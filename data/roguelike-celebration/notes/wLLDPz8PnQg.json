@@ -1,0 +1,110 @@
+{
+  "id": "wLLDPz8PnQg",
+  "title": "Philomena Schwab: This is too hard! How to broaden your game’s target audience with smart difficulty",
+  "speaker": "Philomena Schwab",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=wLLDPz8PnQg",
+  "talk_type": "design",
+  "summary": "Philomena Schwab of Stray Fawn Studio describes the problem of making cute, colourful but genuinely difficult roguelike games (Niche, The Wandering Village) that attract both depth-seeking adults and young players who want a relaxed experience. In Niche, the team let players choose difficulty spatially by island direction, allowed endless resource gathering, and added extensive custom difficulty settings that also became a shared-challenge and role-play feature. For The Wandering Village, beta survey data showed low raters found it too hard, so they quickly added novice/adept modes that front-load a scripted sequence before the fully random veteran game, plus toggles like disabling death or manual saving. She closes by praising RimWorld's choosable storyteller AI.",
+  "games": [
+    "Niche: a genetics survival game",
+    "Nimbatus",
+    "The Wandering Village",
+    "Darkest Dungeon",
+    "Dark Souls",
+    "RimWorld"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "target audience",
+      "kind": "warning",
+      "claim": "A cute, colourful art style signals an easy, casual game, so a difficult game with that look attracts a mixed audience including young players, unlike grim-looking games like Darkest Dungeon or Dark Souls whose art communicates difficulty and an older audience.",
+      "detail": "Schwab contrasts Darkest Dungeon and Dark Souls, whose dark settings and complex UI pre-select teenage-and-older players, with Niche, which is as complex as Darkest Dungeon but draws many young girls who want to play with animals alongside adults who want depth. Catering to both was difficult.",
+      "t": 328,
+      "quote": "you have adult target audience that really like the depth and the difficulty of the game and at the same time you have like children",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "player-chosen difficulty",
+      "kind": "technique",
+      "claim": "Niche lets players adjust difficulty in-world by choosing which direction to travel from each procedurally generated island: left is easier, right keeps difficulty the same, up is harder.",
+      "detail": "In story mode, progress requires going up, but players can retreat left to an easier island and return. Struggling players can also stay and gather resources endlessly (e.g. stockpile 1,000 food) before moving to a harder island.",
+      "t": 373,
+      "quote": "If you go to the left the game gets easier, to it right the difficulty stays the same",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty settings",
+      "kind": "principle",
+      "claim": "Different players find different parts of a game hard, so granular difficulty settings (lifespan multipliers, damage multipliers, starting genetics, food amounts, predators off, hidden genes) serve more players than a single difficulty slider.",
+      "detail": "In Niche, some players wanted animals to live three times longer to pass on genes; others wanted chosen starting genetics because some starting genes made certain biomes unwinnable. Blind gene mode makes it harder.",
+      "t": 454,
+      "quote": "found different players fine different things in the game difficult",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player-made challenges",
+      "kind": "example",
+      "claim": "Niche's custom difficulty settings let players design and share their own challenges and custom characters for role-play, which kept the game alive for years without updates.",
+      "detail": "Schwab says the settings had value beyond difficulty adjustment, supporting storytelling and role-play, which many teenage girls do in the game.",
+      "t": 526,
+      "quote": "People can design their own challenges and share them with other players and that is what has kept the game alive",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "beta surveys",
+      "kind": "example",
+      "claim": "Beta surveys of 6,000 Wandering Village testers revealed that nearly everyone rating the game 7 or below found it too difficult, which normal balancing could not fix for everyone.",
+      "detail": "Two months before launch the team panicked, realising they could not satisfy everyone with balancing because some players said it was too hard, so they turned to difficulty settings.",
+      "t": 599,
+      "quote": "pretty much everyone who rated 7 or below found it was too difficult",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "scripted onboarding",
+      "kind": "technique",
+      "claim": "The Wandering Village's easier difficulty modes front-load a scripted sequence of events before handing over to the same fully random game as veteran mode: fully scripted for about two hours, partially random until hour five, then fully random.",
+      "detail": "The team reused existing tools for scripting which events occur in which biome. The adept mode has a shorter partially scripted start. Schwab says it took about a week and helped a lot: complaints about difficulty dropped and more reviews now say the game is too easy, so they can focus on a harder mode.",
+      "t": 640,
+      "quote": "The first part was fully scripted like every event is scripted where it exactly happens",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty settings",
+      "kind": "technique",
+      "claim": "Simple toggles can reshape a game for different audiences: turning off death in The Wandering Village makes it a chill happiness-management game, while turning off manual saving makes it harder and more roguelike.",
+      "detail": "Schwab says the no-death option is liked by many players and both toggles aim to cater to a very broad audience.",
+      "t": 732,
+      "quote": "switch off manual saving which makes the game harder and more roguelike",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "ai director",
+      "kind": "principle",
+      "claim": "RimWorld's storyteller AI lets players choose between difficulty that adapts to what they're doing and a completely random experience, addressing complaints that games feel too random or too scripted.",
+      "detail": "Schwab calls it a genius idea she rarely sees elsewhere and wants to add something similar to The Wandering Village.",
+      "t": 748,
+      "quote": "people often complain that a game feels too random or feels too scripted",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "science-based mechanics",
+      "kind": "example",
+      "claim": "Niche turned the subtopics of population genetics, such as mutation, into game mechanics, and those real-world mechanics both made a good game and created a built-in interested audience.",
+      "detail": "It was never meant as an educational game, but its genetic complexity is high enough that it is used in schools to teach genetics.",
+      "t": 832,
+      "quote": "take the topic of population genetics which consist of five subtopics such as mutation and so on and turn them into game mechanics",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,1113 @@
+{
+ "id": "pYtlU9wGopo",
+ "url": "https://www.youtube.com/watch?v=pYtlU9wGopo",
+ "title": "Ludipe - Exploring Pacifist Roguelikes",
+ "speaker": "Ludipe",
+ "talk_title": "Exploring Pacifist Roguelikes",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 957,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Combat has always been the core interaction of the roguelike genre but, is there space for games that aren't focused on whacking goblins in the head? Why would we make a pacifist roguelike? And the most dreadful question of all, how do we make sure the mechanics are still engaging and interesting?",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 65,
+   "title": "Defining pacifist roguelikes"
+  },
+  {
+   "start": 129,
+   "title": "The gray areas of combat"
+  },
+  {
+   "start": 203,
+   "title": "Examples of pacifist games"
+  },
+  {
+   "start": 270,
+   "title": "Why create pacifist games?"
+  },
+  {
+   "start": 392,
+   "title": "Strategies for design"
+  },
+  {
+   "start": 496,
+   "title": "Themes and systems"
+  },
+  {
+   "start": 618,
+   "title": "The future of the genre"
+  },
+  {
+   "start": 695,
+   "title": "Q&A and closing thoughts"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2139,
+ "trimmed": {
+  "segments": 68,
+  "words": 695
+ },
+ "segments": [
+  {
+   "t": 5.58,
+   "d": 2.57,
+   "text": "ALEXEI: Hello."
+  },
+  {
+   "t": 8.15,
+   "d": 1.29,
+   "text": "Hi."
+  },
+  {
+   "t": 9.44,
+   "d": 8.92,
+   "text": "Last lightning talk for this little slot from Ludipe."
+  },
+  {
+   "t": 18.36,
+   "d": 2.8,
+   "text": "I lope that's correct."
+  },
+  {
+   "t": 21.16,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 22.16,
+   "d": 4.63,
+   "text": "The head of fellowship at Asterisk games."
+  },
+  {
+   "t": 26.79,
+   "d": 5.21,
+   "text": "The fellowship programs offers grants and scholarships to designers so they can focus"
+  },
+  {
+   "t": 32.0,
+   "d": 1.36,
+   "text": "on their projects."
+  },
+  {
+   "t": 33.36,
+   "d": 5.57,
+   "text": "You are here to talk about pacifist roguelikes which is a favorite topic of this conference"
+  },
+  {
+   "t": 38.93,
+   "d": 6.64,
+   "text": "so go ahead and take it away."
+  },
+  {
+   "t": 45.57,
+   "d": 6.35,
+   "text": "LUDIPE: Before starting the topic of the conversation."
+  },
+  {
+   "t": 51.92,
+   "d": 2.98,
+   "text": "A brief introduction about myself."
+  },
+  {
+   "t": 54.9,
+   "d": 6.39,
+   "text": "I am a game designer working at Asra -- Astra Games."
+  },
+  {
+   "t": 61.29,
+   "d": 17.62,
+   "text": "Two small games I highlight here are the ever-changing case of the unpaid rent and adultlike."
+  },
+  {
+   "t": 78.91,
+   "d": 6.54,
+   "text": "The first is about being a detective and trying to solve crimes in order to pay rent."
+  },
+  {
+   "t": 85.45,
+   "d": 3.23,
+   "text": "It is a very abstract kind of deck building game."
+  },
+  {
+   "t": 88.68,
+   "d": 5.67,
+   "text": "And the second is let's say a multiple choice game where you move around the grid and you"
+  },
+  {
+   "t": 94.35,
+   "d": 6.55,
+   "text": "have to make it to the end of the month and there are things like removing energy from"
+  },
+  {
+   "t": 100.9,
+   "d": 2.86,
+   "text": "you and you have skills on certain days."
+  },
+  {
+   "t": 103.76,
+   "d": 5.89,
+   "text": "Yeah, these are some of the ways I explore pacifist roguelikes in the past."
+  },
+  {
+   "t": 109.65,
+   "d": 2.19,
+   "text": "This is a short talk."
+  },
+  {
+   "t": 111.84,
+   "d": 7.3,
+   "text": "I wanted to define pacifist roguelikes and tell you why I think it is a cool topic and"
+  },
+  {
+   "t": 119.14,
+   "d": 2.8,
+   "text": "why I think we should be exploring them more often."
+  },
+  {
+   "t": 121.94,
+   "d": 8.09,
+   "text": "And also, a peak at how we start tackling these challenges and making these pacifist"
+  },
+  {
+   "t": 130.03,
+   "d": 1.86,
+   "text": "roguelikes."
+  },
+  {
+   "t": 131.89,
+   "d": 5.46,
+   "text": "When I am talking about a pacifist roguelikes I mean conflict and solved with violence,"
+  },
+  {
+   "t": 137.35,
+   "d": 7.7,
+   "text": "any kind of violence even if it is cute cats fighting and bump into them and one flies"
+  },
+  {
+   "t": 145.05,
+   "d": 5.26,
+   "text": "off the screen, that's still combat through violence."
+  },
+  {
+   "t": 150.31,
+   "d": 11.22,
+   "text": "Also, whenever I look on Google, I see games like renowned explorers but that's not the"
+  },
+  {
+   "t": 161.53,
+   "d": 3.77,
+   "text": "focus of the experience."
+  },
+  {
+   "t": 165.3,
+   "d": 2.93,
+   "text": "I am aware there are lots of gray areas."
+  },
+  {
+   "t": 168.23,
+   "d": 1.54,
+   "text": "Short talk."
+  },
+  {
+   "t": 169.77,
+   "d": 6.95,
+   "text": "I want to acknowledge that there are some things like invisible inc where you can go"
+  },
+  {
+   "t": 176.72,
+   "d": 5.6,
+   "text": "through the whole game without violent acts but they are still part of the game."
+  },
+  {
+   "t": 182.32,
+   "d": 5.66,
+   "text": "Also there are games where you are not the one engaging in the combat and action but"
+  },
+  {
+   "t": 187.98,
+   "d": 2.64,
+   "text": "you are still supporting the entity doing that."
+  },
+  {
+   "t": 190.62,
+   "d": 4.87,
+   "text": "Again, grey areas we could talk about in the discussion."
+  },
+  {
+   "t": 195.49,
+   "d": 1.0,
+   "text": "Some examples."
+  },
+  {
+   "t": 196.49,
+   "d": 8.08,
+   "text": "There are a bunch of these but some examples that came to mind when I was preparing this"
+  },
+  {
+   "t": 204.57,
+   "d": 1.0,
+   "text": "talk."
+  },
+  {
+   "t": 205.57,
+   "d": 7.02,
+   "text": "Insurmountable is a survival game where you are managing the parameters and trying to"
+  },
+  {
+   "t": 212.59,
+   "d": 1.16,
+   "text": "stay alive."
+  },
+  {
+   "t": 213.75,
+   "d": 2.31,
+   "text": "It is really hard."
+  },
+  {
+   "t": 216.06,
+   "d": 4.72,
+   "text": "But again, it is about the climber trying to get to the top."
+  },
+  {
+   "t": 220.78,
+   "d": 3.99,
+   "text": "It is not focused on combat or violence."
+  },
+  {
+   "t": 224.77,
+   "d": 2.25,
+   "text": "Luck to be a Landlord."
+  },
+  {
+   "t": 227.02,
+   "d": 3.29,
+   "text": "I think the description was funny."
+  },
+  {
+   "t": 230.31,
+   "d": 5.22,
+   "text": "The landlord is knocking on the door and you don't have money to pay rent and start messing"
+  },
+  {
+   "t": 235.53,
+   "d": 4.91,
+   "text": "around with the slot machine to make enough money to pay rent."
+  },
+  {
+   "t": 240.44,
+   "d": 4.66,
+   "text": "The Waking Knot is still in development but had a few demos."
+  },
+  {
+   "t": 245.1,
+   "d": 3.29,
+   "text": "I really like this."
+  },
+  {
+   "t": 248.39,
+   "d": 4.13,
+   "text": "I think this game is super cool when it releases."
+  },
+  {
+   "t": 252.52,
+   "d": 5.97,
+   "text": "It is kind of like a pacifist where you are moving around this grid and trying to save"
+  },
+  {
+   "t": 258.49,
+   "d": 4.41,
+   "text": "all these and manipulating things around."
+  },
+  {
+   "t": 262.9,
+   "d": 5.99,
+   "text": "It is a bit cryptic and abstract but a really cool example of pacifist roguelikes which"
+  },
+  {
+   "t": 268.89,
+   "d": 1.57,
+   "text": "look more traditional."
+  },
+  {
+   "t": 270.46,
+   "d": 3.89,
+   "text": "Why am I talking about this?"
+  },
+  {
+   "t": 274.35,
+   "d": 8.58,
+   "text": "First of all, even though the examples, this is a tiny fraction compared to the roguelikes"
+  },
+  {
+   "t": 282.93,
+   "d": 5.58,
+   "text": "games, I think most people in games jump into a new opportunity of doing something that"
+  },
+  {
+   "t": 288.51,
+   "d": 2.55,
+   "text": "is like let's start it and explore it."
+  },
+  {
+   "t": 291.06,
+   "d": 2.22,
+   "text": "So it is more different."
+  },
+  {
+   "t": 293.28,
+   "d": 1.94,
+   "text": "I think there is other things to explore."
+  },
+  {
+   "t": 295.22,
+   "d": 6.52,
+   "text": "It is the fun of roguelikes and the play of this genre and I want to see all sorts of"
+  },
+  {
+   "t": 301.74,
+   "d": 1.0,
+   "text": "games."
+  },
+  {
+   "t": 302.74,
+   "d": 1.0,
+   "text": "More variety."
+  },
+  {
+   "t": 303.74,
+   "d": 6.81,
+   "text": "Yeah, as a bonus point, I would say it is great tool to draw more players to the john"
+  },
+  {
+   "t": 310.55,
+   "d": 9.98,
+   "text": "-- genre which I think is a good idea."
+  },
+  {
+   "t": 320.53,
+   "d": 1.0,
+   "text": "We are high in combat."
+  },
+  {
+   "t": 321.53,
+   "d": 14.51,
+   "text": "First of all, there is references to use a lot of cool games we can draw inspiration"
+  },
+  {
+   "t": 336.04,
+   "d": 1.09,
+   "text": "from."
+  },
+  {
+   "t": 337.13,
+   "d": 2.43,
+   "text": "This makes the design process a bit easier."
+  },
+  {
+   "t": 339.56,
+   "d": 2.82,
+   "text": "Designing any kind of game is hard."
+  },
+  {
+   "t": 342.38,
+   "d": 4.54,
+   "text": "So, you know, if we have something that's a bit easier we can follow that path."
+  },
+  {
+   "t": 346.92,
+   "d": 5.85,
+   "text": "It is full of elements that players recognize instantly."
+  },
+  {
+   "t": 352.77,
+   "d": 9.49,
+   "text": "A put a warrior goblin on the screen and the warrior has five hearts and the goblin has"
+  },
+  {
+   "t": 362.26,
+   "d": 6.07,
+   "text": "five hearts and most players recognize this is my enemy and if I choose to hit them I"
+  },
+  {
+   "t": 368.33,
+   "d": 3.57,
+   "text": "am going to do damage and they have five health points."
+  },
+  {
+   "t": 371.9,
+   "d": 3.61,
+   "text": "Lots of symbols that we are very used to."
+  },
+  {
+   "t": 375.51,
+   "d": 2.43,
+   "text": "It is easy to recognize them."
+  },
+  {
+   "t": 377.94,
+   "d": 5.9,
+   "text": "Also, yeah, they usually have like an opposing force that, you know, it is playing against"
+  },
+  {
+   "t": 383.84,
+   "d": 1.0,
+   "text": "us."
+  },
+  {
+   "t": 384.84,
+   "d": 1.01,
+   "text": "That's exciting."
+  },
+  {
+   "t": 385.85,
+   "d": 7.62,
+   "text": "When we show them around, usually combat leaves players frustrated which always helps?"
+  },
+  {
+   "t": 393.47,
+   "d": 8.24,
+   "text": "How do we start -- in my mind you want to try to make more of these pacifist roguelikes"
+  },
+  {
+   "t": 401.71,
+   "d": 5.21,
+   "text": "and I am going to use two early ideas."
+  },
+  {
+   "t": 406.92,
+   "d": 1.0,
+   "text": "Very short talk."
+  },
+  {
+   "t": 407.92,
+   "d": 2.15,
+   "text": "We don't have time dig deep into these."
+  },
+  {
+   "t": 410.07,
+   "d": 9.89,
+   "text": "You have game like Rift Wizard with all the usuals."
+  },
+  {
+   "t": 419.96,
+   "d": 5.8,
+   "text": "Everybody in this game is like a wizard and you are throwing spells at each other and"
+  },
+  {
+   "t": 425.76,
+   "d": 2.86,
+   "text": "trying to remove all their health points and get the enemies."
+  },
+  {
+   "t": 428.62,
+   "d": 3.11,
+   "text": "Now we are going to replace the narrative."
+  },
+  {
+   "t": 431.73,
+   "d": 3.51,
+   "text": "Let's say we keep the same thing."
+  },
+  {
+   "t": 435.24,
+   "d": 7.34,
+   "text": "Everything is the same but instead of us fighting the dungeon it is a setting like where it"
+  },
+  {
+   "t": 442.58,
+   "d": 5.94,
+   "text": "is people in a ballroom and they are gossiping and trying to restore the reputation of someone"
+  },
+  {
+   "t": 448.52,
+   "d": 1.0,
+   "text": "else."
+  },
+  {
+   "t": 449.52,
+   "d": 1.0,
+   "text": "Something like that."
+  },
+  {
+   "t": 450.52,
+   "d": 2.29,
+   "text": "Or maybe they are trying to find romance."
+  },
+  {
+   "t": 452.81,
+   "d": 9.66,
+   "text": "And instead of doing damage, it is like adding parameters like energy to dance, or how much"
+  },
+  {
+   "t": 462.47,
+   "d": 3.28,
+   "text": "a person likes you, something like that."
+  },
+  {
+   "t": 465.75,
+   "d": 5.35,
+   "text": "We would be keeping the same systems and kind of replacing the wrapping around them."
+  },
+  {
+   "t": 471.1,
+   "d": 1.62,
+   "text": "Obviously is not always possible."
+  },
+  {
+   "t": 472.72,
+   "d": 6.53,
+   "text": "But there are a good amount of examples where you can actually do this and just switch around"
+  },
+  {
+   "t": 479.25,
+   "d": 7.71,
+   "text": "variables, change the wrapping, and you have something that I think feels more refreshing"
+  },
+  {
+   "t": 486.96,
+   "d": 3.01,
+   "text": "or at least newer."
+  },
+  {
+   "t": 489.97,
+   "d": 1.25,
+   "text": "This is like the easy way."
+  },
+  {
+   "t": 491.22,
+   "d": 8.03,
+   "text": "I mean it says let's keep doing what we were already doing but with a new wrapping."
+  },
+  {
+   "t": 499.25,
+   "d": 8.72,
+   "text": "Obviously, the harder path, staying away from those and trying to really lean on these new"
+  },
+  {
+   "t": 507.97,
+   "d": 6.25,
+   "text": "systems like for example in insurmountable the game I mentioned about climbing a mountain"
+  },
+  {
+   "t": 514.22,
+   "d": 5.8,
+   "text": "they are relying on the whole fantasy of being a climber and getting to the top."
+  },
+  {
+   "t": 520.02,
+   "d": 5.53,
+   "text": "They are creating mini systems and interesting challenges out of that."
+  },
+  {
+   "t": 525.55,
+   "d": 3.05,
+   "text": "Again, it is harder."
+  },
+  {
+   "t": 528.6,
+   "d": 1.6,
+   "text": "Each iteration is harder."
+  },
+  {
+   "t": 530.2,
+   "d": 4.21,
+   "text": "There is more ideas that need to be discarded like taking longer."
+  },
+  {
+   "t": 534.41,
+   "d": 6.74,
+   "text": "But I think you can get to more interesting situations."
+  },
+  {
+   "t": 541.15,
+   "d": 6.65,
+   "text": "One thing I was missing was like hey, in roguelikes, we usually have combat and means we have an"
+  },
+  {
+   "t": 547.8,
+   "d": 5.78,
+   "text": "active opponent fighting against us, playing against us."
+  },
+  {
+   "t": 553.58,
+   "d": 3.13,
+   "text": "It is like not passive."
+  },
+  {
+   "t": 556.71,
+   "d": 1.41,
+   "text": "It is active."
+  },
+  {
+   "t": 558.12,
+   "d": 3.55,
+   "text": "But really it is not all roguelikes are doing this."
+  },
+  {
+   "t": 561.67,
+   "d": 9.36,
+   "text": "Desktop dungeon is a missing roguelike, one of the parents of the genre and in this game,"
+  },
+  {
+   "t": 571.03,
+   "d": 3.1,
+   "text": "you have like very big passive enemies."
+  },
+  {
+   "t": 574.13,
+   "d": 4.27,
+   "text": "I am not saying you have to rely on a thief."
+  },
+  {
+   "t": 578.4,
+   "d": 8.51,
+   "text": "You can have things that are like static and passive on the grid and still make an experience."
+  },
+  {
+   "t": 586.91,
+   "d": 6.46,
+   "text": "And The Waking Knot, the game I mentioned before, this one has active forces fighting"
+  },
+  {
+   "t": 593.37,
+   "d": 1.0,
+   "text": "against you."
+  },
+  {
+   "t": 594.37,
+   "d": 6.6,
+   "text": "It is like some fireball appearing out of nowhere moving around."
+  },
+  {
+   "t": 600.97,
+   "d": 1.89,
+   "text": "It is a force of nature."
+  },
+  {
+   "t": 602.86,
+   "d": 3.54,
+   "text": "Not an enemy to be defeated."
+  },
+  {
+   "t": 606.4,
+   "d": 4.43,
+   "text": "The whole point of the game is finding your way around it and trying to manipulate in"
+  },
+  {
+   "t": 610.83,
+   "d": 5.17,
+   "text": "a way that suits your goal even though it is a force of nature and not about something"
+  },
+  {
+   "t": 616.0,
+   "d": 3.6,
+   "text": "you can fight."
+  },
+  {
+   "t": 619.6,
+   "d": 5.15,
+   "text": "The whole point of leaning on your inspiration and trying to say what's the theme of what"
+  },
+  {
+   "t": 624.75,
+   "d": 4.65,
+   "text": "I want to do and try to draw more mechanic and systems from that."
+  },
+  {
+   "t": 629.4,
+   "d": 5.42,
+   "text": "I think we could be exploring so many cool things like gardening, sports, preparing a"
+  },
+  {
+   "t": 634.82,
+   "d": 7.58,
+   "text": "trip, doing laundry, cooking, hosting a dinner, and I would like to see more creators pick"
+  },
+  {
+   "t": 642.4,
+   "d": 8.47,
+   "text": "these non-violent newer themes and I am excited to see what new mechanics can come from there."
+  },
+  {
+   "t": 650.87,
+   "d": 8.42,
+   "text": "Maybe it is doing clothes or a sports thing with managing the team and you need to hire"
+  },
+  {
+   "t": 659.29,
+   "d": 1.85,
+   "text": "new people or maybe fire them or train them."
+  },
+  {
+   "t": 661.14,
+   "d": 1.13,
+   "text": "I don't know."
+  },
+  {
+   "t": 662.27,
+   "d": 6.96,
+   "text": "I just think that if we lean on these inspirations we can see new kinds of roguelikes and new"
+  },
+  {
+   "t": 669.23,
+   "d": 3.22,
+   "text": "kinds of mechanics and challenges and I am very excited about that."
+  },
+  {
+   "t": 672.45,
+   "d": 6.52,
+   "text": "It is like when I went to one of the big game conferences and I see 6-7 games in a row are"
+  },
+  {
+   "t": 678.97,
+   "d": 6.13,
+   "text": "realistic shooting games, I am like I don't know have anything against these but I don't"
+  },
+  {
+   "t": 685.1,
+   "d": 3.77,
+   "text": "like seeing 5-6 games in a row that do the identical."
+  },
+  {
+   "t": 688.87,
+   "d": 6.9,
+   "text": "I am hoping this inspires more people to play and explore this section of roguelikes."
+  },
+  {
+   "t": 695.77,
+   "d": 7.64,
+   "text": "Like I said, you can find me on Twitter, Blue Sky and all that."
+  },
+  {
+   "t": 703.41,
+   "d": 1.0,
+   "text": "That's it."
+  },
+  {
+   "t": 704.41,
+   "d": 2.26,
+   "text": "Thanks a lot for being here."
+  },
+  {
+   "t": 706.67,
+   "d": 1.01,
+   "text": "ALEXEI: Thank you."
+  },
+  {
+   "t": 707.68,
+   "d": 2.29,
+   "text": "It is really great."
+  },
+  {
+   "t": 709.97,
+   "d": 6.17,
+   "text": "Well done fitting I think a lot of ideas into that amount of time."
+  },
+  {
+   "t": 716.14,
+   "d": 11.04,
+   "text": "I think this is one of the ones that will be fun to unpack in the recording and really"
+  },
+  {
+   "t": 727.18,
+   "d": 2.71,
+   "text": "go through all these references."
+  },
+  {
+   "t": 729.89,
+   "d": 4.89,
+   "text": "We probably have time for one or two questions."
+  },
+  {
+   "t": 734.78,
+   "d": 7.83,
+   "text": "I know the idea of swapping combat mechanics if you turn that into gardening does that"
+  },
+  {
+   "t": 742.61,
+   "d": 1.29,
+   "text": "make it a pacifist roguelike?"
+  },
+  {
+   "t": 743.9,
+   "d": 1.0,
+   "text": "And maybe."
+  },
+  {
+   "t": 744.9,
+   "d": 1.0,
+   "text": "But there are other ways."
+  },
+  {
+   "t": 745.9,
+   "d": 5.51,
+   "text": "LUDIPE: The most common way is replacing the narrative but that's one idea."
+  },
+  {
+   "t": 751.41,
+   "d": 5.02,
+   "text": "The harder the path and the other one is just knowing over there and trying come up with"
+  },
+  {
+   "t": 756.43,
+   "d": 7.99,
+   "text": "new mechanics and thinking I am going to turn thighs into a roguelike and it is all about"
+  },
+  {
+   "t": 764.42,
+   "d": 3.99,
+   "text": "learning when to drift and use the boost and when to do this."
+  },
+  {
+   "t": 768.41,
+   "d": 1.69,
+   "text": "Each iteration is harder."
+  },
+  {
+   "t": 770.1,
+   "d": 3.18,
+   "text": "But I think it is also very exciting."
+  },
+  {
+   "t": 773.28,
+   "d": 1.0,
+   "text": "ALEXEI: Yeah."
+  },
+  {
+   "t": 774.28,
+   "d": 4.86,
+   "text": "I think that's a full example of trying to control a car which something I saw in the"
+  },
+  {
+   "t": 779.14,
+   "d": 1.12,
+   "text": "chat was interesting."
+  },
+  {
+   "t": 780.26,
+   "d": 4.34,
+   "text": "We talk about conflict as a word but also struggle as something where maybe like you"
+  },
+  {
+   "t": 784.6,
+   "d": 5.9,
+   "text": "could struggle without necessarily having a 1:1 conflict with something."
+  },
+  {
+   "t": 790.5,
+   "d": 3.09,
+   "text": "LUDIPE: Conflict and struggle comes in so many ways."
+  },
+  {
+   "t": 793.59,
+   "d": 2.79,
+   "text": "Not only in fighting."
+  },
+  {
+   "t": 796.38,
+   "d": 3.4,
+   "text": "We will have like a struggle and challenges every day."
+  },
+  {
+   "t": 799.78,
+   "d": 3.83,
+   "text": "I think it is very cool to draw inspiration from that as well."
+  },
+  {
+   "t": 803.61,
+   "d": 1.0,
+   "text": "ALEXEI: Yeah."
+  },
+  {
+   "t": 804.61,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 805.61,
+   "d": 1.93,
+   "text": "Here is an interesting question."
+  },
+  {
+   "t": 807.54,
+   "d": 3.5,
+   "text": "What do you consider the bar for a pacifist roguelike?"
+  },
+  {
+   "t": 811.04,
+   "d": 7.8,
+   "text": "Do you think a game can mix the concepts and that's something you consider pacifist?"
+  },
+  {
+   "t": 818.84,
+   "d": 3.47,
+   "text": "How much combat mixed in before it loses?"
+  },
+  {
+   "t": 822.31,
+   "d": 2.54,
+   "text": "LUDIPE: This is purely personal."
+  },
+  {
+   "t": 824.85,
+   "d": 6.08,
+   "text": "From my point of view, with I am looking and googling looking for pacifist roguelikes,"
+  },
+  {
+   "t": 830.93,
+   "d": 9.4,
+   "text": "I am looking for games like if there is combat, it is 5% of the game or happens during an"
+  },
+  {
+   "t": 840.33,
+   "d": 1.18,
+   "text": "isolated event."
+  },
+  {
+   "t": 841.51,
+   "d": 5.05,
+   "text": "At least that's my point of view when I am on Google or whatever trying to find these"
+  },
+  {
+   "t": 846.56,
+   "d": 1.0,
+   "text": "games."
+  },
+  {
+   "t": 847.56,
+   "d": 5.4,
+   "text": "When somebody recommends games where like does it have the option for going pacifist"
+  },
+  {
+   "t": 852.96,
+   "d": 5.86,
+   "text": "and that's cool but I am looking for a more pacifist thing at the moment."
+  },
+  {
+   "t": 858.82,
+   "d": 1.64,
+   "text": "ALEXEI: I think that makes sense."
+  },
+  {
+   "t": 860.46,
+   "d": 4.5,
+   "text": "Here is really interesting question from meanwhile which is bringing up."
+  },
+  {
+   "t": 864.96,
+   "d": 7.25,
+   "text": "To adequately shift toward non-combat games posing the question we should stimulate social,"
+  },
+  {
+   "t": 872.21,
+   "d": 8.51,
+   "text": "economic, those kinds of processes instead of stimulating combat adventure what do you"
+  },
+  {
+   "t": 880.72,
+   "d": 1.25,
+   "text": "think of that?"
+  },
+  {
+   "t": 881.97,
+   "d": 1.0,
+   "text": "LUDIPE: Definitely."
+  },
+  {
+   "t": 882.97,
+   "d": 7.89,
+   "text": "Once we step out of combat we have so many settings to draw inspiration."
+  },
+  {
+   "t": 890.86,
+   "d": 4.61,
+   "text": "One thing I wished more games focused on is games about building trips."
+  },
+  {
+   "t": 895.47,
+   "d": 5.47,
+   "text": "Like something where you are hiking around and the whole challenge is what do I pack,"
+  },
+  {
+   "t": 900.94,
+   "d": 6.84,
+   "text": "where do I sleep, again, like when you start thinking in all these spheres and settings,"
+  },
+  {
+   "t": 907.78,
+   "d": 3.27,
+   "text": "you stumble upon so many interesting ideas."
+  },
+  {
+   "t": 911.05,
+   "d": 1.23,
+   "text": "I think that's very cool."
+  },
+  {
+   "t": 912.28,
+   "d": 4.26,
+   "text": "ALEXEI: We had a talk about Oregon Trail which has a lot of packing."
+  },
+  {
+   "t": 916.54,
+   "d": 2.82,
+   "text": "The Banished Vault deals with a lot of resource management."
+  },
+  {
+   "t": 919.36,
+   "d": 6.12,
+   "text": "And that makes me think of unpacking which is game about the opposite but it is also"
+  },
+  {
+   "t": 925.48,
+   "d": 1.0,
+   "text": "a very fascinating."
+  },
+  {
+   "t": 926.48,
+   "d": 1.04,
+   "text": "I think pacifistic game."
+  },
+  {
+   "t": 927.52,
+   "d": 1.0,
+   "text": "I think so."
+  },
+  {
+   "t": 934.7,
+   "d": 1.0,
+   "text": "Unless like putting, you know, a hair drier in the kitchen is violence."
+  },
+  {
+   "t": 939.36,
+   "d": 1.0,
+   "text": "LUDIPE: Again, grey area all around."
+  },
+  {
+   "t": 942.43,
+   "d": 1.0,
+   "text": "ALEXEI: When you live together, your partner might think that's not appreciated."
+  },
+  {
+   "t": 950.53,
+   "d": 1.0,
+   "text": "That brings us to the end of the time."
+  },
+  {
+   "t": 953.03,
+   "d": 1.0,
+   "text": "Thank you so much for coming to Roguelike Celebration and excellent talk."
+  }
+ ],
+ "note": "re-timed 5 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 21 s off the audio)"
+}

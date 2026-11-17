@@ -1,0 +1,138 @@
+{
+  "id": "ziN33iMQVPo",
+  "title": "Jeremy Rose: The Hitchhiker's Guide to the Cataclysm",
+  "speaker": "Jeremy Rose",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=ziN33iMQVPo",
+  "talk_type": "technical",
+  "summary": "Jeremy Rose introduces Cataclysm: Dark Days Ahead, a simulationist open-world survival roguelike built by over 1,700 open-source contributors, and the Hitchhiker's Guide to the Cataclysm, a companion web app he built that indexes the game's JSON data and makes every relationship between items, monsters, terrain, skills and locations browsable in both directions. He covers the game's 'if it works in reality it should work in the game' tenet, the guide's offline static-site architecture and its automated tests against a fast-changing experimental build, and argues that spoilers or 'encyclopedias' enrich rather than ruin play. He closes with a personal note on overcoming perfectionism.",
+  "games": [
+    "Cataclysm: Dark Days Ahead",
+    "NetHack",
+    "Angband",
+    "Dungeon Crawl Stone Soup"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "open source development",
+      "kind": "history",
+      "claim": "Cataclysm: Dark Days Ahead began as a single developer's (Zachary Jenkins) project and has since had over 1,700 contributors, making it one of the largest open-source games and an amalgam of many people's ideas.",
+      "detail": "Rose compares it to Python's roughly 2,000 lifetime contributors despite Python being three times older; the next largest open-source game he lists has about 1,148. He calls it 'nobody's game' for this reason.",
+      "t": 284,
+      "quote": "over 1700 individuals have contributed to Cataclysm which makes it one of the largest open source games",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "simulation",
+      "kind": "principle",
+      "claim": "Cataclysm: Dark Days Ahead's core tenet is that if something works in reality it should work in the game, so its 8,000+ items carry physical properties like mass, volume, material and temperature.",
+      "detail": "Most items can be disassembled with the right tools, and items have temperature across seasons modelled on New England. The game has no explicit end goal; goals are for the player to decide.",
+      "t": 370,
+      "quote": "The game's core tenant is if it works in reality it should work in the game",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent tactics",
+      "kind": "example",
+      "claim": "In Cataclysm, simulated systems chain into emergent tactics: winter freezes drinks, lighting a fire on a flammable floor burns the house down, the loud collapse attracts zombies, and so a house fire becomes a distraction for looting elsewhere.",
+      "detail": "To thaw frozen bottles you might light a fire, but should do it in an oven or container; otherwise the fire spreads, beams collapse loudly and noise draws zombies.",
+      "t": 427,
+      "quote": "Starting a house fire is a good tactic to distract the zombies from another location you are interested in looting",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "real-world knowledge",
+      "kind": "open-question",
+      "claim": "A realistic simulation invites players to reason from real-world knowledge, but the ways it simplifies reality are not obvious, leaving players with constant questions about how its world works.",
+      "detail": "Rose wanted an arc welder for crafting a spear and wondered whether a garage would have one, whether a book or laptop could teach building one from microwave parts. Questions like where to find duct tape or how dangerous a giant slug is drove him to build the guide.",
+      "t": 445,
+      "quote": "Cataclysm is trying to simulate something like the real world. The ways in which it simplifies are not obvious",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "example",
+      "claim": "Cataclysm defines all of its nouns (items, monsters, terrain, furniture, limbs, martial arts) and many verbs in JSON data files, which made it possible to build an external tool that indexes the whole game.",
+      "detail": "Rose initially answered questions by searching the data files for an item's ID and then for what dropped it or where it spawned, which was tedious enough to justify building a tool.",
+      "t": 545,
+      "quote": "All of the nouns in the game, items, monsters, terrain, furniture, what limbs a character has and what kind of martial arts are defined in the data files",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "technique",
+      "claim": "The Hitchhiker's Guide to the Cataclysm makes every relationship between game nouns visible and bidirectional, which illustrates the underlying systems and surfaces possibilities players did not think to look for.",
+      "detail": "Duct tape's page shows every recipe it is used in and every way to obtain it: crafting from thread, super glue and cotton patches, rare monster drops, or deconstructing a taped window. Seeing that terrain deconstruction yields items prompts players to wonder what else (e.g. a sheet of glass) they could get that way.",
+      "t": 702,
+      "quote": "The goal of the guide is to make every relationship between the nouns in Cataclysm visible",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "companion tools",
+      "kind": "technique",
+      "claim": "A companion guide can be a static web app that downloads a version's gzipped game data once and then works fully offline, with crowdsourced translations matching the game's.",
+      "detail": "The guide is hosted on GitHub as a static site with some trickery to collect data files without running a server; a version's data is about 3.5 MB of gzipped JSON. Both Cataclysm and the guide are translated into 10 languages via crowdsourcing.",
+      "t": 892,
+      "quote": "Once the data for a particular version of the game is downloaded which is about 3.5 megabytes of gzip JSON you can turn off the internet",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "testing",
+      "kind": "technique",
+      "claim": "To keep up with Cataclysm's fast-changing data format, the guide's GitHub Action pulls each experimental release, renders every page checking for errors, and validates all game data against a JSON schema auto-generated from TypeScript types.",
+      "detail": "With 300+ changes a month, some alter data shapes (e.g. numbers becoming strings with units). Hand-writing a schema for 100+ object types and 1,000+ properties would be a nightmare, so a TypeScript-to-JSON-schema library generates it; this caught schema errors and some data errors in the game itself.",
+      "t": 1009,
+      "quote": "Whenever a new experimental release is pubished a GitHub action pulls down the new data and runs the guides test over",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "principle",
+      "claim": "Treating wikis and spoiler guides as cheating is an impoverished view; Rose argues they are encyclopedias that inform rather than prescribe, and that browsing them is itself a form of discovery.",
+      "detail": "He notes there has been only a single unspoiled NetHack ascension, cites studies finding spoilers increase enjoyment, and distinguishes information from suggestion: an encyclopedia tells you bleach is corrosive but not to avoid drinking it. Because Cataclysm changes constantly, players keep meeting new things, and the guide includes a few careful omissions.",
+      "t": 1163,
+      "quote": "There is a single unspoiled NetHack ascension. Are we supposed to be to believe every other ascension in NetHack was a false victory",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "perfectionism",
+      "kind": "principle",
+      "claim": "Building a tool in tiny time slots with lowered stakes helped Rose escape the perfectionism that had torpedoed most of his earlier projects.",
+      "detail": "He built the guide in early 2021 during his newborn daughter's naps, in 15-minute gaps; caring for her made imperfect fonts or layouts transparently unimportant.",
+      "t": 1330,
+      "quote": "I have torpedoed most of my own projects deciding they were not good enough and would never be and losing motivation",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data relationships",
+      "kind": "technique",
+      "claim": "Showing where an item spawns in Cataclysm requires collapsing several data layers (palette to mapgen to location) into one apparent link; a triple-store database could enable richer queries.",
+      "detail": "In Q&A, Rose explains a mapgen chunk has a palette mapping map characters to items and furniture, so the guide traverses palette, mapgen and location. If rebuilding he would consider triple stores for more sophisticated queries than text search.",
+      "t": 1628,
+      "quote": "I have to collapse those three layers to show anything but to the user it looks like a one-way link",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "in-game hints",
+      "kind": "example",
+      "claim": "Cataclysm already contains an in-game Hitchhiker's Guide book that gives a random hint from the hints file when read, and Rose would like to integrate the guide so an item's page can pop up from inside the game.",
+      "detail": "The book, contributed in 2013, inspired the guide's name and has no other mechanical effect.",
+      "t": 1734,
+      "quote": "if you do read the book it gives you a random hint from the hints file",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

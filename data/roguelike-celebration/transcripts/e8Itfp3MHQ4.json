@@ -1,0 +1,4478 @@
+{
+ "id": "e8Itfp3MHQ4",
+ "url": "https://www.youtube.com/watch?v=e8Itfp3MHQ4",
+ "title": "Alexei Pepers - Accessibility",
+ "speaker": "Alexei Pepers",
+ "talk_title": "Accessibility",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1680,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nThis talk examines how features of the roguelike genre relate to accessibility for visually impaired players, using Nethack as a case study. Several changes were made to Nethack to make it more accessible, and the feedback from this case study provides several lessons as to how roguelike games in general can be made more accessible, as well as what aspects of them pose the biggest challenges to accessibility.\n\nAlexei Pepers is a graduate of the University of Calgary, who is now working as a programmer in the games industry at Beamdog. She has loved Nethack since childhood and always wanted to know how it ticked, so in the final year of her degree conducted a research project on introducing accessibility for visually impaired players to Nethack, under the supervision of Dr. John Aycock. John Aycock is an associate professor at the University of Calgary, and the author of Retrogame Archeology: Exploring Old Computer Games.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to challenge"
+  },
+  {
+   "start": 69,
+   "title": "Roguelikes and accessibility"
+  },
+  {
+   "start": 154,
+   "title": "Existing accessible titles"
+  },
+  {
+   "start": 226,
+   "title": "Strategies for improvement"
+  },
+  {
+   "start": 324,
+   "title": "New accessibility commands"
+  },
+  {
+   "start": 396,
+   "title": "Lessons from user studies"
+  },
+  {
+   "start": 979,
+   "title": "The challenge of spatial data"
+  },
+  {
+   "start": 1028,
+   "title": "Limitations of text output"
+  },
+  {
+   "start": 1038,
+   "title": "Strategic gameplay barriers"
+  },
+  {
+   "start": 1046,
+   "title": "Case study success factors"
+  },
+  {
+   "start": 1133,
+   "title": "Future and industry progress"
+  },
+  {
+   "start": 1233,
+   "title": "Audience Q&A session"
+  },
+  {
+   "start": 1528,
+   "title": "Closing thoughts"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5202,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.16,
+   "d": 1.68,
+   "text": "the reason for that is that the"
+  },
+  {
+   "t": 1.84,
+   "d": 2.08,
+   "text": "information in video games is usually"
+  },
+  {
+   "t": 3.92,
+   "d": 0.64,
+   "text": "given"
+  },
+  {
+   "t": 4.56,
+   "d": 2.48,
+   "text": "visually and graphically hence the name"
+  },
+  {
+   "t": 7.04,
+   "d": 1.28,
+   "text": "video games"
+  },
+  {
+   "t": 8.32,
+   "d": 2.08,
+   "text": "and that's not very accessible to"
+  },
+  {
+   "t": 10.4,
+   "d": 1.52,
+   "text": "someone who's visually impaired"
+  },
+  {
+   "t": 11.92,
+   "d": 1.44,
+   "text": "for a visually impaired player"
+  },
+  {
+   "t": 13.36,
+   "d": 2.08,
+   "text": "information needs to be given as"
+  },
+  {
+   "t": 15.44,
+   "d": 2.08,
+   "text": "either directly audio so stuff like"
+  },
+  {
+   "t": 17.52,
+   "d": 1.12,
+   "text": "sound effects"
+  },
+  {
+   "t": 18.64,
+   "d": 2.88,
+   "text": "or as text which can then be converted"
+  },
+  {
+   "t": 21.52,
+   "d": 0.56,
+   "text": "into"
+  },
+  {
+   "t": 22.08,
+   "d": 2.32,
+   "text": "spoken word audio using a kind of"
+  },
+  {
+   "t": 24.4,
+   "d": 1.76,
+   "text": "software called screen reading software"
+  },
+  {
+   "t": 26.16,
+   "d": 1.52,
+   "text": "that's commonly used by"
+  },
+  {
+   "t": 27.68,
+   "d": 1.52,
+   "text": "visually impaired computer users so"
+  },
+  {
+   "t": 29.2,
+   "d": 2.96,
+   "text": "that'll speak the text aloud to them"
+  },
+  {
+   "t": 32.16,
+   "d": 1.44,
+   "text": "and there's been a lot of research and"
+  },
+  {
+   "t": 33.6,
+   "d": 2.16,
+   "text": "kind of games looking at how to make"
+  },
+  {
+   "t": 35.76,
+   "d": 1.6,
+   "text": "games accessible for visually impaired"
+  },
+  {
+   "t": 37.36,
+   "d": 1.2,
+   "text": "players"
+  },
+  {
+   "t": 38.56,
+   "d": 2.32,
+   "text": "and the thing about this research is"
+  },
+  {
+   "t": 40.88,
+   "d": 1.52,
+   "text": "that a lot of it's been focused really"
+  },
+  {
+   "t": 42.4,
+   "d": 1.84,
+   "text": "strongly on accessibility"
+  },
+  {
+   "t": 44.24,
+   "d": 1.44,
+   "text": "and less so on the actual games"
+  },
+  {
+   "t": 45.68,
+   "d": 2.08,
+   "text": "themselves and what's this"
+  },
+  {
+   "t": 47.76,
+   "d": 1.28,
+   "text": "meant is that there's a lot of games"
+  },
+  {
+   "t": 49.04,
+   "d": 1.76,
+   "text": "that are fully accessible"
+  },
+  {
+   "t": 50.8,
+   "d": 2.32,
+   "text": "but were pretty simplistic and not very"
+  },
+  {
+   "t": 53.12,
+   "d": 1.76,
+   "text": "replayable compared to the kind of games"
+  },
+  {
+   "t": 54.88,
+   "d": 1.76,
+   "text": "available for sighted players"
+  },
+  {
+   "t": 56.64,
+   "d": 2.48,
+   "text": "it's really easy to make battleship 100"
+  },
+  {
+   "t": 59.12,
+   "d": 1.44,
+   "text": "accessible for a visually impaired"
+  },
+  {
+   "t": 60.56,
+   "d": 0.56,
+   "text": "player"
+  },
+  {
+   "t": 61.12,
+   "d": 1.2,
+   "text": "but it's not going to make it a lot of"
+  },
+  {
+   "t": 62.32,
+   "d": 1.76,
+   "text": "fun compared to the kind of things that"
+  },
+  {
+   "t": 64.08,
+   "d": 1.68,
+   "text": "side players get to play"
+  },
+  {
+   "t": 65.76,
+   "d": 2.16,
+   "text": "so we were interested in is it possible"
+  },
+  {
+   "t": 67.92,
+   "d": 2.24,
+   "text": "to have both"
+  },
+  {
+   "t": 70.16,
+   "d": 1.36,
+   "text": "in terms of roguelikes you're at a"
+  },
+  {
+   "t": 71.52,
+   "d": 1.52,
+   "text": "roguelike conference i assume you know"
+  },
+  {
+   "t": 73.04,
+   "d": 1.52,
+   "text": "what a roguelike is"
+  },
+  {
+   "t": 74.56,
+   "d": 1.76,
+   "text": "but since the definition can be kind of"
+  },
+  {
+   "t": 76.32,
+   "d": 1.76,
+   "text": "fuzzy what we were interested in"
+  },
+  {
+   "t": 78.08,
+   "d": 2.32,
+   "text": "were the kind of quote-unquote classic"
+  },
+  {
+   "t": 80.4,
+   "d": 0.96,
+   "text": "uh"
+  },
+  {
+   "t": 81.36,
+   "d": 2.32,
+   "text": "turn-based dungeon crawling ascii"
+  },
+  {
+   "t": 83.68,
+   "d": 1.68,
+   "text": "graphic kind of roguelikes"
+  },
+  {
+   "t": 85.36,
+   "d": 3.28,
+   "text": "so ones like rogue angband dungeon"
+  },
+  {
+   "t": 88.64,
+   "d": 1.12,
+   "text": "crawlstone soup"
+  },
+  {
+   "t": 89.76,
+   "d": 1.52,
+   "text": "funny thing those were the examples i"
+  },
+  {
+   "t": 91.28,
+   "d": 1.6,
+   "text": "had like six months ago before i knew"
+  },
+  {
+   "t": 92.88,
+   "d": 1.6,
+   "text": "all of those developers are at this"
+  },
+  {
+   "t": 94.48,
+   "d": 2.64,
+   "text": "conference so"
+  },
+  {
+   "t": 97.12,
+   "d": 3.04,
+   "text": "funny thing uh yeah so and the thing"
+  },
+  {
+   "t": 100.16,
+   "d": 0.88,
+   "text": "about these games"
+  },
+  {
+   "t": 101.04,
+   "d": 2.64,
+   "text": "also is that they are very complex and"
+  },
+  {
+   "t": 103.68,
+   "d": 2.32,
+   "text": "very replayable as i'm sure we all know"
+  },
+  {
+   "t": 106.0,
+   "d": 1.12,
+   "text": "so these are just the kind of"
+  },
+  {
+   "t": 107.12,
+   "d": 1.84,
+   "text": "experiences that are not usually"
+  },
+  {
+   "t": 108.96,
+   "d": 0.72,
+   "text": "accessible"
+  },
+  {
+   "t": 109.68,
+   "d": 3.2,
+   "text": "for visually impaired players the game"
+  },
+  {
+   "t": 112.88,
+   "d": 1.6,
+   "text": "we worked with specifically in our"
+  },
+  {
+   "t": 114.48,
+   "d": 1.28,
+   "text": "research was nethack"
+  },
+  {
+   "t": 115.76,
+   "d": 2.48,
+   "text": "and you just heard excellent talk about"
+  },
+  {
+   "t": 118.24,
+   "d": 1.36,
+   "text": "why nethack is great"
+  },
+  {
+   "t": 119.6,
+   "d": 2.16,
+   "text": "but uh so it's been in development for"
+  },
+  {
+   "t": 121.76,
+   "d": 0.96,
+   "text": "29 years"
+  },
+  {
+   "t": 122.72,
+   "d": 2.8,
+   "text": "still in active development it is a very"
+  },
+  {
+   "t": 125.52,
+   "d": 1.52,
+   "text": "complex roguelike"
+  },
+  {
+   "t": 127.04,
+   "d": 1.2,
+   "text": "and the really interesting thing you"
+  },
+  {
+   "t": 128.24,
+   "d": 1.84,
+   "text": "might not know is that some visually"
+  },
+  {
+   "t": 130.08,
+   "d": 2.56,
+   "text": "impaired players already play nethack"
+  },
+  {
+   "t": 132.64,
+   "d": 1.52,
+   "text": "the way they do this is that because"
+  },
+  {
+   "t": 134.16,
+   "d": 1.52,
+   "text": "everything in nethack is"
+  },
+  {
+   "t": 135.68,
+   "d": 2.64,
+   "text": "technically an ascii character a screen"
+  },
+  {
+   "t": 138.32,
+   "d": 1.92,
+   "text": "reader can read it aloud"
+  },
+  {
+   "t": 140.24,
+   "d": 4.0,
+   "text": "as hash dot dot dot hash and"
+  },
+  {
+   "t": 144.24,
+   "d": 3.28,
+   "text": "it's terrible but some people want to"
+  },
+  {
+   "t": 147.52,
+   "d": 1.84,
+   "text": "blame that hack so bad"
+  },
+  {
+   "t": 149.36,
+   "d": 1.28,
+   "text": "that they do it anyway which is"
+  },
+  {
+   "t": 150.64,
+   "d": 2.24,
+   "text": "remarkable and we thought well"
+  },
+  {
+   "t": 152.88,
+   "d": 3.2,
+   "text": "we can do better than that"
+  },
+  {
+   "t": 156.08,
+   "d": 2.48,
+   "text": "and there's also some games in the"
+  },
+  {
+   "t": 158.56,
+   "d": 1.6,
+   "text": "roguelike genre which are completely"
+  },
+  {
+   "t": 160.16,
+   "d": 0.96,
+   "text": "accessible"
+  },
+  {
+   "t": 161.12,
+   "d": 2.4,
+   "text": "this is a screenshot of a game called"
+  },
+  {
+   "t": 163.52,
+   "d": 1.04,
+   "text": "keokukrope"
+  },
+  {
+   "t": 164.56,
+   "d": 3.52,
+   "text": "which is a purely text-based roguelike"
+  },
+  {
+   "t": 168.08,
+   "d": 2.24,
+   "text": "and that makes it 100 accessible because"
+  },
+  {
+   "t": 170.32,
+   "d": 1.68,
+   "text": "that text can be read aloud"
+  },
+  {
+   "t": 172.0,
+   "d": 3.04,
+   "text": "a screen reading software into spoken"
+  },
+  {
+   "t": 175.04,
+   "d": 0.56,
+   "text": "word"
+  },
+  {
+   "t": 175.6,
+   "d": 1.28,
+   "text": "so that's really cool and then there's"
+  },
+  {
+   "t": 176.88,
+   "d": 1.92,
+   "text": "another game called entombed which is a"
+  },
+  {
+   "t": 178.8,
+   "d": 0.72,
+   "text": "hundred percent"
+  },
+  {
+   "t": 179.52,
+   "d": 2.0,
+   "text": "audio roguelike which was made for"
+  },
+  {
+   "t": 181.52,
+   "d": 1.68,
+   "text": "visually impaired players"
+  },
+  {
+   "t": 183.2,
+   "d": 1.28,
+   "text": "but an interesting thing about both of"
+  },
+  {
+   "t": 184.48,
+   "d": 1.92,
+   "text": "these games is that"
+  },
+  {
+   "t": 186.4,
+   "d": 2.72,
+   "text": "they get rid of the map completely they"
+  },
+  {
+   "t": 189.12,
+   "d": 1.04,
+   "text": "don't have"
+  },
+  {
+   "t": 190.16,
+   "d": 1.84,
+   "text": "some kind of internal representation of"
+  },
+  {
+   "t": 192.0,
+   "d": 1.44,
+   "text": "a tile-based map"
+  },
+  {
+   "t": 193.44,
+   "d": 1.92,
+   "text": "instead they do more what interactive"
+  },
+  {
+   "t": 195.36,
+   "d": 2.16,
+   "text": "fiction does where you're in a room"
+  },
+  {
+   "t": 197.52,
+   "d": 2.56,
+   "text": "and you can pick up items in that room"
+  },
+  {
+   "t": 200.08,
+   "d": 1.12,
+   "text": "and you don't have to worry about"
+  },
+  {
+   "t": 201.2,
+   "d": 1.76,
+   "text": "exactly where you are"
+  },
+  {
+   "t": 202.96,
+   "d": 1.12,
+   "text": "and this has a lot of gameplay"
+  },
+  {
+   "t": 204.08,
+   "d": 2.24,
+   "text": "ramifications stuff like combat is"
+  },
+  {
+   "t": 206.32,
+   "d": 1.04,
+   "text": "completely different"
+  },
+  {
+   "t": 207.36,
+   "d": 2.0,
+   "text": "in that kind of system when you don't"
+  },
+  {
+   "t": 209.36,
+   "d": 2.08,
+   "text": "have the actual tile-based map"
+  },
+  {
+   "t": 211.44,
+   "d": 2.64,
+   "text": "it's more like i choose to dodge or"
+  },
+  {
+   "t": 214.08,
+   "d": 1.92,
+   "text": "attack and the monster chooses to dodge"
+  },
+  {
+   "t": 216.0,
+   "d": 0.96,
+   "text": "or attack"
+  },
+  {
+   "t": 216.96,
+   "d": 1.36,
+   "text": "and these games are really great and are"
+  },
+  {
+   "t": 218.32,
+   "d": 1.68,
+   "text": "enjoyed by a lot of people but the"
+  },
+  {
+   "t": 220.0,
+   "d": 1.68,
+   "text": "experience is quite different from"
+  },
+  {
+   "t": 221.68,
+   "d": 1.68,
+   "text": "playing a game like nethack"
+  },
+  {
+   "t": 223.36,
+   "d": 2.24,
+   "text": "so we wanted to see can we preserve that"
+  },
+  {
+   "t": 225.6,
+   "d": 1.84,
+   "text": "experience"
+  },
+  {
+   "t": 227.44,
+   "d": 1.52,
+   "text": "it's also interesting to note that some"
+  },
+  {
+   "t": 228.96,
+   "d": 1.84,
+   "text": "of these kind of classic roguelikes"
+  },
+  {
+   "t": 230.8,
+   "d": 1.68,
+   "text": "are semi-accessible for visually"
+  },
+  {
+   "t": 232.48,
+   "d": 1.44,
+   "text": "impaired players"
+  },
+  {
+   "t": 233.92,
+   "d": 2.72,
+   "text": "engband is one example where in the"
+  },
+  {
+   "t": 236.64,
+   "d": 1.92,
+   "text": "combat portion angband has auto"
+  },
+  {
+   "t": 238.56,
+   "d": 0.8,
+   "text": "targeting"
+  },
+  {
+   "t": 239.36,
+   "d": 1.44,
+   "text": "and it also has an ability to list"
+  },
+  {
+   "t": 240.8,
+   "d": 2.64,
+   "text": "nearby monsters and this means that"
+  },
+  {
+   "t": 243.44,
+   "d": 2.4,
+   "text": "the combat part of engband is all"
+  },
+  {
+   "t": 245.84,
+   "d": 1.36,
+   "text": "described in text"
+  },
+  {
+   "t": 247.2,
+   "d": 2.96,
+   "text": "so that part is accessible but exploring"
+  },
+  {
+   "t": 250.16,
+   "d": 2.32,
+   "text": "the map in angband can't be done"
+  },
+  {
+   "t": 252.48,
+   "d": 3.04,
+   "text": "in a text kind of way so effectively"
+  },
+  {
+   "t": 255.52,
+   "d": 1.6,
+   "text": "it's only really playable for people"
+  },
+  {
+   "t": 257.12,
+   "d": 1.84,
+   "text": "with partial vision loss who are able to"
+  },
+  {
+   "t": 258.96,
+   "d": 1.92,
+   "text": "blow up the tiles really big and still"
+  },
+  {
+   "t": 260.88,
+   "d": 2.48,
+   "text": "have some kind of side of the map"
+  },
+  {
+   "t": 263.36,
+   "d": 1.6,
+   "text": "dungeon crawlstone soup is another"
+  },
+  {
+   "t": 264.96,
+   "d": 2.08,
+   "text": "example where it has an auto"
+  },
+  {
+   "t": 267.04,
+   "d": 2.48,
+   "text": "explorer feature and this means that the"
+  },
+  {
+   "t": 269.52,
+   "d": 2.0,
+   "text": "exploration side is accessible"
+  },
+  {
+   "t": 271.52,
+   "d": 2.16,
+   "text": "because you don't have to be able to"
+  },
+  {
+   "t": 273.68,
+   "d": 1.76,
+   "text": "know what's going on in the map you"
+  },
+  {
+   "t": 275.44,
+   "d": 1.2,
+   "text": "don't have to see it"
+  },
+  {
+   "t": 276.64,
+   "d": 1.92,
+   "text": "you can just keep on using auto explorer"
+  },
+  {
+   "t": 278.56,
+   "d": 2.0,
+   "text": "and you will move through the map"
+  },
+  {
+   "t": 280.56,
+   "d": 1.44,
+   "text": "downside of this is that if you're"
+  },
+  {
+   "t": 282.0,
+   "d": 2.0,
+   "text": "playing the game that way you never know"
+  },
+  {
+   "t": 284.0,
+   "d": 1.28,
+   "text": "where you actually are"
+  },
+  {
+   "t": 285.28,
+   "d": 1.6,
+   "text": "and it's fairly disorienting you're kind"
+  },
+  {
+   "t": 286.88,
+   "d": 1.28,
+   "text": "of just going from encounter to"
+  },
+  {
+   "t": 288.16,
+   "d": 1.2,
+   "text": "encounter"
+  },
+  {
+   "t": 289.36,
+   "d": 1.92,
+   "text": "so it kind of completely removes the"
+  },
+  {
+   "t": 291.28,
+   "d": 1.44,
+   "text": "exploration aspect"
+  },
+  {
+   "t": 292.72,
+   "d": 2.24,
+   "text": "so visually impaired players enjoy"
+  },
+  {
+   "t": 294.96,
+   "d": 1.04,
+   "text": "playing it but"
+  },
+  {
+   "t": 296.0,
+   "d": 2.56,
+   "text": "it's also not really a perfect example"
+  },
+  {
+   "t": 298.56,
+   "d": 1.36,
+   "text": "of how to play a rogue like"
+  },
+  {
+   "t": 299.92,
+   "d": 3.36,
+   "text": "as a visually impaired player so"
+  },
+  {
+   "t": 303.28,
+   "d": 2.88,
+   "text": "the research that we did was we really"
+  },
+  {
+   "t": 306.16,
+   "d": 1.76,
+   "text": "wanted to see if we could keep the full"
+  },
+  {
+   "t": 307.92,
+   "d": 2.32,
+   "text": "complexity of nethack"
+  },
+  {
+   "t": 310.24,
+   "d": 2.4,
+   "text": "and make it accessible and the idea was"
+  },
+  {
+   "t": 312.64,
+   "d": 1.84,
+   "text": "we do this by adding new commands to the"
+  },
+  {
+   "t": 314.48,
+   "d": 0.4,
+   "text": "game"
+  },
+  {
+   "t": 314.88,
+   "d": 1.76,
+   "text": "which would give information that was"
+  },
+  {
+   "t": 316.64,
+   "d": 1.92,
+   "text": "previously available visually"
+  },
+  {
+   "t": 318.56,
+   "d": 2.72,
+   "text": "as text in the end it would hopefully be"
+  },
+  {
+   "t": 321.28,
+   "d": 1.44,
+   "text": "possible to play nethack without having"
+  },
+  {
+   "t": 322.72,
+   "d": 2.96,
+   "text": "to see the map at all"
+  },
+  {
+   "t": 325.68,
+   "d": 1.76,
+   "text": "to go over some of the commands that we"
+  },
+  {
+   "t": 327.44,
+   "d": 2.24,
+   "text": "added the first kind of big category was"
+  },
+  {
+   "t": 329.68,
+   "d": 1.44,
+   "text": "commands that gave you information about"
+  },
+  {
+   "t": 331.12,
+   "d": 1.28,
+   "text": "your surroundings as"
+  },
+  {
+   "t": 332.4,
+   "d": 2.16,
+   "text": "text so the kind of bread and butter of"
+  },
+  {
+   "t": 334.56,
+   "d": 1.68,
+   "text": "it was a view command"
+  },
+  {
+   "t": 336.24,
+   "d": 3.12,
+   "text": "that when you press it gives you a text"
+  },
+  {
+   "t": 339.36,
+   "d": 2.48,
+   "text": "list of everything around you that you"
+  },
+  {
+   "t": 341.84,
+   "d": 1.04,
+   "text": "can see"
+  },
+  {
+   "t": 342.88,
+   "d": 2.48,
+   "text": "so objects monsters dungeon features"
+  },
+  {
+   "t": 345.36,
+   "d": 2.0,
+   "text": "doors stuff like that"
+  },
+  {
+   "t": 347.36,
+   "d": 2.08,
+   "text": "and also it gives you the exact location"
+  },
+  {
+   "t": 349.44,
+   "d": 1.84,
+   "text": "of those things in terms of how many"
+  },
+  {
+   "t": 351.28,
+   "d": 1.84,
+   "text": "tiles it is away from you"
+  },
+  {
+   "t": 353.12,
+   "d": 2.24,
+   "text": "uh in each direction this is where being"
+  },
+  {
+   "t": 355.36,
+   "d": 1.76,
+   "text": "tile based is really helpful"
+  },
+  {
+   "t": 357.12,
+   "d": 1.68,
+   "text": "because you can say exactly it's two"
+  },
+  {
+   "t": 358.8,
+   "d": 1.68,
+   "text": "tiles north and"
+  },
+  {
+   "t": 360.48,
+   "d": 1.84,
+   "text": "you need this because to be able to"
+  },
+  {
+   "t": 362.32,
+   "d": 2.24,
+   "text": "actually play net hack and be able to"
+  },
+  {
+   "t": 364.56,
+   "d": 2.0,
+   "text": "interact with things in the game you"
+  },
+  {
+   "t": 366.56,
+   "d": 2.24,
+   "text": "need to know exactly where they are"
+  },
+  {
+   "t": 368.8,
+   "d": 1.92,
+   "text": "there's also a command we added that let"
+  },
+  {
+   "t": 370.72,
+   "d": 1.76,
+   "text": "you feel tiles"
+  },
+  {
+   "t": 372.48,
+   "d": 1.76,
+   "text": "so you'd go into a mode where you had a"
+  },
+  {
+   "t": 374.24,
+   "d": 2.16,
+   "text": "cursor in-game and as you moved it"
+  },
+  {
+   "t": 376.4,
+   "d": 2.16,
+   "text": "over tiles it would say what the tile"
+  },
+  {
+   "t": 378.56,
+   "d": 1.76,
+   "text": "was so you could kind of feel out around"
+  },
+  {
+   "t": 380.32,
+   "d": 0.96,
+   "text": "you"
+  },
+  {
+   "t": 381.28,
+   "d": 2.4,
+   "text": "and hallways were a special case where"
+  },
+  {
+   "t": 383.68,
+   "d": 1.6,
+   "text": "when you're in a hallway instead of a"
+  },
+  {
+   "t": 385.28,
+   "d": 0.56,
+   "text": "room"
+  },
+  {
+   "t": 385.84,
+   "d": 2.56,
+   "text": "every time you move you get a printout"
+  },
+  {
+   "t": 388.4,
+   "d": 0.72,
+   "text": "of how many"
+  },
+  {
+   "t": 389.12,
+   "d": 2.08,
+   "text": "tiles are kind of visible and accessible"
+  },
+  {
+   "t": 391.2,
+   "d": 1.28,
+   "text": "in each direction"
+  },
+  {
+   "t": 392.48,
+   "d": 2.16,
+   "text": "and i'll talk later about why hallways"
+  },
+  {
+   "t": 394.64,
+   "d": 2.56,
+   "text": "were special like that"
+  },
+  {
+   "t": 397.2,
+   "d": 1.6,
+   "text": "another category of commands that we"
+  },
+  {
+   "t": 398.8,
+   "d": 2.56,
+   "text": "added were movement shortcuts"
+  },
+  {
+   "t": 401.36,
+   "d": 1.44,
+   "text": "when it comes to playing nethack as a"
+  },
+  {
+   "t": 402.8,
+   "d": 2.08,
+   "text": "visually impaired player when we looked"
+  },
+  {
+   "t": 404.88,
+   "d": 1.28,
+   "text": "at what visually impaired players had to"
+  },
+  {
+   "t": 406.16,
+   "d": 0.8,
+   "text": "say"
+  },
+  {
+   "t": 406.96,
+   "d": 2.88,
+   "text": "the really difficult thing was the kind"
+  },
+  {
+   "t": 409.84,
+   "d": 1.76,
+   "text": "of movement through the dungeon as a"
+  },
+  {
+   "t": 411.6,
+   "d": 0.72,
+   "text": "whole"
+  },
+  {
+   "t": 412.32,
+   "d": 1.6,
+   "text": "because to be able to do that you need"
+  },
+  {
+   "t": 413.92,
+   "d": 2.0,
+   "text": "to not just know your local surroundings"
+  },
+  {
+   "t": 415.92,
+   "d": 1.52,
+   "text": "really exactly so you know"
+  },
+  {
+   "t": 417.44,
+   "d": 2.24,
+   "text": "how to find the door you also need to"
+  },
+  {
+   "t": 419.68,
+   "d": 1.68,
+   "text": "have made a kind of mental map of the"
+  },
+  {
+   "t": 421.36,
+   "d": 1.36,
+   "text": "entire dungeon"
+  },
+  {
+   "t": 422.72,
+   "d": 1.76,
+   "text": "and know what hallways lead to what"
+  },
+  {
+   "t": 424.48,
+   "d": 1.84,
+   "text": "rooms what rooms had interesting things"
+  },
+  {
+   "t": 426.32,
+   "d": 0.88,
+   "text": "in them"
+  },
+  {
+   "t": 427.2,
+   "d": 2.32,
+   "text": "and that's the most kind of taxing part"
+  },
+  {
+   "t": 429.52,
+   "d": 1.2,
+   "text": "of the game"
+  },
+  {
+   "t": 430.72,
+   "d": 1.6,
+   "text": "and backtracking is especially"
+  },
+  {
+   "t": 432.32,
+   "d": 1.04,
+   "text": "frustrating because then you're going"
+  },
+  {
+   "t": 433.36,
+   "d": 1.84,
+   "text": "places you've already been"
+  },
+  {
+   "t": 435.2,
+   "d": 1.84,
+   "text": "so we thought well that's something we"
+  },
+  {
+   "t": 437.04,
+   "d": 1.28,
+   "text": "can maybe make better"
+  },
+  {
+   "t": 438.32,
+   "d": 1.92,
+   "text": "we added a command that you can get a"
+  },
+  {
+   "t": 440.24,
+   "d": 1.6,
+   "text": "list of all the dungeon features you've"
+  },
+  {
+   "t": 441.84,
+   "d": 0.4,
+   "text": "seen"
+  },
+  {
+   "t": 442.24,
+   "d": 2.32,
+   "text": "so things like staircases and altars and"
+  },
+  {
+   "t": 444.56,
+   "d": 0.72,
+   "text": "fountains"
+  },
+  {
+   "t": 445.28,
+   "d": 1.6,
+   "text": "which usually is why you're going to a"
+  },
+  {
+   "t": 446.88,
+   "d": 1.36,
+   "text": "previous room you don't usually want to"
+  },
+  {
+   "t": 448.24,
+   "d": 1.84,
+   "text": "go to an empty room anyway"
+  },
+  {
+   "t": 450.08,
+   "d": 2.16,
+   "text": "and you get a list of those and when you"
+  },
+  {
+   "t": 452.24,
+   "d": 1.52,
+   "text": "select one you'll start automatically"
+  },
+  {
+   "t": 453.76,
+   "d": 1.04,
+   "text": "passing back there"
+  },
+  {
+   "t": 454.8,
+   "d": 1.76,
+   "text": "you might get interrupted but it'll put"
+  },
+  {
+   "t": 456.56,
+   "d": 1.6,
+   "text": "you on the right path"
+  },
+  {
+   "t": 458.16,
+   "d": 1.68,
+   "text": "so we wanted to just do things like that"
+  },
+  {
+   "t": 459.84,
+   "d": 2.0,
+   "text": "to minimize the most frustrating parts"
+  },
+  {
+   "t": 461.84,
+   "d": 1.12,
+   "text": "of the game for visually impaired"
+  },
+  {
+   "t": 462.96,
+   "d": 0.72,
+   "text": "players"
+  },
+  {
+   "t": 463.68,
+   "d": 2.08,
+   "text": "in a way that didn't take away from the"
+  },
+  {
+   "t": 465.76,
+   "d": 1.44,
+   "text": "gameplay experience this is something"
+  },
+  {
+   "t": 467.2,
+   "d": 1.52,
+   "text": "that a sighted player doesn't even think"
+  },
+  {
+   "t": 468.72,
+   "d": 0.72,
+   "text": "about"
+  },
+  {
+   "t": 469.44,
+   "d": 2.16,
+   "text": "but makes the game a bit easier to play"
+  },
+  {
+   "t": 471.6,
+   "d": 1.2,
+   "text": "another thing was"
+  },
+  {
+   "t": 472.8,
+   "d": 1.68,
+   "text": "in net hack to pick up items you have to"
+  },
+  {
+   "t": 474.48,
+   "d": 1.84,
+   "text": "stand directly on top of them"
+  },
+  {
+   "t": 476.32,
+   "d": 1.52,
+   "text": "we made it so that if you can see an"
+  },
+  {
+   "t": 477.84,
+   "d": 2.4,
+   "text": "item you can select it it'll move you"
+  },
+  {
+   "t": 480.24,
+   "d": 1.28,
+   "text": "over there and pick it up"
+  },
+  {
+   "t": 481.52,
+   "d": 1.6,
+   "text": "so just taking out some of the most"
+  },
+  {
+   "t": 483.12,
+   "d": 3.04,
+   "text": "frustrating parts of the game"
+  },
+  {
+   "t": 486.16,
+   "d": 1.44,
+   "text": "once we've made these kind of changes"
+  },
+  {
+   "t": 487.6,
+   "d": 1.36,
+   "text": "and we had at a good point where you"
+  },
+  {
+   "t": 488.96,
+   "d": 0.96,
+   "text": "could play the game"
+  },
+  {
+   "t": 489.92,
+   "d": 1.6,
+   "text": "without having to see the map we did"
+  },
+  {
+   "t": 491.52,
+   "d": 1.52,
+   "text": "some tests with users"
+  },
+  {
+   "t": 493.04,
+   "d": 2.56,
+   "text": "we did a in-person user study where we"
+  },
+  {
+   "t": 495.6,
+   "d": 0.64,
+   "text": "got"
+  },
+  {
+   "t": 496.24,
+   "d": 2.08,
+   "text": "sighted players to come in and what we"
+  },
+  {
+   "t": 498.32,
+   "d": 1.44,
+   "text": "did is give them a version of the game"
+  },
+  {
+   "t": 499.76,
+   "d": 1.52,
+   "text": "where the map was turned off"
+  },
+  {
+   "t": 501.28,
+   "d": 1.84,
+   "text": "so they only got text which is the same"
+  },
+  {
+   "t": 503.12,
+   "d": 1.36,
+   "text": "thing a visually impaired player would"
+  },
+  {
+   "t": 504.48,
+   "d": 2.4,
+   "text": "get so it was kind of"
+  },
+  {
+   "t": 506.88,
+   "d": 2.64,
+   "text": "the same experience and we also did an"
+  },
+  {
+   "t": 509.52,
+   "d": 1.68,
+   "text": "online study with visually impaired"
+  },
+  {
+   "t": 511.2,
+   "d": 1.52,
+   "text": "players where we gave them a version of"
+  },
+  {
+   "t": 512.72,
+   "d": 1.52,
+   "text": "the game and we said hey"
+  },
+  {
+   "t": 514.24,
+   "d": 2.0,
+   "text": "tell us what you think and some lessons"
+  },
+  {
+   "t": 516.24,
+   "d": 1.2,
+   "text": "we got out of that"
+  },
+  {
+   "t": 517.44,
+   "d": 1.52,
+   "text": "the first one is the most important one"
+  },
+  {
+   "t": 518.96,
+   "d": 2.0,
+   "text": "and also the most obvious one but it"
+  },
+  {
+   "t": 520.96,
+   "d": 2.48,
+   "text": "always bears repeating which is that"
+  },
+  {
+   "t": 523.44,
+   "d": 1.2,
+   "text": "doing this kind of work there's really"
+  },
+  {
+   "t": 524.64,
+   "d": 1.76,
+   "text": "no substitute for getting the feedback"
+  },
+  {
+   "t": 526.4,
+   "d": 2.4,
+   "text": "directly from visually impaired players"
+  },
+  {
+   "t": 528.8,
+   "d": 2.88,
+   "text": "they know what's best for them and in"
+  },
+  {
+   "t": 531.68,
+   "d": 0.64,
+   "text": "this case"
+  },
+  {
+   "t": 532.32,
+   "d": 1.84,
+   "text": "the screen reading software actually"
+  },
+  {
+   "t": 534.16,
+   "d": 1.52,
+   "text": "adds another level because that's the"
+  },
+  {
+   "t": 535.68,
+   "d": 1.28,
+   "text": "kind of software"
+  },
+  {
+   "t": 536.96,
+   "d": 2.4,
+   "text": "that most cited people have never used"
+  },
+  {
+   "t": 539.36,
+   "d": 1.44,
+   "text": "and actually requires quite a bit of"
+  },
+  {
+   "t": 540.8,
+   "d": 2.0,
+   "text": "expertise to use effectively"
+  },
+  {
+   "t": 542.8,
+   "d": 2.8,
+   "text": "so there are examples like we had done"
+  },
+  {
+   "t": 545.6,
+   "d": 0.88,
+   "text": "it so that"
+  },
+  {
+   "t": 546.48,
+   "d": 1.84,
+   "text": "since we knew there were visually"
+  },
+  {
+   "t": 548.32,
+   "d": 1.84,
+   "text": "impaired players who played nethack"
+  },
+  {
+   "t": 550.16,
+   "d": 2.16,
+   "text": "as it was we thought well we'll leave"
+  },
+  {
+   "t": 552.32,
+   "d": 1.52,
+   "text": "the map in"
+  },
+  {
+   "t": 553.84,
+   "d": 1.52,
+   "text": "and we'll add our text commands and then"
+  },
+  {
+   "t": 555.36,
+   "d": 1.52,
+   "text": "if our text commands aren't enough they"
+  },
+  {
+   "t": 556.88,
+   "d": 0.32,
+   "text": "can"
+  },
+  {
+   "t": 557.2,
+   "d": 2.24,
+   "text": "use their screen reader on the map seem"
+  },
+  {
+   "t": 559.44,
+   "d": 1.92,
+   "text": "to make sense to us"
+  },
+  {
+   "t": 561.36,
+   "d": 1.44,
+   "text": "we give the game to visually impaired"
+  },
+  {
+   "t": 562.8,
+   "d": 1.44,
+   "text": "players and one of the first things"
+  },
+  {
+   "t": 564.24,
+   "d": 1.52,
+   "text": "they're asking for is is there a way to"
+  },
+  {
+   "t": 565.76,
+   "d": 1.28,
+   "text": "turn off the map"
+  },
+  {
+   "t": 567.04,
+   "d": 1.76,
+   "text": "turns out screen reading software will"
+  },
+  {
+   "t": 568.8,
+   "d": 1.68,
+   "text": "usually once it finishes reading the"
+  },
+  {
+   "t": 570.48,
+   "d": 0.88,
+   "text": "text line"
+  },
+  {
+   "t": 571.36,
+   "d": 1.84,
+   "text": "automatically start reading out the map"
+  },
+  {
+   "t": 573.2,
+   "d": 1.92,
+   "text": "so every useful bit of text is followed"
+  },
+  {
+   "t": 575.12,
+   "d": 0.48,
+   "text": "by"
+  },
+  {
+   "t": 575.6,
+   "d": 2.72,
+   "text": "hashes and dots and it's annoying so"
+  },
+  {
+   "t": 578.32,
+   "d": 1.36,
+   "text": "yeah we already knew how to turn off the"
+  },
+  {
+   "t": 579.68,
+   "d": 1.6,
+   "text": "map it was easy to do"
+  },
+  {
+   "t": 581.28,
+   "d": 1.92,
+   "text": "but uh stuff like that you just need to"
+  },
+  {
+   "t": 583.2,
+   "d": 1.2,
+   "text": "get the feedback from the people who"
+  },
+  {
+   "t": 584.4,
+   "d": 1.76,
+   "text": "know what's best for them"
+  },
+  {
+   "t": 586.16,
+   "d": 2.88,
+   "text": "another thing is that visually impaired"
+  },
+  {
+   "t": 589.04,
+   "d": 1.28,
+   "text": "players all have different preferences"
+  },
+  {
+   "t": 590.32,
+   "d": 1.76,
+   "text": "like any other group of people"
+  },
+  {
+   "t": 592.08,
+   "d": 2.4,
+   "text": "and so there are some things that there"
+  },
+  {
+   "t": 594.48,
+   "d": 1.52,
+   "text": "are multiple ways to do and the best way"
+  },
+  {
+   "t": 596.0,
+   "d": 1.44,
+   "text": "to do it is to give an option"
+  },
+  {
+   "t": 597.44,
+   "d": 2.08,
+   "text": "which is already kind of the roguelike"
+  },
+  {
+   "t": 599.52,
+   "d": 2.4,
+   "text": "ethos we like our configuration files"
+  },
+  {
+   "t": 601.92,
+   "d": 0.88,
+   "text": "and our"
+  },
+  {
+   "t": 602.8,
+   "d": 2.24,
+   "text": "ability to customize things to our every"
+  },
+  {
+   "t": 605.04,
+   "d": 1.6,
+   "text": "whim"
+  },
+  {
+   "t": 606.64,
+   "d": 1.92,
+   "text": "but things like whether or not to"
+  },
+  {
+   "t": 608.56,
+   "d": 2.88,
+   "text": "describe tiles as north south east west"
+  },
+  {
+   "t": 611.44,
+   "d": 2.64,
+   "text": "or up down left right is things that"
+  },
+  {
+   "t": 614.08,
+   "d": 2.16,
+   "text": "people cared really strongly about"
+  },
+  {
+   "t": 616.24,
+   "d": 2.96,
+   "text": "but they had different strong opinions"
+  },
+  {
+   "t": 619.2,
+   "d": 0.56,
+   "text": "so"
+  },
+  {
+   "t": 619.76,
+   "d": 1.84,
+   "text": "there's no decision you can make that"
+  },
+  {
+   "t": 621.6,
+   "d": 2.32,
+   "text": "won't make 50 of your user base angry so"
+  },
+  {
+   "t": 623.92,
+   "d": 1.52,
+   "text": "make it an option"
+  },
+  {
+   "t": 625.44,
+   "d": 2.24,
+   "text": "and people can play it how they like"
+  },
+  {
+   "t": 627.68,
+   "d": 1.36,
+   "text": "another thing is that one of the big"
+  },
+  {
+   "t": 629.04,
+   "d": 1.6,
+   "text": "benefits of a game like nethack is how"
+  },
+  {
+   "t": 630.64,
+   "d": 1.04,
+   "text": "complex it is"
+  },
+  {
+   "t": 631.68,
+   "d": 2.8,
+   "text": "but that also means that as a developer"
+  },
+  {
+   "t": 634.48,
+   "d": 1.6,
+   "text": "there are so many special cases to"
+  },
+  {
+   "t": 636.08,
+   "d": 0.72,
+   "text": "account for"
+  },
+  {
+   "t": 636.8,
+   "d": 1.28,
+   "text": "and it's really hard to think of those"
+  },
+  {
+   "t": 638.08,
+   "d": 3.6,
+   "text": "all up front one good example is that"
+  },
+  {
+   "t": 641.68,
+   "d": 1.36,
+   "text": "if you played nethack you're probably"
+  },
+  {
+   "t": 643.04,
+   "d": 1.68,
+   "text": "familiar with this but you can steal"
+  },
+  {
+   "t": 644.72,
+   "d": 2.32,
+   "text": "from shops and net hack using your pet"
+  },
+  {
+   "t": 647.04,
+   "d": 2.0,
+   "text": "you let your pet go into the shop you"
+  },
+  {
+   "t": 649.04,
+   "d": 1.2,
+   "text": "stand in the doorway"
+  },
+  {
+   "t": 650.24,
+   "d": 2.32,
+   "text": "your pet will pick up and drop items"
+  },
+  {
+   "t": 652.56,
+   "d": 1.44,
+   "text": "semi kind of at random"
+  },
+  {
+   "t": 654.0,
+   "d": 1.2,
+   "text": "and if they drop it in the right square"
+  },
+  {
+   "t": 655.2,
+   "d": 1.12,
+   "text": "right in front of you you can take it"
+  },
+  {
+   "t": 656.32,
+   "d": 1.36,
+   "text": "and the shopkeeper won't know that you"
+  },
+  {
+   "t": 657.68,
+   "d": 0.8,
+   "text": "stole it"
+  },
+  {
+   "t": 658.48,
+   "d": 1.68,
+   "text": "and then you can kind of reinforce this"
+  },
+  {
+   "t": 660.16,
+   "d": 2.16,
+   "text": "behavior and stuff like that"
+  },
+  {
+   "t": 662.32,
+   "d": 2.32,
+   "text": "and well one of our users had played"
+  },
+  {
+   "t": 664.64,
+   "d": 1.92,
+   "text": "nethack and knew about this and wanted"
+  },
+  {
+   "t": 666.56,
+   "d": 1.68,
+   "text": "to do it because it's great"
+  },
+  {
+   "t": 668.24,
+   "d": 2.4,
+   "text": "we hadn't been thinking about it when we"
+  },
+  {
+   "t": 670.64,
+   "d": 1.2,
+   "text": "were developing"
+  },
+  {
+   "t": 671.84,
+   "d": 3.28,
+   "text": "because it's not exactly core gameplay"
+  },
+  {
+   "t": 675.12,
+   "d": 2.0,
+   "text": "so we thought that usually you go into a"
+  },
+  {
+   "t": 677.12,
+   "d": 2.08,
+   "text": "shop you'd use the view command once to"
+  },
+  {
+   "t": 679.2,
+   "d": 1.92,
+   "text": "figure out what was in that shop"
+  },
+  {
+   "t": 681.12,
+   "d": 1.6,
+   "text": "and you wouldn't really need constant"
+  },
+  {
+   "t": 682.72,
+   "d": 1.52,
+   "text": "updates unless something happened like a"
+  },
+  {
+   "t": 684.24,
+   "d": 1.52,
+   "text": "monster showed up"
+  },
+  {
+   "t": 685.76,
+   "d": 2.4,
+   "text": "well to do this shop stealing you need"
+  },
+  {
+   "t": 688.16,
+   "d": 0.88,
+   "text": "to know"
+  },
+  {
+   "t": 689.04,
+   "d": 1.44,
+   "text": "every single time your pet drops"
+  },
+  {
+   "t": 690.48,
+   "d": 2.16,
+   "text": "something exactly where they drop it"
+  },
+  {
+   "t": 692.64,
+   "d": 1.6,
+   "text": "and every time you use the view command"
+  },
+  {
+   "t": 694.24,
+   "d": 1.44,
+   "text": "you're going to get a list of everything"
+  },
+  {
+   "t": 695.68,
+   "d": 0.96,
+   "text": "in the shop"
+  },
+  {
+   "t": 696.64,
+   "d": 3.76,
+   "text": "read aloud to you and it was not great"
+  },
+  {
+   "t": 700.4,
+   "d": 1.2,
+   "text": "so it was the kind of thing that we"
+  },
+  {
+   "t": 701.6,
+   "d": 2.24,
+   "text": "could totally do better doing something"
+  },
+  {
+   "t": 703.84,
+   "d": 1.52,
+   "text": "like making it so that when a monster"
+  },
+  {
+   "t": 705.36,
+   "d": 1.52,
+   "text": "drops an item it tells you where they"
+  },
+  {
+   "t": 706.88,
+   "d": 0.64,
+   "text": "dropped it"
+  },
+  {
+   "t": 707.52,
+   "d": 2.48,
+   "text": "or maybe just your pet it tells you"
+  },
+  {
+   "t": 710.0,
+   "d": 1.36,
+   "text": "where they drop things"
+  },
+  {
+   "t": 711.36,
+   "d": 1.44,
+   "text": "there are a lot of options that we could"
+  },
+  {
+   "t": 712.8,
+   "d": 2.16,
+   "text": "do better but just stuff like that it's"
+  },
+  {
+   "t": 714.96,
+   "d": 1.68,
+   "text": "so hard to think of it all ahead of time"
+  },
+  {
+   "t": 716.64,
+   "d": 1.68,
+   "text": "so the best kind of way to do it is to"
+  },
+  {
+   "t": 718.32,
+   "d": 2.16,
+   "text": "get the users playing it and they can"
+  },
+  {
+   "t": 720.48,
+   "d": 2.4,
+   "text": "tell you"
+  },
+  {
+   "t": 723.04,
+   "d": 2.32,
+   "text": "so good news when we finished our talk"
+  },
+  {
+   "t": 725.36,
+   "d": 1.2,
+   "text": "in our"
+  },
+  {
+   "t": 726.56,
+   "d": 3.28,
+   "text": "our research was that"
+  },
+  {
+   "t": 729.84,
+   "d": 2.72,
+   "text": "this genre really is super exciting in"
+  },
+  {
+   "t": 732.56,
+   "d": 1.68,
+   "text": "terms of accessibility"
+  },
+  {
+   "t": 734.24,
+   "d": 1.92,
+   "text": "because so much of these games is"
+  },
+  {
+   "t": 736.16,
+   "d": 1.2,
+   "text": "already text"
+  },
+  {
+   "t": 737.36,
+   "d": 1.76,
+   "text": "the reason for that is because of this"
+  },
+  {
+   "t": 739.12,
+   "d": 1.36,
+   "text": "simple ascii"
+  },
+  {
+   "t": 740.48,
+   "d": 3.76,
+   "text": "tile graphic system ascii is not able"
+  },
+  {
+   "t": 744.24,
+   "d": 2.56,
+   "text": "to give you much in terms of visual"
+  },
+  {
+   "t": 746.8,
+   "d": 0.88,
+   "text": "information"
+  },
+  {
+   "t": 747.68,
+   "d": 3.12,
+   "text": "other than where things are so when you"
+  },
+  {
+   "t": 750.8,
+   "d": 1.92,
+   "text": "do something like drink a potion and"
+  },
+  {
+   "t": 752.72,
+   "d": 2.16,
+   "text": "you start levitating it can't show you"
+  },
+  {
+   "t": 754.88,
+   "d": 1.44,
+   "text": "that in the ascii it has to describe it"
+  },
+  {
+   "t": 756.32,
+   "d": 1.28,
+   "text": "to you as text"
+  },
+  {
+   "t": 757.6,
+   "d": 2.32,
+   "text": "and even when there is a graphic"
+  },
+  {
+   "t": 759.92,
+   "d": 1.36,
+   "text": "depiction of something there's often"
+  },
+  {
+   "t": 761.28,
+   "d": 1.68,
+   "text": "text to go along with it as kind of"
+  },
+  {
+   "t": 762.96,
+   "d": 0.8,
+   "text": "flavor"
+  },
+  {
+   "t": 763.76,
+   "d": 2.32,
+   "text": "for example as you zap a wand of"
+  },
+  {
+   "t": 766.08,
+   "d": 0.72,
+   "text": "lightning"
+  },
+  {
+   "t": 766.8,
+   "d": 1.76,
+   "text": "you get a nice little graphic effect of"
+  },
+  {
+   "t": 768.56,
+   "d": 1.44,
+   "text": "it bouncing around the room which is"
+  },
+  {
+   "t": 770.0,
+   "d": 0.64,
+   "text": "cool"
+  },
+  {
+   "t": 770.64,
+   "d": 1.76,
+   "text": "but you also get a text description of"
+  },
+  {
+   "t": 772.4,
+   "d": 1.44,
+   "text": "everything it does"
+  },
+  {
+   "t": 773.84,
+   "d": 2.8,
+   "text": "because that adds kind of flavor and"
+  },
+  {
+   "t": 776.64,
+   "d": 1.6,
+   "text": "what all this means is that"
+  },
+  {
+   "t": 778.24,
+   "d": 2.4,
+   "text": "so much of these games is already 100"
+  },
+  {
+   "t": 780.64,
+   "d": 1.76,
+   "text": "accessible for visually impaired players"
+  },
+  {
+   "t": 782.4,
+   "d": 2.08,
+   "text": "all that text is already accessible for"
+  },
+  {
+   "t": 784.48,
+   "d": 3.2,
+   "text": "them and so it's relatively few changes"
+  },
+  {
+   "t": 787.68,
+   "d": 2.32,
+   "text": "to take these games to being completely"
+  },
+  {
+   "t": 790.0,
+   "d": 1.6,
+   "text": "accessible"
+  },
+  {
+   "t": 791.6,
+   "d": 2.64,
+   "text": "and another thing we found that was uh"
+  },
+  {
+   "t": 794.24,
+   "d": 1.28,
+   "text": "useful as a developer is that"
+  },
+  {
+   "t": 795.52,
+   "d": 2.08,
+   "text": "accessibility improvements can be useful"
+  },
+  {
+   "t": 797.6,
+   "d": 1.6,
+   "text": "for your whole player base in ways that"
+  },
+  {
+   "t": 799.2,
+   "d": 2.56,
+   "text": "are hard to predict the view command"
+  },
+  {
+   "t": 801.76,
+   "d": 2.16,
+   "text": "is meant for visually impaired players"
+  },
+  {
+   "t": 803.92,
+   "d": 1.44,
+   "text": "but it turns out that if you're someone"
+  },
+  {
+   "t": 805.36,
+   "d": 1.84,
+   "text": "who's kind of newer to nethack and you"
+  },
+  {
+   "t": 807.2,
+   "d": 2.48,
+   "text": "don't know all of the ascii super well"
+  },
+  {
+   "t": 809.68,
+   "d": 1.6,
+   "text": "having a one hit command that tells you"
+  },
+  {
+   "t": 811.28,
+   "d": 1.84,
+   "text": "what everything is that you can see"
+  },
+  {
+   "t": 813.12,
+   "d": 2.0,
+   "text": "it's really nice even for someone who"
+  },
+  {
+   "t": 815.12,
+   "d": 1.84,
+   "text": "knows the ascii stuff like if you see a"
+  },
+  {
+   "t": 816.96,
+   "d": 1.68,
+   "text": "weapon on the other side of the room"
+  },
+  {
+   "t": 818.64,
+   "d": 1.68,
+   "text": "and you don't know exactly what it is"
+  },
+  {
+   "t": 820.32,
+   "d": 1.52,
+   "text": "there's a one-hit command to figure out"
+  },
+  {
+   "t": 821.84,
+   "d": 1.76,
+   "text": "oh that's a silver saber i should go get"
+  },
+  {
+   "t": 823.6,
+   "d": 1.6,
+   "text": "that"
+  },
+  {
+   "t": 825.2,
+   "d": 2.16,
+   "text": "and so as a developer it's just more"
+  },
+  {
+   "t": 827.36,
+   "d": 2.16,
+   "text": "incentive if you put the work in"
+  },
+  {
+   "t": 829.52,
+   "d": 2.0,
+   "text": "to thinking about accessibility you'll"
+  },
+  {
+   "t": 831.52,
+   "d": 1.44,
+   "text": "often get"
+  },
+  {
+   "t": 832.96,
+   "d": 2.0,
+   "text": "unexpected benefits for all kinds of"
+  },
+  {
+   "t": 834.96,
+   "d": 2.32,
+   "text": "players"
+  },
+  {
+   "t": 837.28,
+   "d": 1.6,
+   "text": "now there were also some compromises"
+  },
+  {
+   "t": 838.88,
+   "d": 2.48,
+   "text": "that we found in our work on nethack"
+  },
+  {
+   "t": 841.36,
+   "d": 1.12,
+   "text": "and the main one is that when you're"
+  },
+  {
+   "t": 842.48,
+   "d": 2.24,
+   "text": "doing this kind of text description"
+  },
+  {
+   "t": 844.72,
+   "d": 3.92,
+   "text": "the real push and pull is between being"
+  },
+  {
+   "t": 848.64,
+   "d": 2.0,
+   "text": "descriptive enough to give the player"
+  },
+  {
+   "t": 850.64,
+   "d": 1.36,
+   "text": "all the information they need to play"
+  },
+  {
+   "t": 852.0,
+   "d": 1.2,
+   "text": "the game"
+  },
+  {
+   "t": 853.2,
+   "d": 2.08,
+   "text": "but still trying to be immersive and not"
+  },
+  {
+   "t": 855.28,
+   "d": 2.08,
+   "text": "make them bored and give them"
+  },
+  {
+   "t": 857.36,
+   "d": 2.24,
+   "text": "tons of text and sometimes we could do"
+  },
+  {
+   "t": 859.6,
+   "d": 0.88,
+   "text": "this pretty well"
+  },
+  {
+   "t": 860.48,
+   "d": 1.52,
+   "text": "the view command was a pretty nice"
+  },
+  {
+   "t": 862.0,
+   "d": 1.28,
+   "text": "example where you got all the"
+  },
+  {
+   "t": 863.28,
+   "d": 1.76,
+   "text": "information you needed to play"
+  },
+  {
+   "t": 865.04,
+   "d": 2.08,
+   "text": "but most of it was fairly immersive you"
+  },
+  {
+   "t": 867.12,
+   "d": 1.36,
+   "text": "know you see your little dog named"
+  },
+  {
+   "t": 868.48,
+   "d": 1.04,
+   "text": "sirius"
+  },
+  {
+   "t": 869.52,
+   "d": 3.12,
+   "text": "and it was nice"
+  },
+  {
+   "t": 872.64,
+   "d": 2.48,
+   "text": "sometimes it wasn't so nice hallways"
+  },
+  {
+   "t": 875.12,
+   "d": 0.8,
+   "text": "like i mentioned"
+  },
+  {
+   "t": 875.92,
+   "d": 1.6,
+   "text": "every single time you move you get a"
+  },
+  {
+   "t": 877.52,
+   "d": 2.8,
+   "text": "list of all the tiles in each direction"
+  },
+  {
+   "t": 880.32,
+   "d": 2.24,
+   "text": "which is both entirely technical and you"
+  },
+  {
+   "t": 882.56,
+   "d": 1.44,
+   "text": "get it every single time you move which"
+  },
+  {
+   "t": 884.0,
+   "d": 1.52,
+   "text": "is a lot of text"
+  },
+  {
+   "t": 885.52,
+   "d": 1.92,
+   "text": "so you might think why do that well"
+  },
+  {
+   "t": 887.44,
+   "d": 1.68,
+   "text": "here's why corridors are the worst"
+  },
+  {
+   "t": 889.12,
+   "d": 4.4,
+   "text": "thing you might think"
+  },
+  {
+   "t": 893.52,
+   "d": 2.0,
+   "text": "that corridors would be kind of straight"
+  },
+  {
+   "t": 895.52,
+   "d": 1.6,
+   "text": "line connections between rooms but"
+  },
+  {
+   "t": 897.12,
+   "d": 2.0,
+   "text": "that's where you would be wrong"
+  },
+  {
+   "t": 899.12,
+   "d": 2.4,
+   "text": "corridors can dead end corridors can"
+  },
+  {
+   "t": 901.52,
+   "d": 1.6,
+   "text": "kind of overlap"
+  },
+  {
+   "t": 903.12,
+   "d": 3.04,
+   "text": "corridors can do whatever is going on"
+  },
+  {
+   "t": 906.16,
+   "d": 1.68,
+   "text": "on the left side of the screen which is"
+  },
+  {
+   "t": 907.84,
+   "d": 2.0,
+   "text": "a legit screenshot from nethack i did"
+  },
+  {
+   "t": 909.84,
+   "d": 2.88,
+   "text": "not make this out and even worse they"
+  },
+  {
+   "t": 912.72,
+   "d": 1.6,
+   "text": "can change during gameplay"
+  },
+  {
+   "t": 914.32,
+   "d": 1.84,
+   "text": "if you leave a dwarf to his own devices"
+  },
+  {
+   "t": 916.16,
+   "d": 1.36,
+   "text": "with a peck axe"
+  },
+  {
+   "t": 917.52,
+   "d": 1.84,
+   "text": "by the time you get to him he will have"
+  },
+  {
+   "t": 919.36,
+   "d": 2.16,
+   "text": "dug a whole new corridor in his search"
+  },
+  {
+   "t": 921.52,
+   "d": 1.36,
+   "text": "for gold"
+  },
+  {
+   "t": 922.88,
+   "d": 2.56,
+   "text": "and furthermore since there is gold and"
+  },
+  {
+   "t": 925.44,
+   "d": 1.52,
+   "text": "dwarves and monsters"
+  },
+  {
+   "t": 926.96,
+   "d": 2.8,
+   "text": "in these hallways you can't skip them so"
+  },
+  {
+   "t": 929.76,
+   "d": 1.52,
+   "text": "we'd first thought well you know"
+  },
+  {
+   "t": 931.28,
+   "d": 1.84,
+   "text": "navigating hallways is hard maybe we'll"
+  },
+  {
+   "t": 933.12,
+   "d": 1.68,
+   "text": "make it so you can kind of automatically"
+  },
+  {
+   "t": 934.8,
+   "d": 1.52,
+   "text": "move between rooms"
+  },
+  {
+   "t": 936.32,
+   "d": 2.0,
+   "text": "gave up on that right away because"
+  },
+  {
+   "t": 938.32,
+   "d": 1.92,
+   "text": "navigating between rooms is not at all"
+  },
+  {
+   "t": 940.24,
+   "d": 1.28,
+   "text": "something you can represent"
+  },
+  {
+   "t": 941.52,
+   "d": 2.48,
+   "text": "in a simple way and then we thought well"
+  },
+  {
+   "t": 944.0,
+   "d": 1.2,
+   "text": "maybe we can give a"
+  },
+  {
+   "t": 945.2,
+   "d": 2.16,
+   "text": "immersive description like you head down"
+  },
+  {
+   "t": 947.36,
+   "d": 1.76,
+   "text": "a hallway and you see it branches to the"
+  },
+  {
+   "t": 949.12,
+   "d": 1.28,
+   "text": "left and right"
+  },
+  {
+   "t": 950.4,
+   "d": 4.64,
+   "text": "well no as you can see"
+  },
+  {
+   "t": 955.04,
+   "d": 2.0,
+   "text": "most of the time hallways will not fall"
+  },
+  {
+   "t": 957.04,
+   "d": 2.0,
+   "text": "into a easy to describe"
+  },
+  {
+   "t": 959.04,
+   "d": 2.24,
+   "text": "way like that so it came down to just"
+  },
+  {
+   "t": 961.28,
+   "d": 1.52,
+   "text": "the only way we could give enough"
+  },
+  {
+   "t": 962.8,
+   "d": 1.92,
+   "text": "information to reliably navigate"
+  },
+  {
+   "t": 964.72,
+   "d": 1.6,
+   "text": "every hallway you came across was to"
+  },
+  {
+   "t": 966.32,
+   "d": 1.92,
+   "text": "give you all of the information of"
+  },
+  {
+   "t": 968.24,
+   "d": 1.68,
+   "text": "here's all of the tiles in each"
+  },
+  {
+   "t": 969.92,
+   "d": 2.8,
+   "text": "direction and it was definitely the most"
+  },
+  {
+   "t": 972.72,
+   "d": 2.4,
+   "text": "kind of frustrating part now of playing"
+  },
+  {
+   "t": 975.12,
+   "d": 1.6,
+   "text": "visually impaired nethack"
+  },
+  {
+   "t": 976.72,
+   "d": 2.64,
+   "text": "but hard to get around and the reason"
+  },
+  {
+   "t": 979.36,
+   "d": 0.88,
+   "text": "for that is the"
+  },
+  {
+   "t": 980.24,
+   "d": 2.16,
+   "text": "the kind of number one problem with"
+  },
+  {
+   "t": 982.4,
+   "d": 1.6,
+   "text": "doing accessibility in these games which"
+  },
+  {
+   "t": 984.0,
+   "d": 0.8,
+   "text": "is that"
+  },
+  {
+   "t": 984.8,
+   "d": 3.04,
+   "text": "giving precise spatial location"
+  },
+  {
+   "t": 987.84,
+   "d": 1.92,
+   "text": "information using text in a way that's"
+  },
+  {
+   "t": 989.76,
+   "d": 0.4,
+   "text": "not"
+  },
+  {
+   "t": 990.16,
+   "d": 2.4,
+   "text": "really technical and verbose is really"
+  },
+  {
+   "t": 992.56,
+   "d": 1.28,
+   "text": "hard to do"
+  },
+  {
+   "t": 993.84,
+   "d": 1.28,
+   "text": "and you can tell because if you look at"
+  },
+  {
+   "t": 995.12,
+   "d": 1.6,
+   "text": "the best example of doing things with"
+  },
+  {
+   "t": 996.72,
+   "d": 1.6,
+   "text": "text and games which are"
+  },
+  {
+   "t": 998.32,
+   "d": 1.76,
+   "text": "interactive fiction text-based games"
+  },
+  {
+   "t": 1000.08,
+   "d": 1.68,
+   "text": "like zork or hitchhiker's guide to the"
+  },
+  {
+   "t": 1001.76,
+   "d": 0.88,
+   "text": "galaxy"
+  },
+  {
+   "t": 1002.64,
+   "d": 2.64,
+   "text": "they don't even try they go with what i"
+  },
+  {
+   "t": 1005.28,
+   "d": 1.68,
+   "text": "said earlier which is an abstraction"
+  },
+  {
+   "t": 1006.96,
+   "d": 1.2,
+   "text": "where you're in a room"
+  },
+  {
+   "t": 1008.16,
+   "d": 2.4,
+   "text": "and you can pick up things in that room"
+  },
+  {
+   "t": 1010.56,
+   "d": 1.68,
+   "text": "and you never have to worry about"
+  },
+  {
+   "t": 1012.24,
+   "d": 1.84,
+   "text": "like am i next to the table with the"
+  },
+  {
+   "t": 1014.08,
+   "d": 1.28,
+   "text": "toothbrush on it"
+  },
+  {
+   "t": 1015.36,
+   "d": 1.92,
+   "text": "you don't have to do that because it's"
+  },
+  {
+   "t": 1017.28,
+   "d": 1.92,
+   "text": "hard to do and you might think well"
+  },
+  {
+   "t": 1019.2,
+   "d": 1.68,
+   "text": "maybe we can do that in nethack"
+  },
+  {
+   "t": 1020.88,
+   "d": 2.16,
+   "text": "well if we had an example like this and"
+  },
+  {
+   "t": 1023.04,
+   "d": 1.12,
+   "text": "we tried to say"
+  },
+  {
+   "t": 1024.16,
+   "d": 1.6,
+   "text": "you see a wand in a kobold to the"
+  },
+  {
+   "t": 1025.76,
+   "d": 1.52,
+   "text": "southwest of you"
+  },
+  {
+   "t": 1027.28,
+   "d": 2.16,
+   "text": "it doesn't answer all kinds of questions"
+  },
+  {
+   "t": 1029.44,
+   "d": 2.4,
+   "text": "oh no"
+  },
+  {
+   "t": 1037.2,
+   "d": 2.48,
+   "text": "i'll just keep talking uh it doesn't"
+  },
+  {
+   "t": 1039.68,
+   "d": 0.88,
+   "text": "tell you"
+  },
+  {
+   "t": 1040.56,
+   "d": 2.08,
+   "text": "if you can get to that wand before the"
+  },
+  {
+   "t": 1042.64,
+   "d": 1.36,
+   "text": "kobold does it doesn't tell you if"
+  },
+  {
+   "t": 1044.0,
+   "d": 1.92,
+   "text": "there's enough room for you to"
+  },
+  {
+   "t": 1045.92,
+   "d": 2.16,
+   "text": "go around and avoid this encounter"
+  },
+  {
+   "t": 1048.08,
+   "d": 1.6,
+   "text": "altogether it doesn't tell you if you're"
+  },
+  {
+   "t": 1049.68,
+   "d": 1.68,
+   "text": "lined up right to be able to"
+  },
+  {
+   "t": 1051.36,
+   "d": 2.4,
+   "text": "zap your own wand so really to be able"
+  },
+  {
+   "t": 1053.76,
+   "d": 2.0,
+   "text": "to play nethack in the way it was kind"
+  },
+  {
+   "t": 1055.76,
+   "d": 1.52,
+   "text": "of meant to be played you need to know"
+  },
+  {
+   "t": 1057.28,
+   "d": 1.68,
+   "text": "exactly where things are so you can't"
+  },
+  {
+   "t": 1058.96,
+   "d": 1.84,
+   "text": "get away from this problem of how do i"
+  },
+  {
+   "t": 1060.8,
+   "d": 1.6,
+   "text": "give that information"
+  },
+  {
+   "t": 1062.4,
+   "d": 4.0,
+   "text": "as text so when we ended our study"
+  },
+  {
+   "t": 1066.4,
+   "d": 1.36,
+   "text": "we were successful in that we made a"
+  },
+  {
+   "t": 1067.76,
+   "d": 1.84,
+   "text": "version of nethack that you can play"
+  },
+  {
+   "t": 1069.6,
+   "d": 2.32,
+   "text": "without having to see the map don't get"
+  },
+  {
+   "t": 1071.92,
+   "d": 0.8,
+   "text": "me wrong"
+  },
+  {
+   "t": 1072.72,
+   "d": 3.44,
+   "text": "it is frustrating it is very difficult"
+  },
+  {
+   "t": 1076.16,
+   "d": 2.08,
+   "text": "even compared to the baseline difficulty"
+  },
+  {
+   "t": 1078.24,
+   "d": 2.08,
+   "text": "of playing that hack at all"
+  },
+  {
+   "t": 1080.32,
+   "d": 2.48,
+   "text": "but it can be done which is cool because"
+  },
+  {
+   "t": 1082.8,
+   "d": 2.48,
+   "text": "we were able to do this in only kind of"
+  },
+  {
+   "t": 1085.28,
+   "d": 3.28,
+   "text": "eight months of not full-time work"
+  },
+  {
+   "t": 1088.56,
+   "d": 2.4,
+   "text": "and what we really wanted was to show a"
+  },
+  {
+   "t": 1090.96,
+   "d": 0.88,
+   "text": "case study"
+  },
+  {
+   "t": 1091.84,
+   "d": 2.72,
+   "text": "that games of this kind of genre of"
+  },
+  {
+   "t": 1094.56,
+   "d": 1.68,
+   "text": "these kind of ascii tile-based"
+  },
+  {
+   "t": 1096.24,
+   "d": 2.24,
+   "text": "roguelikes which are still popular"
+  },
+  {
+   "t": 1098.48,
+   "d": 1.92,
+   "text": "are really good candidates for"
+  },
+  {
+   "t": 1100.4,
+   "d": 1.52,
+   "text": "accessibility of this kind"
+  },
+  {
+   "t": 1101.92,
+   "d": 1.76,
+   "text": "and the reason for that is that so much"
+  },
+  {
+   "t": 1103.68,
+   "d": 2.4,
+   "text": "of them is already given this text"
+  },
+  {
+   "t": 1106.08,
+   "d": 1.44,
+   "text": "and so much of the work for"
+  },
+  {
+   "t": 1107.52,
+   "d": 1.84,
+   "text": "accessibility has already been done"
+  },
+  {
+   "t": 1109.36,
+   "d": 2.0,
+   "text": "so it's only a relatively small amount"
+  },
+  {
+   "t": 1111.36,
+   "d": 2.0,
+   "text": "of change to take those games to being"
+  },
+  {
+   "t": 1113.36,
+   "d": 1.68,
+   "text": "entirely accessible"
+  },
+  {
+   "t": 1115.04,
+   "d": 1.84,
+   "text": "but like i just went over the one"
+  },
+  {
+   "t": 1116.88,
+   "d": 1.52,
+   "text": "challenge that will be facing any kind"
+  },
+  {
+   "t": 1118.4,
+   "d": 2.0,
+   "text": "of attempts to do that is how to give"
+  },
+  {
+   "t": 1120.4,
+   "d": 2.08,
+   "text": "this precise spatial information in a"
+  },
+  {
+   "t": 1122.48,
+   "d": 1.36,
+   "text": "way that's concise"
+  },
+  {
+   "t": 1123.84,
+   "d": 1.44,
+   "text": "and it was something that we were able"
+  },
+  {
+   "t": 1125.28,
+   "d": 2.48,
+   "text": "to solve in some cases and not in others"
+  },
+  {
+   "t": 1127.76,
+   "d": 1.52,
+   "text": "and that's going to be the big thing"
+  },
+  {
+   "t": 1129.28,
+   "d": 1.92,
+   "text": "that future work would also have to try"
+  },
+  {
+   "t": 1131.2,
+   "d": 3.04,
+   "text": "and find better ways to deal with"
+  },
+  {
+   "t": 1134.24,
+   "d": 1.44,
+   "text": "an interesting thing is that just"
+  },
+  {
+   "t": 1135.68,
+   "d": 1.6,
+   "text": "between like the few months when we"
+  },
+  {
+   "t": 1137.28,
+   "d": 1.84,
+   "text": "finished our research and me giving this"
+  },
+  {
+   "t": 1139.12,
+   "d": 0.8,
+   "text": "talk now"
+  },
+  {
+   "t": 1139.92,
+   "d": 1.68,
+   "text": "there's already been some cool stuff"
+  },
+  {
+   "t": 1141.6,
+   "d": 1.68,
+   "text": "going on in this area"
+  },
+  {
+   "t": 1143.28,
+   "d": 2.24,
+   "text": "nethack 3.6 came out while we were"
+  },
+  {
+   "t": 1145.52,
+   "d": 1.52,
+   "text": "working on the research which was"
+  },
+  {
+   "t": 1147.04,
+   "d": 2.0,
+   "text": "hilarious because nethack hadn't had an"
+  },
+  {
+   "t": 1149.04,
+   "d": 1.04,
+   "text": "update"
+  },
+  {
+   "t": 1150.08,
+   "d": 1.92,
+   "text": "in many years and then as soon as we"
+  },
+  {
+   "t": 1152.0,
+   "d": 1.84,
+   "text": "were in the code base and had made our"
+  },
+  {
+   "t": 1153.84,
+   "d": 0.56,
+   "text": "changes"
+  },
+  {
+   "t": 1154.4,
+   "d": 1.84,
+   "text": "they put out a new one so now our work"
+  },
+  {
+   "t": 1156.24,
+   "d": 2.0,
+   "text": "is out of date but"
+  },
+  {
+   "t": 1158.24,
+   "d": 2.0,
+   "text": "the cool thing is that net hack 3.6"
+  },
+  {
+   "t": 1160.24,
+   "d": 1.44,
+   "text": "added the ability"
+  },
+  {
+   "t": 1161.68,
+   "d": 2.24,
+   "text": "to list the location of monsters and"
+  },
+  {
+   "t": 1163.92,
+   "d": 1.76,
+   "text": "objects on the map"
+  },
+  {
+   "t": 1165.68,
+   "d": 2.08,
+   "text": "and i don't know if the dev team did"
+  },
+  {
+   "t": 1167.76,
+   "d": 0.96,
+   "text": "this because they were thinking of"
+  },
+  {
+   "t": 1168.72,
+   "d": 2.24,
+   "text": "accessibility i don't know the dev team"
+  },
+  {
+   "t": 1170.96,
+   "d": 1.84,
+   "text": "but this is super cool they actually"
+  },
+  {
+   "t": 1172.8,
+   "d": 2.0,
+   "text": "implemented something really similar"
+  },
+  {
+   "t": 1174.8,
+   "d": 2.48,
+   "text": "to what we were doing and it's kind of"
+  },
+  {
+   "t": 1177.28,
+   "d": 0.72,
+   "text": "buried a few"
+  },
+  {
+   "t": 1178.0,
+   "d": 2.64,
+   "text": "menus deep so it's not quite as useful"
+  },
+  {
+   "t": 1180.64,
+   "d": 2.08,
+   "text": "but it's a good step in that direction"
+  },
+  {
+   "t": 1182.72,
+   "d": 2.32,
+   "text": "and i've even seen that one of the"
+  },
+  {
+   "t": 1185.04,
+   "d": 1.44,
+   "text": "nethack devs might be"
+  },
+  {
+   "t": 1186.48,
+   "d": 3.68,
+   "text": "bringing changes inspired by our work"
+  },
+  {
+   "t": 1190.16,
+   "d": 3.12,
+   "text": "into the next nethack release so there's"
+  },
+  {
+   "t": 1193.28,
+   "d": 0.32,
+   "text": "been"
+  },
+  {
+   "t": 1193.6,
+   "d": 2.48,
+   "text": "interesting advances in that front and"
+  },
+  {
+   "t": 1196.08,
+   "d": 0.96,
+   "text": "there's also"
+  },
+  {
+   "t": 1197.04,
+   "d": 2.4,
+   "text": "a project called broguespeak which is in"
+  },
+  {
+   "t": 1199.44,
+   "d": 1.2,
+   "text": "development right now"
+  },
+  {
+   "t": 1200.64,
+   "d": 1.92,
+   "text": "which is 100 accessible version of"
+  },
+  {
+   "t": 1202.56,
+   "d": 2.0,
+   "text": "brogue and what that is is"
+  },
+  {
+   "t": 1204.56,
+   "d": 2.16,
+   "text": "it's a screen reader free so it doesn't"
+  },
+  {
+   "t": 1206.72,
+   "d": 1.76,
+   "text": "give you text it actually"
+  },
+  {
+   "t": 1208.48,
+   "d": 2.0,
+   "text": "kind of internally converts that text"
+  },
+  {
+   "t": 1210.48,
+   "d": 2.08,
+   "text": "into spoken audio"
+  },
+  {
+   "t": 1212.56,
+   "d": 2.08,
+   "text": "and sound effects and things like that"
+  },
+  {
+   "t": 1214.64,
+   "d": 1.28,
+   "text": "and it's kind of"
+  },
+  {
+   "t": 1215.92,
+   "d": 2.64,
+   "text": "picking up steam and there's been some"
+  },
+  {
+   "t": 1218.56,
+   "d": 1.36,
+   "text": "good feedback from visually impaired"
+  },
+  {
+   "t": 1219.92,
+   "d": 1.52,
+   "text": "players so far"
+  },
+  {
+   "t": 1221.44,
+   "d": 2.16,
+   "text": "so this is kind of an active area of"
+  },
+  {
+   "t": 1223.6,
+   "d": 1.04,
+   "text": "development"
+  },
+  {
+   "t": 1224.64,
+   "d": 2.0,
+   "text": "and there's a lot of potential for"
+  },
+  {
+   "t": 1226.64,
+   "d": 1.36,
+   "text": "future accessibility"
+  },
+  {
+   "t": 1228.0,
+   "d": 1.76,
+   "text": "in this genre and i think we all want"
+  },
+  {
+   "t": 1229.76,
+   "d": 1.52,
+   "text": "everyone to enjoy"
+  },
+  {
+   "t": 1231.28,
+   "d": 2.48,
+   "text": "how great roguelikes are i want to give"
+  },
+  {
+   "t": 1233.76,
+   "d": 0.96,
+   "text": "a special"
+  },
+  {
+   "t": 1234.72,
+   "d": 2.08,
+   "text": "thanks to roguelike radio they had a"
+  },
+  {
+   "t": 1236.8,
+   "d": 1.36,
+   "text": "podcast episode about"
+  },
+  {
+   "t": 1238.16,
+   "d": 2.24,
+   "text": "accessibility that was really useful in"
+  },
+  {
+   "t": 1240.4,
+   "d": 1.36,
+   "text": "our research"
+  },
+  {
+   "t": 1241.76,
+   "d": 1.2,
+   "text": "and i want to thank all of you for"
+  },
+  {
+   "t": 1242.96,
+   "d": 2.4,
+   "text": "coming to my talk that concludes"
+  },
+  {
+   "t": 1245.36,
+   "d": 1.76,
+   "text": "and if we have time for some questions"
+  },
+  {
+   "t": 1247.12,
+   "d": 2.17,
+   "text": "then that'd be great"
+  },
+  {
+   "t": 1249.29,
+   "d": 9.61,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1261.52,
+   "d": 3.44,
+   "text": "oh uh"
+  },
+  {
+   "t": 1265.04,
+   "d": 2.0,
+   "text": "yeah okay so the question is do i have"
+  },
+  {
+   "t": 1267.04,
+   "d": 1.92,
+   "text": "any specific kind of resources for"
+  },
+  {
+   "t": 1268.96,
+   "d": 1.2,
+   "text": "accessibility that i can point"
+  },
+  {
+   "t": 1270.16,
+   "d": 1.28,
+   "text": "developers at"
+  },
+  {
+   "t": 1271.44,
+   "d": 2.16,
+   "text": "well one that does come to mind is that"
+  },
+  {
+   "t": 1273.6,
+   "d": 3.92,
+   "text": "there's a forum called audiogames.net"
+  },
+  {
+   "t": 1277.52,
+   "d": 2.24,
+   "text": "i believe and that's a kind of big place"
+  },
+  {
+   "t": 1279.76,
+   "d": 1.92,
+   "text": "where visually impaired players"
+  },
+  {
+   "t": 1281.68,
+   "d": 1.68,
+   "text": "hang out and talk about games they've"
+  },
+  {
+   "t": 1283.36,
+   "d": 2.72,
+   "text": "found and talk about their experiences"
+  },
+  {
+   "t": 1286.08,
+   "d": 2.24,
+   "text": "and that's a good place to get feedback"
+  },
+  {
+   "t": 1288.32,
+   "d": 1.76,
+   "text": "from visually impaired users they're"
+  },
+  {
+   "t": 1290.08,
+   "d": 1.04,
+   "text": "always"
+  },
+  {
+   "t": 1291.12,
+   "d": 1.52,
+   "text": "active and looking for new games that's"
+  },
+  {
+   "t": 1292.64,
+   "d": 2.64,
+   "text": "where i talk to them and"
+  },
+  {
+   "t": 1295.28,
+   "d": 1.92,
+   "text": "yeah that's the one that comes to mind"
+  },
+  {
+   "t": 1297.2,
+   "d": 3.12,
+   "text": "to check out if you're"
+  },
+  {
+   "t": 1303.04,
+   "d": 2.4,
+   "text": "how do you interested rooms themselves"
+  },
+  {
+   "t": 1305.44,
+   "d": 1.6,
+   "text": "because oftentimes rooms are really"
+  },
+  {
+   "t": 1307.04,
+   "d": 1.52,
+   "text": "complicated like they'll have"
+  },
+  {
+   "t": 1308.56,
+   "d": 2.4,
+   "text": "a rectangle but they'll be like a tiny"
+  },
+  {
+   "t": 1310.96,
+   "d": 2.08,
+   "text": "little divot in that rectangle"
+  },
+  {
+   "t": 1313.04,
+   "d": 2.16,
+   "text": "or like two and that's really important"
+  },
+  {
+   "t": 1315.2,
+   "d": 1.36,
+   "text": "that the cobalt is"
+  },
+  {
+   "t": 1316.56,
+   "d": 2.56,
+   "text": "in not a completely linear path but in"
+  },
+  {
+   "t": 1319.12,
+   "d": 1.76,
+   "text": "this weird exhibit"
+  },
+  {
+   "t": 1320.88,
+   "d": 2.4,
+   "text": "yeah our changes so the question yeah is"
+  },
+  {
+   "t": 1323.28,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 1324.32,
+   "d": 2.0,
+   "text": "what about when rooms themselves are"
+  },
+  {
+   "t": 1326.32,
+   "d": 1.92,
+   "text": "abnormal so i talked about"
+  },
+  {
+   "t": 1328.24,
+   "d": 1.2,
+   "text": "telling you about objects that are"
+  },
+  {
+   "t": 1329.44,
+   "d": 1.2,
+   "text": "nearby when you're playing the game but"
+  },
+  {
+   "t": 1330.64,
+   "d": 1.68,
+   "text": "what if the room is kind of a weird"
+  },
+  {
+   "t": 1332.32,
+   "d": 1.6,
+   "text": "shape and there's a little side area and"
+  },
+  {
+   "t": 1333.92,
+   "d": 2.24,
+   "text": "the kobolds hiding in there"
+  },
+  {
+   "t": 1336.16,
+   "d": 1.84,
+   "text": "well the thing net hack at least is nice"
+  },
+  {
+   "t": 1338.0,
+   "d": 1.44,
+   "text": "in that in the"
+  },
+  {
+   "t": 1339.44,
+   "d": 1.92,
+   "text": "dungeon levels which are the first"
+  },
+  {
+   "t": 1341.36,
+   "d": 1.36,
+   "text": "several levels it's"
+  },
+  {
+   "t": 1342.72,
+   "d": 2.8,
+   "text": "pretty much rectangular rooms but then"
+  },
+  {
+   "t": 1345.52,
+   "d": 1.68,
+   "text": "you do get into like the dwarven mines"
+  },
+  {
+   "t": 1347.2,
+   "d": 1.28,
+   "text": "which is just"
+  },
+  {
+   "t": 1348.48,
+   "d": 2.24,
+   "text": "there's no primer reason to the torben"
+  },
+  {
+   "t": 1350.72,
+   "d": 1.28,
+   "text": "mines"
+  },
+  {
+   "t": 1352.0,
+   "d": 2.56,
+   "text": "and so definitely yeah our our changes"
+  },
+  {
+   "t": 1354.56,
+   "d": 1.12,
+   "text": "don't work as well"
+  },
+  {
+   "t": 1355.68,
+   "d": 3.04,
+   "text": "in those cases there is a command where"
+  },
+  {
+   "t": 1358.72,
+   "d": 3.12,
+   "text": "you can choose a direction it'll tell"
+  },
+  {
+   "t": 1361.84,
+   "d": 0.32,
+   "text": "you"
+  },
+  {
+   "t": 1362.16,
+   "d": 2.08,
+   "text": "how many tiles away the nearest kind of"
+  },
+  {
+   "t": 1364.24,
+   "d": 0.96,
+   "text": "wall is"
+  },
+  {
+   "t": 1365.2,
+   "d": 2.4,
+   "text": "so that helps you get a sense of how big"
+  },
+  {
+   "t": 1367.6,
+   "d": 0.8,
+   "text": "the room is"
+  },
+  {
+   "t": 1368.4,
+   "d": 1.92,
+   "text": "but when you're in those kind of more"
+  },
+  {
+   "t": 1370.32,
+   "d": 1.76,
+   "text": "abstract locations"
+  },
+  {
+   "t": 1372.08,
+   "d": 1.6,
+   "text": "the view command works and that if you"
+  },
+  {
+   "t": 1373.68,
+   "d": 1.76,
+   "text": "can see it it'll tell you where it is"
+  },
+  {
+   "t": 1375.44,
+   "d": 2.0,
+   "text": "but definitely it's a lot harder in"
+  },
+  {
+   "t": 1377.44,
+   "d": 1.52,
+   "text": "something like the dwarven mines or an"
+  },
+  {
+   "t": 1378.96,
+   "d": 1.12,
+   "text": "oddly shaped room"
+  },
+  {
+   "t": 1380.08,
+   "d": 2.0,
+   "text": "to give a better description in that"
+  },
+  {
+   "t": 1382.08,
+   "d": 1.68,
+   "text": "case you'd probably use like the"
+  },
+  {
+   "t": 1383.76,
+   "d": 3.2,
+   "text": "feel command i talked about to feel out"
+  },
+  {
+   "t": 1386.96,
+   "d": 4.4,
+   "text": "the shape of the room so yeah"
+  },
+  {
+   "t": 1394.0,
+   "d": 1.2,
+   "text": "the question is if i'm planning to do"
+  },
+  {
+   "t": 1395.2,
+   "d": 1.84,
+   "text": "any more work in this field i've"
+  },
+  {
+   "t": 1397.04,
+   "d": 2.4,
+   "text": "graduated and i'm working in game"
+  },
+  {
+   "t": 1399.44,
+   "d": 0.88,
+   "text": "development now"
+  },
+  {
+   "t": 1400.32,
+   "d": 3.28,
+   "text": "a company called beamdog so"
+  },
+  {
+   "t": 1403.6,
+   "d": 1.6,
+   "text": "they did dungeons and dragons kind of"
+  },
+  {
+   "t": 1405.2,
+   "d": 2.64,
+   "text": "games so i'm not working in it as much"
+  },
+  {
+   "t": 1407.84,
+   "d": 0.32,
+   "text": "i'm"
+  },
+  {
+   "t": 1408.16,
+   "d": 2.0,
+   "text": "hoping to kind of be a bit interested in"
+  },
+  {
+   "t": 1410.16,
+   "d": 1.2,
+   "text": "it as a hobby but"
+  },
+  {
+   "t": 1411.36,
+   "d": 2.56,
+   "text": "i've graduated and kind of moved on a"
+  },
+  {
+   "t": 1413.92,
+   "d": 0.48,
+   "text": "little bit"
+  },
+  {
+   "t": 1414.4,
+   "d": 3.12,
+   "text": "yeah it happens"
+  },
+  {
+   "t": 1417.52,
+   "d": 2.24,
+   "text": "yes"
+  },
+  {
+   "t": 1423.12,
+   "d": 2.08,
+   "text": "sorry what kind of useful spatialized"
+  },
+  {
+   "t": 1425.2,
+   "d": 2.16,
+   "text": "audio so like"
+  },
+  {
+   "t": 1427.36,
+   "d": 2.48,
+   "text": "uh hearing where something is in terms"
+  },
+  {
+   "t": 1429.84,
+   "d": 1.44,
+   "text": "like it's louder if it's closer that"
+  },
+  {
+   "t": 1431.28,
+   "d": 2.72,
+   "text": "kind of idea"
+  },
+  {
+   "t": 1434.32,
+   "d": 3.44,
+   "text": "yeah okay yeah so the question is"
+  },
+  {
+   "t": 1437.76,
+   "d": 3.68,
+   "text": "um how useful is kind of directional"
+  },
+  {
+   "t": 1441.44,
+   "d": 3.04,
+   "text": "spatialized and"
+  },
+  {
+   "t": 1444.48,
+   "d": 1.92,
+   "text": "yeah that's something that i looked into"
+  },
+  {
+   "t": 1446.4,
+   "d": 1.28,
+   "text": "there's"
+  },
+  {
+   "t": 1447.68,
+   "d": 1.36,
+   "text": "there's things like there's a version of"
+  },
+  {
+   "t": 1449.04,
+   "d": 1.84,
+   "text": "doom that's uh"
+  },
+  {
+   "t": 1450.88,
+   "d": 2.8,
+   "text": "completely spatialized uh directional"
+  },
+  {
+   "t": 1453.68,
+   "d": 1.12,
+   "text": "audio it's like"
+  },
+  {
+   "t": 1454.8,
+   "d": 2.32,
+   "text": "visually impaired accessible doom which"
+  },
+  {
+   "t": 1457.12,
+   "d": 0.96,
+   "text": "apparently is pretty"
+  },
+  {
+   "t": 1458.08,
+   "d": 4.16,
+   "text": "fun so that is something that works and"
+  },
+  {
+   "t": 1462.24,
+   "d": 1.12,
+   "text": "a lot of other"
+  },
+  {
+   "t": 1463.36,
+   "d": 2.8,
+   "text": "genres like shooter kind of type games"
+  },
+  {
+   "t": 1466.16,
+   "d": 0.88,
+   "text": "that can be"
+  },
+  {
+   "t": 1467.04,
+   "d": 3.36,
+   "text": "better the problem with a game like"
+  },
+  {
+   "t": 1470.4,
+   "d": 0.8,
+   "text": "nethack is"
+  },
+  {
+   "t": 1471.2,
+   "d": 1.92,
+   "text": "that you do need to know more"
+  },
+  {
+   "t": 1473.12,
+   "d": 1.6,
+   "text": "specifically what tile"
+  },
+  {
+   "t": 1474.72,
+   "d": 1.84,
+   "text": "exactly things are in and it's not"
+  },
+  {
+   "t": 1476.56,
+   "d": 1.68,
+   "text": "always as useful to just know"
+  },
+  {
+   "t": 1478.24,
+   "d": 3.28,
+   "text": "there's something in that direction i do"
+  },
+  {
+   "t": 1481.52,
+   "d": 0.96,
+   "text": "think it might be"
+  },
+  {
+   "t": 1482.48,
+   "d": 2.16,
+   "text": "worth looking into if there could be a"
+  },
+  {
+   "t": 1484.64,
+   "d": 2.4,
+   "text": "combination of the two where you had"
+  },
+  {
+   "t": 1487.04,
+   "d": 2.72,
+   "text": "the kind of directional audio as well as"
+  },
+  {
+   "t": 1489.76,
+   "d": 1.52,
+   "text": "being able to get the specific"
+  },
+  {
+   "t": 1491.28,
+   "d": 1.28,
+   "text": "information i think that would be"
+  },
+  {
+   "t": 1492.56,
+   "d": 1.36,
+   "text": "worthwhile"
+  },
+  {
+   "t": 1493.92,
+   "d": 1.92,
+   "text": "it was beyond we talked about it in our"
+  },
+  {
+   "t": 1495.84,
+   "d": 1.84,
+   "text": "research project we didn't have the time"
+  },
+  {
+   "t": 1497.68,
+   "d": 1.28,
+   "text": "for it but i think that would be an"
+  },
+  {
+   "t": 1498.96,
+   "d": 1.36,
+   "text": "interesting kind of combination i don't"
+  },
+  {
+   "t": 1500.32,
+   "d": 2.08,
+   "text": "think it would be sufficient on its own"
+  },
+  {
+   "t": 1502.4,
+   "d": 1.84,
+   "text": "in a game like nethack but i think it"
+  },
+  {
+   "t": 1504.24,
+   "d": 1.76,
+   "text": "could help out and help deal with that"
+  },
+  {
+   "t": 1506.0,
+   "d": 1.84,
+   "text": "problem of having too much"
+  },
+  {
+   "t": 1507.84,
+   "d": 3.76,
+   "text": "text so yeah good question"
+  },
+  {
+   "t": 1511.6,
+   "d": 2.48,
+   "text": "so um have a sort of question related to"
+  },
+  {
+   "t": 1514.08,
+   "d": 1.44,
+   "text": "the other one about group shapes which"
+  },
+  {
+   "t": 1515.52,
+   "d": 0.32,
+   "text": "is"
+  },
+  {
+   "t": 1515.84,
+   "d": 1.52,
+   "text": "uh a nice thing about net hacking your"
+  },
+  {
+   "t": 1517.36,
+   "d": 1.12,
+   "text": "point of view is you do have kind of"
+  },
+  {
+   "t": 1518.48,
+   "d": 1.36,
+   "text": "logical group sort of like an"
+  },
+  {
+   "t": 1519.84,
+   "d": 1.84,
+   "text": "interactive fiction like you mentioned"
+  },
+  {
+   "t": 1521.68,
+   "d": 1.36,
+   "text": "uh where you can say you know this is a"
+  },
+  {
+   "t": 1523.04,
+   "d": 1.52,
+   "text": "room"
+  },
+  {
+   "t": 1524.56,
+   "d": 1.92,
+   "text": "a lot of roguelikes don't actually think"
+  },
+  {
+   "t": 1526.48,
+   "d": 1.2,
+   "text": "they have sort of logic like"
+  },
+  {
+   "t": 1527.68,
+   "d": 1.44,
+   "text": "physical roots they're not really like"
+  },
+  {
+   "t": 1529.12,
+   "d": 1.52,
+   "text": "logical rooms like they could be kind of"
+  },
+  {
+   "t": 1530.64,
+   "d": 2.16,
+   "text": "an achievement or configuration so then"
+  },
+  {
+   "t": 1532.8,
+   "d": 2.56,
+   "text": "your perspective do you think that you"
+  },
+  {
+   "t": 1535.36,
+   "d": 2.08,
+   "text": "kind of need maybe like a scriptable"
+  },
+  {
+   "t": 1537.44,
+   "d": 1.52,
+   "text": "auto explorer feature to really be able"
+  },
+  {
+   "t": 1538.96,
+   "d": 1.6,
+   "text": "to do that because it's harder to talk"
+  },
+  {
+   "t": 1540.56,
+   "d": 0.48,
+   "text": "about"
+  },
+  {
+   "t": 1541.04,
+   "d": 3.36,
+   "text": "you'll go back to that room"
+  },
+  {
+   "t": 1544.4,
+   "d": 2.32,
+   "text": "in some sense yeah what's your feeling"
+  },
+  {
+   "t": 1546.72,
+   "d": 0.88,
+   "text": "if we're like"
+  },
+  {
+   "t": 1547.6,
+   "d": 1.76,
+   "text": "say like that if we need to go and our"
+  },
+  {
+   "t": 1549.36,
+   "d": 3.76,
+   "text": "other game like what what advice"
+  },
+  {
+   "t": 1555.28,
+   "d": 2.56,
+   "text": "right so the question is in other games"
+  },
+  {
+   "t": 1557.84,
+   "d": 1.52,
+   "text": "like angben and stuff like that where"
+  },
+  {
+   "t": 1559.36,
+   "d": 1.68,
+   "text": "the rooms aren't as"
+  },
+  {
+   "t": 1561.04,
+   "d": 2.16,
+   "text": "predictable as nethack and you're kind"
+  },
+  {
+   "t": 1563.2,
+   "d": 2.24,
+   "text": "of constantly in this hallway situation"
+  },
+  {
+   "t": 1565.44,
+   "d": 1.04,
+   "text": "of having"
+  },
+  {
+   "t": 1566.48,
+   "d": 1.84,
+   "text": "weird shaped rooms how do you deal with"
+  },
+  {
+   "t": 1568.32,
+   "d": 1.68,
+   "text": "that and what kind of advice"
+  },
+  {
+   "t": 1570.0,
+   "d": 2.08,
+   "text": "that's definitely like the the harder"
+  },
+  {
+   "t": 1572.08,
+   "d": 1.12,
+   "text": "case and"
+  },
+  {
+   "t": 1573.2,
+   "d": 3.28,
+   "text": "auto explorer is definitely a"
+  },
+  {
+   "t": 1576.48,
+   "d": 1.6,
+   "text": "kind of good solution to that i think"
+  },
+  {
+   "t": 1578.08,
+   "d": 1.68,
+   "text": "that the auto explorer"
+  },
+  {
+   "t": 1579.76,
+   "d": 2.0,
+   "text": "is best if it can be combined with also"
+  },
+  {
+   "t": 1581.76,
+   "d": 1.36,
+   "text": "having other ways"
+  },
+  {
+   "t": 1583.12,
+   "d": 2.0,
+   "text": "to orient yourself in the map because"
+  },
+  {
+   "t": 1585.12,
+   "d": 1.68,
+   "text": "like i said dungeon crawlstone soup has"
+  },
+  {
+   "t": 1586.8,
+   "d": 1.6,
+   "text": "auto explore and that does make it"
+  },
+  {
+   "t": 1588.4,
+   "d": 1.04,
+   "text": "accessible"
+  },
+  {
+   "t": 1589.44,
+   "d": 2.8,
+   "text": "but players find it disorienting because"
+  },
+  {
+   "t": 1592.24,
+   "d": 2.0,
+   "text": "they don't have any actual positional"
+  },
+  {
+   "t": 1594.24,
+   "d": 1.44,
+   "text": "information about where they are in the"
+  },
+  {
+   "t": 1595.68,
+   "d": 1.2,
+   "text": "map as a whole"
+  },
+  {
+   "t": 1596.88,
+   "d": 2.32,
+   "text": "so i think if you could combine being"
+  },
+  {
+   "t": 1599.2,
+   "d": 2.4,
+   "text": "able to auto explore but also being able"
+  },
+  {
+   "t": 1601.6,
+   "d": 0.72,
+   "text": "to"
+  },
+  {
+   "t": 1602.32,
+   "d": 2.88,
+   "text": "whenever possible know your location"
+  },
+  {
+   "t": 1605.2,
+   "d": 1.84,
+   "text": "things like having maybe the"
+  },
+  {
+   "t": 1607.04,
+   "d": 2.64,
+   "text": "absolute coordinates instead of because"
+  },
+  {
+   "t": 1609.68,
+   "d": 1.84,
+   "text": "i used local coordinates mostly where it"
+  },
+  {
+   "t": 1611.52,
+   "d": 2.24,
+   "text": "said like it's two tiles north of you"
+  },
+  {
+   "t": 1613.76,
+   "d": 2.72,
+   "text": "having absolute coordinates like you're"
+  },
+  {
+   "t": 1616.48,
+   "d": 1.04,
+   "text": "50 tiles"
+  },
+  {
+   "t": 1617.52,
+   "d": 2.96,
+   "text": "right into the dungeon would maybe help"
+  },
+  {
+   "t": 1620.48,
+   "d": 1.84,
+   "text": "a player feel more oriented in the"
+  },
+  {
+   "t": 1622.32,
+   "d": 1.44,
+   "text": "dungeon as a whole"
+  },
+  {
+   "t": 1623.76,
+   "d": 2.56,
+   "text": "so something like that might help auto"
+  },
+  {
+   "t": 1626.32,
+   "d": 1.92,
+   "text": "explore probably is useful enough"
+  },
+  {
+   "t": 1628.24,
+   "d": 2.16,
+   "text": "that when it can be done it should be"
+  },
+  {
+   "t": 1630.4,
+   "d": 1.92,
+   "text": "done"
+  },
+  {
+   "t": 1632.32,
+   "d": 1.84,
+   "text": "because again that's another example of"
+  },
+  {
+   "t": 1634.16,
+   "d": 1.52,
+   "text": "giving players the option"
+  },
+  {
+   "t": 1635.68,
+   "d": 1.6,
+   "text": "because then if they do want to auto"
+  },
+  {
+   "t": 1637.28,
+   "d": 1.92,
+   "text": "explore then that does make the game a"
+  },
+  {
+   "t": 1639.2,
+   "d": 1.68,
+   "text": "lot easier to play"
+  },
+  {
+   "t": 1640.88,
+   "d": 4.48,
+   "text": "but um some people are more hardcore"
+  },
+  {
+   "t": 1645.36,
+   "d": 2.56,
+   "text": "about it and really want to do it"
+  },
+  {
+   "t": 1647.92,
+   "d": 0.72,
+   "text": "themselves"
+  },
+  {
+   "t": 1648.64,
+   "d": 3.04,
+   "text": "so yeah it's a good question"
+  },
+  {
+   "t": 1651.68,
+   "d": 2.48,
+   "text": "yeah everyone wants to ask me after it's"
+  },
+  {
+   "t": 1654.16,
+   "d": 0.8,
+   "text": "a break now"
+  },
+  {
+   "t": 1654.96,
+   "d": 4.53,
+   "text": "but uh yeah it's break time so thanks a"
+  },
+  {
+   "t": 1659.49,
+   "d": 7.35,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1666.84,
+   "d": 3.0,
+   "text": "lot"
+  }
+ ]
+}

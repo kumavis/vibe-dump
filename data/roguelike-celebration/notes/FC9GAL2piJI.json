@@ -1,0 +1,198 @@
+{
+  "id": "FC9GAL2piJI",
+  "title": "Alexander Birke & Sofie Kjær Schmidt - Art direction and tech art in Sea Of Rifts, a naval RPG",
+  "speaker": "Alexander Birke & Sofie Kjær Schmidt",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=FC9GAL2piJI",
+  "talk_type": "technical",
+  "summary": "Alexander Birke (creative lead/coder) and Sofie Kjær Schmidt (art lead) describe how their small team produces visual variety for Sea Of Rifts, a large top-down naval RPG with generated harbors, quest lines and crew. They cover team principles (no implementation or decision bottlenecks, fast iteration, an always-playable build), art direction for top-down readability (visual hierarchy, contrast, exaggerated silhouettes), and asset-economy techniques: modular kit-built ships and buildings, HSV colour-offset shaders, deterministic per-object noise, a stacking building generator, a trim-sheet/nine-slice 'sub-tiling' shader, and signed-distance-field paper UI. Their thesis is that shaders and tools that let everyone contribute can extract large variety from a small set of assets.",
+  "games": [
+    "Sea Of Rifts",
+    "Sid Meier's Pirates!",
+    "The Settlers",
+    "Dota 2"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "team bottlenecks",
+      "kind": "principle",
+      "claim": "On Sea Of Rifts the tech lead aimed never to be an implementation or decision bottleneck, so anyone on the team could push content into the game without checking first.",
+      "detail": "Alexander Birke lists three principles: tech must not block content, the decision maker must not block decisions (he hates micromanagement on either end), and iteration speed is paramount because without iteration you are 'in for a world of pain'. He cites the book Turn the Ship Around as inspiration for letting people do their jobs.",
+      "t": 231,
+      "quote": "I as the tech department didn't become an implementation bottleneck so everyone on the team should be able to push content in the game",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "iteration",
+      "kind": "technique",
+      "claim": "Sea Of Rifts keeps the game always playable with automated tests and frequent playtests, and asks artists and programmers to share responsibility for both aesthetics and performance.",
+      "detail": "Birke contrasts the usual split where artists focus on visual niceties and programmers on frame rate, arguing the best games come when everyone shares responsibility for both. He describes the team as 'octopuses' with overlapping skills who can offload each other.",
+      "t": 315,
+      "quote": "One thing we made sure of is that the game is always playable. We have automate tests that we can run",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "asset reuse",
+      "kind": "principle",
+      "claim": "Sea Of Rifts' central art goal was to get the most visual variation from the fewest assets, which drove its choice of a top-down, low-poly style.",
+      "detail": "Sofie Kjær Schmidt explains it is a very large game made by a very small team, so the style was chosen for being speedy to produce and allowing variation; inspirations were the Anno series, Kenshi and DOTA. She looked for places to cut corners without it being obvious, e.g. texture swaps and colour variation.",
+      "t": 186,
+      "quote": "how we can create the most visual variation with the fewest assets possible",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "tooling",
+      "kind": "warning",
+      "claim": "Small teams should avoid juggling too many tools; Sea Of Rifts moved its detailed style guides from Miro to Google Slides because easy access beats clever features.",
+      "detail": "Schmidt uses a Miro board for the overall art direction but found Google Slides best for per-environment style guides (e.g. the sunken city) because they are easy to modify, share and print with no account setup. Tools that cause friction or stall production should be dropped.",
+      "t": 557,
+      "quote": "I have a rule of thumb saying you should avoid juggling too many tools",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "visual readability",
+      "kind": "technique",
+      "claim": "In a top-down game like Sea Of Rifts, readability comes from placing detail on the tops of objects, using strong colour and shape contrast, and exaggerating important features.",
+      "detail": "Players need to decode ship factions and types from afar. Buildings carry their detail on top since that is seen first; spiky boats use contrasting colours to signal danger; enemies are bright purple against the ocean; a weapon boom is made unrealistically large so it can be seen at any camera distance. References include Sid Meier's Pirates!, The Settlers and Dota 2's workshop guide.",
+      "t": 623,
+      "quote": "Especially for top down you pay attention to the top part of the element since that's what you spot first",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "readability",
+      "kind": "example",
+      "claim": "Sea Of Rifts deliberately exaggerates proportions, such as an oversized weapon boom, so key features stay readable from the distant camera.",
+      "detail": "Because things are often seen from afar, the team accentuates sizes and shapes that matter for gameplay, accepting unrealistic proportions so players can always tell what is going on wherever the camera is.",
+      "t": 741,
+      "quote": "This blunt boom here does not look proportionally realistic but for the game and the sake of readability",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "underwater depth",
+      "kind": "technique",
+      "claim": "Since most of Sea Of Rifts is open ocean, the team layers underwater assets (wrecks, creatures) beneath the surface to add depth and spark exploration.",
+      "detail": "Schmidt notes players spend around 80% of their time at sea, so the ocean became ground for environmental storytelling, with hints of past things and creatures beneath the surface to provoke curiosity.",
+      "t": 884,
+      "quote": "this is a way to spark curiosity in players to go out and explore this world",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "modular assets",
+      "kind": "technique",
+      "claim": "Sea Of Rifts builds ships and buildings from modular kit pieces assembled in-engine, so a handful of parts covers many ship types.",
+      "detail": "Schmidt compares it to childhood toy blocks: few block types, much imagination. Everyone on the team can assemble a ship when needed; about three roof types serve ten ship types.",
+      "t": 957,
+      "quote": "We have maybe three types of roofs for the ship and used them for 10 different types of ships",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "color variation shader",
+      "kind": "technique",
+      "claim": "An HSV-offset shader lets Sea Of Rifts recolour ships from only three texture atlases, producing many colour variants that also signal faction.",
+      "detail": "Birke and Schmidt built the shader together with a database of colour swaps, giving a whole range of differently coloured ships, which is especially useful for conveying which faction a ship belongs to.",
+      "t": 987,
+      "quote": "although we only have three different types of texture atlas for all the ships, we have this database, this shader that makes sure we can do color swaps",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "store-bought assets",
+      "kind": "warning",
+      "claim": "Bought assets can speed up a small team, but they lack source files and risk making the game look like stock photos, so use them warily and unify them with post-processing.",
+      "detail": "Schmidt says purchased assets are useful for work-in-progress testing and speeding production, but there are no production files to return to and the game can lose character. Post-processing such as vignette and lighting helps both bought and self-made assets sit together.",
+      "t": 1048,
+      "quote": "you have a risk the game loses character meaning it ends up looking like a series of stock photos",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "per-object noise",
+      "kind": "technique",
+      "claim": "Sea Of Rifts derives a deterministic random value per static object from its height and rotation and uses it to offset colour and lighting, adding natural-looking variation for free.",
+      "detail": "Because the world streams, the only constant per-object data is height and angle; a dot product plus fmod over the world matrix yields a seed. Houses get slightly different tints and window lighting, which would be unrealistic up close but on a small screen reads as appealing natural noise rather than flat dullness.",
+      "t": 1142,
+      "quote": "that is still enough that we can actually derive a random like value from that and we then use that to apply a random color offset to the model",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "mesh combining",
+      "kind": "warning",
+      "claim": "Kit-based assets create many game objects and draw calls, so Sea Of Rifts combines meshes per ship family sharing an atlas to keep frame rate up.",
+      "detail": "Birke notes that without optimisation the modular approach leads to unhappy players with low frame rate; using a mesh-combining plugin works well because each ship family shares a few atlases.",
+      "t": 1272,
+      "quote": "you end up with having a lot of game objects, draw calls, and unhappy players because the frame rate is under flaw",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "building generator",
+      "kind": "technique",
+      "claim": "For Sea Of Rifts' sunken city, a simple generator stacks modules vertically using rules (repeat one, two, three, or random), and artists were then left to use it freely.",
+      "detail": "Birke built it to avoid being a bottleneck for the biome's verticality; Schmidt designed how much variation could come from 'just a square', and another artist modelled modules in Blender. The artists then found creative uses, such as adding pillars to a top section and extending them down.",
+      "t": 1327,
+      "quote": "made this simple generator that stacks elements on top of each other. There is different stacking rules",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "tools for artists",
+      "kind": "principle",
+      "claim": "When procedural tools are handed to other team members they get used in creative ways the author did not anticipate, so let everyone contribute to generation.",
+      "detail": "Birke gives examples from the building generator and from the sub-tiling shader, where an artist ignored the coding rules and used offsets to make two stained-glass window types from one tile. The talk's summary stresses that teammates will surprise you with their creativity.",
+      "t": 1396,
+      "quote": "As soon as you give a tool to someone else they find ways to I could say abuse but use in creative ways",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "trim sheets",
+      "kind": "technique",
+      "claim": "Sea Of Rifts' 'sub-tiling' shader combines trim sheets with nine-slicing by storing a tile offset and tile dimensions in vertex data, showing many textures from one tile set.",
+      "detail": "The shader offsets the UV and repeats it at the tile frequency, avoiding the traditional trim-sheet need to stretch to the edge. A pitfall is tile bleed at lower mip levels, fixed by padding each tile with itself, which can be scripted with a custom texture importer.",
+      "t": 1478,
+      "quote": "for each vertex we define the position as normal and then we define an off set to that file we want to show and also define the tile dimensions",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ui shaders",
+      "kind": "technique",
+      "claim": "Sea Of Rifts generates parchment UI panels with a nine-sliced signed distance field plus screen-space noise instead of hand-drawing paper for every size.",
+      "detail": "Schmidt was drawing paper for many UI sizes. Birke's shader applies a paper texture, then thresholds a noisy greyscale SDF to get frayed pirate-map edges; nine-slicing makes resizing work. Because a shared SDF repeats visibly, screen-space noise and per-element vertex colour offsets add variety; the same method gives shadows.",
+      "t": 1679,
+      "quote": "A signed distance field is like magic. It is super easy to use and scales well",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "oatmeal problem",
+      "kind": "technique",
+      "claim": "To stop Sea Of Rifts' islands all looking the same, each prop has weightings and each harbor picks a different weight range to draw from.",
+      "detail": "Birke references the oatmeal problem raised in another talk. Props are defined with ranges in which they can appear and weights, and each harbor picks the range it samples, so islands differ despite sharing the same prop pool.",
+      "t": 1839,
+      "quote": "One thing we ran into is a lot of our islands look the same",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "shader variety",
+      "kind": "principle",
+      "claim": "Shaders can add large variety to a small selection of props and are an under-explored area for procedural games.",
+      "detail": "In their summary the speakers also stress finding where to cheat and cut corners, which their distant camera allows without visible loss of quality.",
+      "t": 1935,
+      "quote": "shaders can add a lot of variety of a small selection of props. It is an area where there is a lot of room for exploration in procedural games",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

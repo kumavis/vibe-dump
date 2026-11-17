@@ -1,0 +1,147 @@
+{
+  "id": "aJC3ioashbs",
+  "title": "Brianna McHorse & Chris Foster - Fusing AI with Game Design: Let the Chaos In",
+  "speaker": "Brianna McHorse, Chris Foster",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=aJC3ioashbs",
+  "talk_type": "design",
+  "summary": "Brianna McHorse and Chris Foster of Hidden Door describe how they combine generative AI (LLMs) with handwritten content, procedural generation and classic machine learning to build a co-creative narrative role-playing game. They argue that handwritten branching narrative and procgen each bound the stories a budget can tell, and that LLMs are expressive, responsive and expansive but inconsistent and incoherent over time. Their core idea is 'chaos within order': decompose turn resolution into small composable tasks, letting the LLM suggest and render prose inside handwritten trope structures and ordered systems like skill checks and embeddings. They also flag ethical risks (bias, IP, hallucination) and offer practices: reduce problems to ranking, precompute, treat the model as an improv partner, and build shared design vocabulary.",
+  "games": [
+    "Hades",
+    "Dwarf Fortress",
+    "Wildermyth"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "branching narrative",
+      "kind": "warning",
+      "claim": "Handwritten branching narrative is the gold standard for emotional impact but scales poorly: mapping cascading consequences over dozens of choices is bounded by human labour and budget.",
+      "detail": "Hades is cited as a lovely, responsive branching story built on an enormous list of conditions and over 20,000 unique voice lines; it feels handwritten and responsive because it is, at huge cost. Hades uses procgen for levels but not its narrative.",
+      "t": 228,
+      "quote": "Mapping this out over dozens and dozens of player choices with cascading consequences you want to be meaningful becomes a massive amount of work",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "warning",
+      "claim": "Simulations like Dwarf Fortress generate interesting emergent events, but connected information rendered fluently does not by itself make a compelling narrative.",
+      "detail": "The speakers say the meaning in Dwarf Fortress comes from the human brain. A friend who tried to turn its events into narrative, even sifting for good bits like a spy who had the tables turned on him, found them hard to convey interestingly.",
+      "t": 337,
+      "quote": "Information alone even connected information rendered fluently does not make a compelling narrative",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "hybrid authored procedural",
+      "kind": "example",
+      "claim": "Wildermyth interleaves heavily procedural, requirement-based events with thoughtful handwritten arcs, falling back to more generic procedural arcs when custom ones run out.",
+      "detail": "Handwritten villains have real motivation. Combining approaches expands the space of stories a budget can tell, but still bounds it; players always want to do or romance things you didn't plan for.",
+      "t": 358,
+      "quote": "It uses a ton of procedurally generated content interleaved with handwritten content in the storytelling to great effect",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "generative ai limits",
+      "kind": "warning",
+      "claim": "LLMs are good at capturing moments but lack consistency and coherence over time, which is a core problem because games need consistently applied constraints and stories unfold through time.",
+      "detail": "Chris argues unbounded agency is make-believe, not gameplay; gameplay exists within consistently applied constraints, and AI is bad at consistency. Chaining a picture to video yields 'nightmare fuel'. Limits may be surpassed but they design for now.",
+      "t": 930,
+      "quote": "Gameplay exist within the constraints and they must be applied consistently",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "generative ai strengths",
+      "kind": "principle",
+      "claim": "Generative AI is expressive, responsive to language input, and expansive, offering far more possibilities for similar effort than a procedural system, which also makes the space unbounded to guide.",
+      "detail": "Expressiveness comes from recombining patterns in massive data rather than from constructive systems. The breadth raises the question of how to guide the system toward better stories.",
+      "t": 885,
+      "quote": "Many more possibilities are immediately available to developers than using a procedural system for a similar effort",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "ai ethics",
+      "kind": "warning",
+      "claim": "Using generative models in games carries ethical risks of magnified bias, unlicensed IP in training data and leaking into output, and hallucination presented as knowledge.",
+      "detail": "Brianna notes models magnify racism, sexism and stereotypes, default to white men, and are trained on work without permission. Hidden Door's first world is The Wizard of Oz, in the public domain, on purpose. She urges thinking through ethics at the start rather than bolting it on.",
+      "t": 684,
+      "quote": "Not only do they reproduce that bias they magnify it especially",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "chaos within order",
+      "kind": "principle",
+      "claim": "Hidden Door contains generative AI's chaos within ordered structures: rules, procgen and design provide control, while the LLM supplies surprise in bounded places.",
+      "detail": "Brianna contrasts ordered systems, whose emergent results can be traced to causes, with generative AI, whose outputs are unexplainable and grow less coherent the longer it generates. Chaos is the good part, but relying on it alone gets out of control quickly.",
+      "t": 1140,
+      "quote": "the solution to this is finding a way to contain the chaos within order",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "composable pipeline",
+      "kind": "technique",
+      "claim": "Hidden Door resolves a player's stated intent through many small composable tasks rather than one LLM call: the LLM suggests outcomes, offers ideas and renders prose, while ordered tools handle skill checks and story factors.",
+      "detail": "Brianna's garden metaphor: pick a few beds where chosen plants grow chaotically. Classic ML, procgen and handwritten rules decide whether dice are needed (not to open a cabinet), adjust mood, drama, pacing and genre, and check world physics and plot needs.",
+      "t": 1190,
+      "quote": "instead of using generative AI to decide what happens we break it up into smaller more specific tasks that contain the chaos within the structure",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "trope engine",
+      "kind": "technique",
+      "claim": "Hidden Door uses short generic handwritten trope structures as the narrative skeleton and has LLMs give them unique contextual expression.",
+      "detail": "The team identified desired tropes in a design jam; meeting or subverting trope expectations is satisfying for players. Chris describes their engine as a trope engine.",
+      "t": 1305,
+      "quote": "Our approach that let's us write the tropes is short generic handwritten structures and then use LLMs to give them a unique contextual expression",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "ranking and embeddings",
+      "kind": "technique",
+      "claim": "Hidden Door reduces generative decisions to ranking problems and uses precomputed word embeddings (e.g. a genre-ness score) instead of live generation where possible.",
+      "detail": "Picking among options is easier than deciding in a vacuum and allows changing priorities later. Embeddings let them score which dialogue is most romantic or what a proud Oz baker keeps in their pockets. Simplification is faster, cheaper and easier to debug.",
+      "t": 1416,
+      "quote": "Whenever possible we reduce something to a ranking problem because picking among options is easier than deciding exactly what you want in a vacuum",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "ai as improv partner",
+      "kind": "principle",
+      "claim": "Working with an LLM is like improv: impose too little and it becomes incoherent, but it needs room to roam, so 'yes, and' its ideas and tie them to written trope threads.",
+      "detail": "Chris compares prompt writing to writing design documentation interpreted by someone else in unexpected ways, except the model doesn't show its work; tuning can feel like a hostage negotiation.",
+      "t": 1527,
+      "quote": "you have to treat with like you are an improv partner. You want to find ways to yes and its ideas",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "interpretability",
+      "kind": "technique",
+      "claim": "A composable system of many small components compensates for LLMs' poor explainability, letting each element be interpreted and tuned independently like a series of lenses.",
+      "detail": "Chris adds that the team developed a shared language around story coherence, agency, replayability and pacing so many disciplines could tune disparate parts toward a common end.",
+      "t": 1685,
+      "quote": "by using a composable system with many small components it gives us the ability to interpret, and tune each element independently",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "order to chaos balance",
+      "kind": "example",
+      "claim": "Over a year Hidden Door's game moved from almost entirely order to almost entirely chaos and then to a mixed blend the developers find fun to play.",
+      "detail": "Brianna summarises: break things into composable blocks of chaos within order, use structure, prefer simple solutions, iterate quickly with the 'robot coworker', and handle ethics at the start.",
+      "t": 1792,
+      "quote": "we have gotten to watch the game grow from almost entirely order to almost entirely chaos and now to a lovely mixed blend",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

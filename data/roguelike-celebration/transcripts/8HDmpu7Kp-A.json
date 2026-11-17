@@ -1,0 +1,2257 @@
+{
+ "id": "8HDmpu7Kp-A",
+ "url": "https://www.youtube.com/watch?v=8HDmpu7Kp-A",
+ "title": "Dustin Freeman - Procedurally Generating Technology Trees",
+ "speaker": "Dustin Freeman",
+ "talk_title": "Procedurally Generating Technology Trees",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 761,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nDustin Freeman gets lost in tech trees all the time. By day, he builds new embodiment technology at Facebook Reality Labs. By night, he works on telepresence LARPs. He's Canadian, but lives in New York. \n\nSpeculative fiction often postulates an alternate technology tree from ours, due to a different culture, or available resources, or even alternate physics. On the other hand, most games, proc gen or otherwise, treat technology trees as fixed. There are rare exceptions. This lighting talk will talk about Dustin's search to procedurally generate technology trees in a meaningful way.\n\nFind him on Twitter: https://twitter.com/dustinfreeman",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 26,
+   "title": "Definition of \"Technology Tree\""
+  },
+  {
+   "start": 66,
+   "title": "Some Graph Theory Modes Connections / Edges / Weights Topology"
+  },
+  {
+   "start": 115,
+   "title": "Technology Trees in Real Life"
+  },
+  {
+   "start": 151,
+   "title": "Neural Interfaces"
+  },
+  {
+   "start": 187,
+   "title": "Microsoft Surface"
+  },
+  {
+   "start": 277,
+   "title": "Limit Theory Fixed core topology. research on current node spuns variations"
+  },
+  {
+   "start": 421,
+   "title": "Civilization IV - Tech € Civics Shuffle Mode Randon topology"
+  },
+  {
+   "start": 452,
+   "title": "Civilization IV: \"Bronze World\""
+  },
+  {
+   "start": 475,
+   "title": "Kitchen Sink Universes are Boring"
+  },
+  {
+   "start": 515,
+   "title": "Describing Technology Accurately"
+  },
+  {
+   "start": 648,
+   "title": "Generated Tech Trees"
+  },
+  {
+   "start": 689,
+   "title": "Time Travel in Alternate Universes"
+  },
+  {
+   "start": 694,
+   "title": "Areas of Future Research"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2463,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.16,
+   "d": 1.76,
+   "text": "cool all right thank you so much to all"
+  },
+  {
+   "t": 1.92,
+   "d": 1.68,
+   "text": "of our speakers for speeding along"
+  },
+  {
+   "t": 3.6,
+   "d": 2.4,
+   "text": "these lightning talks we are gonna roll"
+  },
+  {
+   "t": 6.0,
+   "d": 3.12,
+   "text": "along now to dustin freeman"
+  },
+  {
+   "t": 9.12,
+   "d": 2.96,
+   "text": "hello hey there oh i love the sparkly"
+  },
+  {
+   "t": 12.08,
+   "d": 2.0,
+   "text": "things behind you"
+  },
+  {
+   "t": 14.08,
+   "d": 3.12,
+   "text": "uh it can is my screen visible yet"
+  },
+  {
+   "t": 17.2,
+   "d": 3.2,
+   "text": "it is not yet and now it is wonderful"
+  },
+  {
+   "t": 20.4,
+   "d": 2.16,
+   "text": "um hi i'm dustin and today i'm going to"
+  },
+  {
+   "t": 22.56,
+   "d": 1.68,
+   "text": "talk about procedurally generating"
+  },
+  {
+   "t": 24.24,
+   "d": 2.16,
+   "text": "technology trees"
+  },
+  {
+   "t": 26.4,
+   "d": 2.56,
+   "text": "so a technology tree is using games to"
+  },
+  {
+   "t": 28.96,
+   "d": 0.72,
+   "text": "give players"
+  },
+  {
+   "t": 29.68,
+   "d": 1.6,
+   "text": "options over progression by adding new"
+  },
+  {
+   "t": 31.28,
+   "d": 2.24,
+   "text": "abilities or enhancing existing ones"
+  },
+  {
+   "t": 33.52,
+   "d": 1.6,
+   "text": "typically at a given time you have a"
+  },
+  {
+   "t": 35.12,
+   "d": 1.92,
+   "text": "small set of options to choose from"
+  },
+  {
+   "t": 37.04,
+   "d": 1.36,
+   "text": "this the set of technologies to choose"
+  },
+  {
+   "t": 38.4,
+   "d": 1.36,
+   "text": "from depends on the previous choices"
+  },
+  {
+   "t": 39.76,
+   "d": 0.8,
+   "text": "you've made"
+  },
+  {
+   "t": 40.56,
+   "d": 2.72,
+   "text": "this lets you specialize over time so"
+  },
+  {
+   "t": 43.28,
+   "d": 1.76,
+   "text": "unlocking new technologies is an"
+  },
+  {
+   "t": 45.04,
+   "d": 1.36,
+   "text": "instant but typically you need to spend"
+  },
+  {
+   "t": 46.4,
+   "d": 1.76,
+   "text": "time plus some other resource"
+  },
+  {
+   "t": 48.16,
+   "d": 2.16,
+   "text": "researching that technology here we have"
+  },
+  {
+   "t": 50.32,
+   "d": 1.52,
+   "text": "a tech tree for the protoss race in"
+  },
+  {
+   "t": 51.84,
+   "d": 1.28,
+   "text": "starcraft 2."
+  },
+  {
+   "t": 53.12,
+   "d": 2.48,
+   "text": "uh skill trees for leveling up"
+  },
+  {
+   "t": 55.6,
+   "d": 1.36,
+   "text": "individual characters can act the same"
+  },
+  {
+   "t": 56.96,
+   "d": 2.16,
+   "text": "as tech trees here is destruction magic"
+  },
+  {
+   "t": 59.12,
+   "d": 1.04,
+   "text": "from skyrim"
+  },
+  {
+   "t": 60.16,
+   "d": 1.52,
+   "text": "this diagram is a little bit confusing"
+  },
+  {
+   "t": 61.68,
+   "d": 1.84,
+   "text": "because on the left one it flows down on"
+  },
+  {
+   "t": 63.52,
+   "d": 1.12,
+   "text": "the right one it flows"
+  },
+  {
+   "t": 64.64,
+   "d": 2.96,
+   "text": "up so before we go ahead i need to"
+  },
+  {
+   "t": 67.6,
+   "d": 1.68,
+   "text": "explain some graph theory which is a"
+  },
+  {
+   "t": 69.28,
+   "d": 2.72,
+   "text": "branch of mathematics to describe uh"
+  },
+  {
+   "t": 72.0,
+   "d": 1.6,
+   "text": "graphs but in this case we'll apply to"
+  },
+  {
+   "t": 73.6,
+   "d": 1.84,
+   "text": "tech trees so in this case"
+  },
+  {
+   "t": 75.44,
+   "d": 2.08,
+   "text": "nodes are blue these are positions in"
+  },
+  {
+   "t": 77.52,
+   "d": 1.36,
+   "text": "the graph and in tech trees these are"
+  },
+  {
+   "t": 78.88,
+   "d": 1.76,
+   "text": "the technologies themselves"
+  },
+  {
+   "t": 80.64,
+   "d": 1.68,
+   "text": "connections describe how technologies"
+  },
+  {
+   "t": 82.32,
+   "d": 1.84,
+   "text": "depend on previous technologies"
+  },
+  {
+   "t": 84.16,
+   "d": 1.76,
+   "text": "these are the gray arrows in the graph"
+  },
+  {
+   "t": 85.92,
+   "d": 1.6,
+   "text": "sometimes these are called edges or"
+  },
+  {
+   "t": 87.52,
+   "d": 1.04,
+   "text": "machine learning they're also called"
+  },
+  {
+   "t": 88.56,
+   "d": 2.64,
+   "text": "weights a connection can describe the"
+  },
+  {
+   "t": 91.2,
+   "d": 1.04,
+   "text": "difficulty of researching a new"
+  },
+  {
+   "t": 92.24,
+   "d": 1.2,
+   "text": "technology based on the previous"
+  },
+  {
+   "t": 93.44,
+   "d": 1.76,
+   "text": "technologies you already know"
+  },
+  {
+   "t": 95.2,
+   "d": 2.8,
+   "text": "the topology is the whole shape of nodes"
+  },
+  {
+   "t": 98.0,
+   "d": 1.04,
+   "text": "and connections"
+  },
+  {
+   "t": 99.04,
+   "d": 2.56,
+   "text": "we could uh have two tractors with the"
+  },
+  {
+   "t": 101.6,
+   "d": 0.72,
+   "text": "same nodes"
+  },
+  {
+   "t": 102.32,
+   "d": 1.28,
+   "text": "but a different set of connections and"
+  },
+  {
+   "t": 103.6,
+   "d": 2.16,
+   "text": "we'd say these have different topologies"
+  },
+  {
+   "t": 105.76,
+   "d": 1.28,
+   "text": "we could also have two graphs with the"
+  },
+  {
+   "t": 107.04,
+   "d": 2.0,
+   "text": "same topology but they may differ by the"
+  },
+  {
+   "t": 109.04,
+   "d": 1.44,
+   "text": "difficulty of researching each"
+  },
+  {
+   "t": 110.48,
+   "d": 0.8,
+   "text": "technology"
+  },
+  {
+   "t": 111.28,
+   "d": 1.04,
+   "text": "and the difference would lie in the"
+  },
+  {
+   "t": 112.32,
+   "d": 1.12,
+   "text": "weights themselves but they would have"
+  },
+  {
+   "t": 113.44,
+   "d": 2.56,
+   "text": "the same typology"
+  },
+  {
+   "t": 116.0,
+   "d": 3.44,
+   "text": "so in real life research doesn't"
+  },
+  {
+   "t": 119.44,
+   "d": 1.76,
+   "text": "exactly flow like this in a very nice"
+  },
+  {
+   "t": 121.2,
+   "d": 3.12,
+   "text": "way topology is not known in advance"
+  },
+  {
+   "t": 124.32,
+   "d": 2.24,
+   "text": "weights are totally unknown nodes are"
+  },
+  {
+   "t": 126.56,
+   "d": 1.68,
+   "text": "unknown what possible technologies there"
+  },
+  {
+   "t": 128.24,
+   "d": 1.04,
+   "text": "are we don't know"
+  },
+  {
+   "t": 129.28,
+   "d": 1.84,
+   "text": "uh and technology can fail for"
+  },
+  {
+   "t": 131.12,
+   "d": 2.16,
+   "text": "surprising and unpredictable reasons"
+  },
+  {
+   "t": 133.28,
+   "d": 3.04,
+   "text": "uh hello i am currently a research"
+  },
+  {
+   "t": 136.32,
+   "d": 1.6,
+   "text": "scientist at facebook reality labs and"
+  },
+  {
+   "t": 137.92,
+   "d": 1.68,
+   "text": "for the last 12 years i've worked on"
+  },
+  {
+   "t": 139.6,
+   "d": 1.6,
+   "text": "researching new technologies"
+  },
+  {
+   "t": 141.2,
+   "d": 2.0,
+   "text": "so i know a lot about this process"
+  },
+  {
+   "t": 143.2,
+   "d": 1.36,
+   "text": "generally i've worked in the areas of"
+  },
+  {
+   "t": 144.56,
+   "d": 1.68,
+   "text": "spatial computing gestural interaction"
+  },
+  {
+   "t": 146.24,
+   "d": 1.6,
+   "text": "and embodied telepresence"
+  },
+  {
+   "t": 147.84,
+   "d": 1.28,
+   "text": "and here are a few of the projects i've"
+  },
+  {
+   "t": 149.12,
+   "d": 2.4,
+   "text": "worked on"
+  },
+  {
+   "t": 151.68,
+   "d": 1.6,
+   "text": "currently i work on what we call a"
+  },
+  {
+   "t": 153.28,
+   "d": 2.0,
+   "text": "neural interface so i can't say much"
+  },
+  {
+   "t": 155.28,
+   "d": 0.72,
+   "text": "here"
+  },
+  {
+   "t": 156.0,
+   "d": 2.4,
+   "text": "but i'll just briefly show some pictures"
+  },
+  {
+   "t": 158.4,
+   "d": 1.04,
+   "text": "they've already been in public"
+  },
+  {
+   "t": 159.44,
+   "d": 1.28,
+   "text": "i work at i work at a company that is"
+  },
+  {
+   "t": 160.72,
+   "d": 2.08,
+   "text": "formally called control labs"
+  },
+  {
+   "t": 162.8,
+   "d": 2.24,
+   "text": "but and we take one particular approach"
+  },
+  {
+   "t": 165.04,
+   "d": 1.44,
+   "text": "uh academics and some startups take"
+  },
+  {
+   "t": 166.48,
+   "d": 0.96,
+   "text": "another approach"
+  },
+  {
+   "t": 167.44,
+   "d": 1.84,
+   "text": "and there's a company called neurolink"
+  },
+  {
+   "t": 169.28,
+   "d": 1.6,
+   "text": "which takes a different approach"
+  },
+  {
+   "t": 170.88,
+   "d": 1.84,
+   "text": "all these technologies have the same"
+  },
+  {
+   "t": 172.72,
+   "d": 1.36,
+   "text": "goal was to which is to"
+  },
+  {
+   "t": 174.08,
+   "d": 2.0,
+   "text": "improve the mapping between what happens"
+  },
+  {
+   "t": 176.08,
+   "d": 1.28,
+   "text": "in our brain and what happens"
+  },
+  {
+   "t": 177.36,
+   "d": 2.16,
+   "text": "with a system but we're going through a"
+  },
+  {
+   "t": 179.52,
+   "d": 1.04,
+   "text": "bunch of different"
+  },
+  {
+   "t": 180.56,
+   "d": 2.96,
+   "text": "alternate approaches and we don't we"
+  },
+  {
+   "t": 183.52,
+   "d": 1.2,
+   "text": "can't really predict what'll succeed or"
+  },
+  {
+   "t": 184.72,
+   "d": 0.72,
+   "text": "not you know"
+  },
+  {
+   "t": 185.44,
+   "d": 2.8,
+   "text": "technologically or culturally so let's"
+  },
+  {
+   "t": 188.24,
+   "d": 0.88,
+   "text": "go back to a"
+  },
+  {
+   "t": 189.12,
+   "d": 2.24,
+   "text": "a long time ago a very long time ago i"
+  },
+  {
+   "t": 191.36,
+   "d": 1.28,
+   "text": "worked on the microsoft surface at"
+  },
+  {
+   "t": 192.64,
+   "d": 1.76,
+   "text": "microsoft research you probably remember"
+  },
+  {
+   "t": 194.4,
+   "d": 0.32,
+   "text": "this"
+  },
+  {
+   "t": 194.72,
+   "d": 2.4,
+   "text": "as the big ass touch table that was a"
+  },
+  {
+   "t": 197.12,
+   "d": 1.12,
+   "text": "parody video"
+  },
+  {
+   "t": 198.24,
+   "d": 2.08,
+   "text": "uh this was actually a really wonderful"
+  },
+  {
+   "t": 200.32,
+   "d": 2.24,
+   "text": "interface uh and while prototyping"
+  },
+  {
+   "t": 202.56,
+   "d": 1.44,
+   "text": "with it i've had some of my most"
+  },
+  {
+   "t": 204.0,
+   "d": 2.08,
+   "text": "interesting multi-person experiences as"
+  },
+  {
+   "t": 206.08,
+   "d": 1.76,
+   "text": "we're playing a game or just doing some"
+  },
+  {
+   "t": 207.84,
+   "d": 1.36,
+   "text": "other activity together"
+  },
+  {
+   "t": 209.2,
+   "d": 3.52,
+   "text": "around a table um honestly and"
+  },
+  {
+   "t": 212.72,
+   "d": 1.52,
+   "text": "it just didn't get picked up it just"
+  },
+  {
+   "t": 214.24,
+   "d": 1.36,
+   "text": "didn't work for some reason which is"
+  },
+  {
+   "t": 215.6,
+   "d": 1.12,
+   "text": "surprising"
+  },
+  {
+   "t": 216.72,
+   "d": 2.88,
+   "text": "we keep using big ass touch tables in"
+  },
+  {
+   "t": 219.6,
+   "d": 1.28,
+   "text": "science fiction"
+  },
+  {
+   "t": 220.88,
+   "d": 2.24,
+   "text": "we know this would be cool and there's"
+  },
+  {
+   "t": 223.12,
+   "d": 1.68,
+   "text": "no real technological barrier it all"
+  },
+  {
+   "t": 224.8,
+   "d": 0.48,
+   "text": "works"
+  },
+  {
+   "t": 225.28,
+   "d": 3.28,
+   "text": "so why didn't this happen let's go to"
+  },
+  {
+   "t": 228.56,
+   "d": 1.84,
+   "text": "another technology that exists but no"
+  },
+  {
+   "t": 230.4,
+   "d": 1.28,
+   "text": "one seems to want"
+  },
+  {
+   "t": 231.68,
+   "d": 3.44,
+   "text": "airships are obviously awesome now"
+  },
+  {
+   "t": 235.12,
+   "d": 2.08,
+   "text": "there was this one incident but that was"
+  },
+  {
+   "t": 237.2,
+   "d": 2.24,
+   "text": "due to using hydrogen instead of helium"
+  },
+  {
+   "t": 239.44,
+   "d": 3.76,
+   "text": "uh or hot air so this incident should"
+  },
+  {
+   "t": 243.2,
+   "d": 1.36,
+   "text": "have been a problem so why don't we live"
+  },
+  {
+   "t": 244.56,
+   "d": 1.04,
+   "text": "in a world of airships"
+  },
+  {
+   "t": 245.6,
+   "d": 2.32,
+   "text": "i i honestly feel our current timeline"
+  },
+  {
+   "t": 247.92,
+   "d": 1.92,
+   "text": "is maybe only one or two steps away from"
+  },
+  {
+   "t": 249.84,
+   "d": 0.96,
+   "text": "a timeline"
+  },
+  {
+   "t": 250.8,
+   "d": 3.52,
+   "text": "where there is a world of airships so"
+  },
+  {
+   "t": 254.32,
+   "d": 1.84,
+   "text": "i'm now gonna after the introduction i'm"
+  },
+  {
+   "t": 256.16,
+   "d": 1.52,
+   "text": "now gonna go to a bunch of prior work in"
+  },
+  {
+   "t": 257.68,
+   "d": 1.52,
+   "text": "video games with procedurally generated"
+  },
+  {
+   "t": 259.2,
+   "d": 0.72,
+   "text": "tech trees"
+  },
+  {
+   "t": 259.92,
+   "d": 2.56,
+   "text": "and i'll go through them pretty fast uh"
+  },
+  {
+   "t": 262.48,
+   "d": 1.12,
+   "text": "in sword of stars"
+  },
+  {
+   "t": 263.6,
+   "d": 2.4,
+   "text": "a space 4x game from 2006 there is a"
+  },
+  {
+   "t": 266.0,
+   "d": 1.36,
+   "text": "fixed topology"
+  },
+  {
+   "t": 267.36,
+   "d": 1.44,
+   "text": "but at the beginning of the game a role"
+  },
+  {
+   "t": 268.8,
+   "d": 1.68,
+   "text": "occurs for whether each connection"
+  },
+  {
+   "t": 270.48,
+   "d": 0.48,
+   "text": "exists"
+  },
+  {
+   "t": 270.96,
+   "d": 1.92,
+   "text": "this is independent for each player so"
+  },
+  {
+   "t": 272.88,
+   "d": 1.92,
+   "text": "each player will will have a different"
+  },
+  {
+   "t": 274.8,
+   "d": 2.16,
+   "text": "technology tree"
+  },
+  {
+   "t": 276.96,
+   "d": 2.24,
+   "text": "in limit theory which is one of those"
+  },
+  {
+   "t": 279.2,
+   "d": 2.24,
+   "text": "everything is procedural in space games"
+  },
+  {
+   "t": 281.44,
+   "d": 2.0,
+   "text": "this was kickstarter in 2012 and"
+  },
+  {
+   "t": 283.44,
+   "d": 1.68,
+   "text": "canceled in 2018 unfortunately"
+  },
+  {
+   "t": 285.12,
+   "d": 1.28,
+   "text": "so here there's a core set of"
+  },
+  {
+   "t": 286.4,
+   "d": 1.92,
+   "text": "technologies with a fixed apology"
+  },
+  {
+   "t": 288.32,
+   "d": 1.84,
+   "text": "you spend research on a node and after a"
+  },
+  {
+   "t": 290.16,
+   "d": 1.84,
+   "text": "while that node will spawn child nodes"
+  },
+  {
+   "t": 292.0,
+   "d": 2.16,
+   "text": "with variations on the current node"
+  },
+  {
+   "t": 294.16,
+   "d": 1.76,
+   "text": "so you end up constructing a topology of"
+  },
+  {
+   "t": 295.92,
+   "d": 1.84,
+   "text": "research technologies as you go"
+  },
+  {
+   "t": 297.76,
+   "d": 2.0,
+   "text": "this it's kind of like you're doing dog"
+  },
+  {
+   "t": 299.76,
+   "d": 1.36,
+   "text": "breeding or something like that"
+  },
+  {
+   "t": 301.12,
+   "d": 2.08,
+   "text": "um so that's kind of interesting uh but"
+  },
+  {
+   "t": 303.2,
+   "d": 1.36,
+   "text": "you know who knows how it actually would"
+  },
+  {
+   "t": 304.56,
+   "d": 0.48,
+   "text": "feel"
+  },
+  {
+   "t": 305.04,
+   "d": 2.08,
+   "text": "in practice in sid meier's alpha"
+  },
+  {
+   "t": 307.12,
+   "d": 1.44,
+   "text": "centauri there's something called a"
+  },
+  {
+   "t": 308.56,
+   "d": 1.6,
+   "text": "blind research mode where the tech tree"
+  },
+  {
+   "t": 310.16,
+   "d": 1.04,
+   "text": "isn't visible"
+  },
+  {
+   "t": 311.2,
+   "d": 1.92,
+   "text": "you can indicate a focus which is one of"
+  },
+  {
+   "t": 313.12,
+   "d": 1.2,
+   "text": "discover explore"
+  },
+  {
+   "t": 314.32,
+   "d": 1.84,
+   "text": "conquer or build after some time a"
+  },
+  {
+   "t": 316.16,
+   "d": 1.76,
+   "text": "random technology will be unlocked from"
+  },
+  {
+   "t": 317.92,
+   "d": 1.44,
+   "text": "that part of the tree"
+  },
+  {
+   "t": 319.36,
+   "d": 2.88,
+   "text": "the hidden topology is itself fixed so"
+  },
+  {
+   "t": 322.24,
+   "d": 2.48,
+   "text": "it doesn't change in stellaris"
+  },
+  {
+   "t": 324.72,
+   "d": 1.44,
+   "text": "choosing a technology to research is"
+  },
+  {
+   "t": 326.16,
+   "d": 1.6,
+   "text": "like drawing from a deck of cards"
+  },
+  {
+   "t": 327.76,
+   "d": 1.28,
+   "text": "when you're making a choice of what"
+  },
+  {
+   "t": 329.04,
+   "d": 1.92,
+   "text": "technology to research next you choose"
+  },
+  {
+   "t": 330.96,
+   "d": 2.08,
+   "text": "from three randomly presented"
+  },
+  {
+   "t": 333.04,
+   "d": 1.92,
+   "text": "options from the graph theory"
+  },
+  {
+   "t": 334.96,
+   "d": 1.68,
+   "text": "perspective there's not technically a"
+  },
+  {
+   "t": 336.64,
+   "d": 1.12,
+   "text": "tree in the background"
+  },
+  {
+   "t": 337.76,
+   "d": 1.76,
+   "text": "instead technologies are divided into"
+  },
+  {
+   "t": 339.52,
+   "d": 2.32,
+   "text": "tiers and to be able to draw a tier 3"
+  },
+  {
+   "t": 341.84,
+   "d": 1.28,
+   "text": "technology you must have researched a"
+  },
+  {
+   "t": 343.12,
+   "d": 0.88,
+   "text": "certain number of"
+  },
+  {
+   "t": 344.0,
+   "d": 2.56,
+   "text": "tier 2 technologies for example so i can"
+  },
+  {
+   "t": 346.56,
+   "d": 0.56,
+   "text": "see"
+  },
+  {
+   "t": 347.12,
+   "d": 2.4,
+   "text": "that this structure um that solaris"
+  },
+  {
+   "t": 349.52,
+   "d": 1.12,
+   "text": "presents makes it a little bit easier to"
+  },
+  {
+   "t": 350.64,
+   "d": 1.04,
+   "text": "cut down the number of choices you can"
+  },
+  {
+   "t": 351.68,
+   "d": 1.76,
+   "text": "make at any given moment"
+  },
+  {
+   "t": 353.44,
+   "d": 1.44,
+   "text": "but to be honest when i play solaris i"
+  },
+  {
+   "t": 354.88,
+   "d": 2.32,
+   "text": "don't feel like i'm doing research it's"
+  },
+  {
+   "t": 357.2,
+   "d": 0.8,
+   "text": "not it's"
+  },
+  {
+   "t": 358.0,
+   "d": 2.16,
+   "text": "not that exciting to choose a technology"
+  },
+  {
+   "t": 360.16,
+   "d": 2.0,
+   "text": "um i mean additionally in all in the"
+  },
+  {
+   "t": 362.16,
+   "d": 1.28,
+   "text": "first release of stellaris"
+  },
+  {
+   "t": 363.44,
+   "d": 2.16,
+   "text": "uh different civilizations had different"
+  },
+  {
+   "t": 365.6,
+   "d": 1.44,
+   "text": "fashion lab than light travel"
+  },
+  {
+   "t": 367.04,
+   "d": 1.28,
+   "text": "technologies so"
+  },
+  {
+   "t": 368.32,
+   "d": 1.36,
+   "text": "you might have a civilization that can"
+  },
+  {
+   "t": 369.68,
+   "d": 1.28,
+   "text": "do warp you might have a civilization"
+  },
+  {
+   "t": 370.96,
+   "d": 1.36,
+   "text": "that can do wormholes or"
+  },
+  {
+   "t": 372.32,
+   "d": 2.08,
+   "text": "hyper lanes however this was removed for"
+  },
+  {
+   "t": 374.4,
+   "d": 1.92,
+   "text": "balance it was hard to defend against"
+  },
+  {
+   "t": 376.32,
+   "d": 1.84,
+   "text": "all three types of"
+  },
+  {
+   "t": 378.16,
+   "d": 1.84,
+   "text": "travel at once it's unfortunate that"
+  },
+  {
+   "t": 380.0,
+   "d": 1.52,
+   "text": "this trade up has to be made i think"
+  },
+  {
+   "t": 381.52,
+   "d": 1.36,
+   "text": "what i get excited about in terms of"
+  },
+  {
+   "t": 382.88,
+   "d": 1.84,
+   "text": "technology development is"
+  },
+  {
+   "t": 384.72,
+   "d": 2.08,
+   "text": "more the evocativeness of the universe"
+  },
+  {
+   "t": 386.8,
+   "d": 1.68,
+   "text": "it implies not the balance choices i"
+  },
+  {
+   "t": 388.48,
+   "d": 0.64,
+   "text": "need to make"
+  },
+  {
+   "t": 389.12,
+   "d": 1.12,
+   "text": "at least those those are the games i'm"
+  },
+  {
+   "t": 390.24,
+   "d": 2.24,
+   "text": "interested in playing"
+  },
+  {
+   "t": 392.48,
+   "d": 2.24,
+   "text": "asura is a roguelike with a procedurally"
+  },
+  {
+   "t": 394.72,
+   "d": 1.84,
+   "text": "generated skill tree inspired by indian"
+  },
+  {
+   "t": 396.56,
+   "d": 0.88,
+   "text": "mythology"
+  },
+  {
+   "t": 397.44,
+   "d": 1.84,
+   "text": "by a team out of hyderabad india so i"
+  },
+  {
+   "t": 399.28,
+   "d": 1.04,
+   "text": "played around with this a bit while"
+  },
+  {
+   "t": 400.32,
+   "d": 1.28,
+   "text": "researching this talk and it's"
+  },
+  {
+   "t": 401.6,
+   "d": 1.04,
+   "text": "actually quite slick you should"
+  },
+  {
+   "t": 402.64,
+   "d": 2.24,
+   "text": "definitely check it out uh for each game"
+  },
+  {
+   "t": 404.88,
+   "d": 2.0,
+   "text": "the topology of the skill tree is"
+  },
+  {
+   "t": 406.88,
+   "d": 1.84,
+   "text": "freshly generated there are around 80"
+  },
+  {
+   "t": 408.72,
+   "d": 0.8,
+   "text": "skills"
+  },
+  {
+   "t": 409.52,
+   "d": 1.84,
+   "text": "and in each game only 16 are possible"
+  },
+  {
+   "t": 411.36,
+   "d": 1.84,
+   "text": "spread out across four branches"
+  },
+  {
+   "t": 413.2,
+   "d": 2.0,
+   "text": "as a player you have both a lot of"
+  },
+  {
+   "t": 415.2,
+   "d": 1.2,
+   "text": "interesting trade-offs to think about"
+  },
+  {
+   "t": 416.4,
+   "d": 1.36,
+   "text": "but each game is forced to be quite"
+  },
+  {
+   "t": 417.76,
+   "d": 0.64,
+   "text": "different"
+  },
+  {
+   "t": 418.4,
+   "d": 2.96,
+   "text": "thanks to the random number generator in"
+  },
+  {
+   "t": 421.36,
+   "d": 0.8,
+   "text": "civilization"
+  },
+  {
+   "t": 422.16,
+   "d": 2.56,
+   "text": "six six's august update they added"
+  },
+  {
+   "t": 424.72,
+   "d": 1.76,
+   "text": "something called a tech and civic"
+  },
+  {
+   "t": 426.48,
+   "d": 2.56,
+   "text": "civics shuffle mode that randomizes the"
+  },
+  {
+   "t": 429.04,
+   "d": 0.88,
+   "text": "topology"
+  },
+  {
+   "t": 429.92,
+   "d": 2.4,
+   "text": "texts are still sorted into eras to make"
+  },
+  {
+   "t": 432.32,
+   "d": 1.36,
+   "text": "everything feel sensible"
+  },
+  {
+   "t": 433.68,
+   "d": 1.2,
+   "text": "um but this can lead to some really"
+  },
+  {
+   "t": 434.88,
+   "d": 2.24,
+   "text": "interesting universes so here"
+  },
+  {
+   "t": 437.12,
+   "d": 2.72,
+   "text": "astrology depends on animal husbandry"
+  },
+  {
+   "t": 439.84,
+   "d": 1.36,
+   "text": "what does that imply"
+  },
+  {
+   "t": 441.2,
+   "d": 1.52,
+   "text": "what have we learned about the stars"
+  },
+  {
+   "t": 442.72,
+   "d": 1.52,
+   "text": "from domesticated animals"
+  },
+  {
+   "t": 444.24,
+   "d": 2.08,
+   "text": "um have horses that are able to go long"
+  },
+  {
+   "t": 446.32,
+   "d": 1.84,
+   "text": "distances enabled us to"
+  },
+  {
+   "t": 448.16,
+   "d": 1.6,
+   "text": "make important astronomical discoveries"
+  },
+  {
+   "t": 449.76,
+   "d": 1.6,
+   "text": "we couldn't otherwise that's so"
+  },
+  {
+   "t": 451.36,
+   "d": 0.72,
+   "text": "interesting"
+  },
+  {
+   "t": 452.08,
+   "d": 1.92,
+   "text": "um here's another tech tree from civ6"
+  },
+  {
+   "t": 454.0,
+   "d": 1.2,
+   "text": "that i generated"
+  },
+  {
+   "t": 455.2,
+   "d": 2.16,
+   "text": "uh and this is randomly generated i just"
+  },
+  {
+   "t": 457.36,
+   "d": 1.28,
+   "text": "rolled the dice a couple times"
+  },
+  {
+   "t": 458.64,
+   "d": 2.64,
+   "text": "so here all technologies in the world"
+  },
+  {
+   "t": 461.28,
+   "d": 1.28,
+   "text": "depend at a certain point"
+  },
+  {
+   "t": 462.56,
+   "d": 2.24,
+   "text": "on bronze working what does this imply"
+  },
+  {
+   "t": 464.8,
+   "d": 0.88,
+   "text": "about the universe"
+  },
+  {
+   "t": 465.68,
+   "d": 2.32,
+   "text": "i kind of imagine that everything high"
+  },
+  {
+   "t": 468.0,
+   "d": 1.2,
+   "text": "tech has to be built out of bronze for"
+  },
+  {
+   "t": 469.2,
+   "d": 2.0,
+   "text": "some reason"
+  },
+  {
+   "t": 471.2,
+   "d": 1.44,
+   "text": "so this is the question i'm into what"
+  },
+  {
+   "t": 472.64,
+   "d": 1.2,
+   "text": "does the tech tree imply about the"
+  },
+  {
+   "t": 473.84,
+   "d": 1.6,
+   "text": "universe"
+  },
+  {
+   "t": 475.44,
+   "d": 2.24,
+   "text": "so one thing i do know is that kitchen"
+  },
+  {
+   "t": 477.68,
+   "d": 1.44,
+   "text": "sink universes are boring"
+  },
+  {
+   "t": 479.12,
+   "d": 1.68,
+   "text": "and a kitchen sink universe is something"
+  },
+  {
+   "t": 480.8,
+   "d": 1.04,
+   "text": "i'm describing where everything is"
+  },
+  {
+   "t": 481.84,
+   "d": 0.64,
+   "text": "possible"
+  },
+  {
+   "t": 482.48,
+   "d": 1.44,
+   "text": "if you can dream of a power it is"
+  },
+  {
+   "t": 483.92,
+   "d": 2.0,
+   "text": "possible to eventually spend enough time"
+  },
+  {
+   "t": 485.92,
+   "d": 1.92,
+   "text": "on research or meditating or working out"
+  },
+  {
+   "t": 487.84,
+   "d": 1.12,
+   "text": "to get that power"
+  },
+  {
+   "t": 488.96,
+   "d": 1.6,
+   "text": "uh comic book universes are really are"
+  },
+  {
+   "t": 490.56,
+   "d": 2.0,
+   "text": "particularly guilty of this where"
+  },
+  {
+   "t": 492.56,
+   "d": 2.0,
+   "text": "everything seems to be possible and we"
+  },
+  {
+   "t": 494.56,
+   "d": 1.44,
+   "text": "know in like the dragon ball z universe"
+  },
+  {
+   "t": 496.0,
+   "d": 1.52,
+   "text": "goku can probably do something as long"
+  },
+  {
+   "t": 497.52,
+   "d": 1.76,
+   "text": "as he works out enough so"
+  },
+  {
+   "t": 499.28,
+   "d": 1.2,
+   "text": "there's not really interesting choices"
+  },
+  {
+   "t": 500.48,
+   "d": 3.2,
+   "text": "it's more about just quantity of effort"
+  },
+  {
+   "t": 503.68,
+   "d": 1.44,
+   "text": "so to sum up all my thoughts i build a"
+  },
+  {
+   "t": 505.12,
+   "d": 2.32,
+   "text": "procedural tech tree generator where"
+  },
+  {
+   "t": 507.44,
+   "d": 1.6,
+   "text": "each technology gets assigned an"
+  },
+  {
+   "t": 509.04,
+   "d": 1.36,
+   "text": "evocative description"
+  },
+  {
+   "t": 510.4,
+   "d": 2.16,
+   "text": "so you can check it out here uh and this"
+  },
+  {
+   "t": 512.56,
+   "d": 2.4,
+   "text": "link will appear again later"
+  },
+  {
+   "t": 514.96,
+   "d": 0.96,
+   "text": "so let's talk about describing"
+  },
+  {
+   "t": 515.92,
+   "d": 2.56,
+   "text": "technology accurately so"
+  },
+  {
+   "t": 518.48,
+   "d": 2.0,
+   "text": "a trivial technology could be invented"
+  },
+  {
+   "t": 520.48,
+   "d": 1.04,
+   "text": "by accident"
+  },
+  {
+   "t": 521.52,
+   "d": 2.4,
+   "text": "like the wheel a technology which"
+  },
+  {
+   "t": 523.92,
+   "d": 1.84,
+   "text": "requires a massive undertaking requires"
+  },
+  {
+   "t": 525.76,
+   "d": 1.04,
+   "text": "an actual project"
+  },
+  {
+   "t": 526.8,
+   "d": 2.4,
+   "text": "you know like nuclear power some"
+  },
+  {
+   "t": 529.2,
+   "d": 1.84,
+   "text": "technologies are so big it requires work"
+  },
+  {
+   "t": 531.04,
+   "d": 1.92,
+   "text": "on a civilization scale"
+  },
+  {
+   "t": 532.96,
+   "d": 2.08,
+   "text": "so fixing climate change is probably in"
+  },
+  {
+   "t": 535.04,
+   "d": 2.0,
+   "text": "this category"
+  },
+  {
+   "t": 537.04,
+   "d": 1.6,
+   "text": "and some technologies may be in the"
+  },
+  {
+   "t": 538.64,
+   "d": 1.84,
+   "text": "category where it's possible"
+  },
+  {
+   "t": 540.48,
+   "d": 2.32,
+   "text": "but it's barely functional uh they sort"
+  },
+  {
+   "t": 542.8,
+   "d": 1.44,
+   "text": "of work they sort of don't"
+  },
+  {
+   "t": 544.24,
+   "d": 1.92,
+   "text": "so curing cancer might be in this"
+  },
+  {
+   "t": 546.16,
+   "d": 1.12,
+   "text": "category"
+  },
+  {
+   "t": 547.28,
+   "d": 2.48,
+   "text": "we don't quite know some technologies"
+  },
+  {
+   "t": 549.76,
+   "d": 2.88,
+   "text": "never work they're crap shoots"
+  },
+  {
+   "t": 552.64,
+   "d": 1.92,
+   "text": "so we tried a few times to make"
+  },
+  {
+   "t": 554.56,
+   "d": 1.68,
+   "text": "telepathy happen it's probably not going"
+  },
+  {
+   "t": 556.24,
+   "d": 0.88,
+   "text": "to happen"
+  },
+  {
+   "t": 557.12,
+   "d": 1.76,
+   "text": "fortunately this seems pretty obvious"
+  },
+  {
+   "t": 558.88,
+   "d": 1.92,
+   "text": "and we as a civilization don't worry"
+  },
+  {
+   "t": 560.8,
+   "d": 1.68,
+   "text": "about this too much"
+  },
+  {
+   "t": 562.48,
+   "d": 1.92,
+   "text": "on the other hand some technologies"
+  },
+  {
+   "t": 564.4,
+   "d": 2.64,
+   "text": "could be unclear costly crapshoots"
+  },
+  {
+   "t": 567.04,
+   "d": 2.08,
+   "text": "nuclear fusion might be in this category"
+  },
+  {
+   "t": 569.12,
+   "d": 1.36,
+   "text": "it's been 10 years away"
+  },
+  {
+   "t": 570.48,
+   "d": 2.0,
+   "text": "for maybe a half century at this point"
+  },
+  {
+   "t": 572.48,
+   "d": 1.04,
+   "text": "it might never work"
+  },
+  {
+   "t": 573.52,
+   "d": 1.52,
+   "text": "no matter how many resources we put into"
+  },
+  {
+   "t": 575.04,
+   "d": 1.52,
+   "text": "it"
+  },
+  {
+   "t": 576.56,
+   "d": 2.24,
+   "text": "and finally technologies may be possible"
+  },
+  {
+   "t": 578.8,
+   "d": 1.28,
+   "text": "but once we have them"
+  },
+  {
+   "t": 580.08,
+   "d": 1.92,
+   "text": "they may not really be desired by anyone"
+  },
+  {
+   "t": 582.0,
+   "d": 1.36,
+   "text": "i think this is the most interesting"
+  },
+  {
+   "t": 583.36,
+   "d": 1.36,
+   "text": "category for me"
+  },
+  {
+   "t": 584.72,
+   "d": 1.68,
+   "text": "so for example the ottoman empire"
+  },
+  {
+   "t": 586.4,
+   "d": 1.52,
+   "text": "neglected to pick up the printing press"
+  },
+  {
+   "t": 587.92,
+   "d": 2.64,
+   "text": "for a few centuries after europe did"
+  },
+  {
+   "t": 590.56,
+   "d": 1.52,
+   "text": "this is for a variety of really unclear"
+  },
+  {
+   "t": 592.08,
+   "d": 2.48,
+   "text": "reasons um it's possible arabic was too"
+  },
+  {
+   "t": 594.56,
+   "d": 0.72,
+   "text": "hard to print"
+  },
+  {
+   "t": 595.28,
+   "d": 2.24,
+   "text": "you know it was deemed sacrilegious to"
+  },
+  {
+   "t": 597.52,
+   "d": 2.0,
+   "text": "to print religious text or the book copy"
+  },
+  {
+   "t": 599.52,
+   "d": 1.52,
+   "text": "and guild was just too powerful i've"
+  },
+  {
+   "t": 601.04,
+   "d": 1.6,
+   "text": "listened to a historian's talk"
+  },
+  {
+   "t": 602.64,
+   "d": 2.08,
+   "text": "about this recently and we don't really"
+  },
+  {
+   "t": 604.72,
+   "d": 1.84,
+   "text": "know"
+  },
+  {
+   "t": 606.56,
+   "d": 2.4,
+   "text": "so sometimes technologies are possible"
+  },
+  {
+   "t": 608.96,
+   "d": 0.72,
+   "text": "we just"
+  },
+  {
+   "t": 609.68,
+   "d": 3.2,
+   "text": "don't do them for some reason hey this"
+  },
+  {
+   "t": 612.88,
+   "d": 1.52,
+   "text": "is pretty similar to big ass touch"
+  },
+  {
+   "t": 614.4,
+   "d": 0.8,
+   "text": "tables"
+  },
+  {
+   "t": 615.2,
+   "d": 3.28,
+   "text": "or airships or telepresence conferences"
+  },
+  {
+   "t": 618.48,
+   "d": 0.48,
+   "text": "which"
+  },
+  {
+   "t": 618.96,
+   "d": 3.36,
+   "text": "seemed like an absurd idea a year ago"
+  },
+  {
+   "t": 622.32,
+   "d": 2.0,
+   "text": "um i feel like these kind of"
+  },
+  {
+   "t": 624.32,
+   "d": 1.76,
+   "text": "technologies are all in waiting for a"
+  },
+  {
+   "t": 626.08,
+   "d": 2.24,
+   "text": "surprise factor cultural or otherwise to"
+  },
+  {
+   "t": 628.32,
+   "d": 1.52,
+   "text": "make them real"
+  },
+  {
+   "t": 629.84,
+   "d": 2.24,
+   "text": "so look at 2020 everywhere you need to"
+  },
+  {
+   "t": 632.08,
+   "d": 1.68,
+   "text": "go you need to quarantine 14 days so"
+  },
+  {
+   "t": 633.76,
+   "d": 1.52,
+   "text": "traveling fast by plane doesn't really"
+  },
+  {
+   "t": 635.28,
+   "d": 1.44,
+   "text": "matter to anyone anymore"
+  },
+  {
+   "t": 636.72,
+   "d": 2.72,
+   "text": "is 2021 final of the year that airships"
+  },
+  {
+   "t": 639.44,
+   "d": 1.84,
+   "text": "could become a thing"
+  },
+  {
+   "t": 641.28,
+   "d": 1.36,
+   "text": "i mean you're going to need to wait"
+  },
+  {
+   "t": 642.64,
+   "d": 1.52,
+   "text": "several days after you travel anywhere"
+  },
+  {
+   "t": 644.16,
+   "d": 0.56,
+   "text": "anyway"
+  },
+  {
+   "t": 644.72,
+   "d": 2.56,
+   "text": "might as well go slowly in a seat of"
+  },
+  {
+   "t": 647.28,
+   "d": 0.8,
+   "text": "luxury"
+  },
+  {
+   "t": 648.08,
+   "d": 2.0,
+   "text": "um but let's look at some real examples"
+  },
+  {
+   "t": 650.08,
+   "d": 1.84,
+   "text": "from my tech tree generator"
+  },
+  {
+   "t": 651.92,
+   "d": 2.16,
+   "text": "so here's one universe i'm your one"
+  },
+  {
+   "t": 654.08,
+   "d": 1.04,
+   "text": "minute warning"
+  },
+  {
+   "t": 655.12,
+   "d": 3.52,
+   "text": "dusty so here's here's one universe"
+  },
+  {
+   "t": 658.64,
+   "d": 2.32,
+   "text": "uh in this universe ai not really"
+  },
+  {
+   "t": 660.96,
+   "d": 1.44,
+   "text": "desired by anyone"
+  },
+  {
+   "t": 662.4,
+   "d": 2.48,
+   "text": "bioengineering it's an unclear crap"
+  },
+  {
+   "t": 664.88,
+   "d": 1.28,
+   "text": "shoot we put a lot of money into it and"
+  },
+  {
+   "t": 666.16,
+   "d": 1.6,
+   "text": "we get nothing out of it"
+  },
+  {
+   "t": 667.76,
+   "d": 1.68,
+   "text": "bionics and cybernetics though totally"
+  },
+  {
+   "t": 669.44,
+   "d": 1.76,
+   "text": "triple trivial easy to modify"
+  },
+  {
+   "t": 671.2,
+   "d": 1.68,
+   "text": "our bodies and turn them into machines"
+  },
+  {
+   "t": 672.88,
+   "d": 1.6,
+   "text": "here's another universe"
+  },
+  {
+   "t": 674.48,
+   "d": 2.72,
+   "text": "ai is trivial bionics and cybernetics"
+  },
+  {
+   "t": 677.2,
+   "d": 1.44,
+   "text": "obvious crapshoot we don't spend any"
+  },
+  {
+   "t": 678.64,
+   "d": 1.04,
+   "text": "time on it"
+  },
+  {
+   "t": 679.68,
+   "d": 3.12,
+   "text": "bioengineering it barely works so these"
+  },
+  {
+   "t": 682.8,
+   "d": 1.68,
+   "text": "are interesting evocative different"
+  },
+  {
+   "t": 684.48,
+   "d": 1.36,
+   "text": "universes"
+  },
+  {
+   "t": 685.84,
+   "d": 1.12,
+   "text": "that i think are more interesting than"
+  },
+  {
+   "t": 686.96,
+   "d": 2.8,
+   "text": "just a random topology tech tree"
+  },
+  {
+   "t": 689.76,
+   "d": 2.4,
+   "text": "uh here's another example about time"
+  },
+  {
+   "t": 692.16,
+   "d": 1.36,
+   "text": "travel but i'm gonna actually skip this"
+  },
+  {
+   "t": 693.52,
+   "d": 2.96,
+   "text": "one uh so from this spot in my tech tree"
+  },
+  {
+   "t": 696.48,
+   "d": 0.72,
+   "text": "which is about"
+  },
+  {
+   "t": 697.2,
+   "d": 1.36,
+   "text": "proc gen tech trees i see two"
+  },
+  {
+   "t": 698.56,
+   "d": 1.84,
+   "text": "interesting things ahead first mapping"
+  },
+  {
+   "t": 700.4,
+   "d": 1.36,
+   "text": "cross domain"
+  },
+  {
+   "t": 701.76,
+   "d": 1.36,
+   "text": "so sometimes we invest a lot of effort"
+  },
+  {
+   "t": 703.12,
+   "d": 1.68,
+   "text": "in a domain that is important to us and"
+  },
+  {
+   "t": 704.8,
+   "d": 0.96,
+   "text": "there's a chance of discovering"
+  },
+  {
+   "t": 705.76,
+   "d": 1.68,
+   "text": "something in an alternate domain"
+  },
+  {
+   "t": 707.44,
+   "d": 1.68,
+   "text": "so a game reviewer might call this"
+  },
+  {
+   "t": 709.12,
+   "d": 2.4,
+   "text": "unrealistic but this happens in real"
+  },
+  {
+   "t": 711.52,
+   "d": 0.72,
+   "text": "life so"
+  },
+  {
+   "t": 712.24,
+   "d": 3.04,
+   "text": "the microwave was a communication domain"
+  },
+  {
+   "t": 715.28,
+   "d": 1.12,
+   "text": "technology"
+  },
+  {
+   "t": 716.4,
+   "d": 1.36,
+   "text": "well it was funded by communication"
+  },
+  {
+   "t": 717.76,
+   "d": 1.44,
+   "text": "domain technology research and we ended"
+  },
+  {
+   "t": 719.2,
+   "d": 0.4,
+   "text": "up"
+  },
+  {
+   "t": 719.6,
+   "d": 1.44,
+   "text": "with a food processing technology out of"
+  },
+  {
+   "t": 721.04,
+   "d": 1.6,
+   "text": "it uh"
+  },
+  {
+   "t": 722.64,
+   "d": 1.44,
+   "text": "another thing i'd like to try describing"
+  },
+  {
+   "t": 724.08,
+   "d": 1.76,
+   "text": "is domain progression"
+  },
+  {
+   "t": 725.84,
+   "d": 1.68,
+   "text": "so for example in the history of compute"
+  },
+  {
+   "t": 727.52,
+   "d": 1.52,
+   "text": "computing the media that we use for"
+  },
+  {
+   "t": 729.04,
+   "d": 1.36,
+   "text": "computing was wood"
+  },
+  {
+   "t": 730.4,
+   "d": 2.4,
+   "text": "then metal gears then gas and glass like"
+  },
+  {
+   "t": 732.8,
+   "d": 1.12,
+   "text": "vacuum tubes"
+  },
+  {
+   "t": 733.92,
+   "d": 2.8,
+   "text": "now sand um like transistors and now"
+  },
+  {
+   "t": 736.72,
+   "d": 1.28,
+   "text": "it's qubits although that might be a"
+  },
+  {
+   "t": 738.0,
+   "d": 1.68,
+   "text": "crapshoot we're not sure"
+  },
+  {
+   "t": 739.68,
+   "d": 1.92,
+   "text": "so thank you for attending my talk"
+  },
+  {
+   "t": 741.6,
+   "d": 0.96,
+   "text": "fortunately in this universe"
+  },
+  {
+   "t": 742.56,
+   "d": 1.12,
+   "text": "communication is trivial so you can"
+  },
+  {
+   "t": 743.68,
+   "d": 1.2,
+   "text": "reach out to me here"
+  },
+  {
+   "t": 744.88,
+   "d": 2.48,
+   "text": "uh and i'll see you around the"
+  },
+  {
+   "t": 747.36,
+   "d": 2.0,
+   "text": "telepresence conference space"
+  },
+  {
+   "t": 749.36,
+   "d": 2.24,
+   "text": "thank you so much justin uh wish we had"
+  },
+  {
+   "t": 751.6,
+   "d": 0.96,
+   "text": "time for even more"
+  },
+  {
+   "t": 752.56,
+   "d": 2.32,
+   "text": "fantastic talk hopefully you can uh"
+  },
+  {
+   "t": 754.88,
+   "d": 1.52,
+   "text": "follow up a bit more on it later i would"
+  },
+  {
+   "t": 756.4,
+   "d": 1.36,
+   "text": "love to see that turn into a full talk"
+  },
+  {
+   "t": 757.76,
+   "d": 0.64,
+   "text": "next year"
+  },
+  {
+   "t": 758.4,
+   "d": 4.08,
+   "text": "next year let's be honest moving on"
+  }
+ ]
+}

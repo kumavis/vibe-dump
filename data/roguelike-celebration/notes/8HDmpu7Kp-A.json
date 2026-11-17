@@ -1,0 +1,162 @@
+{
+  "id": "8HDmpu7Kp-A",
+  "title": "Dustin Freeman - Procedurally Generating Technology Trees",
+  "speaker": "Dustin Freeman",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=8HDmpu7Kp-A",
+  "talk_type": "design",
+  "summary": "Dustin Freeman, a research scientist, explains tech trees in graph terms (nodes, connections/weights, topology), contrasts them with real-world research where topology and outcomes are unknown, and surveys games with procedural tech trees: Sword of the Stars, Limit Theory, Alpha Centauri's blind research, Stellaris, Asura and Civilization VI's tech shuffle mode. He argues that what makes a generated tech tree interesting is what it implies about the universe, that 'kitchen sink' universes where everything is attainable are boring, and presents his own generator that labels each technology with an evocative feasibility category (trivial, project, civilization-scale, barely works, crapshoot, costly crapshoot, undesired). He closes with future directions: cross-domain discoveries and domain progression.",
+  "games": [
+    "StarCraft II",
+    "Skyrim",
+    "Sword of the Stars",
+    "Limit Theory",
+    "Sid Meier's Alpha Centauri",
+    "Stellaris",
+    "Asura",
+    "Civilization VI"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "tech trees",
+      "kind": "technique",
+      "claim": "A tech tree can be modelled as a graph of technologies (nodes), dependencies (connections whose weights encode research difficulty) and overall shape (topology), and generators can vary each independently.",
+      "detail": "Freeman notes two trees can share nodes but differ in connections (different topology), or share topology but differ in research difficulty (different weights). This vocabulary frames the procedural approaches he surveys.",
+      "t": 88,
+      "quote": "a connection can describe the difficulty of researching a new technology based on the previous technologies you already know the topology is the whole shape",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tech trees",
+      "kind": "principle",
+      "claim": "Real research differs from game tech trees: the topology, weights and even the set of possible technologies are unknown, and technologies fail or go unadopted for unpredictable reasons.",
+      "detail": "Freeman draws on 12 years of technology research. He cites the Microsoft Surface touch table, which worked well but wasn't picked up, and airships, as technologies that exist but nobody seems to want.",
+      "t": 121,
+      "quote": "topology is not known in advance weights are totally unknown nodes are unknown what possible technologies there are we don't know",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tech trees",
+      "kind": "example",
+      "claim": "Sword of the Stars randomises tech trees by rolling, per player at game start, whether each connection of a fixed topology exists, so every player gets a different tree.",
+      "detail": "Freeman presents it as the first of several prior examples of procedural tech trees in games.",
+      "t": 263,
+      "quote": "there is a fixed topology but at the beginning of the game a role occurs for whether each connection exists this is independent for each player",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tech trees",
+      "kind": "example",
+      "claim": "Limit Theory planned a tech system where researching a node eventually spawns child nodes that are variations of it, so the player builds the tree's topology as they go.",
+      "detail": "There was a fixed core set of technologies. Freeman compares it to dog breeding but notes the game was cancelled, so how it would feel in practice is unknown.",
+      "t": 288,
+      "quote": "you spend research on a node and after a while that node will spawn child nodes with variations on the current node",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tech trees",
+      "kind": "example",
+      "claim": "Alpha Centauri's blind research mode hides a fixed tree and lets the player set only a focus (discover, explore, conquer or build), after which a random technology from that area unlocks.",
+      "detail": "Freeman notes the hidden topology itself stays fixed and doesn't change.",
+      "t": 307,
+      "quote": "there's something called a blind research mode where the tech tree isn't visible you can indicate a focus",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tech trees",
+      "kind": "example",
+      "claim": "Stellaris presents research as drawing three random options from tiered technologies, which limits choices at once but, for Freeman, doesn't feel like research.",
+      "detail": "Access to a tier requires researching a number of technologies from the previous tier. Freeman says choosing a technology isn't exciting.",
+      "t": 324,
+      "quote": "choosing a technology to research is like drawing from a deck of cards",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "balance vs flavor",
+      "kind": "warning",
+      "claim": "Stellaris originally gave civilizations different faster-than-light technologies but removed this for balance, which Freeman sees as an unfortunate trade-off that sacrificed evocativeness.",
+      "detail": "Defending against warp, wormholes and hyperlanes at once was hard. Freeman says he cares more about the evocativeness of the universe a tech system implies than about balance choices.",
+      "t": 381,
+      "quote": "what i get excited about in terms of technology development is more the evocativeness of the universe it implies not the balance choices",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "skill trees",
+      "kind": "example",
+      "claim": "The roguelike Asura generates a fresh skill tree topology each game, offering only 16 of about 80 skills across four branches, so each run is forced to be different.",
+      "detail": "Freeman tried it while researching the talk and found it slick: players get interesting trade-offs and the RNG forces variety between games.",
+      "t": 406,
+      "quote": "there are around 80 skills and in each game only 16 are possible spread out across four branches",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "implied worlds",
+      "kind": "principle",
+      "claim": "A randomised tech tree is interesting for what its dependencies imply about the universe, as in Civilization VI's shuffle mode where astrology depends on animal husbandry or everything depends on bronze working.",
+      "detail": "Civ VI's tech and civics shuffle mode randomises topology while keeping eras. Freeman speculates on what horses enabling astronomy implies, and imagines a 'bronze world' where all high tech is built from bronze.",
+      "t": 471,
+      "quote": "this is the question i'm into what does the tech tree imply about the universe",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "kitchen sink universes",
+      "kind": "warning",
+      "claim": "'Kitchen sink' universes where any power is eventually attainable with enough effort are boring, because choices reduce to quantity of effort.",
+      "detail": "Freeman says comic book universes are particularly guilty, citing Dragon Ball Z where Goku can probably do anything if he works out enough.",
+      "t": 475,
+      "quote": "kitchen sink universes are boring and a kitchen sink universe is something i'm describing where everything is possible",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tech feasibility",
+      "kind": "technique",
+      "claim": "Freeman's tech tree generator assigns each technology a feasibility category: trivial/accidental, a project, civilization-scale, barely functional, a crapshoot, a costly crapshoot, or possible but undesired.",
+      "detail": "His examples: the wheel (trivial), nuclear power (project), fixing climate change (civilization scale), curing cancer (barely works), telepathy (crapshoot), nuclear fusion (unclear costly crapshoot).",
+      "t": 562,
+      "quote": "some technologies could be unclear costly crapshoots nuclear fusion might be in this category",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tech feasibility",
+      "kind": "principle",
+      "claim": "The most interesting technology category is one that is possible but not desired, waiting for a cultural or other surprise to make it real.",
+      "detail": "Freeman cites the Ottoman Empire not adopting the printing press for centuries for unclear reasons, and links it to touch tables, airships and telepresence conferences, joking that 2020 quarantines could make slow airship travel viable.",
+      "t": 576,
+      "quote": "technologies may be possible but once we have them they may not really be desired by anyone i think this is the most interesting category",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tech feasibility",
+      "kind": "example",
+      "claim": "Feasibility labels make generated universes distinct: in one, AI is undesired, bioengineering a costly crapshoot and cybernetics trivial; in another, AI is trivial and cybernetics an obvious crapshoot.",
+      "detail": "Freeman shows outputs of his generator and argues these evocative, differing universes are more interesting than a tech tree with merely random topology.",
+      "t": 679,
+      "quote": "these are interesting evocative different universes that i think are more interesting than just a random topology tech tree",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tech trees",
+      "kind": "open-question",
+      "claim": "Future directions for procedural tech trees include cross-domain discovery (research in one domain yielding tech in another) and domain progression (a technology's substrate changing over time).",
+      "detail": "Freeman's examples: the microwave came out of communications research; computing media went from wood to metal gears, vacuum tubes, transistors and possibly qubits.",
+      "t": 698,
+      "quote": "mapping cross domain so sometimes we invest a lot of effort in a domain that is important to us",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

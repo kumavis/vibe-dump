@@ -1,0 +1,249 @@
+{
+  "id": "4-7TtPX5uhg",
+  "title": "Tarn Adams - Villains in Dwarf Fortress",
+  "speaker": "Tarn Adams",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=4-7TtPX5uhg",
+  "talk_type": "design",
+  "summary": "Tarn Adams describes a planned feature for Dwarf Fortress's adventure mode, which he calls flat: an open world with no overarching structure. Instead of waiting years for procedural myths and magic, he proposes generated villains (necromancers, scheming advisors, spymasters) who pursue goals through networks of compromised agents built from existing relationships and simple espionage rolls. The player starts with no information, investigates local events like village murders, and climbs the chain of villainy, with escape hatches at each stage so the arc still works if the investigation systems are weak. He covers local network repair when nodes die, robustness to player disruption, and reusing the same mission system so the player can run schemes of their own.",
+  "games": [
+    "Dwarf Fortress",
+    "Skyrim",
+    "Middle-earth: Shadow of Mordor",
+    "Sid Meier's Pirates!",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "overarching structure",
+      "kind": "example",
+      "claim": "Dwarf Fortress's adventure mode feels flat because it is an open world of towns, monsters and bandits with no overarching structure, so players often just die or amuse themselves with side activities like being a bard.",
+      "detail": "Adams contrasts it with traditional roguelikes where generated levels going deeper give a quest-like structure for charting progress. His planned creation myths and procedural magic would take a couple of years, so he wanted a feature that could fix flatness in a few months.",
+      "t": 85,
+      "quote": "we basically have an open-world game where you wander around between towns where you can talk to a few people and there's some monsters",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Emergent narrative comes from interlocking mechanics that resonate with the outside world, are internally consistent, and let the player investigate, producing stories players retell to each other.",
+      "detail": "Adams summarises his longer Northwestern University talk on emergent narrative. He says designers understand this intuitively from playing these games and can use that intuition to design.",
+      "t": 188,
+      "quote": "interlocking mechanics making sure they're resonant with the the outside world but also internally consistent and allow the player to investigate things",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "replayability",
+      "kind": "principle",
+      "claim": "Replayability means different things to different roguelike players, such as mastering intricate interactions, being surprised, or inhabiting a single-player world, and your definition of it reflects your flavour of roguelike.",
+      "detail": "Adams calls replayability a tricky word that is big in the roguelike scene, giving NetHack-style mastery of connections as one example.",
+      "t": 215,
+      "quote": "what's your flavor of roguelike is what your definition of replayability is",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "reuse existing systems",
+      "kind": "principle",
+      "claim": "On a long-running roguelike, look for features that can be built by gluing together systems you already have, since such projects accumulate layers you have no choice but to use and cutting corners saves years.",
+      "detail": "Adams describes Dwarf Fortress as having an archaeological history of layers of garbage piled on each other. The villain feature reuses existing monsters, necromancer apprentices, spying agents and relationships; he says the approach would also work in a more pared-down system with comparable pieces.",
+      "t": 246,
+      "quote": "it has a archeological kind of history or geological history of layers of garbage just piled on top of each other",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "villains",
+      "kind": "principle",
+      "claim": "Villains acting on the world through schemes map naturally onto traditional plot and act structure, and their interlocking chains resemble the item-and-monster interaction stories roguelike players already tell.",
+      "detail": "Dwarf Fortress already has vampires, necromancers, rulers and ill-natured people. A villain interlocking with a townsperson who talks to someone else to start a ball rolling has a structure similar to stories about items interacting with terrain and a monster pushing you into it, so ordinary video game intuitions apply.",
+      "t": 359,
+      "quote": "having a villain that interlocks with townsperson who then speaks to the you know some somebody else to get a ball rolling it has a very similar sort of structure",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "example",
+      "claim": "Fixed RPG plot events produce no emergent narrative: players retell Skyrim stories about putting buckets on people's heads, never about the scripted dragon or boss fights.",
+      "detail": "Adams distinguishes the scripted events and quests that are the same for everybody from the emergent thread of what players actually do. In strategy games, stories are told as a sequence of how the opposition behaved on a randomized map.",
+      "t": 438,
+      "quote": "it's gonna be about buckets on people's heads and not about like did they fight the dragon right no and I've never heard anyone recount their boss battle",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "opposition models",
+      "kind": "example",
+      "claim": "Games reach emergent narrative through opposition in different ways: Shadow of Mordor has the player fight through a generated organisational structure, while Pirates!-style games make the player a small cog in a strategy game running without them.",
+      "detail": "In the Shadow of Mordor model the plot arcs are the same as an RPG but the opposition hierarchy varies. In the other model the player can influence how the overall situation unfolds but is beholden to it. Adams wants to squeeze out all of these at once.",
+      "t": 505,
+      "quote": "you're a small cog in the sort of strategy puzzle that has like some particular way of influencing how the overall situation unfold",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "villain goals",
+      "kind": "technique",
+      "claim": "Dwarf Fortress villains get inherent goals from their type (a necromancer wants bodies to raise) plus specific goals from world-generation history (a grudge against the village that expelled them).",
+      "detail": "Necromancers get kicked out when they do not appear to age. Adams says simple motivations and some programmed goals can lead somewhere, but on their own there is no scheme, which is why he added more relationships and structures.",
+      "t": 657,
+      "quote": "they have their sort of inherent goals that come from their necromancy which is I just want more bodies and I want to turn them into zombies",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "relationships",
+      "kind": "technique",
+      "claim": "To give schemes something to act on, Dwarf Fortress added layered relationships (friendships, lovers, even divorce) and new positions like an advisor and a spymaster, each relationship carrying simple flags and personality traits.",
+      "detail": "The spymaster has a randomized title (keeper of the seals). Relationships just have little flags such as 'these people don't like each other' or 'have history', and personality traits work like video game traits such as greedy.",
+      "t": 702,
+      "quote": "add a bunch of new relationships friendships lovers we had an occasion to had divorce to the game",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "espionage",
+      "kind": "technique",
+      "claim": "Dwarf Fortress villains recruit agents by picking a target from relationship flags and rolling against the counterintelligence MICE motives (money, ideology, coercion, ego), building a chained, nested network.",
+      "detail": "A necromancer's apprentice, promised immortality, goes to a town (building on existing artifact-spying agents) and finds a node via relationships. These rolls happen offscreen to set the stage for the player, not as a game being played.",
+      "t": 787,
+      "quote": "money ideology coercion and ego is one possible there's a bunch of different ways people spell it out but those are just ways to manipulate people",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "goal propagation",
+      "kind": "technique",
+      "claim": "Once a network is compromised, the villain feeds goals down it and each node uses its own tools, e.g. a necromancer wanting bodies gets a war started, and a revenge goal reaches a spymaster who knows how to assassinate.",
+      "detail": "Adams notes many things in roguelikes are hard-coded at first, like knowing war creates bodies, and goals can be made more interesting later. Every node has simple goals and tools, and a few linkages yield a nested, layered RPG plot.",
+      "t": 809,
+      "quote": "once they turn it around you can just start feeding goals down the system so we want bodies we can create bodies",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "network repair",
+      "kind": "technique",
+      "claim": "Because characters die constantly in Dwarf Fortress, the villain network must repair itself through local checks by each node rather than global analysis, which keeps it fast, simple, and allowed to fail sometimes.",
+      "detail": "If the necromancer dies, the apprentice checks whether immortality is still coming and wanders off, but the ruler still hates his targets so the war and murders continue. If the apprentice dies, the necromancer checks for other known agents or goes up the chain; Adams compares this local behaviour to entity component system thinking.",
+      "t": 998,
+      "quote": "you can make sure that your behavior is coming out of local nodes without having to do global analysis that often then it can still be kind of fast",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "blackmail",
+      "kind": "technique",
+      "claim": "Dwarf Fortress tracks each agreement a character makes in a plot as a small stored object, which serves both villain exposition and as blackmail leverage to continue the chain when a link dies.",
+      "detail": "Compromise is measured by the number of agreements carried out. Villains can cackle about these deeds in villain talk. If the advisor dies, the necromancer loses access to the ruler entirely and must start over.",
+      "t": 1034,
+      "quote": "each one of these actions is a little little just structure object thingy we save that just says you've agreed to pass this name along",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "investigation",
+      "kind": "principle",
+      "claim": "A player who starts with no knowledge of a hidden villain network and learns only what they see locally or hear in conversation naturally gets a step-by-step mystery to solve.",
+      "detail": "In Adams's example the player arrives in a village with murders and can learn of the necromancer, the ruler and the elf war by talking, but not the threads connecting them, which he says is good for mystery solving.",
+      "t": 1180,
+      "quote": "we have no initial information except what's what's going on right in front of us",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "escape hatches",
+      "kind": "principle",
+      "claim": "Design risky features with escape hatches: if Dwarf Fortress's clue-based investigation fails, it can be simplified to someone saying 'the bandits did it' and the rest of the arc still works.",
+      "detail": "Adams advises thinking about the entire player experience you want and focusing on the parts you feel you can do well. The investigation could be arbitrarily complicated or arbitrarily simple, and he is unsure ideas like partial clues and mistaken identifications will work.",
+      "t": 1243,
+      "quote": "I can always just jettison out and still have a complete game arc",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "metagaming",
+      "kind": "open-question",
+      "claim": "Character observation skills that reveal clues are tricky because players learn to read clues themselves after seeing enough, though Adams sees that player learning alongside character skill as acceptable.",
+      "detail": "Dwarf Fortress already tracks footprints. Adams says players will metagame these things, which is just getting better at the game, but the character still matters.",
+      "t": 1298,
+      "quote": "the player can kind of metagame these things once they see enough of them but that's and that's that's a really real kind of thing",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "risk and reward",
+      "kind": "principle",
+      "claim": "Investigation fits the roguelike principle of balancing resources and risk: making an accusation is like reading an unknown scroll, and false accusations or attacking the wrong bandit camp bring trouble on the player.",
+      "detail": "Players can choose how much to investigate and which tools to use, such as intimidation they may be bad at. Because mistakes cost the player, there is positive feedback for careful investigation and proper decisions.",
+      "t": 1315,
+      "quote": "how you balance your resources and your risk and so forth if you want to try and investigate more",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hints",
+      "kind": "technique",
+      "claim": "Townspeople who know the actual plot can feed the player an arbitrary amount of hints because the game knows which clues the player has not yet found, giving a tunable difficulty control.",
+      "detail": "Adams presents this as another escape hatch and notes there are many tuning apparatuses to keep an eye on.",
+      "t": 1360,
+      "quote": "if it understands the actual plot then it can give you hints because it knows what you haven't found yet",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "exposition",
+      "kind": "technique",
+      "claim": "At a dungeon like a bandit hideout, traditional RPG devices such as incriminating notes, payments, or captured villains confessing provide a fallback way to pass plot information to the next link.",
+      "detail": "The hideout itself is a traditional adventure environment that can be as interesting as you want. Adams jokes about RPG villains signing everything, and says these devices let the game slide through to the next step even if investigation is weak.",
+      "t": 1402,
+      "quote": "you can put clues like they were paid or whatever to do this then there's the money or there's the incriminating note",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "player disruption",
+      "kind": "principle",
+      "claim": "If the player breaks an investigative thread, for example by killing everyone before they talk, it is fine: the player never knew the thread existed, the villain keeps working, and the player can meet the network again later.",
+      "detail": "The player still solved the murders and feels good. The simulation continues and the player may encounter the old thread higher up the chain later.",
+      "t": 1484,
+      "quote": "the villain keeps working right keeps on moving the simulation keeps happening and then you encounter something else",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "game loop",
+      "kind": "technique",
+      "claim": "Each solved link yields information pointing to the next link in the villain chain, forming an upward game spiral, and villains reacting to the player's presence add both danger and clues.",
+      "detail": "Adams says making your presence known propagates up the chain; a sudden zombie attack becomes a clue an experienced player learns to read, mapping traditional RPG structures into the game piece by piece.",
+      "t": 1541,
+      "quote": "we're basically setting up a kind of game loop or it feels like a game spiral kind of going upward into new mechanisms",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "generalized systems",
+      "kind": "technique",
+      "claim": "Because the villain's agent relationships and missions are generalized data, the same system lets the player send companions on missions to build networks and cause strife, making the player a villain or other actor at little extra cost.",
+      "detail": "The necromancer-apprentice bond stores loyalty and trust used in dice rolls, with a default mission to compulsively expand the network. Player companions already exist, so an interface to give goals is the main cost. In Q&A Adams adds that this uses the existing army controller, so companions can do anything dwarf squads can, and it could later model diplomacy.",
+      "t": 1697,
+      "quote": "having the player be a villain in quotes just some kind of actor and having that be a whole tool that you can use in in the roguelike game",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "agent knowledge",
+      "kind": "technique",
+      "claim": "Agents in a Dwarf Fortress plot only know the agreement link they are part of and their progress toward it, not the rest of the chain, and occasionally check it for local repair.",
+      "detail": "Answering a question, Adams says the agreement is stored in both parties' heads like regular mission data. Feedback loops, such as two kingdoms' advisors each advising the other's ruler badly, are fine and entertaining when players later piece them together, including in legends mode.",
+      "t": 1809,
+      "quote": "that agent is aware of that element of the plot they don't know further down the chain",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

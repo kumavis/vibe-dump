@@ -1,0 +1,1879 @@
+{
+ "id": "0ydWz1EvMJs",
+ "url": "https://www.youtube.com/watch?v=0ydWz1EvMJs",
+ "title": "Atty Vohra - Automating D&D Combat Prep with Roguelike Principles",
+ "speaker": "Atty Vohra",
+ "talk_title": "Automating D&D Combat Prep with Roguelike Principles",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 740,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "I'm an associate game designer at Improbable Canada - designing systems driven, open world content! While in university I dabbled in AI-driven content generation and wrote papers on cognitive load and learning in games. Most importantly however, I am addicted to D&D and I became a forever DM by my own volition! When you combine all of the above you get someone who likes to constantly experiment with designs in the tabletop and digital space and validate them by forcing players to fill out forms. That's me!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to the concept"
+  },
+  {
+   "start": 54,
+   "title": "The combat generator tool"
+  },
+  {
+   "start": 156,
+   "title": "Design philosophy and goals"
+  },
+  {
+   "start": 280,
+   "title": "From constraints to narrative"
+  },
+  {
+   "start": 448,
+   "title": "Automation as an improv partner"
+  },
+  {
+   "start": 569,
+   "title": "Future possibilities and advice"
+  },
+  {
+   "start": 647,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2340,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.84,
+   "d": 1.44,
+   "text": "next up"
+  },
+  {
+   "t": 5.28,
+   "d": 3.76,
+   "text": "it is uh addy bora um"
+  },
+  {
+   "t": 9.04,
+   "d": 3.36,
+   "text": "a co-worker of mine we know each other"
+  },
+  {
+   "t": 12.4,
+   "d": 2.48,
+   "text": "yeah from work yeah friend from work uh"
+  },
+  {
+   "t": 14.88,
+   "d": 2.16,
+   "text": "but also a intelligent game designer"
+  },
+  {
+   "t": 17.04,
+   "d": 2.48,
+   "text": "works in systems driven uh kind of"
+  },
+  {
+   "t": 19.52,
+   "d": 3.2,
+   "text": "development and um addicted to dnd and"
+  },
+  {
+   "t": 22.72,
+   "d": 3.36,
+   "text": "they self-describe forever dm so uh i'll"
+  },
+  {
+   "t": 26.08,
+   "d": 1.04,
+   "text": "let you"
+  },
+  {
+   "t": 27.12,
+   "d": 1.84,
+   "text": "get on with teaching us how to apply"
+  },
+  {
+   "t": 28.96,
+   "d": 1.68,
+   "text": "systems to reduce your dungeon master"
+  },
+  {
+   "t": 30.64,
+   "d": 1.44,
+   "text": "prep"
+  },
+  {
+   "t": 32.08,
+   "d": 1.6,
+   "text": "thanks uh preface i'm gonna be nerding"
+  },
+  {
+   "t": 33.68,
+   "d": 1.76,
+   "text": "out about dungeons and dragons and say a"
+  },
+  {
+   "t": 35.44,
+   "d": 1.28,
+   "text": "lot of um"
+  },
+  {
+   "t": 36.72,
+   "d": 2.16,
+   "text": "a lot of lingo so if you haven't played"
+  },
+  {
+   "t": 38.88,
+   "d": 1.92,
+   "text": "my sunsets and dragons i'm gonna link"
+  },
+  {
+   "t": 40.8,
+   "d": 1.2,
+   "text": "just a"
+  },
+  {
+   "t": 42.0,
+   "d": 2.8,
+   "text": "a a link in the chat oh wait alexa can"
+  },
+  {
+   "t": 44.8,
+   "d": 2.08,
+   "text": "we link that in the chat actually"
+  },
+  {
+   "t": 46.88,
+   "d": 2.0,
+   "text": "yes i'll do that"
+  },
+  {
+   "t": 48.88,
+   "d": 1.2,
+   "text": "yeah just in case you don't know any"
+  },
+  {
+   "t": 50.08,
+   "d": 1.68,
+   "text": "lingo you can control f on the website"
+  },
+  {
+   "t": 51.76,
+   "d": 2.32,
+   "text": "and find any terminology"
+  },
+  {
+   "t": 54.08,
+   "d": 3.68,
+   "text": "um okay so story time um a two year long"
+  },
+  {
+   "t": 57.76,
+   "d": 2.48,
+   "text": "campaign i was dming for uh friends was"
+  },
+  {
+   "t": 60.24,
+   "d": 2.72,
+   "text": "coming to an end i had a terribly tough"
+  },
+  {
+   "t": 62.96,
+   "d": 2.32,
+   "text": "week at work and i had totally forgotten"
+  },
+  {
+   "t": 65.28,
+   "d": 1.6,
+   "text": "about an upcoming session for that"
+  },
+  {
+   "t": 66.88,
+   "d": 1.2,
+   "text": "campaign"
+  },
+  {
+   "t": 68.08,
+   "d": 2.16,
+   "text": "um i had 30 minutes of prep time before"
+  },
+  {
+   "t": 70.24,
+   "d": 2.56,
+   "text": "it was go time and i was super stressed"
+  },
+  {
+   "t": 72.8,
+   "d": 1.36,
+   "text": "i didn't want my players to have bad"
+  },
+  {
+   "t": 74.16,
+   "d": 1.36,
+   "text": "session i didn't want to cancel last"
+  },
+  {
+   "t": 75.52,
+   "d": 2.0,
+   "text": "minute coincidentally i had this"
+  },
+  {
+   "t": 77.52,
+   "d": 2.16,
+   "text": "half-baked untested combat generator"
+  },
+  {
+   "t": 79.68,
+   "d": 2.4,
+   "text": "that hadn't seen the light of day in a"
+  },
+  {
+   "t": 82.08,
+   "d": 2.32,
+   "text": "while i took the gamble generated the"
+  },
+  {
+   "t": 84.4,
+   "d": 1.76,
+   "text": "combat for that session in an instant"
+  },
+  {
+   "t": 86.16,
+   "d": 1.36,
+   "text": "polished it for about five or ten"
+  },
+  {
+   "t": 87.52,
+   "d": 2.08,
+   "text": "minutes and now here i am to share with"
+  },
+  {
+   "t": 89.6,
+   "d": 2.08,
+   "text": "you how that generator changed the way i"
+  },
+  {
+   "t": 91.68,
+   "d": 1.12,
+   "text": "dm'd"
+  },
+  {
+   "t": 92.8,
+   "d": 2.72,
+   "text": "so hi i'm addie he him associate game"
+  },
+  {
+   "t": 95.52,
+   "d": 1.6,
+   "text": "designer at improbable i'm still"
+  },
+  {
+   "t": 97.12,
+   "d": 1.36,
+   "text": "figuring out my proctoring class but"
+  },
+  {
+   "t": 98.48,
+   "d": 2.08,
+   "text": "let's go with bart druid for now"
+  },
+  {
+   "t": 100.56,
+   "d": 1.6,
+   "text": "and i've been jamming for three years"
+  },
+  {
+   "t": 102.16,
+   "d": 2.0,
+   "text": "and this is a talk about what it looks"
+  },
+  {
+   "t": 104.16,
+   "d": 2.56,
+   "text": "like when my proctor obsession starts"
+  },
+  {
+   "t": 106.72,
+   "d": 2.8,
+   "text": "leaking into my ttrpg life"
+  },
+  {
+   "t": 109.52,
+   "d": 1.68,
+   "text": "so real quick let's generate i'll show"
+  },
+  {
+   "t": 111.2,
+   "d": 1.84,
+   "text": "you how the generator works so here we"
+  },
+  {
+   "t": 113.04,
+   "d": 2.16,
+   "text": "go command prompt i have a python script"
+  },
+  {
+   "t": 115.2,
+   "d": 1.28,
+   "text": "over here"
+  },
+  {
+   "t": 116.48,
+   "d": 1.68,
+   "text": "i'm going to choose a difficulty let's"
+  },
+  {
+   "t": 118.16,
+   "d": 1.92,
+   "text": "say it's going to be a hard encounter"
+  },
+  {
+   "t": 120.08,
+   "d": 2.32,
+   "text": "for a level seven party"
+  },
+  {
+   "t": 122.4,
+   "d": 2.48,
+   "text": "and boom we got a wallet text it has"
+  },
+  {
+   "t": 124.88,
+   "d": 3.84,
+   "text": "like hit points armor class dc's stats"
+  },
+  {
+   "t": 128.72,
+   "d": 2.88,
+   "text": "actions special actions desperation"
+  },
+  {
+   "t": 131.6,
+   "d": 2.16,
+   "text": "actions what are those"
+  },
+  {
+   "t": 133.76,
+   "d": 1.84,
+   "text": "um i'll explain it in a little bit for"
+  },
+  {
+   "t": 135.6,
+   "d": 1.04,
+   "text": "now"
+  },
+  {
+   "t": 136.64,
+   "d": 1.76,
+   "text": "this is just the simplicity of how this"
+  },
+  {
+   "t": 138.4,
+   "d": 2.64,
+   "text": "generator works but we'll be using a"
+  },
+  {
+   "t": 141.04,
+   "d": 2.32,
+   "text": "different stat block for this talk it's"
+  },
+  {
+   "t": 143.36,
+   "d": 1.84,
+   "text": "a difficult encounter for a level six"
+  },
+  {
+   "t": 145.2,
+   "d": 0.96,
+   "text": "party"
+  },
+  {
+   "t": 146.16,
+   "d": 2.16,
+   "text": "i generated this 30 minutes ago"
+  },
+  {
+   "t": 148.32,
+   "d": 2.16,
+   "text": "um just to prove my point"
+  },
+  {
+   "t": 150.48,
+   "d": 2.56,
+   "text": "and um yeah it's very similar as stats"
+  },
+  {
+   "t": 153.04,
+   "d": 1.6,
+   "text": "and stuff like that and it's uh you know"
+  },
+  {
+   "t": 154.64,
+   "d": 1.92,
+   "text": "pretty decent so"
+  },
+  {
+   "t": 156.56,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 158.0,
+   "d": 1.76,
+   "text": "at first look the stat block just the"
+  },
+  {
+   "t": 159.76,
+   "d": 1.68,
+   "text": "wall of text might look really weird a"
+  },
+  {
+   "t": 161.44,
+   "d": 1.52,
+   "text": "lot of it doesn't look like a proper"
+  },
+  {
+   "t": 162.96,
+   "d": 1.36,
+   "text": "fully fledged"
+  },
+  {
+   "t": 164.32,
+   "d": 2.32,
+   "text": "um stat block from the monster manual so"
+  },
+  {
+   "t": 166.64,
+   "d": 1.84,
+   "text": "here's a monster manual stat block for"
+  },
+  {
+   "t": 168.48,
+   "d": 3.44,
+   "text": "reference this is an adult blue dragon"
+  },
+  {
+   "t": 171.92,
+   "d": 1.6,
+   "text": "as you can see the game designers have"
+  },
+  {
+   "t": 173.52,
+   "d": 1.84,
+   "text": "put a lot of thought into what it does"
+  },
+  {
+   "t": 175.36,
+   "d": 2.32,
+   "text": "the lightning breath has like a whole"
+  },
+  {
+   "t": 177.68,
+   "d": 1.92,
+   "text": "spiel about it and how it's described"
+  },
+  {
+   "t": 179.6,
+   "d": 1.6,
+   "text": "and what players have to do in response"
+  },
+  {
+   "t": 181.2,
+   "d": 1.84,
+   "text": "to it it's very detailed"
+  },
+  {
+   "t": 183.04,
+   "d": 1.44,
+   "text": "on the other hand"
+  },
+  {
+   "t": 184.48,
+   "d": 2.96,
+   "text": "um here's my generated wall of text"
+  },
+  {
+   "t": 187.44,
+   "d": 1.76,
+   "text": "which is quite abstract there's like a"
+  },
+  {
+   "t": 189.2,
+   "d": 1.92,
+   "text": "layer of abstractness in the way the"
+  },
+  {
+   "t": 191.12,
+   "d": 2.24,
+   "text": "monster's various actions are described"
+  },
+  {
+   "t": 193.36,
+   "d": 2.0,
+   "text": "if you look into the list of creatures"
+  },
+  {
+   "t": 195.36,
+   "d": 1.04,
+   "text": "actions"
+  },
+  {
+   "t": 196.4,
+   "d": 1.92,
+   "text": "but that abstract wall of text was what"
+  },
+  {
+   "t": 198.32,
+   "d": 2.24,
+   "text": "i was going for because i wanted to make"
+  },
+  {
+   "t": 200.56,
+   "d": 2.8,
+   "text": "a lightweight flexible custom tool to"
+  },
+  {
+   "t": 203.36,
+   "d": 3.28,
+   "text": "complement my own improv heavy dm style"
+  },
+  {
+   "t": 206.64,
+   "d": 1.36,
+   "text": "so let's talk about the design the"
+  },
+  {
+   "t": 208.0,
+   "d": 1.44,
+   "text": "generator a little bit because that"
+  },
+  {
+   "t": 209.44,
+   "d": 2.08,
+   "text": "might offer insight as to why i made it"
+  },
+  {
+   "t": 211.52,
+   "d": 2.64,
+   "text": "the way i made it"
+  },
+  {
+   "t": 214.48,
+   "d": 2.96,
+   "text": "so 5e 5th edition dnd already gives me a"
+  },
+  {
+   "t": 217.44,
+   "d": 2.0,
+   "text": "set of rules for what a player can do a"
+  },
+  {
+   "t": 219.44,
+   "d": 2.32,
+   "text": "monster can do on their turns in combat"
+  },
+  {
+   "t": 221.76,
+   "d": 1.36,
+   "text": "so it was easy for me to model the"
+  },
+  {
+   "t": 223.12,
+   "d": 1.44,
+   "text": "output of the generator based on the"
+  },
+  {
+   "t": 224.56,
+   "d": 2.08,
+   "text": "stat blocks and the monster manual and"
+  },
+  {
+   "t": 226.64,
+   "d": 2.64,
+   "text": "actions in the books however i realized"
+  },
+  {
+   "t": 229.28,
+   "d": 2.4,
+   "text": "that what i really needed to define was"
+  },
+  {
+   "t": 231.68,
+   "d": 1.76,
+   "text": "the kind of output that i wanted to see"
+  },
+  {
+   "t": 233.44,
+   "d": 1.04,
+   "text": "at the end"
+  },
+  {
+   "t": 234.48,
+   "d": 2.08,
+   "text": "what kinds of output lead to interesting"
+  },
+  {
+   "t": 236.56,
+   "d": 1.76,
+   "text": "combat encounters for my players"
+  },
+  {
+   "t": 238.32,
+   "d": 1.44,
+   "text": "that was an interesting question design"
+  },
+  {
+   "t": 239.76,
+   "d": 2.32,
+   "text": "question for me to solve so"
+  },
+  {
+   "t": 242.08,
+   "d": 1.84,
+   "text": "matt coville made a video about"
+  },
+  {
+   "t": 243.92,
+   "d": 2.24,
+   "text": "action-oriented combat it highlights the"
+  },
+  {
+   "t": 246.16,
+   "d": 1.76,
+   "text": "design philosophy about how we can make"
+  },
+  {
+   "t": 247.92,
+   "d": 2.4,
+   "text": "combat and 5e engaging by telling an"
+  },
+  {
+   "t": 250.32,
+   "d": 2.56,
+   "text": "evolving story throughout the combat he"
+  },
+  {
+   "t": 252.88,
+   "d": 2.0,
+   "text": "says typical monster think about the"
+  },
+  {
+   "t": 254.88,
+   "d": 1.36,
+   "text": "themes that monster"
+  },
+  {
+   "t": 256.24,
+   "d": 1.2,
+   "text": "what it would do under certain"
+  },
+  {
+   "t": 257.44,
+   "d": 1.04,
+   "text": "conditions"
+  },
+  {
+   "t": 258.48,
+   "d": 1.44,
+   "text": "and then design the mechanics around"
+  },
+  {
+   "t": 259.92,
+   "d": 2.48,
+   "text": "those situations like what does a goblin"
+  },
+  {
+   "t": 262.4,
+   "d": 2.16,
+   "text": "boss do when it's cornered yell at a"
+  },
+  {
+   "t": 264.56,
+   "d": 2.24,
+   "text": "subordinates to attack all at once"
+  },
+  {
+   "t": 266.8,
+   "d": 1.68,
+   "text": "throw themselves at the problem"
+  },
+  {
+   "t": 268.48,
+   "d": 1.2,
+   "text": "the monster should feel like it's"
+  },
+  {
+   "t": 269.68,
+   "d": 3.28,
+   "text": "reacting and has tactics the party for"
+  },
+  {
+   "t": 272.96,
+   "d": 1.84,
+   "text": "the party to experience"
+  },
+  {
+   "t": 274.8,
+   "d": 2.0,
+   "text": "i ended up borrowing from colville's"
+  },
+  {
+   "t": 276.8,
+   "d": 1.36,
+   "text": "design philosophy because i've been"
+  },
+  {
+   "t": 278.16,
+   "d": 1.28,
+   "text": "using it for years and it worked great"
+  },
+  {
+   "t": 279.44,
+   "d": 2.56,
+   "text": "for me but for this generator i decided"
+  },
+  {
+   "t": 282.0,
+   "d": 1.6,
+   "text": "to invert it"
+  },
+  {
+   "t": 283.6,
+   "d": 1.52,
+   "text": "i would generate the numbers and"
+  },
+  {
+   "t": 285.12,
+   "d": 2.0,
+   "text": "mechanics first and then i would use"
+  },
+  {
+   "t": 287.12,
+   "d": 2.0,
+   "text": "those as constraints to create a monster"
+  },
+  {
+   "t": 289.12,
+   "d": 1.12,
+   "text": "instead"
+  },
+  {
+   "t": 290.24,
+   "d": 1.52,
+   "text": "that way i don't have to think about the"
+  },
+  {
+   "t": 291.76,
+   "d": 1.28,
+   "text": "numbers at all"
+  },
+  {
+   "t": 293.04,
+   "d": 2.24,
+   "text": "i just got to justify why things are the"
+  },
+  {
+   "t": 295.28,
+   "d": 2.32,
+   "text": "way they are which to me is a lot easier"
+  },
+  {
+   "t": 297.6,
+   "d": 1.6,
+   "text": "and faster"
+  },
+  {
+   "t": 299.2,
+   "d": 2.24,
+   "text": "so the generator deals with the numbers"
+  },
+  {
+   "t": 301.44,
+   "d": 1.84,
+   "text": "the stuff that i find tedious to work"
+  },
+  {
+   "t": 303.28,
+   "d": 2.08,
+   "text": "with and during preparation unless we"
+  },
+  {
+   "t": 305.36,
+   "d": 2.24,
+   "text": "focus on storytelling by offering a"
+  },
+  {
+   "t": 307.6,
+   "d": 2.24,
+   "text": "level of abstraction in the descriptions"
+  },
+  {
+   "t": 309.84,
+   "d": 2.24,
+   "text": "of the monster's mechanics so like for"
+  },
+  {
+   "t": 312.08,
+   "d": 1.52,
+   "text": "example in"
+  },
+  {
+   "t": 313.6,
+   "d": 1.92,
+   "text": "special action number one the creature"
+  },
+  {
+   "t": 315.52,
+   "d": 2.4,
+   "text": "may drain resource or an abil unability"
+  },
+  {
+   "t": 317.92,
+   "d": 1.76,
+   "text": "cooldown of three rounds"
+  },
+  {
+   "t": 319.68,
+   "d": 2.24,
+   "text": "it's an adjective verb pair special"
+  },
+  {
+   "t": 321.92,
+   "d": 1.68,
+   "text": "action what is that drain could mean"
+  },
+  {
+   "t": 323.6,
+   "d": 3.2,
+   "text": "anything resources like hit points small"
+  },
+  {
+   "t": 326.8,
+   "d": 1.84,
+   "text": "slots it could mean anything in a"
+  },
+  {
+   "t": 328.64,
+   "d": 2.4,
+   "text": "limited mechanical subspace"
+  },
+  {
+   "t": 331.04,
+   "d": 0.72,
+   "text": "but"
+  },
+  {
+   "t": 331.76,
+   "d": 2.72,
+   "text": "it um but the purpose is to inspire my"
+  },
+  {
+   "t": 334.48,
+   "d": 2.0,
+   "text": "creativity by offering constraints for"
+  },
+  {
+   "t": 336.48,
+   "d": 2.4,
+   "text": "me to work with it for example when i"
+  },
+  {
+   "t": 338.88,
+   "d": 2.08,
+   "text": "see the stats on this thing i noticed"
+  },
+  {
+   "t": 340.96,
+   "d": 2.48,
+   "text": "the whole like drain gain pattern"
+  },
+  {
+   "t": 343.44,
+   "d": 2.24,
+   "text": "in the special actions and a company"
+  },
+  {
+   "t": 345.68,
+   "d": 1.68,
+   "text": "with the ability to cast necromancy"
+  },
+  {
+   "t": 347.36,
+   "d": 2.48,
+   "text": "spells it kind of exudes like an undead"
+  },
+  {
+   "t": 349.84,
+   "d": 1.52,
+   "text": "creature vibe to me or some kind of"
+  },
+  {
+   "t": 351.36,
+   "d": 2.56,
+   "text": "necromancer it has a move speed of 45 so"
+  },
+  {
+   "t": 353.92,
+   "d": 2.0,
+   "text": "maybe you can fly around with a ghost"
+  },
+  {
+   "t": 355.92,
+   "d": 2.0,
+   "text": "i see the charisma is the highest stat"
+  },
+  {
+   "t": 357.92,
+   "d": 2.56,
+   "text": "maybe it's a leader maybe it's a warlock"
+  },
+  {
+   "t": 360.48,
+   "d": 2.0,
+   "text": "it has resistance and vulnerability to"
+  },
+  {
+   "t": 362.48,
+   "d": 2.8,
+   "text": "piercing damage how does that even work"
+  },
+  {
+   "t": 365.28,
+   "d": 2.32,
+   "text": "so for this stab block for example this"
+  },
+  {
+   "t": 367.6,
+   "d": 1.28,
+   "text": "is what it looked like after a few"
+  },
+  {
+   "t": 368.88,
+   "d": 1.6,
+   "text": "minutes of polish and throwing it into a"
+  },
+  {
+   "t": 370.48,
+   "d": 1.68,
+   "text": "stat block creator right before this"
+  },
+  {
+   "t": 372.16,
+   "d": 1.84,
+   "text": "talk"
+  },
+  {
+   "t": 374.0,
+   "d": 2.0,
+   "text": "this is the hallowed soul of princess"
+  },
+  {
+   "t": 376.0,
+   "d": 2.16,
+   "text": "anjini she was subjected to terrible"
+  },
+  {
+   "t": 378.16,
+   "d": 2.08,
+   "text": "torment in the castle of the city above"
+  },
+  {
+   "t": 380.24,
+   "d": 2.24,
+   "text": "of the by the hands of the patriarchal"
+  },
+  {
+   "t": 382.48,
+   "d": 1.04,
+   "text": "sultanate"
+  },
+  {
+   "t": 383.52,
+   "d": 2.48,
+   "text": "it said that her restlessness and ven uh"
+  },
+  {
+   "t": 386.0,
+   "d": 2.24,
+   "text": "and vegetable spirit haunts the sewers"
+  },
+  {
+   "t": 388.24,
+   "d": 2.4,
+   "text": "to this day and that her ghoulish visage"
+  },
+  {
+   "t": 390.64,
+   "d": 2.08,
+   "text": "is flushed with wounds of the past as"
+  },
+  {
+   "t": 392.72,
+   "d": 2.88,
+   "text": "she teeters on the verge of undeath"
+  },
+  {
+   "t": 395.6,
+   "d": 2.24,
+   "text": "that drainability from earlier it became"
+  },
+  {
+   "t": 397.84,
+   "d": 1.68,
+   "text": "a legendary action if you look at"
+  },
+  {
+   "t": 399.52,
+   "d": 1.84,
+   "text": "special action dreams of torment that's"
+  },
+  {
+   "t": 401.36,
+   "d": 2.24,
+   "text": "the evolution of that constraint"
+  },
+  {
+   "t": 403.6,
+   "d": 2.16,
+   "text": "it basically makes the player characters"
+  },
+  {
+   "t": 405.76,
+   "d": 2.24,
+   "text": "roll a d20 for save and it could has"
+  },
+  {
+   "t": 408.0,
+   "d": 2.08,
+   "text": "possibly to drain the spell slots which"
+  },
+  {
+   "t": 410.08,
+   "d": 2.64,
+   "text": "in turn fuels her own kind of flickering"
+  },
+  {
+   "t": 412.72,
+   "d": 2.0,
+   "text": "between the ethereal and the and the"
+  },
+  {
+   "t": 414.72,
+   "d": 1.68,
+   "text": "prime material plane"
+  },
+  {
+   "t": 416.4,
+   "d": 1.92,
+   "text": "and justifies the vulnerability and"
+  },
+  {
+   "t": 418.32,
+   "d": 1.84,
+   "text": "resistance to piercing damage so when"
+  },
+  {
+   "t": 420.16,
+   "d": 3.2,
+   "text": "she's ethereal she's resistant"
+  },
+  {
+   "t": 423.36,
+   "d": 1.92,
+   "text": "if players stumble across her you know"
+  },
+  {
+   "t": 425.28,
+   "d": 1.68,
+   "text": "on the way if they're questing around"
+  },
+  {
+   "t": 426.96,
+   "d": 1.2,
+   "text": "then there's a good chance they might"
+  },
+  {
+   "t": 428.16,
+   "d": 1.84,
+   "text": "get a bit curious about this sultanate"
+  },
+  {
+   "t": 430.0,
+   "d": 2.0,
+   "text": "and the sketchiness behind it and end up"
+  },
+  {
+   "t": 432.0,
+   "d": 2.24,
+   "text": "taking up the quest to avenge ajini and"
+  },
+  {
+   "t": 434.24,
+   "d": 2.96,
+   "text": "tear down the sultanate's patriarchy"
+  },
+  {
+   "t": 437.2,
+   "d": 2.08,
+   "text": "as a dm i can pepper in these generated"
+  },
+  {
+   "t": 439.28,
+   "d": 1.52,
+   "text": "combats and weave the outcome of the"
+  },
+  {
+   "t": 440.8,
+   "d": 1.92,
+   "text": "story of the combat into the overarching"
+  },
+  {
+   "t": 442.72,
+   "d": 2.32,
+   "text": "narrative later and this has led to more"
+  },
+  {
+   "t": 445.04,
+   "d": 2.0,
+   "text": "dynamic arcs and narrative for my table"
+  },
+  {
+   "t": 447.04,
+   "d": 1.84,
+   "text": "stories"
+  },
+  {
+   "t": 448.88,
+   "d": 0.72,
+   "text": "so"
+  },
+  {
+   "t": 449.6,
+   "d": 2.08,
+   "text": "with that i want to share some thoughts"
+  },
+  {
+   "t": 451.68,
+   "d": 1.68,
+   "text": "and questions that i've reflected on as"
+  },
+  {
+   "t": 453.36,
+   "d": 2.24,
+   "text": "i started making more generators uh to"
+  },
+  {
+   "t": 455.6,
+   "d": 3.68,
+   "text": "help me save prep time for my sessions"
+  },
+  {
+   "t": 459.28,
+   "d": 1.92,
+   "text": "number one what parts of jamming do you"
+  },
+  {
+   "t": 461.2,
+   "d": 2.24,
+   "text": "want to put more focus on than others"
+  },
+  {
+   "t": 463.44,
+   "d": 2.16,
+   "text": "this may reveal what parts of dming feel"
+  },
+  {
+   "t": 465.6,
+   "d": 2.4,
+   "text": "tedious to you and what things you might"
+  },
+  {
+   "t": 468.0,
+   "d": 1.92,
+   "text": "want to automate so that you can spend"
+  },
+  {
+   "t": 469.92,
+   "d": 1.92,
+   "text": "more time on different facets of dming"
+  },
+  {
+   "t": 471.84,
+   "d": 2.16,
+   "text": "that you want to work on you might not"
+  },
+  {
+   "t": 474.0,
+   "d": 1.84,
+   "text": "want to be"
+  },
+  {
+   "t": 475.84,
+   "d": 1.6,
+   "text": "to have the best kind of combat in the"
+  },
+  {
+   "t": 477.44,
+   "d": 1.52,
+   "text": "world but you want to really make role"
+  },
+  {
+   "t": 478.96,
+   "d": 1.36,
+   "text": "play experience for your table feel"
+  },
+  {
+   "t": 480.32,
+   "d": 2.56,
+   "text": "really good so automate the combat focus"
+  },
+  {
+   "t": 482.88,
+   "d": 2.4,
+   "text": "the role playing"
+  },
+  {
+   "t": 485.28,
+   "d": 2.32,
+   "text": "session prep can get lonely at the table"
+  },
+  {
+   "t": 487.6,
+   "d": 1.92,
+   "text": "we're improving for with our friends as"
+  },
+  {
+   "t": 489.52,
+   "d": 2.16,
+   "text": "npcs but while we're prepping behind the"
+  },
+  {
+   "t": 491.68,
+   "d": 1.92,
+   "text": "dm screen there's often no one there to"
+  },
+  {
+   "t": 493.6,
+   "d": 2.48,
+   "text": "yes and with you a generator could be"
+  },
+  {
+   "t": 496.08,
+   "d": 1.76,
+   "text": "that improv partner to help make session"
+  },
+  {
+   "t": 497.84,
+   "d": 2.48,
+   "text": "prep more creative and fun so example"
+  },
+  {
+   "t": 500.32,
+   "d": 1.6,
+   "text": "generator could tell me that this giant"
+  },
+  {
+   "t": 501.92,
+   "d": 2.72,
+   "text": "monster at 40 health as a desperation"
+  },
+  {
+   "t": 504.64,
+   "d": 1.92,
+   "text": "mechanic will spawn tons of minions"
+  },
+  {
+   "t": 506.56,
+   "d": 1.36,
+   "text": "around the field"
+  },
+  {
+   "t": 507.92,
+   "d": 3.76,
+   "text": "yes and the minions are specters of"
+  },
+  {
+   "t": 511.68,
+   "d": 1.28,
+   "text": "all the loved ones of the player"
+  },
+  {
+   "t": 512.96,
+   "d": 2.88,
+   "text": "characters now this is getting serious"
+  },
+  {
+   "t": 515.84,
+   "d": 2.64,
+   "text": "and now there's a story"
+  },
+  {
+   "t": 518.48,
+   "d": 1.84,
+   "text": "so i used to be the sort of dm who"
+  },
+  {
+   "t": 520.32,
+   "d": 2.08,
+   "text": "needed to know things before a session"
+  },
+  {
+   "t": 522.4,
+   "d": 0.96,
+   "text": "at least"
+  },
+  {
+   "t": 523.36,
+   "d": 1.76,
+   "text": "i would spend like an hour to prepare"
+  },
+  {
+   "t": 525.12,
+   "d": 1.68,
+   "text": "for a session i know a lot of dms who"
+  },
+  {
+   "t": 526.8,
+   "d": 1.6,
+   "text": "have a lot of fun spending many hours in"
+  },
+  {
+   "t": 528.4,
+   "d": 2.56,
+   "text": "prep too i do too but for me time after"
+  },
+  {
+   "t": 530.96,
+   "d": 2.64,
+   "text": "work is like my most precious resource"
+  },
+  {
+   "t": 533.6,
+   "d": 1.44,
+   "text": "so instead of preparing for an hour"
+  },
+  {
+   "t": 535.04,
+   "d": 1.92,
+   "text": "right after work for a session i can"
+  },
+  {
+   "t": 536.96,
+   "d": 1.92,
+   "text": "have tea time with my cat"
+  },
+  {
+   "t": 538.88,
+   "d": 1.44,
+   "text": "i've learned to embrace the dark side of"
+  },
+  {
+   "t": 540.32,
+   "d": 2.32,
+   "text": "random generation and lean into it it's"
+  },
+  {
+   "t": 542.64,
+   "d": 2.32,
+   "text": "made my ttrp sessions more spontaneous"
+  },
+  {
+   "t": 544.96,
+   "d": 2.24,
+   "text": "and fun for me and nothing feels better"
+  },
+  {
+   "t": 547.2,
+   "d": 2.0,
+   "text": "than rolling up at the table and telling"
+  },
+  {
+   "t": 549.2,
+   "d": 1.12,
+   "text": "your players that even you don't know"
+  },
+  {
+   "t": 550.32,
+   "d": 1.44,
+   "text": "what a combat will look like until you"
+  },
+  {
+   "t": 551.76,
+   "d": 1.44,
+   "text": "press the button on the computer and"
+  },
+  {
+   "t": 553.2,
+   "d": 1.92,
+   "text": "watch the fear in their eyes and revel"
+  },
+  {
+   "t": 555.12,
+   "d": 1.2,
+   "text": "in it"
+  },
+  {
+   "t": 556.32,
+   "d": 1.36,
+   "text": "this is kind of what it looks like when"
+  },
+  {
+   "t": 557.68,
+   "d": 3.12,
+   "text": "i walk in with a weird creature for a"
+  },
+  {
+   "t": 560.8,
+   "d": 1.76,
+   "text": "session and it's really fun it's always"
+  },
+  {
+   "t": 562.56,
+   "d": 2.4,
+   "text": "very fun it's a party of kobolds each a"
+  },
+  {
+   "t": 564.96,
+   "d": 1.52,
+   "text": "different color"
+  },
+  {
+   "t": 566.48,
+   "d": 3.2,
+   "text": "resembling a power ranger"
+  },
+  {
+   "t": 569.84,
+   "d": 1.76,
+   "text": "so what else can we automate in our tt"
+  },
+  {
+   "t": 571.6,
+   "d": 1.12,
+   "text": "rpgs"
+  },
+  {
+   "t": 572.72,
+   "d": 3.12,
+   "text": "all of this to ask can we automate npc"
+  },
+  {
+   "t": 575.84,
+   "d": 0.96,
+   "text": "dialogue"
+  },
+  {
+   "t": 576.8,
+   "d": 3.92,
+   "text": "faction wars the big bad evil guys plot"
+  },
+  {
+   "t": 580.72,
+   "d": 1.6,
+   "text": "to victory"
+  },
+  {
+   "t": 582.32,
+   "d": 2.16,
+   "text": "the entire complex thematic dungeon that"
+  },
+  {
+   "t": 584.48,
+   "d": 1.6,
+   "text": "you've been kind of developing for your"
+  },
+  {
+   "t": 586.08,
+   "d": 1.84,
+   "text": "players for months"
+  },
+  {
+   "t": 587.92,
+   "d": 2.16,
+   "text": "skill challenges can we simulate the"
+  },
+  {
+   "t": 590.08,
+   "d": 1.68,
+   "text": "entire world"
+  },
+  {
+   "t": 591.76,
+   "d": 2.16,
+   "text": "of your dnd campaign between sessions so"
+  },
+  {
+   "t": 593.92,
+   "d": 1.28,
+   "text": "that it feels like it's being lived in"
+  },
+  {
+   "t": 595.2,
+   "d": 2.4,
+   "text": "and stuff is evolving around the players"
+  },
+  {
+   "t": 597.6,
+   "d": 2.16,
+   "text": "this can go anywhere and the constraints"
+  },
+  {
+   "t": 599.76,
+   "d": 1.44,
+   "text": "can"
+  },
+  {
+   "t": 601.2,
+   "d": 1.6,
+   "text": "are possibly endless i wouldn't"
+  },
+  {
+   "t": 602.8,
+   "d": 1.6,
+   "text": "recommend simulating your entire world"
+  },
+  {
+   "t": 604.4,
+   "d": 1.28,
+   "text": "but if"
+  },
+  {
+   "t": 605.68,
+   "d": 1.36,
+   "text": "that's a challenge you want to take on"
+  },
+  {
+   "t": 607.04,
+   "d": 2.08,
+   "text": "then go for it"
+  },
+  {
+   "t": 609.12,
+   "d": 2.16,
+   "text": "um but yeah basically i encourage you"
+  },
+  {
+   "t": 611.28,
+   "d": 1.68,
+   "text": "all to try and making"
+  },
+  {
+   "t": 612.96,
+   "d": 2.32,
+   "text": "a generator for your ttrpg games if you"
+  },
+  {
+   "t": 615.28,
+   "d": 1.84,
+   "text": "haven't already whatever that might look"
+  },
+  {
+   "t": 617.12,
+   "d": 2.72,
+   "text": "like it's a quite fun in my experience"
+  },
+  {
+   "t": 619.84,
+   "d": 1.2,
+   "text": "and i'm looking forward to iterating"
+  },
+  {
+   "t": 621.04,
+   "d": 2.0,
+   "text": "more on this generator of mine this"
+  },
+  {
+   "t": 623.04,
+   "d": 2.24,
+   "text": "comma generator maybe i can"
+  },
+  {
+   "t": 625.28,
+   "d": 1.92,
+   "text": "make it have varying levels of detail"
+  },
+  {
+   "t": 627.2,
+   "d": 1.76,
+   "text": "depending on my mood"
+  },
+  {
+   "t": 628.96,
+   "d": 2.48,
+   "text": "um anyway if you ever make a generator"
+  },
+  {
+   "t": 631.44,
+   "d": 2.32,
+   "text": "for your tcrpg experience then share"
+  },
+  {
+   "t": 633.76,
+   "d": 1.36,
+   "text": "with me what it looks like i'm excited"
+  },
+  {
+   "t": 635.12,
+   "d": 2.24,
+   "text": "to take a look at it um i'm running an"
+  },
+  {
+   "t": 637.36,
+   "d": 1.92,
+   "text": "hour-long combat one shot using this"
+  },
+  {
+   "t": 639.28,
+   "d": 1.92,
+   "text": "generator in the following social hour"
+  },
+  {
+   "t": 641.2,
+   "d": 2.56,
+   "text": "so come hang out and play for like 45"
+  },
+  {
+   "t": 643.76,
+   "d": 2.0,
+   "text": "minutes of lighthearted dnd with"
+  },
+  {
+   "t": 645.76,
+   "d": 2.56,
+   "text": "generated characters and yeah thank you"
+  },
+  {
+   "t": 648.32,
+   "d": 2.4,
+   "text": "for your time i'll take questions yeah"
+  },
+  {
+   "t": 650.72,
+   "d": 2.24,
+   "text": "thank you addy and yeah like uh like you"
+  },
+  {
+   "t": 652.96,
+   "d": 2.16,
+   "text": "just mentioned people can look forward"
+  },
+  {
+   "t": 655.12,
+   "d": 1.92,
+   "text": "to uh yeah you're gonna be bold enough"
+  },
+  {
+   "t": 657.04,
+   "d": 4.16,
+   "text": "to do a live play demo so very exciting"
+  },
+  {
+   "t": 661.2,
+   "d": 2.24,
+   "text": "uh yeah that was great i think that once"
+  },
+  {
+   "t": 663.44,
+   "d": 1.36,
+   "text": "we have one question the note wall"
+  },
+  {
+   "t": 664.8,
+   "d": 1.68,
+   "text": "already from alexa which is do you ever"
+  },
+  {
+   "t": 666.48,
+   "d": 1.92,
+   "text": "get outputs which you can't come up with"
+  },
+  {
+   "t": 668.4,
+   "d": 2.32,
+   "text": "anything for"
+  },
+  {
+   "t": 670.72,
+   "d": 2.4,
+   "text": "um personally like my style is oriented"
+  },
+  {
+   "t": 673.12,
+   "d": 1.76,
+   "text": "towards like having the constraints"
+  },
+  {
+   "t": 674.88,
+   "d": 2.96,
+   "text": "allows me to just like pick things that"
+  },
+  {
+   "t": 677.84,
+   "d": 1.76,
+   "text": "i think will work well from it so for"
+  },
+  {
+   "t": 679.6,
+   "d": 1.6,
+   "text": "example if we go back"
+  },
+  {
+   "t": 681.2,
+   "d": 2.64,
+   "text": "all the way to the stat block earlier"
+  },
+  {
+   "t": 683.84,
+   "d": 2.72,
+   "text": "sometimes i can't think about a good way"
+  },
+  {
+   "t": 686.56,
+   "d": 2.4,
+   "text": "to make this piercing and vulnerability"
+  },
+  {
+   "t": 688.96,
+   "d": 1.76,
+   "text": "to piercing work out sometimes it's just"
+  },
+  {
+   "t": 690.72,
+   "d": 3.2,
+   "text": "like a stump and a wall so i'll just get"
+  },
+  {
+   "t": 693.92,
+   "d": 2.08,
+   "text": "rid of it ignore it and focus on other"
+  },
+  {
+   "t": 696.0,
+   "d": 1.68,
+   "text": "parts of the generation instead and"
+  },
+  {
+   "t": 697.68,
+   "d": 1.52,
+   "text": "maybe use those as inspiration to"
+  },
+  {
+   "t": 699.2,
+   "d": 2.48,
+   "text": "develop a cool mechanic"
+  },
+  {
+   "t": 701.68,
+   "d": 1.6,
+   "text": "yeah that's great yeah it's a team"
+  },
+  {
+   "t": 703.28,
+   "d": 1.68,
+   "text": "member you can yes and and you can also"
+  },
+  {
+   "t": 704.96,
+   "d": 1.68,
+   "text": "say no"
+  },
+  {
+   "t": 706.64,
+   "d": 2.48,
+   "text": "exactly"
+  },
+  {
+   "t": 709.52,
+   "d": 1.28,
+   "text": "that's great are there any other"
+  },
+  {
+   "t": 710.8,
+   "d": 1.52,
+   "text": "questions for people"
+  },
+  {
+   "t": 712.32,
+   "d": 1.84,
+   "text": "use it at walls"
+  },
+  {
+   "t": 714.16,
+   "d": 1.6,
+   "text": "um"
+  },
+  {
+   "t": 715.76,
+   "d": 1.04,
+   "text": "people definitely were talking about"
+  },
+  {
+   "t": 716.8,
+   "d": 1.68,
+   "text": "other things they'd like to generate uh"
+  },
+  {
+   "t": 718.48,
+   "d": 2.0,
+   "text": "i think it was ryan buckley was wanting"
+  },
+  {
+   "t": 720.48,
+   "d": 1.76,
+   "text": "like a kingdom generator what kind of"
+  },
+  {
+   "t": 722.24,
+   "d": 1.44,
+   "text": "relationships and stuff like that that"
+  },
+  {
+   "t": 723.68,
+   "d": 2.56,
+   "text": "you could improv off of"
+  },
+  {
+   "t": 726.24,
+   "d": 2.08,
+   "text": "yeah you could totally maybe make use of"
+  },
+  {
+   "t": 728.32,
+   "d": 2.32,
+   "text": "matt koval's kingdoms and warfare pdf"
+  },
+  {
+   "t": 730.64,
+   "d": 1.76,
+   "text": "and just like use those as the rules to"
+  },
+  {
+   "t": 732.4,
+   "d": 2.32,
+   "text": "generate entire kingdoms that players"
+  },
+  {
+   "t": 734.72,
+   "d": 0.8,
+   "text": "can"
+  },
+  {
+   "t": 735.52,
+   "d": 2.24,
+   "text": "mess around with and use as a stronghold"
+  },
+  {
+   "t": 737.76,
+   "d": 3.52,
+   "text": "pretty cool yeah"
+  }
+ ]
+}

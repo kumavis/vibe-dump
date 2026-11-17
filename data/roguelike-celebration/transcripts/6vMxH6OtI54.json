@@ -1,0 +1,664 @@
+{
+ "id": "6vMxH6OtI54",
+ "url": "https://www.youtube.com/watch?v=6vMxH6OtI54",
+ "title": "Josh Galecki - Procedurally Generating Puzzles",
+ "speaker": "Josh Galecki",
+ "talk_title": "Procedurally Generating Puzzles",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 866,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Puzzles are a common design element in many genres - but not roguelikes. Roguelikes are designed for repitition, and a puzzle that's been solved once provides no challenge and no satisfaction on the third (or thirtieth) playthrough. In order to get around the 'curse' of repitition, Josh leans on some strategies from mathematics in order to create systems for producing puzzles that continually engage players, even across many (many) playthroughs.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 88,
+   "title": "Why Include Puzzles"
+  },
+  {
+   "start": 145,
+   "title": "Puzzle Systems"
+  },
+  {
+   "start": 250,
+   "title": "Undo Moves"
+  },
+  {
+   "start": 297,
+   "title": "Toggles"
+  },
+  {
+   "start": 422,
+   "title": "The River Grid"
+  },
+  {
+   "start": 715,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2116,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 0.0,
+   "text": "All right. Moving right along. We love our lightning talks. They go fast. I"
+  },
+  {
+   "t": 0.0,
+   "d": 6.08,
+   "text": "think that Jasper is after and next up is Josh Galecki. Got a preview. We have a lightning"
+  },
+  {
+   "t": 6.08,
+   "d": 4.32,
+   "text": "talk from Josh Galecki. A solo game dev based in"
+  },
+  {
+   "t": 10.4,
+   "d": 3.12,
+   "text": "Cleveland. He fell in love with roguelikes after playing Dungeon"
+  },
+  {
+   "t": 13.52,
+   "d": 17.72,
+   "text": "Crawl Stone Soup fifteen years ago, and loves the emergent"
+  },
+  {
+   "t": 31.24,
+   "d": 3.44,
+   "text": "narratives created by the genre. Previous releases include"
+  },
+  {
+   "t": 34.68,
+   "d": 3.6,
+   "text": "Moondrop (a nonviolent farming roguelite), Within a Dead City,"
+  },
+  {
+   "t": 38.28,
+   "d": 3.76,
+   "text": "and Dwarven Depths. Go ahead."
+  },
+  {
+   "t": 42.04,
+   "d": 7.0,
+   "text": "JOSH: Hello, Roguelike Celebration. This is my talk \"Procedurally Generating Puzzles.\" A"
+  },
+  {
+   "t": 49.04,
+   "d": 5.0,
+   "text": "mathematician and an engineer are sitting in the faculty lounge when the coffee machine catches"
+  },
+  {
+   "t": 54.04,
+   "d": 8.4,
+   "text": "on fire. The engineer rushes to the sink and fills up a bucket and douses the flames. The"
+  },
+  {
+   "t": 62.44,
+   "d": 3.88,
+   "text": "two teachers are in the faculty lounge the next day and the coffee machine catches on"
+  },
+  {
+   "t": 66.32,
+   "d": 6.2,
+   "text": "fire again. The mathematician rushes to the sink, fills the bucket with water, and hands it off to"
+  },
+  {
+   "t": 72.52,
+   "d": 6.88,
+   "text": "the engineer. They then proudly proclaim and now we reduced it to a problem we know how to solve."
+  },
+  {
+   "t": 79.4,
+   "d": 13.52,
+   "text": "Hi. I am Josh Galecki. Solo game dev of Moon roof studios. Puzzles are common in video games. They"
+  },
+  {
+   "t": 92.92,
+   "d": 6.44,
+   "text": "help change the pace which can be important in a more action oriented game. They give the player"
+  },
+  {
+   "t": 99.36,
+   "d": 6.68,
+   "text": "a challenge and provide that flash of insight that a-ha moment that so many people love. Whole"
+  },
+  {
+   "t": 106.04,
+   "d": 7.48,
+   "text": "genres of video games are founded on puzzles. But solving a puzzle once is fun. Solving it twice is"
+  },
+  {
+   "t": 113.52,
+   "d": 6.72,
+   "text": "trivial. And solving it for the 20th time is a chore. Roguelikes I would argue are designed"
+  },
+  {
+   "t": 120.24,
+   "d": 6.56,
+   "text": "around repetition. Given that, how do you include puzzles? This was a bit of a personal challenge"
+  },
+  {
+   "t": 126.8,
+   "d": 6.64,
+   "text": "for me. I made a non-violent farming roguelike called Moondrop. I didn't want to include combat"
+  },
+  {
+   "t": 133.44,
+   "d": 8.92,
+   "text": "or any combat like maw mechanics but how do you challenge the player and keep them engaged while"
+  },
+  {
+   "t": 142.36,
+   "d": 7.4,
+   "text": "they explore the quote-unquote dungeon? The answer I arrived at was to include puzzles in the game."
+  },
+  {
+   "t": 150.36,
+   "d": 5.96,
+   "text": "I knew because of repetition I would have to design puzzle systems rather than individual"
+  },
+  {
+   "t": 156.32,
+   "d": 5.64,
+   "text": "puzzles. These puzzle systems much like the random level generator would be able to generate a random"
+  },
+  {
+   "t": 161.96,
+   "d": 8.12,
+   "text": "puzzle on demand. Now back in college, I studied both math and computer science and sometimes I"
+  },
+  {
+   "t": 170.08,
+   "d": 8.36,
+   "text": "would see the same problem in both classes. In the math class, we would prove that a solution existed"
+  },
+  {
+   "t": 178.44,
+   "d": 7.2,
+   "text": "for this problem. Whereas in computer science we could examine an algorithm that gave you the"
+  },
+  {
+   "t": 186.48,
+   "d": 7.56,
+   "text": "solution. Like the mathematician we just want to show you a solution to the puzzle exist. We call"
+  },
+  {
+   "t": 194.04,
+   "d": 7.16,
+   "text": "this the analytic and constructive strategies and the analytic shows any generated puzzle has to be"
+  },
+  {
+   "t": 201.2,
+   "d": 7.76,
+   "text": "solvable and the constructive is building a particular puzzle so that it has a known"
+  },
+  {
+   "t": 208.96,
+   "d": 6.56,
+   "text": "solution. First thing we will take a look at the analytic strategy. There is a classic video game"
+  },
+  {
+   "t": 215.52,
+   "d": 6.88,
+   "text": "puzzle and handheld game puzzle known as lights out. This involves turning all the switches on or"
+  },
+  {
+   "t": 222.4,
+   "d": 8.28,
+   "text": "off. Whenever you toggle a switch it also toggles its neighbors to their opposite state. I included"
+  },
+  {
+   "t": 230.68,
+   "d": 7.72,
+   "text": "this in Moondrop 2 when the player encounters this puzzle they must turn on the lantern columns on."
+  },
+  {
+   "t": 238.4,
+   "d": 4.92,
+   "text": "On the right-hand side of the slide you can see a schematic diagram of one possible board"
+  },
+  {
+   "t": 243.32,
+   "d": 11.08,
+   "text": "state. Two lanterns on here and six are off. Now in order to solve all possible puzzles in"
+  },
+  {
+   "t": 254.4,
+   "d": 7.48,
+   "text": "this space it helps to know what interesting properties your puzzle design might poses. An"
+  },
+  {
+   "t": 261.88,
+   "d": 6.96,
+   "text": "undue move is simple. If a player toggles switch A twice in a row there is no change to the puzzle"
+  },
+  {
+   "t": 268.84,
+   "d": 8.08,
+   "text": "state. It starts off blank and ends up blank. We can extend that more and throw a move in between"
+  },
+  {
+   "t": 276.92,
+   "d": 6.6,
+   "text": "these two toggles. If a player toggles switch A then toggles switch B and then switch A again"
+  },
+  {
+   "t": 283.52,
+   "d": 6.28,
+   "text": "it is the same puzzle state as if the player only ever toggled switch B. In essence the two"
+  },
+  {
+   "t": 289.8,
+   "d": 8.4,
+   "text": "A toggles cancel each other out regardless of how many movers -- moves you have in between them."
+  },
+  {
+   "t": 298.2,
+   "d": 6.36,
+   "text": "What I want to show now is I can toggle on any switch on or off without affecting any of the"
+  },
+  {
+   "t": 304.56,
+   "d": 6.69,
+   "text": "others. I have a couple of GIFs here. They show that I can toggle on the top left corner. They"
+  },
+  {
+   "t": 311.25,
+   "d": 6.47,
+   "text": "will both start at the blank state right here and right here. So I can show that I can toggle on the"
+  },
+  {
+   "t": 317.72,
+   "d": 7.12,
+   "text": "top left corner and in here the top middle corner. There is the top left. And one more, two more,"
+  },
+  {
+   "t": 324.84,
+   "d": 5.64,
+   "text": "here is the top middle. There is a series of moves that let me toggle any of these switches on or off"
+  },
+  {
+   "t": 330.48,
+   "d": 7.28,
+   "text": "at will without changing the board state outside of those switches. That's great for these two but"
+  },
+  {
+   "t": 337.76,
+   "d": 5.32,
+   "text": "what about the other six switches? The puzzle has interesting property number three that the puzzle"
+  },
+  {
+   "t": 343.08,
+   "d": 6.44,
+   "text": "board is symmetric. I can switch or flip-flop any of these move sequences horizontally or"
+  },
+  {
+   "t": 349.52,
+   "d": 9.12,
+   "text": "vertically and reach the other six switches and be able to turn them on and off at will."
+  },
+  {
+   "t": 358.64,
+   "d": 5.4,
+   "text": "Since any individual switch can be toggled on without affecting the state of the others then"
+  },
+  {
+   "t": 364.04,
+   "d": 8.4,
+   "text": "there must be some set of moves that solves any given puzzle on this 2X4 layout. However many"
+  },
+  {
+   "t": 372.44,
+   "d": 6.4,
+   "text": "switches start off, I can just make sure I toggle those ones on and the puzzle is solved. That means"
+  },
+  {
+   "t": 378.84,
+   "d": 6.2,
+   "text": "that I can generate any initial configuration of on and off lanterns and I know a solution"
+  },
+  {
+   "t": 385.04,
+   "d": 7.72,
+   "text": "exists. Also, a little nifty thing. I know a minimum move sequence to solve the puzzle"
+  },
+  {
+   "t": 392.76,
+   "d": 10.6,
+   "text": "has at most eight moves. If there is a switch that needs to be toggled twice for a solution"
+  },
+  {
+   "t": 403.88,
+   "d": 7.56,
+   "text": "it is the same as it not being toggled at all. I can create, you know, all but one lantern on."
+  },
+  {
+   "t": 411.44,
+   "d": 6.24,
+   "text": "I can create the opposite corners on. What are the solutions were these puzzles? I am not really"
+  },
+  {
+   "t": 417.68,
+   "d": 8.64,
+   "text": "sure. I will let the engineers handle that one. Next up we will take a look at this constructive"
+  },
+  {
+   "t": 426.32,
+   "d": 5.56,
+   "text": "strategy. Here we are building up a puzzle so that it has a known solution. I call this"
+  },
+  {
+   "t": 431.88,
+   "d": 4.4,
+   "text": "particular puzzle the river grid. It might be one of the more complicated in the game."
+  },
+  {
+   "t": 439.12,
+   "d": 7.4,
+   "text": "A river flows in a four by four directed graph meaning just like a real river it flows one way"
+  },
+  {
+   "t": 446.52,
+   "d": 8.4,
+   "text": "not both. It flows down and to the right. Dams are placed alongside the edges and can block the"
+  },
+  {
+   "t": 454.92,
+   "d": 8.56,
+   "text": "flow. The players must figure out which dams to open to have the right amount of water at"
+  },
+  {
+   "t": 463.48,
+   "d": 11.48,
+   "text": "specific vertices or intersections on the grid. This is schematic diagram of the empty river grid"
+  },
+  {
+   "t": 474.96,
+   "d": 5.68,
+   "text": "without any dams. Water comes in from the top, splits along the outer set of vertices on the"
+  },
+  {
+   "t": 480.64,
+   "d": 8.16,
+   "text": "left and right, with recombines on the inner set of vertices and that and edges can have"
+  },
+  {
+   "t": 488.8,
+   "d": 7.88,
+   "text": "a level of 0 and 3. Vertex water level is found by adding the value of the incoming edges. This"
+  },
+  {
+   "t": 496.68,
+   "d": 8.2,
+   "text": "vertex edge has a strength of one and strength of one and the water level is 2. 2 is also what this"
+  },
+  {
+   "t": 504.88,
+   "d": 7.64,
+   "text": "vertex spits out the nodes further down the river.. First thing we do is add two locked"
+  },
+  {
+   "t": 512.52,
+   "d": 8.24,
+   "text": "dams to random locations and you can see how that changes the water levels behind those dams. Next"
+  },
+  {
+   "t": 520.76,
+   "d": 9.04,
+   "text": "we add three more dams. These dams are must close dam for the known solution that we are generating."
+  },
+  {
+   "t": 529.8,
+   "d": 8.88,
+   "text": "They are togglable by the player. Once we have these, we pick four vertices as the solution"
+  },
+  {
+   "t": 538.68,
+   "d": 6.4,
+   "text": "vertices and note the level of water in each of these four vertices and the player must toggle"
+  },
+  {
+   "t": 545.08,
+   "d": 7.52,
+   "text": "switches until they get all four of these with the correct water level. Next we add three must open"
+  },
+  {
+   "t": 552.6,
+   "d": 8.4,
+   "text": "dams and the player needs all these open for our known solution. Finally, I randomly open and close"
+  },
+  {
+   "t": 561.0,
+   "d": 6.0,
+   "text": "all these dams before the player arrives. The player finds the puzzle and I am satisfied knowing"
+  },
+  {
+   "t": 567.0,
+   "d": 5.4,
+   "text": "that there is at least one solution for it. There could be more than one. I am cool with that. But"
+  },
+  {
+   "t": 572.4,
+   "d": 8.64,
+   "text": "I know that it is a solvable puzzle and there has to be because that's the way I built it."
+  },
+  {
+   "t": 581.04,
+   "d": 6.96,
+   "text": "With constructive strategies it is easier to have something where you generate the solution in the"
+  },
+  {
+   "t": 588.0,
+   "d": 6.65,
+   "text": "mild of your -- you generate the solution in the middle of the creation of it but it"
+  },
+  {
+   "t": 594.65,
+   "d": 6.35,
+   "text": "is also possible to start without a solution and then you search until you find one. This"
+  },
+  {
+   "t": 601.0,
+   "d": 5.84,
+   "text": "works great for mazes because of the way they get built. In this video, you see the wheat"
+  },
+  {
+   "t": 606.84,
+   "d": 5.92,
+   "text": "maze. Each tile of the maze is either passable or not. The tiles all look the same though and the"
+  },
+  {
+   "t": 612.76,
+   "d": 8.48,
+   "text": "player isn't easily able to see their location. Here is the construction algorithm for it. I won't"
+  },
+  {
+   "t": 621.24,
+   "d": 5.84,
+   "text": "go into too much detail but I will note there is a list of open tiles in orange and possible"
+  },
+  {
+   "t": 627.08,
+   "d": 6.52,
+   "text": "in red and wall tiles in black. At each round of maze construction, we take a possible tile"
+  },
+  {
+   "t": 633.6,
+   "d": 6.64,
+   "text": "that has exactly 1 open neighbor and we make it open. If it has more than one open neighbor,"
+  },
+  {
+   "t": 640.24,
+   "d": 6.52,
+   "text": "it becomes a wall. This gives us a branching maze that usually spans there grid and doesn't contain"
+  },
+  {
+   "t": 646.76,
+   "d": 7.44,
+   "text": "any loops. I say usually because there is a set of circumstances where this algorithm can fail."
+  },
+  {
+   "t": 654.2,
+   "d": 5.52,
+   "text": "In fact it narrowly avoids doing it at the end. You blink and you miss that. Let's see it in"
+  },
+  {
+   "t": 659.72,
+   "d": 8.16,
+   "text": "slow motion. At the end of the maze generation there are two possibly open tiles left. If the"
+  },
+  {
+   "t": 667.88,
+   "d": 5.56,
+   "text": "algorithm picks the one on the right instead of the left, the one on the left gets marked"
+  },
+  {
+   "t": 673.44,
+   "d": 5.96,
+   "text": "ad a wall. Now the maze has no solution and the player is sad. If your algorithm is searching"
+  },
+  {
+   "t": 679.4,
+   "d": 6.2,
+   "text": "for the solution you have to be aware of the bugs and in math speak you have to look for"
+  },
+  {
+   "t": 685.6,
+   "d": 9.52,
+   "text": "the counter example of what could go wrong. When you find that counterexample you can fix it. It is"
+  },
+  {
+   "t": 695.12,
+   "d": 5.6,
+   "text": "possible to guard against this. In the wheat maze it looks for an open neighbor and if it can't be"
+  },
+  {
+   "t": 700.72,
+   "d": 6.8,
+   "text": "found it creates a path told a start tile until an open neighbor is found guaranteeing a solution"
+  },
+  {
+   "t": 707.52,
+   "d": 8.72,
+   "text": "to the maze even if the nice no looping prompt isn't in tact at the end of that."
+  },
+  {
+   "t": 716.24,
+   "d": 5.24,
+   "text": "Summing things up. Puzzles are great. I love them. Doing the same puzzle more than once"
+  },
+  {
+   "t": 721.48,
+   "d": 6.12,
+   "text": "is not so great. Puzzle systems let you give variants on the same puzzle design and keep"
+  },
+  {
+   "t": 727.6,
+   "d": 9.84,
+   "text": "them interested. Any puzzle you create needs to be solvable. Solving a puzzle space analytically"
+  },
+  {
+   "t": 737.44,
+   "d": 5.76,
+   "text": "means showing that any initial configuration of that puzzle can be solved. Generating a solvable"
+  },
+  {
+   "t": 743.2,
+   "d": 5.4,
+   "text": "puzzle constructively also guarantees a solution. When doing this it is easiest to start off with a"
+  },
+  {
+   "t": 748.6,
+   "d": 7.08,
+   "text": "solution and add red herrings and trapped doors but it is possible to build up to a solution and"
+  },
+  {
+   "t": 756.28,
+   "d": 6.6,
+   "text": "like any other algorithm you have to pay extra attention to the bugs. I will like to thank the"
+  },
+  {
+   "t": 762.88,
+   "d": 4.32,
+   "text": "organizers for throwing an amazing conference and thank you all for coming and listening to"
+  },
+  {
+   "t": 767.2,
+   "d": 6.6,
+   "text": "my talk. I have a couple places you can follow me here and I am ready for any questions."
+  },
+  {
+   "t": 773.8,
+   "d": 4.28,
+   "text": "ALEXEI: If anyone is quick enough on the draw, we might be able to do one question. Only if"
+  },
+  {
+   "t": 778.08,
+   "d": 8.48,
+   "text": "they post it right away. That was a great talk and feels like a useful toolbox. I can"
+  },
+  {
+   "t": 786.56,
+   "d": 4.72,
+   "text": "see how those techniques expand outwards and you could flavor the puzzles in a lot of different"
+  },
+  {
+   "t": 791.28,
+   "d": 6.76,
+   "text": "ways and get a lot of mileage out of it. JOSH: There is a number of different tools"
+  },
+  {
+   "t": 798.04,
+   "d": 8.16,
+   "text": "from math too. Graph theory offers a rich set of ways to generate puzzles or ideas for doing so."
+  },
+  {
+   "t": 806.2,
+   "d": 6.4,
+   "text": "ALEXEI: That makes a lot of sense. I love the inspiration from mathematics. Cool. OK."
+  },
+  {
+   "t": 814.8,
+   "d": 7.52,
+   "text": "Here is a quick one. How did you determine which puzzles you wanted in your game?"
+  },
+  {
+   "t": 822.32,
+   "d": 7.4,
+   "text": "JOSH: It was kind of a general build up. I have four elemental dungeons on the mountain"
+  },
+  {
+   "t": 829.72,
+   "d": 7.56,
+   "text": "top and trying to find different cozier themed puzzles. Obviously you aren't falling foe into"
+  },
+  {
+   "t": 837.28,
+   "d": 9.76,
+   "text": "a pit of lava or anything in this game. On the damp trail, you have fishing and this"
+  },
+  {
+   "t": 847.04,
+   "d": 5.12,
+   "text": "river grid puzzle and things like that. Kind of looking for an interesting math problems"
+  },
+  {
+   "t": 852.16,
+   "d": 4.6,
+   "text": "and seeing if I can give them a theme that fits with what I am going for."
+  }
+ ]
+}

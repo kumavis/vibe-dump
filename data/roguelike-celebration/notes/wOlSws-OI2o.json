@@ -1,0 +1,140 @@
+{
+  "id": "wOlSws-OI2o",
+  "title": "Zeno Rogue - The best genre for a non-Euclidean game",
+  "speaker": "Zeno Rogue",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=wOlSws-OI2o",
+  "talk_type": "design",
+  "summary": "Zeno Rogue introduces non-Euclidean (spherical and hyperbolic) geometry via Euclid's postulates and the question of whether rectangles exist, then recounts the history of HyperRogue from a 1998 idea to a Steam release with over 60 lands. He argues roguelikes suit hyperbolic geometry: grid-based movement and combat expose the extra neighbours of a heptagonal tiling, exponential growth makes an infinite procedurally generated world essential, and navigation becomes a challenge. He describes HyperRogue's mastery-oriented design (no hit points or character growth, per-land difficulty scaling), spatial consistency, why pixel art fits poorly, and projections that show the whole level. The manual captions are fragmentary and partly garbled, so several points are only partly recoverable.",
+  "games": [
+    "HyperRogue",
+    "Rogue",
+    "No Man's Sky",
+    "Dwarf Fortress",
+    "Caves of Qud",
+    "Minecraft"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "non-euclidean geometry",
+      "kind": "principle",
+      "claim": "Zeno Rogue frames non-Euclidean geometry around the observation that Rogue's levels are built from rectangles, which only exist if Euclid's parallel postulate holds.",
+      "detail": "A rectangle needs four right angles and straight edges. Euclid's first four postulates can all hold while rectangles still do not exist; spheres and hyperbolic planes are spaces that are the same everywhere and in every direction yet have no true rectangles.",
+      "t": 236,
+      "quote": "The meaning of this is postulates 1-4 are all true but still rectangles do not exist",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "hyperrogue",
+      "kind": "history",
+      "claim": "HyperRogue began as a simple prototype on a hyperbolic tiling where monsters die in one hit, and was expanded from 2012 with multiple lands, graphics and music, then released on Steam where its community formed.",
+      "detail": "Zeno wanted to make a hyperbolic game since 1998, tried a first-person approach, learned the hyperboloid model, and found a hyperbolic tiling good for a roguelike. People liked the simple prototype; the Steam forums became important for the community, and HyperRogue now has over 60 lands.",
+      "t": 779,
+      "quote": "This was released on Steam and it was quite important because the community for this game was built on these Steam forums",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "grid geometry",
+      "kind": "example",
+      "claim": "Roguelike movement and melee make hyperbolic geometry matter in HyperRogue: on a heptagonal tiling the extra neighbour direction lets you escape and defeat several monsters attacking you at once.",
+      "detail": "Zeno says what matters most for HyperRogue is that you move and fight like in Rogue. When attacked by several monsters, standing on a heptagon gives an extra direction to step into so you can defeat them, which he says makes the game cool.",
+      "t": 909,
+      "quote": "What matters the most is you move and fight like in rogue",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "infinite worlds",
+      "kind": "principle",
+      "claim": "Because the number of cells within a given distance grows exponentially in hyperbolic space, HyperRogue's world is effectively infinite and procedural generation is crucial.",
+      "detail": "Counting cells within 50 steps already gives enormous numbers; Zeno says even games cited as the biggest, like No Man's Sky, are small compared with hyperbolic space due to exponential growth.",
+      "t": 1050,
+      "quote": "since we have this infinite world procedural generation is crucial",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "auto-travel",
+      "kind": "example",
+      "claim": "Auto-travel, controversial in traditional roguelikes, is absent in HyperRogue, where navigating hyperbolic space becomes a challenge in its own right.",
+      "detail": "Zeno notes many roguelikes have a travel feature that some people dislike; in HyperRogue he says it would not feel better with auto travel, and navigation itself presents challenges.",
+      "t": 1082,
+      "quote": "This is controversial in traditional roguelikes. They commonly have this travel feature which makes the game more fun but it is controversial",
+      "weight": 1
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "mastery versus simulation",
+      "kind": "principle",
+      "claim": "Zeno identifies two roguelike approaches — mastery/challenge versus simulating an immersive complex world — and designs HyperRogue for mastery.",
+      "detail": "He contrasts mastery-focused games with complex-simulation ones in the vein of Dwarf Fortress or Caves of Qud; HyperRogue is closer to the mastery side, though its complexity comes from mathematics rather than world simulation.",
+      "t": 1142,
+      "quote": "Roguelikes are associated with mastery so the game should be a challenge but you also have -- the idea is to simulate an immersive complex world",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "per-land difficulty",
+      "kind": "technique",
+      "claim": "HyperRogue scales difficulty per land in a non-linear sandbox: collecting treasure in a land makes that land harder, while moving to another land resets to easy, and high scores unlock content.",
+      "detail": "Zeno calls this approach a sandbox suited to an infinite world: the more you collect in one land the harder it gets, but a new land starts at zero.",
+      "t": 1258,
+      "quote": "If you move to another land, it is still at 0, so it will still be easy. Also these high scores unlock stuff",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "no character growth",
+      "kind": "example",
+      "claim": "HyperRogue has no hit points, no character growth and no resource management; progression lives in the world rather than the character.",
+      "detail": "Zeno argues roguelikes need not be defined by these elements. He mentions an interpretation in which hit points abstract positioning that in roguelikes is explicit, and says that the character doesn't grow but the world advances.",
+      "t": 1350,
+      "quote": "The character doesn't grow but the world gets progression and advanced",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "spatial consistency",
+      "kind": "principle",
+      "claim": "HyperRogue values spatial consistency and non-modality, with its shops as the example, which enables tricks like stealing from shops.",
+      "detail": "Zeno contrasts this with violations such as stairs, where it is unclear whether enemies will follow, and says a consistent spatial world structure is fun. The captions read that the shops 'aren't part of the map', which sits oddly with the non-modality point and may be a caption error.",
+      "t": 1419,
+      "quote": "The next thing I want to talk about is a special consistency. What I mean by that is non-modality",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "pixel art",
+      "kind": "warning",
+      "claim": "Pixel art fits non-Euclidean games poorly because pixels are squares and hyperbolic space has no squares, so HyperRogue uses simple vector-style graphics.",
+      "detail": "Zeno notes ASCII is used for prototyping and many developers use pixel art, but in hyperbolic geometry pixels would have to be weirdly shaped.",
+      "t": 1533,
+      "quote": "pixels are squares and there are no squares or rectangles",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "projections",
+      "kind": "technique",
+      "claim": "HyperRogue uses projections that combine a close view of the character with a view of a large part of the level in a single screen.",
+      "detail": "Zeno likes roguelike screenshots that show the whole level, which are rarer in other games, and realised hyperbolic projections could show both at once; players prefer different projections.",
+      "t": 1622,
+      "quote": "Something which shows my character isn't in but I can also see in the bigger part of the level",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "marketing experiments",
+      "kind": "principle",
+      "claim": "Zeno observes experimental games with low production values are easier to market if they are roguelikes, which helps them find a community of players.",
+      "detail": "This was a brief, partly garbled point near the end of the talk about why the roguelike genre suits experimental games.",
+      "t": 1668,
+      "quote": "For experimental games it is easier to market them if there are roguelikes",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

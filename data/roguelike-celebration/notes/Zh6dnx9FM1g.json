@@ -1,0 +1,208 @@
+{
+  "id": "Zh6dnx9FM1g",
+  "title": "Zach and Tarn Adams - Dwarf Fortress Design Inspirations",
+  "speaker": "Zach Adams and Tarn Adams",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=Zh6dnx9FM1g",
+  "talk_type": "history",
+  "summary": "Zach and Tarn Adams trace how the roguelikes they played as children (Rogue, Hack, Moria, Larn, Ragnarok) shaped Dwarf Fortress. Zach maps specific features to inspirations: Hack's bones files and named killers to Legends mode, Moria's monster memory to the editable raw files, Larn and Ragnarok's god-level endgames to DF's planned myth and magic generator. Tarn describes their early unfinished projects, the scoping failure that led from Mutant Miner to Dwarf Fortress, and how permadeath powers DF's loop of forts and adventurers feeding a persistent world. He argues that consistent rules for every creature and interlocking mechanisms are what make roguelikes narrative generators, illustrated by the drunken-cats bug.",
+  "games": [
+    "Dwarf Fortress",
+    "Rogue",
+    "Hack",
+    "NetHack",
+    "Moria",
+    "Larn",
+    "Ragnarok",
+    "Starflight",
+    "Middle-earth: Shadow of Mordor",
+    "ADOM",
+    "Armok",
+    "Mutant Miner",
+    "Liberal Crime Squad",
+    "Dragslay"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "dwarf fortress origins",
+      "kind": "history",
+      "claim": "Dwarf Fortress's feature list half-jokingly limits itself to 16 colours and the ASCII set, reflecting the Adams brothers' question of what games would have to focus on if the industry never advanced past that.",
+      "detail": "Zach said they like to imagine what developers would have had to deal with if technology froze at that point, and believe it would be exactly the things that make roguelikes great.",
+      "t": 140,
+      "quote": "we like to think what would happen if the uh game industry never advanced beyond that like what would they what would they have to deal with",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "replayability",
+      "kind": "principle",
+      "claim": "Roguelikes answered the replay problem of fixed adventure games like King's Quest and Ultima, because procedural generation makes the treasures, enemies and dungeon different every time.",
+      "detail": "Zach said replaying King's Quest made no sense since you knew what would happen. Roguelikes, with procedural generation plus permadeath and a high score list, kept them playing Rogue until its floppy disk stopped working.",
+      "t": 185,
+      "quote": "roguelikes were the answer to that because of procedural generation and it's the the treasures and and enemies and and uh and the dungeon were different every time",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "bones files",
+      "kind": "history",
+      "claim": "Hack's bones files, which saved the level where you died with your body, items and a creature you had named, directly inspired Dwarf Fortress's Legends mode.",
+      "detail": "Zach explained you could name a creature you realised was about to kill you, then find it again in the bones level and take revenge. He said nothing comparable appeared until Shadow of Mordor's recurring orc nemesis roughly 30 years later.",
+      "t": 299,
+      "quote": "this is kind of what inspired drawer fortress's legend mode because it saved what creature killed you and if you name the creature",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "monster memory",
+      "kind": "example",
+      "claim": "Moria's monster memory, which recorded across games how hard a creature hit and its special abilities, made play feel like exploring a strange planet and inspired Dwarf Fortress's editable raw files.",
+      "detail": "Zach called monster memory their favourite part of Moria, a way of persisting knowledge through character deaths. Together with Starflight's 800 planets of creatures with different attributes, it inspired putting all creature statistics in modifiable text files.",
+      "t": 356,
+      "quote": "the monster memory would tell you later when you when you looked it up on your next game how much it could hit for what special abilities they had",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "god-level endgame",
+      "kind": "example",
+      "claim": "Larn and Ragnarok let high-level characters become god-like, walking through walls or fighting the gods at the end of time, and the Adams brothers want Dwarf Fortress to reach that level of world-changing power.",
+      "detail": "Zach described Larn's evil master/good master ranks with abilities like sphere of annihilation, and Ragnarok's final levels where you transform and fight the gods. As kids playing D&D like Rogue, they always died at level two and never reached such power.",
+      "t": 440,
+      "quote": "this is the future of drawer fortress we want the to be able to change things at the highest level and be equal to the gods",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "persistent killers",
+      "kind": "history",
+      "claim": "The Adams brothers' early high-school game Dragslay already saved every creature that killed the player in a score list, and a killer could yell your name back like in Dwarf Fortress.",
+      "detail": "Tarn showed a score list from 1993-97 recording what killed each character; you could also get negative points for crimes. A later project kept debug logs of persistent tribes that created items and splintered. At first they cared most about what killed you, not level layout, as with bones levels.",
+      "t": 614,
+      "quote": "it saved all of those creatures if one of them killed you it could yell your name back at you just like in dwarf fortress",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "bottom-up simulation",
+      "kind": "warning",
+      "claim": "The Adams brothers' early project Armok never became a game because they built simulation data structures bottom-up, down to body tissues and arm hair curliness, without finding gameplay.",
+      "detail": "Tarn said they had hundreds of dead projects. Armok tracked every tissue, procedurally generated (terrible) animations from stance points and showed muscles under stripped skin. He granted there is something to starting from basic structures, but their idea was so large that all they built was data structures.",
+      "t": 714,
+      "quote": "we had such a large idea of what that game would be that all we did was just build basic data structures",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "turn-based tedium",
+      "kind": "warning",
+      "claim": "Mutant Miner, the side project that preceded Dwarf Fortress, became an interminable turn-based slog once it grew to multiple miners, because the brothers had not considered the interface.",
+      "detail": "Tarn compared it to the Gold Box games' 50-person orc fights, except you mostly weren't fighting anything and just clicked repeatedly. Long phone calls between Zach and Tarn followed and led to Dwarf Fortress.",
+      "t": 813,
+      "quote": "you weren't even fighting anything most of the time so you're just like click click click click we didn't think about the interface at all",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "ascii speed",
+      "kind": "history",
+      "claim": "Dwarf Fortress began as a planned two-month real-time side project, and working in ASCII rather than 3D made ideas get implemented so fast that it absorbed Armok's persistent-world goals.",
+      "detail": "Tarn said they switched to real time to fix the mining colony's problems and to fantasy dwarves because dwarves mine. The original loop: build a fort, lose it, play a roguelike in its ruins, with the fort setting a maximum score.",
+      "t": 877,
+      "quote": "when you're programming an ascii with text graphics and you're not working on a 3d game all of your ideas get done so much more quickly",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "In Dwarf Fortress permadeath is the engine of the whole game: lost forts and dead adventurers are added to a persistent world, and as long as something persists, nothing is truly lost.",
+      "detail": "Tarn described generating a world, losing forts and adventurers into it, and continuing play as long as you like; this is the origin of the 'losing is fun' motto. They later also let players retire adventurers and forts so others can meet them as AI-controlled characters.",
+      "t": 922,
+      "quote": "losing is fun motto comes from permadeath is the entire engine that runs the game",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "world generation",
+      "kind": "technique",
+      "claim": "Dwarf Fortress builds its world from elevation, temperature, rainfall and drainage layers combined into a biome map, then runs a history over it.",
+      "detail": "Tarn framed world generation as the analog of roguelike level generation, with the world as a bones level. He also noted the fortress cross-section view is one of the most confusing parts of the game, which players address with isometric viewers.",
+      "t": 1065,
+      "quote": "we use elevation temperature rainfall drainage to put them together make a biomap run a history on it",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "legends",
+      "kind": "principle",
+      "claim": "Dwarf Fortress's Legends mode is conceived as a high score list: a shared record of exploits, descended from the one-line death sentence with a killer's name in Hack and NetHack.",
+      "detail": "Tarn said legends is less a competition than a memory players share of their exploits. The death sentence with name and date was the seed of a DF legend and the beginning of the brothers' whole narrative approach.",
+      "t": 1088,
+      "quote": "the legends we really do think it is a high score list",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "consistent rules",
+      "kind": "principle",
+      "claim": "In Dwarf Fortress every creature, including the player, is defined by the same kind of creature file and plays by the same rules, and this verisimilitude helps narratives emerge.",
+      "detail": "Tarn said a dwarf or human has a very similar definition to a kestrel or emu. Even in a non-Earth world, consistent understandable rules let players anticipate what will happen, which is why the brothers think of roguelikes as narrative generators.",
+      "t": 1155,
+      "quote": "every creature in the game is playing by the same rules",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii symbols",
+      "kind": "example",
+      "claim": "Dwarf Fortress reuses roguelike glyph conventions, such as ADOM's quote-mark herbs for taller grass and the DOS Rogue smiley face for its dwarves.",
+      "detail": "One of the brothers (the captions do not show which) said the quote character was perfect because DF builds grass out of periods, commas and apostrophes, so thicker, taller grass becomes a quote. They also reuse the same lighting methods and map-saving conventions as homage.",
+      "t": 1263,
+      "quote": "you want to make it thicker and you want to make it taller and that's a quote",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "engraving",
+      "kind": "history",
+      "claim": "Engraving in Hack inspired engraving as the first visual art dwarves could make in Dwarf Fortress, though the brothers personally banned Elbereth as out-of-character cheating.",
+      "detail": "Tarn said they never got far in Hack because they wouldn't use Elbereth, reasoning a tourist or caveman wouldn't know it. They even had a house rule that a wand of fire's last known charge had to be used to engrave something funny for the next player of the bones level.",
+      "t": 1273,
+      "quote": "we took engravings this is a hack thing you probably know about for us it was the first visual art that dwarves could could do",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "interlocking mechanisms",
+      "kind": "example",
+      "claim": "Dwarf Fortress's drunken-cats bug shows interlocking mechanisms producing stories: cats licked spilled tavern alcohol off their paws and, due to a default dose, ingested a full mug's worth and died.",
+      "detail": "Dwarves serving drinks tossed mugs aside when given another job, spilling alcohol; cats followed people into taverns; newly added self-cleaning triggered ingestion syndromes. The only bug was the default dose size, combined with body-mass effects. Tarn compared it to Hack moments like a bounced polymorph wand.",
+      "t": 1463,
+      "quote": "interlocking mechanisms give rise to to this kind of thing and it's kind of our our whole philosophy that came out of playing roguelike games",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "non-modal interface",
+      "kind": "principle",
+      "claim": "Roguelikes favour a non-modal interface that keeps play on one screen, and Dwarf Fortress extends this to conversations, which exist as in-world structures that others act during.",
+      "detail": "Tarn noted the roguelike idea of avoiding separate shop screens and keeping it all on one screen where possible. DF's utterance builder sends speech into the world so listeners can act while responding, enabling back-and-forth behaviours such as robberies, unlike AAA radial dialogue menus.",
+      "t": 1496,
+      "quote": "if if possible try and keep it all on one screen and that's that's kind of a general interface um you know philosophy",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "myth generation",
+      "kind": "example",
+      "claim": "Dwarf Fortress's planned myth and magic system generator creates whole mythologies with concrete in-world requirements, such as rune stones that must be carved from a rare stone under the stars.",
+      "detail": "Tarn presented it as the culmination of the Larn and Ragnarok inspiration, letting the generator 'go nuts'; his example involved dwarves concentrating on a generated force called the timeless judgment.",
+      "t": 1601,
+      "quote": "they're created by carving a very rare stone under the stars okay and so you'd actually have to do that if you want to make one",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

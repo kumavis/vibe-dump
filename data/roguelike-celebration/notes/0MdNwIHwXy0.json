@@ -1,0 +1,204 @@
+{
+  "id": "0MdNwIHwXy0",
+  "title": "John Harris: A Trip Through The Mystery Dungeons",
+  "speaker": "John Harris",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=0MdNwIHwXy0",
+  "talk_type": "history",
+  "summary": "John Harris, author of a book on the series, surveys Chunsoft's Mystery Dungeon games, a family of around 31 classic Rogue- and Hack-inspired roguelikes spanning crossovers (Dragon Quest, Pokemon, Chocobo) and the core Shiren the Wanderer line. He explains the series' focus on resource management, positioning and the creative application of items against tricky monsters, and its distinctive take on permadeath where failure ejects you from the dungeon without your items. He then walks through each Shiren game's experiments: mixer monsters, castle building, party control, day/night cycles, item creation, leveling equipment and behemoths.",
+  "games": [
+    "Shiren the Wanderer",
+    "Torneko no Daibouken",
+    "Pokemon Mystery Dungeon",
+    "Chocobo's Mystery Dungeon",
+    "One Way Heroics",
+    "Mystery Chronicle: One Way Heroics",
+    "Rogue",
+    "Hack",
+    "NetHack",
+    "Azure Dreams"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "mystery dungeon series",
+      "kind": "history",
+      "claim": "Chunsoft's Mystery Dungeon series, begun in 1993 with a Dragon Quest crossover on Super Famicom, comprises roughly 31 Rogue- and Hack-inspired games and remains among the most classical roguelikes still commercially developed.",
+      "detail": "Harris says the series has kept its Rogue and Hack inspiration throughout and crosses over with many franchises including Dragon Quest, Final Fantasy, Gundam and Pokemon. A few titles are lost, with no surviving copies to be found.",
+      "t": 107,
+      "quote": "they are heavily inspired by Rogue and hack and throughout the years they have kept that uh that inspiration",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "item use tradeoffs",
+      "kind": "principle",
+      "claim": "Shiren-style Mystery Dungeon games are about resource management and positioning, with items that pose use-now-or-later tradeoffs, such as an herb that heals or, eaten at full health, raises maximum HP.",
+      "detail": "Harris gives examples: a knockback staff pushes a monster away to buy escape room or time for other items, and a scroll of confusion can incapacitate a whole room. Using an item now gives an immediate advantage, later a longer-term one.",
+      "t": 339,
+      "quote": "they're basically about resource management and positioning it's up you to figure out how to use both of these uh resources to survive",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "creative item use",
+      "kind": "principle",
+      "claim": "The essence of Mystery Dungeon play is the creative application of every trick you have found against monsters, escaping by the skin of your teeth.",
+      "detail": "Harris describes the games as basically about using items creatively, because you will need all of them. He calls narrow escapes the essence of the games.",
+      "t": 384,
+      "quote": "being about the creative application of uh all the tricks that you can that you have up your sleeve",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "monster design",
+      "kind": "example",
+      "claim": "Shiren monsters each pose a distinct tricky problem: archers attack from range, a radish slows you with poison grass, fast monsters lay traps, one turns your items into rice balls, and a thief walrus steals items from your pack and the floor.",
+      "detail": "Harris walks through these example monsters from the Shiren games to show how monster abilities target the player's resources and positioning rather than just dealing damage.",
+      "t": 430,
+      "quote": "can turn your items into rice balls",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "external threat",
+      "kind": "example",
+      "claim": "One Mystery Dungeon game adds a side view where tough monsters climb up through the dungeon toward the town as you descend, requiring you to manage that threat and build fortresses in the dungeon to stop them.",
+      "detail": "Harris describes this as adding a danger-management aspect: the monsters have positions in the dungeon and will attack the town if they reach the top. He calls it an interesting idea.",
+      "t": 474,
+      "quote": "they're climbing up to the dungeon as you're descending down through it and you have they're trying to attack a town",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Mystery Dungeon treats each adventure as one in a series: on failure the character collapses and is ejected without their items, usually restarting at level one, while successful clears let you keep items that ease later runs.",
+      "detail": "Harris contrasts this with classic roguelikes where each session is self-contained and a new character is created after death. In Mystery Dungeon permadeath therefore means something different than in Rogue or NetHack.",
+      "t": 719,
+      "quote": "your character doesn't die on failure but collapses and is kicked out of the dungeon without their stuff",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "example",
+      "claim": "In the first Shiren game, repeatedly donating money to a struggling restaurant across runs turns it into a reliable resource and eventually unlocks a food-based bonus dungeon.",
+      "detail": "Harris cites this as an example of plot lines that carry over between sessions, which he says are found most often in the Shiren games.",
+      "t": 753,
+      "quote": "if you keep supporting this restaurant every time you traes through town uh it eventually becomes the resource that you can rely on",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "item weighting",
+      "kind": "example",
+      "claim": "Many Mystery Dungeon games weight item generation so powerful items appear only deeper, but the first Shiren lets great items appear early, which can transform a run, much like NetHack.",
+      "detail": "Harris says this early-power variability is one of the best reasons to play the first game, which is very hard but completable on a first try.",
+      "t": 858,
+      "quote": "you can find great items early and it can just completely change the nature of your entire run",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "tutorial puzzles",
+      "kind": "technique",
+      "claim": "The first Shiren includes non-random 'Fei's Problems' puzzle scenarios that serve as a tutorial, and solving one at the start of a run grants a random item for that journey.",
+      "detail": "Harris says these little puzzle games are fun on their own; each new run lets you try one, and success gives you an item to help on that run.",
+      "t": 876,
+      "quote": "they're non-random situations that are like little puzzle games and those are fun to play just on their own",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "repeated runs",
+      "kind": "example",
+      "claim": "Shiren 2 is designed to be played many times: you run its main dungeon repeatedly to gather materials that build a castle defending the town from Oni, then take the fight to them.",
+      "detail": "Harris contrasts this with the usual pattern of dying repeatedly until you win. The castle is damaged as the Oni attack, and completing it opens an in-game dungeon to confront them.",
+      "t": 1007,
+      "quote": "you're meant to play its main dungeon many times and you're doing this to pick up materials that appear in the dungeon",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "item fusion",
+      "kind": "example",
+      "claim": "Shiren 2's mixer monsters combine the attributes of items thrown into them, dropping a fused super item when killed, but each item they eat makes them stronger.",
+      "detail": "Harris calls mixers more a resource than a foe: fusing swords, shields or wands increases the abilities you can field at once. The risk is you must be sure you can defeat the strengthened mixer before attempting it.",
+      "t": 1076,
+      "quote": "every item they eat makes them stronger so you have to be sure that you can defeat the monster",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "grinding",
+      "kind": "warning",
+      "claim": "The Wii Shiren, aimed at a US audience, kept experience levels after death, which encouraged grinding levels rather than making do with what you have, and Harris considers it the weakest in the series.",
+      "detail": "You still lose items on death, but not resetting experience level undermined the survival-with-what-you've-got core. Harris also disliked its standard JRPG betrayal story.",
+      "t": 1188,
+      "quote": "it encourages grinding playing levels over and over again to gain an edge on the dungeon instead of making do with what you've got",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "party control",
+      "kind": "example",
+      "claim": "The Wii Shiren optionally lets you directly control every party member each turn with a shared inventory, which slows play but makes boss fights an interesting tactical challenge.",
+      "detail": "Harris says it is the only game in the series allowing this and enables wonderful strategies for boss fights, though he found the bosses a bit gimmicky.",
+      "t": 1230,
+      "quote": "this is the only game in the series where if you want you can completely control all of your party members at once every turn",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "day night cycle",
+      "kind": "warning",
+      "claim": "Shiren 4 and 5's day/night system replaces all monsters at night with much stronger ones, turning play into stealth where items work poorly, which splits players because the two modes don't fit together.",
+      "detail": "Harris says because the series is about creative application of tools, fewer strategies work at night; players who like the day game will hate the night game and vice versa. He calls it an interesting experiment that was cut from Shiren 6.",
+      "t": 1372,
+      "quote": "if you like the daytime gameplay then you're going to hate the night game and if you end up liking the nighttime gameplay",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "bonus dungeons",
+      "kind": "example",
+      "claim": "Shiren 5 offers some 20-30 bonus dungeons with distinct rule twists, such as a Minesweeper-like one, a Sokoban-like one with monsters, and one where you never level past 1 and flee monsters throughout.",
+      "detail": "Harris says these give huge replay value for dozens of hours. The main dungeon must be cleared in progressively longer versions, and you must get your friend through too to win.",
+      "t": 1515,
+      "quote": "there's one that plays like mind sweeper uh there's another one that plays like Soo ban but with monsters in it",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "equipment leveling",
+      "kind": "example",
+      "claim": "Shiren 5 lets you create new items that then appear in dungeons from that point on, and gives swords and shields their own experience so they level up.",
+      "detail": "Harris says item creation subtly changes the whole game afterwards. Shiren 6 cut the equipment experience system, which he considers positive.",
+      "t": 1555,
+      "quote": "you can create new items that appear in the dungeons after you've created them uh which subtly changes the whole game",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "telegraphed threats",
+      "kind": "example",
+      "claim": "Shiren 6's behemoths are slow, one-hit-kill giants with one hit point that you are warned about in advance and can always see, and which you defeat by attacking from behind or throwing items over their barrier.",
+      "detail": "Harris says behemoths are visible even on dark levels where you otherwise cannot see beyond your room. They are an interesting challenge but not hard once learned; Shiren 6 was a back-to-basics game that cut the day/night and equipment experience systems.",
+      "t": 1668,
+      "quote": "you're properly warned if you're aren't a level would Behemoth on it",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "sales",
+      "kind": "history",
+      "claim": "Pokemon Mystery Dungeon vastly outsold the rest of the series, with the Explorers games selling about 6 million, while Shiren 5 and 6 reached around 200,000, enough to spur Western notice and further sequels.",
+      "detail": "Harris says many people who have never heard of roguelikes have enjoyed Pokemon Mystery Dungeon due to the brand's power. Shiren 6 sold 200,000 in its first month in Japan, and a seventh game is rumoured.",
+      "t": 597,
+      "quote": "the Explorer series as explorers of Time explorers I forgot that way explorers of Sky uh they've sold 6 million",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,72 @@
+Spencer Egart - Procedurally Generated Ritual Spell Systems
+Speaker: Spencer Egart
+https://www.youtube.com/watch?v=q4Tf0vf2kiI
+Year: 2019   Kind: talk   Captions: manual (en)
+
+## Introduction
+
+[0:00:00] I just said most of this. I am a dabbler in roguelikes. I have many unfinished prototype projects as I am sure some of you might be able to relate. My day job is at Monomi Park, I work on Slime Rancher as a game engineer. My social and Itch things are there if you want to check anything out or give me a follow. That's the who. This is the what, how, when, where, and why that I'm going to be talking about. What do I mean by rituals? What do we do with them? How can we generate them and use them within a game, specifically within a Roguelike context and when where and why I grouped together. When do we want to use this, within where the structure of the game does it make sense and why it is interesting from a developer and from a player perspective.
+
+[0:01:02] First, a working definition for rituals for the context of the talk.
+
+## Defining game rituals
+
+[0:01:10] A ritual is a repeatable set of actions that cause some effect within the game world indirectly and the indirectly is important because you might say if I hit a goblin with my sword five times it dies, is that the ritual of goblin slaying? No. For you it can be, sure. But for the purposes of this talk let's say no. Really what we are looking at is you do the series of actions and some external force or system is what will drive the effect you want to happen to actually occur. This is something I looked into last year during Proc Jam.
+
+## Procedural generation
+
+[0:02:00] I made a system for generating some rituals just to create endless spellbooks so they have proc gen contents, proc gen icons and proc gen text. I'll read one of these because the font is a bit flowery. So I have "A CHARM TO BRING FORTUNE TO YOUR ALLY." It says to shatter a pearl upon the earth, and then shout the name of your ally and look toward the west and chant the holy verse and burn a stick of thyme and draw the Bet rune in the air to complete the ritual. The idea is you would be able to do this within a game and it would bring fortune to your ally, for whatever that might mean. Maybe it gives a Bless buff or something like that. I have one to bless a hammer which is a similar kind of almost hokey-poky esque system for doing a particular set of steps to bring about a certain effect.
+
+## Inspiration and design
+
+[0:03:06] Some inspiration for this, of course, there is, you know, for as long as humans have existed there has been real life practices of various rituals, whether it be magic, or the real life study of alchemy, or throughout various religiouns. But also within roguelikes there is Elbereth. There's a real life Elbereth there over by the statue. This is a real ritual that works within Nethack, you can write a magic word on the ground and protect yourself from harm. And in a meta sense, if you look at speed running or glitch techniques within games, you might see, you know, players who have discovered "if I open up this menu, and then move in a certain way, and then select this and drop that, I can pass through a wall." Those are rituals that exist between the real world and the game world.
+
+[0:04:09] They are not intentional, usually, but they have the same kind of power in that you are taking a set of actions and then using it to create a magical effect within a world.
+
+## Avoiding menu reliance
+
+[0:04:22] In game terms, I am looking at a system for building these rituals procedurally and interpreting them so they can be actually used within a game. An important thing I wanted to have here is it is not just accessed through a menu. So you're not going into your 'rituals' menu and hitting Do Bless Ritual, because at that point it is no different than any other spell system in a game. I wanted to cut out all the UI interactions you would have to directly cast this. Even if you are doing a Bless ritual, you would not get a pop up UI saying "who do you want to cast this on?" I think it's important that information is contained within the ritual itself. That is one of the challenges when you are generating a set of steps to do these things, you need to be aware of what are the requirements that this effect has that I need to satisfy
+
+[0:05:26] through doing the ritual. So, if the spell needs a target, something that I am doing in this ritual has to say who the target is. If I am blessing you, you know, against certain elements, or if I am, you know, enchanting my weapon with a particular type of energy, I need to specify that within the ritual itself.
+
+## Building the generator
+
+[0:05:51] How do we do that? We make a generator. The generator that I came up with takes a, you know, a big list of all of the verbs and nouns that it is interested in, and this list within a game might already exist in some form, if you are using some kind of action pattern, you might have all your verbs enumerated in some way along with the nouns that they can be associated with. Basically, we are going to use these to generate our set of steps. The effects we are interested in, they might require a target, or might require an element, or a magnitude which is like how powerful is the effect I am doing. First what I want to do is create associations between certain types of nouns or verbs and these elements or magnitude or what have you. Some of this might be preauthored. I might say hey, when I go to generate this, the fire rune is always going to be associated
+
+[0:06:56] with fire because if it is associated with water, nobody is going to understand why that is. Some of it might be something we come up with on the fly, though. So if you have a whole alphabet of runes, you could say OK, the foo rune is associated with water and the thark rune is associated with air and that is a system that can change between each run of the game or however often you are generating these. The cool thing about this is players will learn this over time so you can create parallel rituals. You know, if they find a scrap of paper containing the fire bless ritual that says use the foo rune and they know the thark rune is associated with that water they might be able to figure it out, if they swap them out they can get a different effect.
+
+[0:07:57] Part of what we need to do is create associations and pick steps to satisfy the effects for the generator.
+
+## Data and associations
+
+[0:08:06] This is some of my data. It is hard to read. I work in Unity. I have the different verbs and nouns and they're just tagged with strings to determine what can associate with what and I have a whole listing of everything. This is a very small list. For any big generator like this, the larger your combination possibility between your verbs and nouns, the more interesting and diverse rituals you can come up with.
+
+## Execution flow
+
+[0:08:41] We start with, you know, we have an effect we want to do like cause protection from some element and that is going to require what element and who we are protecting. We might say hey, our verb is to draw and we want to draw the fire rune and that's establishing the element we are going to protect from fire because we have created that association ahead of time. Then we might say hey, you are going to speak the target's name and that will establish the target. So within the context of actually running this within a game world, you would have some kind of look up for determining which actual actor game object is associated with each name. You might already have that or you might have some way to do that. But this speak targets name could just as easily be, you know, burn a scrap of their hair or something if you have systems for grabbing those and creating those associations
+
+[0:09:46] between different actions the player can take and entities within your game world. And, of course, because this is a boring ritual on its own, we pad it out with some structure to give it kind of more of a ritualistic flavor rather than just doing two things and an effect happens. You know, in this case, the ritual is step north and draw the fire rune and step south and speak the target's name and draw a circle and step to the west and then, magically, you have protected your target from fire.
+
+## Interpreting actions
+
+[0:10:29] How do we go from that to actually interpreting this within the game world? The interpreter system that I built for this is really simple. It is just taking the list of things in the previous slide and, you know, every action that you do within the game you report up to this interpreter saying hey, the player stepped north, hey the player did this or that, and we just track progress along each of these lists. I add a bit of fudging for, you know, allowing things in between because you may have to do a few intervening actions in order to draw something. If you need to like take out chalk or something it wouldn't make sense for that to disrupt the ritual. Also, not allowing it to go forever so that you can kind of distinguish between when a player is intentionally doing this, or if they happen to accidentally hit all of the milestones throughout their 10-hour run and then, you know, suddenly a spell pops off
+
+[0:11:31] and they have no idea why. From there, we just notify whatever system you already have for doing spells to actually do the thing. So presumably you have been passing up this information to your interpreter. It says hey, the player has achieved doing this ritual. We know the information because we have been gathering it through the stuff that they have done. Now, you know, call your action thing to do whatever spell happens and let the player know that it happened. That's the what and the how. I think the more interesting is when, where, why.
+
+## Context and narrative value
+
+[0:12:12] Probably not combat because if you have to do a dance to cast a fireball, you are probably not going to live very long in most games but maybe. Depending on your game maybe that's viable. I think longer-term effects this makes sense. Enchanting equipment, applying buffs, healing, doing things - you might do the rituals before you go into the a dangerous room if you know there is a boss on the other side of the door and have a ritual that will protect you maybe that's worth doing. You can provide magic effects to characters who would not otherwise have them. Maybe you can allow fighter class to do the rituals. They don't normally have access to enchanting but because they found a book with the spells in it they can do some of it. You can embed a textual representation of the rules within in-game books, or dialogue, or - players can find these things throughout the world and then use that knowledge.
+
+[0:13:17] It is tricking people into the reading your in-game text because you are providing value there. I think that's really neat.
+
+## Conclusion
+
+[0:13:27] So that's my talk. Thank you all for listening. Please give me a follow.
+
+## Q&A session
+
+[0:13:37] [Applause] >> We have time for one question. >> There are two questions. Maybe we have time. OK. AUDIENCE: Have you thought about, like, what happens when someone flubs a ritual? Or you know, like is there failure? Or does weird shit happen?
+
+## Refining failures
+
+[0:14:07] SPENCER EGART: If you flub a ritual, I think it is definitely something you could pretty easily track. You know, if we want to say -- because we don't want it to be the case that the first step of doing ritual A is that you step to the North. We don't want to consider it a failure if the player steps to the north and goes north again because they are walking north but maybe you can reach a point where you are 90% through a ritual, or some percentage that makes sense, where we can say with certainty the player is trying to do this thing and sure, yeah. Maybe they flub a ritual and instead of protecting someone from fire, they set them on fire. And maybe that's even something we can do intentionally. Like, now they know, hey, if I tweak this ritual, now I can set people on fire. Yeah, that would be awesome. Thank you. AUDIENCE: Thank you so much. [Applause]

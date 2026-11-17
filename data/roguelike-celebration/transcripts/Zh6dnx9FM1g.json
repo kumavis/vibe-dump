@@ -1,0 +1,4376 @@
+{
+ "id": "Zh6dnx9FM1g",
+ "url": "https://www.youtube.com/watch?v=Zh6dnx9FM1g",
+ "title": "Zach and Tarn Adams - Dwarf Fortress Design Inspirations",
+ "speaker": "Zach and Tarn Adams",
+ "talk_title": "Dwarf Fortress Design Inspirations",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-04-28",
+ "duration_s": 1650,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nThe creators of Dwarf Fortress discuss the influence of several roguelikes on the foundation and continued development of the project.\n\nTarn and Zach Adams are the co-founders of Bay 12 Games. Their main project is Dwarf Fortress, a fantasy simulation game which is distributed free of charge and has developed a strong niche following. While centered around a dwarven colony mode, the game's adventure mode is a traditional roguelike roleplaying game.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 63,
+   "title": "Early Gaming Roots"
+  },
+  {
+   "start": 166,
+   "title": "Rogue and Hack Influences"
+  },
+  {
+   "start": 324,
+   "title": "Moria and World Building"
+  },
+  {
+   "start": 397,
+   "title": "Larn and Ragnarok Inspiration"
+  },
+  {
+   "start": 469,
+   "title": "First Game Development"
+  },
+  {
+   "start": 623,
+   "title": "Failed Projects and Design"
+  },
+  {
+   "start": 833,
+   "title": "Creating Dwarf Fortress"
+  },
+  {
+   "start": 977,
+   "title": "Game Modes and Mechanisms"
+  },
+  {
+   "start": 1038,
+   "title": "Roguelike Narrative Analogies"
+  },
+  {
+   "start": 1146,
+   "title": "Consistency and Rules"
+  },
+  {
+   "start": 1244,
+   "title": "Engravings and Cheating"
+  },
+  {
+   "start": 1344,
+   "title": "Interlocking Systems Example"
+  },
+  {
+   "start": 1471,
+   "title": "Interface Philosophy"
+  },
+  {
+   "start": 1566,
+   "title": "The Future of the Game"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5210,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.04,
+   "d": 2.96,
+   "text": "i'm tarn adams also co-founder of bay 12"
+  },
+  {
+   "t": 4.0,
+   "d": 2.96,
+   "text": "games we made dwarf"
+  },
+  {
+   "t": 7.0,
+   "d": 3.53,
+   "text": "[Applause]"
+  },
+  {
+   "t": 12.61,
+   "d": 2.59,
+   "text": "[Applause]"
+  },
+  {
+   "t": 15.2,
+   "d": 2.64,
+   "text": "that's fine fortress guess i noticed the"
+  },
+  {
+   "t": 17.84,
+   "d": 1.52,
+   "text": "pdf was pretty blurry"
+  },
+  {
+   "t": 19.36,
+   "d": 2.64,
+   "text": "great do you want this clicker uh yeah"
+  },
+  {
+   "t": 22.0,
+   "d": 2.16,
+   "text": "yeah"
+  },
+  {
+   "t": 24.88,
+   "d": 1.6,
+   "text": "oh this is just mike there you go your"
+  },
+  {
+   "t": 26.48,
+   "d": 5.36,
+   "text": "mic we'll come up on stage"
+  },
+  {
+   "t": 38.83,
+   "d": 3.86,
+   "text": "[Applause]"
+  },
+  {
+   "t": 43.2,
+   "d": 2.64,
+   "text": "hello"
+  },
+  {
+   "t": 46.56,
+   "d": 2.08,
+   "text": "i'm zach adams the co-founder of bay 12"
+  },
+  {
+   "t": 48.64,
+   "d": 2.72,
+   "text": "games and co-creator of dwarf fortress"
+  },
+  {
+   "t": 51.36,
+   "d": 3.52,
+   "text": "and i'd like to share my"
+  },
+  {
+   "t": 54.88,
+   "d": 2.24,
+   "text": "our childhood inspirations of dwarf"
+  },
+  {
+   "t": 57.12,
+   "d": 1.36,
+   "text": "dwarf fortress of the roguelike"
+  },
+  {
+   "t": 58.48,
+   "d": 2.0,
+   "text": "inspirations and then tarn's gonna"
+  },
+  {
+   "t": 60.48,
+   "d": 1.76,
+   "text": "describe more of how that came into"
+  },
+  {
+   "t": 62.24,
+   "d": 1.36,
+   "text": "reality"
+  },
+  {
+   "t": 63.6,
+   "d": 2.16,
+   "text": "so"
+  },
+  {
+   "t": 66.88,
+   "d": 2.4,
+   "text": "this is rogue it came out when i was"
+  },
+  {
+   "t": 69.28,
+   "d": 1.6,
+   "text": "five years old"
+  },
+  {
+   "t": 70.88,
+   "d": 2.96,
+   "text": "and back then i was just learning how to"
+  },
+  {
+   "t": 73.84,
+   "d": 1.84,
+   "text": "write basic my dad was teaching me"
+  },
+  {
+   "t": 75.68,
+   "d": 2.08,
+   "text": "from the back of magazines we would type"
+  },
+  {
+   "t": 77.76,
+   "d": 2.0,
+   "text": "in the the code together"
+  },
+  {
+   "t": 79.76,
+   "d": 3.52,
+   "text": "and it was only a few years later when"
+  },
+  {
+   "t": 83.28,
+   "d": 1.84,
+   "text": "we were able to me and tarn were able to"
+  },
+  {
+   "t": 85.12,
+   "d": 1.52,
+   "text": "download"
+  },
+  {
+   "t": 86.64,
+   "d": 3.04,
+   "text": "roguelike games from bulletin board"
+  },
+  {
+   "t": 89.68,
+   "d": 1.04,
+   "text": "systems"
+  },
+  {
+   "t": 90.72,
+   "d": 3.36,
+   "text": "and our favorites were hack"
+  },
+  {
+   "t": 94.08,
+   "d": 3.12,
+   "text": "moria and lauren and rogue of course"
+  },
+  {
+   "t": 97.2,
+   "d": 2.96,
+   "text": "but of all of them hacked we were able"
+  },
+  {
+   "t": 100.16,
+   "d": 2.08,
+   "text": "to get pretty far down in the dungeon"
+  },
+  {
+   "t": 102.24,
+   "d": 1.36,
+   "text": "maurya were able to flesh out the"
+  },
+  {
+   "t": 103.6,
+   "d": 2.16,
+   "text": "monster memory and"
+  },
+  {
+   "t": 105.76,
+   "d": 2.4,
+   "text": "lauren were was the easier of the games"
+  },
+  {
+   "t": 108.16,
+   "d": 0.96,
+   "text": "and were able to get really"
+  },
+  {
+   "t": 109.12,
+   "d": 1.6,
+   "text": "high levels which was different for us"
+  },
+  {
+   "t": 110.72,
+   "d": 2.12,
+   "text": "because we sucked at these games"
+  },
+  {
+   "t": 112.84,
+   "d": 3.24,
+   "text": "and but rogue was always the hardest and"
+  },
+  {
+   "t": 116.08,
+   "d": 1.44,
+   "text": "we always we'd always get killed on"
+  },
+  {
+   "t": 117.52,
+   "d": 2.08,
+   "text": "level one by an emu or a kestrel or"
+  },
+  {
+   "t": 119.6,
+   "d": 2.4,
+   "text": "something"
+  },
+  {
+   "t": 122.96,
+   "d": 3.88,
+   "text": "so in our uh in our"
+  },
+  {
+   "t": 126.84,
+   "d": 2.28,
+   "text": "um specifications or"
+  },
+  {
+   "t": 129.12,
+   "d": 2.32,
+   "text": "or feature a feature list of dwarf"
+  },
+  {
+   "t": 131.44,
+   "d": 1.12,
+   "text": "fortress"
+  },
+  {
+   "t": 132.56,
+   "d": 2.16,
+   "text": "we joked at the bottom that we include"
+  },
+  {
+   "t": 134.72,
+   "d": 1.84,
+   "text": "16 colors including black"
+  },
+  {
+   "t": 136.56,
+   "d": 1.52,
+   "text": "and eight background colors including"
+  },
+  {
+   "t": 138.08,
+   "d": 2.24,
+   "text": "black with the ascii character set"
+  },
+  {
+   "t": 140.32,
+   "d": 2.08,
+   "text": "and even though that's a joke we like to"
+  },
+  {
+   "t": 142.4,
+   "d": 1.92,
+   "text": "think what would happen if the"
+  },
+  {
+   "t": 144.32,
+   "d": 2.56,
+   "text": "uh game industry never advanced beyond"
+  },
+  {
+   "t": 146.88,
+   "d": 0.96,
+   "text": "that like what would they"
+  },
+  {
+   "t": 147.84,
+   "d": 1.6,
+   "text": "what would they have to deal with and we"
+  },
+  {
+   "t": 149.44,
+   "d": 2.0,
+   "text": "think it would be the kind of things"
+  },
+  {
+   "t": 151.44,
+   "d": 0.64,
+   "text": "that make"
+  },
+  {
+   "t": 152.08,
+   "d": 2.88,
+   "text": "roguelikes great is what would be out"
+  },
+  {
+   "t": 154.96,
+   "d": 0.4,
+   "text": "there"
+  },
+  {
+   "t": 155.36,
+   "d": 3.12,
+   "text": "and that's what we tried to do"
+  },
+  {
+   "t": 158.48,
+   "d": 3.12,
+   "text": "now roguelikes"
+  },
+  {
+   "t": 166.08,
+   "d": 3.28,
+   "text": "let's see so"
+  },
+  {
+   "t": 169.36,
+   "d": 1.92,
+   "text": "after he gave up on games like king's"
+  },
+  {
+   "t": 171.28,
+   "d": 1.2,
+   "text": "quest and ultima they"
+  },
+  {
+   "t": 172.48,
+   "d": 2.72,
+   "text": "came out around the same time or or won"
+  },
+  {
+   "t": 175.2,
+   "d": 0.8,
+   "text": "them"
+  },
+  {
+   "t": 176.0,
+   "d": 2.4,
+   "text": "it's like going back and playing them it"
+  },
+  {
+   "t": 178.4,
+   "d": 1.52,
+   "text": "didn't make sense because you knew what"
+  },
+  {
+   "t": 179.92,
+   "d": 1.44,
+   "text": "was going to happen there's no what"
+  },
+  {
+   "t": 181.36,
+   "d": 2.16,
+   "text": "i mean you could speed run king's quest"
+  },
+  {
+   "t": 183.52,
+   "d": 1.12,
+   "text": "or something but what would that even"
+  },
+  {
+   "t": 184.64,
+   "d": 0.88,
+   "text": "mean"
+  },
+  {
+   "t": 185.52,
+   "d": 2.0,
+   "text": "so roguelikes were the answer to that"
+  },
+  {
+   "t": 187.52,
+   "d": 3.28,
+   "text": "because of procedural generation"
+  },
+  {
+   "t": 190.8,
+   "d": 2.32,
+   "text": "and"
+  },
+  {
+   "t": 194.96,
+   "d": 3.52,
+   "text": "it's the the treasures and and enemies"
+  },
+  {
+   "t": 198.48,
+   "d": 0.4,
+   "text": "and"
+  },
+  {
+   "t": 198.88,
+   "d": 2.4,
+   "text": "and uh and the dungeon were different"
+  },
+  {
+   "t": 201.28,
+   "d": 0.8,
+   "text": "every time"
+  },
+  {
+   "t": 202.08,
+   "d": 4.0,
+   "text": "every time you played and"
+  },
+  {
+   "t": 207.28,
+   "d": 3.76,
+   "text": "so uh we kept playing these games like"
+  },
+  {
+   "t": 211.04,
+   "d": 1.44,
+   "text": "rogue we played until the five and a"
+  },
+  {
+   "t": 212.48,
+   "d": 1.68,
+   "text": "quarter-inch disc that it came on"
+  },
+  {
+   "t": 214.16,
+   "d": 4.4,
+   "text": "didn't work on our computer anymore so"
+  },
+  {
+   "t": 219.44,
+   "d": 2.16,
+   "text": "the other thing that made roguelikes"
+  },
+  {
+   "t": 221.6,
+   "d": 1.6,
+   "text": "great was perma-death"
+  },
+  {
+   "t": 223.2,
+   "d": 2.16,
+   "text": "and a high score list and of course"
+  },
+  {
+   "t": 225.36,
+   "d": 1.28,
+   "text": "elevator action we"
+  },
+  {
+   "t": 226.64,
+   "d": 1.28,
+   "text": "we in turn grew up in the age of the"
+  },
+  {
+   "t": 227.92,
+   "d": 2.08,
+   "text": "pizza arcade where we would endlessly"
+  },
+  {
+   "t": 230.0,
+   "d": 1.84,
+   "text": "sync tokens into games like elevator"
+  },
+  {
+   "t": 231.84,
+   "d": 0.64,
+   "text": "action"
+  },
+  {
+   "t": 232.48,
+   "d": 2.72,
+   "text": "and pac-man but we treated roguelikes"
+  },
+  {
+   "t": 235.2,
+   "d": 0.96,
+   "text": "the same way"
+  },
+  {
+   "t": 236.16,
+   "d": 2.68,
+   "text": "and this is a rogue like a pac-man we"
+  },
+  {
+   "t": 238.84,
+   "d": 1.48,
+   "text": "found"
+  },
+  {
+   "t": 240.32,
+   "d": 3.12,
+   "text": "and at home we would compete against"
+  },
+  {
+   "t": 243.44,
+   "d": 0.96,
+   "text": "each other just like we would be"
+  },
+  {
+   "t": 244.4,
+   "d": 1.84,
+   "text": "competing in chuck e cheese"
+  },
+  {
+   "t": 246.24,
+   "d": 3.12,
+   "text": "for the highest level on the high score"
+  },
+  {
+   "t": 249.36,
+   "d": 0.72,
+   "text": "list"
+  },
+  {
+   "t": 250.08,
+   "d": 1.44,
+   "text": "but roguelikes were different because"
+  },
+  {
+   "t": 251.52,
+   "d": 1.76,
+   "text": "you have to name your character before"
+  },
+  {
+   "t": 253.28,
+   "d": 1.12,
+   "text": "you play"
+  },
+  {
+   "t": 254.4,
+   "d": 1.76,
+   "text": "and so naturally we would get so pissed"
+  },
+  {
+   "t": 256.16,
+   "d": 1.92,
+   "text": "off by losing over and over again i"
+  },
+  {
+   "t": 258.08,
+   "d": 1.84,
+   "text": "didn't hack or something that we get"
+  },
+  {
+   "t": 259.92,
+   "d": 1.52,
+   "text": "really far down and then i don't realize"
+  },
+  {
+   "t": 261.44,
+   "d": 1.12,
+   "text": "that we named ourselves something"
+  },
+  {
+   "t": 262.56,
+   "d": 1.36,
+   "text": "obscene and then get the top of the high"
+  },
+  {
+   "t": 263.92,
+   "d": 1.28,
+   "text": "score list"
+  },
+  {
+   "t": 265.2,
+   "d": 1.68,
+   "text": "so quickly we had to learn how to hack"
+  },
+  {
+   "t": 266.88,
+   "d": 1.28,
+   "text": "the high score list and put our own"
+  },
+  {
+   "t": 268.16,
+   "d": 2.8,
+   "text": "names back in there"
+  },
+  {
+   "t": 272.0,
+   "d": 4.8,
+   "text": "so now this is hack hack 103 and hack"
+  },
+  {
+   "t": 276.8,
+   "d": 2.4,
+   "text": "went further beyond the high score list"
+  },
+  {
+   "t": 279.2,
+   "d": 1.28,
+   "text": "because"
+  },
+  {
+   "t": 280.48,
+   "d": 1.36,
+   "text": "it would actually save what was called a"
+  },
+  {
+   "t": 281.84,
+   "d": 1.68,
+   "text": "bones file and this was really"
+  },
+  {
+   "t": 283.52,
+   "d": 2.24,
+   "text": "revolutionary for us because it was like"
+  },
+  {
+   "t": 285.76,
+   "d": 0.8,
+   "text": "it would save"
+  },
+  {
+   "t": 286.56,
+   "d": 1.6,
+   "text": "the it would save the entire level we"
+  },
+  {
+   "t": 288.16,
+   "d": 0.96,
+   "text": "didn't know that at the time it would"
+  },
+  {
+   "t": 289.12,
+   "d": 2.0,
+   "text": "save your where your body was"
+  },
+  {
+   "t": 291.12,
+   "d": 1.6,
+   "text": "and your items so you could come back"
+  },
+  {
+   "t": 292.72,
+   "d": 1.6,
+   "text": "and rescue them"
+  },
+  {
+   "t": 294.32,
+   "d": 5.28,
+   "text": "and it's like this this um"
+  },
+  {
+   "t": 299.68,
+   "d": 1.6,
+   "text": "this is kind of what inspired drawer"
+  },
+  {
+   "t": 301.28,
+   "d": 2.72,
+   "text": "fortress's legend mode"
+  },
+  {
+   "t": 304.0,
+   "d": 1.6,
+   "text": "because it saved what creature killed"
+  },
+  {
+   "t": 305.6,
+   "d": 1.76,
+   "text": "you and"
+  },
+  {
+   "t": 307.36,
+   "d": 2.32,
+   "text": "if you name the creature and and net in"
+  },
+  {
+   "t": 309.68,
+   "d": 0.96,
+   "text": "hack"
+  },
+  {
+   "t": 310.64,
+   "d": 2.72,
+   "text": "it would come back and uh if you if you"
+  },
+  {
+   "t": 313.36,
+   "d": 0.8,
+   "text": "you'd have to"
+  },
+  {
+   "t": 314.16,
+   "d": 1.44,
+   "text": "name it first you have to realize it's"
+  },
+  {
+   "t": 315.6,
+   "d": 1.6,
+   "text": "going to kill you it's going to kill you"
+  },
+  {
+   "t": 317.2,
+   "d": 1.28,
+   "text": "and then name it"
+  },
+  {
+   "t": 318.48,
+   "d": 1.44,
+   "text": "and then you could come back and get"
+  },
+  {
+   "t": 319.92,
+   "d": 1.28,
+   "text": "revenge because you could find the name"
+  },
+  {
+   "t": 321.2,
+   "d": 2.0,
+   "text": "creature back in the bones file"
+  },
+  {
+   "t": 323.2,
+   "d": 2.48,
+   "text": "so and there really hasn't been anything"
+  },
+  {
+   "t": 325.68,
+   "d": 1.2,
+   "text": "like this"
+  },
+  {
+   "t": 326.88,
+   "d": 2.64,
+   "text": "until shadow of mordor i was thinking"
+  },
+  {
+   "t": 329.52,
+   "d": 1.76,
+   "text": "because it's like the same orc would"
+  },
+  {
+   "t": 331.28,
+   "d": 1.76,
+   "text": "kill you over and over again"
+  },
+  {
+   "t": 333.04,
+   "d": 1.52,
+   "text": "and then you'd eventually get revenge"
+  },
+  {
+   "t": 334.56,
+   "d": 1.76,
+   "text": "and that was like 30 years after the"
+  },
+  {
+   "t": 336.32,
+   "d": 0.72,
+   "text": "fact"
+  },
+  {
+   "t": 337.04,
+   "d": 1.28,
+   "text": "there hasn't really been anything like"
+  },
+  {
+   "t": 338.32,
+   "d": 3.12,
+   "text": "that like that for bones files"
+  },
+  {
+   "t": 341.44,
+   "d": 3.2,
+   "text": "so this one is moria and warrior"
+  },
+  {
+   "t": 344.64,
+   "d": 2.24,
+   "text": "their what their way of persisting"
+  },
+  {
+   "t": 346.88,
+   "d": 2.4,
+   "text": "through through character deaths was"
+  },
+  {
+   "t": 349.28,
+   "d": 1.52,
+   "text": "through the monster memory and that was"
+  },
+  {
+   "t": 350.8,
+   "d": 1.68,
+   "text": "our favorite part of moria"
+  },
+  {
+   "t": 352.48,
+   "d": 2.08,
+   "text": "it would tell you like if you were hit"
+  },
+  {
+   "t": 354.56,
+   "d": 1.76,
+   "text": "by a creature it would tell you"
+  },
+  {
+   "t": 356.32,
+   "d": 1.52,
+   "text": "the monster memory would tell you later"
+  },
+  {
+   "t": 357.84,
+   "d": 1.44,
+   "text": "when you when you looked it up on your"
+  },
+  {
+   "t": 359.28,
+   "d": 0.8,
+   "text": "next game"
+  },
+  {
+   "t": 360.08,
+   "d": 1.68,
+   "text": "how much it could hit for what special"
+  },
+  {
+   "t": 361.76,
+   "d": 2.4,
+   "text": "abilities they had"
+  },
+  {
+   "t": 364.16,
+   "d": 3.12,
+   "text": "and uh so for this"
+  },
+  {
+   "t": 367.28,
+   "d": 3.12,
+   "text": "it's like it inspired in us the the raw"
+  },
+  {
+   "t": 370.4,
+   "d": 1.68,
+   "text": "files for dwarf fortress like all the"
+  },
+  {
+   "t": 372.08,
+   "d": 1.6,
+   "text": "statistics and stuff we put in text"
+  },
+  {
+   "t": 373.68,
+   "d": 0.64,
+   "text": "files"
+  },
+  {
+   "t": 374.32,
+   "d": 2.88,
+   "text": "that you can change but it's more like"
+  },
+  {
+   "t": 377.2,
+   "d": 1.28,
+   "text": "when we were playing maurya like"
+  },
+  {
+   "t": 378.48,
+   "d": 2.0,
+   "text": "exploring a strange planet or something"
+  },
+  {
+   "t": 380.48,
+   "d": 1.12,
+   "text": "like that"
+  },
+  {
+   "t": 381.6,
+   "d": 1.68,
+   "text": "finding all these different animals and"
+  },
+  {
+   "t": 383.28,
+   "d": 1.68,
+   "text": "it reminded us of starfly which is a"
+  },
+  {
+   "t": 384.96,
+   "d": 2.08,
+   "text": "contemporary game which is a big"
+  },
+  {
+   "t": 387.04,
+   "d": 2.0,
+   "text": "inspiration for dwarf fortress because"
+  },
+  {
+   "t": 389.04,
+   "d": 1.12,
+   "text": "you there's like"
+  },
+  {
+   "t": 390.16,
+   "d": 1.92,
+   "text": "800 planets and you could find all these"
+  },
+  {
+   "t": 392.08,
+   "d": 1.44,
+   "text": "animals with different attributes and"
+  },
+  {
+   "t": 393.52,
+   "d": 0.96,
+   "text": "stuff like that"
+  },
+  {
+   "t": 394.48,
+   "d": 1.44,
+   "text": "and that was another big inspiration"
+  },
+  {
+   "t": 395.92,
+   "d": 2.56,
+   "text": "along with moria"
+  },
+  {
+   "t": 398.48,
+   "d": 1.52,
+   "text": "now this is lauren i haven't heard a lot"
+  },
+  {
+   "t": 400.0,
+   "d": 1.68,
+   "text": "of people talk about lauren it came out"
+  },
+  {
+   "t": 401.68,
+   "d": 2.96,
+   "text": "uh i think when i was nine years old and"
+  },
+  {
+   "t": 404.64,
+   "d": 0.64,
+   "text": "it was"
+  },
+  {
+   "t": 405.28,
+   "d": 1.52,
+   "text": "like the other roguelikes but you could"
+  },
+  {
+   "t": 406.8,
+   "d": 2.16,
+   "text": "it was relatively easy to become a god"
+  },
+  {
+   "t": 408.96,
+   "d": 2.48,
+   "text": "you could at the highest levels like at"
+  },
+  {
+   "t": 411.44,
+   "d": 1.92,
+   "text": "this it says evil master you become like"
+  },
+  {
+   "t": 413.36,
+   "d": 0.4,
+   "text": "a"
+  },
+  {
+   "t": 413.76,
+   "d": 1.92,
+   "text": "god of earth and then a good master and"
+  },
+  {
+   "t": 415.68,
+   "d": 1.52,
+   "text": "then an evil master"
+  },
+  {
+   "t": 417.2,
+   "d": 1.36,
+   "text": "and it would like let you to walk"
+  },
+  {
+   "t": 418.56,
+   "d": 1.84,
+   "text": "through walls and cast the sphere of"
+  },
+  {
+   "t": 420.4,
+   "d": 2.0,
+   "text": "annihilation and destroy all the demons"
+  },
+  {
+   "t": 422.4,
+   "d": 3.36,
+   "text": "and it wasn't until after that that the"
+  },
+  {
+   "t": 425.76,
+   "d": 2.96,
+   "text": "roguelike ragnarok came out and ragnarok"
+  },
+  {
+   "t": 428.72,
+   "d": 1.6,
+   "text": "it was like the the last levels of"
+  },
+  {
+   "t": 430.32,
+   "d": 1.76,
+   "text": "ragnarok you would be able to transform"
+  },
+  {
+   "t": 432.08,
+   "d": 1.6,
+   "text": "a dandy creature cast the highest level"
+  },
+  {
+   "t": 433.68,
+   "d": 0.72,
+   "text": "spells"
+  },
+  {
+   "t": 434.4,
+   "d": 1.44,
+   "text": "and fight with the gods at the end of"
+  },
+  {
+   "t": 435.84,
+   "d": 2.08,
+   "text": "time on the riverbride frost and"
+  },
+  {
+   "t": 437.92,
+   "d": 2.32,
+   "text": "so this is an inspiration for us because"
+  },
+  {
+   "t": 440.24,
+   "d": 1.52,
+   "text": "this is what we want this is the future"
+  },
+  {
+   "t": 441.76,
+   "d": 1.52,
+   "text": "of drawer fortress we want"
+  },
+  {
+   "t": 443.28,
+   "d": 1.76,
+   "text": "the to be able to change things at the"
+  },
+  {
+   "t": 445.04,
+   "d": 1.44,
+   "text": "highest level and be"
+  },
+  {
+   "t": 446.48,
+   "d": 1.52,
+   "text": "equal to the gods it's something that we"
+  },
+  {
+   "t": 448.0,
+   "d": 1.84,
+   "text": "never did when we were playing dungeons"
+  },
+  {
+   "t": 449.84,
+   "d": 0.8,
+   "text": "and dragons"
+  },
+  {
+   "t": 450.64,
+   "d": 1.68,
+   "text": "we never got past the first couple"
+  },
+  {
+   "t": 452.32,
+   "d": 1.2,
+   "text": "levels because we when we played"
+  },
+  {
+   "t": 453.52,
+   "d": 1.6,
+   "text": "dungeons and dragons with each other"
+  },
+  {
+   "t": 455.12,
+   "d": 2.4,
+   "text": "it was like playing rogue it was like"
+  },
+  {
+   "t": 457.52,
+   "d": 2.08,
+   "text": "you die on level two every time"
+  },
+  {
+   "t": 459.6,
+   "d": 1.44,
+   "text": "so we always wanted to do this so"
+  },
+  {
+   "t": 461.04,
+   "d": 1.84,
+   "text": "eventually this is where we're gonna go"
+  },
+  {
+   "t": 462.88,
+   "d": 1.2,
+   "text": "so i'm going to give it over to taran"
+  },
+  {
+   "t": 464.08,
+   "d": 0.96,
+   "text": "he's going to talk about"
+  },
+  {
+   "t": 465.04,
+   "d": 3.68,
+   "text": "how this came into being"
+  },
+  {
+   "t": 469.44,
+   "d": 4.8,
+   "text": "yeah so um yep okay so"
+  },
+  {
+   "t": 474.24,
+   "d": 3.28,
+   "text": "uh we've been uh let's see i'll just"
+  },
+  {
+   "t": 477.52,
+   "d": 0.48,
+   "text": "stand here"
+  },
+  {
+   "t": 478.0,
+   "d": 2.08,
+   "text": "seems safer right so we've been we've"
+  },
+  {
+   "t": 480.08,
+   "d": 1.28,
+   "text": "been writing uh"
+  },
+  {
+   "t": 481.36,
+   "d": 1.6,
+   "text": "games as long as we've been playing them"
+  },
+  {
+   "t": 482.96,
+   "d": 2.0,
+   "text": "i don't remember a time i couldn't"
+  },
+  {
+   "t": 484.96,
+   "d": 2.16,
+   "text": "program basic i learned to read at the"
+  },
+  {
+   "t": 487.12,
+   "d": 1.36,
+   "text": "same time"
+  },
+  {
+   "t": 488.48,
+   "d": 1.44,
+   "text": "my father was really serious about"
+  },
+  {
+   "t": 489.92,
+   "d": 2.16,
+   "text": "computer education but"
+  },
+  {
+   "t": 492.08,
+   "d": 2.64,
+   "text": "he he regrets now getting us into it"
+  },
+  {
+   "t": 494.72,
+   "d": 1.44,
+   "text": "using games it was probably the right"
+  },
+  {
+   "t": 496.16,
+   "d": 1.92,
+   "text": "approach but now we make games and we"
+  },
+  {
+   "t": 498.08,
+   "d": 1.76,
+   "text": "don't"
+  },
+  {
+   "t": 499.84,
+   "d": 1.6,
+   "text": "really do anything else with it but this"
+  },
+  {
+   "t": 501.44,
+   "d": 1.68,
+   "text": "is uh we wrote this in"
+  },
+  {
+   "t": 503.12,
+   "d": 2.8,
+   "text": "in basic this was in elementary school"
+  },
+  {
+   "t": 505.92,
+   "d": 0.56,
+   "text": "this is the"
+  },
+  {
+   "t": 506.48,
+   "d": 1.84,
+   "text": "the oldest screenshot we could find of a"
+  },
+  {
+   "t": 508.32,
+   "d": 1.76,
+   "text": "surviving game this is drag slay the"
+  },
+  {
+   "t": 510.08,
+   "d": 1.12,
+   "text": "basic version"
+  },
+  {
+   "t": 511.2,
+   "d": 1.76,
+   "text": "it's basically just text that scrolls"
+  },
+  {
+   "t": 512.96,
+   "d": 1.28,
+   "text": "down the screen"
+  },
+  {
+   "t": 514.24,
+   "d": 1.76,
+   "text": "um and you're fighting monsters and so"
+  },
+  {
+   "t": 516.0,
+   "d": 1.6,
+   "text": "forth and at this time we were playing"
+  },
+  {
+   "t": 517.6,
+   "d": 1.6,
+   "text": "games like rogue and"
+  },
+  {
+   "t": 519.2,
+   "d": 3.28,
+   "text": "hack but we didn't have a clue how to"
+  },
+  {
+   "t": 522.48,
+   "d": 2.48,
+   "text": "actually do a pathfinding algorithm or"
+  },
+  {
+   "t": 524.96,
+   "d": 2.0,
+   "text": "vision algorithm it was very hard"
+  },
+  {
+   "t": 526.96,
+   "d": 2.96,
+   "text": "you know especially before the internet"
+  },
+  {
+   "t": 529.92,
+   "d": 1.92,
+   "text": "was just accessible at your fingertips"
+  },
+  {
+   "t": 531.84,
+   "d": 1.2,
+   "text": "and we wouldn't know to search for"
+  },
+  {
+   "t": 533.04,
+   "d": 0.96,
+   "text": "pathfinding anyway"
+  },
+  {
+   "t": 534.0,
+   "d": 2.4,
+   "text": "right we were little kids and uh so we"
+  },
+  {
+   "t": 536.4,
+   "d": 1.6,
+   "text": "ended up making a lot of games"
+  },
+  {
+   "t": 538.0,
+   "d": 2.16,
+   "text": "uh you can hardly see these things this"
+  },
+  {
+   "t": 540.16,
+   "d": 2.08,
+   "text": "is a strategy wizard based game you"
+  },
+  {
+   "t": 542.24,
+   "d": 0.8,
+   "text": "choose your"
+  },
+  {
+   "t": 543.04,
+   "d": 1.6,
+   "text": "your goal in the beginning of the game"
+  },
+  {
+   "t": 544.64,
+   "d": 1.68,
+   "text": "like bathing the world in flame or just"
+  },
+  {
+   "t": 546.32,
+   "d": 1.84,
+   "text": "protecting people or whatever"
+  },
+  {
+   "t": 548.16,
+   "d": 2.72,
+   "text": "uh we have this this planetary"
+  },
+  {
+   "t": 550.88,
+   "d": 0.96,
+   "text": "exploration"
+  },
+  {
+   "t": 551.84,
+   "d": 3.6,
+   "text": "game uh we had arcade games this is a"
+  },
+  {
+   "t": 555.44,
+   "d": 2.72,
+   "text": "a pixel based arcade game all randomly"
+  },
+  {
+   "t": 558.16,
+   "d": 1.68,
+   "text": "generated wiring and everything we wrote"
+  },
+  {
+   "t": 559.84,
+   "d": 0.48,
+   "text": "this"
+  },
+  {
+   "t": 560.32,
+   "d": 3.36,
+   "text": "around 96. pixel pieces blow off the"
+  },
+  {
+   "t": 563.68,
+   "d": 1.36,
+   "text": "textures and everything this is right"
+  },
+  {
+   "t": 565.04,
+   "d": 1.04,
+   "text": "when"
+  },
+  {
+   "t": 566.08,
+   "d": 1.6,
+   "text": "3d textures became popular you can"
+  },
+  {
+   "t": 567.68,
+   "d": 1.36,
+   "text": "actually learn in a book how to do them"
+  },
+  {
+   "t": 569.04,
+   "d": 2.56,
+   "text": "we made little 2d texture games"
+  },
+  {
+   "t": 571.6,
+   "d": 2.64,
+   "text": "but we never made a roguelike but that's"
+  },
+  {
+   "t": 574.24,
+   "d": 2.16,
+   "text": "not to say that"
+  },
+  {
+   "t": 576.4,
+   "d": 3.6,
+   "text": "the roguelike games didn't inspire a lot"
+  },
+  {
+   "t": 580.0,
+   "d": 1.76,
+   "text": "of what we were doing even back then"
+  },
+  {
+   "t": 581.76,
+   "d": 1.76,
+   "text": "it's hard to read the darker text but"
+  },
+  {
+   "t": 583.52,
+   "d": 1.36,
+   "text": "this is a score"
+  },
+  {
+   "t": 584.88,
+   "d": 2.16,
+   "text": "a score list from the c version of drag"
+  },
+  {
+   "t": 587.04,
+   "d": 1.2,
+   "text": "slay this is from"
+  },
+  {
+   "t": 588.24,
+   "d": 3.2,
+   "text": "93 to 97 say when we were in high school"
+  },
+  {
+   "t": 591.44,
+   "d": 3.36,
+   "text": "and all of our roguelike inspirations"
+  },
+  {
+   "t": 594.8,
+   "d": 1.28,
+   "text": "that we could do"
+  },
+  {
+   "t": 596.08,
+   "d": 1.52,
+   "text": "not pathfinding or anything like that"
+  },
+  {
+   "t": 597.6,
+   "d": 2.32,
+   "text": "but persistence find itself"
+  },
+  {
+   "t": 599.92,
+   "d": 2.16,
+   "text": "here you can see at the top that you"
+  },
+  {
+   "t": 602.08,
+   "d": 1.44,
+   "text": "were killed by a skilled"
+  },
+  {
+   "t": 603.52,
+   "d": 1.76,
+   "text": "bug baron down below you were killed by"
+  },
+  {
+   "t": 605.28,
+   "d": 1.92,
+   "text": "novice creatures and so forth you could"
+  },
+  {
+   "t": 607.2,
+   "d": 1.44,
+   "text": "get negative points if you committed"
+  },
+  {
+   "t": 608.64,
+   "d": 1.6,
+   "text": "crimes but uh"
+  },
+  {
+   "t": 610.24,
+   "d": 2.48,
+   "text": "basically um just the same kind of"
+  },
+  {
+   "t": 612.72,
+   "d": 1.6,
+   "text": "scrolling fighting"
+  },
+  {
+   "t": 614.32,
+   "d": 3.04,
+   "text": "game but it saved all of those creatures"
+  },
+  {
+   "t": 617.36,
+   "d": 1.76,
+   "text": "if one of them killed you it could yell"
+  },
+  {
+   "t": 619.12,
+   "d": 1.52,
+   "text": "your name back at you just like in dwarf"
+  },
+  {
+   "t": 620.64,
+   "d": 1.36,
+   "text": "fortress"
+  },
+  {
+   "t": 622.0,
+   "d": 2.64,
+   "text": "and they had persistent again the"
+  },
+  {
+   "t": 624.64,
+   "d": 0.64,
+   "text": "horrible"
+  },
+  {
+   "t": 625.28,
+   "d": 2.32,
+   "text": "horrible shot here but that's that's the"
+  },
+  {
+   "t": 627.6,
+   "d": 1.52,
+   "text": "debug readout for a"
+  },
+  {
+   "t": 629.12,
+   "d": 2.4,
+   "text": "persistent tribe in this game this this"
+  },
+  {
+   "t": 631.52,
+   "d": 2.72,
+   "text": "is some kind of giant tadpole creatures"
+  },
+  {
+   "t": 634.24,
+   "d": 2.24,
+   "text": "uh and there were 67 of them in the"
+  },
+  {
+   "t": 636.48,
+   "d": 0.96,
+   "text": "tribe the"
+  },
+  {
+   "t": 637.44,
+   "d": 2.48,
+   "text": "the the levels are listed there they"
+  },
+  {
+   "t": 639.92,
+   "d": 1.92,
+   "text": "created items after you lose the game it"
+  },
+  {
+   "t": 641.84,
+   "d": 0.4,
+   "text": "would"
+  },
+  {
+   "t": 642.24,
+   "d": 1.6,
+   "text": "dump all this information about them you"
+  },
+  {
+   "t": 643.84,
+   "d": 1.04,
+   "text": "can read the part at the bottom where"
+  },
+  {
+   "t": 644.88,
+   "d": 1.76,
+   "text": "the tribe splinters into"
+  },
+  {
+   "t": 646.64,
+   "d": 3.2,
+   "text": "an additional um uh"
+  },
+  {
+   "t": 649.84,
+   "d": 3.68,
+   "text": "who's what's it and uh"
+  },
+  {
+   "t": 653.52,
+   "d": 3.44,
+   "text": "and the the uh the the uh so so we we"
+  },
+  {
+   "t": 656.96,
+   "d": 1.44,
+   "text": "had a lot of this information"
+  },
+  {
+   "t": 658.4,
+   "d": 2.48,
+   "text": "and they they remembered certain things"
+  },
+  {
+   "t": 660.88,
+   "d": 0.8,
+   "text": "but we didn't"
+  },
+  {
+   "t": 661.68,
+   "d": 1.6,
+   "text": "think of it and we kind of thought of it"
+  },
+  {
+   "t": 663.28,
+   "d": 1.52,
+   "text": "how we thought about bones levels"
+  },
+  {
+   "t": 664.8,
+   "d": 0.32,
+   "text": "because"
+  },
+  {
+   "t": 665.12,
+   "d": 1.44,
+   "text": "like like zach said the most important"
+  },
+  {
+   "t": 666.56,
+   "d": 1.6,
+   "text": "thing was what killed you and what it"
+  },
+  {
+   "t": 668.16,
+   "d": 1.28,
+   "text": "was called not really"
+  },
+  {
+   "t": 669.44,
+   "d": 1.36,
+   "text": "the layout of the level we didn't think"
+  },
+  {
+   "t": 670.8,
+   "d": 2.8,
+   "text": "about that too much"
+  },
+  {
+   "t": 673.76,
+   "d": 3.2,
+   "text": "but as we went on all of our kind of"
+  },
+  {
+   "t": 676.96,
+   "d": 2.24,
+   "text": "game inspirations starflight ultima"
+  },
+  {
+   "t": 679.2,
+   "d": 2.72,
+   "text": "gelled with these roguelike inspirations"
+  },
+  {
+   "t": 681.92,
+   "d": 1.04,
+   "text": "and we started doing"
+  },
+  {
+   "t": 682.96,
+   "d": 2.24,
+   "text": "thinking about persistent worlds uh you"
+  },
+  {
+   "t": 685.2,
+   "d": 1.84,
+   "text": "know so we have this game"
+  },
+  {
+   "t": 687.04,
+   "d": 2.48,
+   "text": "uh such as it is the the the we we were"
+  },
+  {
+   "t": 689.52,
+   "d": 1.28,
+   "text": "also kind of um"
+  },
+  {
+   "t": 690.8,
+   "d": 2.16,
+   "text": "still young and struggling with uh kind"
+  },
+  {
+   "t": 692.96,
+   "d": 2.48,
+   "text": "of what's the we had so many"
+  },
+  {
+   "t": 695.44,
+   "d": 2.16,
+   "text": "dead projects in our graveyard hundreds"
+  },
+  {
+   "t": 697.6,
+   "d": 1.92,
+   "text": "of dead projects and never we released"
+  },
+  {
+   "t": 699.52,
+   "d": 1.12,
+   "text": "maybe one game"
+  },
+  {
+   "t": 700.64,
+   "d": 3.2,
+   "text": "uh and before this time"
+  },
+  {
+   "t": 703.84,
+   "d": 1.84,
+   "text": "and so we had this horrible philosophy"
+  },
+  {
+   "t": 705.68,
+   "d": 1.84,
+   "text": "that would need to be built from the"
+  },
+  {
+   "t": 707.52,
+   "d": 1.28,
+   "text": "bottom up i mean there's something to be"
+  },
+  {
+   "t": 708.8,
+   "d": 1.36,
+   "text": "said for starting"
+  },
+  {
+   "t": 710.16,
+   "d": 1.92,
+   "text": "with your basic structures and kind of"
+  },
+  {
+   "t": 712.08,
+   "d": 2.32,
+   "text": "finding the gameplay from there"
+  },
+  {
+   "t": 714.4,
+   "d": 2.56,
+   "text": "but we had such a large idea of what"
+  },
+  {
+   "t": 716.96,
+   "d": 1.36,
+   "text": "that game would be"
+  },
+  {
+   "t": 718.32,
+   "d": 1.76,
+   "text": "that all we did was just build basic"
+  },
+  {
+   "t": 720.08,
+   "d": 1.92,
+   "text": "data structures and uh"
+  },
+  {
+   "t": 722.0,
+   "d": 1.84,
+   "text": "this game knew all of the tissues in"
+  },
+  {
+   "t": 723.84,
+   "d": 2.24,
+   "text": "your body and knew how curly the hair on"
+  },
+  {
+   "t": 726.08,
+   "d": 1.28,
+   "text": "your arm was"
+  },
+  {
+   "t": 727.36,
+   "d": 2.96,
+   "text": "you could set any set of stance points"
+  },
+  {
+   "t": 730.32,
+   "d": 1.04,
+   "text": "your feet and your hands and would"
+  },
+  {
+   "t": 731.36,
+   "d": 1.12,
+   "text": "procedurally generate"
+  },
+  {
+   "t": 732.48,
+   "d": 3.28,
+   "text": "animations for them terrible animations"
+  },
+  {
+   "t": 735.76,
+   "d": 0.64,
+   "text": "here's"
+  },
+  {
+   "t": 736.4,
+   "d": 1.84,
+   "text": "here's a cat person standing on their"
+  },
+  {
+   "t": 738.24,
+   "d": 1.68,
+   "text": "hands and there's their tail sticking up"
+  },
+  {
+   "t": 739.92,
+   "d": 0.48,
+   "text": "there"
+  },
+  {
+   "t": 740.4,
+   "d": 1.36,
+   "text": "and you could just walk around on your"
+  },
+  {
+   "t": 741.76,
+   "d": 2.0,
+   "text": "hands and so forth it updated all the"
+  },
+  {
+   "t": 743.76,
+   "d": 1.44,
+   "text": "textures if you lost your eye it would"
+  },
+  {
+   "t": 745.2,
+   "d": 0.96,
+   "text": "be removed"
+  },
+  {
+   "t": 746.16,
+   "d": 1.76,
+   "text": "if the skin was stripped off one of your"
+  },
+  {
+   "t": 747.92,
+   "d": 1.52,
+   "text": "limbs with one of our horrible spells it"
+  },
+  {
+   "t": 749.44,
+   "d": 1.12,
+   "text": "would show little muscles and stuff"
+  },
+  {
+   "t": 750.56,
+   "d": 1.6,
+   "text": "underneath the disgusting game"
+  },
+  {
+   "t": 752.16,
+   "d": 3.92,
+   "text": "but uh it was it and it never became a"
+  },
+  {
+   "t": 756.08,
+   "d": 0.72,
+   "text": "game at all"
+  },
+  {
+   "t": 756.8,
+   "d": 2.24,
+   "text": "it was um we were still kind of"
+  },
+  {
+   "t": 759.04,
+   "d": 1.12,
+   "text": "struggling to find"
+  },
+  {
+   "t": 760.16,
+   "d": 3.36,
+   "text": "uh sort of um the right way to to make"
+  },
+  {
+   "t": 763.52,
+   "d": 2.48,
+   "text": "games uh and we had a lot of side"
+  },
+  {
+   "t": 766.0,
+   "d": 1.84,
+   "text": "projects at that time on the website i"
+  },
+  {
+   "t": 767.84,
+   "d": 1.52,
+   "text": "may have heard of world war one medic or"
+  },
+  {
+   "t": 769.36,
+   "d": 2.0,
+   "text": "liberal crime squad those are on our web"
+  },
+  {
+   "t": 771.36,
+   "d": 2.4,
+   "text": "page and we also started working on"
+  },
+  {
+   "t": 773.76,
+   "d": 1.6,
+   "text": "this game called mutant minor finally"
+  },
+  {
+   "t": 775.36,
+   "d": 2.4,
+   "text": "found a screenshot of it and"
+  },
+  {
+   "t": 777.76,
+   "d": 2.32,
+   "text": "this one was going to be just another"
+  },
+  {
+   "t": 780.08,
+   "d": 1.2,
+   "text": "side project"
+  },
+  {
+   "t": 781.28,
+   "d": 2.24,
+   "text": "where you dig down into this kind of dig"
+  },
+  {
+   "t": 783.52,
+   "d": 1.92,
+   "text": "dug style level down"
+  },
+  {
+   "t": 785.44,
+   "d": 2.4,
+   "text": "and it's it's ascii graphics you find"
+  },
+  {
+   "t": 787.84,
+   "d": 1.28,
+   "text": "little creatures down there you also"
+  },
+  {
+   "t": 789.12,
+   "d": 1.36,
+   "text": "find"
+  },
+  {
+   "t": 790.48,
+   "d": 2.96,
+   "text": "minerals to bring back and you find vats"
+  },
+  {
+   "t": 793.44,
+   "d": 0.32,
+   "text": "of"
+  },
+  {
+   "t": 793.76,
+   "d": 1.92,
+   "text": "teenage mutant ninja turtle mutagen to"
+  },
+  {
+   "t": 795.68,
+   "d": 1.52,
+   "text": "bathe yourself in"
+  },
+  {
+   "t": 797.2,
+   "d": 2.4,
+   "text": "to grow extra arms and so forth to help"
+  },
+  {
+   "t": 799.6,
+   "d": 1.2,
+   "text": "you out in your"
+  },
+  {
+   "t": 800.8,
+   "d": 2.8,
+   "text": "endeavor and as usual the thing was not"
+  },
+  {
+   "t": 803.6,
+   "d": 1.36,
+   "text": "scoped very well so we're like well you"
+  },
+  {
+   "t": 804.96,
+   "d": 1.76,
+   "text": "need multiple miners and so forth and it"
+  },
+  {
+   "t": 806.72,
+   "d": 1.44,
+   "text": "became this horrible turn but i don't"
+  },
+  {
+   "t": 808.16,
+   "d": 1.36,
+   "text": "know if you ever played the gold box"
+  },
+  {
+   "t": 809.52,
+   "d": 2.08,
+   "text": "games with these interminable 50"
+  },
+  {
+   "t": 811.6,
+   "d": 2.24,
+   "text": "person orc fights and so forth it became"
+  },
+  {
+   "t": 813.84,
+   "d": 1.12,
+   "text": "like a version of that where you weren't"
+  },
+  {
+   "t": 814.96,
+   "d": 1.52,
+   "text": "even fighting anything most of the time"
+  },
+  {
+   "t": 816.48,
+   "d": 1.28,
+   "text": "so you're just like click click click"
+  },
+  {
+   "t": 817.76,
+   "d": 1.12,
+   "text": "click we didn't think about the"
+  },
+  {
+   "t": 818.88,
+   "d": 0.88,
+   "text": "interface at all"
+  },
+  {
+   "t": 819.76,
+   "d": 1.92,
+   "text": "and so we had a little sit down and"
+  },
+  {
+   "t": 821.68,
+   "d": 1.76,
+   "text": "talked about it for a few days"
+  },
+  {
+   "t": 823.44,
+   "d": 2.0,
+   "text": "i remember these kind of four hour phone"
+  },
+  {
+   "t": 825.44,
+   "d": 1.28,
+   "text": "calls zach and i would have"
+  },
+  {
+   "t": 826.72,
+   "d": 2.4,
+   "text": "trying to to piece together what"
+  },
+  {
+   "t": 829.12,
+   "d": 1.52,
+   "text": "eventually became"
+  },
+  {
+   "t": 830.64,
+   "d": 3.28,
+   "text": "uh dwarf fortress uh we had this"
+  },
+  {
+   "t": 833.92,
+   "d": 2.48,
+   "text": "idea for a side project now where we"
+  },
+  {
+   "t": 836.4,
+   "d": 1.76,
+   "text": "made it real time so to completely"
+  },
+  {
+   "t": 838.16,
+   "d": 1.44,
+   "text": "alleviate all of these problems we were"
+  },
+  {
+   "t": 839.6,
+   "d": 1.84,
+   "text": "having with the mining colony"
+  },
+  {
+   "t": 841.44,
+   "d": 2.16,
+   "text": "uh and uh switched over to a fantasy"
+  },
+  {
+   "t": 843.6,
+   "d": 1.84,
+   "text": "game just felt comfortable who minds"
+  },
+  {
+   "t": 845.44,
+   "d": 1.68,
+   "text": "dwarves mine who minds in the little"
+  },
+  {
+   "t": 847.12,
+   "d": 1.52,
+   "text": "colony dwarves do that and they get"
+  },
+  {
+   "t": 848.64,
+   "d": 1.12,
+   "text": "treasures and stuff"
+  },
+  {
+   "t": 849.76,
+   "d": 2.48,
+   "text": "so and we're also of course totally into"
+  },
+  {
+   "t": 852.24,
+   "d": 1.6,
+   "text": "our whole armok idea and"
+  },
+  {
+   "t": 853.84,
+   "d": 2.88,
+   "text": "persistence all these kind of roguelike"
+  },
+  {
+   "t": 856.72,
+   "d": 1.36,
+   "text": "bones file ideas so"
+  },
+  {
+   "t": 858.08,
+   "d": 2.16,
+   "text": "you make a fort you lose the ford it"
+  },
+  {
+   "t": 860.24,
+   "d": 2.0,
+   "text": "gets saved you play a roguelike game in"
+  },
+  {
+   "t": 862.24,
+   "d": 1.44,
+   "text": "the ruin"
+  },
+  {
+   "t": 863.68,
+   "d": 2.72,
+   "text": "the fort establishes a maximum score the"
+  },
+  {
+   "t": 866.4,
+   "d": 2.64,
+   "text": "roguelike game you kind of fill up the"
+  },
+  {
+   "t": 869.04,
+   "d": 1.76,
+   "text": "gas tank to get a final score when you"
+  },
+  {
+   "t": 870.8,
+   "d": 2.32,
+   "text": "get tired of it you restart the game"
+  },
+  {
+   "t": 873.12,
+   "d": 1.84,
+   "text": "it's a simple loop but it was it was"
+  },
+  {
+   "t": 874.96,
+   "d": 1.44,
+   "text": "going to be an interesting two-month"
+  },
+  {
+   "t": 876.4,
+   "d": 1.12,
+   "text": "project"
+  },
+  {
+   "t": 877.52,
+   "d": 3.76,
+   "text": "that and it turned out that when you're"
+  },
+  {
+   "t": 881.28,
+   "d": 1.6,
+   "text": "programming an ascii"
+  },
+  {
+   "t": 882.88,
+   "d": 1.52,
+   "text": "with text graphics and you're not"
+  },
+  {
+   "t": 884.4,
+   "d": 1.76,
+   "text": "working on a 3d game"
+  },
+  {
+   "t": 886.16,
+   "d": 2.56,
+   "text": "all of your ideas get done so much more"
+  },
+  {
+   "t": 888.72,
+   "d": 0.64,
+   "text": "quickly"
+  },
+  {
+   "t": 889.36,
+   "d": 1.36,
+   "text": "and dwarf fortress just steals"
+  },
+  {
+   "t": 890.72,
+   "d": 2.08,
+   "text": "everything from armok and becomes"
+  },
+  {
+   "t": 892.8,
+   "d": 1.6,
+   "text": "our persistent world game right so"
+  },
+  {
+   "t": 894.4,
+   "d": 1.84,
+   "text": "here's the"
+  },
+  {
+   "t": 896.24,
+   "d": 2.8,
+   "text": "basic schematic of how dwarf fortress"
+  },
+  {
+   "t": 899.04,
+   "d": 2.16,
+   "text": "works you generate a world"
+  },
+  {
+   "t": 901.2,
+   "d": 1.92,
+   "text": "there it is uh the world can run by"
+  },
+  {
+   "t": 903.12,
+   "d": 1.36,
+   "text": "itself uh"
+  },
+  {
+   "t": 904.48,
+   "d": 2.48,
+   "text": "as of recently there's some ai stuff"
+  },
+  {
+   "t": 906.96,
+   "d": 1.12,
+   "text": "that goes on there"
+  },
+  {
+   "t": 908.08,
+   "d": 1.84,
+   "text": "you lose a fort it's like losing a net"
+  },
+  {
+   "t": 909.92,
+   "d": 1.6,
+   "text": "hack adventure they die"
+  },
+  {
+   "t": 911.52,
+   "d": 1.28,
+   "text": "get added to the world you play an"
+  },
+  {
+   "t": 912.8,
+   "d": 1.84,
+   "text": "adventure you lose it gets added to the"
+  },
+  {
+   "t": 914.64,
+   "d": 0.64,
+   "text": "world"
+  },
+  {
+   "t": 915.28,
+   "d": 1.84,
+   "text": "and i mean it's it's like one of these"
+  },
+  {
+   "t": 917.12,
+   "d": 1.6,
+   "text": "talks was speaking about i think was the"
+  },
+  {
+   "t": 918.72,
+   "d": 1.36,
+   "text": "rogue people speaking about kind of"
+  },
+  {
+   "t": 920.08,
+   "d": 2.0,
+   "text": "rehabilitating perma-death is not just a"
+  },
+  {
+   "t": 922.08,
+   "d": 0.8,
+   "text": "bad thing"
+  },
+  {
+   "t": 922.88,
+   "d": 1.68,
+   "text": "that's what our losing is fun motto"
+  },
+  {
+   "t": 924.56,
+   "d": 2.4,
+   "text": "comes from permadeath is the entire"
+  },
+  {
+   "t": 926.96,
+   "d": 1.52,
+   "text": "engine that runs the game"
+  },
+  {
+   "t": 928.48,
+   "d": 1.84,
+   "text": "uh and you can just start keep playing"
+  },
+  {
+   "t": 930.32,
+   "d": 1.68,
+   "text": "as long as something persists like we're"
+  },
+  {
+   "t": 932.0,
+   "d": 1.92,
+   "text": "obsessed with these score lists right"
+  },
+  {
+   "t": 933.92,
+   "d": 2.64,
+   "text": "as long as something persists it's not"
+  },
+  {
+   "t": 936.56,
+   "d": 0.64,
+   "text": "lost"
+  },
+  {
+   "t": 937.2,
+   "d": 2.8,
+   "text": "and you can continue playing in the"
+  },
+  {
+   "t": 940.0,
+   "d": 1.2,
+   "text": "world as long as you like i mean we"
+  },
+  {
+   "t": 941.2,
+   "d": 1.28,
+   "text": "haven't played up those interactions"
+  },
+  {
+   "t": 942.48,
+   "d": 1.04,
+   "text": "very much but"
+  },
+  {
+   "t": 943.52,
+   "d": 2.16,
+   "text": "we try our best even at some point we"
+  },
+  {
+   "t": 945.68,
+   "d": 1.76,
+   "text": "decided losing who cares uh"
+  },
+  {
+   "t": 947.44,
+   "d": 1.2,
+   "text": "you sometimes people get tired of the"
+  },
+  {
+   "t": 948.64,
+   "d": 1.04,
+   "text": "game sometimes people want to play a"
+  },
+  {
+   "t": 949.68,
+   "d": 0.88,
+   "text": "different part of the game just let them"
+  },
+  {
+   "t": 950.56,
+   "d": 1.04,
+   "text": "retire"
+  },
+  {
+   "t": 951.6,
+   "d": 1.44,
+   "text": "you could always retire your adventure"
+  },
+  {
+   "t": 953.04,
+   "d": 1.84,
+   "text": "it it's harder to retire of fort still"
+  },
+  {
+   "t": 954.88,
+   "d": 0.8,
+   "text": "buggy"
+  },
+  {
+   "t": 955.68,
+   "d": 2.88,
+   "text": "but you can just retire an adventurer"
+  },
+  {
+   "t": 958.56,
+   "d": 1.68,
+   "text": "start up a fort your adventure might"
+  },
+  {
+   "t": 960.24,
+   "d": 1.68,
+   "text": "come to visit it they're ai controlled"
+  },
+  {
+   "t": 961.92,
+   "d": 0.48,
+   "text": "now"
+  },
+  {
+   "t": 962.4,
+   "d": 1.52,
+   "text": "you retire the fort restart the"
+  },
+  {
+   "t": 963.92,
+   "d": 1.52,
+   "text": "adventure move to a different fort and"
+  },
+  {
+   "t": 965.44,
+   "d": 1.36,
+   "text": "retire that fort watch your adventure"
+  },
+  {
+   "t": 966.8,
+   "d": 1.52,
+   "text": "run around and meet your old adventurers"
+  },
+  {
+   "t": 968.32,
+   "d": 1.2,
+   "text": "and so forth"
+  },
+  {
+   "t": 969.52,
+   "d": 1.92,
+   "text": "you can just kind of assume roles for a"
+  },
+  {
+   "t": 971.44,
+   "d": 1.76,
+   "text": "while and then"
+  },
+  {
+   "t": 973.2,
+   "d": 2.0,
+   "text": "carry on from there and we have the"
+  },
+  {
+   "t": 975.2,
+   "d": 2.0,
+   "text": "legends mode down there"
+  },
+  {
+   "t": 977.2,
+   "d": 2.96,
+   "text": "which we'll talk about in a bit so"
+  },
+  {
+   "t": 980.16,
+   "d": 1.84,
+   "text": "here's just for people haven't seen it i"
+  },
+  {
+   "t": 982.0,
+   "d": 0.96,
+   "text": "thought i should"
+  },
+  {
+   "t": 982.96,
+   "d": 2.0,
+   "text": "you know this is not a graphical game it"
+  },
+  {
+   "t": 984.96,
+   "d": 1.68,
+   "text": "looks like this instead you guys are"
+  },
+  {
+   "t": 986.64,
+   "d": 3.12,
+   "text": "happy with that here but um"
+  },
+  {
+   "t": 989.76,
+   "d": 1.76,
+   "text": "this is what we've got right uh there's"
+  },
+  {
+   "t": 991.52,
+   "d": 1.76,
+   "text": "little dwarves little happy faces in the"
+  },
+  {
+   "t": 993.28,
+   "d": 0.72,
+   "text": "center"
+  },
+  {
+   "t": 994.0,
+   "d": 1.68,
+   "text": "we have some rooms up in the top left"
+  },
+  {
+   "t": 995.68,
+   "d": 1.6,
+   "text": "bedrooms there's a stone stockpile on"
+  },
+  {
+   "t": 997.28,
+   "d": 1.28,
+   "text": "the bottom left"
+  },
+  {
+   "t": 998.56,
+   "d": 1.84,
+   "text": "workshops at the bottom uh booze"
+  },
+  {
+   "t": 1000.4,
+   "d": 2.0,
+   "text": "stockpile up top and then"
+  },
+  {
+   "t": 1002.4,
+   "d": 1.6,
+   "text": "a hill dropping off to the right one of"
+  },
+  {
+   "t": 1004.0,
+   "d": 1.28,
+   "text": "the most confusing things about the game"
+  },
+  {
+   "t": 1005.28,
+   "d": 1.6,
+   "text": "now is that you can kind of see in these"
+  },
+  {
+   "t": 1006.88,
+   "d": 1.76,
+   "text": "cross sections"
+  },
+  {
+   "t": 1008.64,
+   "d": 1.52,
+   "text": "it's very difficult to play people have"
+  },
+  {
+   "t": 1010.16,
+   "d": 1.68,
+   "text": "made kind of isometric viewers to help"
+  },
+  {
+   "t": 1011.84,
+   "d": 1.36,
+   "text": "out a bit with that"
+  },
+  {
+   "t": 1013.2,
+   "d": 2.96,
+   "text": "uh but it's still kind of a mess uh"
+  },
+  {
+   "t": 1016.16,
+   "d": 1.68,
+   "text": "here's adventure mode"
+  },
+  {
+   "t": 1017.84,
+   "d": 2.0,
+   "text": "this is the traveling around part in"
+  },
+  {
+   "t": 1019.84,
+   "d": 1.52,
+   "text": "adventure mode at the you see the kind"
+  },
+  {
+   "t": 1021.36,
+   "d": 1.68,
+   "text": "of iconic at in the center that's where"
+  },
+  {
+   "t": 1023.04,
+   "d": 1.36,
+   "text": "you are and there's a river"
+  },
+  {
+   "t": 1024.4,
+   "d": 1.28,
+   "text": "there's a couple villages at the bottom"
+  },
+  {
+   "t": 1025.68,
+   "d": 1.52,
+   "text": "a little castle i mean a couple of"
+  },
+  {
+   "t": 1027.2,
+   "d": 1.2,
+   "text": "villages at the top and a"
+  },
+  {
+   "t": 1028.4,
+   "d": 3.04,
+   "text": "castle down at the bottom and it plays i"
+  },
+  {
+   "t": 1031.44,
+   "d": 1.36,
+   "text": "mean it's it's kind of aimless but it"
+  },
+  {
+   "t": 1032.8,
+   "d": 1.28,
+   "text": "plays more or less like a traditional"
+  },
+  {
+   "t": 1034.08,
+   "d": 2.64,
+   "text": "roguelike wandering around a giant world"
+  },
+  {
+   "t": 1036.72,
+   "d": 2.16,
+   "text": "finding things to do and we have the"
+  },
+  {
+   "t": 1038.88,
+   "d": 1.52,
+   "text": "legends mode which is"
+  },
+  {
+   "t": 1040.4,
+   "d": 2.56,
+   "text": "really just a set of events you can kind"
+  },
+  {
+   "t": 1042.96,
+   "d": 1.6,
+   "text": "of categorize and look for different"
+  },
+  {
+   "t": 1044.56,
+   "d": 0.96,
+   "text": "things but"
+  },
+  {
+   "t": 1045.52,
+   "d": 1.52,
+   "text": "uh really just says everything that's"
+  },
+  {
+   "t": 1047.04,
+   "d": 2.24,
+   "text": "happened and your own exploits just get"
+  },
+  {
+   "t": 1049.28,
+   "d": 1.44,
+   "text": "saved right into this and you can see"
+  },
+  {
+   "t": 1050.72,
+   "d": 2.96,
+   "text": "kind of where you fit in uh it's kind of"
+  },
+  {
+   "t": 1053.68,
+   "d": 1.52,
+   "text": "treated like a like a scoreless"
+  },
+  {
+   "t": 1055.2,
+   "d": 1.12,
+   "text": "ourselves and there's there's a lot of"
+  },
+  {
+   "t": 1056.32,
+   "d": 2.08,
+   "text": "analogs to roguelikes here"
+  },
+  {
+   "t": 1058.4,
+   "d": 2.48,
+   "text": "uh our world generation is is you know"
+  },
+  {
+   "t": 1060.88,
+   "d": 1.36,
+   "text": "we think of that as like a roguelike"
+  },
+  {
+   "t": 1062.24,
+   "d": 1.68,
+   "text": "generation we have uh"
+  },
+  {
+   "t": 1063.92,
+   "d": 1.2,
+   "text": "for us we just want to build a whole"
+  },
+  {
+   "t": 1065.12,
+   "d": 1.68,
+   "text": "world so we use elevation temperature"
+  },
+  {
+   "t": 1066.8,
+   "d": 0.88,
+   "text": "rainfall"
+  },
+  {
+   "t": 1067.68,
+   "d": 2.0,
+   "text": "drainage to put them together make a"
+  },
+  {
+   "t": 1069.68,
+   "d": 2.08,
+   "text": "biomap run a history on it"
+  },
+  {
+   "t": 1071.76,
+   "d": 1.44,
+   "text": "you get this kind of weird historical"
+  },
+  {
+   "t": 1073.2,
+   "d": 1.36,
+   "text": "map and the thing you can't see there is"
+  },
+  {
+   "t": 1074.56,
+   "d": 0.64,
+   "text": "just that"
+  },
+  {
+   "t": 1075.2,
+   "d": 2.56,
+   "text": "same map in ascii and you've probably"
+  },
+  {
+   "t": 1077.76,
+   "d": 1.12,
+   "text": "seen those drifting around the"
+  },
+  {
+   "t": 1078.88,
+   "d": 4.16,
+   "text": "the dwarf fortress ascii world maps"
+  },
+  {
+   "t": 1083.04,
+   "d": 2.0,
+   "text": "but the the analogs as we've been"
+  },
+  {
+   "t": 1085.04,
+   "d": 1.28,
+   "text": "talking about don't end there the world"
+  },
+  {
+   "t": 1086.32,
+   "d": 2.32,
+   "text": "might be like the bones level"
+  },
+  {
+   "t": 1088.64,
+   "d": 1.68,
+   "text": "but the legends we really do think it is"
+  },
+  {
+   "t": 1090.32,
+   "d": 1.36,
+   "text": "a high score list it doesn't"
+  },
+  {
+   "t": 1091.68,
+   "d": 2.48,
+   "text": "it doesn't operate in the same way where"
+  },
+  {
+   "t": 1094.16,
+   "d": 1.52,
+   "text": "you like maybe compete with each other"
+  },
+  {
+   "t": 1095.68,
+   "d": 1.12,
+   "text": "or whatever but"
+  },
+  {
+   "t": 1096.8,
+   "d": 3.28,
+   "text": "the the legends for us was more a"
+  },
+  {
+   "t": 1100.08,
+   "d": 3.36,
+   "text": "kind of um sort of memory we could share"
+  },
+  {
+   "t": 1103.44,
+   "d": 1.76,
+   "text": "with each other of our exploits"
+  },
+  {
+   "t": 1105.2,
+   "d": 1.84,
+   "text": "and uh or just to kind of have fun with"
+  },
+  {
+   "t": 1107.04,
+   "d": 2.48,
+   "text": "each other we have"
+  },
+  {
+   "t": 1109.52,
+   "d": 3.6,
+   "text": "in in these kind of hack games"
+  },
+  {
+   "t": 1113.12,
+   "d": 3.52,
+   "text": "when you die it it tells you"
+  },
+  {
+   "t": 1116.64,
+   "d": 2.88,
+   "text": "a sentence with a name in it usually"
+  },
+  {
+   "t": 1119.52,
+   "d": 2.08,
+   "text": "your name in a net hack and hack"
+  },
+  {
+   "t": 1121.6,
+   "d": 1.92,
+   "text": "you could name your creature that kills"
+  },
+  {
+   "t": 1123.52,
+   "d": 2.24,
+   "text": "you and"
+  },
+  {
+   "t": 1125.76,
+   "d": 2.24,
+   "text": "it would also be preserved on this list"
+  },
+  {
+   "t": 1128.0,
+   "d": 1.28,
+   "text": "and and that is"
+  },
+  {
+   "t": 1129.28,
+   "d": 2.16,
+   "text": "the seed of a dwarf fortress legend that"
+  },
+  {
+   "t": 1131.44,
+   "d": 1.2,
+   "text": "that sentence"
+  },
+  {
+   "t": 1132.64,
+   "d": 2.88,
+   "text": "that you see there with the date and uh"
+  },
+  {
+   "t": 1135.52,
+   "d": 1.44,
+   "text": "everything that that happened like that"
+  },
+  {
+   "t": 1136.96,
+   "d": 0.8,
+   "text": "it was really"
+  },
+  {
+   "t": 1137.76,
+   "d": 2.64,
+   "text": "kind of a beginning of this whole sort"
+  },
+  {
+   "t": 1140.4,
+   "d": 3.68,
+   "text": "of narrative experience for us"
+  },
+  {
+   "t": 1144.08,
+   "d": 3.6,
+   "text": "we have other"
+  },
+  {
+   "t": 1147.68,
+   "d": 2.96,
+   "text": "things that we got out of out of out of"
+  },
+  {
+   "t": 1150.64,
+   "d": 1.28,
+   "text": "roguelikes"
+  },
+  {
+   "t": 1151.92,
+   "d": 3.36,
+   "text": "to kind of build these narratives"
+  },
+  {
+   "t": 1155.28,
+   "d": 3.2,
+   "text": "are this this whole idea that every"
+  },
+  {
+   "t": 1158.48,
+   "d": 1.6,
+   "text": "creature in the game is playing by the"
+  },
+  {
+   "t": 1160.08,
+   "d": 3.2,
+   "text": "same rules here we have our"
+  },
+  {
+   "t": 1163.28,
+   "d": 2.24,
+   "text": "partial uh we picked the kestrel in the"
+  },
+  {
+   "t": 1165.52,
+   "d": 1.76,
+   "text": "ema of course but uh"
+  },
+  {
+   "t": 1167.28,
+   "d": 2.8,
+   "text": "such bad memories but the the uh the"
+  },
+  {
+   "t": 1170.08,
+   "d": 0.32,
+   "text": "they"
+  },
+  {
+   "t": 1170.4,
+   "d": 2.96,
+   "text": "they uh they are just like a dwarf or a"
+  },
+  {
+   "t": 1173.36,
+   "d": 1.12,
+   "text": "human will have a very similar"
+  },
+  {
+   "t": 1174.48,
+   "d": 1.28,
+   "text": "definition when you play"
+  },
+  {
+   "t": 1175.76,
+   "d": 1.52,
+   "text": "you're playing a creature file everyone"
+  },
+  {
+   "t": 1177.28,
+   "d": 1.12,
+   "text": "plays by the same rules there's this"
+  },
+  {
+   "t": 1178.4,
+   "d": 1.2,
+   "text": "whole idea of"
+  },
+  {
+   "t": 1179.6,
+   "d": 1.6,
+   "text": "varus similitude however you pronounce"
+  },
+  {
+   "t": 1181.2,
+   "d": 1.84,
+   "text": "that where even if it's not"
+  },
+  {
+   "t": 1183.04,
+   "d": 2.56,
+   "text": "earth things play by a consistent set of"
+  },
+  {
+   "t": 1185.6,
+   "d": 1.36,
+   "text": "rules that you can kind of"
+  },
+  {
+   "t": 1186.96,
+   "d": 3.44,
+   "text": "understand uh the um"
+  },
+  {
+   "t": 1190.4,
+   "d": 2.24,
+   "text": "like it's kind of like the the the talk"
+  },
+  {
+   "t": 1192.64,
+   "d": 0.96,
+   "text": "that was in this room"
+  },
+  {
+   "t": 1193.6,
+   "d": 3.44,
+   "text": "uh last about wit being able to kind of"
+  },
+  {
+   "t": 1197.04,
+   "d": 2.8,
+   "text": "see what's going to happen uh and that"
+  },
+  {
+   "t": 1199.84,
+   "d": 1.2,
+   "text": "helps you build a narrative and that's"
+  },
+  {
+   "t": 1201.04,
+   "d": 1.28,
+   "text": "kind of how we think about"
+  },
+  {
+   "t": 1202.32,
+   "d": 1.76,
+   "text": "uh roguelike games as sort of narrative"
+  },
+  {
+   "t": 1204.08,
+   "d": 1.28,
+   "text": "generators"
+  },
+  {
+   "t": 1205.36,
+   "d": 2.48,
+   "text": "and if it's all under the same umbrella"
+  },
+  {
+   "t": 1207.84,
+   "d": 1.12,
+   "text": "it's easier for those"
+  },
+  {
+   "t": 1208.96,
+   "d": 2.56,
+   "text": "those narratives to come alive we have"
+  },
+  {
+   "t": 1211.52,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 1212.4,
+   "d": 1.6,
+   "text": "other roguelike conventions i just"
+  },
+  {
+   "t": 1214.0,
+   "d": 1.76,
+   "text": "thought i'd throw up here"
+  },
+  {
+   "t": 1215.76,
+   "d": 1.6,
+   "text": "we use a lot of the same symbols this is"
+  },
+  {
+   "t": 1217.36,
+   "d": 2.32,
+   "text": "all just a just an homage to the uh"
+  },
+  {
+   "t": 1219.68,
+   "d": 1.84,
+   "text": "to the roguelikes that that start us off"
+  },
+  {
+   "t": 1221.52,
+   "d": 1.68,
+   "text": "we have our demons and dragons we even"
+  },
+  {
+   "t": 1223.2,
+   "d": 1.12,
+   "text": "have the"
+  },
+  {
+   "t": 1224.32,
+   "d": 1.44,
+   "text": "the epics version of rogue i mean we're"
+  },
+  {
+   "t": 1225.76,
+   "d": 1.04,
+   "text": "one of the few people to actually"
+  },
+  {
+   "t": 1226.8,
+   "d": 0.72,
+   "text": "purchase it"
+  },
+  {
+   "t": 1227.52,
+   "d": 3.28,
+   "text": "at the box store right uh uh our dwarf"
+  },
+  {
+   "t": 1230.8,
+   "d": 1.92,
+   "text": "carpenter looks exactly like the little"
+  },
+  {
+   "t": 1232.72,
+   "d": 1.6,
+   "text": "yellow happy face that was moving around"
+  },
+  {
+   "t": 1234.32,
+   "d": 1.28,
+   "text": "on the dos version of course we use all"
+  },
+  {
+   "t": 1235.6,
+   "d": 0.8,
+   "text": "the same lighting"
+  },
+  {
+   "t": 1236.4,
+   "d": 2.32,
+   "text": "kind of"
+  },
+  {
+   "t": 1240.08,
+   "d": 2.4,
+   "text": "methods and saving the map that you've"
+  },
+  {
+   "t": 1242.48,
+   "d": 2.24,
+   "text": "seen before"
+  },
+  {
+   "t": 1244.72,
+   "d": 2.4,
+   "text": "even even adom the the herbs you might"
+  },
+  {
+   "t": 1247.12,
+   "d": 1.36,
+   "text": "be able to see here the little quotes"
+  },
+  {
+   "t": 1248.48,
+   "d": 1.44,
+   "text": "you know that grow by the conway's"
+  },
+  {
+   "t": 1249.92,
+   "d": 1.84,
+   "text": "uh life rules you might you might be"
+  },
+  {
+   "t": 1251.76,
+   "d": 1.52,
+   "text": "familiar with from that game"
+  },
+  {
+   "t": 1253.28,
+   "d": 2.08,
+   "text": "the quote is such a perfect a perfect"
+  },
+  {
+   "t": 1255.36,
+   "d": 1.84,
+   "text": "symbol for this because you have"
+  },
+  {
+   "t": 1257.2,
+   "d": 1.52,
+   "text": "in dwarf fortress especially you have"
+  },
+  {
+   "t": 1258.72,
+   "d": 2.32,
+   "text": "these these periods and commas and"
+  },
+  {
+   "t": 1261.04,
+   "d": 2.0,
+   "text": "apostrophes making up kind of the grass"
+  },
+  {
+   "t": 1263.04,
+   "d": 1.76,
+   "text": "and you want to make it thicker and you"
+  },
+  {
+   "t": 1264.8,
+   "d": 2.0,
+   "text": "want to make it taller"
+  },
+  {
+   "t": 1266.8,
+   "d": 3.6,
+   "text": "and that's a quote right so it's"
+  },
+  {
+   "t": 1270.4,
+   "d": 3.12,
+   "text": "it was it was the perfect symbol for us"
+  },
+  {
+   "t": 1273.52,
+   "d": 3.44,
+   "text": "but also we took engravings this is a"
+  },
+  {
+   "t": 1276.96,
+   "d": 1.04,
+   "text": "hack thing"
+  },
+  {
+   "t": 1278.0,
+   "d": 3.44,
+   "text": "you probably know about for us"
+  },
+  {
+   "t": 1281.44,
+   "d": 2.32,
+   "text": "it was the first visual art that dwarves"
+  },
+  {
+   "t": 1283.76,
+   "d": 1.84,
+   "text": "could could do"
+  },
+  {
+   "t": 1285.6,
+   "d": 3.28,
+   "text": "and it's because it was in hack there's"
+  },
+  {
+   "t": 1288.88,
+   "d": 2.0,
+   "text": "of course the alberth engraving right"
+  },
+  {
+   "t": 1290.88,
+   "d": 1.04,
+   "text": "it's i guess it's mentioned in the"
+  },
+  {
+   "t": 1291.92,
+   "d": 1.28,
+   "text": "manual we always thought of it as"
+  },
+  {
+   "t": 1293.2,
+   "d": 0.96,
+   "text": "cheating"
+  },
+  {
+   "t": 1294.16,
+   "d": 2.08,
+   "text": "and so we never got very far in that"
+  },
+  {
+   "t": 1296.24,
+   "d": 0.96,
+   "text": "hack at all right"
+  },
+  {
+   "t": 1297.2,
+   "d": 1.68,
+   "text": "uh because it would it would protect you"
+  },
+  {
+   "t": 1298.88,
+   "d": 1.28,
+   "text": "but we always thought oh it's so out of"
+  },
+  {
+   "t": 1300.16,
+   "d": 1.36,
+   "text": "character you know why would a tourist"
+  },
+  {
+   "t": 1301.52,
+   "d": 1.44,
+   "text": "or a caveman who or whoever"
+  },
+  {
+   "t": 1302.96,
+   "d": 1.84,
+   "text": "you might be playing know this and so it"
+  },
+  {
+   "t": 1304.8,
+   "d": 2.4,
+   "text": "was disallowed no albert in our games"
+  },
+  {
+   "t": 1307.2,
+   "d": 2.56,
+   "text": "uh we had a number of strange rules uh"
+  },
+  {
+   "t": 1309.76,
+   "d": 1.84,
+   "text": "regarding engravings yeah if you had a"
+  },
+  {
+   "t": 1311.6,
+   "d": 1.28,
+   "text": "fire wand"
+  },
+  {
+   "t": 1312.88,
+   "d": 1.6,
+   "text": "right fire one's very useful right you"
+  },
+  {
+   "t": 1314.48,
+   "d": 2.36,
+   "text": "can you can you can kill things with it"
+  },
+  {
+   "t": 1316.84,
+   "d": 1.24,
+   "text": "especially"
+  },
+  {
+   "t": 1318.08,
+   "d": 1.76,
+   "text": "but if you if you knew how many charges"
+  },
+  {
+   "t": 1319.84,
+   "d": 1.28,
+   "text": "you were had and you're down to one"
+  },
+  {
+   "t": 1321.12,
+   "d": 1.36,
+   "text": "charge"
+  },
+  {
+   "t": 1322.48,
+   "d": 1.68,
+   "text": "you couldn't use it to save your life it"
+  },
+  {
+   "t": 1324.16,
+   "d": 1.44,
+   "text": "had to be used to"
+  },
+  {
+   "t": 1325.6,
+   "d": 3.04,
+   "text": "write something funny on the ground"
+  },
+  {
+   "t": 1328.64,
+   "d": 1.44,
+   "text": "like something permanent that the next"
+  },
+  {
+   "t": 1330.08,
+   "d": 1.28,
+   "text": "person could see when they played your"
+  },
+  {
+   "t": 1331.36,
+   "d": 0.72,
+   "text": "bones level"
+  },
+  {
+   "t": 1332.08,
+   "d": 2.8,
+   "text": "right uh it's just how we thought it is"
+  },
+  {
+   "t": 1334.88,
+   "d": 0.56,
+   "text": "we have"
+  },
+  {
+   "t": 1335.44,
+   "d": 2.08,
+   "text": "such a strange experience with these"
+  },
+  {
+   "t": 1337.52,
+   "d": 1.36,
+   "text": "games but uh"
+  },
+  {
+   "t": 1338.88,
+   "d": 3.04,
+   "text": "the uh it but but these little these"
+  },
+  {
+   "t": 1341.92,
+   "d": 1.76,
+   "text": "little interlocking mechanisms right"
+  },
+  {
+   "t": 1343.68,
+   "d": 0.96,
+   "text": "that's that's what make"
+  },
+  {
+   "t": 1344.64,
+   "d": 2.08,
+   "text": "that's what make narratives work for us"
+  },
+  {
+   "t": 1346.72,
+   "d": 2.0,
+   "text": "we've just we've just run with it"
+  },
+  {
+   "t": 1348.72,
+   "d": 3.44,
+   "text": "uh in in in in hack you might have a"
+  },
+  {
+   "t": 1352.16,
+   "d": 3.36,
+   "text": "a a wand bounce off a wall and polymorph"
+  },
+  {
+   "t": 1355.52,
+   "d": 1.44,
+   "text": "something and then you can quick read a"
+  },
+  {
+   "t": 1356.96,
+   "d": 1.6,
+   "text": "genocide scroll or whatever to catch it"
+  },
+  {
+   "t": 1358.56,
+   "d": 1.04,
+   "text": "right at that time"
+  },
+  {
+   "t": 1359.6,
+   "d": 1.44,
+   "text": "all this kind of all this kind of thing"
+  },
+  {
+   "t": 1361.04,
+   "d": 1.68,
+   "text": "and we've we have something similar this"
+  },
+  {
+   "t": 1362.72,
+   "d": 1.28,
+   "text": "was a uh"
+  },
+  {
+   "t": 1364.0,
+   "d": 2.96,
+   "text": "a recent bug report uh which was pretty"
+  },
+  {
+   "t": 1366.96,
+   "d": 0.64,
+   "text": "pretty"
+  },
+  {
+   "t": 1367.6,
+   "d": 2.0,
+   "text": "pretty complicated to figure out uh we"
+  },
+  {
+   "t": 1369.6,
+   "d": 2.16,
+   "text": "had the we just added tavern"
+  },
+  {
+   "t": 1371.76,
+   "d": 2.56,
+   "text": "uh taverns to the fortress mode with the"
+  },
+  {
+   "t": 1374.32,
+   "d": 1.2,
+   "text": "dwarves running around we suddenly get a"
+  },
+  {
+   "t": 1375.52,
+   "d": 0.72,
+   "text": "bug report"
+  },
+  {
+   "t": 1376.24,
+   "d": 1.68,
+   "text": "were there cats vomiting all over the"
+  },
+  {
+   "t": 1377.92,
+   "d": 1.36,
+   "text": "floor"
+  },
+  {
+   "t": 1379.28,
+   "d": 2.64,
+   "text": "and we're just like okay you know it's"
+  },
+  {
+   "t": 1381.92,
+   "d": 1.84,
+   "text": "detective time what what on earth is"
+  },
+  {
+   "t": 1383.76,
+   "d": 0.8,
+   "text": "going on"
+  },
+  {
+   "t": 1384.56,
+   "d": 1.84,
+   "text": "and the community helped us you know"
+  },
+  {
+   "t": 1386.4,
+   "d": 1.84,
+   "text": "figure this one out uh we have the"
+  },
+  {
+   "t": 1388.24,
+   "d": 2.0,
+   "text": "we have the dwarf they're serving the"
+  },
+  {
+   "t": 1390.24,
+   "d": 2.24,
+   "text": "beverage uh they retrieve the mug filled"
+  },
+  {
+   "t": 1392.48,
+   "d": 1.28,
+   "text": "with alcohol give it to the dwarf the"
+  },
+  {
+   "t": 1393.76,
+   "d": 1.52,
+   "text": "dwarf suddenly has another job to do and"
+  },
+  {
+   "t": 1395.28,
+   "d": 1.68,
+   "text": "so i need to free my hands for this one"
+  },
+  {
+   "t": 1396.96,
+   "d": 1.44,
+   "text": "pitch it over their shoulder there goes"
+  },
+  {
+   "t": 1398.4,
+   "d": 0.4,
+   "text": "the"
+  },
+  {
+   "t": 1398.8,
+   "d": 1.6,
+   "text": "alcohol spilled all over the ground the"
+  },
+  {
+   "t": 1400.4,
+   "d": 1.2,
+   "text": "cats are always like i want to be with"
+  },
+  {
+   "t": 1401.6,
+   "d": 0.4,
+   "text": "the people"
+  },
+  {
+   "t": 1402.0,
+   "d": 2.16,
+   "text": "i like wandering around sometimes they"
+  },
+  {
+   "t": 1404.16,
+   "d": 1.52,
+   "text": "go catch vermin but they'll wander into"
+  },
+  {
+   "t": 1405.68,
+   "d": 1.44,
+   "text": "the tavern to be with people"
+  },
+  {
+   "t": 1407.12,
+   "d": 2.0,
+   "text": "and it gets its little paws all over in"
+  },
+  {
+   "t": 1409.12,
+   "d": 1.28,
+   "text": "the alcohol there"
+  },
+  {
+   "t": 1410.4,
+   "d": 1.92,
+   "text": "and uh we had just added when we added"
+  },
+  {
+   "t": 1412.32,
+   "d": 1.28,
+   "text": "eyelids that that"
+  },
+  {
+   "t": 1413.6,
+   "d": 2.4,
+   "text": "don't ask why we added eyelids that that"
+  },
+  {
+   "t": 1416.0,
+   "d": 0.88,
+   "text": "clean"
+  },
+  {
+   "t": 1416.88,
+   "d": 2.72,
+   "text": "clean the uh the the contaminants off of"
+  },
+  {
+   "t": 1419.6,
+   "d": 1.92,
+   "text": "your eyes we were like well"
+  },
+  {
+   "t": 1421.52,
+   "d": 1.36,
+   "text": "let's add a few other things so cats"
+  },
+  {
+   "t": 1422.88,
+   "d": 1.84,
+   "text": "could lick to clean themselves"
+  },
+  {
+   "t": 1424.72,
+   "d": 4.08,
+   "text": "and uh so the cat detected that it had"
+  },
+  {
+   "t": 1428.8,
+   "d": 1.6,
+   "text": "a contaminant on its paw it cleaned"
+  },
+  {
+   "t": 1430.4,
+   "d": 1.68,
+   "text": "itself but we're you know we're like"
+  },
+  {
+   "t": 1432.08,
+   "d": 1.76,
+   "text": "well if you clean yourself with"
+  },
+  {
+   "t": 1433.84,
+   "d": 2.4,
+   "text": "uh you know an ingesting type part then"
+  },
+  {
+   "t": 1436.24,
+   "d": 1.44,
+   "text": "go ahead and trigger the ingestion"
+  },
+  {
+   "t": 1437.68,
+   "d": 0.8,
+   "text": "syndrome"
+  },
+  {
+   "t": 1438.48,
+   "d": 1.92,
+   "text": "but the the kind of the whole the only"
+  },
+  {
+   "t": 1440.4,
+   "d": 2.24,
+   "text": "bug in this whole scenario was that the"
+  },
+  {
+   "t": 1442.64,
+   "d": 1.84,
+   "text": "ingestion syndrome had the default"
+  },
+  {
+   "t": 1444.48,
+   "d": 2.0,
+   "text": "amount so it's just like the cat was"
+  },
+  {
+   "t": 1446.48,
+   "d": 3.28,
+   "text": "throwing back a whole mug"
+  },
+  {
+   "t": 1449.84,
+   "d": 1.84,
+   "text": "and we had of course we had all the body"
+  },
+  {
+   "t": 1451.68,
+   "d": 1.92,
+   "text": "mass stuff in there and the cat just got"
+  },
+  {
+   "t": 1453.6,
+   "d": 2.0,
+   "text": "sick there were some deaths"
+  },
+  {
+   "t": 1455.6,
+   "d": 3.52,
+   "text": "it was terrible and"
+  },
+  {
+   "t": 1459.12,
+   "d": 2.48,
+   "text": "but it was just uh you know this is a"
+  },
+  {
+   "t": 1461.6,
+   "d": 1.76,
+   "text": "story right i mean this is this is this"
+  },
+  {
+   "t": 1463.36,
+   "d": 2.24,
+   "text": "is interlocking mechanisms"
+  },
+  {
+   "t": 1465.6,
+   "d": 2.08,
+   "text": "give rise to to this kind of thing and"
+  },
+  {
+   "t": 1467.68,
+   "d": 1.52,
+   "text": "it's kind of our our whole philosophy"
+  },
+  {
+   "t": 1469.2,
+   "d": 3.12,
+   "text": "that came out of playing roguelike games"
+  },
+  {
+   "t": 1472.32,
+   "d": 2.64,
+   "text": "and we've kind of taken it tried to"
+  },
+  {
+   "t": 1474.96,
+   "d": 1.52,
+   "text": "stretch the boundary of what we could do"
+  },
+  {
+   "t": 1476.48,
+   "d": 1.2,
+   "text": "with it"
+  },
+  {
+   "t": 1477.68,
+   "d": 1.92,
+   "text": "there's this whole idea in roguelikes"
+  },
+  {
+   "t": 1479.6,
+   "d": 1.36,
+   "text": "you might hear floating around about"
+  },
+  {
+   "t": 1480.96,
+   "d": 1.44,
+   "text": "them being non-modal"
+  },
+  {
+   "t": 1482.4,
+   "d": 2.72,
+   "text": "trying to reduce down to a single play"
+  },
+  {
+   "t": 1485.12,
+   "d": 1.04,
+   "text": "mode"
+  },
+  {
+   "t": 1486.16,
+   "d": 4.0,
+   "text": "so that you you're not pulled out of the"
+  },
+  {
+   "t": 1490.16,
+   "d": 3.36,
+   "text": "the action uh and you don't go to like a"
+  },
+  {
+   "t": 1493.52,
+   "d": 1.68,
+   "text": "special shop screen or something like"
+  },
+  {
+   "t": 1495.2,
+   "d": 1.12,
+   "text": "that i mean sometimes you do of course"
+  },
+  {
+   "t": 1496.32,
+   "d": 1.6,
+   "text": "there are all kinds of exceptions but if"
+  },
+  {
+   "t": 1497.92,
+   "d": 2.08,
+   "text": "if possible try and keep it all on one"
+  },
+  {
+   "t": 1500.0,
+   "d": 1.68,
+   "text": "screen and that's that's kind of a"
+  },
+  {
+   "t": 1501.68,
+   "d": 0.96,
+   "text": "general"
+  },
+  {
+   "t": 1502.64,
+   "d": 2.8,
+   "text": "interface um you know philosophy uh not"
+  },
+  {
+   "t": 1505.44,
+   "d": 1.28,
+   "text": "that you should take any interface"
+  },
+  {
+   "t": 1506.72,
+   "d": 1.52,
+   "text": "advice from me but uh"
+  },
+  {
+   "t": 1508.24,
+   "d": 3.2,
+   "text": "it's uh for us uh"
+  },
+  {
+   "t": 1511.44,
+   "d": 1.68,
+   "text": "we tried to do with conversations even"
+  },
+  {
+   "t": 1513.12,
+   "d": 2.56,
+   "text": "here we have a a goblin speaking"
+  },
+  {
+   "t": 1515.68,
+   "d": 1.52,
+   "text": "and then another action which you"
+  },
+  {
+   "t": 1517.2,
+   "d": 2.96,
+   "text": "probably can't read happening afterward"
+  },
+  {
+   "t": 1520.16,
+   "d": 2.4,
+   "text": "and the conversations actually exist as"
+  },
+  {
+   "t": 1522.56,
+   "d": 0.96,
+   "text": "a"
+  },
+  {
+   "t": 1523.52,
+   "d": 2.72,
+   "text": "as a structure in the game and you have"
+  },
+  {
+   "t": 1526.24,
+   "d": 1.44,
+   "text": "an utterance builder we didn't know how"
+  },
+  {
+   "t": 1527.68,
+   "d": 1.6,
+   "text": "to get around that to make that and not"
+  },
+  {
+   "t": 1529.28,
+   "d": 0.96,
+   "text": "a screen you have to"
+  },
+  {
+   "t": 1530.24,
+   "d": 1.52,
+   "text": "kind of say what you want to say but"
+  },
+  {
+   "t": 1531.76,
+   "d": 1.36,
+   "text": "then it's floated out there to who"
+  },
+  {
+   "t": 1533.12,
+   "d": 1.68,
+   "text": "you're talking to and they can do other"
+  },
+  {
+   "t": 1534.8,
+   "d": 1.2,
+   "text": "things while they respond"
+  },
+  {
+   "t": 1536.0,
+   "d": 2.16,
+   "text": "while they respond back and this can"
+  },
+  {
+   "t": 1538.16,
+   "d": 1.76,
+   "text": "this can facilitate behaviors like"
+  },
+  {
+   "t": 1539.92,
+   "d": 1.52,
+   "text": "robberies and so forth that have some"
+  },
+  {
+   "t": 1541.44,
+   "d": 1.6,
+   "text": "back and forth uh"
+  },
+  {
+   "t": 1543.04,
+   "d": 1.12,
+   "text": "it's it's the kind of thing you might"
+  },
+  {
+   "t": 1544.16,
+   "d": 1.6,
+   "text": "you you see in aaa games all the time"
+  },
+  {
+   "t": 1545.76,
+   "d": 1.12,
+   "text": "when someone's running down the street"
+  },
+  {
+   "t": 1546.88,
+   "d": 1.04,
+   "text": "screaming or whatever but you still"
+  },
+  {
+   "t": 1547.92,
+   "d": 1.44,
+   "text": "don't actually when you go to talk to"
+  },
+  {
+   "t": 1549.36,
+   "d": 1.52,
+   "text": "people it still pops up a radial menu or"
+  },
+  {
+   "t": 1550.88,
+   "d": 0.72,
+   "text": "something right"
+  },
+  {
+   "t": 1551.6,
+   "d": 3.2,
+   "text": "so it's it's it's still experimental but"
+  },
+  {
+   "t": 1554.8,
+   "d": 1.6,
+   "text": "it's kind of"
+  },
+  {
+   "t": 1556.4,
+   "d": 2.48,
+   "text": "just another application of this kind of"
+  },
+  {
+   "t": 1558.88,
+   "d": 1.2,
+   "text": "roguelike"
+  },
+  {
+   "t": 1560.08,
+   "d": 3.28,
+   "text": "philosophy that we were kind of brought"
+  },
+  {
+   "t": 1563.36,
+   "d": 0.88,
+   "text": "up with"
+  },
+  {
+   "t": 1564.24,
+   "d": 3.68,
+   "text": "and finally zach brought up lauren and"
+  },
+  {
+   "t": 1567.92,
+   "d": 2.0,
+   "text": "ragnarok right and as as kind of the"
+  },
+  {
+   "t": 1569.92,
+   "d": 2.0,
+   "text": "future of dwarf fortress of course there"
+  },
+  {
+   "t": 1571.92,
+   "d": 2.48,
+   "text": "are all kinds of other inspirations uh"
+  },
+  {
+   "t": 1574.4,
+   "d": 1.68,
+   "text": "that work into this but we never"
+  },
+  {
+   "t": 1576.08,
+   "d": 1.52,
+   "text": "i mean the first time we experienced it"
+  },
+  {
+   "t": 1577.6,
+   "d": 1.44,
+   "text": "was with lauren with these characters"
+  },
+  {
+   "t": 1579.04,
+   "d": 1.52,
+   "text": "that could suddenly walk through walls"
+  },
+  {
+   "t": 1580.56,
+   "d": 2.32,
+   "text": "and so forth and so we have"
+  },
+  {
+   "t": 1582.88,
+   "d": 1.92,
+   "text": "upcoming in dwarf fortress not for the"
+  },
+  {
+   "t": 1584.8,
+   "d": 1.92,
+   "text": "next release but for the one after that"
+  },
+  {
+   "t": 1586.72,
+   "d": 1.44,
+   "text": "the sort of myth and magic system"
+  },
+  {
+   "t": 1588.16,
+   "d": 1.68,
+   "text": "generator we want to just"
+  },
+  {
+   "t": 1589.84,
+   "d": 3.44,
+   "text": "let it go nuts so this one here has a"
+  },
+  {
+   "t": 1593.28,
+   "d": 3.28,
+   "text": "dwarves that carve these fake rune"
+  },
+  {
+   "t": 1596.56,
+   "d": 0.88,
+   "text": "stones"
+  },
+  {
+   "t": 1597.44,
+   "d": 4.0,
+   "text": "out of who knows what"
+  },
+  {
+   "t": 1601.44,
+   "d": 2.16,
+   "text": "they're created by carving a very rare"
+  },
+  {
+   "t": 1603.6,
+   "d": 1.92,
+   "text": "stone under the stars okay"
+  },
+  {
+   "t": 1605.52,
+   "d": 1.12,
+   "text": "and so you'd actually have to do that if"
+  },
+  {
+   "t": 1606.64,
+   "d": 1.36,
+   "text": "you want to make one and they"
+  },
+  {
+   "t": 1608.0,
+   "d": 1.76,
+   "text": "concentrate on the timeless judgment"
+  },
+  {
+   "t": 1609.76,
+   "d": 1.12,
+   "text": "which is one of these"
+  },
+  {
+   "t": 1610.88,
+   "d": 1.84,
+   "text": "weird forces on the right the whole"
+  },
+  {
+   "t": 1612.72,
+   "d": 2.16,
+   "text": "mythology is generated"
+  },
+  {
+   "t": 1614.88,
+   "d": 2.64,
+   "text": "uh there's a you can find a talk online"
+  },
+  {
+   "t": 1617.52,
+   "d": 1.52,
+   "text": "i did it gdc it's free"
+  },
+  {
+   "t": 1619.04,
+   "d": 1.36,
+   "text": "it's not not locked away in the vault"
+  },
+  {
+   "t": 1620.4,
+   "d": 1.04,
+   "text": "where you can just watch me going"
+  },
+  {
+   "t": 1621.44,
+   "d": 1.92,
+   "text": "through one of these but uh"
+  },
+  {
+   "t": 1623.36,
+   "d": 2.24,
+   "text": "that's that's where we're hoping to to"
+  },
+  {
+   "t": 1625.6,
+   "d": 1.92,
+   "text": "take it and finally kind of have the the"
+  },
+  {
+   "t": 1627.52,
+   "d": 1.76,
+   "text": "culmination of all of these uh"
+  },
+  {
+   "t": 1629.28,
+   "d": 1.44,
+   "text": "things we've been we've been working on"
+  },
+  {
+   "t": 1630.72,
+   "d": 1.28,
+   "text": "this will be this will certainly be a"
+  },
+  {
+   "t": 1632.0,
+   "d": 1.28,
+   "text": "peak anyway"
+  },
+  {
+   "t": 1633.28,
+   "d": 2.88,
+   "text": "um but yeah that's really all i have to"
+  },
+  {
+   "t": 1636.16,
+   "d": 0.4,
+   "text": "say"
+  },
+  {
+   "t": 1636.56,
+   "d": 1.36,
+   "text": "uh i don't know how much time there's"
+  },
+  {
+   "t": 1637.92,
+   "d": 3.92,
+   "text": "left but we'll take questions okay"
+  },
+  {
+   "t": 1645.09,
+   "d": 4.96,
+   "text": "[Applause]"
+  }
+ ]
+}

@@ -1,0 +1,129 @@
+{
+  "id": "wxmio1S3iN0",
+  "title": "Andrea Interguglielmi - Designing a turn based roguelike inside a real time simulated environment",
+  "speaker": "Andrea Interguglielmi",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=wxmio1S3iN0",
+  "talk_type": "postmortem",
+  "summary": "Andrea Interguglielmi describes designing Nauticrawl, a game that hides a turn-based dungeon crawl inside a real-time cockpit simulation the player must learn without a tutorial. Roguelike elements are mapped onto machine monitors: a log, inventory, and stats where hull is HP, fuel is hunger and battery is stamina, over a Voronoi-generated map with fog of war. In beta, the real-time simulation overwhelmed the crawl and players died without understanding why, so he used the story's crushing-pressure setting to make turns emerge from building engine pressure and enemies that only react to noise and movement. Players still did not notice turns, which was finally solved by a 'safety lock' that teaches one mechanic at a time after repeated deaths.",
+  "games": [
+    "Nauticrawl",
+    "Brogue",
+    "X-Wing",
+    "A Dark Room",
+    "The Room"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelike tag",
+      "kind": "example",
+      "claim": "Nauticrawl's developers dropped the roguelike tag entirely, and avoided 'roguelite' too, because the game blended too many genres to fit a label.",
+      "detail": "Interguglielmi accepted that the game is unique on its own, drawing on Brogue, X-Wing cockpit simulation, A Dark Room's blending of narrative into a roguelike, and The Room's tutorial-free gizmos.",
+      "t": 31,
+      "quote": "at some point we decided to drop completely the Roguelike tag. We didn't want to go for Roguelite either",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "no tutorial",
+      "kind": "principle",
+      "claim": "Nauticrawl gives the player only a premise, a stolen machine they were never allowed to touch, so learning the controls by pushing every button is the game's opening puzzle.",
+      "detail": "Inspired by The Room's lack of tutorial, the player experiments with levers until, as the machine becomes familiar, the experience fades into dungeon crawl exploration.",
+      "t": 143,
+      "quote": "You have no idea of how it works. You stole it and now you are going to have to put up with this situation and have to push every button",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "diegetic interface",
+      "kind": "example",
+      "claim": "Nauticrawl presents classic roguelike UI diegetically as cockpit monitors: a message log, inventory and stats where hull integrity is HP, fuel is hunger and battery is stamina.",
+      "detail": "The story says surface pressure is so great that only these machines can roam, so there is no porthole, only monitors. The map is shown on a radar with fog of war, and the monitors emulate an old two-colour tile terminal, later with text-mode art made in REXPaint and Playscii.",
+      "t": 247,
+      "quote": "the stats actually map almost 1:1 to a traditional dungeon crawler. There is the hull integrity which is the HP of the player, fuel which is hunger",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "voronoi maps",
+      "kind": "technique",
+      "claim": "Nauticrawl's world is procedurally generated from Voronoi cells into islands that can be scaled up or down as the game needs, rather than a visible grid.",
+      "detail": "The generated map is shown from above inside a radar with fog of war, and descriptions of places entered are handled through the interface.",
+      "t": 177,
+      "quote": "It's all generated using Voronoi cells. I make procedural islands I can scale up and down depending on the need during the game",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta knowledge",
+      "kind": "principle",
+      "claim": "Nauticrawl's core loop treats dying as part of experimentation, with player knowledge carried between runs and curiosity hooks like lore scraps and new controls to keep players going.",
+      "detail": "Each run the player explores, gains lore, dies and repeats, and new buttons and levers restart the cycle of discovery.",
+      "t": 364,
+      "quote": "The core gameplay loop is all about experimenting and eventually dying is part of the experience, but hopefully, you will learn and carry forward your meta experience",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "real-time vs turn-based",
+      "kind": "warning",
+      "claim": "In Nauticrawl's beta, real-time enemies combined with real-time machine maintenance overwhelmed players, who died without understanding why; only three or four testers finished.",
+      "detail": "Blinking warning lights demanded attention while enemies attacked in real time. Testers found pressing buttons fun but the crawl was killed by the simulation, forcing a redesign close to the deadline.",
+      "t": 460,
+      "quote": "general consensus was pressing all the buttons was fun but players were dying without even understanding why",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn structure",
+      "kind": "warning",
+      "claim": "Interguglielmi's crawl drifted into real time because he did not want explicit 'your turn / enemy turn' banners breaking the immersive simulation.",
+      "detail": "He had always intended the crawl to be slow and turn-based, about wonder and discovery, but making the world real-time like the machine felt natural to preserve atmosphere, and that is what broke it.",
+      "t": 539,
+      "quote": "If I was to at some point present the player with a big banner saying it is your turn, or it is the enemy's turn",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn structure",
+      "kind": "technique",
+      "claim": "Nauticrawl creates player turns inside a real-time simulation by requiring engine pressure to build before each move, using the game's crushing-atmosphere setting.",
+      "detail": "Levers can speed up pressure buildup, but stressing the engine releases heat and noise, which strain the stealth device and need more power. The turn system thus became part of the machine simulation, a side effect he had not foreseen.",
+      "t": 595,
+      "quote": "What if I let the user pipe in pressure into the engine and I will make sure they take some time to actually build up the required pressure",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "enemy turns",
+      "kind": "technique",
+      "claim": "Nauticrawl's enemies only react when something makes noise and moves, justified as energy conservation on an abandoned world, so nothing happens until the player commits to a move.",
+      "detail": "This gave the player unlimited time to experiment with machine settings, made play more strategic, and made enemies silently waiting feel creepier.",
+      "t": 695,
+      "quote": "I reprogrammed the AI so it only reacts when something makes a noise and moves",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "invisible rules",
+      "kind": "warning",
+      "claim": "Even with turns implemented, Nauticrawl's players did not realise turns existed and rushed moves to escape pursuers, generating heat and noise that made things worse.",
+      "detail": "Interguglielmi needed to teach the rules of the dungeon crawl past the button-pushing stage without a tutorial, which he calls yet another headache.",
+      "t": 736,
+      "quote": "They don't realize there are turns at all",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "adaptive teaching",
+      "kind": "technique",
+      "claim": "When Nauticrawl detects repeated deaths, it starts runs with a diegetic 'safety lock' check that teaches one mechanic at a time, such as battery, stealth, hull or turns.",
+      "detail": "For turns, the game places a creature next to the player at start and a radio broadcast tells pilots to stay still because nothing moves until you move. If the player dies anyway, the restart teaches another mechanic; he says this worked.",
+      "t": 801,
+      "quote": "the machine enters a safety lock and it will present the player with a check to rebalance the machine",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

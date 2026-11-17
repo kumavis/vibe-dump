@@ -1,0 +1,169 @@
+{
+  "id": "9iTJ9Z8p0ao",
+  "title": "Lachlan Kingsford - Exploring the Monte Carlo Forest: Using MCTS to Balance your Game",
+  "speaker": "Lachlan Kingsford",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=9iTJ9Z8p0ao",
+  "talk_type": "technical",
+  "summary": "Lachlan Kingsford introduces Monte Carlo Tree Search (MCTS) as an understandable, whiteboardable alternative to machine learning for game developers, motivated by balancing his cube-rail board game Emu Bay Railway Company without human playtesters. He explains the upper confidence bound via an unidentified-swords bandit problem, then the select/expand/evaluate/propagate loop on a tiny Slay-the-Spire-like prototype, with practical caveats: pure functional game state, reward shaping, compiled languages and multi-threading. He presents three uses: smarter and more characterful monsters via per-monster rewards and iteration counts, automated playtesting for winnability and fuzzing, and mining the search tree's terminal states for balance statistics and parameter optimisation. He closes with costs (CPU-heavy, influences design) and Q&A on randomness via chance nodes.",
+  "games": [
+    "Emu Bay Railway Company",
+    "Chicago Express",
+    "NetHack",
+    "Slay the Spire",
+    "Angband"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "monte carlo tree search",
+      "kind": "principle",
+      "claim": "Kingsford chose Monte Carlo Tree Search over machine learning for game balancing because MCTS is understandable and can be worked through by hand on a whiteboard, unlike a black box of dot products.",
+      "detail": "He wanted the computer to play his board game against itself repeatedly to generate statistics before involving human testers. Machine learning felt opaque; MCTS was something he could understand.",
+      "t": 370,
+      "quote": "It's this big black box full of dot products and I wanted something I could understand and I found MCTS",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "upper confidence bound",
+      "kind": "technique",
+      "claim": "The upper confidence bound (UCB) formula, explained as choosing among four unidentified swords, balances how good an option looks, how sure we are, and how much it has been explored; at the end the most-visited option is chosen.",
+      "detail": "Because randomness means a great sword may start with bad hits and a bad sword with a crit, you try each and favour the better one as confidence grows. This is the multi-armed ('one-armed bandit') problem and UCB is the heart of MCTS.",
+      "t": 469,
+      "quote": "a way of balancing how sure we are about an outcome, how good the outcome is, and whether we've explored it enough",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "pure functional state",
+      "kind": "technique",
+      "claim": "To run tree search over a game, the game state should be held in memory with actions as pure functions that return a new state without side effects.",
+      "detail": "Kingsford calls this the first 'sanity cost': tree search needs to quickly compute the outcomes of many hypothetical actions, and purely functional state transitions are the easiest way. Later he notes pure functions also let you replay from any point for fuzzing.",
+      "t": 591,
+      "quote": "you've got actions as methods on that state that just return a new state with no side effects",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "monte carlo tree search",
+      "kind": "technique",
+      "claim": "MCTS loops four steps: select a node by recursively taking the highest UCB (lowest on the opponent's turn), expand it, evaluate it by simulation, and back-propagate the reward to the root.",
+      "detail": "Each node stores N (visit count) and Q (average reward). In the opponents' turns selection minimises the player's reward. More iterations make it stronger, and it performs fairly well even at low iteration counts; the final choice is the child with the highest N.",
+      "t": 618,
+      "quote": "if you walk away with four words today, they should be select, expand, evaluate, propagate",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "reward shaping",
+      "kind": "warning",
+      "claim": "In a long game like NetHack, random playouts to the end with win/loss rewards teach nothing, so MCTS needs shaped rewards, truncated simulations and culling of instantly-losing moves.",
+      "detail": "Chess lasts about 45 moves and Go about 250, but NetHack about 80,000 turns. Kingsford suggests simulating about a thousand turns, scoring by metrics like health, and adding intermediate rewards like approaching the staircase. He warns MCTS optimises exactly what you reward, so reward design is trial and error.",
+      "t": 812,
+      "quote": "if all you're giving is zeros and ones, you're going to learn absolutely nothing",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "performance",
+      "kind": "warning",
+      "claim": "MCTS needs very fast simulation loops, so game logic may need to be in a compiled language rather than Python, Lua or Ruby, and run multi-threaded.",
+      "detail": "Kingsford learned Rust for a roughly tenfold speedup that paid off when renting AWS compute for playtesting. Multi-threading over one tree introduces locking problems he only points to rather than explains.",
+      "t": 920,
+      "quote": "You need fast loops and that's our second big caveat. You might really need your program to be in a compiled language",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "monster ai",
+      "kind": "principle",
+      "claim": "Naive MCTS where the whole dungeon optimises one reward to kill the player gives monsters perfect shared information, so it should be framed in-fiction as an omniscient controlling presence.",
+      "detail": "Kingsford says this chess-like approach is not bad but you have to lean into it, for instance a brain-controlling wizard or big-brother AI; otherwise it feels abstract. He suggests treating each dungeon level as a game for simulation purposes.",
+      "t": 1119,
+      "quote": "Your monsters have perfect information because they're all being according to one reward",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "monster ai",
+      "kind": "technique",
+      "claim": "Giving individual monsters different MCTS reward functions and parameters produces characterful emergent behaviour: an apprentice rewarded for its master's survival, a goblin master with more iterations than its apprentice, a scared guard that overestimates the player's HP.",
+      "detail": "Enemy AI should feel like characters rather than be perfect. Varying rewards, iteration counts or the guard's believed player HP makes the monster manual meaningful beyond move-attack-flee, while still allowing opportunistic attacks.",
+      "t": 1167,
+      "quote": "A master goblin might have more iterations than his apprentice, so it behaves cleverer",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "monster ai",
+      "kind": "principle",
+      "claim": "MCTS-driven monsters automatically adapt to rule changes: add a new spell to a wizard and the wizard will use it without new AI code.",
+      "detail": "Because the AI searches over the game's actual rules rather than hand-written behaviours, it keeps up with design changes for free.",
+      "t": 1199,
+      "quote": "you add a new spell to your wizard, then congratulations, that wizard is going to actually use that new spell",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "automated playtesting",
+      "kind": "technique",
+      "claim": "An MCTS player can serve as an automated playtester answering 'is this winnable?', using generic rewards like reaching the next level and losing health so it stays useful as rules change.",
+      "detail": "Simulate to the end of the level, a sensible turn limit or death rather than whole games. Kingsford imagines a 7DRL where from day one, every file save triggers the game to attempt a win in the background so you can watch the @ work its way through.",
+      "t": 1292,
+      "quote": "the closer that you tie that reward to the current rules, the less it's going to help you as you modify those rules",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "fuzz testing",
+      "kind": "technique",
+      "claim": "Because game state is pure, an MCTS agent can play to a point and then fire random playouts from every next turn in parallel to fuzz the game for crashes.",
+      "detail": "Kingsford uses this to test whether the game is 'breakable' and exception-free from turn three onward, distinct from testing winnability.",
+      "t": 1328,
+      "quote": "you can get to a certain point and then just keep randomly hitting it from there to see if it breaks",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "automated playtesting",
+      "kind": "warning",
+      "claim": "An MCTS playtester plays optimally rather than like a human, so it cannot tell you whether a game is fun, though rewarding 'fun' behaviours like grabbing a novelty weapon can make it more human-like.",
+      "detail": "Humans fall into the hero trap with a ridiculous weapon or rescue the cute puppy against logic. Its value is ensuring human playtesters, whose time is valuable, are not wasted on broken builds.",
+      "t": 1347,
+      "quote": "It is only going to optimize for the reward you give it. It means it's not going to play like a human",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balancing",
+      "kind": "technique",
+      "claim": "The whole MCTS search tree, not just its root choice, is a rich sample of feasible game states that can be mined for balance data such as heat maps and winning-move statistics.",
+      "detail": "In Emu Bay Railway Company this revealed that the important Hobart-Launceston rail link was never built, a shape-of-game balance problem humans would take long to spot. With 10,000 terminal states he also had mixed success using the Optuna optimisation framework to tune game constants toward the desired shape. Kingsford believes this use may be novel.",
+      "t": 1466,
+      "quote": "the tree becomes an increasingly rich sample of what is feasible states of the game",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "monster ai",
+      "kind": "warning",
+      "claim": "MCTS is computationally heavy on CPUs, so running it for every monster every turn may feel slow and should shape the game's design toward fewer, deeper-simulated actors.",
+      "detail": "Simulation of real game logic needs multi-threaded CPUs; GPU use would require branchless logic. Kingsford suggests drawing inspiration from small-scale roguelikes like 868-HACK rather than Angband if you want deep simulation.",
+      "t": 1610,
+      "quote": "If you're using it for every monster and every turn, then without some efficiency improvements, it's probably going to feel slow",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "monte carlo tree search",
+      "kind": "technique",
+      "claim": "MCTS works best on deterministic games; randomness can be handled with chance ('game') nodes whose children are sampled by probability weight rather than chosen by UCB.",
+      "detail": "Answering a Q&A question, Kingsford says Emu Bay has randomness in setup, so he adds game nodes alongside player and dungeon nodes; for two dice you weight outcomes by their distribution. MCTS can prove a game is winnable but quantifying how winnable is hard.",
+      "t": 1745,
+      "quote": "It works far better when there is no randomness. So the more deterministic, the better it is",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,2244 @@
+{
+ "id": "IVDN5GDTIvY",
+ "url": "https://www.youtube.com/watch?v=IVDN5GDTIvY",
+ "title": "Noah Swartz - The Tombs of Atuan: The Original Roguelike?",
+ "speaker": "Noah Swartz",
+ "talk_title": "The Tombs of Atuan: The Original Roguelike?",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 902,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "In this talk I will discuss the similarities between Ursula Le Guin's book The Tombs of Atuan (the second book in the Earthsea series) and traditional dungeon based roguelikes. The book takes place in an environment that is extremely similar to the dungeons of doom (including a hunger clock!).\n\nI'll use pieces of the text to illustrate these similarities, and potentially do some digging into the source material of original rogue development to see if there is in fact a direct line of inspiration from the book to the original game.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 14,
+   "title": "Final Speaker of the Day"
+  },
+  {
+   "start": 208,
+   "title": "The Hall and the Tombstones"
+  },
+  {
+   "start": 269,
+   "title": "Quest for the Amulet"
+  },
+  {
+   "start": 427,
+   "title": "The Treasure Room"
+  },
+  {
+   "start": 431,
+   "title": "Getting the Amulet"
+  },
+  {
+   "start": 635,
+   "title": "Influences on Roguelikes"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2606,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.44,
+   "d": 2.08,
+   "text": "and we are going to head into our very"
+  },
+  {
+   "t": 5.52,
+   "d": 2.24,
+   "text": "final lightning talk of the day"
+  },
+  {
+   "t": 7.76,
+   "d": 0.96,
+   "text": "and"
+  },
+  {
+   "t": 8.72,
+   "d": 2.4,
+   "text": "uh it's worked out quite nicely because"
+  },
+  {
+   "t": 11.12,
+   "d": 1.2,
+   "text": "even though"
+  },
+  {
+   "t": 12.32,
+   "d": 2.0,
+   "text": "he submitted as a pseudonym to begin"
+  },
+  {
+   "t": 14.32,
+   "d": 2.16,
+   "text": "with we were delighted to learn that our"
+  },
+  {
+   "t": 16.48,
+   "d": 2.16,
+   "text": "final speaker of the day will be our"
+  },
+  {
+   "t": 18.64,
+   "d": 3.28,
+   "text": "very own no sports the kind of original"
+  },
+  {
+   "t": 21.92,
+   "d": 1.84,
+   "text": "organizer of roguelike celebration who"
+  },
+  {
+   "t": 23.76,
+   "d": 2.32,
+   "text": "stepped back uh from organizing but has"
+  },
+  {
+   "t": 26.08,
+   "d": 2.0,
+   "text": "now returned to the stage as a speaker"
+  },
+  {
+   "t": 28.08,
+   "d": 1.92,
+   "text": "um we're gonna be using a recorded talk"
+  },
+  {
+   "t": 30.0,
+   "d": 1.28,
+   "text": "but then he's going to be around for"
+  },
+  {
+   "t": 31.28,
+   "d": 2.32,
+   "text": "live q a so"
+  },
+  {
+   "t": 33.6,
+   "d": 2.48,
+   "text": "cue up the talk"
+  },
+  {
+   "t": 36.08,
+   "d": 3.04,
+   "text": "hello i'm noah schwartz and this is my"
+  },
+  {
+   "t": 39.12,
+   "d": 3.6,
+   "text": "talk for the 2021 roguelike celebration"
+  },
+  {
+   "t": 42.72,
+   "d": 1.92,
+   "text": "um it's about the book the tombs of"
+  },
+  {
+   "t": 44.64,
+   "d": 2.4,
+   "text": "ottawa and how i feel that it embodies a"
+  },
+  {
+   "t": 47.04,
+   "d": 2.16,
+   "text": "lot of the aspects of the roguelike"
+  },
+  {
+   "t": 49.2,
+   "d": 1.44,
+   "text": "genre"
+  },
+  {
+   "t": 50.64,
+   "d": 1.76,
+   "text": "this is my first talk at the roguelike"
+  },
+  {
+   "t": 52.4,
+   "d": 1.76,
+   "text": "celebration so i'm really happy to be"
+  },
+  {
+   "t": 54.16,
+   "d": 1.28,
+   "text": "here"
+  },
+  {
+   "t": 55.44,
+   "d": 1.4,
+   "text": "so thanks for having"
+  },
+  {
+   "t": 56.84,
+   "d": 4.2,
+   "text": "me before we get into it"
+  },
+  {
+   "t": 61.04,
+   "d": 1.6,
+   "text": "i want to call out that there will"
+  },
+  {
+   "t": 62.64,
+   "d": 3.04,
+   "text": "definitely be spoilers in this talk"
+  },
+  {
+   "t": 65.68,
+   "d": 1.92,
+   "text": "both spoilers about the book and about"
+  },
+  {
+   "t": 67.6,
+   "d": 1.76,
+   "text": "the earthsea"
+  },
+  {
+   "t": 69.36,
+   "d": 1.04,
+   "text": "saga"
+  },
+  {
+   "t": 70.4,
+   "d": 1.68,
+   "text": "as well as for nethack i'm going to be"
+  },
+  {
+   "t": 72.08,
+   "d": 1.52,
+   "text": "talking about their similarities so i'm"
+  },
+  {
+   "t": 73.6,
+   "d": 1.36,
+   "text": "going to be talking about a lot of end"
+  },
+  {
+   "t": 74.96,
+   "d": 2.48,
+   "text": "game content in nethack as well as"
+  },
+  {
+   "t": 77.44,
+   "d": 2.48,
+   "text": "passages from the book and its plot so"
+  },
+  {
+   "t": 79.92,
+   "d": 1.36,
+   "text": "if you want to read the book on spoils"
+  },
+  {
+   "t": 81.28,
+   "d": 2.0,
+   "text": "or you want to play nethack unspoiled"
+  },
+  {
+   "t": 83.28,
+   "d": 2.08,
+   "text": "you may want to not watch this talk or"
+  },
+  {
+   "t": 85.36,
+   "d": 2.16,
+   "text": "close your ears for parts of it"
+  },
+  {
+   "t": 87.52,
+   "d": 2.96,
+   "text": "um i highly recommend both um"
+  },
+  {
+   "t": 90.48,
+   "d": 1.36,
+   "text": "and hopefully you've gotten the chance"
+  },
+  {
+   "t": 91.84,
+   "d": 2.8,
+   "text": "to do so before watching this talk"
+  },
+  {
+   "t": 94.64,
+   "d": 2.0,
+   "text": "for those of you who aren't aware the"
+  },
+  {
+   "t": 96.64,
+   "d": 1.68,
+   "text": "tombs of ottawa is the second book in"
+  },
+  {
+   "t": 98.32,
+   "d": 2.56,
+   "text": "the earthsea trilogy there are now six"
+  },
+  {
+   "t": 100.88,
+   "d": 2.48,
+   "text": "earth c books so not quite a trilogy"
+  },
+  {
+   "t": 103.36,
+   "d": 2.72,
+   "text": "anymore but it was written in 1969 and"
+  },
+  {
+   "t": 106.08,
+   "d": 1.84,
+   "text": "released in 1970"
+  },
+  {
+   "t": 107.92,
+   "d": 1.6,
+   "text": "it's really good if you haven't read it"
+  },
+  {
+   "t": 109.52,
+   "d": 1.6,
+   "text": "you should go read it"
+  },
+  {
+   "t": 111.12,
+   "d": 1.84,
+   "text": "i read the first one i think in fifth"
+  },
+  {
+   "t": 112.96,
+   "d": 2.08,
+   "text": "grade looking for a high fantasy"
+  },
+  {
+   "t": 115.04,
+   "d": 1.6,
+   "text": "adventure thing and i got something very"
+  },
+  {
+   "t": 116.64,
+   "d": 1.76,
+   "text": "different"
+  },
+  {
+   "t": 118.4,
+   "d": 1.68,
+   "text": "ursula le guin writes really good"
+  },
+  {
+   "t": 120.08,
+   "d": 1.84,
+   "text": "characters"
+  },
+  {
+   "t": 121.92,
+   "d": 1.76,
+   "text": "it's really about the personal struggles"
+  },
+  {
+   "t": 123.68,
+   "d": 1.28,
+   "text": "of the people"
+  },
+  {
+   "t": 124.96,
+   "d": 1.92,
+   "text": "i didn't pick up another book the second"
+  },
+  {
+   "t": 126.88,
+   "d": 2.08,
+   "text": "one until much later in life in fact"
+  },
+  {
+   "t": 128.96,
+   "d": 1.84,
+   "text": "shortly after i had finished ned hack"
+  },
+  {
+   "t": 130.8,
+   "d": 1.2,
+   "text": "and i really felt that there were a lot"
+  },
+  {
+   "t": 132.0,
+   "d": 2.16,
+   "text": "of similarities between the two"
+  },
+  {
+   "t": 134.16,
+   "d": 2.48,
+   "text": "and i thought to myself hmm"
+  },
+  {
+   "t": 136.64,
+   "d": 2.48,
+   "text": "this is like the most roguelike book"
+  },
+  {
+   "t": 139.12,
+   "d": 2.0,
+   "text": "i've ever read i wonder if there's"
+  },
+  {
+   "t": 141.12,
+   "d": 2.0,
+   "text": "something there"
+  },
+  {
+   "t": 143.12,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 144.0,
+   "d": 1.52,
+   "text": "the game i'm going to be talking about"
+  },
+  {
+   "t": 145.52,
+   "d": 1.76,
+   "text": "is nethack it's the game that i have the"
+  },
+  {
+   "t": 147.28,
+   "d": 2.0,
+   "text": "most familiarity with i think a lot of"
+  },
+  {
+   "t": 149.28,
+   "d": 2.16,
+   "text": "these things are shared between it and"
+  },
+  {
+   "t": 151.44,
+   "d": 0.88,
+   "text": "rogue"
+  },
+  {
+   "t": 152.32,
+   "d": 1.76,
+   "text": "but i'm specifically going to talk about"
+  },
+  {
+   "t": 154.08,
+   "d": 2.56,
+   "text": "nethack story elements because i've"
+  },
+  {
+   "t": 156.64,
+   "d": 1.68,
+   "text": "played it the most and i feel actually"
+  },
+  {
+   "t": 158.32,
+   "d": 1.92,
+   "text": "ascended in it whereas i've never"
+  },
+  {
+   "t": 160.24,
+   "d": 3.76,
+   "text": "successfully completed a game of rogue"
+  },
+  {
+   "t": 164.24,
+   "d": 2.48,
+   "text": "um so one of the first things that comes"
+  },
+  {
+   "t": 166.72,
+   "d": 2.4,
+   "text": "up in the book is there's this character"
+  },
+  {
+   "t": 169.12,
+   "d": 2.16,
+   "text": "ara or tanar"
+  },
+  {
+   "t": 171.28,
+   "d": 2.08,
+   "text": "who gets conscripted into a priesthood"
+  },
+  {
+   "t": 173.36,
+   "d": 3.12,
+   "text": "for an unnamed elder god"
+  },
+  {
+   "t": 176.48,
+   "d": 2.24,
+   "text": "she becomes a priestess there at this"
+  },
+  {
+   "t": 178.72,
+   "d": 2.16,
+   "text": "temple and spends her days inside the"
+  },
+  {
+   "t": 180.88,
+   "d": 2.64,
+   "text": "temple taking care of it protecting its"
+  },
+  {
+   "t": 183.52,
+   "d": 1.12,
+   "text": "treasure"
+  },
+  {
+   "t": 184.64,
+   "d": 1.44,
+   "text": "and living there"
+  },
+  {
+   "t": 186.08,
+   "d": 1.76,
+   "text": "now those of you who have played through"
+  },
+  {
+   "t": 187.84,
+   "d": 1.84,
+   "text": "a game of net hack and got into the end"
+  },
+  {
+   "t": 189.68,
+   "d": 2.32,
+   "text": "game well remember that at the end there"
+  },
+  {
+   "t": 192.0,
+   "d": 2.72,
+   "text": "is a high priestess of moloch who much"
+  },
+  {
+   "t": 194.72,
+   "d": 2.16,
+   "text": "like arja protects the temple spends her"
+  },
+  {
+   "t": 196.88,
+   "d": 2.0,
+   "text": "days living there"
+  },
+  {
+   "t": 198.88,
+   "d": 2.0,
+   "text": "waiting for adventures to come through"
+  },
+  {
+   "t": 200.88,
+   "d": 1.84,
+   "text": "so that she can protect"
+  },
+  {
+   "t": 202.72,
+   "d": 3.12,
+   "text": "the amulet of endor"
+  },
+  {
+   "t": 206.24,
+   "d": 1.36,
+   "text": "here are some pictures from the back of"
+  },
+  {
+   "t": 207.6,
+   "d": 2.48,
+   "text": "the book you can see that this diagram"
+  },
+  {
+   "t": 210.08,
+   "d": 2.0,
+   "text": "of the hall and the tombstones actually"
+  },
+  {
+   "t": 212.08,
+   "d": 2.24,
+   "text": "bears a lot of resemblance to this final"
+  },
+  {
+   "t": 214.32,
+   "d": 1.12,
+   "text": "scene"
+  },
+  {
+   "t": 215.44,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 216.72,
+   "d": 1.76,
+   "text": "in the game of knit hack you know you"
+  },
+  {
+   "t": 218.48,
+   "d": 1.76,
+   "text": "have a graveyard and a temple and a wall"
+  },
+  {
+   "t": 220.24,
+   "d": 1.04,
+   "text": "in between"
+  },
+  {
+   "t": 221.28,
+   "d": 3.04,
+   "text": "and much like that you have that"
+  },
+  {
+   "t": 224.32,
+   "d": 2.64,
+   "text": "here in the book um so"
+  },
+  {
+   "t": 226.96,
+   "d": 2.08,
+   "text": "there's only one priestess canonically"
+  },
+  {
+   "t": 229.04,
+   "d": 1.28,
+   "text": "in the book"
+  },
+  {
+   "t": 230.32,
+   "d": 2.24,
+   "text": "every time one dies a new one is found"
+  },
+  {
+   "t": 232.56,
+   "d": 1.76,
+   "text": "and much like that there is a single"
+  },
+  {
+   "t": 234.32,
+   "d": 2.16,
+   "text": "unique high priestess of moloch in the"
+  },
+  {
+   "t": 236.48,
+   "d": 1.84,
+   "text": "game of nethack"
+  },
+  {
+   "t": 238.32,
+   "d": 2.32,
+   "text": "on the right here you see uh these"
+  },
+  {
+   "t": 240.64,
+   "d": 2.4,
+   "text": "diagrams of the labyrinth"
+  },
+  {
+   "t": 243.04,
+   "d": 2.08,
+   "text": "this is the undertune or the area"
+  },
+  {
+   "t": 245.12,
+   "d": 1.52,
+   "text": "underneath"
+  },
+  {
+   "t": 246.64,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 247.84,
+   "d": 1.6,
+   "text": "the"
+  },
+  {
+   "t": 249.44,
+   "d": 0.96,
+   "text": "temple"
+  },
+  {
+   "t": 250.4,
+   "d": 2.08,
+   "text": "of the unnamed goths"
+  },
+  {
+   "t": 252.48,
+   "d": 1.44,
+   "text": "and for those of you who have played it"
+  },
+  {
+   "t": 253.92,
+   "d": 2.24,
+   "text": "off of roguelike you may remember a lot"
+  },
+  {
+   "t": 256.16,
+   "d": 3.04,
+   "text": "of areas like this these twisting mazes"
+  },
+  {
+   "t": 259.2,
+   "d": 2.16,
+   "text": "of confusing turns"
+  },
+  {
+   "t": 261.36,
+   "d": 2.0,
+   "text": "meant to slow you down and befuddle you"
+  },
+  {
+   "t": 263.36,
+   "d": 2.48,
+   "text": "well that is exactly the point of these"
+  },
+  {
+   "t": 265.84,
+   "d": 2.8,
+   "text": "labyrinths under the temple and is what"
+  },
+  {
+   "t": 268.64,
+   "d": 2.96,
+   "text": "our lone hero encounters as he goes on"
+  },
+  {
+   "t": 271.6,
+   "d": 2.08,
+   "text": "his quest for the amulet"
+  },
+  {
+   "t": 273.68,
+   "d": 2.24,
+   "text": "in the book the hero is the wizard named"
+  },
+  {
+   "t": 275.92,
+   "d": 2.56,
+   "text": "gad who you have seen in"
+  },
+  {
+   "t": 278.48,
+   "d": 1.52,
+   "text": "the previous earth c books and was sort"
+  },
+  {
+   "t": 280.0,
+   "d": 1.36,
+   "text": "of the protagonist throughout all of"
+  },
+  {
+   "t": 281.36,
+   "d": 1.36,
+   "text": "them"
+  },
+  {
+   "t": 282.72,
+   "d": 1.92,
+   "text": "he is on a quest"
+  },
+  {
+   "t": 284.64,
+   "d": 0.96,
+   "text": "for"
+  },
+  {
+   "t": 285.6,
+   "d": 2.08,
+   "text": "an amulet which i'll get to in a second"
+  },
+  {
+   "t": 287.68,
+   "d": 1.28,
+   "text": "so"
+  },
+  {
+   "t": 288.96,
+   "d": 2.0,
+   "text": "we have this maze and the under tomb"
+  },
+  {
+   "t": 290.96,
+   "d": 1.68,
+   "text": "which you see in this diagram it really"
+  },
+  {
+   "t": 292.64,
+   "d": 3.76,
+   "text": "reminded me of these mazes in that hack"
+  },
+  {
+   "t": 296.4,
+   "d": 2.4,
+   "text": "and yes what is gad looking for he's"
+  },
+  {
+   "t": 298.8,
+   "d": 3.52,
+   "text": "looking for a mystical amulet much like"
+  },
+  {
+   "t": 302.32,
+   "d": 1.92,
+   "text": "in nethack you know he doesn't quite"
+  },
+  {
+   "t": 304.24,
+   "d": 1.52,
+   "text": "know what it is he knows that it's"
+  },
+  {
+   "t": 305.76,
+   "d": 1.36,
+   "text": "powerful and that has a lot of"
+  },
+  {
+   "t": 307.12,
+   "d": 2.4,
+   "text": "significance it's very important for him"
+  },
+  {
+   "t": 309.52,
+   "d": 0.88,
+   "text": "to"
+  },
+  {
+   "t": 310.4,
+   "d": 2.16,
+   "text": "get it from this tomb and bring it back"
+  },
+  {
+   "t": 312.56,
+   "d": 1.04,
+   "text": "up"
+  },
+  {
+   "t": 313.6,
+   "d": 1.84,
+   "text": "um and just like in nethack you have the"
+  },
+  {
+   "t": 315.44,
+   "d": 3.2,
+   "text": "amulet of yandor you don't quite know"
+  },
+  {
+   "t": 318.64,
+   "d": 2.88,
+   "text": "why it's so important but it has"
+  },
+  {
+   "t": 321.52,
+   "d": 1.84,
+   "text": "really important powers and it's going"
+  },
+  {
+   "t": 323.36,
+   "d": 1.92,
+   "text": "to change the world or at least appease"
+  },
+  {
+   "t": 325.28,
+   "d": 2.08,
+   "text": "your god so you must go on this quest"
+  },
+  {
+   "t": 327.36,
+   "d": 2.88,
+   "text": "for it well god is in the same situation"
+  },
+  {
+   "t": 330.24,
+   "d": 1.68,
+   "text": "and he has dedicated"
+  },
+  {
+   "t": 331.92,
+   "d": 2.48,
+   "text": "his life he's willing to risk it to go"
+  },
+  {
+   "t": 334.4,
+   "d": 2.96,
+   "text": "retrieve this amulet of power"
+  },
+  {
+   "t": 337.36,
+   "d": 1.6,
+   "text": "though he doesn't quite know what effect"
+  },
+  {
+   "t": 338.96,
+   "d": 2.16,
+   "text": "it will have"
+  },
+  {
+   "t": 341.12,
+   "d": 4.08,
+   "text": "on his quest he provokes the priestess"
+  },
+  {
+   "t": 345.2,
+   "d": 2.56,
+   "text": "and she traps him in the dungeon he gets"
+  },
+  {
+   "t": 347.76,
+   "d": 2.88,
+   "text": "lost in these labyrinths and"
+  },
+  {
+   "t": 350.64,
+   "d": 3.52,
+   "text": "what happens a truly roguelike thing"
+  },
+  {
+   "t": 354.16,
+   "d": 2.16,
+   "text": "the hunger clock you know"
+  },
+  {
+   "t": 356.32,
+   "d": 2.56,
+   "text": "takes its toll on him so we've all"
+  },
+  {
+   "t": 358.88,
+   "d": 2.08,
+   "text": "probably had a situation in nethack"
+  },
+  {
+   "t": 360.96,
+   "d": 1.6,
+   "text": "where you're stuck in a room you can't"
+  },
+  {
+   "t": 362.56,
+   "d": 1.6,
+   "text": "find the exits you're searching all the"
+  },
+  {
+   "t": 364.16,
+   "d": 2.8,
+   "text": "walls well good has the same thing"
+  },
+  {
+   "t": 366.96,
+   "d": 1.68,
+   "text": "you know the door is locked he can't get"
+  },
+  {
+   "t": 368.64,
+   "d": 2.8,
+   "text": "out and he goes from being sated"
+  },
+  {
+   "t": 371.44,
+   "d": 1.36,
+   "text": "to hungry"
+  },
+  {
+   "t": 372.8,
+   "d": 2.48,
+   "text": "to fainting"
+  },
+  {
+   "t": 375.28,
+   "d": 2.08,
+   "text": "a common form of death in in the"
+  },
+  {
+   "t": 377.36,
+   "d": 1.84,
+   "text": "roguelike genre"
+  },
+  {
+   "t": 379.2,
+   "d": 1.44,
+   "text": "and it's right here in this book the"
+  },
+  {
+   "t": 380.64,
+   "d": 3.68,
+   "text": "origin of the hunger clock"
+  },
+  {
+   "t": 384.48,
+   "d": 2.96,
+   "text": "luckily arja takes mercy on him nurses"
+  },
+  {
+   "t": 387.44,
+   "d": 1.44,
+   "text": "him back to health and they continue"
+  },
+  {
+   "t": 388.88,
+   "d": 2.8,
+   "text": "their quest for the amulet"
+  },
+  {
+   "t": 391.68,
+   "d": 2.0,
+   "text": "much like in a game of nethack they find"
+  },
+  {
+   "t": 393.68,
+   "d": 1.68,
+   "text": "it downstairs"
+  },
+  {
+   "t": 395.36,
+   "d": 1.68,
+   "text": "and go to a whole new area of the"
+  },
+  {
+   "t": 397.04,
+   "d": 1.6,
+   "text": "dungeon that they've never encountered"
+  },
+  {
+   "t": 398.64,
+   "d": 1.84,
+   "text": "before"
+  },
+  {
+   "t": 400.48,
+   "d": 1.36,
+   "text": "seeing new things they believe the"
+  },
+  {
+   "t": 401.84,
+   "d": 2.64,
+   "text": "amulet is further down in the darker"
+  },
+  {
+   "t": 404.48,
+   "d": 1.76,
+   "text": "reaches of it"
+  },
+  {
+   "t": 406.24,
+   "d": 1.52,
+   "text": "but just like in nethack there are"
+  },
+  {
+   "t": 407.76,
+   "d": 2.16,
+   "text": "dangerous traps along the way"
+  },
+  {
+   "t": 409.92,
+   "d": 2.08,
+   "text": "luckily ara is a"
+  },
+  {
+   "t": 412.0,
+   "d": 2.0,
+   "text": "skilled and experienced player and she"
+  },
+  {
+   "t": 414.0,
+   "d": 2.48,
+   "text": "knows that proper strategy is to search"
+  },
+  {
+   "t": 416.48,
+   "d": 2.32,
+   "text": "every tile before you step on it just in"
+  },
+  {
+   "t": 418.8,
+   "d": 1.52,
+   "text": "case there's a trap"
+  },
+  {
+   "t": 420.32,
+   "d": 2.0,
+   "text": "and she manages to find one of these"
+  },
+  {
+   "t": 422.32,
+   "d": 2.4,
+   "text": "traps before falling into a pit to her"
+  },
+  {
+   "t": 424.72,
+   "d": 2.8,
+   "text": "presumed death they managed to escape it"
+  },
+  {
+   "t": 427.52,
+   "d": 1.76,
+   "text": "and make their way to the area the"
+  },
+  {
+   "t": 429.28,
+   "d": 1.6,
+   "text": "treasure room where they emulate the"
+  },
+  {
+   "t": 430.88,
+   "d": 2.24,
+   "text": "story"
+  },
+  {
+   "t": 433.12,
+   "d": 2.0,
+   "text": "but getting the amulet is only"
+  },
+  {
+   "t": 435.12,
+   "d": 2.4,
+   "text": "part of the game for those of you who"
+  },
+  {
+   "t": 437.52,
+   "d": 1.28,
+   "text": "have finished net hack you know you have"
+  },
+  {
+   "t": 438.8,
+   "d": 2.8,
+   "text": "to escape with the amulet too"
+  },
+  {
+   "t": 441.6,
+   "d": 2.16,
+   "text": "well much like in nethack as you are"
+  },
+  {
+   "t": 443.76,
+   "d": 1.6,
+   "text": "escaping"
+  },
+  {
+   "t": 445.36,
+   "d": 2.88,
+   "text": "um there are still obstacles that they"
+  },
+  {
+   "t": 448.24,
+   "d": 2.96,
+   "text": "have to overcome they get very confused"
+  },
+  {
+   "t": 451.2,
+   "d": 1.6,
+   "text": "they lose their way"
+  },
+  {
+   "t": 452.8,
+   "d": 2.48,
+   "text": "i know as you escape in that hack parts"
+  },
+  {
+   "t": 455.28,
+   "d": 1.2,
+   "text": "of the dungeon that you've been to"
+  },
+  {
+   "t": 456.48,
+   "d": 2.24,
+   "text": "before disappear you forget what they"
+  },
+  {
+   "t": 458.72,
+   "d": 2.24,
+   "text": "look like you get teleported back and"
+  },
+  {
+   "t": 460.96,
+   "d": 2.56,
+   "text": "forth to sort of confuse you on your way"
+  },
+  {
+   "t": 463.52,
+   "d": 1.84,
+   "text": "out well the same thing happens in this"
+  },
+  {
+   "t": 465.36,
+   "d": 0.96,
+   "text": "book"
+  },
+  {
+   "t": 466.32,
+   "d": 2.08,
+   "text": "the nameless ones sort of exert their"
+  },
+  {
+   "t": 468.4,
+   "d": 2.16,
+   "text": "presence on both ged and arha they"
+  },
+  {
+   "t": 470.56,
+   "d": 2.24,
+   "text": "become very confused they struggle on"
+  },
+  {
+   "t": 472.8,
+   "d": 1.84,
+   "text": "their way out"
+  },
+  {
+   "t": 474.64,
+   "d": 2.48,
+   "text": "they're not sure which directions to go"
+  },
+  {
+   "t": 477.12,
+   "d": 2.16,
+   "text": "and they really have to"
+  },
+  {
+   "t": 479.28,
+   "d": 1.6,
+   "text": "focus to find their way out of the"
+  },
+  {
+   "t": 480.88,
+   "d": 1.68,
+   "text": "dungeon much slower than they would have"
+  },
+  {
+   "t": 482.56,
+   "d": 0.96,
+   "text": "before"
+  },
+  {
+   "t": 483.52,
+   "d": 2.0,
+   "text": "and just like you might get chased by"
+  },
+  {
+   "t": 485.52,
+   "d": 1.2,
+   "text": "the wizard"
+  },
+  {
+   "t": 486.72,
+   "d": 2.4,
+   "text": "rodney on your way out of a net hack"
+  },
+  {
+   "t": 489.12,
+   "d": 1.2,
+   "text": "dungeon"
+  },
+  {
+   "t": 490.32,
+   "d": 2.0,
+   "text": "they too feel that these nameless gods"
+  },
+  {
+   "t": 492.32,
+   "d": 1.44,
+   "text": "are chasing them on their way out"
+  },
+  {
+   "t": 493.76,
+   "d": 1.36,
+   "text": "they're aware of their presence they're"
+  },
+  {
+   "t": 495.12,
+   "d": 1.84,
+   "text": "aware of how far they are and you know"
+  },
+  {
+   "t": 496.96,
+   "d": 1.52,
+   "text": "they threaten death"
+  },
+  {
+   "t": 498.48,
+   "d": 2.56,
+   "text": "if they are to lag behind"
+  },
+  {
+   "t": 501.04,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 502.48,
+   "d": 2.0,
+   "text": "finally they do manage to leave the"
+  },
+  {
+   "t": 504.48,
+   "d": 2.08,
+   "text": "dungeon"
+  },
+  {
+   "t": 506.56,
+   "d": 1.52,
+   "text": "with the amulet"
+  },
+  {
+   "t": 508.08,
+   "d": 2.96,
+   "text": "and while i'm not exactly sure this is"
+  },
+  {
+   "t": 511.04,
+   "d": 2.16,
+   "text": "what happens in the code in nethack but"
+  },
+  {
+   "t": 513.2,
+   "d": 2.0,
+   "text": "i'm going to presume that it is once"
+  },
+  {
+   "t": 515.2,
+   "d": 1.12,
+   "text": "they leave the dungeon you know it"
+  },
+  {
+   "t": 516.32,
+   "d": 1.92,
+   "text": "disappears so you can't go back to it"
+  },
+  {
+   "t": 518.24,
+   "d": 1.52,
+   "text": "and so the same thing happens in this"
+  },
+  {
+   "t": 519.76,
+   "d": 0.8,
+   "text": "book"
+  },
+  {
+   "t": 520.56,
+   "d": 1.76,
+   "text": "as soon as they escape the dungeon"
+  },
+  {
+   "t": 522.32,
+   "d": 2.08,
+   "text": "crumbles into the ground it swallows"
+  },
+  {
+   "t": 524.4,
+   "d": 2.16,
+   "text": "whole and disappears"
+  },
+  {
+   "t": 526.56,
+   "d": 2.32,
+   "text": "yeah much like in that hack"
+  },
+  {
+   "t": 528.88,
+   "d": 2.0,
+   "text": "i assume that's what's canonically"
+  },
+  {
+   "t": 530.88,
+   "d": 2.16,
+   "text": "happening but yeah"
+  },
+  {
+   "t": 533.04,
+   "d": 2.08,
+   "text": "you know it's a single game single run"
+  },
+  {
+   "t": 535.12,
+   "d": 1.92,
+   "text": "that seat is gone now that they've"
+  },
+  {
+   "t": 537.04,
+   "d": 1.6,
+   "text": "escaped with the amulet"
+  },
+  {
+   "t": 538.64,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 539.68,
+   "d": 2.64,
+   "text": "you can't go back to the same dungeon"
+  },
+  {
+   "t": 542.32,
+   "d": 0.96,
+   "text": "so"
+  },
+  {
+   "t": 543.28,
+   "d": 2.32,
+   "text": "to recap i think that there are a lot of"
+  },
+  {
+   "t": 545.6,
+   "d": 1.92,
+   "text": "similarities they both take place in"
+  },
+  {
+   "t": 547.52,
+   "d": 2.64,
+   "text": "these twisty dark dungeons full of traps"
+  },
+  {
+   "t": 550.16,
+   "d": 1.28,
+   "text": "and danger"
+  },
+  {
+   "t": 551.44,
+   "d": 1.84,
+   "text": "uh with long mises that they have to"
+  },
+  {
+   "t": 553.28,
+   "d": 1.28,
+   "text": "adventure through"
+  },
+  {
+   "t": 554.56,
+   "d": 1.76,
+   "text": "there's a single adventurer in this case"
+  },
+  {
+   "t": 556.32,
+   "d": 1.36,
+   "text": "it's a wizard"
+  },
+  {
+   "t": 557.68,
+   "d": 1.52,
+   "text": "by the name of ged"
+  },
+  {
+   "t": 559.2,
+   "d": 2.72,
+   "text": "who is on his quest for the amulet"
+  },
+  {
+   "t": 561.92,
+   "d": 1.84,
+   "text": "there's a hunger clock and of course"
+  },
+  {
+   "t": 563.76,
+   "d": 1.28,
+   "text": "permadeath"
+  },
+  {
+   "t": 565.04,
+   "d": 2.48,
+   "text": "um you know you can't just wander around"
+  },
+  {
+   "t": 567.52,
+   "d": 2.64,
+   "text": "forever there really are consequences to"
+  },
+  {
+   "t": 570.16,
+   "d": 1.12,
+   "text": "that"
+  },
+  {
+   "t": 571.28,
+   "d": 2.16,
+   "text": "there's stairs to multiple levels"
+  },
+  {
+   "t": 573.44,
+   "d": 1.84,
+   "text": "traps that they have to watch out for"
+  },
+  {
+   "t": 575.28,
+   "d": 1.36,
+   "text": "and search for"
+  },
+  {
+   "t": 576.64,
+   "d": 2.0,
+   "text": "and of course they're both looking for"
+  },
+  {
+   "t": 578.64,
+   "d": 2.56,
+   "text": "this amulet at the end of their quest"
+  },
+  {
+   "t": 581.2,
+   "d": 1.92,
+   "text": "that they have to take from the dungeon"
+  },
+  {
+   "t": 583.12,
+   "d": 1.52,
+   "text": "and escape with"
+  },
+  {
+   "t": 584.64,
+   "d": 1.92,
+   "text": "now that escape is very difficult"
+  },
+  {
+   "t": 586.56,
+   "d": 1.6,
+   "text": "they're being chased by these nameless"
+  },
+  {
+   "t": 588.16,
+   "d": 2.24,
+   "text": "ones they're being confused"
+  },
+  {
+   "t": 590.4,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 591.84,
+   "d": 1.76,
+   "text": "but there is this real feeling of real"
+  },
+  {
+   "t": 593.6,
+   "d": 2.16,
+   "text": "consequences it's a long arduous"
+  },
+  {
+   "t": 595.76,
+   "d": 1.68,
+   "text": "emotional journey"
+  },
+  {
+   "t": 597.44,
+   "d": 2.56,
+   "text": "god goes through lots of states of hope"
+  },
+  {
+   "t": 600.0,
+   "d": 2.0,
+   "text": "feeling very confident"
+  },
+  {
+   "t": 602.0,
+   "d": 3.92,
+   "text": "to disheartenment feeling very scared um"
+  },
+  {
+   "t": 605.92,
+   "d": 2.96,
+   "text": "much like i have and maybe you all have"
+  },
+  {
+   "t": 608.88,
+   "d": 1.84,
+   "text": "in our long games of net hack you know"
+  },
+  {
+   "t": 610.72,
+   "d": 3.04,
+   "text": "you're 30 hours in you have this elation"
+  },
+  {
+   "t": 613.76,
+   "d": 2.08,
+   "text": "and then this despair and then elation"
+  },
+  {
+   "t": 615.84,
+   "d": 0.88,
+   "text": "as you"
+  },
+  {
+   "t": 616.72,
+   "d": 2.24,
+   "text": "escape various traps there's the same"
+  },
+  {
+   "t": 618.96,
+   "d": 2.4,
+   "text": "emotional rollercoaster in the game"
+  },
+  {
+   "t": 621.36,
+   "d": 2.0,
+   "text": "but the real question is"
+  },
+  {
+   "t": 623.36,
+   "d": 3.28,
+   "text": "did this actually have"
+  },
+  {
+   "t": 626.64,
+   "d": 2.72,
+   "text": "an influence on the roguelike genre did"
+  },
+  {
+   "t": 629.36,
+   "d": 2.16,
+   "text": "any of the developers read this book or"
+  },
+  {
+   "t": 631.52,
+   "d": 2.4,
+   "text": "were aware of it i know many people cite"
+  },
+  {
+   "t": 633.92,
+   "d": 3.68,
+   "text": "dungeons and dragons or tolkien has"
+  },
+  {
+   "t": 637.6,
+   "d": 3.36,
+   "text": "influences on roguelikes but i was"
+  },
+  {
+   "t": 640.96,
+   "d": 1.36,
+   "text": "curious to know"
+  },
+  {
+   "t": 642.32,
+   "d": 1.28,
+   "text": "if this book"
+  },
+  {
+   "t": 643.6,
+   "d": 2.16,
+   "text": "also did so i took the liberty of"
+  },
+  {
+   "t": 645.76,
+   "d": 1.76,
+   "text": "emailing the developers"
+  },
+  {
+   "t": 647.52,
+   "d": 1.76,
+   "text": "and i got this great email back from"
+  },
+  {
+   "t": 649.28,
+   "d": 2.8,
+   "text": "michael toy who among other influences"
+  },
+  {
+   "t": 652.08,
+   "d": 1.12,
+   "text": "did say"
+  },
+  {
+   "t": 653.2,
+   "d": 1.52,
+   "text": "that he had read this book multiple"
+  },
+  {
+   "t": 654.72,
+   "d": 2.64,
+   "text": "times and probably subconsciously it did"
+  },
+  {
+   "t": 657.36,
+   "d": 1.92,
+   "text": "affect his"
+  },
+  {
+   "t": 659.28,
+   "d": 3.84,
+   "text": "uh vision of what should go into rogue"
+  },
+  {
+   "t": 663.12,
+   "d": 1.52,
+   "text": "at least you know the quest for the"
+  },
+  {
+   "t": 664.64,
+   "d": 2.08,
+   "text": "amulet but also sort of this"
+  },
+  {
+   "t": 666.72,
+   "d": 1.76,
+   "text": "emotional rollercoaster or real-life"
+  },
+  {
+   "t": 668.48,
+   "d": 2.16,
+   "text": "consequences and i think that there are"
+  },
+  {
+   "t": 670.64,
+   "d": 2.56,
+   "text": "definitely a few more similarities"
+  },
+  {
+   "t": 673.2,
+   "d": 2.56,
+   "text": "so that's my talk thank you all so much"
+  },
+  {
+   "t": 675.76,
+   "d": 2.0,
+   "text": "for listening to it and i want to take a"
+  },
+  {
+   "t": 677.76,
+   "d": 1.76,
+   "text": "moment here at the end of this wonderful"
+  },
+  {
+   "t": 679.52,
+   "d": 2.4,
+   "text": "conference to thank all the organizers"
+  },
+  {
+   "t": 681.92,
+   "d": 2.4,
+   "text": "and all the speakers and all the people"
+  },
+  {
+   "t": 684.32,
+   "d": 1.44,
+   "text": "who have put time into making this"
+  },
+  {
+   "t": 685.76,
+   "d": 1.2,
+   "text": "happen"
+  },
+  {
+   "t": 686.96,
+   "d": 2.24,
+   "text": "it's really great to see it happen for"
+  },
+  {
+   "t": 689.2,
+   "d": 1.28,
+   "text": "another year"
+  },
+  {
+   "t": 690.48,
+   "d": 1.44,
+   "text": "and i hope that you all had a wonderful"
+  },
+  {
+   "t": 691.92,
+   "d": 1.84,
+   "text": "time and let's all give them a big round"
+  },
+  {
+   "t": 693.76,
+   "d": 1.76,
+   "text": "of applause for all of the work that"
+  },
+  {
+   "t": 695.52,
+   "d": 2.8,
+   "text": "they put into it"
+  },
+  {
+   "t": 700.32,
+   "d": 2.16,
+   "text": "so thank you so much and if there's time"
+  },
+  {
+   "t": 702.48,
+   "d": 3.36,
+   "text": "maybe i can take questions"
+  },
+  {
+   "t": 708.88,
+   "d": 2.64,
+   "text": "all right well thank you i feel i mean"
+  },
+  {
+   "t": 711.52,
+   "d": 1.68,
+   "text": "don't give us your claps give noah your"
+  },
+  {
+   "t": 713.2,
+   "d": 4.56,
+   "text": "claps clap's enough for everybody uh"
+  },
+  {
+   "t": 717.76,
+   "d": 1.36,
+   "text": "yeah"
+  },
+  {
+   "t": 719.12,
+   "d": 2.0,
+   "text": "and hello we have you live"
+  },
+  {
+   "t": 721.12,
+   "d": 2.0,
+   "text": "hello"
+  },
+  {
+   "t": 723.12,
+   "d": 2.32,
+   "text": "um good to be back"
+  },
+  {
+   "t": 725.44,
+   "d": 1.84,
+   "text": "good to have you back nice to see"
+  },
+  {
+   "t": 727.28,
+   "d": 2.8,
+   "text": "everyone um"
+  },
+  {
+   "t": 730.08,
+   "d": 2.08,
+   "text": "yeah although i've been on stage a lot"
+  },
+  {
+   "t": 732.16,
+   "d": 1.76,
+   "text": "at the road like celebration this is in"
+  },
+  {
+   "t": 733.92,
+   "d": 3.04,
+   "text": "fact my first talk uh so it's very cool"
+  },
+  {
+   "t": 736.96,
+   "d": 2.48,
+   "text": "to be able to finally give a talk here"
+  },
+  {
+   "t": 739.44,
+   "d": 2.08,
+   "text": "yeah and what a talk i like that it ends"
+  },
+  {
+   "t": 741.52,
+   "d": 1.36,
+   "text": "with the uh"
+  },
+  {
+   "t": 742.88,
+   "d": 1.84,
+   "text": "anyway this isn't just hypothetical here"
+  },
+  {
+   "t": 744.72,
+   "d": 2.24,
+   "text": "i talked to the developers"
+  },
+  {
+   "t": 746.96,
+   "d": 1.68,
+   "text": "well you know i spent a lot of time"
+  },
+  {
+   "t": 748.64,
+   "d": 2.56,
+   "text": "emailing uh roguelike developers in my"
+  },
+  {
+   "t": 751.2,
+   "d": 1.92,
+   "text": "capacity as organizer of roguelike"
+  },
+  {
+   "t": 753.12,
+   "d": 1.52,
+   "text": "celebrations so"
+  },
+  {
+   "t": 754.64,
+   "d": 0.88,
+   "text": "yeah"
+  },
+  {
+   "t": 755.52,
+   "d": 2.8,
+   "text": "the rolodex"
+  },
+  {
+   "t": 758.32,
+   "d": 2.64,
+   "text": "i'm standing by with my copy of tombs of"
+  },
+  {
+   "t": 760.96,
+   "d": 2.96,
+   "text": "atoman a dog-eared version that"
+  },
+  {
+   "t": 763.92,
+   "d": 1.84,
+   "text": "i took a lot of notes in for this talk"
+  },
+  {
+   "t": 765.76,
+   "d": 2.32,
+   "text": "but i don't know if anyone ended up"
+  },
+  {
+   "t": 768.08,
+   "d": 2.56,
+   "text": "asking any questions"
+  },
+  {
+   "t": 770.64,
+   "d": 1.28,
+   "text": "it looks like we don't have any firm"
+  },
+  {
+   "t": 771.92,
+   "d": 2.16,
+   "text": "questions so far though i'm curious i"
+  },
+  {
+   "t": 774.08,
+   "d": 2.48,
+   "text": "think one that might be interesting is"
+  },
+  {
+   "t": 776.56,
+   "d": 1.12,
+   "text": "just if you have any other"
+  },
+  {
+   "t": 777.68,
+   "d": 3.12,
+   "text": "recommendations of uh or silicone books"
+  },
+  {
+   "t": 780.8,
+   "d": 1.44,
+   "text": "that might be good for people to check"
+  },
+  {
+   "t": 782.24,
+   "d": 1.2,
+   "text": "out"
+  },
+  {
+   "t": 783.44,
+   "d": 2.32,
+   "text": "uh that are roguelike related or just"
+  },
+  {
+   "t": 785.76,
+   "d": 1.52,
+   "text": "generally good i mean maybe just"
+  },
+  {
+   "t": 787.28,
+   "d": 2.16,
+   "text": "generally i guess both"
+  },
+  {
+   "t": 789.44,
+   "d": 2.0,
+   "text": "every one that i have read is is quite"
+  },
+  {
+   "t": 791.44,
+   "d": 2.32,
+   "text": "good uh lathe of heaven is also very"
+  },
+  {
+   "t": 793.76,
+   "d": 2.4,
+   "text": "short and and really well written the"
+  },
+  {
+   "t": 796.16,
+   "d": 2.16,
+   "text": "entire earth c series is great i highly"
+  },
+  {
+   "t": 798.32,
+   "d": 1.76,
+   "text": "recommend it to anyone who hasn't read"
+  },
+  {
+   "t": 800.08,
+   "d": 1.68,
+   "text": "it"
+  },
+  {
+   "t": 801.76,
+   "d": 1.2,
+   "text": "cool"
+  },
+  {
+   "t": 802.96,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 804.0,
+   "d": 2.96,
+   "text": "we have one question from dvd uh will"
+  },
+  {
+   "t": 806.96,
+   "d": 1.36,
+   "text": "you be at the internet archive on"
+  },
+  {
+   "t": 808.32,
+   "d": 1.76,
+   "text": "thursday"
+  },
+  {
+   "t": 810.08,
+   "d": 4.08,
+   "text": "uh no unfortunately um i am i am out of"
+  },
+  {
+   "t": 814.16,
+   "d": 3.68,
+   "text": "town uh but i look forward uh"
+  },
+  {
+   "t": 817.84,
+   "d": 2.0,
+   "text": "to seeing well"
+  },
+  {
+   "t": 819.84,
+   "d": 2.16,
+   "text": "i hope next year's roguelike celebration"
+  },
+  {
+   "t": 822.0,
+   "d": 2.72,
+   "text": "we can all meet in person again and i"
+  },
+  {
+   "t": 824.72,
+   "d": 1.52,
+   "text": "look forward to seeing a lot of you"
+  },
+  {
+   "t": 826.24,
+   "d": 1.68,
+   "text": "there"
+  },
+  {
+   "t": 827.92,
+   "d": 1.52,
+   "text": "since there are other questions i'll"
+  },
+  {
+   "t": 829.44,
+   "d": 2.24,
+   "text": "take this opportunity again to"
+  },
+  {
+   "t": 831.68,
+   "d": 1.68,
+   "text": "to express my thanks to all the"
+  },
+  {
+   "t": 833.36,
+   "d": 1.52,
+   "text": "organizers for carrying on the"
+  },
+  {
+   "t": 834.88,
+   "d": 1.12,
+   "text": "conference"
+  },
+  {
+   "t": 836.0,
+   "d": 1.76,
+   "text": "and making it run really well for a"
+  },
+  {
+   "t": 837.76,
+   "d": 1.76,
+   "text": "sixth year"
+  },
+  {
+   "t": 839.52,
+   "d": 1.6,
+   "text": "all the talks that i caught were really"
+  },
+  {
+   "t": 841.12,
+   "d": 2.64,
+   "text": "great i hope all of you had a really fun"
+  },
+  {
+   "t": 843.76,
+   "d": 1.12,
+   "text": "time"
+  },
+  {
+   "t": 844.88,
+   "d": 1.6,
+   "text": "uh and it's great to see the event"
+  },
+  {
+   "t": 846.48,
+   "d": 1.2,
+   "text": "thriving"
+  },
+  {
+   "t": 847.68,
+   "d": 2.4,
+   "text": "thanks noah i mean yeah i know speaking"
+  },
+  {
+   "t": 850.08,
+   "d": 2.0,
+   "text": "for myself and i'm sure the other"
+  },
+  {
+   "t": 852.08,
+   "d": 1.52,
+   "text": "current organizers"
+  },
+  {
+   "t": 853.6,
+   "d": 1.76,
+   "text": "really thankful for you you know in the"
+  },
+  {
+   "t": 855.36,
+   "d": 1.36,
+   "text": "work that you did putting this together"
+  },
+  {
+   "t": 856.72,
+   "d": 2.24,
+   "text": "it was very important to me as a"
+  },
+  {
+   "t": 858.96,
+   "d": 2.08,
+   "text": "attendee and speaker and now it's it's"
+  },
+  {
+   "t": 861.04,
+   "d": 2.08,
+   "text": "great to get a chance to make sure it"
+  },
+  {
+   "t": 863.12,
+   "d": 1.84,
+   "text": "keeps running"
+  },
+  {
+   "t": 864.96,
+   "d": 1.92,
+   "text": "yeah and i can't see chat but i hope all"
+  },
+  {
+   "t": 866.88,
+   "d": 1.6,
+   "text": "of you are expressing your thanks to the"
+  },
+  {
+   "t": 868.48,
+   "d": 1.92,
+   "text": "organizers"
+  },
+  {
+   "t": 870.4,
+   "d": 2.24,
+   "text": "you know send them nice notes"
+  },
+  {
+   "t": 872.64,
+   "d": 2.48,
+   "text": "shout them out on twitter"
+  },
+  {
+   "t": 875.12,
+   "d": 2.48,
+   "text": "as as a former organizer i know how much"
+  },
+  {
+   "t": 877.6,
+   "d": 2.16,
+   "text": "it matters when people say nice things"
+  },
+  {
+   "t": 879.76,
+   "d": 2.24,
+   "text": "so i'm sure they'll appreciate it people"
+  },
+  {
+   "t": 882.0,
+   "d": 1.52,
+   "text": "are doing a lot of dancing and chat"
+  },
+  {
+   "t": 883.52,
+   "d": 1.52,
+   "text": "which is also appreciated because you"
+  },
+  {
+   "t": 885.04,
+   "d": 3.28,
+   "text": "know we wrote the dance corpus so"
+  },
+  {
+   "t": 888.32,
+   "d": 3.12,
+   "text": "it's nice to see people enjoy it"
+  },
+  {
+   "t": 891.44,
+   "d": 2.8,
+   "text": "all right well then thank you noah and i"
+  },
+  {
+   "t": 894.24,
+   "d": 1.28,
+   "text": "hope you enjoyed your first time"
+  },
+  {
+   "t": 895.52,
+   "d": 2.16,
+   "text": "speaking at roguelike celebration it was"
+  },
+  {
+   "t": 897.68,
+   "d": 2.4,
+   "text": "great uh i i hope you all enjoyed the"
+  },
+  {
+   "t": 900.08,
+   "d": 1.04,
+   "text": "talk"
+  },
+  {
+   "t": 901.12,
+   "d": 2.8,
+   "text": "thank you"
+  }
+ ]
+}

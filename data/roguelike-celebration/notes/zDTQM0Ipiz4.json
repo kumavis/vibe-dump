@@ -1,0 +1,166 @@
+{
+  "id": "zDTQM0Ipiz4",
+  "title": "Jason Grinblat - Markov by Candelight",
+  "speaker": "Jason Grinblat",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=zDTQM0Ipiz4",
+  "talk_type": "technical",
+  "summary": "Jason Grinblat of Freehold Games describes using Markov chain text generators to create procedural books for a library in Caves of Qud, whose fractured, ancient lore suits semi-coherent generated text. He explains how order-2 Markov chains are built and walked, how he mixed Qud's own text with public-domain 19th-century books into a corpus, and how he generates sentences, paragraphs, books and titles (by trimming bad leading and trailing words). He adds 'characterful' variation such as author's notes and giant tomes, then weaves a mechanic into the text by embedding procedurally generated secrets about an artifact pistol's location into the corpus, with a formula to control how often they appear.",
+  "games": [
+    "Caves of Qud",
+    "The Elder Scrolls"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "markov text",
+      "kind": "principle",
+      "claim": "Markov-generated text is grammatically well-formed but semantically odd, which makes it a good fit for Caves of Qud's library of ancient books whose authors and context are lost.",
+      "detail": "Grinblat wanted the library to feel like texts from across the ages, rendered semi-decipherable by linguistic drift and transliteration, with fractured meaning and half-remembered myths. He realised this fractured quality is exactly what Markov text produces.",
+      "t": 252,
+      "quote": "i realize this sort of weird fractured text is a perfect fit for markov generated text",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "markov chains",
+      "kind": "technique",
+      "claim": "A Markov text generator maps each n-word prefix in a corpus to a list of words that follow it, then generates by repeatedly choosing a random suffix for the current prefix; the order n controls how closely output reproduces the source.",
+      "detail": "Grinblat walks through building an order-2 chain from 'the cat isn't sleeping but the cat is definitely not listening', where 'the cat' maps to both 'isn't' and 'is'. Punctuation like commas is retained. A large enough order just reproduces the corpus; Caves of Qud uses order two.",
+      "t": 338,
+      "quote": "the order is a property of the chain and you can vary the order to change how predictable the text is that you end up generating",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "corpus design",
+      "kind": "principle",
+      "claim": "What makes Markov text interesting is the clever choice and arrangement of the source corpus, not the simple generation rules.",
+      "detail": "Grinblat's opening examples mixed Puppet documentation with H. P. Lovecraft, and LinkedIn recruiter emails with drug-use anecdotes. He stresses that building chains is simple.",
+      "t": 487,
+      "quote": "the clever arrangement of the corpus the clever choice of a corpus rather than the rules of actually generating the text",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "corpus design",
+      "kind": "example",
+      "claim": "Caves of Qud's book corpus is about half the game's own text (static books, NPC dialogue, quest text, object and skill descriptions, help files) and half public-domain 19th-century books chosen to match the game's tone.",
+      "detail": "Qud's own text is about 45,000 words; Grinblat added a similar amount of excerpts from Project Gutenberg works such as a 19th-century physics book and 'Zoological Mythology'. Including help files creates an odd meta reality where in-game books talk about Caves of Qud.",
+      "t": 631,
+      "quote": "i included excerpts of these such that they made up about half the corpus and then caves of cud made up the other half of the corpus",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "anti-spoiler design",
+      "kind": "example",
+      "claim": "Caves of Qud procedurally generates disease cures each game and records them in an in-game book, so players must consult the book rather than look the cure up on the wiki.",
+      "detail": "Grinblat cites the Corpus Collosus as one of the few static books with procedural elements.",
+      "t": 545,
+      "quote": "each game the the cure is actually procedurally generated so you have to reference this manual instead of just looking up the caves on the caves of cod wiki",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural books",
+      "kind": "technique",
+      "claim": "Caves of Qud generates a sentence by starting from a random sentence-initial prefix and walking the chain until a period, a paragraph from three to six sentences, and a book from eight to thirty paragraphs, then reuses existing formatting tools.",
+      "detail": "While building the chain, Grinblat keeps a separate list of prefixes that start sentences. There is a fallback to terminate after 50 words without a period, which rarely triggers.",
+      "t": 711,
+      "quote": "to generate a paragraph you just generate three to six sentences and to generate a book we generate eight to thirty paragraphs",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "title generation",
+      "kind": "technique",
+      "claim": "Good procedural book titles come from walking the Markov chain two to five times and shaving undesirable words (pronouns, conjunctions and similar) off the start and end, using a static list of about 30 words.",
+      "detail": "Grinblat's first approach filled title templates like 'The X of Y', but a bug let non-template titles through that were better. Trimming 'until' off 'at the foot of a sickly tree until' turns a bad fragment into an interesting title.",
+      "t": 903,
+      "quote": "i generate a fragment of text by walking the chain two to five times and then i just shave undesirable words off the beginning and end of the text",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "characterfulness",
+      "kind": "technique",
+      "claim": "To avoid generated books feeling samey, Caves of Qud adds occasional distinctive features: author's or editor's notes 10% of the time, a tome ten times normal size 5% of the time, and title modifiers 20% of the time.",
+      "detail": "Grinblat draws on Kate Compton's idea of 'characterfulness': output must be perceived as meaningfully different by a human, not merely technically different. Title modifiers include things like 'Nth edition'.",
+      "t": 1004,
+      "quote": "this quality of being able to be like meaningfully perceived as different by a human or by a player or reader",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "authorship",
+      "kind": "principle",
+      "claim": "Generated text raises the question of who the author is; Grinblat adopts Emily Short's framing of writing with a generator as a collaboration between author and generator.",
+      "detail": "Grinblat found it especially fun to generate text from a corpus he had largely written himself. Emily Short described her procedurally assisted fictional travel guide this way.",
+      "t": 806,
+      "quote": "she felt like it was a collaboration with between her and the generator",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "markov chains",
+      "kind": "technique",
+      "claim": "In Grinblat's Markov generator, a prefix appears in generated text at roughly the same frequency it appears in the corpus, which makes common prefixes like 'to the' and 'in the' usable as hooks for inserting content.",
+      "detail": "Grinblat calls this obvious in retrospect but says it took a lot of thinking to reach. He did frequency analysis on the Caves of Qud chain to find the most common order-2 prefixes.",
+      "t": 1150,
+      "quote": "how often a prefix occurs in the corpus very closely matches how often it occurs in generated text",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "embedded secrets",
+      "kind": "technique",
+      "claim": "Caves of Qud hides procedurally generated lore in Markov books by writing secrets as whole phrases after common prefix hooks, adding them to the corpus, and stopping the chain from splitting them into two-word units.",
+      "detail": "The proof of concept places an artifact pistol, the Ruin of House Isner, on one of about 18,000 map screens. Secrets give distances from static landmarks, such as 'east of Joppa some six parasangs', where a parasang is about one world-map tile.",
+      "t": 1224,
+      "quote": "i added some special processing rules to the chain so that when the chain's getting constructed it doesn't crack these secret secrets apart",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "research mechanic",
+      "kind": "example",
+      "claim": "In Caves of Qud's library, a player can cross-reference a north-south secret with an east-west secret from different generated books to narrow the pistol's location to one world-map tile, an area small enough to explore.",
+      "detail": "Grinblat's goal was to evoke sifting through tattered tomes and researching something meaningful in the game world. One world-map tile is nine maps.",
+      "t": 1252,
+      "quote": "a savvy player can go to the library do some research and find a north south secret cross-reference it with an east rest secret",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "frequency control",
+      "kind": "technique",
+      "claim": "The frequency of embedded secrets in Markov-generated books can be tuned: the number of secrets to add equals desired secrets per book times average suffixes per hook, divided by hooks per book.",
+      "detail": "The inputs are average book size, how often hooks appear per book, and how many suffixes each hook has (around 100 for 'in the'). Grinblat chose about one secret every four books, with books also found outside the library from merchants and in the world.",
+      "t": 1327,
+      "quote": "the desired number of secrets per book times the average number of suffixes per hook over the number of hooks per book",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "embedded secrets",
+      "kind": "open-question",
+      "claim": "Grinblat's secret generator requires hand-crafting well-formed English for each lore type; he wants a generalised way to turn Caves of Qud's many procedural elements into secrets, plus thematic sub-corpora and thematic paragraphs.",
+      "detail": "Secrets must be well-formed English to be ingested meaningfully by the chain, so each piece of lore needs its own crafted secret generator.",
+      "t": 1378,
+      "quote": "i would like to have some generalized way to turn those into secrets",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "misinformation",
+      "kind": "example",
+      "claim": "Markov books built from NPC dialogue rarely produce plausible but wrong secrets; false statements tend to be obviously absurd, and Grinblat is comfortable with some misinformation as long as it doesn't look too much like the right answer.",
+      "detail": "In Q&A he adds that players finding procedural books so far are mostly confused, since Qud's lore is shrouded in mystery; the library itself was not yet in the game.",
+      "t": 1592,
+      "quote": "i kind of like the idea of some misinformation as long as it doesn't look too much like the right answer",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

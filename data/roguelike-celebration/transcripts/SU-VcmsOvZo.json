@@ -1,0 +1,5120 @@
+{
+ "id": "SU-VcmsOvZo",
+ "url": "https://www.youtube.com/watch?v=SU-VcmsOvZo",
+ "title": "Matt Carney - Some Quite Fantastic Shapes: Procedural Narrative & Terry Riley’s In C",
+ "speaker": "Matt Carney",
+ "talk_title": "Some Quite Fantastic Shapes: Procedural Narrative & Terry Riley’s In C",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 2050,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "Terry Riley’s landmark minimalist composition \"In C\" (1964) asks musicians to play through 53 melodic fragments in order using their own discretion around instrumentation and repetition. This unique approach balances procedural generation with authored intent in a way that can cause, in Riley’s own words, “some quite fantastic shapes to arise and disintegrate.” This talk will dive into Riley’s piece to look at how procedurally generated games with a strong sense of possibility (or “key”) utilize a balanced range of narrative tools and writing styles to make fantastic shapes of their own.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6566,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 4.5,
+   "d": 3.1,
+   "text": "Our next speaker is Matt Carney. Uh Matt"
+  },
+  {
+   "t": 7.6,
+   "d": 2.0,
+   "text": "is a video editor and musician living in"
+  },
+  {
+   "t": 9.6,
+   "d": 2.2,
+   "text": "California whose credits include the"
+  },
+  {
+   "t": 11.8,
+   "d": 2.4,
+   "text": "video games Norco and Perfect Tide,"
+  },
+  {
+   "t": 14.2,
+   "d": 2.4,
+   "text": "Station to Station, as well as the"
+  },
+  {
+   "t": 16.6,
+   "d": 3.0,
+   "text": "TTRPGs The Creation of Wonder and Forget"
+  },
+  {
+   "t": 19.6,
+   "d": 1.8,
+   "text": "Sunlight. He's also created the"
+  },
+  {
+   "t": 21.4,
+   "d": 2.0,
+   "text": "generative card game Air Light Water"
+  },
+  {
+   "t": 23.4,
+   "d": 2.0,
+   "text": "Moon Shadow Sky and performs"
+  },
+  {
+   "t": 25.4,
+   "d": 3.4,
+   "text": "experimental music as Silo Homes. Uh"
+  },
+  {
+   "t": 28.8,
+   "d": 2.7,
+   "text": "welcome on Matt."
+  },
+  {
+   "t": 31.5,
+   "d": 1.6,
+   "text": ">> Hey, I'm so happy to be here. Thanks for"
+  },
+  {
+   "t": 33.1,
+   "d": 0.5,
+   "text": "having me."
+  },
+  {
+   "t": 33.6,
+   "d": 1.6,
+   "text": ">> Yeah, and Matt will be presenting the"
+  },
+  {
+   "t": 35.2,
+   "d": 2.2,
+   "text": "talk Some Quite Fantastic Shapes,"
+  },
+  {
+   "t": 37.4,
+   "d": 2.1,
+   "text": "Procedural Narrative, and Terry Riley's"
+  },
+  {
+   "t": 39.5,
+   "d": 2.0,
+   "text": "In C. Take it away Matt."
+  },
+  {
+   "t": 41.5,
+   "d": 1.3,
+   "text": ">> Great, I'll just dive right in. Thanks"
+  },
+  {
+   "t": 42.8,
+   "d": 2.3,
+   "text": "again."
+  },
+  {
+   "t": 45.5,
+   "d": 1.6,
+   "text": "All right, this is Some Quite Fantastic"
+  },
+  {
+   "t": 47.1,
+   "d": 1.6,
+   "text": "Shapes, Procedural Narrative, and Terry"
+  },
+  {
+   "t": 48.7,
+   "d": 3.1,
+   "text": "Riley's In C. Um"
+  },
+  {
+   "t": 51.8,
+   "d": 1.6,
+   "text": "just a brief outline. We'll try to cover"
+  },
+  {
+   "t": 53.4,
+   "d": 1.5,
+   "text": "a lot of ground in about half an hour."
+  },
+  {
+   "t": 54.9,
+   "d": 2.7,
+   "text": "So an introduction, uh"
+  },
+  {
+   "t": 57.6,
+   "d": 1.8,
+   "text": "dip into aleatoric music, chance"
+  },
+  {
+   "t": 59.4,
+   "d": 1.4,
+   "text": "operations, and deep listening just to"
+  },
+  {
+   "t": 60.8,
+   "d": 2.1,
+   "text": "give a sense of where Terry Riley's"
+  },
+  {
+   "t": 62.9,
+   "d": 2.2,
+   "text": "piece fits within other forms of music"
+  },
+  {
+   "t": 65.1,
+   "d": 3.2,
+   "text": "that involve generative or prompt-based"
+  },
+  {
+   "t": 68.3,
+   "d": 1.3,
+   "text": "procedures."
+  },
+  {
+   "t": 69.6,
+   "d": 1.3,
+   "text": "We'll look at Terry Riley's career and"
+  },
+  {
+   "t": 70.9,
+   "d": 1.7,
+   "text": "In C itself and then the intersection"
+  },
+  {
+   "t": 72.6,
+   "d": 1.0,
+   "text": "with procedural narrative, kind of"
+  },
+  {
+   "t": 73.6,
+   "d": 1.8,
+   "text": "focusing on three sections that I've"
+  },
+  {
+   "t": 75.4,
+   "d": 2.9,
+   "text": "determined, key and notes, pulse and"
+  },
+  {
+   "t": 78.3,
+   "d": 1.5,
+   "text": "resonance."
+  },
+  {
+   "t": 79.8,
+   "d": 1.9,
+   "text": "Conclusion and then questions. Um if we"
+  },
+  {
+   "t": 81.7,
+   "d": 1.3,
+   "text": "run out of time on this, of course I'll"
+  },
+  {
+   "t": 83.0,
+   "d": 3.1,
+   "text": "be in the uh mud after."
+  },
+  {
+   "t": 86.1,
+   "d": 2.4,
+   "text": "And yeah, let's go ahead and get started"
+  },
+  {
+   "t": 88.5,
+   "d": 1.5,
+   "text": "on it. Uh I will say this talk will"
+  },
+  {
+   "t": 90.0,
+   "d": 3.0,
+   "text": "assume a decent amount of knowledge"
+  },
+  {
+   "t": 93.0,
+   "d": 1.5,
+   "text": "procedural narrative, procgen and"
+  },
+  {
+   "t": 94.5,
+   "d": 2.2,
+   "text": "roguelike, and uh not so much knowledge"
+  },
+  {
+   "t": 96.7,
+   "d": 1.3,
+   "text": "around Terry Riley and In C. So it's"
+  },
+  {
+   "t": 98.0,
+   "d": 1.5,
+   "text": "kind of weighted in that way. So we'll"
+  },
+  {
+   "t": 99.5,
+   "d": 2.7,
+   "text": "get a lot into the piece and who Terry"
+  },
+  {
+   "t": 102.2,
+   "d": 1.9,
+   "text": "Riley is and then follow into the"
+  },
+  {
+   "t": 104.1,
+   "d": 2.2,
+   "text": "procedural narrative."
+  },
+  {
+   "t": 106.3,
+   "d": 0.9,
+   "text": "Um"
+  },
+  {
+   "t": 107.2,
+   "d": 2.0,
+   "text": "Brooke's amazing introduction covered"
+  },
+  {
+   "t": 109.2,
+   "d": 1.8,
+   "text": "all of this. Um so I can breeze through"
+  },
+  {
+   "t": 111.0,
+   "d": 2.0,
+   "text": "this pretty quickly, but I I do think"
+  },
+  {
+   "t": 113.0,
+   "d": 2.9,
+   "text": "it's worth noting that my career within"
+  },
+  {
+   "t": 115.9,
+   "d": 2.1,
+   "text": "video games is sort of going from much"
+  },
+  {
+   "t": 118.0,
+   "d": 3.19,
+   "text": "more narratively forward and stories,"
+  },
+  {
+   "t": 121.19,
+   "d": 1.5,
+   "text": "like Norco and Perfect Tide Station"
+  },
+  {
+   "t": 122.69,
+   "d": 2.2,
+   "text": "Station, and from that getting really"
+  },
+  {
+   "t": 124.89,
+   "d": 2.3,
+   "text": "interested into TTRPG"
+  },
+  {
+   "t": 127.19,
+   "d": 1.6,
+   "text": "editing with the space that can be"
+  },
+  {
+   "t": 128.79,
+   "d": 2.6,
+   "text": "possible within those worlds. Um might"
+  },
+  {
+   "t": 131.39,
+   "d": 1.9,
+   "text": "have to evolving, you know, chance and"
+  },
+  {
+   "t": 133.29,
+   "d": 2.2,
+   "text": "generation, working with Eve Golden"
+  },
+  {
+   "t": 135.49,
+   "d": 1.3,
+   "text": "Woods on the creation of Wonder, and"
+  },
+  {
+   "t": 136.79,
+   "d": 2.1,
+   "text": "then recently on Forget Starlight"
+  },
+  {
+   "t": 138.89,
+   "d": 1.3,
+   "text": "Starlight with Nick Tringali, who'll be"
+  },
+  {
+   "t": 140.19,
+   "d": 2.3,
+   "text": "giving a talk tomorrow. Uh and then I"
+  },
+  {
+   "t": 142.49,
+   "d": 1.8,
+   "text": "make game designer for this journey of"
+  },
+  {
+   "t": 144.29,
+   "d": 1.9,
+   "text": "card game Air Light Water Moon Shadow"
+  },
+  {
+   "t": 146.19,
+   "d": 2.3,
+   "text": "Sky, which I will call out um some nice"
+  },
+  {
+   "t": 148.49,
+   "d": 2.6,
+   "text": "sort of echo of Everest talk. It's"
+  },
+  {
+   "t": 151.09,
+   "d": 2.0,
+   "text": "actually the designer of the game, the"
+  },
+  {
+   "t": 153.09,
+   "d": 1.9,
+   "text": "visual designer is Justin Carter, who"
+  },
+  {
+   "t": 154.99,
+   "d": 2.7,
+   "text": "designed the cover of I Who Have Never"
+  },
+  {
+   "t": 157.69,
+   "d": 1.6,
+   "text": "Known Men. So it's kind of nice seeing"
+  },
+  {
+   "t": 159.29,
+   "d": 1.8,
+   "text": "that appear earlier, and all of his work"
+  },
+  {
+   "t": 161.09,
+   "d": 1.7,
+   "text": "is wonderful. And actually the entire"
+  },
+  {
+   "t": 162.79,
+   "d": 1.3,
+   "text": "game's"
+  },
+  {
+   "t": 164.09,
+   "d": 1.6,
+   "text": "program of Baeder's Library and Library"
+  },
+  {
+   "t": 165.69,
+   "d": 2.2,
+   "text": "itself is via Justin. And then finally I"
+  },
+  {
+   "t": 167.89,
+   "d": 2.7,
+   "text": "make music as Salo Homes. A lot of it is"
+  },
+  {
+   "t": 170.59,
+   "d": 2.2,
+   "text": "sort of semi-improvisational"
+  },
+  {
+   "t": 172.79,
+   "d": 2.4,
+   "text": "um"
+  },
+  {
+   "t": 175.49,
+   "d": 2.0,
+   "text": "defining a space and then improvising"
+  },
+  {
+   "t": 177.49,
+   "d": 1.5,
+   "text": "within that defined space. So I think of"
+  },
+  {
+   "t": 178.99,
+   "d": 1.6,
+   "text": "interest to folks here possibly and and"
+  },
+  {
+   "t": 180.59,
+   "d": 3.0,
+   "text": "check it out if that's the case."
+  },
+  {
+   "t": 183.99,
+   "d": 2.1,
+   "text": "So before we get into"
+  },
+  {
+   "t": 186.09,
+   "d": 1.6,
+   "text": "NC itself, I just want to quickly look"
+  },
+  {
+   "t": 187.69,
+   "d": 1.8,
+   "text": "again at like other ways that generation"
+  },
+  {
+   "t": 189.49,
+   "d": 2.0,
+   "text": "has been used to"
+  },
+  {
+   "t": 191.49,
+   "d": 1.9,
+   "text": "create music either before the creation"
+  },
+  {
+   "t": 193.39,
+   "d": 2.0,
+   "text": "of NC or after to sort of look at its"
+  },
+  {
+   "t": 195.39,
+   "d": 2.0,
+   "text": "legacy."
+  },
+  {
+   "t": 197.39,
+   "d": 2.3,
+   "text": "So the first is aleatoric music, which"
+  },
+  {
+   "t": 199.69,
+   "d": 2.5,
+   "text": "is just using an element of chance often"
+  },
+  {
+   "t": 202.19,
+   "d": 2.3,
+   "text": "defined by a die to create music. This"
+  },
+  {
+   "t": 204.49,
+   "d": 1.5,
+   "text": "actually already came up in Roguelike"
+  },
+  {
+   "t": 205.99,
+   "d": 2.1,
+   "text": "Celebration 2026, which is delightful."
+  },
+  {
+   "t": 208.09,
+   "d": 1.9,
+   "text": "And Martin Pichlmair has a great talk"
+  },
+  {
+   "t": 209.99,
+   "d": 1.9,
+   "text": "about ancient roguelikes for the preview"
+  },
+  {
+   "t": 211.89,
+   "d": 1.6,
+   "text": "event. Uh"
+  },
+  {
+   "t": 213.49,
+   "d": 1.6,
+   "text": "Mozart's Musical Dice Game was"
+  },
+  {
+   "t": 215.09,
+   "d": 2.6,
+   "text": "discussed, which as described there and"
+  },
+  {
+   "t": 217.69,
+   "d": 1.4,
+   "text": "as I would have described it here as"
+  },
+  {
+   "t": 219.09,
+   "d": 3.6,
+   "text": "well, uh it uses rolls to determine"
+  },
+  {
+   "t": 222.69,
+   "d": 2.8,
+   "text": "which fragments of already written music"
+  },
+  {
+   "t": 225.49,
+   "d": 2.1,
+   "text": "you will then put into an order. I think"
+  },
+  {
+   "t": 227.59,
+   "d": 1.5,
+   "text": "it was really interesting also that"
+  },
+  {
+   "t": 229.09,
+   "d": 1.9,
+   "text": "Martin notes that it was attributed to"
+  },
+  {
+   "t": 230.99,
+   "d": 1.3,
+   "text": "Mozart, but that actually might just be"
+  },
+  {
+   "t": 232.29,
+   "d": 1.6,
+   "text": "a bit of clever branding to get more"
+  },
+  {
+   "t": 233.89,
+   "d": 1.8,
+   "text": "people to take it on. Um but there's"
+  },
+  {
+   "t": 235.69,
+   "d": 1.6,
+   "text": "certainly a playfulness in there, and it"
+  },
+  {
+   "t": 237.29,
+   "d": 3.4,
+   "text": "involves referring to pre-written"
+  },
+  {
+   "t": 240.69,
+   "d": 1.8,
+   "text": "measures of music, which will be"
+  },
+  {
+   "t": 242.49,
+   "d": 3.0,
+   "text": "important when we discuss NC."
+  },
+  {
+   "t": 245.49,
+   "d": 2.2,
+   "text": "Terry Riley was definitely a fan of John"
+  },
+  {
+   "t": 247.69,
+   "d": 2.3,
+   "text": "Cage and his chance operations work."
+  },
+  {
+   "t": 249.99,
+   "d": 3.9,
+   "text": "Cage was the avant-garde composer in the"
+  },
+  {
+   "t": 253.89,
+   "d": 2.7,
+   "text": "'40s, '50s, and beyond, and he was very"
+  },
+  {
+   "t": 256.59,
+   "d": 2.3,
+   "text": "interested in the I Ching, as with many"
+  },
+  {
+   "t": 258.89,
+   "d": 1.6,
+   "text": "Western composers started to become"
+  },
+  {
+   "t": 260.49,
+   "d": 1.7,
+   "text": "interested in and how that could"
+  },
+  {
+   "t": 262.19,
+   "d": 2.9,
+   "text": "determine chance to create pieces."
+  },
+  {
+   "t": 265.09,
+   "d": 1.8,
+   "text": "Imaginary Landscape Number Four is"
+  },
+  {
+   "t": 266.89,
+   "d": 1.7,
+   "text": "actually his first piece that was fully"
+  },
+  {
+   "t": 268.59,
+   "d": 1.5,
+   "text": "created using chance operations, which"
+  },
+  {
+   "t": 270.09,
+   "d": 1.7,
+   "text": "is what he called his method of"
+  },
+  {
+   "t": 271.79,
+   "d": 2.9,
+   "text": "incorporating the I Ching rules into"
+  },
+  {
+   "t": 274.69,
+   "d": 2.3,
+   "text": "I Ching into his own process, and it was"
+  },
+  {
+   "t": 276.99,
+   "d": 2.5,
+   "text": "actually for 12 radios. That's"
+  },
+  {
+   "t": 279.49,
+   "d": 1.6,
+   "text": "exactly what it sounds like. So you have"
+  },
+  {
+   "t": 281.09,
+   "d": 3.9,
+   "text": "the 12 radios, each measure, each bar,"
+  },
+  {
+   "t": 284.99,
+   "d": 1.8,
+   "text": "what each radio will be doing, turning"
+  },
+  {
+   "t": 286.79,
+   "d": 2.5,
+   "text": "on and off. This is from 1951, and I"
+  },
+  {
+   "t": 289.29,
+   "d": 1.6,
+   "text": "think it's always fascinating with"
+  },
+  {
+   "t": 290.89,
+   "d": 1.1,
+   "text": "looking at like avant-garde and"
+  },
+  {
+   "t": 291.99,
+   "d": 2.5,
+   "text": "experimental work with music, how early"
+  },
+  {
+   "t": 294.49,
+   "d": 3.2,
+   "text": "some of it really dates back."
+  },
+  {
+   "t": 297.69,
+   "d": 2.7,
+   "text": "And then actually something beyond NC"
+  },
+  {
+   "t": 300.39,
+   "d": 1.4,
+   "text": "and important to the history of NC"
+  },
+  {
+   "t": 301.79,
+   "d": 1.7,
+   "text": "because Pauline Oliveros was actually in"
+  },
+  {
+   "t": 303.49,
+   "d": 2.3,
+   "text": "the initial ensemble that performed it"
+  },
+  {
+   "t": 305.79,
+   "d": 1.3,
+   "text": "was Deep Listening, which was created by"
+  },
+  {
+   "t": 307.09,
+   "d": 2.1,
+   "text": "Pauline Oliveros. You could do an entire"
+  },
+  {
+   "t": 309.19,
+   "d": 1.8,
+   "text": "talk on Deep Listening and roguelikes"
+  },
+  {
+   "t": 310.99,
+   "d": 2.4,
+   "text": "and games, and it would be fascinating,"
+  },
+  {
+   "t": 313.39,
+   "d": 1.3,
+   "text": "but"
+  },
+  {
+   "t": 314.69,
+   "d": 1.7,
+   "text": "these scores are much more text-focused,"
+  },
+  {
+   "t": 316.39,
+   "d": 1.2,
+   "text": "and some of that was also occurring"
+  },
+  {
+   "t": 317.59,
+   "d": 1.4,
+   "text": "around Riley's time, but this is one of"
+  },
+  {
+   "t": 318.99,
+   "d": 2.4,
+   "text": "my favorites from the '70s, Horse Sings"
+  },
+  {
+   "t": 321.39,
+   "d": 2.3,
+   "text": "from Cloud, which is sustain one or more"
+  },
+  {
+   "t": 323.69,
+   "d": 2.0,
+   "text": "tones or sounds until any desire to"
+  },
+  {
+   "t": 325.69,
+   "d": 2.6,
+   "text": "change the tones or sounds subsides."
+  },
+  {
+   "t": 328.29,
+   "d": 1.6,
+   "text": "When there is no desire to change the"
+  },
+  {
+   "t": 329.89,
+   "d": 2.4,
+   "text": "tones or sounds, then change. And that's"
+  },
+  {
+   "t": 332.29,
+   "d": 1.6,
+   "text": "the entirety of the score. It's really"
+  },
+  {
+   "t": 333.89,
+   "d": 2.6,
+   "text": "trusting the performers to listen to one"
+  },
+  {
+   "t": 336.49,
+   "d": 2.8,
+   "text": "another, to listen to themselves, and to"
+  },
+  {
+   "t": 339.29,
+   "d": 2.4,
+   "text": "then create these really amazing pieces"
+  },
+  {
+   "t": 341.69,
+   "d": 1.3,
+   "text": "that come out of it. I highly recommend"
+  },
+  {
+   "t": 342.99,
+   "d": 2.3,
+   "text": "looking at recordings for this, which"
+  },
+  {
+   "t": 345.29,
+   "d": 2.5,
+   "text": "can all vary in really interesting ways."
+  },
+  {
+   "t": 347.79,
+   "d": 1.0,
+   "text": "And"
+  },
+  {
+   "t": 348.79,
+   "d": 1.5,
+   "text": "simultaneously a lot of this sort of you"
+  },
+  {
+   "t": 350.29,
+   "d": 1.4,
+   "text": "can see elements of the start of this in"
+  },
+  {
+   "t": 351.69,
+   "d": 2.0,
+   "text": "some bits of NC. So we'll"
+  },
+  {
+   "t": 353.69,
+   "d": 3.1,
+   "text": "go ahead and get into NC itself."
+  },
+  {
+   "t": 356.79,
+   "d": 2.0,
+   "text": "So this is Terry Riley when he was"
+  },
+  {
+   "t": 358.79,
+   "d": 1.6,
+   "text": "younger, I think still after the"
+  },
+  {
+   "t": 360.39,
+   "d": 1.3,
+   "text": "creation of NC though, which was in the"
+  },
+  {
+   "t": 361.69,
+   "d": 2.7,
+   "text": "'60s. This is Terry Riley as he is now,"
+  },
+  {
+   "t": 364.39,
+   "d": 1.7,
+   "text": "and I think a lot of for pictures"
+  },
+  {
+   "t": 366.1,
+   "d": 1.8,
+   "text": "focused on. He's 91 now, so but he's"
+  },
+  {
+   "t": 367.89,
+   "d": 1.9,
+   "text": "American composer and performer. He was"
+  },
+  {
+   "t": 369.8,
+   "d": 2.5,
+   "text": "born in 1935. Uh Sorry, kind of"
+  },
+  {
+   "t": 372.3,
+   "d": 2.1,
+   "text": "specializing with piano and then moved"
+  },
+  {
+   "t": 374.39,
+   "d": 2.1,
+   "text": "into composition and beyond and it's"
+  },
+  {
+   "t": 376.5,
+   "d": 2.4,
+   "text": "still going now."
+  },
+  {
+   "t": 378.89,
+   "d": 1.8,
+   "text": "He was very influenced by North Indian"
+  },
+  {
+   "t": 380.69,
+   "d": 2.8,
+   "text": "classical music, particularly ragas. Um"
+  },
+  {
+   "t": 383.5,
+   "d": 2.7,
+   "text": "he later studied with Pandit Pran Nath,"
+  },
+  {
+   "t": 386.19,
+   "d": 2.8,
+   "text": "uh who was a raga master."
+  },
+  {
+   "t": 389.0,
+   "d": 1.8,
+   "text": "He was also extremely influenced by"
+  },
+  {
+   "t": 390.8,
+   "d": 1.9,
+   "text": "jazz, very openly discussed his love of"
+  },
+  {
+   "t": 392.69,
+   "d": 1.2,
+   "text": "John Coltrane and his work with"
+  },
+  {
+   "t": 393.89,
+   "d": 2.8,
+   "text": "clusters. He performed ragtime piano and"
+  },
+  {
+   "t": 396.69,
+   "d": 1.3,
+   "text": "and a lot of other styles of piano. He"
+  },
+  {
+   "t": 398.0,
+   "d": 1.5,
+   "text": "actually made his living playing piano"
+  },
+  {
+   "t": 399.5,
+   "d": 1.4,
+   "text": "in a saloon in San Francisco for a"
+  },
+  {
+   "t": 400.89,
+   "d": 2.3,
+   "text": "while. And he made friends earlier in"
+  },
+  {
+   "t": 403.19,
+   "d": 1.6,
+   "text": "college with La Monte Young, who was"
+  },
+  {
+   "t": 404.8,
+   "d": 2.1,
+   "text": "another early minimalist performer, um"
+  },
+  {
+   "t": 406.89,
+   "d": 2.2,
+   "text": "who also was pulling from this North"
+  },
+  {
+   "t": 409.1,
+   "d": 2.0,
+   "text": "Indian classical music world. And I"
+  },
+  {
+   "t": 411.1,
+   "d": 1.5,
+   "text": "think it's important to stress when you"
+  },
+  {
+   "t": 412.6,
+   "d": 2.1,
+   "text": "think about experimental music as we"
+  },
+  {
+   "t": 414.69,
+   "d": 2.4,
+   "text": "know it in the West and drones and"
+  },
+  {
+   "t": 417.1,
+   "d": 2.0,
+   "text": "ambient and anything like that, how much"
+  },
+  {
+   "t": 419.1,
+   "d": 2.6,
+   "text": "of it is really downstream from this"
+  },
+  {
+   "t": 421.69,
+   "d": 3.8,
+   "text": "fascination with ragas from this time."
+  },
+  {
+   "t": 425.89,
+   "d": 3.4,
+   "text": "He composed In C in 1964. He actually"
+  },
+  {
+   "t": 429.3,
+   "d": 1.8,
+   "text": "says that he the idea came from him"
+  },
+  {
+   "t": 431.1,
+   "d": 2.4,
+   "text": "while he was riding the bus back from a"
+  },
+  {
+   "t": 433.5,
+   "d": 1.8,
+   "text": "gig he had playing ragtime piano to"
+  },
+  {
+   "t": 435.3,
+   "d": 1.9,
+   "text": "saloon, which I think is a delightful"
+  },
+  {
+   "t": 437.19,
+   "d": 2.6,
+   "text": "little anecdote."
+  },
+  {
+   "t": 440.69,
+   "d": 1.5,
+   "text": "And right before the composition of In"
+  },
+  {
+   "t": 442.19,
+   "d": 2.5,
+   "text": "C, he had been to Paris and in Paris uh"
+  },
+  {
+   "t": 444.69,
+   "d": 2.6,
+   "text": "befriended the jazz trumpet Chet Baker."
+  },
+  {
+   "t": 447.3,
+   "d": 1.6,
+   "text": "And Chet Baker had a very early"
+  },
+  {
+   "t": 448.89,
+   "d": 2.1,
+   "text": "Echoplex, which is this image here. Uh"
+  },
+  {
+   "t": 451.0,
+   "d": 3.0,
+   "text": "it is a machine that can shift the"
+  },
+  {
+   "t": 454.0,
+   "d": 3.5,
+   "text": "distance of the heads and tape to create"
+  },
+  {
+   "t": 457.5,
+   "d": 2.1,
+   "text": "echoes and"
+  },
+  {
+   "t": 459.6,
+   "d": 2.0,
+   "text": "loops and and it's all do all sorts of"
+  },
+  {
+   "t": 461.6,
+   "d": 1.3,
+   "text": "really weird interesting things with"
+  },
+  {
+   "t": 462.89,
+   "d": 2.7,
+   "text": "time that hadn't occurred before at this"
+  },
+  {
+   "t": 465.6,
+   "d": 1.0,
+   "text": "scale, right? You you could have"
+  },
+  {
+   "t": 466.6,
+   "d": 1.3,
+   "text": "something much larger in a studio, but"
+  },
+  {
+   "t": 467.89,
+   "d": 2.0,
+   "text": "not something that was more portable. Uh"
+  },
+  {
+   "t": 469.89,
+   "d": 1.8,
+   "text": "and this got Riley really interested in"
+  },
+  {
+   "t": 471.69,
+   "d": 2.5,
+   "text": "the idea of time lag accumulation and he"
+  },
+  {
+   "t": 474.19,
+   "d": 2.0,
+   "text": "created his own setup with two stereo"
+  },
+  {
+   "t": 476.19,
+   "d": 2.1,
+   "text": "reels that could feed into one another"
+  },
+  {
+   "t": 478.3,
+   "d": 3.3,
+   "text": "and do a very similar thing."
+  },
+  {
+   "t": 481.6,
+   "d": 1.6,
+   "text": "So he was thinking a lot about that at"
+  },
+  {
+   "t": 483.19,
+   "d": 1.7,
+   "text": "the time, this sort of like idea of"
+  },
+  {
+   "t": 484.89,
+   "d": 1.6,
+   "text": "loops. And so he said out of all that"
+  },
+  {
+   "t": 486.5,
+   "d": 1.1,
+   "text": "experimentation with sound"
+  },
+  {
+   "t": 487.6,
+   "d": 1.7,
+   "text": "experimentation with sound, I decided I"
+  },
+  {
+   "t": 489.3,
+   "d": 1.7,
+   "text": "wanted to do it with live musicians. To"
+  },
+  {
+   "t": 491.0,
+   "d": 2.3,
+   "text": "take repetition, take music fragments,"
+  },
+  {
+   "t": 493.3,
+   "d": 1.8,
+   "text": "and make it live. Musicians would be"
+  },
+  {
+   "t": 495.1,
+   "d": 1.5,
+   "text": "able to play it and then create this"
+  },
+  {
+   "t": 496.6,
+   "d": 2.8,
+   "text": "kind of abstract fabric of sound."
+  },
+  {
+   "t": 499.4,
+   "d": 1.8,
+   "text": "I think it's also important to note"
+  },
+  {
+   "t": 501.2,
+   "d": 2.7,
+   "text": "uh like a lot of members of or folks in"
+  },
+  {
+   "t": 503.9,
+   "d": 1.7,
+   "text": "the counterculture movement of the 60s,"
+  },
+  {
+   "t": 505.6,
+   "d": 2.0,
+   "text": "he was also very interested in the idea"
+  },
+  {
+   "t": 507.6,
+   "d": 2.7,
+   "text": "of like expanded consciousness, um very"
+  },
+  {
+   "t": 510.3,
+   "d": 1.9,
+   "text": "interested in Eastern religions,"
+  },
+  {
+   "t": 512.2,
+   "d": 4.3,
+   "text": "mysticism, uh and as part of that um a"
+  },
+  {
+   "t": 516.5,
+   "d": 2.4,
+   "text": "lot of mescaline was involved and other"
+  },
+  {
+   "t": 518.9,
+   "d": 1.6,
+   "text": "psychedelic drugs. And so I think that"
+  },
+  {
+   "t": 520.5,
+   "d": 2.3,
+   "text": "all of that was sort of"
+  },
+  {
+   "t": 522.8,
+   "d": 2.8,
+   "text": "grouping this idea of like time and"
+  },
+  {
+   "t": 525.6,
+   "d": 2.1,
+   "text": "shifting time and sort of how to make"
+  },
+  {
+   "t": 527.7,
+   "d": 2.3,
+   "text": "meaning from this sort of uh"
+  },
+  {
+   "t": 530.0,
+   "d": 2.9,
+   "text": "approach with time."
+  },
+  {
+   "t": 535.0,
+   "d": 3.1,
+   "text": "So here is the performing directions for"
+  },
+  {
+   "t": 538.1,
+   "d": 2.1,
+   "text": "NC itself. So I was going to read"
+  },
+  {
+   "t": 540.2,
+   "d": 2.1,
+   "text": "through parts of these um to give some"
+  },
+  {
+   "t": 542.3,
+   "d": 1.3,
+   "text": "context."
+  },
+  {
+   "t": 543.6,
+   "d": 1.7,
+   "text": "Let me I'm seeing a note that I sound"
+  },
+  {
+   "t": 545.3,
+   "d": 1.4,
+   "text": "quiet. Am I sounding a little better"
+  },
+  {
+   "t": 546.7,
+   "d": 2.3,
+   "text": "now?"
+  },
+  {
+   "t": 554.9,
+   "d": 1.7,
+   "text": "Can folks hear me okay? Okay, I'm louder"
+  },
+  {
+   "t": 556.6,
+   "d": 1.6,
+   "text": "now. Thanks, Rick. Excellent. All right,"
+  },
+  {
+   "t": 558.2,
+   "d": 1.6,
+   "text": "back to it. Oh, thank you so much for"
+  },
+  {
+   "t": 559.8,
+   "d": 1.3,
+   "text": "adjusting it. I'm so glad you all are"
+  },
+  {
+   "t": 561.1,
+   "d": 1.0,
+   "text": "here."
+  },
+  {
+   "t": 562.1,
+   "d": 1.9,
+   "text": "Um"
+  },
+  {
+   "t": 564.0,
+   "d": 1.9,
+   "text": "here are the text directions of NC. So"
+  },
+  {
+   "t": 565.9,
+   "d": 2.1,
+   "text": "NC is tech direct text directions and"
+  },
+  {
+   "t": 568.0,
+   "d": 1.3,
+   "text": "notations. So we'll start with the text"
+  },
+  {
+   "t": 569.3,
+   "d": 2.4,
+   "text": "directions. These are actually a later"
+  },
+  {
+   "t": 571.7,
+   "d": 1.4,
+   "text": "set of text directions that will"
+  },
+  {
+   "t": 573.1,
+   "d": 1.3,
+   "text": "incorporate a couple of new things that"
+  },
+  {
+   "t": 574.4,
+   "d": 1.6,
+   "text": "come out of the performance. Um but I"
+  },
+  {
+   "t": 576.0,
+   "d": 1.6,
+   "text": "want to focus on some highlights that"
+  },
+  {
+   "t": 577.6,
+   "d": 2.2,
+   "text": "are relevant to I think thinking around"
+  },
+  {
+   "t": 579.8,
+   "d": 1.9,
+   "text": "game design and again this idea of"
+  },
+  {
+   "t": 581.7,
+   "d": 1.8,
+   "text": "intentionality,"
+  },
+  {
+   "t": 583.5,
+   "d": 2.0,
+   "text": "where intentionality and chance can"
+  },
+  {
+   "t": 585.5,
+   "d": 1.4,
+   "text": "really meet and create something"
+  },
+  {
+   "t": 586.9,
+   "d": 1.2,
+   "text": "special."
+  },
+  {
+   "t": 588.1,
+   "d": 2.5,
+   "text": "Um so all performers will play the same"
+  },
+  {
+   "t": 590.6,
+   "d": 2.8,
+   "text": "page of 53 melodic patterns in sequence."
+  },
+  {
+   "t": 593.4,
+   "d": 2.1,
+   "text": "Um it's it's linear but there's choice"
+  },
+  {
+   "t": 595.5,
+   "d": 1.8,
+   "text": "about when and where you start and when"
+  },
+  {
+   "t": 597.3,
+   "d": 1.8,
+   "text": "and where you shift."
+  },
+  {
+   "t": 599.1,
+   "d": 2.0,
+   "text": "Any number and any kind of instruments"
+  },
+  {
+   "t": 601.1,
+   "d": 1.7,
+   "text": "can play. It's truly open to anything"
+  },
+  {
+   "t": 602.8,
+   "d": 1.4,
+   "text": "and then that's part of its long legacy"
+  },
+  {
+   "t": 604.2,
+   "d": 1.8,
+   "text": "is you get all of these combinations of"
+  },
+  {
+   "t": 606.0,
+   "d": 2.0,
+   "text": "it working with many different things."
+  },
+  {
+   "t": 608.0,
+   "d": 2.0,
+   "text": "Um a group about 35 is desired but"
+  },
+  {
+   "t": 610.0,
+   "d": 1.8,
+   "text": "smaller and larger groups work. I think"
+  },
+  {
+   "t": 611.8,
+   "d": 1.2,
+   "text": "I often have seen it with smaller"
+  },
+  {
+   "t": 613.0,
+   "d": 2.7,
+   "text": "groups, honestly."
+  },
+  {
+   "t": 616.3,
+   "d": 1.2,
+   "text": "The patterns are to be played"
+  },
+  {
+   "t": 617.5,
+   "d": 2.3,
+   "text": "consecutively, but each performer has"
+  },
+  {
+   "t": 619.8,
+   "d": 2.6,
+   "text": "the freedom to determine how many times"
+  },
+  {
+   "t": 622.4,
+   "d": 1.9,
+   "text": "they will repeat each pattern before"
+  },
+  {
+   "t": 624.3,
+   "d": 2.2,
+   "text": "moving on to the next. There's no rule"
+  },
+  {
+   "t": 626.5,
+   "d": 1.0,
+   "text": "for the number of repetitions the"
+  },
+  {
+   "t": 627.5,
+   "d": 1.6,
+   "text": "pattern may have. There's no rule if it"
+  },
+  {
+   "t": 629.1,
+   "d": 2.0,
+   "text": "has to perfectly sync or not. You can"
+  },
+  {
+   "t": 631.1,
+   "d": 1.7,
+   "text": "have points or counterpoints. And"
+  },
+  {
+   "t": 632.8,
+   "d": 2.5,
+   "text": "there's a lot of choice and trust within"
+  },
+  {
+   "t": 635.3,
+   "d": 2.0,
+   "text": "this process."
+  },
+  {
+   "t": 637.3,
+   "d": 1.3,
+   "text": "And part of that is it's very important"
+  },
+  {
+   "t": 638.6,
+   "d": 1.3,
+   "text": "the performers listen carefully to one"
+  },
+  {
+   "t": 639.9,
+   "d": 2.4,
+   "text": "another."
+  },
+  {
+   "t": 642.6,
+   "d": 2.0,
+   "text": "Each pattern can be played in unison or"
+  },
+  {
+   "t": 644.6,
+   "d": 1.8,
+   "text": "canonically in any alignment with itself"
+  },
+  {
+   "t": 646.4,
+   "d": 1.8,
+   "text": "or with its neighboring patterns. I love"
+  },
+  {
+   "t": 648.2,
+   "d": 2.0,
+   "text": "this element of this this talk. It's"
+  },
+  {
+   "t": 650.2,
+   "d": 1.9,
+   "text": "like one of the joys of NC is the"
+  },
+  {
+   "t": 652.1,
+   "d": 1.2,
+   "text": "interaction of players and a"
+  },
+  {
+   "t": 653.3,
+   "d": 1.3,
+   "text": "polyrhythmic combinations that"
+  },
+  {
+   "t": 654.6,
+   "d": 2.2,
+   "text": "spontaneously arise between patterns."
+  },
+  {
+   "t": 656.8,
+   "d": 1.8,
+   "text": "Some quite fantastic shapes will arise"
+  },
+  {
+   "t": 658.6,
+   "d": 1.2,
+   "text": "and disintegrate as the group moves"
+  },
+  {
+   "t": 659.8,
+   "d": 3.2,
+   "text": "through the piece when properly played."
+  },
+  {
+   "t": 663.0,
+   "d": 1.8,
+   "text": "As the performance progresses,"
+  },
+  {
+   "t": 664.8,
+   "d": 1.2,
+   "text": "performers should stay within two or"
+  },
+  {
+   "t": 666.0,
+   "d": 1.4,
+   "text": "three patterns of each other. So even"
+  },
+  {
+   "t": 667.4,
+   "d": 2.1,
+   "text": "though there is openness and possibility"
+  },
+  {
+   "t": 669.5,
+   "d": 1.6,
+   "text": "space, there's still some structure"
+  },
+  {
+   "t": 671.1,
+   "d": 4.3,
+   "text": "around how far a field one should get."
+  },
+  {
+   "t": 675.4,
+   "d": 1.7,
+   "text": "We'll come back to the element of the"
+  },
+  {
+   "t": 677.1,
+   "d": 2.6,
+   "text": "pulse. That's a later incorporation."
+  },
+  {
+   "t": 679.7,
+   "d": 1.5,
+   "text": "It's important to think patterns"
+  },
+  {
+   "t": 681.2,
+   "d": 1.3,
+   "text": "periodically so that when you are"
+  },
+  {
+   "t": 682.5,
+   "d": 1.7,
+   "text": "resting, you're conscious of the larger"
+  },
+  {
+   "t": 684.2,
+   "d": 1.3,
+   "text": "periodic"
+  },
+  {
+   "t": 685.5,
+   "d": 2.3,
+   "text": "composite accents that are sounding. And"
+  },
+  {
+   "t": 687.8,
+   "d": 1.3,
+   "text": "when you reenter, you are aware of what"
+  },
+  {
+   "t": 689.1,
+   "d": 1.1,
+   "text": "effect your entrance will have on the"
+  },
+  {
+   "t": 690.2,
+   "d": 2.2,
+   "text": "music flow. Again, really understanding"
+  },
+  {
+   "t": 692.4,
+   "d": 2.3,
+   "text": "where you are and how you are"
+  },
+  {
+   "t": 694.7,
+   "d": 1.4,
+   "text": "inhabiting that space and that's each"
+  },
+  {
+   "t": 696.1,
+   "d": 1.6,
+   "text": "performer and the rest sort of around"
+  },
+  {
+   "t": 697.7,
+   "d": 1.2,
+   "text": "the idea"
+  },
+  {
+   "t": 698.9,
+   "d": 2.3,
+   "text": "similar ideas like when to be in unison"
+  },
+  {
+   "t": 701.2,
+   "d": 1.3,
+   "text": "and when to not. And then finally, I"
+  },
+  {
+   "t": 702.5,
+   "d": 1.9,
+   "text": "wanted to just jump to the fact that it"
+  },
+  {
+   "t": 704.4,
+   "d": 1.4,
+   "text": "has an ending, which I think is really"
+  },
+  {
+   "t": 705.8,
+   "d": 1.2,
+   "text": "interesting when thinking of generative"
+  },
+  {
+   "t": 707.0,
+   "d": 1.2,
+   "text": "work is like"
+  },
+  {
+   "t": 708.2,
+   "d": 1.7,
+   "text": "where to put your thumb on the scale a"
+  },
+  {
+   "t": 709.9,
+   "d": 2.4,
+   "text": "bit and actually get a desired outcome."
+  },
+  {
+   "t": 712.3,
+   "d": 2.2,
+   "text": "And so when each performer arrives at"
+  },
+  {
+   "t": 714.5,
+   "d": 1.6,
+   "text": "figure 53 and we'll look at the figures"
+  },
+  {
+   "t": 716.1,
+   "d": 2.9,
+   "text": "next so those will make more sense,"
+  },
+  {
+   "t": 719.0,
+   "d": 1.4,
+   "text": "they stay on it until the entire"
+  },
+  {
+   "t": 720.4,
+   "d": 1.9,
+   "text": "ensemble has arrived there. And then the"
+  },
+  {
+   "t": 722.3,
+   "d": 1.8,
+   "text": "group can then make a large"
+  },
+  {
+   "t": 724.1,
+   "d": 1.9,
+   "text": "crescendo and then diminuendo a few"
+  },
+  {
+   "t": 726.0,
+   "d": 2.0,
+   "text": "times and then each player drops out as"
+  },
+  {
+   "t": 728.0,
+   "d": 2.2,
+   "text": "he or she wishes. So it's there's again"
+  },
+  {
+   "t": 730.2,
+   "d": 1.5,
+   "text": "this sort of idea of like arriving in"
+  },
+  {
+   "t": 731.7,
+   "d": 3.1,
+   "text": "down these ways, coming together, doing"
+  },
+  {
+   "t": 734.8,
+   "d": 1.7,
+   "text": "these actions together and then also"
+  },
+  {
+   "t": 736.5,
+   "d": 2.5,
+   "text": "leaving with that same sense of agency."
+  },
+  {
+   "t": 739.0,
+   "d": 1.8,
+   "text": "Uh so these melodic patterns look like"
+  },
+  {
+   "t": 740.8,
+   "d": 1.3,
+   "text": "this."
+  },
+  {
+   "t": 742.1,
+   "d": 1.9,
+   "text": "You can see each one is numbered. Um"
+  },
+  {
+   "t": 744.0,
+   "d": 2.5,
+   "text": "there's various lengths of them."
+  },
+  {
+   "t": 746.5,
+   "d": 1.7,
+   "text": "There some are hold no some involve"
+  },
+  {
+   "t": 748.2,
+   "d": 2.1,
+   "text": "holding notes, some involve much shorter"
+  },
+  {
+   "t": 750.3,
+   "d": 1.8,
+   "text": "faster notes, some involve pauses, some"
+  },
+  {
+   "t": 752.1,
+   "d": 3.7,
+   "text": "don't. Um and the reason that this can"
+  },
+  {
+   "t": 755.8,
+   "d": 2.7,
+   "text": "work with all these performers choosing"
+  },
+  {
+   "t": 758.5,
+   "d": 1.6,
+   "text": "kind of the route not the route but"
+  },
+  {
+   "t": 760.1,
+   "d": 1.8,
+   "text": "choosing the pacing they take to go"
+  },
+  {
+   "t": 761.9,
+   "d": 1.4,
+   "text": "through these in their petitions is that"
+  },
+  {
+   "t": 763.3,
+   "d": 2.4,
+   "text": "they are all more or less in the same"
+  },
+  {
+   "t": 765.7,
+   "d": 3.6,
+   "text": "key. So uh the piece is called NC. Um so"
+  },
+  {
+   "t": 769.3,
+   "d": 1.0,
+   "text": "you can guess at least what key it"
+  },
+  {
+   "t": 770.3,
+   "d": 1.6,
+   "text": "starts on."
+  },
+  {
+   "t": 771.9,
+   "d": 1.8,
+   "text": "And then I'll read this review which I"
+  },
+  {
+   "t": 773.7,
+   "d": 1.6,
+   "text": "think is wonderful. It's like the effect"
+  },
+  {
+   "t": 775.3,
+   "d": 2.0,
+   "text": "is of a sparkling glinting crystal which"
+  },
+  {
+   "t": 777.3,
+   "d": 2.2,
+   "text": "as it slowly rotates changes almost"
+  },
+  {
+   "t": 779.5,
+   "d": 2.1,
+   "text": "imperceptibly in color from a clear C"
+  },
+  {
+   "t": 781.6,
+   "d": 2.0,
+   "text": "major to a bright yet more slowly"
+  },
+  {
+   "t": 783.6,
+   "d": 2.6,
+   "text": "pulsating E minor then back to C rather"
+  },
+  {
+   "t": 786.2,
+   "d": 2.1,
+   "text": "triumphantly and finally takes on the"
+  },
+  {
+   "t": 788.3,
+   "d": 2.2,
+   "text": "cast of a much more somber and"
+  },
+  {
+   "t": 790.5,
+   "d": 2.2,
+   "text": "enigmatic G minor. It's from Douglas"
+  },
+  {
+   "t": 792.7,
+   "d": 2.8,
+   "text": "Leedy. So by by having this sort of like"
+  },
+  {
+   "t": 795.5,
+   "d": 3.2,
+   "text": "uh slithery shifting of keys that"
+  },
+  {
+   "t": 798.7,
+   "d": 1.4,
+   "text": "everyone can be making at different"
+  },
+  {
+   "t": 800.1,
+   "d": 2.4,
+   "text": "times as well it really makes this this"
+  },
+  {
+   "t": 802.5,
+   "d": 3.0,
+   "text": "morphing uncertain object that feels"
+  },
+  {
+   "t": 805.5,
+   "d": 3.6,
+   "text": "different each time it's performed."
+  },
+  {
+   "t": 809.4,
+   "d": 2.1,
+   "text": "A lot of the source for this talk is"
+  },
+  {
+   "t": 811.5,
+   "d": 2.1,
+   "text": "Robert Carl's book on Terry Riley's NC"
+  },
+  {
+   "t": 813.6,
+   "d": 1.1,
+   "text": "and I just wanted to quickly pull out"
+  },
+  {
+   "t": 814.7,
+   "d": 2.2,
+   "text": "this idea that he creates there. Um he"
+  },
+  {
+   "t": 816.9,
+   "d": 2.0,
+   "text": "coins two phrases for how do you look at"
+  },
+  {
+   "t": 818.9,
+   "d": 2.9,
+   "text": "something like NC where there's a very"
+  },
+  {
+   "t": 821.8,
+   "d": 2.9,
+   "text": "set instruction and notation and then"
+  },
+  {
+   "t": 824.7,
+   "d": 2.3,
+   "text": "very different output, right? How you"
+  },
+  {
+   "t": 827.0,
+   "d": 1.9,
+   "text": "talk about those things separately. And"
+  },
+  {
+   "t": 828.9,
+   "d": 2.8,
+   "text": "so what Carl proposes is the term"
+  },
+  {
+   "t": 831.7,
+   "d": 3.7,
+   "text": "endogenous to look at the materials"
+  },
+  {
+   "t": 835.4,
+   "d": 2.0,
+   "text": "themselves like the artifact of the"
+  },
+  {
+   "t": 837.4,
+   "d": 3.0,
+   "text": "score and the um"
+  },
+  {
+   "t": 840.4,
+   "d": 1.7,
+   "text": "notation and that's takes materials"
+  },
+  {
+   "t": 842.1,
+   "d": 1.7,
+   "text": "presented in the score and instructions"
+  },
+  {
+   "t": 843.8,
+   "d": 1.7,
+   "text": "as musical artifact that can be analyzed"
+  },
+  {
+   "t": 845.5,
+   "d": 2.2,
+   "text": "in its own right. Again that is a a"
+  },
+  {
+   "t": 847.7,
+   "d": 3.1,
+   "text": "static thing that we have and then"
+  },
+  {
+   "t": 850.8,
+   "d": 2.0,
+   "text": "exogenous which is to examine the piece"
+  },
+  {
+   "t": 852.8,
+   "d": 1.8,
+   "text": "as it actually occurs in real time"
+  },
+  {
+   "t": 854.6,
+   "d": 1.3,
+   "text": "performance. And that's really"
+  },
+  {
+   "t": 855.9,
+   "d": 1.4,
+   "text": "interesting to have these two concepts"
+  },
+  {
+   "t": 857.3,
+   "d": 2.4,
+   "text": "around ideas of roguelike and procgen,"
+  },
+  {
+   "t": 859.7,
+   "d": 1.6,
+   "text": "where you have everything in the"
+  },
+  {
+   "t": 861.3,
+   "d": 1.5,
+   "text": "generator, the grammar, and the"
+  },
+  {
+   "t": 862.8,
+   "d": 2.2,
+   "text": "possibilities that can produce. And then"
+  },
+  {
+   "t": 865.0,
+   "d": 1.3,
+   "text": "you have the production and the very"
+  },
+  {
+   "t": 866.3,
+   "d": 1.7,
+   "text": "subjective experience of being the"
+  },
+  {
+   "t": 868.0,
+   "d": 3.5,
+   "text": "player encountering that production."
+  },
+  {
+   "t": 871.5,
+   "d": 1.4,
+   "text": "So I just really quickly want to touch"
+  },
+  {
+   "t": 872.9,
+   "d": 3.7,
+   "text": "on the premiere of NC. Um"
+  },
+  {
+   "t": 876.6,
+   "d": 1.9,
+   "text": "first because it's a large part of its"
+  },
+  {
+   "t": 878.5,
+   "d": 2.3,
+   "text": "legacy is how many notable figures were"
+  },
+  {
+   "t": 880.8,
+   "d": 2.2,
+   "text": "involved in it. And so Riley of course"
+  },
+  {
+   "t": 883.0,
+   "d": 2.2,
+   "text": "performed Pauline Oliveros, who he"
+  },
+  {
+   "t": 885.2,
+   "d": 1.1,
+   "text": "mentioned earlier was performing"
+  },
+  {
+   "t": 886.3,
+   "d": 2.1,
+   "text": "accordion. Steve Reich was on electric"
+  },
+  {
+   "t": 888.4,
+   "d": 2.8,
+   "text": "piano. Uh Morton Subotnick who also kind"
+  },
+  {
+   "t": 891.2,
+   "d": 1.1,
+   "text": "of ran the Tape Music Center at the"
+  },
+  {
+   "t": 892.3,
+   "d": 3.7,
+   "text": "time. John Gibson. So a lot of notable"
+  },
+  {
+   "t": 896.0,
+   "d": 2.4,
+   "text": "minimalist composers. And again this"
+  },
+  {
+   "t": 898.4,
+   "d": 1.4,
+   "text": "this piece is kind of"
+  },
+  {
+   "t": 899.8,
+   "d": 3.1,
+   "text": "predating and to some creating, to"
+  },
+  {
+   "t": 902.9,
+   "d": 1.2,
+   "text": "others just sort of like kicking off"
+  },
+  {
+   "t": 904.1,
+   "d": 2.8,
+   "text": "minimalism as it is a compositional"
+  },
+  {
+   "t": 906.9,
+   "d": 1.6,
+   "text": "music approach,"
+  },
+  {
+   "t": 908.5,
+   "d": 1.4,
+   "text": "especially again within like western"
+  },
+  {
+   "t": 909.9,
+   "d": 2.2,
+   "text": "ideas of experimentation and and uh"
+  },
+  {
+   "t": 912.1,
+   "d": 1.6,
+   "text": "classical music."
+  },
+  {
+   "t": 913.7,
+   "d": 1.2,
+   "text": "And you have all of these people who are"
+  },
+  {
+   "t": 914.9,
+   "d": 1.5,
+   "text": "part of this performance and go forward"
+  },
+  {
+   "t": 916.4,
+   "d": 1.9,
+   "text": "to do such interesting things."
+  },
+  {
+   "t": 918.3,
+   "d": 1.3,
+   "text": "And that also is where the idea of the"
+  },
+  {
+   "t": 919.6,
+   "d": 3.1,
+   "text": "pulse was created. So Riley initially"
+  },
+  {
+   "t": 922.7,
+   "d": 1.9,
+   "text": "did not intend for there to be any sort"
+  },
+  {
+   "t": 924.6,
+   "d": 2.6,
+   "text": "of rhythmic element going that coheres"
+  },
+  {
+   "t": 927.2,
+   "d": 1.8,
+   "text": "the piece. And that turned out to be"
+  },
+  {
+   "t": 929.0,
+   "d": 2.2,
+   "text": "very difficult in the rehearsals for it."
+  },
+  {
+   "t": 931.2,
+   "d": 1.9,
+   "text": "So Steve Reich, which makes a lot of"
+  },
+  {
+   "t": 933.1,
+   "d": 1.2,
+   "text": "sense if you're familiar with his later"
+  },
+  {
+   "t": 934.3,
+   "d": 1.4,
+   "text": "output, which is very centered around"
+  },
+  {
+   "t": 935.7,
+   "d": 3.3,
+   "text": "repetition, um actually suggested"
+  },
+  {
+   "t": 939.0,
+   "d": 2.1,
+   "text": "creating something called the pulse,"
+  },
+  {
+   "t": 941.1,
+   "d": 2.5,
+   "text": "which is just a high C note played over"
+  },
+  {
+   "t": 943.6,
+   "d": 2.0,
+   "text": "and over and over and over again on a"
+  },
+  {
+   "t": 945.6,
+   "d": 2.7,
+   "text": "piano or a mallet. And it's keeping the"
+  },
+  {
+   "t": 948.3,
+   "d": 1.3,
+   "text": "time for the piece. And something I"
+  },
+  {
+   "t": 949.6,
+   "d": 1.3,
+   "text": "really love about the pulse as well is"
+  },
+  {
+   "t": 950.9,
+   "d": 2.0,
+   "text": "that it's it's not a metronome, right?"
+  },
+  {
+   "t": 952.9,
+   "d": 2.4,
+   "text": "It's someone is physically doing it. Uh"
+  },
+  {
+   "t": 955.3,
+   "d": 2.3,
+   "text": "in this case it was Jeannie"
+  },
+  {
+   "t": 957.6,
+   "d": 2.1,
+   "text": "Breckenridge. Uh and I believe another"
+  },
+  {
+   "t": 959.7,
+   "d": 1.2,
+   "text": "performance where she was performing the"
+  },
+  {
+   "t": 960.9,
+   "d": 2.3,
+   "text": "pulse, she actually wore gloves to be"
+  },
+  {
+   "t": 963.2,
+   "d": 1.7,
+   "text": "able to keep playing the piece over and"
+  },
+  {
+   "t": 964.9,
+   "d": 3.4,
+   "text": "over again. So it's something so uh"
+  },
+  {
+   "t": 968.3,
+   "d": 1.8,
+   "text": "you know hand created and and"
+  },
+  {
+   "t": 970.1,
+   "d": 2.4,
+   "text": "intentional even when it is essentially"
+  },
+  {
+   "t": 972.5,
+   "d": 1.8,
+   "text": "a repetitive metronome of sorts and it"
+  },
+  {
+   "t": 974.3,
+   "d": 2.0,
+   "text": "really comes in and goes out of of in"
+  },
+  {
+   "t": 976.3,
+   "d": 1.2,
+   "text": "these ways that we'll come to when we"
+  },
+  {
+   "t": 977.5,
+   "d": 1.1,
+   "text": "talk about how it intersects with"
+  },
+  {
+   "t": 978.6,
+   "d": 2.4,
+   "text": "narrative."
+  },
+  {
+   "t": 981.0,
+   "d": 1.8,
+   "text": "So finally, there was the release in"
+  },
+  {
+   "t": 982.8,
+   "d": 2.5,
+   "text": "1968. I think it's just notable that"
+  },
+  {
+   "t": 985.3,
+   "d": 1.5,
+   "text": "one, it was on Columbia and performed"
+  },
+  {
+   "t": 986.8,
+   "d": 1.9,
+   "text": "quite well, so it actually again helped"
+  },
+  {
+   "t": 988.7,
+   "d": 1.4,
+   "text": "to really move this idea of this piece"
+  },
+  {
+   "t": 990.1,
+   "d": 2.4,
+   "text": "across. And it also involved overdubs"
+  },
+  {
+   "t": 992.5,
+   "d": 2.3,
+   "text": "because the size of the recording group"
+  },
+  {
+   "t": 994.8,
+   "d": 1.5,
+   "text": "uh was smaller, so they they actually"
+  },
+  {
+   "t": 996.3,
+   "d": 1.8,
+   "text": "went through and performed it three"
+  },
+  {
+   "t": 998.1,
+   "d": 2.2,
+   "text": "times to overlay enough to get the the"
+  },
+  {
+   "t": 1000.3,
+   "d": 1.8,
+   "text": "numbers they wanted."
+  },
+  {
+   "t": 1002.1,
+   "d": 1.7,
+   "text": "And then there's been so many recordings"
+  },
+  {
+   "t": 1003.8,
+   "d": 1.9,
+   "text": "since. So Riley actually essentially"
+  },
+  {
+   "t": 1005.7,
+   "d": 2.0,
+   "text": "made this open source of sorts. Anyone"
+  },
+  {
+   "t": 1007.7,
+   "d": 1.4,
+   "text": "can perform it."
+  },
+  {
+   "t": 1009.1,
+   "d": 1.6,
+   "text": "Any combination of instruments can"
+  },
+  {
+   "t": 1010.7,
+   "d": 2.0,
+   "text": "perform it as we mentioned earlier."
+  },
+  {
+   "t": 1012.7,
+   "d": 1.2,
+   "text": "And so you get a lot of really"
+  },
+  {
+   "t": 1013.9,
+   "d": 1.5,
+   "text": "interesting takes on it. These four are"
+  },
+  {
+   "t": 1015.4,
+   "d": 2.3,
+   "text": "only a fraction of what's out there, but"
+  },
+  {
+   "t": 1017.7,
+   "d": 2.1,
+   "text": "I think they're really great examples"
+  },
+  {
+   "t": 1019.8,
+   "d": 1.4,
+   "text": "where, you know, both the Shanghai Film"
+  },
+  {
+   "t": 1021.2,
+   "d": 4.2,
+   "text": "Orchestra and NC Molly use instruments"
+  },
+  {
+   "t": 1025.4,
+   "d": 2.0,
+   "text": "that are of those places and really like"
+  },
+  {
+   "t": 1027.4,
+   "d": 2.7,
+   "text": "create a different sense to what this"
+  },
+  {
+   "t": 1030.1,
+   "d": 1.3,
+   "text": "piece can be and the sort of the shape"
+  },
+  {
+   "t": 1031.4,
+   "d": 1.1,
+   "text": "it can take."
+  },
+  {
+   "t": 1032.5,
+   "d": 3.1,
+   "text": "Uh the Bang on a Can version is actually"
+  },
+  {
+   "t": 1035.6,
+   "d": 1.5,
+   "text": "I think Riley is directly playing also"
+  },
+  {
+   "t": 1037.1,
+   "d": 1.2,
+   "text": "and is going or maybe it's playing it,"
+  },
+  {
+   "t": 1038.3,
+   "d": 1.8,
+   "text": "but it's going back to the original"
+  },
+  {
+   "t": 1040.1,
+   "d": 1.7,
+   "text": "approach, but much later and it's"
+  },
+  {
+   "t": 1041.8,
+   "d": 1.7,
+   "text": "actually a little quicker. Uh and I"
+  },
+  {
+   "t": 1043.5,
+   "d": 1.3,
+   "text": "think it uses more strings in a way"
+  },
+  {
+   "t": 1044.8,
+   "d": 1.4,
+   "text": "that's very interesting. And then"
+  },
+  {
+   "t": 1046.2,
+   "d": 1.8,
+   "text": "finally, the Acid Mothers Temple version"
+  },
+  {
+   "t": 1048.0,
+   "d": 1.6,
+   "text": "is just it's like a psych rock song,"
+  },
+  {
+   "t": 1049.6,
+   "d": 2.2,
+   "text": "right? It's a motoric psych rock, but"
+  },
+  {
+   "t": 1051.8,
+   "d": 2.7,
+   "text": "still in C because it using that pulse"
+  },
+  {
+   "t": 1054.5,
+   "d": 1.8,
+   "text": "as its like beat really works in that"
+  },
+  {
+   "t": 1056.3,
+   "d": 2.4,
+   "text": "case."
+  },
+  {
+   "t": 1058.8,
+   "d": 1.3,
+   "text": "So why does any of this have to do with"
+  },
+  {
+   "t": 1060.1,
+   "d": 1.4,
+   "text": "procedural narrative, right? I think"
+  },
+  {
+   "t": 1061.5,
+   "d": 1.7,
+   "text": "when when I was coming up with this idea"
+  },
+  {
+   "t": 1063.2,
+   "d": 1.0,
+   "text": "for the talk and it was sort of"
+  },
+  {
+   "t": 1064.2,
+   "d": 1.1,
+   "text": "something that kicked around my head for"
+  },
+  {
+   "t": 1065.3,
+   "d": 1.4,
+   "text": "a while as I became more and more"
+  },
+  {
+   "t": 1066.7,
+   "d": 2.2,
+   "text": "familiar with roguelike and as I went"
+  },
+  {
+   "t": 1068.9,
+   "d": 2.4,
+   "text": "from someone who enjoyed the genre but"
+  },
+  {
+   "t": 1071.3,
+   "d": 1.5,
+   "text": "hadn't really looked closely at the"
+  },
+  {
+   "t": 1072.8,
+   "d": 2.2,
+   "text": "creation of it to someone who again"
+  },
+  {
+   "t": 1075.0,
+   "d": 1.5,
+   "text": "starting with editing narrative, moving"
+  },
+  {
+   "t": 1076.5,
+   "d": 1.6,
+   "text": "to editing DTRPGs was more and more"
+  },
+  {
+   "t": 1078.1,
+   "d": 2.3,
+   "text": "interested about this like idea of how"
+  },
+  {
+   "t": 1080.4,
+   "d": 1.8,
+   "text": "things can come out of these spaces and"
+  },
+  {
+   "t": 1082.2,
+   "d": 1.9,
+   "text": "create them, which means looking at the"
+  },
+  {
+   "t": 1084.1,
+   "d": 2.3,
+   "text": "the core thing itself. And I was already"
+  },
+  {
+   "t": 1086.4,
+   "d": 1.9,
+   "text": "familiar with NC uh"
+  },
+  {
+   "t": 1088.3,
+   "d": 1.3,
+   "text": "much more familiar than any of the"
+  },
+  {
+   "t": 1089.6,
+   "d": 1.0,
+   "text": "workings of a lot of roguelikes,"
+  },
+  {
+   "t": 1090.6,
+   "d": 1.1,
+   "text": "honestly."
+  },
+  {
+   "t": 1091.7,
+   "d": 1.5,
+   "text": "And it just kept seeming like such an"
+  },
+  {
+   "t": 1093.2,
+   "d": 2.2,
+   "text": "interesting lens to look at this sort of"
+  },
+  {
+   "t": 1095.4,
+   "d": 2.1,
+   "text": "game work."
+  },
+  {
+   "t": 1097.5,
+   "d": 1.3,
+   "text": "So as I mentioned before, this can going"
+  },
+  {
+   "t": 1098.8,
+   "d": 2.6,
+   "text": "to into three sections. Um, the first is"
+  },
+  {
+   "t": 1101.4,
+   "d": 2.1,
+   "text": "key and notes. And again, all of these"
+  },
+  {
+   "t": 1103.5,
+   "d": 1.7,
+   "text": "performers for NC are playing these"
+  },
+  {
+   "t": 1105.2,
+   "d": 2.1,
+   "text": "melodic patterns. These 53 patterns are"
+  },
+  {
+   "t": 1107.3,
+   "d": 2.4,
+   "text": "set. How they can go through it is not"
+  },
+  {
+   "t": 1109.7,
+   "d": 1.7,
+   "text": "set, but it coheres. And it coheres"
+  },
+  {
+   "t": 1111.4,
+   "d": 1.9,
+   "text": "because of the idea of key, right? If"
+  },
+  {
+   "t": 1113.3,
+   "d": 2.1,
+   "text": "all of them if the section is in C and"
+  },
+  {
+   "t": 1115.4,
+   "d": 2.3,
+   "text": "every note is something that is in the"
+  },
+  {
+   "t": 1117.7,
+   "d": 3.0,
+   "text": "key of C or the like within a scale,"
+  },
+  {
+   "t": 1120.7,
+   "d": 1.6,
+   "text": "it will function within that space. I'm"
+  },
+  {
+   "t": 1122.3,
+   "d": 1.3,
+   "text": "being very reductive with music theory,"
+  },
+  {
+   "t": 1123.6,
+   "d": 1.7,
+   "text": "but that that's just like"
+  },
+  {
+   "t": 1125.3,
+   "d": 2.2,
+   "text": "where I'm coming from with this. So you"
+  },
+  {
+   "t": 1127.5,
+   "d": 2.0,
+   "text": "you have these really choice notations"
+  },
+  {
+   "t": 1129.5,
+   "d": 2.5,
+   "text": "that all work, but can work in all these"
+  },
+  {
+   "t": 1132.0,
+   "d": 1.8,
+   "text": "different possible arrangements. And"
+  },
+  {
+   "t": 1133.8,
+   "d": 2.5,
+   "text": "even where they maybe start to be"
+  },
+  {
+   "t": 1136.3,
+   "d": 2.0,
+   "text": "slightly off, that dissonance is really"
+  },
+  {
+   "t": 1138.3,
+   "d": 1.3,
+   "text": "interesting and welcome. And so you"
+  },
+  {
+   "t": 1139.6,
+   "d": 2.2,
+   "text": "think like how what is the idea of key"
+  },
+  {
+   "t": 1141.8,
+   "d": 1.9,
+   "text": "for a game, right? Like"
+  },
+  {
+   "t": 1143.7,
+   "d": 3.3,
+   "text": "how do we get to the sense of"
+  },
+  {
+   "t": 1147.0,
+   "d": 2.8,
+   "text": "coherence and ideas in something where"
+  },
+  {
+   "t": 1149.8,
+   "d": 2.5,
+   "text": "so much can be generated? And so looking"
+  },
+  {
+   "t": 1152.3,
+   "d": 3.2,
+   "text": "at Rogue to start with, right? It's like"
+  },
+  {
+   "t": 1155.5,
+   "d": 2.0,
+   "text": "this idea of setting and dungeon and"
+  },
+  {
+   "t": 1157.5,
+   "d": 2.8,
+   "text": "fantasy gives a sense of everything that"
+  },
+  {
+   "t": 1160.3,
+   "d": 3.1,
+   "text": "occurs within Rogue is within a dungeon."
+  },
+  {
+   "t": 1163.4,
+   "d": 1.9,
+   "text": "And so then it is of the dungeon. And I"
+  },
+  {
+   "t": 1165.3,
+   "d": 1.2,
+   "text": "think that's especially interesting for"
+  },
+  {
+   "t": 1166.5,
+   "d": 1.0,
+   "text": "Rogue because you have some things like"
+  },
+  {
+   "t": 1167.5,
+   "d": 1.8,
+   "text": "bats, which make a lot of sense. And you"
+  },
+  {
+   "t": 1169.3,
+   "d": 1.3,
+   "text": "also have Yetis, which I think"
+  },
+  {
+   "t": 1170.6,
+   "d": 1.2,
+   "text": "personally make less sense for a"
+  },
+  {
+   "t": 1171.8,
+   "d": 2.3,
+   "text": "dungeon. But still by by setting"
+  },
+  {
+   "t": 1174.1,
+   "d": 2.6,
+   "text": "everything in a certain space, that is"
+  },
+  {
+   "t": 1176.7,
+   "d": 1.8,
+   "text": "literally the possibility space and it"
+  },
+  {
+   "t": 1178.5,
+   "d": 2.2,
+   "text": "creates this coherence of"
+  },
+  {
+   "t": 1180.7,
+   "d": 2.3,
+   "text": "proximity, right? So everything every"
+  },
+  {
+   "t": 1183.0,
+   "d": 2.2,
+   "text": "note performed unless it was very out of"
+  },
+  {
+   "t": 1185.2,
+   "d": 1.4,
+   "text": "sort which we can maybe Yeti's like"
+  },
+  {
+   "t": 1186.6,
+   "d": 2.6,
+   "text": "starting to get too dissonant for me um"
+  },
+  {
+   "t": 1189.2,
+   "d": 2.1,
+   "text": "is still working within the setting and"
+  },
+  {
+   "t": 1191.3,
+   "d": 1.6,
+   "text": "key."
+  },
+  {
+   "t": 1192.9,
+   "d": 1.7,
+   "text": "Then you have something like theme and"
+  },
+  {
+   "t": 1194.6,
+   "d": 1.7,
+   "text": "genre for Shadows of Doubt where it"
+  },
+  {
+   "t": 1196.3,
+   "d": 1.7,
+   "text": "there's all of these wonderful noir"
+  },
+  {
+   "t": 1198.0,
+   "d": 2.2,
+   "text": "trappings. Um"
+  },
+  {
+   "t": 1200.2,
+   "d": 0.9,
+   "text": "and I want to be sure I get the correct"
+  },
+  {
+   "t": 1201.1,
+   "d": 1.0,
+   "text": "name."
+  },
+  {
+   "t": 1202.1,
+   "d": 0.8,
+   "text": "Yeah."
+  },
+  {
+   "t": 1202.9,
+   "d": 2.0,
+   "text": "And Stark Holbrook in a great essay in"
+  },
+  {
+   "t": 1204.9,
+   "d": 1.6,
+   "text": "the game narrative kaleidoscope talks"
+  },
+  {
+   "t": 1206.5,
+   "d": 3.1,
+   "text": "about how the Shadows of Doubt team"
+  },
+  {
+   "t": 1209.6,
+   "d": 2.6,
+   "text": "they really used a lot of handwritten"
+  },
+  {
+   "t": 1212.2,
+   "d": 2.5,
+   "text": "very detailed elements"
+  },
+  {
+   "t": 1214.7,
+   "d": 1.6,
+   "text": "under this idea of theme and like what"
+  },
+  {
+   "t": 1216.3,
+   "d": 2.2,
+   "text": "would fit into this mysterious space of"
+  },
+  {
+   "t": 1218.5,
+   "d": 2.1,
+   "text": "mystery and noir. And then all of that"
+  },
+  {
+   "t": 1220.6,
+   "d": 2.1,
+   "text": "can be recombined because of that layer"
+  },
+  {
+   "t": 1222.7,
+   "d": 3.1,
+   "text": "of theming and genre."
+  },
+  {
+   "t": 1226.11,
+   "d": 1.3,
+   "text": "Caves of Cud, of course, is a great"
+  },
+  {
+   "t": 1227.4,
+   "d": 1.9,
+   "text": "example because its possibility space is"
+  },
+  {
+   "t": 1229.31,
+   "d": 1.7,
+   "text": "so wide and then, you know, many talks"
+  },
+  {
+   "t": 1231.01,
+   "d": 1.8,
+   "text": "both Jason Grinblat and Brian Bucklow"
+  },
+  {
+   "t": 1232.81,
+   "d": 3.4,
+   "text": "have mentioned the idea of not"
+  },
+  {
+   "t": 1236.2,
+   "d": 1.9,
+   "text": "saying something can occur be generated"
+  },
+  {
+   "t": 1238.11,
+   "d": 2.2,
+   "text": "unless it felt extremely off. And I"
+  },
+  {
+   "t": 1240.31,
+   "d": 1.6,
+   "text": "think by playing the game you feel a lot"
+  },
+  {
+   "t": 1241.9,
+   "d": 2.5,
+   "text": "of that welcome dissonance, right?"
+  },
+  {
+   "t": 1244.4,
+   "d": 2.5,
+   "text": "There there are things that are"
+  },
+  {
+   "t": 1246.9,
+   "d": 1.9,
+   "text": "out of sorts a little bit but that"
+  },
+  {
+   "t": 1248.81,
+   "d": 1.3,
+   "text": "adds to this whole question of like what"
+  },
+  {
+   "t": 1250.11,
+   "d": 1.5,
+   "text": "is possible in this space? What even is"
+  },
+  {
+   "t": 1251.61,
+   "d": 1.3,
+   "text": "this space?"
+  },
+  {
+   "t": 1252.9,
+   "d": 1.6,
+   "text": "And it's such a strange, you know,"
+  },
+  {
+   "t": 1254.51,
+   "d": 2.1,
+   "text": "wonderful exploration. And I think it's"
+  },
+  {
+   "t": 1256.61,
+   "d": 1.4,
+   "text": "also worth noting that it's a game for"
+  },
+  {
+   "t": 1258.01,
+   "d": 2.5,
+   "text": "all its openness there is also very"
+  },
+  {
+   "t": 1260.51,
+   "d": 2.6,
+   "text": "targeted and intentional for other ways"
+  },
+  {
+   "t": 1263.11,
+   "d": 1.8,
+   "text": "of generation. You know, the Sultanate"
+  },
+  {
+   "t": 1264.9,
+   "d": 1.6,
+   "text": "shrines have been discussed at length in"
+  },
+  {
+   "t": 1266.51,
+   "d": 1.7,
+   "text": "previous Roguelike Conversations in GDC"
+  },
+  {
+   "t": 1268.2,
+   "d": 0.9,
+   "text": "but"
+  },
+  {
+   "t": 1269.11,
+   "d": 1.6,
+   "text": "it's really wonderful how you can have"
+  },
+  {
+   "t": 1270.7,
+   "d": 3.0,
+   "text": "this narrow sense of the Sultans through"
+  },
+  {
+   "t": 1273.7,
+   "d": 1.7,
+   "text": "you know, theming around elements like"
+  },
+  {
+   "t": 1275.4,
+   "d": 1.8,
+   "text": "if ice is present or fire is present we"
+  },
+  {
+   "t": 1277.2,
+   "d": 2.6,
+   "text": "create natural minging through those or"
+  },
+  {
+   "t": 1279.81,
+   "d": 1.8,
+   "text": "also even broadly more broadly like the"
+  },
+  {
+   "t": 1281.61,
+   "d": 1.3,
+   "text": "idea of history and how history is"
+  },
+  {
+   "t": 1282.9,
+   "d": 1.8,
+   "text": "created which I think you know, history"
+  },
+  {
+   "t": 1284.7,
+   "d": 1.5,
+   "text": "comes back a lot when we're looking at"
+  },
+  {
+   "t": 1286.2,
+   "d": 2.5,
+   "text": "how how meaning is made after the fact"
+  },
+  {
+   "t": 1288.7,
+   "d": 1.3,
+   "text": "for something like Caves of Cud or Dwarf"
+  },
+  {
+   "t": 1290.01,
+   "d": 2.3,
+   "text": "Fortress or history mythology. And I"
+  },
+  {
+   "t": 1292.31,
+   "d": 1.2,
+   "text": "think there's lots of great work like I"
+  },
+  {
+   "t": 1293.51,
+   "d": 2.1,
+   "text": "really enjoyed Florence"
+  },
+  {
+   "t": 1295.61,
+   "d": 2.1,
+   "text": "Nichols talk about"
+  },
+  {
+   "t": 1297.7,
+   "d": 1.2,
+   "text": "object history which is a historical"
+  },
+  {
+   "t": 1298.9,
+   "d": 1.9,
+   "text": "concept introducing here and like what"
+  },
+  {
+   "t": 1300.81,
+   "d": 1.6,
+   "text": "is in this space and how do they really"
+  },
+  {
+   "t": 1302.4,
+   "d": 1.4,
+   "text": "bounce off one another and even, you"
+  },
+  {
+   "t": 1303.81,
+   "d": 1.6,
+   "text": "know, that space could literally be a"
+  },
+  {
+   "t": 1305.4,
+   "d": 2.7,
+   "text": "town in something like Caves of Cud."
+  },
+  {
+   "t": 1308.11,
+   "d": 1.3,
+   "text": "And then finally for key end notes I"
+  },
+  {
+   "t": 1309.4,
+   "d": 2.1,
+   "text": "want to call out Amber Spire,"
+  },
+  {
+   "t": 1311.51,
+   "d": 3.1,
+   "text": "Nick Tragali and Dr. Holly Nelson for"
+  },
+  {
+   "t": 1314.61,
+   "d": 1.5,
+   "text": "using the description of the buildings"
+  },
+  {
+   "t": 1316.11,
+   "d": 1.4,
+   "text": "in a similar way as well. It's it's"
+  },
+  {
+   "t": 1317.51,
+   "d": 2.2,
+   "text": "this, you know, weird city builder where"
+  },
+  {
+   "t": 1319.7,
+   "d": 2.0,
+   "text": "everything is hard to get a sense of"
+  },
+  {
+   "t": 1321.7,
+   "d": 1.3,
+   "text": "initially because it's all new to you"
+  },
+  {
+   "t": 1323.01,
+   "d": 2.5,
+   "text": "the player but there's such a cultural"
+  },
+  {
+   "t": 1325.51,
+   "d": 2.1,
+   "text": "history to the buildings and like how"
+  },
+  {
+   "t": 1327.61,
+   "d": 2.1,
+   "text": "they're described and even how history"
+  },
+  {
+   "t": 1329.7,
+   "d": 2.0,
+   "text": "functions. You know, some are first"
+  },
+  {
+   "t": 1331.7,
+   "d": 2.4,
+   "text": "person quotes about what the building"
+  },
+  {
+   "t": 1334.11,
+   "d": 2.3,
+   "text": "is, some are overheard things, some are"
+  },
+  {
+   "t": 1336.4,
+   "d": 2.1,
+   "text": "much more like"
+  },
+  {
+   "t": 1338.51,
+   "d": 1.6,
+   "text": "not almost academic for lack of a better"
+  },
+  {
+   "t": 1340.11,
+   "d": 1.8,
+   "text": "word. And I think that works so well for"
+  },
+  {
+   "t": 1341.9,
+   "d": 2.1,
+   "text": "like combining in all these different"
+  },
+  {
+   "t": 1344.01,
+   "d": 1.7,
+   "text": "interesting ways."
+  },
+  {
+   "t": 1345.7,
+   "d": 1.4,
+   "text": "There's also the pulse, right? As"
+  },
+  {
+   "t": 1347.11,
+   "d": 1.7,
+   "text": "discussed earlier, the pulse is what"
+  },
+  {
+   "t": 1348.81,
+   "d": 2.1,
+   "text": "keeps that through line and makes"
+  },
+  {
+   "t": 1350.91,
+   "d": 2.2,
+   "text": "everything on NC cohere."
+  },
+  {
+   "t": 1353.11,
+   "d": 1.5,
+   "text": "Uh and I think that's really interesting"
+  },
+  {
+   "t": 1354.61,
+   "d": 1.8,
+   "text": "like what is that for a roguelike or a"
+  },
+  {
+   "t": 1356.41,
+   "d": 1.8,
+   "text": "proc gen game? And it's usually very"
+  },
+  {
+   "t": 1358.21,
+   "d": 2.2,
+   "text": "also uh straight line. You know, it's"
+  },
+  {
+   "t": 1360.41,
+   "d": 1.7,
+   "text": "like very descriptive. What are you"
+  },
+  {
+   "t": 1362.11,
+   "d": 1.4,
+   "text": "doing here? Like you're diving into a"
+  },
+  {
+   "t": 1363.51,
+   "d": 1.8,
+   "text": "dungeon. You're you know, sometimes it's"
+  },
+  {
+   "t": 1365.31,
+   "d": 2.3,
+   "text": "very like literally you're diving down"
+  },
+  {
+   "t": 1367.61,
+   "d": 2.4,
+   "text": "um or you know, sometimes you're in a"
+  },
+  {
+   "t": 1370.01,
+   "d": 2.1,
+   "text": "maze as discussed earlier. But it's it's"
+  },
+  {
+   "t": 1372.11,
+   "d": 1.2,
+   "text": "really what are you doing here? You're"
+  },
+  {
+   "t": 1373.31,
+   "d": 1.4,
+   "text": "going into a dungeon maybe to retrieve"
+  },
+  {
+   "t": 1374.71,
+   "d": 2.0,
+   "text": "something, maybe to keep exploring. Or"
+  },
+  {
+   "t": 1376.71,
+   "d": 1.3,
+   "text": "you're there's a tower and you're going"
+  },
+  {
+   "t": 1378.01,
+   "d": 2.5,
+   "text": "up the tower. Again, a very clear line"
+  },
+  {
+   "t": 1380.51,
+   "d": 2.2,
+   "text": "that anything weird that happens, no"
+  },
+  {
+   "t": 1382.71,
+   "d": 1.9,
+   "text": "matter how far a field it is, can cohere"
+  },
+  {
+   "t": 1384.61,
+   "d": 3.2,
+   "text": "around this sense of motion and purpose."
+  },
+  {
+   "t": 1387.81,
+   "d": 1.7,
+   "text": "Another one maybe it's sort of a"
+  },
+  {
+   "t": 1389.51,
+   "d": 1.6,
+   "text": "meandering sense of motion and purpose,"
+  },
+  {
+   "t": 1391.11,
+   "d": 2.1,
+   "text": "but it's still linear and allows"
+  },
+  {
+   "t": 1393.21,
+   "d": 1.8,
+   "text": "whatever is created around it to really"
+  },
+  {
+   "t": 1395.01,
+   "d": 2.5,
+   "text": "stay on tempos as it would for within"
+  },
+  {
+   "t": 1397.51,
+   "d": 3.5,
+   "text": "the NC. Or even in a place with a set"
+  },
+  {
+   "t": 1401.01,
+   "d": 1.4,
+   "text": "map like Caves of Qud or in this case"
+  },
+  {
+   "t": 1402.41,
+   "d": 2.6,
+   "text": "this is the Mississippi River, how there"
+  },
+  {
+   "t": 1405.01,
+   "d": 1.9,
+   "text": "can be so many different very linear"
+  },
+  {
+   "t": 1406.91,
+   "d": 2.1,
+   "text": "paths that occur each time the game is"
+  },
+  {
+   "t": 1409.01,
+   "d": 1.4,
+   "text": "played which also adds this great sense"
+  },
+  {
+   "t": 1410.41,
+   "d": 3.1,
+   "text": "of repetition and loop."
+  },
+  {
+   "t": 1413.51,
+   "d": 1.8,
+   "text": "And finally this idea I've come to of"
+  },
+  {
+   "t": 1415.31,
+   "d": 1.8,
+   "text": "resonance. So"
+  },
+  {
+   "t": 1417.11,
+   "d": 2.0,
+   "text": "again, one of the joys of NC and I agree"
+  },
+  {
+   "t": 1419.11,
+   "d": 1.8,
+   "text": "this is absolutely a joy is this"
+  },
+  {
+   "t": 1420.91,
+   "d": 2.1,
+   "text": "interaction between players,"
+  },
+  {
+   "t": 1423.01,
+   "d": 1.4,
+   "text": "the spontaneously arising between"
+  },
+  {
+   "t": 1424.41,
+   "d": 1.5,
+   "text": "patterns and these quite fantastic"
+  },
+  {
+   "t": 1425.91,
+   "d": 1.5,
+   "text": "shapes that arise and disintegrate as a"
+  },
+  {
+   "t": 1427.41,
+   "d": 2.5,
+   "text": "group moves through properly played."
+  },
+  {
+   "t": 1429.91,
+   "d": 1.4,
+   "text": "So what is that in games, right? And and"
+  },
+  {
+   "t": 1431.31,
+   "d": 1.8,
+   "text": "to me it's like how how do you start"
+  },
+  {
+   "t": 1433.11,
+   "d": 1.5,
+   "text": "talking about not even just the"
+  },
+  {
+   "t": 1434.61,
+   "d": 1.9,
+   "text": "individual resonance of design or like"
+  },
+  {
+   "t": 1436.51,
+   "d": 1.2,
+   "text": "if it was an instrument each"
+  },
+  {
+   "t": 1437.71,
+   "d": 2.0,
+   "text": "instrument's actual resonance,"
+  },
+  {
+   "t": 1439.71,
+   "d": 2.2,
+   "text": "but this broader amorphous shape that"
+  },
+  {
+   "t": 1441.91,
+   "d": 1.8,
+   "text": "you have and are experiencing either in"
+  },
+  {
+   "t": 1443.71,
+   "d": 1.7,
+   "text": "the piece or in"
+  },
+  {
+   "t": 1445.41,
+   "d": 2.3,
+   "text": "uh a game."
+  },
+  {
+   "t": 1447.71,
+   "d": 1.4,
+   "text": "And I really love this idea of like a a"
+  },
+  {
+   "t": 1449.11,
+   "d": 2.3,
+   "text": "bell. Uh that's just the way that I"
+  },
+  {
+   "t": 1451.41,
+   "d": 1.5,
+   "text": "found most useful to think about it"
+  },
+  {
+   "t": 1452.91,
+   "d": 1.6,
+   "text": "where it's it's something and I want to"
+  },
+  {
+   "t": 1454.51,
+   "d": 2.3,
+   "text": "kind of briefly talk about resonance cuz"
+  },
+  {
+   "t": 1456.81,
+   "d": 1.9,
+   "text": "you know, there's lots of"
+  },
+  {
+   "t": 1458.71,
+   "d": 1.3,
+   "text": "you know, it's a very common expression"
+  },
+  {
+   "t": 1460.01,
+   "d": 2.3,
+   "text": "to say like oh um I really resonated"
+  },
+  {
+   "t": 1462.31,
+   "d": 1.9,
+   "text": "with X and Y and I think that there's a"
+  },
+  {
+   "t": 1464.21,
+   "d": 2.2,
+   "text": "really lot of beauty in that idea. But"
+  },
+  {
+   "t": 1466.41,
+   "d": 1.5,
+   "text": "just thinking about resonance and it's"
+  },
+  {
+   "t": 1467.91,
+   "d": 2.7,
+   "text": "think good to remember that an object"
+  },
+  {
+   "t": 1470.61,
+   "d": 2.6,
+   "text": "has resonance beforehand, right? It's"
+  },
+  {
+   "t": 1473.21,
+   "d": 1.3,
+   "text": "like that's the frequency that the"
+  },
+  {
+   "t": 1474.51,
+   "d": 3.4,
+   "text": "object is at. Um, and so it can be tuned"
+  },
+  {
+   "t": 1477.91,
+   "d": 2.2,
+   "text": "to most produce that resonance. It can"
+  },
+  {
+   "t": 1480.11,
+   "d": 2.4,
+   "text": "be shifted and then as it's producing"
+  },
+  {
+   "t": 1482.51,
+   "d": 2.7,
+   "text": "that resonance, someone can come to it"
+  },
+  {
+   "t": 1485.21,
+   "d": 1.3,
+   "text": "and then"
+  },
+  {
+   "t": 1486.51,
+   "d": 1.4,
+   "text": "bringing their own experiences, bringing"
+  },
+  {
+   "t": 1487.91,
+   "d": 2.4,
+   "text": "their subjectivity, they then resonate"
+  },
+  {
+   "t": 1490.31,
+   "d": 1.8,
+   "text": "with it which just really heightens the"
+  },
+  {
+   "t": 1492.11,
+   "d": 1.4,
+   "text": "experience, right? And I think that's a"
+  },
+  {
+   "t": 1493.51,
+   "d": 1.9,
+   "text": "really beautiful way of thinking of"
+  },
+  {
+   "t": 1495.41,
+   "d": 1.7,
+   "text": "games as far as I like to at least"
+  },
+  {
+   "t": 1497.11,
+   "d": 1.1,
+   "text": "consider them and what makes sense for"
+  },
+  {
+   "t": 1498.21,
+   "d": 1.9,
+   "text": "me which is less something of immersion"
+  },
+  {
+   "t": 1500.11,
+   "d": 1.8,
+   "text": "which feels very like stifling honestly,"
+  },
+  {
+   "t": 1501.91,
+   "d": 2.6,
+   "text": "this sense of like it has to"
+  },
+  {
+   "t": 1504.51,
+   "d": 2.0,
+   "text": "fully be a blanket of experience or"
+  },
+  {
+   "t": 1506.51,
+   "d": 2.9,
+   "text": "fully convince a player and and"
+  },
+  {
+   "t": 1509.41,
+   "d": 2.2,
+   "text": "something much more closer to like an"
+  },
+  {
+   "t": 1511.61,
+   "d": 2.0,
+   "text": "object that gives a lot of agency to the"
+  },
+  {
+   "t": 1513.61,
+   "d": 2.4,
+   "text": "player to come to it, but also gives a"
+  },
+  {
+   "t": 1516.01,
+   "d": 2.6,
+   "text": "lot of just respect and idea to the game"
+  },
+  {
+   "t": 1518.61,
+   "d": 2.1,
+   "text": "as an object and potential of producing"
+  },
+  {
+   "t": 1520.71,
+   "d": 1.5,
+   "text": "and like possibility space that it can"
+  },
+  {
+   "t": 1522.21,
+   "d": 2.0,
+   "text": "be. And then really like viewing those"
+  },
+  {
+   "t": 1524.21,
+   "d": 1.2,
+   "text": "things combined and you know, no"
+  },
+  {
+   "t": 1525.41,
+   "d": 2.4,
+   "text": "surprise that a lot of this"
+  },
+  {
+   "t": 1527.81,
+   "d": 2.1,
+   "text": "work it's like I it was ideas I'd had"
+  },
+  {
+   "t": 1529.91,
+   "d": 1.6,
+   "text": "before I think you know coming to it"
+  },
+  {
+   "t": 1531.51,
+   "d": 2.1,
+   "text": "kind of from the side"
+  },
+  {
+   "t": 1533.61,
+   "d": 2.0,
+   "text": "and almost like it just made sense but"
+  },
+  {
+   "t": 1535.61,
+   "d": 2.0,
+   "text": "then um Christine Drogensen's Game World"
+  },
+  {
+   "t": 1537.61,
+   "d": 2.7,
+   "text": "Interfaces and the way she discusses how"
+  },
+  {
+   "t": 1540.31,
+   "d": 1.6,
+   "text": "the game, the game world and then the"
+  },
+  {
+   "t": 1541.91,
+   "d": 1.6,
+   "text": "player and how interfacing function"
+  },
+  {
+   "t": 1543.51,
+   "d": 1.3,
+   "text": "between those really kind of felt like"
+  },
+  {
+   "t": 1544.81,
+   "d": 2.1,
+   "text": "it gave me permission to keep pulling at"
+  },
+  {
+   "t": 1546.91,
+   "d": 2.0,
+   "text": "this thread and especially hearing the"
+  },
+  {
+   "t": 1548.91,
+   "d": 1.8,
+   "text": "discussion around it in the podcast Game"
+  },
+  {
+   "t": 1550.71,
+   "d": 1.2,
+   "text": "Studies Study Buddies that I want to"
+  },
+  {
+   "t": 1551.91,
+   "d": 1.9,
+   "text": "mention um which also"
+  },
+  {
+   "t": 1553.81,
+   "d": 1.9,
+   "text": "leads to the next work which is Cameron"
+  },
+  {
+   "t": 1555.71,
+   "d": 1.4,
+   "text": "Conselman who is one of the hosts of"
+  },
+  {
+   "t": 1557.11,
+   "d": 2.4,
+   "text": "that podcast with Michael Lutz wrote The"
+  },
+  {
+   "t": 1559.51,
+   "d": 2.5,
+   "text": "World is Born for Zero."
+  },
+  {
+   "t": 1562.01,
+   "d": 3.5,
+   "text": "Uh, sorry I need some tea real quick."
+  },
+  {
+   "t": 1566.41,
+   "d": 1.9,
+   "text": "Which mentions mechanics of speculation"
+  },
+  {
+   "t": 1568.31,
+   "d": 2.4,
+   "text": "and and speculation"
+  },
+  {
+   "t": 1570.71,
+   "d": 1.8,
+   "text": "sort of the gap between action and"
+  },
+  {
+   "t": 1572.51,
+   "d": 1.6,
+   "text": "result and the possibility of"
+  },
+  {
+   "t": 1574.11,
+   "d": 1.4,
+   "text": "speculation they're both small and"
+  },
+  {
+   "t": 1575.51,
+   "d": 1.5,
+   "text": "large."
+  },
+  {
+   "t": 1577.01,
+   "d": 1.8,
+   "text": "And then finally I think that was really"
+  },
+  {
+   "t": 1578.81,
+   "d": 1.5,
+   "text": "captured well in the Polaris paper"
+  },
+  {
+   "t": 1580.31,
+   "d": 1.7,
+   "text": "Understanding System Suspense which was"
+  },
+  {
+   "t": 1582.01,
+   "d": 3.4,
+   "text": "Jason Grinblat uh and uh"
+  },
+  {
+   "t": 1585.41,
+   "d": 2.0,
+   "text": "Max Reminski, Graham Lehman, sorry this"
+  },
+  {
+   "t": 1587.41,
+   "d": 1.3,
+   "text": "text is very small and I should have"
+  },
+  {
+   "t": 1588.71,
+   "d": 1.9,
+   "text": "made this very Cat Manan,"
+  },
+  {
+   "t": 1590.61,
+   "d": 1.6,
+   "text": "Alexi Peppers of course, and Lauren"
+  },
+  {
+   "t": 1592.21,
+   "d": 1.6,
+   "text": "Scott, a wonderful paper I highly"
+  },
+  {
+   "t": 1593.81,
+   "d": 1.2,
+   "text": "recommend checking out. And then Alexi"
+  },
+  {
+   "t": 1595.01,
+   "d": 2.3,
+   "text": "Peppers actually had a wonderful talk at"
+  },
+  {
+   "t": 1597.31,
+   "d": 1.5,
+   "text": "an earlier roguelike about the same"
+  },
+  {
+   "t": 1598.81,
+   "d": 2.0,
+   "text": "paper. Uh"
+  },
+  {
+   "t": 1600.81,
+   "d": 1.6,
+   "text": "this is the idea of like learning the"
+  },
+  {
+   "t": 1602.41,
+   "d": 1.6,
+   "text": "rules and leaving what is possible, a"
+  },
+  {
+   "t": 1604.01,
+   "d": 2.7,
+   "text": "suspense and sort of what can be created"
+  },
+  {
+   "t": 1606.71,
+   "d": 1.4,
+   "text": "or an outcome. And again, I think all of"
+  },
+  {
+   "t": 1608.11,
+   "d": 1.8,
+   "text": "these works so well with something like"
+  },
+  {
+   "t": 1609.91,
+   "d": 3.0,
+   "text": "N C because there are both expectations"
+  },
+  {
+   "t": 1612.91,
+   "d": 2.1,
+   "text": "of output and then surprise. You think"
+  },
+  {
+   "t": 1615.01,
+   "d": 1.1,
+   "text": "you're learning as it goes because"
+  },
+  {
+   "t": 1616.11,
+   "d": 2.2,
+   "text": "repetition and something new can occur."
+  },
+  {
+   "t": 1618.31,
+   "d": 1.8,
+   "text": "And all of them"
+  },
+  {
+   "t": 1620.11,
+   "d": 2.4,
+   "text": "all these pieces and N C"
+  },
+  {
+   "t": 1622.51,
+   "d": 1.3,
+   "text": "leave room, right? They're really"
+  },
+  {
+   "t": 1623.81,
+   "d": 2.2,
+   "text": "focused on what can occur when room is"
+  },
+  {
+   "t": 1626.01,
+   "d": 2.3,
+   "text": "left for bringing these very technical"
+  },
+  {
+   "t": 1628.31,
+   "d": 2.4,
+   "text": "approaches and these very subjective"
+  },
+  {
+   "t": 1630.71,
+   "d": 1.7,
+   "text": "approaches to a piece. And I just find"
+  },
+  {
+   "t": 1632.41,
+   "d": 1.3,
+   "text": "that like really beautiful, right? It's"
+  },
+  {
+   "t": 1633.71,
+   "d": 1.8,
+   "text": "something"
+  },
+  {
+   "t": 1635.51,
+   "d": 1.4,
+   "text": "to look at like"
+  },
+  {
+   "t": 1636.91,
+   "d": 4.1,
+   "text": "not certainty, not known, not immersion,"
+  },
+  {
+   "t": 1641.01,
+   "d": 0.9,
+   "text": "but"
+  },
+  {
+   "t": 1641.91,
+   "d": 2.3,
+   "text": "space between and sort of like"
+  },
+  {
+   "t": 1644.21,
+   "d": 1.7,
+   "text": "you know, how do we produce meaning? How"
+  },
+  {
+   "t": 1645.91,
+   "d": 2.3,
+   "text": "do we both as designers and in players"
+  },
+  {
+   "t": 1648.21,
+   "d": 1.6,
+   "text": "in that space?"
+  },
+  {
+   "t": 1649.81,
+   "d": 1.4,
+   "text": "Uh and then looking at it not as like"
+  },
+  {
+   "t": 1651.21,
+   "d": 2.6,
+   "text": "space as open or space as like"
+  },
+  {
+   "t": 1653.81,
+   "d": 1.4,
+   "text": "gap or anything like that, but really"
+  },
+  {
+   "t": 1655.21,
+   "d": 1.4,
+   "text": "embracing space is more like I don't"
+  },
+  {
+   "t": 1656.61,
+   "d": 1.1,
+   "text": "know, like a"
+  },
+  {
+   "t": 1657.71,
+   "d": 1.8,
+   "text": "it's like a the space in a bowl that can"
+  },
+  {
+   "t": 1659.51,
+   "d": 1.4,
+   "text": "be filled through all of these things."
+  },
+  {
+   "t": 1660.91,
+   "d": 1.1,
+   "text": "And what what does it mean to create the"
+  },
+  {
+   "t": 1662.01,
+   "d": 1.7,
+   "text": "bowl or you know, a bell which is sort"
+  },
+  {
+   "t": 1663.71,
+   "d": 1.8,
+   "text": "of an inverted bowl and a couple of"
+  },
+  {
+   "t": 1665.51,
+   "d": 2.2,
+   "text": "ways, but not really. But still, I just"
+  },
+  {
+   "t": 1667.71,
+   "d": 2.3,
+   "text": "I really love these ideas that"
+  },
+  {
+   "t": 1670.01,
+   "d": 3.0,
+   "text": "to me really wonderful music, especially"
+  },
+  {
+   "t": 1673.01,
+   "d": 3.2,
+   "text": "Terry Riley's N C and later movements"
+  },
+  {
+   "t": 1676.21,
+   "d": 1.3,
+   "text": "towards like experimental composition"
+  },
+  {
+   "t": 1677.51,
+   "d": 1.6,
+   "text": "like I cannot recommend Point of Eras"
+  },
+  {
+   "t": 1679.11,
+   "d": 1.8,
+   "text": "enough either"
+  },
+  {
+   "t": 1680.91,
+   "d": 2.3,
+   "text": "bring to the table when thinking about"
+  },
+  {
+   "t": 1683.21,
+   "d": 1.3,
+   "text": "you know, not just music or not just"
+  },
+  {
+   "t": 1684.51,
+   "d": 2.2,
+   "text": "games, but just how we create meaning"
+  },
+  {
+   "t": 1686.71,
+   "d": 1.3,
+   "text": "through anything. And I I don't know, I"
+  },
+  {
+   "t": 1688.01,
+   "d": 1.5,
+   "text": "think that's a really"
+  },
+  {
+   "t": 1689.51,
+   "d": 1.7,
+   "text": "wonderful thing to see explored,"
+  },
+  {
+   "t": 1691.21,
+   "d": 1.3,
+   "text": "something I hope to continue exploring"
+  },
+  {
+   "t": 1692.51,
+   "d": 1.3,
+   "text": "and something a reason I'm so welcome"
+  },
+  {
+   "t": 1693.81,
+   "d": 2.1,
+   "text": "for roguelike celebration to allow it to"
+  },
+  {
+   "t": 1695.91,
+   "d": 2.2,
+   "text": "be explored here in my talk and"
+  },
+  {
+   "t": 1698.11,
+   "d": 1.2,
+   "text": "through so many other talks I've seen"
+  },
+  {
+   "t": 1699.31,
+   "d": 2.3,
+   "text": "today and tomorrow."
+  },
+  {
+   "t": 1701.61,
+   "d": 1.4,
+   "text": "So thank you so much to all the"
+  },
+  {
+   "t": 1703.01,
+   "d": 1.7,
+   "text": "participants, organizers, and speakers"
+  },
+  {
+   "t": 1704.71,
+   "d": 2.5,
+   "text": "for roguelike 2026. I have to say this"
+  },
+  {
+   "t": 1707.21,
+   "d": 1.5,
+   "text": "is my first time presenting at roguelike"
+  },
+  {
+   "t": 1708.71,
+   "d": 1.2,
+   "text": "and"
+  },
+  {
+   "t": 1709.91,
+   "d": 2.2,
+   "text": "the organizers are incredible. If they"
+  },
+  {
+   "t": 1712.11,
+   "d": 1.9,
+   "text": "are so supportive and on top of"
+  },
+  {
+   "t": 1714.01,
+   "d": 1.1,
+   "text": "everything and helpful. So if you're"
+  },
+  {
+   "t": 1715.11,
+   "d": 1.5,
+   "text": "ever considering throwing out a weird"
+  },
+  {
+   "t": 1716.61,
+   "d": 1.6,
+   "text": "idea or it's something you might want to"
+  },
+  {
+   "t": 1718.21,
+   "d": 1.7,
+   "text": "do, do it, right? It's a really"
+  },
+  {
+   "t": 1719.91,
+   "d": 1.5,
+   "text": "wonderful group and a very supportive"
+  },
+  {
+   "t": 1721.41,
+   "d": 0.9,
+   "text": "group."
+  },
+  {
+   "t": 1722.31,
+   "d": 1.7,
+   "text": "Uh you can find me on Blue Sky or on"
+  },
+  {
+   "t": 1724.01,
+   "d": 2.7,
+   "text": "Gmail. It's the same for both. Uh here's"
+  },
+  {
+   "t": 1726.71,
+   "d": 1.7,
+   "text": "some NC recommendations that I mentioned"
+  },
+  {
+   "t": 1728.41,
+   "d": 1.9,
+   "text": "earlier. So if you wanted to start kind"
+  },
+  {
+   "t": 1730.31,
+   "d": 1.8,
+   "text": "of pulling that thread here are some of"
+  },
+  {
+   "t": 1732.11,
+   "d": 2.0,
+   "text": "those examples and I'll actually for"
+  },
+  {
+   "t": 1734.11,
+   "d": 1.5,
+   "text": "those who are doing the breakout room,"
+  },
+  {
+   "t": 1735.61,
+   "d": 1.4,
+   "text": "I'll share some links to three of those"
+  },
+  {
+   "t": 1737.01,
+   "d": 1.8,
+   "text": "performances there and we can even have"
+  },
+  {
+   "t": 1738.81,
+   "d": 1.8,
+   "text": "a little informal listening section of"
+  },
+  {
+   "t": 1740.61,
+   "d": 1.4,
+   "text": "session if folks want."
+  },
+  {
+   "t": 1742.01,
+   "d": 1.6,
+   "text": "Um all the public domain art was via the"
+  },
+  {
+   "t": 1743.61,
+   "d": 1.4,
+   "text": "public domain review and their image"
+  },
+  {
+   "t": 1745.01,
+   "d": 2.1,
+   "text": "search, which I highly recommend. And"
+  },
+  {
+   "t": 1747.11,
+   "d": 2.3,
+   "text": "then I also want to thank webaim.org cuz"
+  },
+  {
+   "t": 1749.41,
+   "d": 2.0,
+   "text": "they're they determine accessibility and"
+  },
+  {
+   "t": 1751.41,
+   "d": 1.8,
+   "text": "helped me set this contrast, which was"
+  },
+  {
+   "t": 1753.21,
+   "d": 1.1,
+   "text": "actually needed to be tweaked a little"
+  },
+  {
+   "t": 1754.31,
+   "d": 1.8,
+   "text": "bit. So I you should use them for"
+  },
+  {
+   "t": 1756.11,
+   "d": 2.2,
+   "text": "accessibility when doing a presentation."
+  },
+  {
+   "t": 1758.31,
+   "d": 2.1,
+   "text": "And then finally here are all the"
+  },
+  {
+   "t": 1760.41,
+   "d": 2.3,
+   "text": "resources that I discussed. Um not so"
+  },
+  {
+   "t": 1762.71,
+   "d": 2.3,
+   "text": "many outright citations, but I've the"
+  },
+  {
+   "t": 1765.01,
+   "d": 1.4,
+   "text": "top tier of the Terry Riley book and"
+  },
+  {
+   "t": 1766.41,
+   "d": 1.6,
+   "text": "then this blog I want to mention because"
+  },
+  {
+   "t": 1768.01,
+   "d": 2.1,
+   "text": "if you are at the end of this talk"
+  },
+  {
+   "t": 1770.11,
+   "d": 1.4,
+   "text": "thinking I wish there's a lot more about"
+  },
+  {
+   "t": 1771.51,
+   "d": 3.1,
+   "text": "the math and possibility and structure"
+  },
+  {
+   "t": 1774.61,
+   "d": 2.8,
+   "text": "of Terry Riley's NC, this blog has a lot"
+  },
+  {
+   "t": 1777.41,
+   "d": 1.3,
+   "text": "of that. There's elements where you can"
+  },
+  {
+   "t": 1778.71,
+   "d": 1.5,
+   "text": "listen to different pulses over the"
+  },
+  {
+   "t": 1780.21,
+   "d": 1.4,
+   "text": "years. You can listen to different"
+  },
+  {
+   "t": 1781.61,
+   "d": 2.4,
+   "text": "pieces in tandem or separate. So really"
+  },
+  {
+   "t": 1784.01,
+   "d": 1.9,
+   "text": "worth digging into."
+  },
+  {
+   "t": 1785.91,
+   "d": 3.2,
+   "text": "Here are the various talk or papers and"
+  },
+  {
+   "t": 1789.11,
+   "d": 1.8,
+   "text": "elements I mentioned."
+  },
+  {
+   "t": 1790.91,
+   "d": 2.0,
+   "text": "Here are some talks I really highly"
+  },
+  {
+   "t": 1792.91,
+   "d": 2.2,
+   "text": "recommend um and also came up earlier."
+  },
+  {
+   "t": 1795.11,
+   "d": 2.0,
+   "text": "And then at the very end, though not"
+  },
+  {
+   "t": 1797.11,
+   "d": 2.0,
+   "text": "directly mentioned, I do think Mike"
+  },
+  {
+   "t": 1799.11,
+   "d": 1.3,
+   "text": "Cook's book Next Level, which came out"
+  },
+  {
+   "t": 1800.41,
+   "d": 1.4,
+   "text": "this year."
+  },
+  {
+   "t": 1801.81,
+   "d": 1.5,
+   "text": "And then the Tanya X Short and Tarn"
+  },
+  {
+   "t": 1803.31,
+   "d": 1.8,
+   "text": "Adams Procedural Storytelling in Game"
+  },
+  {
+   "t": 1805.11,
+   "d": 1.2,
+   "text": "Design"
+  },
+  {
+   "t": 1806.31,
+   "d": 2.0,
+   "text": "came out 2019. Both really helped"
+  },
+  {
+   "t": 1808.31,
+   "d": 2.8,
+   "text": "influence my move into diving deeper"
+  },
+  {
+   "t": 1811.11,
+   "d": 2.2,
+   "text": "into Roblox overall. And I'm exactly at"
+  },
+  {
+   "t": 1813.31,
+   "d": 2.2,
+   "text": "time."
+  },
+  {
+   "t": 1816.71,
+   "d": 2.9,
+   "text": ">> Great. Thank you so much Matt uh for"
+  },
+  {
+   "t": 1819.61,
+   "d": 3.3,
+   "text": "being so kind to us organizers, but also"
+  },
+  {
+   "t": 1822.91,
+   "d": 3.9,
+   "text": "I feel like this list of resources is uh"
+  },
+  {
+   "t": 1826.81,
+   "d": 1.8,
+   "text": "pretty similar to the list of anyone who"
+  },
+  {
+   "t": 1828.61,
+   "d": 1.7,
+   "text": "asked like, hey, how should I learn"
+  },
+  {
+   "t": 1830.31,
+   "d": 1.7,
+   "text": "about procedural generation in games?"
+  },
+  {
+   "t": 1832.01,
+   "d": 1.9,
+   "text": "Like well this site"
+  },
+  {
+   "t": 1833.91,
+   "d": 1.5,
+   "text": "covers a lot of the things I would point"
+  },
+  {
+   "t": 1835.41,
+   "d": 1.2,
+   "text": "them to."
+  },
+  {
+   "t": 1836.61,
+   "d": 2.7,
+   "text": "Um, we do have"
+  },
+  {
+   "t": 1839.31,
+   "d": 2.6,
+   "text": "time for one question."
+  },
+  {
+   "t": 1841.91,
+   "d": 4.9,
+   "text": "Um, one question from Isaac IO is um so"
+  },
+  {
+   "t": 1846.81,
+   "d": 2.2,
+   "text": "one thing that N C and these games have"
+  },
+  {
+   "t": 1849.01,
+   "d": 2.0,
+   "text": "in common is that they're somewhat"
+  },
+  {
+   "t": 1851.01,
+   "d": 1.7,
+   "text": "linear. Are there any other pieces that"
+  },
+  {
+   "t": 1852.71,
+   "d": 2.5,
+   "text": "come to mind as a model for less linear"
+  },
+  {
+   "t": 1855.21,
+   "d": 2.1,
+   "text": "games or experiences?"
+  },
+  {
+   "t": 1857.31,
+   "d": 3.1,
+   "text": ">> Oh, that's a great question. Um"
+  },
+  {
+   "t": 1860.41,
+   "d": 2.4,
+   "text": "whoo I'm sure there's later generative"
+  },
+  {
+   "t": 1862.81,
+   "d": 2.0,
+   "text": "pieces. Nothing that has the same"
+  },
+  {
+   "t": 1864.81,
+   "d": 2.9,
+   "text": "balance of notation and text prompts,"
+  },
+  {
+   "t": 1867.71,
+   "d": 2.2,
+   "text": "right? Like I"
+  },
+  {
+   "t": 1869.91,
+   "d": 2.0,
+   "text": "the her has an entire book of her text"
+  },
+  {
+   "t": 1871.91,
+   "d": 2.0,
+   "text": "scores. I mentioned Horse Sings from"
+  },
+  {
+   "t": 1873.91,
+   "d": 1.8,
+   "text": "Cloud earlier and I think some of those"
+  },
+  {
+   "t": 1875.71,
+   "d": 4.6,
+   "text": "have more clear directions. Um"
+  },
+  {
+   "t": 1880.31,
+   "d": 1.5,
+   "text": "oh, you know, actually one that I think"
+  },
+  {
+   "t": 1881.81,
+   "d": 2.3,
+   "text": "is really wonderful is okay, I almost"
+  },
+  {
+   "t": 1884.11,
+   "d": 1.8,
+   "text": "included this and then"
+  },
+  {
+   "t": 1885.91,
+   "d": 1.8,
+   "text": "it ended up there's"
+  },
+  {
+   "t": 1887.71,
+   "d": 3.0,
+   "text": "there's a composer named Raven Chacon"
+  },
+  {
+   "t": 1890.71,
+   "d": 2.0,
+   "text": "an indigenous composer who does really"
+  },
+  {
+   "t": 1892.71,
+   "d": 2.2,
+   "text": "great sort bouncing percussive"
+  },
+  {
+   "t": 1894.91,
+   "d": 1.9,
+   "text": "instruments and other elements. And at"
+  },
+  {
+   "t": 1896.81,
+   "d": 2.4,
+   "text": "the Swiss Institute in Manhattan,"
+  },
+  {
+   "t": 1899.21,
+   "d": 1.5,
+   "text": "there's a giant mural of one of his"
+  },
+  {
+   "t": 1900.71,
+   "d": 2.4,
+   "text": "pieces where it's kind of almost like a"
+  },
+  {
+   "t": 1903.11,
+   "d": 2.1,
+   "text": "board game as well. You the performers"
+  },
+  {
+   "t": 1905.21,
+   "d": 2.3,
+   "text": "start in different quadrants and then"
+  },
+  {
+   "t": 1907.51,
+   "d": 2.1,
+   "text": "they can choose to move to aligning"
+  },
+  {
+   "t": 1909.61,
+   "d": 2.5,
+   "text": "quadrants as they hear one another. I"
+  },
+  {
+   "t": 1912.11,
+   "d": 1.3,
+   "text": "think it's for horns and percussion or"
+  },
+  {
+   "t": 1913.41,
+   "d": 1.5,
+   "text": "maybe just for horns."
+  },
+  {
+   "t": 1914.91,
+   "d": 1.3,
+   "text": "But that I think is a really interesting"
+  },
+  {
+   "t": 1916.21,
+   "d": 2.5,
+   "text": "example of more it's still linear in the"
+  },
+  {
+   "t": 1918.71,
+   "d": 1.6,
+   "text": "movement, but it's more prescribed with"
+  },
+  {
+   "t": 1920.31,
+   "d": 1.4,
+   "text": "that linearity."
+  },
+  {
+   "t": 1921.71,
+   "d": 1.3,
+   "text": "Um"
+  },
+  {
+   "t": 1923.01,
+   "d": 1.2,
+   "text": "and then"
+  },
+  {
+   "t": 1924.21,
+   "d": 2.6,
+   "text": "for games, yeah, I'm not"
+  },
+  {
+   "t": 1926.81,
+   "d": 1.0,
+   "text": "I'm not sure. Actually, you know, one"
+  },
+  {
+   "t": 1927.81,
+   "d": 1.4,
+   "text": "example which is a plug for the next"
+  },
+  {
+   "t": 1929.21,
+   "d": 1.6,
+   "text": "talk which I was actually meant to give"
+  },
+  {
+   "t": 1930.81,
+   "d": 1.3,
+   "text": "is that I'm really excited to play"
+  },
+  {
+   "t": 1932.11,
+   "d": 1.4,
+   "text": "Thousand Hells which I have not played"
+  },
+  {
+   "t": 1933.51,
+   "d": 2.3,
+   "text": "yet. And I think that has a wonderful"
+  },
+  {
+   "t": 1935.81,
+   "d": 2.3,
+   "text": "pulse to it because it's you know, heist"
+  },
+  {
+   "t": 1938.11,
+   "d": 2.0,
+   "text": "which is like always a winning formula."
+  },
+  {
+   "t": 1940.11,
+   "d": 2.2,
+   "text": "Hell hells, multiple hells which is like"
+  },
+  {
+   "t": 1942.31,
+   "d": 1.7,
+   "text": "better than a single or worse than a"
+  },
+  {
+   "t": 1944.01,
+   "d": 2.3,
+   "text": "single hell, however you view it."
+  },
+  {
+   "t": 1946.31,
+   "d": 1.9,
+   "text": "And I think it seems like it's playing"
+  },
+  {
+   "t": 1948.21,
+   "d": 2.0,
+   "text": "with genre and theme which in within"
+  },
+  {
+   "t": 1950.21,
+   "d": 2.8,
+   "text": "each of those heist while still cohering"
+  },
+  {
+   "t": 1953.01,
+   "d": 1.3,
+   "text": "more broadly. And I think something like"
+  },
+  {
+   "t": 1954.31,
+   "d": 1.2,
+   "text": "that's really great or even you know,"
+  },
+  {
+   "t": 1955.51,
+   "d": 2.1,
+   "text": "like your Fallen Londons and and things"
+  },
+  {
+   "t": 1957.61,
+   "d": 1.7,
+   "text": "like that where there's a set, but"
+  },
+  {
+   "t": 1959.31,
+   "d": 1.3,
+   "text": "really different authors are coming in"
+  },
+  {
+   "t": 1960.61,
+   "d": 1.9,
+   "text": "and playing within those those formulas."
+  },
+  {
+   "t": 1962.51,
+   "d": 1.0,
+   "text": "So I guess"
+  },
+  {
+   "t": 1963.51,
+   "d": 1.8,
+   "text": "those would be my suggestions for now,"
+  },
+  {
+   "t": 1965.31,
+   "d": 1.6,
+   "text": "but I'll have to keep that to mind and"
+  },
+  {
+   "t": 1966.91,
+   "d": 1.2,
+   "text": "try to think of some more."
+  },
+  {
+   "t": 1968.11,
+   "d": 2.3,
+   "text": ">> Great. Thank you so much Matt. And"
+  },
+  {
+   "t": 1970.41,
+   "d": 2.3,
+   "text": "Matt's talk will be in or Matt's"
+  },
+  {
+   "t": 1972.71,
+   "d": 3.0,
+   "text": "breakout will be in the press box. And"
+  },
+  {
+   "t": 1975.71,
+   "d": 1.7,
+   "text": "as a reminder,"
+  },
+  {
+   "t": 1977.41,
+   "d": 4.1,
+   "text": "Paul's breakout will be in the dugout."
+  },
+  {
+   "t": 1981.51,
+   "d": 1.5,
+   "text": "Thank you so much Matt. I'll just do a"
+  },
+  {
+   "t": 1983.01,
+   "d": 3.7,
+   "text": "couple reminders shout outs before"
+  },
+  {
+   "t": 1986.71,
+   "d": 2.3,
+   "text": "we go into the break."
+  },
+  {
+   "t": 1989.01,
+   "d": 3.0,
+   "text": "If you've been having any trouble seeing"
+  },
+  {
+   "t": 1992.01,
+   "d": 2.0,
+   "text": "chat, chat's been pretty active. So if"
+  },
+  {
+   "t": 1994.01,
+   "d": 1.7,
+   "text": "you haven't been seeing messages there,"
+  },
+  {
+   "t": 1995.71,
+   "d": 1.6,
+   "text": "first try refreshing and if that doesn't"
+  },
+  {
+   "t": 1997.31,
+   "d": 3.0,
+   "text": "work, but also try to see if you have"
+  },
+  {
+   "t": 2000.31,
+   "d": 3.2,
+   "text": "any other tabs of The Moan social space"
+  },
+  {
+   "t": 2003.51,
+   "d": 2.9,
+   "text": "open cuz sometimes that causes issues as"
+  },
+  {
+   "t": 2006.41,
+   "d": 2.3,
+   "text": "well."
+  },
+  {
+   "t": 2008.71,
+   "d": 2.3,
+   "text": "If you want to buy this cool Roguelike"
+  },
+  {
+   "t": 2011.01,
+   "d": 2.5,
+   "text": "Celebration shirt or any of our shirts"
+  },
+  {
+   "t": 2013.51,
+   "d": 2.5,
+   "text": "from previous years, you can go to the"
+  },
+  {
+   "t": 2016.01,
+   "d": 2.0,
+   "text": "Roguelike Celebration website"
+  },
+  {
+   "t": 2018.01,
+   "d": 2.9,
+   "text": "roguelike.club to grab those."
+  },
+  {
+   "t": 2020.91,
+   "d": 3.0,
+   "text": "And once again, please check out"
+  },
+  {
+   "t": 2023.91,
+   "d": 2.8,
+   "text": "cool social space that our volunteers,"
+  },
+  {
+   "t": 2026.71,
+   "d": 1.4,
+   "text": "especially Nathan, put so much work"
+  },
+  {
+   "t": 2028.11,
+   "d": 2.0,
+   "text": "into. I've heard there's some very cool"
+  },
+  {
+   "t": 2030.11,
+   "d": 2.8,
+   "text": "secrets. And maybe dig around the soda"
+  },
+  {
+   "t": 2032.91,
+   "d": 2.1,
+   "text": "fountain if you're interested in those."
+  },
+  {
+   "t": 2035.01,
+   "d": 3.8,
+   "text": "And we will be back in half an hour to"
+  },
+  {
+   "t": 2038.81,
+   "d": 2.7,
+   "text": "hear from David Dunham"
+  },
+  {
+   "t": 2041.51,
+   "d": 2.9,
+   "text": "first for some about Thousand Hells. So"
+  },
+  {
+   "t": 2044.41,
+   "d": 2.0,
+   "text": "kind of a throw forward for that."
+  },
+  {
+   "t": 2046.41,
+   "d": 1.3,
+   "text": "Great."
+  },
+  {
+   "t": 2047.71,
+   "d": 2.4,
+   "text": "See you then."
+  }
+ ]
+}

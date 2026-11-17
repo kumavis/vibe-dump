@@ -1,0 +1,60 @@
+Ludipe - Exploring Pacifist Roguelikes
+Speaker: Ludipe
+https://www.youtube.com/watch?v=pYtlU9wGopo
+Year: 2023   Kind: talk   Captions: manual (en)
+
+## Introduction and background
+
+[0:00:05] ALEXEI: Hello. Hi. Last lightning talk for this little slot from Ludipe. I lope that's correct. Yeah. The head of fellowship at Asterisk games. The fellowship programs offers grants and scholarships to designers so they can focus on their projects. You are here to talk about pacifist roguelikes which is a favorite topic of this conference so go ahead and take it away. LUDIPE: Before starting the topic of the conversation. A brief introduction about myself. I am a game designer working at Asra -- Astra Games. Two small games I highlight here are the ever-changing case of the unpaid rent and adultlike.
+
+## Defining pacifist roguelikes
+
+[0:01:18] The first is about being a detective and trying to solve crimes in order to pay rent. It is a very abstract kind of deck building game. And the second is let's say a multiple choice game where you move around the grid and you have to make it to the end of the month and there are things like removing energy from you and you have skills on certain days. Yeah, these are some of the ways I explore pacifist roguelikes in the past. This is a short talk. I wanted to define pacifist roguelikes and tell you why I think it is a cool topic and why I think we should be exploring them more often. And also, a peak at how we start tackling these challenges and making these pacifist
+
+## The gray areas of combat
+
+[0:02:10] roguelikes. When I am talking about a pacifist roguelikes I mean conflict and solved with violence, any kind of violence even if it is cute cats fighting and bump into them and one flies off the screen, that's still combat through violence. Also, whenever I look on Google, I see games like renowned explorers but that's not the focus of the experience. I am aware there are lots of gray areas. Short talk. I want to acknowledge that there are some things like invisible inc where you can go through the whole game without violent acts but they are still part of the game. Also there are games where you are not the one engaging in the combat and action but you are still supporting the entity doing that.
+
+[0:03:10] Again, grey areas we could talk about in the discussion. Some examples. There are a bunch of these but some examples that came to mind when I was preparing this
+
+## Examples of pacifist games
+
+[0:03:24] talk. Insurmountable is a survival game where you are managing the parameters and trying to stay alive. It is really hard. But again, it is about the climber trying to get to the top. It is not focused on combat or violence. Luck to be a Landlord. I think the description was funny. The landlord is knocking on the door and you don't have money to pay rent and start messing around with the slot machine to make enough money to pay rent. The Waking Knot is still in development but had a few demos. I really like this. I think this game is super cool when it releases. It is kind of like a pacifist where you are moving around this grid and trying to save all these and manipulating things around. It is a bit cryptic and abstract but a really cool example of pacifist roguelikes which
+
+[0:04:28] look more traditional.
+
+## Why create pacifist games?
+
+[0:04:30] Why am I talking about this? First of all, even though the examples, this is a tiny fraction compared to the roguelikes games, I think most people in games jump into a new opportunity of doing something that is like let's start it and explore it. So it is more different. I think there is other things to explore. It is the fun of roguelikes and the play of this genre and I want to see all sorts of games. More variety. Yeah, as a bonus point, I would say it is great tool to draw more players to the john -- genre which I think is a good idea. We are high in combat. First of all, there is references to use a lot of cool games we can draw inspiration
+
+[0:05:36] from. This makes the design process a bit easier. Designing any kind of game is hard. So, you know, if we have something that's a bit easier we can follow that path. It is full of elements that players recognize instantly. A put a warrior goblin on the screen and the warrior has five hearts and the goblin has five hearts and most players recognize this is my enemy and if I choose to hit them I am going to do damage and they have five health points. Lots of symbols that we are very used to. It is easy to recognize them. Also, yeah, they usually have like an opposing force that, you know, it is playing against us. That's exciting. When we show them around, usually combat leaves players frustrated which always helps?
+
+## Strategies for design
+
+[0:06:33] How do we start -- in my mind you want to try to make more of these pacifist roguelikes and I am going to use two early ideas. Very short talk. We don't have time dig deep into these. You have game like Rift Wizard with all the usuals. Everybody in this game is like a wizard and you are throwing spells at each other and trying to remove all their health points and get the enemies. Now we are going to replace the narrative. Let's say we keep the same thing. Everything is the same but instead of us fighting the dungeon it is a setting like where it is people in a ballroom and they are gossiping and trying to restore the reputation of someone else. Something like that. Or maybe they are trying to find romance. And instead of doing damage, it is like adding parameters like energy to dance, or how much
+
+[0:07:42] a person likes you, something like that. We would be keeping the same systems and kind of replacing the wrapping around them. Obviously is not always possible. But there are a good amount of examples where you can actually do this and just switch around variables, change the wrapping, and you have something that I think feels more refreshing or at least newer. This is like the easy way. I mean it says let's keep doing what we were already doing but with a new wrapping.
+
+## Themes and systems
+
+[0:08:19] Obviously, the harder path, staying away from those and trying to really lean on these new systems like for example in insurmountable the game I mentioned about climbing a mountain they are relying on the whole fantasy of being a climber and getting to the top. They are creating mini systems and interesting challenges out of that. Again, it is harder. Each iteration is harder. There is more ideas that need to be discarded like taking longer. But I think you can get to more interesting situations. One thing I was missing was like hey, in roguelikes, we usually have combat and means we have an active opponent fighting against us, playing against us. It is like not passive. It is active. But really it is not all roguelikes are doing this.
+
+[0:09:21] Desktop dungeon is a missing roguelike, one of the parents of the genre and in this game, you have like very big passive enemies. I am not saying you have to rely on a thief. You can have things that are like static and passive on the grid and still make an experience. And The Waking Knot, the game I mentioned before, this one has active forces fighting against you. It is like some fireball appearing out of nowhere moving around. It is a force of nature. Not an enemy to be defeated. The whole point of the game is finding your way around it and trying to manipulate in a way that suits your goal even though it is a force of nature and not about something you can fight.
+
+## The future of the genre
+
+[0:10:19] The whole point of leaning on your inspiration and trying to say what's the theme of what I want to do and try to draw more mechanic and systems from that. I think we could be exploring so many cool things like gardening, sports, preparing a trip, doing laundry, cooking, hosting a dinner, and I would like to see more creators pick these non-violent newer themes and I am excited to see what new mechanics can come from there. Maybe it is doing clothes or a sports thing with managing the team and you need to hire new people or maybe fire them or train them. I don't know. I just think that if we lean on these inspirations we can see new kinds of roguelikes and new kinds of mechanics and challenges and I am very excited about that. It is like when I went to one of the big game conferences and I see 6-7 games in a row are realistic shooting games, I am like I don't know have anything against these but I don't
+
+[0:11:25] like seeing 5-6 games in a row that do the identical. I am hoping this inspires more people to play and explore this section of roguelikes.
+
+## Q&A and closing thoughts
+
+[0:11:35] Like I said, you can find me on Twitter, Blue Sky and all that. That's it. Thanks a lot for being here. ALEXEI: Thank you. It is really great. Well done fitting I think a lot of ideas into that amount of time. I think this is one of the ones that will be fun to unpack in the recording and really go through all these references. We probably have time for one or two questions. I know the idea of swapping combat mechanics if you turn that into gardening does that make it a pacifist roguelike? And maybe. But there are other ways. LUDIPE: The most common way is replacing the narrative but that's one idea. The harder the path and the other one is just knowing over there and trying come up with
+
+[0:12:36] new mechanics and thinking I am going to turn thighs into a roguelike and it is all about learning when to drift and use the boost and when to do this. Each iteration is harder. But I think it is also very exciting. ALEXEI: Yeah. I think that's a full example of trying to control a car which something I saw in the chat was interesting. We talk about conflict as a word but also struggle as something where maybe like you could struggle without necessarily having a 1:1 conflict with something. LUDIPE: Conflict and struggle comes in so many ways. Not only in fighting. We will have like a struggle and challenges every day. I think it is very cool to draw inspiration from that as well. ALEXEI: Yeah. Yeah. Here is an interesting question. What do you consider the bar for a pacifist roguelike? Do you think a game can mix the concepts and that's something you consider pacifist?
+
+[0:13:38] How much combat mixed in before it loses? LUDIPE: This is purely personal. From my point of view, with I am looking and googling looking for pacifist roguelikes, I am looking for games like if there is combat, it is 5% of the game or happens during an isolated event. At least that's my point of view when I am on Google or whatever trying to find these games. When somebody recommends games where like does it have the option for going pacifist and that's cool but I am looking for a more pacifist thing at the moment. ALEXEI: I think that makes sense. Here is really interesting question from meanwhile which is bringing up. To adequately shift toward non-combat games posing the question we should stimulate social, economic, those kinds of processes instead of stimulating combat adventure what do you
+
+[0:14:40] think of that? LUDIPE: Definitely. Once we step out of combat we have so many settings to draw inspiration. One thing I wished more games focused on is games about building trips. Like something where you are hiking around and the whole challenge is what do I pack, where do I sleep, again, like when you start thinking in all these spheres and settings, you stumble upon so many interesting ideas. I think that's very cool. ALEXEI: We had a talk about Oregon Trail which has a lot of packing. The Banished Vault deals with a lot of resource management. And that makes me think of unpacking which is game about the opposite but it is also a very fascinating. I think pacifistic game. I think so. Unless like putting, you know, a hair drier in the kitchen is violence. LUDIPE: Again, grey area all around.
+
+[0:15:42] ALEXEI: When you live together, your partner might think that's not appreciated. That brings us to the end of the time. Thank you so much for coming to Roguelike Celebration and excellent talk.

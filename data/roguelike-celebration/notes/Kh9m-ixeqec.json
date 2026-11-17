@@ -1,0 +1,198 @@
+{
+  "id": "Kh9m-ixeqec",
+  "title": "Brian Cronin - Playtesting Process for Ultra Small Teams",
+  "speaker": "Brian Cronin",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=Kh9m-ixeqec",
+  "talk_type": "design",
+  "summary": "Brian Cronin (Monster Train, now solo part-time on the dice roguelike Slumber Realm) argues that one-on-one synchronous playtesting should be the central pillar of a tiny team's development process. He describes prototyping his game in Tabletop Simulator, running about 88 hour-long one-on-one sessions, and a loop of hypothesis, playtest round of one to five people, feedback processing and action. He gives practical advice on tracking testers, finding them, opening sessions, avoiding defensive language, talking rather than staying silent, useful questions, and following up with testers to build trust and community.",
+  "games": [
+    "Slumber Realm",
+    "Monster Train",
+    "Machi Koro",
+    "Resident Evil"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "paper prototyping",
+      "kind": "technique",
+      "claim": "Cronin prototyped his dice roguelike in a spreadsheet and Tabletop Simulator before touching Unity, getting valuable early feedback from friends.",
+      "detail": "Inspired by the board game Machi Koro's dice mechanic, he laid out card ideas in a spreadsheet and built a Tabletop Simulator version. Feedback was not glowing, but getting it very early shaped the game going forward.",
+      "t": 108,
+      "quote": "before I fired up Unity, I went into, you know, spreadsheet and I started laying out some card ideas",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "example",
+      "claim": "As a part-time solo developer with little time, Cronin leaned heavily on playtesting, running about 88 one-on-one hour-long sessions over the project.",
+      "detail": "He ran 50 sessions in the first year (2022 through 2023), all over Discord or Google Meet, about 113 hours in total, which he tracks precisely; for a very part-time project this was a big commitment.",
+      "t": 195,
+      "quote": "I ended up leaning really hard in play testing",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "principle",
+      "claim": "Developers are bad at judging whether their own game is fun or understandable, so playtesting should be the central pillar of development rather than a QA step at the end.",
+      "detail": "Cronin contrasts the traditional idea-GDD-prototype-production-QA-release pipeline with tight iteration loops around playtests. He often finds something he thought clear confuses five testers in a row, and warns that developers who skip playtesting and succeed are likely survivorship bias.",
+      "t": 460,
+      "quote": "Devs are bad at knowing if their game is fun. Devs are bad at knowing if their game is understandable",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "warning",
+      "claim": "Small developers often under-use playtesting or rely only on asynchronous testing, but one-on-one synchronous sessions are critical.",
+      "detail": "Asynchronous testing, where testers send back notes, can be good too, but Cronin argues the live one-on-one form is underutilized by small teams and extremely valuable.",
+      "t": 448,
+      "quote": "Or they do like asynchronous play testing only. They send it out to some people. Those people send back notes",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "onboarding",
+      "kind": "principle",
+      "claim": "Extensive playtesting makes a game feel like it reads the player's mind, because each answer appears right when a new player wonders about it.",
+      "detail": "Cronin describes a new player asking how something works and the next screen revealing it, because he had already 'read a lot of other people's minds' in earlier tests.",
+      "t": 502,
+      "quote": "It's because I did I just read a lot of other people's minds first",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community building",
+      "kind": "technique",
+      "claim": "Playtesting doubles as early community building: Cronin's game Discord is almost entirely made up of past playtesters.",
+      "detail": "As a solo part-time developer with a game on Steam, he finds testers become his community, and following up with them about changes builds trust and willingness to test again.",
+      "t": 518,
+      "quote": "That Discord community is almost entirely built out of people that have play tested my game in the past",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "validation",
+      "kind": "technique",
+      "claim": "Early playtests should validate whether second-to-second play is fun, whether the minute-to-minute loop is fun, whether players understand what is happening, and whether the art and theme are compelling.",
+      "detail": "In a deckbuilder, drawing and playing cards is the core nugget, while adding cards, shopping and moving between battles is the outer loop. Prototypes can be on paper or as a mod of another game; music and artwork can be playtested too.",
+      "t": 639,
+      "quote": "Is the secondto-second gameplay fun? So in a deck builder card game, you like drawing cards, playing cards",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtest loop",
+      "kind": "technique",
+      "claim": "Cronin's playtesting loop is: form a hypothesis, run a round with one to five testers, synthesise feedback into prioritised action items, act, and repeat.",
+      "detail": "He uses the example of Resident Evil painting interactables yellow, likely after tests showed players missing them. Focus each round on one hypothesis but don't neglect the whole experience; it isn't strict science.",
+      "t": 688,
+      "quote": "You start with a hypothesis. You go through a play test round of one to five people. You synthesize and process their feedback",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "sample size",
+      "kind": "principle",
+      "claim": "Three to five testers per round is usually enough because patterns repeat, so small teams need not schedule 20 people for every change.",
+      "detail": "Cronin takes the five-user figure from the book Sprint, where patterns repeated by the fifth user; he usually gets a strong gut feeling by three, sometimes one.",
+      "t": 796,
+      "quote": "for most of my play tests, three people is enough. I start to get a really good gut feeling by three",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "feedback triage",
+      "kind": "technique",
+      "claim": "Don't try to act on every piece of playtest feedback; prioritise high-impact items, but do at least one action per playtest.",
+      "detail": "Cronin marks action items in each session's notes, collects them with attribution into a prioritised list (hypothesis items first), and accepts that unfixed issues will resurface in later tests or disappear with design changes. Spending an hour with someone and doing nothing feels pointless.",
+      "t": 926,
+      "quote": "One heristic I have is I'd like to do at least one action per play test",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "tester tracking",
+      "kind": "technique",
+      "claim": "Track every playtest and every interested person in one place (name, date, build, notes, status, contact source) to build a bank of future testers and a history of the game.",
+      "detail": "Cronin adds anyone who expresses interest, from real life, Discord or a Reddit comment, with a link to how to reach them, and can look back at notes to see the past state of the game.",
+      "t": 950,
+      "quote": "one of the key things that has has made this process really work for me is I track all of my play tests",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "finding testers",
+      "kind": "technique",
+      "claim": "Find playtesters by simply asking: friends and family, Discord servers, Reddit playtesting subreddits, social media, paid services, and above all by asking testers to refer others.",
+      "detail": "A single Facebook post yielded six or seven sessions. Cronin cautions against over-relying on other game developers, who view games in a particular way, though trusted genre experts are useful.",
+      "t": 1127,
+      "quote": "Game developers have a very particular way to view a game",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "session facilitation",
+      "kind": "technique",
+      "claim": "Open a playtest by thanking the tester, asking warm-up questions about what games they play, and explicitly asking for what they find fun, frustrating and confusing.",
+      "detail": "Warm-up questions get testers talking and reveal their perspective; one tester who had never played a turn-based game called his game 'chill'. Telling them they won't hurt your feelings invites honest feedback.",
+      "t": 1272,
+      "quote": "Please tell me what you find fun, frustrating, and confusing. I always go to these three words",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "defensive language",
+      "kind": "warning",
+      "claim": "Responding defensively to a confused tester (pointing at the UI they missed) makes them stop giving honest feedback; use 'I' language that owns the mistake instead.",
+      "detail": "If a tester confused by a burning skeleton is told the status icon is obvious, they retreat to 'the game was good, thanks'. Saying 'I can see where I made a mistake' and noting it down keeps feedback flowing; active listening techniques help.",
+      "t": 1338,
+      "quote": "she's going to notice that we're being defensive and she's going to give us feedback. The game was good",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "session facilitation",
+      "kind": "principle",
+      "claim": "Cronin rejects silent observation in playtests: talk as an active listener, decide case by case whether to answer a question or probe the player's intuition, and unblock testers stuck on bugs.",
+      "detail": "If a question relates to what is being tested, he asks 'what does your intuition say?'; otherwise he answers and moves on. Audible note-taking signals that their time is valued. Avoid being too chatty and biasing the player.",
+      "t": 1418,
+      "quote": "I think it's weird to just be totally silent when you're running a play test and I think it's not useful",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "session facilitation",
+      "kind": "technique",
+      "claim": "Useful in-session questions include 'What are you feeling now?', 'What decision are you making?', 'Do you know what to click next?' and 'I sense you're a bit frustrated, I'm curious why'.",
+      "detail": "These help when players of crunchy games go silent while thinking. Cronin keeps his webcam on and encourages testers to turn theirs on so he can read their faces.",
+      "t": 1517,
+      "quote": "What are you feeling now? What are you thinking about? What's the decision you're making?",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "tester relations",
+      "kind": "technique",
+      "claim": "Send testers follow-up notes when you change the game because of their feedback; it thanks them, builds trust and makes them keen to test again.",
+      "detail": "This is why Cronin attributes action items to individual testers: he tells them when he addressed their confusion or implemented their suggestion.",
+      "t": 1593,
+      "quote": "It helps build trust and it opens up like for future opportunities of play testing",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "interpreting feedback",
+      "kind": "principle",
+      "claim": "There are no bad playtesters; even harsh feedback from someone outside the target audience can be correct, while friendly testers bias positive, so the developer must interpret rather than follow feedback dogmatically.",
+      "detail": "In Q&A, Cronin describes a harsh asynchronous tester whose feedback made him defensive but was partly 'absolutely correct'. Positive bias from one-on-one testers is why later anonymous feedback, such as from a public demo, is also useful. Host Alexei Pepers adds that feedback must be parsed, not followed blindly.",
+      "t": 1774,
+      "quote": "I wouldn't say anyone's a bad play tester. I think it's up to you as the person running the play test to figure out how to get value",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

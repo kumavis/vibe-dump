@@ -1,0 +1,176 @@
+{
+  "id": "WtdCY6NxX6I",
+  "title": "Andrea Roberts - Designing a Roguelike for People Who've Never Played Roguelikes",
+  "speaker": "Andrea Roberts",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=WtdCY6NxX6I",
+  "talk_type": "design",
+  "summary": "Andrea Roberts describes how Roundguard, a Peggle-inspired pinball dungeon crawler with permadeath, was designed to welcome players who had never played a roguelike. She frames the heart of the genre as self-directed learning and argues accessibility means not interfering with that learning rather than making the game easier. Her four approaches are testing genre assumptions, pacing complexity through unlocks fed into the generator, keeping a welcoming tone around death, and giving players tools to tune the challenge (class complexity, scoring, rules-changing relics, a mercy/easy relic). Fan feedback from non-gamers and families is presented as evidence it worked.",
+  "games": [
+    "Roundguard",
+    "Peggle"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "genre heart",
+      "kind": "principle",
+      "claim": "The heart of the roguelike genre is deep self-directed learning, where players discover the rules themselves, fail, and build mastery to improvise against whatever the generator throws at them.",
+      "detail": "Roberts frames Roundguard's accessibility work around protecting this. Failure is an important part of learning, and mastery of systems lets players improvise in the face of procedural content.",
+      "t": 193,
+      "quote": "Real, true deep learning where players are discovering for themselves the underlying rules of the games",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "accessibility",
+      "kind": "principle",
+      "claim": "Making a roguelike accessible should mean not interfering with learning rather than making it easier or adding tutorials that give answers away.",
+      "detail": "Roberts' initial assumption was to make Roundguard easier or add more tutorials, but she reframed the goal: don't interrupt players about to figure something out, trust them to learn, give space to experiment, and avoid grind-to-win mechanics that create a false sense of progress, so players feel they won through their own learning.",
+      "t": 248,
+      "quote": "I am trying to encourage learning and more than anything, I am trying not to interfere with learning",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "genre assumptions",
+      "kind": "principle",
+      "claim": "Much roguelike difficulty is knowledge veterans already carry, so designers for newcomers must identify and test the genre assumptions they take for granted.",
+      "detail": "Because roguelikes are about learning, experienced players bring expectations that make the game easier for them. Roberts calls testing assumptions the key to Roundguard's onboarding work.",
+      "t": 324,
+      "quote": "so much of that difficulty is in what you already have, you know, you are understanding in your head",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "onboarding",
+      "kind": "example",
+      "claim": "Roundguard playtests showed newcomers did not grasp that enemies hit back on contact or that health must be managed across a whole run, because many games avoid damage or heal after every encounter.",
+      "detail": "The team assumed trading damage and long-form health management were basics players would pick up, but early procedural demo tests showed people struggling. Roberts notes that in many games players avoid most damage and are healed after encounters.",
+      "t": 427,
+      "quote": "Long form health management isn't important in a lot of games. In a lot of games you are healed up after every encounter",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "tutorials",
+      "kind": "technique",
+      "claim": "Roundguard isolates truly foundational concepts in a short step-by-step tutorial because dropping newcomers into a full procedural run overwhelmed them.",
+      "detail": "A pop-in tutorial character helped some, but heroes, skills, varied monsters and status effects were too much at once. A short, focused tutorial teaching that enemies hit back and that potions heal got everyone through the basics so they could reach deeper systems. Roberts concluded these basics are not the fun part, so teaching them does not spoil learning.",
+      "t": 516,
+      "quote": "We finally made a very, you know, step-by-step tutorial. It is short. Right at the beginning of the game",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "safety nets",
+      "kind": "technique",
+      "claim": "Roundguard watches for players who are not using skills for a couple of boards and only then has the tutorial character remind them.",
+      "detail": "Skills are the main way to manage the health/damage tradeoff. Most players embraced them after a brief introduction, so the reminder is a safety net that triggers only for those struggling, rather than a forced lesson for everyone.",
+      "t": 595,
+      "quote": "If you go for a couple boards and are not using your skills then that little tutorial character pops up",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "unlocking complexity",
+      "kind": "technique",
+      "claim": "Roundguard holds back complications and pushes them into the procedural generator as players prove mastery, keeping early floors fresh for veterans without overwhelming newcomers.",
+      "detail": "Since roguelike players repeat the early territory most, reaching halfway through an act unlocks a new board element that then appears everywhere, beating the act 2 boss unlocks chaos rooms that change map generation, and beating the game unlocks rule-changing relics. Roberts frames this as giving players more ways to express what they learned, not punishing them.",
+      "t": 755,
+      "quote": "we ended up holding on to some of these complications and unlocking them as we saw players provering they understand the game",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath framing",
+      "kind": "technique",
+      "claim": "Roundguard softens permadeath with a theatre framing where the host treats death as a reset of the stage, plus a small token carried into the next run.",
+      "detail": "Permadeath is scary to newcomers but failure and repetition are core. A curtain, host and clapping audience frame each run as practice; on death the host says it was just a bad run. A death token is not run-changing but gives a strategic idea and hope that the next run will differ.",
+      "t": 926,
+      "quote": "When you die, the host comes up with the message of no worries, just a bad run and we will reset the stage",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "celebrating progress",
+      "kind": "technique",
+      "claim": "Roundguard's UI puts unlocks, mastered relics and score progression front and centre each run to remind players that dying did not erase what they learned.",
+      "detail": "Roberts hates feeling all progress is lost, and argues it isn't: a UI overhaul celebrates accomplishments so far, which she says is part of telling players it is OK to fail.",
+      "t": 1015,
+      "quote": "We did a UI overhaul where we put up front and center every run where you put up all the unlocks",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "player-tuned difficulty",
+      "kind": "principle",
+      "claim": "Because difficulty is subjective and balance is never perfect, a roguelike should give players tools to tune the challenge themselves.",
+      "detail": "Roberts notes some players want a relaxing game, others intense challenge, and capabilities differ; a designer cannot predict all of it. Roundguard's levers include class choice, scoring, and stackable relics.",
+      "t": 1096,
+      "quote": "I can't predict all of these and give you the perfect game but I can give you tools so you can make the game",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "class complexity",
+      "kind": "example",
+      "claim": "Roundguard's warrior, rogue and wizard target increasing complexity, and an added complexity meter fixed players not realizing that picking the warrior meant picking the simplest game.",
+      "detail": "The warrior smashes into things, the rogue is about control and precision, the wizard has complex hard-to-control skills. Some players chose the front-and-centre warrior and concluded the game wasn't complicated enough, so an update made the choice explicit.",
+      "t": 1186,
+      "quote": "we just added a little complexity meter so you understand that this is a choice that you are making",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "score chasing",
+      "kind": "example",
+      "claim": "Roundguard's roaming scarab score multiplier creates optional press-your-luck choices that make the game harder for players who want it, without changing the systems.",
+      "detail": "The scarab moves peg to peg between shots and multiplies points of everything hit after it. Chasing it means trying to hit it with a skill before the rest of the board, sometimes instead of grabbing needed health, which naturally raises difficulty for score-focused players.",
+      "t": 1252,
+      "quote": "Sometimes it goads you into press your luck choices where it is like I really should be going for this health",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "relics",
+      "kind": "technique",
+      "claim": "Roundguard's post-victory relics each alter a core rule and can be layered freely, letting players reshape the game.",
+      "detail": "Relics change status effects, enemy responses, map generation and gravity; the relic of instinct shields heroes who launch within two seconds. Players can stack as many as they want.",
+      "t": 1287,
+      "quote": "Every relic touches on a core system of the game and changes the fundamental rules",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "easy mode",
+      "kind": "warning",
+      "claim": "An easy-mode option must be labelled clearly as well as respectfully, as Roundguard learned when streamers equipped its mercy relic without realizing it was easy mode.",
+      "detail": "The mercy relic gives training wheels for frustrated players and was popular with kids, and was worded so nobody felt talked down to. But streamers took it for its extra potions and stats, risking a wrong impression of the game, so an update added the words 'easy mode' up front.",
+      "t": 1405,
+      "quote": "they found more potion and better stats and equipped it but without understanding they were putting on easy mode",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "playtesting",
+      "kind": "technique",
+      "claim": "Roundguard was playtested from the first months at public indie show-and-tell events, watching strangers including kids play over their shoulders.",
+      "detail": "In Q&A Roberts says the team regularly took the game to Seattle indie community events open to the public, watched people play and asked how things were going.",
+      "t": 1763,
+      "quote": "We just regularly got it out there and brought it to lots of events and things and looked at people over their shoulders",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "audience",
+      "kind": "principle",
+      "claim": "Roguelikes suit time-poor players and families because short sessions end cleanly with a fresh start and repetition teaches persistence.",
+      "detail": "As a new parent, Roberts found she could get strategic depth in 35-45 minute sessions and return a week later without having to resume an epic storyline or inventory mess. Parents told her their kids enjoyed the repetition, practice and learning, and she calls exploration, comfort in failure and grit values the community spreads.",
+      "t": 142,
+      "quote": "I learned I could get that real strategic doubt I was looking for in the short play sessions",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

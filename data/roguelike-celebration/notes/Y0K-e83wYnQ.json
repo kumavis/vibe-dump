@@ -1,0 +1,149 @@
+{
+  "id": "Y0K-e83wYnQ",
+  "title": "Leif Bloomquist: Multiplayer RogueLike for the Commodore 64",
+  "speaker": "Leif Bloomquist",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=Y0K-e83wYnQ",
+  "talk_type": "technical",
+  "summary": "Leif Bloomquist presents an unnamed hobby project: a real-time, persistent, multiplayer roguelike playable on a networked Commodore 64, in a browser via a JavaScript port, or over Telnet, all sharing one server instance. He explains design choices meant to force cooperation, such as having no inventory beyond two hands and keys that teleport back after use, and the server architecture (Java, loosely model-view-controller, UDP with simple acks, finite-state-machine monsters that act through the same controller as players). He outlines a roadmap including multi-player puzzles, ranged weapons, field of view, and a login system, and in Q&A discusses the real-time tick system, tutorial first level and persistent monsters.",
+  "games": [
+    "Space Command",
+    "Artillery Duel",
+    "Net Racer",
+    "NetHack",
+    "Minecraft"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "multiplayer roguelike",
+      "kind": "open-question",
+      "claim": "Bloomquist's Commodore 64 multiplayer roguelike departs from roguelike norms by being real-time, a single persistent shared instance, with persistent objects and monsters, putting it closer to a multi-user dungeon.",
+      "detail": "Because of networking and multiplayer it is not turn-based. Dropped items stay where they were left weeks later unless someone takes them, and monsters keep running around on the server even when no players are connected; he admits it may be more akin to a MUD.",
+      "t": 407,
+      "quote": "It is real-time because of the network and multiplayer aspect. It's not turn-based. It's one single shared instance",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "cooperative play",
+      "kind": "principle",
+      "claim": "The game's premise is that the other characters you meet in the dungeon are other players, enabling shared quests, teaming up against monsters, joint puzzles, and leaving each other tools, clues and equipment.",
+      "detail": "Bloomquist frames this as his personal challenge for the project. Persistence of dropped items supports players leaving things for one another.",
+      "t": 380,
+      "quote": "what if the other characters in the dungeon you were running across were other players? So you could interact with them.",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "inventory limits",
+      "kind": "technique",
+      "claim": "To encourage multiplayer cooperation, the game has no inventory: a player can hold only one item in each hand, so carrying a sword, shield, key and potion requires bringing a friend.",
+      "detail": "The two-hand model lets players double up (two swords for offence, two shields for defence, or one of each). Other pickups include potions, keys and gold.",
+      "t": 491,
+      "quote": "There's no inventory. So to encourage multiplayer, you you can only hold items in your left hand or your right hand.",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "explicit attack",
+      "kind": "technique",
+      "claim": "The game uses an explicit attack command instead of bump-to-attack so that ranged weapons can be added later, and the attack combines all weapons the player is holding.",
+      "detail": "In Q&A Bloomquist says the distinction between using a potion and attacking with a sword needed coaching, but players picked it up fairly quickly; the first level acts as a tutorial with simple tasks to learn the mechanic.",
+      "t": 465,
+      "quote": "There's an explicit attack command cuz I eventually want to introduce ranged weapons. So the bump to attack wouldn't work.",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "tutorial level",
+      "kind": "technique",
+      "claim": "Bloomquist's multiplayer roguelike makes its first level a tutorial where players must do simple tasks to learn the unusual explicit-attack mechanic before reaching the real game.",
+      "detail": "He describes the attack-versus-use distinction as subtle (how do you use one of two swords?), so the attack stacks all carried weapons and the opening level teaches it.",
+      "t": 1078,
+      "quote": "the first level is sort of a tutorial. So, you have to do some very simple tasks to get used to that mechanic",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "shared-world items",
+      "kind": "technique",
+      "claim": "In a persistent shared world, keys teleport back to their origin when used so that one player cannot lock a door behind them and shut out all future players.",
+      "detail": "Bloomquist calls these magic items and gives the key as the example of a mechanic adapted for multiplayer persistence.",
+      "t": 521,
+      "quote": "when you use the key, it teleports back to its origin",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "multiple clients",
+      "kind": "technique",
+      "claim": "The game runs one shared server instance that can be played from a Commodore 64, a JavaScript browser port, or a Telnet ASCII client, with a translation layer converting the view to PETSCII, ASCII or UTF-8.",
+      "detail": "Few people own networked C64s, so he ported the client to JavaScript while keeping its character sets; his vision is that any retro machine (VIC-20, Tandy CoCo, Atari, Apple II) could connect and play together.",
+      "t": 574,
+      "quote": "There's a Telnet client, so if you want the true ASCII experience, you can Telnet to the server and see it in glorious ASCII.",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "server architecture",
+      "kind": "technique",
+      "claim": "The game's Java server uses a loose model-view-controller split where all entity actions, from both players and monsters, pass through the same controller, with monsters interacting with the world the same way players do.",
+      "detail": "The model holds maps, objects and entity locations plus rules; a view acts like a camera on the immediate surroundings; a thin translation layer handles encodings; a socket interface talks to clients over UDP with simple acks, sending changes plus a 1 Hz refresh.",
+      "t": 666,
+      "quote": "this is all entity actions go through the controller. So that applies to both players and monsters.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "finite state machines",
+      "kind": "technique",
+      "claim": "Monsters in Bloomquist's roguelike are simple finite state machines, and tweaking their state transitions gives them different personalities.",
+      "detail": "Monsters have states and triggers for switching between them. In Q&A he notes some sit and wait until something enters visual range while others wander aimlessly.",
+      "t": 715,
+      "quote": "by tweaking these state transitions, you can give the monster slightly different personalities",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "real-time ticks",
+      "kind": "technique",
+      "claim": "Because the multiplayer roguelike is real-time, the server updates all players and monsters on a 50 ms tick, while per-entity timers limit how often each can move, such as one square every 300 ms.",
+      "detail": "Bloomquist describes movement speed as an attribute (a component, as he learned the term that day) managed by timers attached to individual entity objects.",
+      "t": 1104,
+      "quote": "the server is running on a uh 50 ms tick. So, every 50 ms there's a tick. All the players and monsters are updated.",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "hybrid maps",
+      "kind": "technique",
+      "claim": "The game's test levels are procedurally generated and then manually tweaked, with a goal of ten levels of 1,000 by 1,000 tiles where players wander and find each other.",
+      "detail": "The test server runs four 100 by 100 levels mixing generation and hand editing.",
+      "t": 728,
+      "quote": "It's a mix of hand edited and procedurally generated. So, it procedurally generated the levels and then did a couple of manual tweaks.",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "cooperative puzzles",
+      "kind": "open-question",
+      "claim": "Bloomquist wants to add puzzles that require simultaneous actions by multiple players, such as one player doing one thing while another does something else to open a portal.",
+      "detail": "This is on his to-do list alongside character types, ranged weapons, A* monster movement, field of view (currently players see everything), and a Minecraft-inspired login system for returning to quests later.",
+      "t": 859,
+      "quote": "little puzzles into the game that would require multiple players to go in, you know, player one does this at the same time while player two does this",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "persistent monsters",
+      "kind": "open-question",
+      "claim": "Persistent monsters that act while no players are online raise the question of whether they should pick up items, which could make NPCs indistinguishable from players.",
+      "detail": "An audience member worried a monster could collect deadly items NetHack-style; Bloomquist said monsters currently have no inventory but he'd limit them to one or two items, and that this opens the possibility of NPCs where you can't tell if someone is a player or AI.",
+      "t": 1254,
+      "quote": "is this an actual player or is this an AI? Or does it matter?",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

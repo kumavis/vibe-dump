@@ -1,0 +1,2501 @@
+{
+ "id": "iZUXjbcAfYs",
+ "url": "https://www.youtube.com/watch?v=iZUXjbcAfYs",
+ "title": "Thomas Biskup - The Future of ADOM",
+ "speaker": "Thomas Biskup",
+ "talk_title": "The Future of ADOM",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 2116,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Thomas Biskup talks about the future of ADOM and what the next year has in store.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [],
+ "caption_source": "whisper",
+ "caption_lang": "en",
+ "word_count": 6658,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 9.76,
+   "text": "Good morning. Great to see you all back. I hope you had a wonderful evening yesterday. Sadly my jet lag killed me so I had no chance to be there but I hope you enjoyed it."
+  },
+  {
+   "t": 11.6,
+   "d": 10.5,
+   "text": "Today I would like to continue my talk from last year where I talked about the first 24 years of ADOM and today I want to give a little audio look on the next 25 years, what we are planning."
+  },
+  {
+   "t": 22.1,
+   "d": 1.84,
+   "text": "So I hope you will find that interesting."
+  },
+  {
+   "t": 26.08,
+   "d": 4.38,
+   "text": "Without further ado, basically the talk consists of, let's say, five announcements I'm going"
+  },
+  {
+   "t": 30.46,
+   "d": 3.58,
+   "text": "to make and explain a little bit and give some technical details and stuff."
+  },
+  {
+   "t": 34.9,
+   "d": 1.46,
+   "text": "And yeah, I'll just start."
+  },
+  {
+   "t": 38.44,
+   "d": 2.62,
+   "text": "First of all, the talk is named the future of ADOM."
+  },
+  {
+   "t": 41.26,
+   "d": 4.82,
+   "text": "So I just decided to be very comfortable and take the slide from last year, my final slide"
+  },
+  {
+   "t": 46.08,
+   "d": 2.18,
+   "text": "from last year, where I announced some things we were thinking about."
+  },
+  {
+   "t": 48.72,
+   "d": 1.42,
+   "text": "That's what I showed in 2016."
+  },
+  {
+   "t": 50.14,
+   "d": 4.18,
+   "text": "And now I would like to give a brief update and then come to the interesting parts."
+  },
+  {
+   "t": 55.08,
+   "d": 5.12,
+   "text": "So first of all, state of ADOM in 2017 is, yes, it's still going very well despite a"
+  },
+  {
+   "t": 60.2,
+   "d": 3.28,
+   "text": "break of my arm and a break in development at the beginning of 2017."
+  },
+  {
+   "t": 64.68,
+   "d": 4.8,
+   "text": "We are again very active, still going strong on Steam, which I love very much because we"
+  },
+  {
+   "t": 69.48,
+   "d": 2.04,
+   "text": "were not sure how the sales numbers would develop."
+  },
+  {
+   "t": 72.52,
+   "d": 3.56,
+   "text": "And as a consequence, we are marching forward with more releases."
+  },
+  {
+   "t": 76.08,
+   "d": 2.7,
+   "text": "and just 15 minutes ago, announcement number one,"
+  },
+  {
+   "t": 79.26,
+   "d": 4.22,
+   "text": "we released pre-release 3.0.0 to the pre-release testers."
+  },
+  {
+   "t": 83.72,
+   "d": 1.38,
+   "text": "So that's the very latest version"
+  },
+  {
+   "t": 85.1,
+   "d": 1.68,
+   "text": "with all the stuff from the crowdfunding campaign."
+  },
+  {
+   "t": 86.94,
+   "d": 2.72,
+   "text": "It's now feature complete and has lots of new dungeons,"
+  },
+  {
+   "t": 89.9,
+   "d": 2.46,
+   "text": "lots of new monsters, items, artifacts, quests, whatever."
+  },
+  {
+   "t": 92.8,
+   "d": 3.18,
+   "text": "And we'll hurry forward to get it as fast as possible"
+  },
+  {
+   "t": 95.98,
+   "d": 1.42,
+   "text": "to the public and to Steam."
+  },
+  {
+   "t": 97.66,
+   "d": 2.98,
+   "text": "So a little bit more testing is required to make it stable"
+  },
+  {
+   "t": 100.64,
+   "d": 2.14,
+   "text": "and then it will be there for everyone."
+  },
+  {
+   "t": 103.06,
+   "d": 2.76,
+   "text": "So that's announcement number one, ADOM 3.0."
+  },
+  {
+   "t": 105.82,
+   "d": 8.82,
+   "text": "a very magical number. Next point is already what I indicated. We are finally coming to an end of our"
+  },
+  {
+   "t": 114.64,
+   "d": 5.88,
+   "text": "crowdfunding campaign. I also stated that yesterday after 1960 days we finally have done everything"
+  },
+  {
+   "t": 120.52,
+   "d": 6.32,
+   "text": "we wanted to do. It's still a bit more of testing, a bit more of let's say rollout activities,"
+  },
+  {
+   "t": 127.32,
+   "d": 4.46,
+   "text": "some more stragglers from all the mailing because some boxes are returned and need to be sent out"
+  },
+  {
+   "t": 131.78,
+   "d": 5.38,
+   "text": "again but I guess by end of November all that will finally really be done so that we can say"
+  },
+  {
+   "t": 137.16,
+   "d": 5.1,
+   "text": "okay crowdfunding complete finished and as you can imagine I'm quite happy about that because"
+  },
+  {
+   "t": 142.26,
+   "d": 6.02,
+   "text": "it took a little bit longer than we expected so it's fine to be finally liberated and relieved"
+  },
+  {
+   "t": 148.28,
+   "d": 5.64,
+   "text": "and can be able to look forward into the future and we also are pretty happy with what happened"
+  },
+  {
+   "t": 153.92,
+   "d": 5.54,
+   "text": "despite taking five years because things really developed and got much more let's say expressive"
+  },
+  {
+   "t": 159.46,
+   "d": 7.92,
+   "text": "than we expected. Lots of things we did. Which brings me to other features I talked about at"
+  },
+  {
+   "t": 167.38,
+   "d": 7.44,
+   "text": "the end of 2016. Things like the co-op modes, network play and things. We also have done some"
+  },
+  {
+   "t": 174.82,
+   "d": 4.36,
+   "text": "work on that. It's still a very early version of what we are doing there, but over the next couple"
+  },
+  {
+   "t": 179.18,
+   "d": 5.26,
+   "text": "of months a lot more will be happening. And starting today there will be at least an alpha"
+  },
+  {
+   "t": 184.44,
+   "d": 7.78,
+   "text": "version under a new domain rogueleague.org where it will be possible in the future to engage in"
+  },
+  {
+   "t": 192.22,
+   "d": 4.7,
+   "text": "really community-based add-on play with shared high scores and a lot more to come the initial"
+  },
+  {
+   "t": 196.92,
+   "d": 4.38,
+   "text": "version will just be the global high scores so that everyone who is signing up can share their"
+  },
+  {
+   "t": 201.3,
+   "d": 5.54,
+   "text": "high scores with the world then we ramp up the statistics part add a lot of reports i was quite"
+  },
+  {
+   "t": 206.84,
+   "d": 4.3,
+   "text": "inspired by the dungeon called stone soup talk yesterday which gave us some ideas what we also"
+  },
+  {
+   "t": 211.14,
+   "d": 5.22,
+   "text": "should be trying to do. That's something that will evolve over the next 12 months probably"
+  },
+  {
+   "t": 216.36,
+   "d": 4.58,
+   "text": "because it's something we are building up now step by step and we hope for a lot of"
+  },
+  {
+   "t": 220.94,
+   "d": 4.5,
+   "text": "fun with that because things like the challenge mode in Atom and other things only make sense"
+  },
+  {
+   "t": 225.44,
+   "d": 4.42,
+   "text": "if you can compare your scores and your results with others and not just talk about it in"
+  },
+  {
+   "t": 229.86,
+   "d": 5.34,
+   "text": "a forum. That's one step. Still pretty young but it will grow."
+  },
+  {
+   "t": 236.02,
+   "d": 6.4,
+   "text": "So, then there were other points on the slides about backporting ADOM2 features to ADOM,"
+  },
+  {
+   "t": 243.06,
+   "d": 3.04,
+   "text": "about more platforms we want to support and so on and so forth."
+  },
+  {
+   "t": 247.04,
+   "d": 8.58,
+   "text": "And well, we have given that some more thoughts and discussed quite a bit what to do and that's"
+  },
+  {
+   "t": 255.62,
+   "d": 1.78,
+   "text": "now the future part of the talk."
+  },
+  {
+   "t": 257.58,
+   "d": 1.36,
+   "text": "What are we going to do with that?"
+  },
+  {
+   "t": 262.36,
+   "d": 4.56,
+   "text": "First of all, I would like to say we believe that there still is room for highly detailed"
+  },
+  {
+   "t": 266.92,
+   "d": 4.64,
+   "text": "roguelike games in the mainstream, which still has not quite fully accepted, I would say,"
+  },
+  {
+   "t": 271.62,
+   "d": 4.88,
+   "text": "roguelike gaming, but I think it can be done because we see so much enjoyment and patterns"
+  },
+  {
+   "t": 276.5,
+   "d": 5.7,
+   "text": "moving over to mainstream games, and that's still something we would like to work on and"
+  },
+  {
+   "t": 282.2,
+   "d": 4.1,
+   "text": "do our part in to make Roguelike gaming much more mainstream and"
+  },
+  {
+   "t": 288.42,
+   "d": 5.4,
+   "text": "The good news number four for that is that we managed to find an investor for our team that allows us to"
+  },
+  {
+   "t": 294.32,
+   "d": 3.64,
+   "text": "work full-time on Adam for at least the next 24 months"
+  },
+  {
+   "t": 297.96,
+   "d": 4.34,
+   "text": "Which for us is a very big change because I only have been doing this as a hobby so far"
+  },
+  {
+   "t": 302.3,
+   "d": 4.76,
+   "text": "I'm in my real life job CEO of an IT company and that takes up about 10 hours per day"
+  },
+  {
+   "t": 307.06,
+   "d": 2.78,
+   "text": "So Adam always was kind of hobby development"
+  },
+  {
+   "t": 310.52,
+   "d": 5.84,
+   "text": "Now, luckily, due to the investment we received, I will be able to delegate lots of day-to-day"
+  },
+  {
+   "t": 316.36,
+   "d": 2.28,
+   "text": "activities to the awesome colleagues I have at my company."
+  },
+  {
+   "t": 318.94,
+   "d": 3.26,
+   "text": "We're taking over many of the day-to-day activities, fully supporting this."
+  },
+  {
+   "t": 322.8,
+   "d": 3.88,
+   "text": "And yeah, that's the first time for me in 25 years that I will be able to really full-time"
+  },
+  {
+   "t": 326.68,
+   "d": 5.34,
+   "text": "work on ADOM, which is quite cool, because we already noticed in the last couple of weeks"
+  },
+  {
+   "t": 332.02,
+   "d": 4.4,
+   "text": "where you might have seen that the number of releases quickly increased from like one"
+  },
+  {
+   "t": 336.42,
+   "d": 5.26,
+   "text": "every quarter or year to like nine in the past six weeks. We really can do a lot more"
+  },
+  {
+   "t": 341.68,
+   "d": 5.14,
+   "text": "if we have the time to do it. So we now have the time to do a lot and want to make the"
+  },
+  {
+   "t": 346.82,
+   "d": 5.56,
+   "text": "best of it. So that's quite interesting for us to have a full-time team now and being"
+  },
+  {
+   "t": 352.38,
+   "d": 5.18,
+   "text": "able to work on ADOM and maybe shake up things a little bit. And now the question naturally"
+  },
+  {
+   "t": 357.56,
+   "d": 4.72,
+   "text": "is what are we going to do with it? First message is ADOM will continue to grow definitely."
+  },
+  {
+   "t": 362.28,
+   "d": 3.16,
+   "text": "We love to work on that for a very long time."
+  },
+  {
+   "t": 365.58,
+   "d": 4.46,
+   "text": "The 25 years are no joke. I have this idea of 50th anniversary at some point."
+  },
+  {
+   "t": 371.18,
+   "d": 1.82,
+   "text": "So I'll try to be stubborn and get there."
+  },
+  {
+   "t": 374.14,
+   "d": 4.44,
+   "text": "What we plan for ADOM, basically right now are a couple of areas we would like to work on"
+  },
+  {
+   "t": 378.58,
+   "d": 2.7,
+   "text": "because we had many ideas there during the crowdfunding campaign"
+  },
+  {
+   "t": 381.28,
+   "d": 3.0,
+   "text": "but couldn't concentrate on them because we had to complete all those promises."
+  },
+  {
+   "t": 385.16,
+   "d": 6.0,
+   "text": "And first thing is something we need to do to get more new players into the game"
+  },
+  {
+   "t": 391.16,
+   "d": 1.12,
+   "text": "and make it more enjoyable for them."
+  },
+  {
+   "t": 392.42,
+   "d": 1.5,
+   "text": "We will continue to work on the user interface,"
+  },
+  {
+   "t": 394.12,
+   "d": 2.12,
+   "text": "the user experience improvements we've been doing"
+  },
+  {
+   "t": 396.24,
+   "d": 1.1,
+   "text": "over the past couple of months,"
+  },
+  {
+   "t": 397.68,
+   "d": 2.54,
+   "text": "because ADOM still is much too hard for new gamers"
+  },
+  {
+   "t": 400.22,
+   "d": 1.44,
+   "text": "who don't know how a roguelike works."
+  },
+  {
+   "t": 402.42,
+   "d": 2.66,
+   "text": "The good news for the old guard of ADOM players"
+  },
+  {
+   "t": 405.08,
+   "d": 1.08,
+   "text": "for the existing community is,"
+  },
+  {
+   "t": 406.18,
+   "d": 3.04,
+   "text": "I think we are done with totally changing up"
+  },
+  {
+   "t": 409.22,
+   "d": 1.58,
+   "text": "the user interface."
+  },
+  {
+   "t": 411.06,
+   "d": 2.4,
+   "text": "There won't be more groundbreaking changes"
+  },
+  {
+   "t": 413.46,
+   "d": 3.76,
+   "text": "that force you to unlearn all the things you learned"
+  },
+  {
+   "t": 417.22,
+   "d": 0.94,
+   "text": "over the past couple of years."
+  },
+  {
+   "t": 418.48,
+   "d": 2.22,
+   "text": "But there's a lot we can do in the graphical user interface"
+  },
+  {
+   "t": 420.7,
+   "d": 2.32,
+   "text": "to make it much more accessible to new players."
+  },
+  {
+   "t": 423.3,
+   "d": 1.6,
+   "text": "That's something we are going to work on."
+  },
+  {
+   "t": 425.44,
+   "d": 3.06,
+   "text": "Then what I already said, this Rogue League portal we now are having,"
+  },
+  {
+   "t": 428.7,
+   "d": 3.44,
+   "text": "that's something we would like to greatly extend and add lots of more stuff to it."
+  },
+  {
+   "t": 432.36,
+   "d": 2.46,
+   "text": "So that it's really becoming a community platform"
+  },
+  {
+   "t": 434.82,
+   "d": 2.7,
+   "text": "and will be very nice for challenge games and similar stuff."
+  },
+  {
+   "t": 439.54,
+   "d": 5.44,
+   "text": "Third thing is related to that, the co-op mode in ADOM right now is very basic, I would say."
+  },
+  {
+   "t": 445.18,
+   "d": 2.34,
+   "text": "Not what we really thought about when we wanted to do it."
+  },
+  {
+   "t": 447.52,
+   "d": 2.9,
+   "text": "so we intend to have a much more complex co-op mode"
+  },
+  {
+   "t": 450.42,
+   "d": 3.0,
+   "text": "where you can, let's say, participate in parallel games."
+  },
+  {
+   "t": 453.58,
+   "d": 1.62,
+   "text": "It won't be multiplayer, that's not the goal,"
+  },
+  {
+   "t": 455.38,
+   "d": 2.3,
+   "text": "but it will be some kind of cooperative mode."
+  },
+  {
+   "t": 457.68,
+   "d": 1.04,
+   "text": "We have lots of ideas for that,"
+  },
+  {
+   "t": 458.8,
+   "d": 1.36,
+   "text": "and we need the server for that to do it,"
+  },
+  {
+   "t": 460.2,
+   "d": 2.1,
+   "text": "and now that we have the server, we can start working on that."
+  },
+  {
+   "t": 463.2,
+   "d": 2.44,
+   "text": "So that's another area we'd like to work on."
+  },
+  {
+   "t": 466.14,
+   "d": 2.28,
+   "text": "And the final thing for ADON right now is"
+  },
+  {
+   "t": 468.42,
+   "d": 3.14,
+   "text": "we just would like to add much more content to the story"
+  },
+  {
+   "t": 471.56,
+   "d": 1.62,
+   "text": "because that's always so much fun,"
+  },
+  {
+   "t": 473.26,
+   "d": 2.04,
+   "text": "adding new locations, new items, new quests,"
+  },
+  {
+   "t": 475.3,
+   "d": 2.78,
+   "text": "It's new everything that you can experience during the game."
+  },
+  {
+   "t": 479.3,
+   "d": 4.84,
+   "text": "We started this during the last couple of weeks while fulfilling the final promises,"
+  },
+  {
+   "t": 484.34,
+   "d": 1.14,
+   "text": "but there's so much more that could be done."
+  },
+  {
+   "t": 485.68,
+   "d": 4.74,
+   "text": "So you also will see a lot of more additional in-game content to change the way you can"
+  },
+  {
+   "t": 490.42,
+   "d": 0.46,
+   "text": "play the game."
+  },
+  {
+   "t": 491.52,
+   "d": 3.0,
+   "text": "So that's the four areas we are going to work on on ADOM."
+  },
+  {
+   "t": 495.24,
+   "d": 1.12,
+   "text": "But that's not all."
+  },
+  {
+   "t": 498.0,
+   "d": 1.98,
+   "text": "I always wanted to say that while standing on a stage."
+  },
+  {
+   "t": 501.24,
+   "d": 0.92,
+   "text": "There's one more thing."
+  },
+  {
+   "t": 505.28,
+   "d": 9.74,
+   "text": "And this one thing is, drum roll, that hey, we are going to try to evolve the whole experience,"
+  },
+  {
+   "t": 515.98,
+   "d": 5.52,
+   "text": "but there is again a but, differently than people probably expected because it's not"
+  },
+  {
+   "t": 521.5,
+   "d": 3.84,
+   "text": "going to be ADOM 2, but we are going to do something different."
+  },
+  {
+   "t": 526.9,
+   "d": 5.82,
+   "text": "And that's what we call ultimate ADEM announcement number five."
+  },
+  {
+   "t": 535.8,
+   "d": 3.96,
+   "text": "So despite loving ADEM there are many things we can't do in ADEM because they are technically"
+  },
+  {
+   "t": 539.76,
+   "d": 3.02,
+   "text": "almost impossible or just not justifiable in effort."
+  },
+  {
+   "t": 543.0,
+   "d": 0.62,
+   "text": "It just doesn't work."
+  },
+  {
+   "t": 544.66,
+   "d": 4.3,
+   "text": "And we had so many cool ideas coming up during the past five years where people said, hey,"
+  },
+  {
+   "t": 549.02,
+   "d": 0.58,
+   "text": "do this, do that."
+  },
+  {
+   "t": 549.72,
+   "d": 1.0,
+   "text": "And we said, yeah, we would love to."
+  },
+  {
+   "t": 550.92,
+   "d": 1.0,
+   "text": "And it just doesn't work."
+  },
+  {
+   "t": 552.0,
+   "d": 0.68,
+   "text": "We tried some things."
+  },
+  {
+   "t": 552.68,
+   "d": 5.2,
+   "text": "and there are certain limits of what you can do to the Atom engine and that's basically"
+  },
+  {
+   "t": 558.46,
+   "d": 5.6,
+   "text": "the result of 25 years of, let's say, code base. You can't change anything. The biggest"
+  },
+  {
+   "t": 564.06,
+   "d": 5.2,
+   "text": "problem with Atom really is the user interface because the user interface is completely non-separated,"
+  },
+  {
+   "t": 569.4,
+   "d": 4.14,
+   "text": "it runs through all the code and if you try to change that to get a really viable mobile"
+  },
+  {
+   "t": 573.54,
+   "d": 5.34,
+   "text": "version for example, you're going to die. It's not nice. It's really not fun. We tried"
+  },
+  {
+   "t": 578.88,
+   "d": 4.32,
+   "text": "to do some things in that area but I guess it's too hard so we said okay, let's try to"
+  },
+  {
+   "t": 583.2,
+   "d": 6.52,
+   "text": "do something different. First of all, what will be the story of Ultimate Adam? We intend"
+  },
+  {
+   "t": 589.72,
+   "d": 5.68,
+   "text": "to write forward the story that exists in the current game. The idea is the one you"
+  },
+  {
+   "t": 595.4,
+   "d": 6.08,
+   "text": "know. There is an incursion of chaos invading this world of Enkadia, trying to corrupt everything,"
+  },
+  {
+   "t": 601.56,
+   "d": 5.42,
+   "text": "destroy everything. This chaos lord Endor Dracon is trying to basically conquer and destroy"
+  },
+  {
+   "t": 606.98,
+   "d": 8.68,
+   "text": "the world. Some champion managed to become powerful enough to oppose, confront him in"
+  },
+  {
+   "t": 615.66,
+   "d": 3.44,
+   "text": "the plane of chaos and fight him, which is one of the ultra endings you can do in ADOM,"
+  },
+  {
+   "t": 619.28,
+   "d": 7.78,
+   "text": "or one of several, and they started fighting. Then something went wrong. Something happened."
+  },
+  {
+   "t": 627.26,
+   "d": 4.7,
+   "text": "Nobody is quite sure what it was, but there was some kind of cosmical chain reaction."
+  },
+  {
+   "t": 631.96,
+   "d": 7.1,
+   "text": "and well the world changed forever by completely shattering reality and the one world of Ankadia"
+  },
+  {
+   "t": 639.06,
+   "d": 7.76,
+   "text": "turned into a multiverse of Ankadian worlds. All quite similar yet different in certain aspects"
+  },
+  {
+   "t": 646.82,
+   "d": 5.92,
+   "text": "and that's what the stage will be for the future Ultimate Atom games. You will have many Ankadian"
+  },
+  {
+   "t": 652.74,
+   "d": 4.86,
+   "text": "worlds with slight separation you can play in that will be connected by a common let's say rule"
+  },
+  {
+   "t": 657.6,
+   "d": 4.04,
+   "text": "system, common engine, common monsters, all that stuff, but with certain variations and"
+  },
+  {
+   "t": 661.64,
+   "d": 5.74,
+   "text": "also certain optimizations for various platforms to be able to play ADOM in many different ways"
+  },
+  {
+   "t": 667.38,
+   "d": 4.14,
+   "text": "because one thing we learned from the past five years is that there is not one way to"
+  },
+  {
+   "t": 671.52,
+   "d": 0.64,
+   "text": "play such a game."
+  },
+  {
+   "t": 672.46,
+   "d": 3.56,
+   "text": "There are many things people like and they devise their own kind of games."
+  },
+  {
+   "t": 676.22,
+   "d": 3.62,
+   "text": "When they ask for mobile, they don't want the full complexity of an ADOM on mobile because"
+  },
+  {
+   "t": 680.46,
+   "d": 2.8,
+   "text": "I've yet to see one good mobile game with the complexity of a game like ADOM."
+  },
+  {
+   "t": 683.54,
+   "d": 0.9,
+   "text": "I haven't seen one."
+  },
+  {
+   "t": 684.44,
+   "d": 6.7,
+   "text": "The idea is to use the story to have a good reason to create variants of ADEM games on"
+  },
+  {
+   "t": 691.14,
+   "d": 4.52,
+   "text": "certain platforms for various styles of plays with the advantage of having one unified engine"
+  },
+  {
+   "t": 695.66,
+   "d": 5.08,
+   "text": "so you learn the rules once, you learn the basic way everything works once, but you can"
+  },
+  {
+   "t": 700.74,
+   "d": 1.82,
+   "text": "use it in different settings and reuse it."
+  },
+  {
+   "t": 702.86,
+   "d": 5.28,
+   "text": "Much more enjoyment coming out of it than being required to learn new rule systems all"
+  },
+  {
+   "t": 708.14,
+   "d": 3.22,
+   "text": "the time and having to get into new games all the time."
+  },
+  {
+   "t": 711.36,
+   "d": 4.32,
+   "text": "Naturally, as you can imagine, with a server like Rogue League, there are also ideas to"
+  },
+  {
+   "t": 715.68,
+   "d": 3.24,
+   "text": "connect this multi-game, multi-platform playing."
+  },
+  {
+   "t": 723.66,
+   "d": 5.94,
+   "text": "Starting like 30 minutes ago, we now also have a rudimentary website for Ultimate ADOM"
+  },
+  {
+   "t": 729.6,
+   "d": 0.38,
+   "text": "set up."
+  },
+  {
+   "t": 730.22,
+   "d": 6.12,
+   "text": "There is not yet much on it, slightly longer background story, getting into the mood, a"
+  },
+  {
+   "t": 736.34,
+   "d": 3.4,
+   "text": "little bit about the platforms, but not much more right now because, as I will explain,"
+  },
+  {
+   "t": 739.74,
+   "d": 3.82,
+   "text": "there's still a lot of work to be done. That's why we are so happy about the funding, as"
+  },
+  {
+   "t": 743.56,
+   "d": 5.6,
+   "text": "that will allow us to do a lot of stuff in that area. As I mentioned, we are planning"
+  },
+  {
+   "t": 750.14,
+   "d": 6.8,
+   "text": "several games under the ultimate Atom umbrella. There will be, complex is the wrong word, detailed"
+  },
+  {
+   "t": 757.82,
+   "d": 3.98,
+   "text": "RPG games for the desktop in the classical roguelike way with a much better interface"
+  },
+  {
+   "t": 761.8,
+   "d": 3.68,
+   "text": "because we have learned so much that we should do in the past five years and we couldn't do"
+  },
+  {
+   "t": 765.48,
+   "d": 3.48,
+   "text": "or only barely could do with the given ADOM interface we have."
+  },
+  {
+   "t": 769.26,
+   "d": 6.48,
+   "text": "So we are trying to create a new generation of very ADOM-like experiences on the desktop"
+  },
+  {
+   "t": 775.74,
+   "d": 3.22,
+   "text": "where you immediately will recognize all the beloved features, I would say,"
+  },
+  {
+   "t": 779.3,
+   "d": 5.58,
+   "text": "but with a much better interface and a much more enjoyable way of getting into the game."
+  },
+  {
+   "t": 785.82,
+   "d": 4.38,
+   "text": "Additionally, we are very interested in finally getting ADOM moved to other platforms"
+  },
+  {
+   "t": 791.48,
+   "d": 6.28,
+   "text": "because I think there is a lot of good points to move to mobile, to maybe also be on consoles,"
+  },
+  {
+   "t": 798.04,
+   "d": 4.08,
+   "text": "and that right now really is a challenge because porting over, which we did for a couple of platforms,"
+  },
+  {
+   "t": 802.24,
+   "d": 5.78,
+   "text": "is very, very hard for us, and because all this stuff is written by us, there are lots of bugs and strange effects,"
+  },
+  {
+   "t": 808.2,
+   "d": 2.82,
+   "text": "and we need a new generation of game to do that with a better platform."
+  },
+  {
+   "t": 812.18,
+   "d": 2.98,
+   "text": "And I don't know if Aaron is today here, I talked to him on Friday,"
+  },
+  {
+   "t": 815.5,
+   "d": 3.08,
+   "text": "and he will now understand why I was a bit concerned about his statements about Unity,"
+  },
+  {
+   "t": 818.58,
+   "d": 2.38,
+   "text": "because we decided to do the new ADOM in Unity"
+  },
+  {
+   "t": 822.28,
+   "d": 1.32,
+   "text": "because according to our estimate,"
+  },
+  {
+   "t": 823.78,
+   "d": 1.96,
+   "text": "it's the best platform for the multi-platform approach"
+  },
+  {
+   "t": 825.74,
+   "d": 0.82,
+   "text": "we are going for."
+  },
+  {
+   "t": 827.66,
+   "d": 1.2,
+   "text": "We researched quite a bit,"
+  },
+  {
+   "t": 828.92,
+   "d": 1.62,
+   "text": "but it seems the way to go for us,"
+  },
+  {
+   "t": 830.6,
+   "d": 1.14,
+   "text": "and hopefully it will work out."
+  },
+  {
+   "t": 832.58,
+   "d": 2.54,
+   "text": "Our preliminary tests and prototypes look okay, I would say."
+  },
+  {
+   "t": 835.64,
+   "d": 2.38,
+   "text": "Makes hope that it will be working out very well."
+  },
+  {
+   "t": 838.48,
+   "d": 2.3,
+   "text": "And so we hope for the Unity support for all those platforms"
+  },
+  {
+   "t": 840.78,
+   "d": 2.76,
+   "text": "to gradually come to one platform than the next."
+  },
+  {
+   "t": 843.92,
+   "d": 3.42,
+   "text": "The initial work will be done for the desktop system"
+  },
+  {
+   "t": 847.34,
+   "d": 4.56,
+   "text": "system to get the full complexity into the game engine and on mobile systems to start"
+  },
+  {
+   "t": 851.9,
+   "d": 4.0,
+   "text": "with a mobile first, let's say, design approach for the UI to make it as simple as possible."
+  },
+  {
+   "t": 856.54,
+   "d": 3.88,
+   "text": "First of all, you will probably see one desktop version, one mobile version, maybe two mobile"
+  },
+  {
+   "t": 860.42,
+   "d": 1.08,
+   "text": "versions for iOS and Android."
+  },
+  {
+   "t": 862.38,
+   "d": 4.1,
+   "text": "From then we will proceed to other platforms as time allows, so that's not set in stone"
+  },
+  {
+   "t": 866.48,
+   "d": 0.46,
+   "text": "right now."
+  },
+  {
+   "t": 869.9,
+   "d": 3.5,
+   "text": "I also learned yesterday a lot about metaplot, meta-knowledge, meta-powers, all those things."
+  },
+  {
+   "t": 873.4,
+   "d": 4.5,
+   "text": "things, that's one of the ideas behind it. We really want to have an overarching story"
+  },
+  {
+   "t": 877.9,
+   "d": 4.3,
+   "text": "that connects those platforms, those worlds, those game experiences without making it a"
+  },
+  {
+   "t": 882.2,
+   "d": 5.48,
+   "text": "power creep or something. Hopefully we will get it right. The lesson yesterday, the information"
+  },
+  {
+   "t": 887.68,
+   "d": 7.66,
+   "text": "yesterday also was very good to remind us of doing it in the right way. What does this"
+  },
+  {
+   "t": 895.34,
+   "d": 3.88,
+   "text": "mean for the relationship between ADOM and Ultimate ADOM? Our plan is the following."
+  },
+  {
+   "t": 899.22,
+   "d": 4.82,
+   "text": "We intend to spend about 20% of our time on ADOM, 80% on Ultimate ADOM."
+  },
+  {
+   "t": 904.5,
+   "d": 10.7,
+   "text": "This might sound like little for ADOM, but I can assure you that 20% full-time is much more than we had in the past years, to be honest, most of the time, except for maybe vacations or anything."
+  },
+  {
+   "t": 915.44,
+   "d": 9.62,
+   "text": "So we are very optimistic that we will have a much better sustainable pace for releases now with ADOM, so that we can do very regular releases, maybe monthly, maybe even faster, we'll see."
+  },
+  {
+   "t": 925.74,
+   "d": 4.4,
+   "text": "because we just can regularly work on it, not just when time allows and nobody is sick"
+  },
+  {
+   "t": 930.14,
+   "d": 6.28,
+   "text": "and whatever. So we hope to move forward at a realistic pace with Atom and have more than"
+  },
+  {
+   "t": 936.42,
+   "d": 3.62,
+   "text": "enough time to work on Ultimate Atom, so that's right now the plan and hopefully it will work"
+  },
+  {
+   "t": 940.04,
+   "d": 10.32,
+   "text": "out. One word about the architecture we have planned for Atom, our idea is to have first"
+  },
+  {
+   "t": 950.36,
+   "d": 4.34,
+   "text": "of all a game engine that basically is an Atom game engine that knows all the rules,"
+  },
+  {
+   "t": 954.7,
+   "d": 2.92,
+   "text": "all the interactions, all the subsystems, how they work."
+  },
+  {
+   "t": 958.9,
+   "d": 4.98,
+   "text": "And that game engine will use an external configuration that we already have prototyped,"
+  },
+  {
+   "t": 964.02,
+   "d": 4.54,
+   "text": "to describe the items, monsters, quests and other stuff, more specialized behavior, so"
+  },
+  {
+   "t": 968.56,
+   "d": 4.86,
+   "text": "that we then can put on top of that game engine either platform-specific UIs for experiences"
+  },
+  {
+   "t": 973.42,
+   "d": 5.62,
+   "text": "like mobile, maybe combined with reusable Ui parts that are similar or same for various"
+  },
+  {
+   "t": 979.9,
+   "d": 5.4,
+   "text": "platforms. And additionally there will be platform configurations so that you really"
+  },
+  {
+   "t": 985.3,
+   "d": 5.4,
+   "text": "can customize the game experience, for example when playing mobile versus when playing desktop."
+  },
+  {
+   "t": 990.98,
+   "d": 4.18,
+   "text": "For example for one mobile game variant we have in mind I could imagine that you won't"
+  },
+  {
+   "t": 995.16,
+   "d": 4.84,
+   "text": "even have things like item identification or statuses because it can get very fiddly"
+  },
+  {
+   "t": 1000.0,
+   "d": 3.84,
+   "text": "in a certain mobile setting. But maybe in another mobile setting you want to have part"
+  },
+  {
+   "t": 1003.84,
+   "d": 4.04,
+   "text": "of that and so those are things we want to make configurable so that the basic engine"
+  },
+  {
+   "t": 1007.88,
+   "d": 5.24,
+   "text": "always is the same, but details work differently so that we can optimize them for the specific,"
+  },
+  {
+   "t": 1013.16,
+   "d": 2.92,
+   "text": "let's say, game and play experience on the relevant platforms."
+  },
+  {
+   "t": 1017.62,
+   "d": 4.58,
+   "text": "And one nice side effect of the setup is that we finally also will have modding support"
+  },
+  {
+   "t": 1022.2,
+   "d": 3.62,
+   "text": "so that it will be possible to add external mods to the game because the whole setup is"
+  },
+  {
+   "t": 1025.82,
+   "d": 0.32,
+   "text": "like this."
+  },
+  {
+   "t": 1026.24,
+   "d": 3.28,
+   "text": "We have an engine that interprets given configurations."
+  },
+  {
+   "t": 1029.68,
+   "d": 4.86,
+   "text": "You will be able to add to those configurations and thus extend the game if you want to."
+  },
+  {
+   "t": 1035.72,
+   "d": 4.24,
+   "text": "This will probably at first only be available to us to get the basic game running and get"
+  },
+  {
+   "t": 1039.96,
+   "d": 1.06,
+   "text": "everything stable enough."
+  },
+  {
+   "t": 1041.52,
+   "d": 2.96,
+   "text": "But after a certain while, when we have the first couple of releases, we will open up"
+  },
+  {
+   "t": 1044.48,
+   "d": 4.12,
+   "text": "this for the community so that everyone can start working on extension mods and everything."
+  },
+  {
+   "t": 1049.78,
+   "d": 4.9,
+   "text": "So this is a quite, let's say, a compromise for the discussion about open sourcing ADOM."
+  },
+  {
+   "t": 1054.78,
+   "d": 3.22,
+   "text": "So we will try to open parts of the next version for people who want to customize it."
+  },
+  {
+   "t": 1058.84,
+   "d": 4.26,
+   "text": "And we may be at some point, but that's now quite a bit in the future, a bit of, let's"
+  },
+  {
+   "t": 1063.1,
+   "d": 0.38,
+   "text": "say, dreaming."
+  },
+  {
+   "t": 1063.48,
+   "d": 7.54,
+   "text": "maybe might install an area on the rogueleague.org server for, let's say, giving very good mods"
+  },
+  {
+   "t": 1071.02,
+   "d": 3.62,
+   "text": "a special place where they can be listed, downloaded, and rated, and discussed by people,"
+  },
+  {
+   "t": 1074.92,
+   "d": 3.2,
+   "text": "so that there is a kind of, let's say, other mod store or something like that."
+  },
+  {
+   "t": 1078.36,
+   "d": 3.88,
+   "text": "But that's, as I said, a bit of future dreaming right now."
+  },
+  {
+   "t": 1086.58,
+   "d": 2.22,
+   "text": "Who knows what an entity component system is?"
+  },
+  {
+   "t": 1089.9,
+   "d": 1.42,
+   "text": "Wow, that's a surprising number."
+  },
+  {
+   "t": 1091.54,
+   "d": 0.44,
+   "text": "Cool."
+  },
+  {
+   "t": 1093.92,
+   "d": 4.76,
+   "text": "I just wanted to mention at this point thanks to Josh G of Cockmind fame because until last"
+  },
+  {
+   "t": 1098.68,
+   "d": 3.76,
+   "text": "year I didn't know what that is and I never heard about it and had a very good discussion"
+  },
+  {
+   "t": 1102.44,
+   "d": 5.12,
+   "text": "with Josh at last roguelike celebration that inspired me quite a bit to think about that."
+  },
+  {
+   "t": 1108.08,
+   "d": 3.92,
+   "text": "That's basically what we are going to use in Ultimate Artem to make it much more variable"
+  },
+  {
+   "t": 1112.0,
+   "d": 4.84,
+   "text": "and customizable with some tweaks from what I've seen in let's say official literature"
+  },
+  {
+   "t": 1116.84,
+   "d": 5.06,
+   "text": "because we have some modifications to that to be able to work with very large amounts"
+  },
+  {
+   "t": 1121.9,
+   "d": 1.2,
+   "text": "of entities and components."
+  },
+  {
+   "t": 1123.9,
+   "d": 3.12,
+   "text": "I hope I have enough time to show a brief prototype in a couple of minutes."
+  },
+  {
+   "t": 1128.62,
+   "d": 3.88,
+   "text": "Just for those who don't know it, entity component systems basically try to structure the world"
+  },
+  {
+   "t": 1132.5,
+   "d": 0.58,
+   "text": "in a different way."
+  },
+  {
+   "t": 1133.18,
+   "d": 2.28,
+   "text": "You have entities that can be anything in the world if you want."
+  },
+  {
+   "t": 1135.88,
+   "d": 5.28,
+   "text": "You have components which define certain maybe behaviors, properties or let's say markers"
+  },
+  {
+   "t": 1141.16,
+   "d": 0.68,
+   "text": "on things."
+  },
+  {
+   "t": 1141.84,
+   "d": 5.84,
+   "text": "and you have the systems which kind of interpret what that means and how they behave in the"
+  },
+  {
+   "t": 1147.68,
+   "d": 0.9,
+   "text": "context of the game."
+  },
+  {
+   "t": 1149.52,
+   "d": 4.0,
+   "text": "I just wanted to give a couple of examples of things we have already, let's say, prototyped"
+  },
+  {
+   "t": 1153.52,
+   "d": 0.4,
+   "text": "for ADOM."
+  },
+  {
+   "t": 1154.4,
+   "d": 5.82,
+   "text": "For example, something we can't do at all right now in ADOM, let's say the player wants"
+  },
+  {
+   "t": 1160.22,
+   "d": 3.76,
+   "text": "to exchange his soul with an org, swap souls by some kind of magic."
+  },
+  {
+   "t": 1164.72,
+   "d": 3.6,
+   "text": "In ADOM it's impossible, in ADOM 2 it would have been hard work."
+  },
+  {
+   "t": 1168.32,
+   "d": 7.36,
+   "text": "with a new system, it's like three lines of code to do that, which is kind of cool. It"
+  },
+  {
+   "t": 1175.68,
+   "d": 5.22,
+   "text": "works like this. You have two entities, the player and the org, P and O. You just say"
+  },
+  {
+   "t": 1180.9,
+   "d": 6.76,
+   "text": "something like P, player, you are no longer controlled by the UI. Orc, you now are controlled"
+  },
+  {
+   "t": 1187.66,
+   "d": 4.58,
+   "text": "by the UI. And based on the setup we have in the systems that interpret this, we are"
+  },
+  {
+   "t": 1192.24,
+   "d": 4.74,
+   "text": "done. I can show it in a demo with me. It works very nicely. So something that was impossible"
+  },
+  {
+   "t": 1196.98,
+   "d": 5.1,
+   "text": "in ADOM, very hard in ADOM 2, couple of hundred lines of codes, maybe even a thousand. Now"
+  },
+  {
+   "t": 1202.08,
+   "d": 5.48,
+   "text": "it's basically two lines of code. And that's kind of cool because that's the way we want"
+  },
+  {
+   "t": 1207.56,
+   "d": 5.56,
+   "text": "to grow ADOM in a rather innovative way, make it much more fun to do very strange things."
+  },
+  {
+   "t": 1213.42,
+   "d": 3.86,
+   "text": "Also big nod to Caves of Quad because I'm always impressed how all those mutations work and all"
+  },
+  {
+   "t": 1217.28,
+   "d": 5.04,
+   "text": "those subsystems interact. It's awesome. And we want to do that a little more too. So it's really"
+  },
+  {
+   "t": 1222.32,
+   "d": 5.78,
+   "text": "inspiring. Now a little more complex example. Let's assume the player wants to possess the"
+  },
+  {
+   "t": 1228.1,
+   "d": 5.5,
+   "text": "Orc that's destroying his soul and player body slumps to the ground and becomes lifeless"
+  },
+  {
+   "t": 1233.6,
+   "d": 4.82,
+   "text": "while the soul of the player is in the Orc. Again, same setup. We have a player, we have"
+  },
+  {
+   "t": 1238.42,
+   "d": 5.84,
+   "text": "an Orc. We remove the UI control from the player, we add it to the Orc. We remove the"
+  },
+  {
+   "t": 1244.26,
+   "d": 4.8,
+   "text": "being aspect, so it's a living being from the Orc because, from the player, because"
+  },
+  {
+   "t": 1249.06,
+   "d": 5.56,
+   "text": "now his soul is gone, he is lifeless at that point. Then we just turn him into an item"
+  },
+  {
+   "t": 1254.62,
+   "d": 5.62,
+   "text": "by adding in flag. Suddenly the player with his body is an item and you can then put it"
+  },
+  {
+   "t": 1260.24,
+   "d": 4.42,
+   "text": "onto the map, put it somewhere, allow it to lie there, could pick it theoretically up"
+  },
+  {
+   "t": 1264.66,
+   "d": 3.62,
+   "text": "and naturally that's the point where it becomes a little more difficult because the question"
+  },
+  {
+   "t": 1268.28,
+   "d": 4.56,
+   "text": "is how do you interact with a complex item like in body with equipped items and slots"
+  },
+  {
+   "t": 1272.84,
+   "d": 6.4,
+   "text": "and body parts and all that but again it's very nice and simple to set this up and get"
+  },
+  {
+   "t": 1279.24,
+   "d": 4.4,
+   "text": "it running and yeah there are some details but they are not as bad as they were in the"
+  },
+  {
+   "t": 1283.64,
+   "d": 6.62,
+   "text": "past where it's again impossible in ADOM and very very hard to do in ADOM 2 which due to"
+  },
+  {
+   "t": 1290.26,
+   "d": 4.44,
+   "text": "its object oriented structure has quite a lot of problems turning let's say one type"
+  },
+  {
+   "t": 1294.7,
+   "d": 3.28,
+   "text": "of thing into another type of thing because they are not in the same inheritance hierarchy"
+  },
+  {
+   "t": 1297.98,
+   "d": 1.28,
+   "text": "That's not so nice."
+  },
+  {
+   "t": 1301.08,
+   "d": 3.9,
+   "text": "One more example, player hacks off the arm of an orc."
+  },
+  {
+   "t": 1306.68,
+   "d": 3.56,
+   "text": "I'm sure you don't want to have this all the time in the combats because if you have thousands"
+  },
+  {
+   "t": 1310.24,
+   "d": 5.42,
+   "text": "of fights and everyone can hack off everything, the player probably very soon will be quite"
+  },
+  {
+   "t": 1315.66,
+   "d": 0.46,
+   "text": "crippled."
+  },
+  {
+   "t": 1316.7,
+   "d": 4.08,
+   "text": "But occasionally it could be fun, maybe with special weapons or in very special circumstances"
+  },
+  {
+   "t": 1320.78,
+   "d": 1.46,
+   "text": "or if you are doomed or something like that."
+  },
+  {
+   "t": 1323.32,
+   "d": 3.74,
+   "text": "Again very simple with the player, we have the orc and we have the arm of the orc we"
+  },
+  {
+   "t": 1327.06,
+   "d": 3.68,
+   "text": "are working with. What would the code be? The code would be find the left arm of the"
+  },
+  {
+   "t": 1330.74,
+   "d": 4.68,
+   "text": "org, for example, if the left arm is going to act off in the org structure. So search"
+  },
+  {
+   "t": 1335.42,
+   "d": 5.44,
+   "text": "that left arm, then remove it from the org because it gets hacked off, remove it from"
+  },
+  {
+   "t": 1340.86,
+   "d": 6.68,
+   "text": "that entity, add again to the arm the item, facet, item component to make it an item now"
+  },
+  {
+   "t": 1347.54,
+   "d": 5.92,
+   "text": "that it drops to the floor, and then put it on the map. Done. That's it. Orc one arm less,"
+  },
+  {
+   "t": 1353.9,
+   "d": 6.52,
+   "text": "floor, one arm more, we are done. But this can get more interesting, that's also something"
+  },
+  {
+   "t": 1360.42,
+   "d": 4.14,
+   "text": "that we are looking for in Ardham. Imagine your player now not just as a good hacker"
+  },
+  {
+   "t": 1364.56,
+   "d": 5.98,
+   "text": "of arms, but is also maybe a necromancer with dark magics that allow him to do things to"
+  },
+  {
+   "t": 1370.54,
+   "d": 4.9,
+   "text": "living and dead beings. And he wants to graft that Orc arm to his body, to have a third"
+  },
+  {
+   "t": 1375.44,
+   "d": 4.96,
+   "text": "arm and be more powerful in combat. So what do we do there? We have the player, we have"
+  },
+  {
+   "t": 1380.4,
+   "d": 5.54,
+   "text": "the Org Arm on the ground right now. We remove that Org Arm from the ground because the player"
+  },
+  {
+   "t": 1385.94,
+   "d": 5.7,
+   "text": "picks it up. Now he casts his Dark Magic in order to graft it to his body. That's some,"
+  },
+  {
+   "t": 1391.64,
+   "d": 5.76,
+   "text": "let's say, description part of the game. Then we remove that Item component from the Arm"
+  },
+  {
+   "t": 1397.4,
+   "d": 5.24,
+   "text": "because it's now turned again into a living part of a body. It's no longer an Item. Then"
+  },
+  {
+   "t": 1402.64,
+   "d": 6.34,
+   "text": "we search the body parts and the player structure and add that Org Arm to the body parts. And"
+  },
+  {
+   "t": 1408.98,
+   "d": 4.72,
+   "text": "that's it. Suddenly, as a third arm, the system for body parts know how to interpret that and"
+  },
+  {
+   "t": 1413.7,
+   "d": 6.64,
+   "text": "works with it. Again, very nice and very cool and I have quite a lot of ideas of very cool"
+  },
+  {
+   "t": 1420.34,
+   "d": 4.12,
+   "text": "magical effects and spells we can do in that respect and that's what we are looking forward to."
+  },
+  {
+   "t": 1424.76,
+   "d": 4.76,
+   "text": "Last and final example, we would like to have much more magic to interact with the environment in"
+  },
+  {
+   "t": 1429.52,
+   "d": 5.04,
+   "text": "much smarter ways. For example, imagine kind of elementalists who has control over earth magic"
+  },
+  {
+   "t": 1434.56,
+   "d": 5.48,
+   "text": "and wants to animate a wall to turn into a monster. Again, very simple. We have the player,"
+  },
+  {
+   "t": 1440.22,
+   "d": 6.02,
+   "text": "we have the wall in the example to the north of the player. We go to the map to the position"
+  },
+  {
+   "t": 1446.24,
+   "d": 4.54,
+   "text": "north of the player. There we find the entity that represents the wall, which is our W."
+  },
+  {
+   "t": 1451.44,
+   "d": 5.74,
+   "text": "Then we turn the wall into a being with one line, make it a being, and that's it. Done."
+  },
+  {
+   "t": 1457.44,
+   "d": 4.84,
+   "text": "The wall starts moving around and doing some kind of things. If you don't have control"
+  },
+  {
+   "t": 1462.86,
+   "d": 3.54,
+   "text": "spells or domination spells or anything you can do fun things there and try to"
+  },
+  {
+   "t": 1466.4,
+   "d": 4.22,
+   "text": "combine things in very new ways and now imagine traps that animate the"
+  },
+  {
+   "t": 1470.62,
+   "d": 4.52,
+   "text": "environment or whatever there can be very fun interactions I guess from that"
+  },
+  {
+   "t": 1475.14,
+   "d": 4.78,
+   "text": "and it will be a totally new kind of magical gaming experience. So some of the"
+  },
+  {
+   "t": 1479.92,
+   "d": 4.68,
+   "text": "consequences why we are very enthusiastic about the prototypes we"
+  },
+  {
+   "t": 1484.6,
+   "d": 3.46,
+   "text": "have is as I mentioned that we will be able to do things that so far were"
+  },
+  {
+   "t": 1488.06,
+   "d": 3.34,
+   "text": "totally impossible for us and very hard to do in ADOM 2 and we want to do lots"
+  },
+  {
+   "t": 1491.4,
+   "d": 4.68,
+   "text": "of those things. And that's for example an extensive crafting system so that you can"
+  },
+  {
+   "t": 1496.08,
+   "d": 4.62,
+   "text": "build and modify items and work on those. It becomes rather easy with such an approach."
+  },
+  {
+   "t": 1502.54,
+   "d": 3.94,
+   "text": "A term, I don't know if it even exists because I didn't hear it before, but we call it a"
+  },
+  {
+   "t": 1506.48,
+   "d": 4.2,
+   "text": "grafting system. So a system so that you can build and modify living beings and work on"
+  },
+  {
+   "t": 1510.68,
+   "d": 8.0,
+   "text": "them. That could be quite a bit of fun. Then as I indicated, we want to expand the magic"
+  },
+  {
+   "t": 1518.68,
+   "d": 6.06,
+   "text": "system far beyond the, let's say, variants of detection, hiding, and damage spells."
+  },
+  {
+   "t": 1524.9,
+   "d": 3.58,
+   "text": "We right now have an ADOM to much more interactive things with which you really can work on the"
+  },
+  {
+   "t": 1528.48,
+   "d": 1.68,
+   "text": "world and do surprising things."
+  },
+  {
+   "t": 1530.38,
+   "d": 5.54,
+   "text": "I don't know if anyone remembers the dust powder-like demo from ADOM 2 where you could"
+  },
+  {
+   "t": 1536.54,
+   "d": 4.4,
+   "text": "kind of lay out dust powder chains and then turn things into magma and explode villages"
+  },
+  {
+   "t": 1540.94,
+   "d": 0.54,
+   "text": "and everything."
+  },
+  {
+   "t": 1542.38,
+   "d": 1.18,
+   "text": "It goes in that direction."
+  },
+  {
+   "t": 1543.7,
+   "d": 3.8,
+   "text": "We want to have highly interactive systems where you really can build smart and funny"
+  },
+  {
+   "t": 1547.5,
+   "d": 4.7,
+   "text": "things and so kind of emerging behavior in the game so that hopefully the players will"
+  },
+  {
+   "t": 1552.2,
+   "d": 4.18,
+   "text": "come up with ideas we never have dreamt of and suddenly interesting strategies arise"
+  },
+  {
+   "t": 1556.38,
+   "d": 1.08,
+   "text": "and grow out of that."
+  },
+  {
+   "t": 1559.44,
+   "d": 3.54,
+   "text": "Modding I mentioned, we want to really make it moddable because we need it for our setup"
+  },
+  {
+   "t": 1562.98,
+   "d": 3.44,
+   "text": "and it makes sense to give it to the community then to allow them to do fun things with that"
+  },
+  {
+   "t": 1566.42,
+   "d": 0.18,
+   "text": "too."
+  },
+  {
+   "t": 1568.74,
+   "d": 4.4,
+   "text": "It will also allow for a kind of content module so that for example we could make specific"
+  },
+  {
+   "t": 1573.14,
+   "d": 4.9,
+   "text": "requests or if you want to have a time travel variant, we could do a time travel extension"
+  },
+  {
+   "t": 1578.58,
+   "d": 4.54,
+   "text": "for Ultimate Art and similar things so that they not necessarily clutter up the main game"
+  },
+  {
+   "t": 1583.12,
+   "d": 3.98,
+   "text": "but become choices for players who want a certain specialization of let's say content"
+  },
+  {
+   "t": 1587.1,
+   "d": 0.6,
+   "text": "or game style."
+  },
+  {
+   "t": 1588.46,
+   "d": 3.3,
+   "text": "Naturally, that will be possible both for us and the community once it's open so that"
+  },
+  {
+   "t": 1591.76,
+   "d": 1.96,
+   "text": "everyone can work on such things."
+  },
+  {
+   "t": 1597.32,
+   "d": 3.72,
+   "text": "Also planned, just a little outlook, it will be worlds as I mentioned."
+  },
+  {
+   "t": 1601.04,
+   "d": 4.52,
+   "text": "We want to have a large surface world, but we want to have also variants of worlds so"
+  },
+  {
+   "t": 1605.56,
+   "d": 5.34,
+   "text": "that you can actually experience quite different things because now that we have this cosmic"
+  },
+  {
+   "t": 1610.9,
+   "d": 3.96,
+   "text": "cataclysm, we should make something out of it and there should be a lot of interesting"
+  },
+  {
+   "t": 1614.86,
+   "d": 0.66,
+   "text": "adventure in it."
+  },
+  {
+   "t": 1615.78,
+   "d": 3.8,
+   "text": "We definitely will go with the mobile first, controller first UI UX design to make the"
+  },
+  {
+   "t": 1619.58,
+   "d": 5.52,
+   "text": "initial interface as easy to use as possible and then expand upon it for power players"
+  },
+  {
+   "t": 1625.1,
+   "d": 3.92,
+   "text": "so that we can give them the tools they need to be very fast, very specialized."
+  },
+  {
+   "t": 1629.02,
+   "d": 4.16,
+   "text": "But this way around is much better than the current Atom way where you are struggling"
+  },
+  {
+   "t": 1633.18,
+   "d": 5.54,
+   "text": "all the time to get things reduced to simplicity and the code is much too complex to do that."
+  },
+  {
+   "t": 1639.26,
+   "d": 3.64,
+   "text": "As I said, we want to have lots of configuration settings because our idea is really to have"
+  },
+  {
+   "t": 1642.9,
+   "d": 4.9,
+   "text": "this core engine and then to configure it in ways so that platform variants and platform-specific"
+  },
+  {
+   "t": 1647.8,
+   "d": 3.84,
+   "text": "settings or game-specific settings become interesting and challenging in certain ways."
+  },
+  {
+   "t": 1652.86,
+   "d": 1.44,
+   "text": "That's just a brief outlook on that."
+  },
+  {
+   "t": 1657.38,
+   "d": 5.74,
+   "text": "But we intend, as I said, to combine this rogue leak thing with the various platforms"
+  },
+  {
+   "t": 1663.12,
+   "d": 5.76,
+   "text": "so that you have a meta plot and a meta ability to grow, learn, and get things without power"
+  },
+  {
+   "t": 1668.88,
+   "d": 2.02,
+   "text": "creep because I think that doesn't work very well."
+  },
+  {
+   "t": 1671.04,
+   "d": 3.44,
+   "text": "So we want to have, let's say, a smoother curve there."
+  },
+  {
+   "t": 1676.06,
+   "d": 5.24,
+   "text": "And maybe, that's again theory, even ADOM could figure into this because if you regard"
+  },
+  {
+   "t": 1681.3,
+   "d": 6.5,
+   "text": "ADOM as the past or the prequel to Ultimate ADOM, it could make sense that certain achievements"
+  },
+  {
+   "t": 1687.8,
+   "d": 6.98,
+   "text": "or things you manage to do in ADOM reflect in your meta abilities in the future world"
+  },
+  {
+   "t": 1694.78,
+   "d": 0.76,
+   "text": "of Ultimate ADOM."
+  },
+  {
+   "t": 1695.74,
+   "d": 3.56,
+   "text": "There could even be things like if you manage to unlock a certain item in ADOM, you will"
+  },
+  {
+   "t": 1699.3,
+   "d": 4.12,
+   "text": "be able to find it only then in Ultimate ADOM or similar things."
+  },
+  {
+   "t": 1703.64,
+   "d": 2.64,
+   "text": "So there are lots of ideas what you could do to connect those games."
+  },
+  {
+   "t": 1708.36,
+   "d": 8.82,
+   "text": "And yeah, that's basically that. Five minutes left and I will show two things just very"
+  },
+  {
+   "t": 1717.18,
+   "d": 3.66,
+   "text": "quickly. They are not very impressive because it's very early prototypes and I know everyone"
+  },
+  {
+   "t": 1720.84,
+   "d": 3.58,
+   "text": "who is a technician will laugh at me and say, wow, what was this crazy guy showing there?"
+  },
+  {
+   "t": 1724.56,
+   "d": 3.6,
+   "text": "But the stuff behind the scenes for us was quite a success, so I'm showing it in any"
+  },
+  {
+   "t": 1728.16,
+   "d": 10.94,
+   "text": "case and just two things. One thing, what? Yep, it's very brief. This one thing here"
+  },
+  {
+   "t": 1739.1,
+   "d": 5.62,
+   "text": "is just an ASCII demo of our entity component system structure still done in Java, not in"
+  },
+  {
+   "t": 1744.72,
+   "d": 4.38,
+   "text": "Unity because the first demo was in Java while we decided what to use. Interesting about"
+  },
+  {
+   "t": 1749.1,
+   "d": 6.2,
+   "text": "it is that already here the world is quite large. It's a pretty huge dungeon level. This"
+  },
+  {
+   "t": 1755.3,
+   "d": 4.7,
+   "text": "This single dungeon level is about ten times the size of all the levels combined in ADOM."
+  },
+  {
+   "t": 1760.78,
+   "d": 3.32,
+   "text": "Just for fun, just to see if we could do it with a couple of millions of those entities."
+  },
+  {
+   "t": 1764.98,
+   "d": 2.6,
+   "text": "They are all there, they are very efficient, you can do fun things with them."
+  },
+  {
+   "t": 1767.78,
+   "d": 3.82,
+   "text": "I don't think you want to play such large levels except maybe in a very special type"
+  },
+  {
+   "t": 1771.6,
+   "d": 1.04,
+   "text": "of game, we have an idea there."
+  },
+  {
+   "t": 1773.9,
+   "d": 5.48,
+   "text": "It was quite fun to do that and just to show it, although it's an early prototype, it's"
+  },
+  {
+   "t": 1779.38,
+   "d": 3.78,
+   "text": "quite fast, the auto exploration, all those things, there's still some bugs in the display,"
+  },
+  {
+   "t": 1783.16,
+   "d": 5.92,
+   "text": "but I hope he just now stops to find a troll. Sometimes there should be trolls because then I"
+  },
+  {
+   "t": 1789.08,
+   "d": 7.34,
+   "text": "can swap. Ah, there's a troll. This pink weird troll, this T. Then I can now, if I move into him,"
+  },
+  {
+   "t": 1797.0,
+   "d": 7.58,
+   "text": "come here. No, not yet. Okay, you see on the right, now there's a female weird troll."
+  },
+  {
+   "t": 1805.44,
+   "d": 3.56,
+   "text": "It's just a trick in the game. When I hit him, I can switch my body now. Now I'm the troll."
+  },
+  {
+   "t": 1809.0,
+   "d": 2.62,
+   "text": "and now I can quickly move away as the troll."
+  },
+  {
+   "t": 1811.86,
+   "d": 3.74,
+   "text": "So that's what I indicated with sole possession, so it's really easy to do with a couple of"
+  },
+  {
+   "t": 1815.6,
+   "d": 4.6,
+   "text": "lines of code in this implementation because it's still rudimentary but now I can continue"
+  },
+  {
+   "t": 1820.2,
+   "d": 0.44,
+   "text": "as the troll."
+  },
+  {
+   "t": 1823.3,
+   "d": 2.96,
+   "text": "As you see the attributes are not correctly initialized, we have no game system still"
+  },
+  {
+   "t": 1826.26,
+   "d": 3.64,
+   "text": "implemented in this prototype because it was no focus but we would have all the abilities"
+  },
+  {
+   "t": 1829.9,
+   "d": 1.12,
+   "text": "and capabilities of the troll."
+  },
+  {
+   "t": 1831.48,
+   "d": 4.74,
+   "text": "If I now move into a wall, this one to the right here, I can animate the wall and I hope"
+  },
+  {
+   "t": 1836.22,
+   "d": 0.52,
+   "text": "it works."
+  },
+  {
+   "t": 1838.5,
+   "d": 2.56,
+   "text": "The problem with the trolley is they see only one space."
+  },
+  {
+   "t": 1841.42,
+   "d": 1.98,
+   "text": "So the wall can quickly move it."
+  },
+  {
+   "t": 1843.88,
+   "d": 2.3,
+   "text": "The wall already moved away."
+  },
+  {
+   "t": 1846.42,
+   "d": 0.1,
+   "text": "Shit."
+  },
+  {
+   "t": 1848.26,
+   "d": 0.38,
+   "text": "Okay."
+  },
+  {
+   "t": 1848.74,
+   "d": 1.26,
+   "text": "Well, maybe there's a bug in the display."
+  },
+  {
+   "t": 1850.44,
+   "d": 0.6,
+   "text": "That also could be."
+  },
+  {
+   "t": 1851.6,
+   "d": 0.58,
+   "text": "Ah, okay."
+  },
+  {
+   "t": 1853.1,
+   "d": 1.26,
+   "text": "Let's stay away from that."
+  },
+  {
+   "t": 1854.6,
+   "d": 1.9,
+   "text": "So I put up this again."
+  },
+  {
+   "t": 1857.24,
+   "d": 4.02,
+   "text": "And final comment, we also prototyped this already."
+  },
+  {
+   "t": 1862.5,
+   "d": 2.9,
+   "text": "So I probably guess most of you won't be able to see it."
+  },
+  {
+   "t": 1867.56,
+   "d": 3.16,
+   "text": "but there is a very small ultimate item icon here."
+  },
+  {
+   "t": 1871.4,
+   "d": 2.08,
+   "text": "And at least we already have an ASCII prototype"
+  },
+  {
+   "t": 1873.48,
+   "d": 3.86,
+   "text": "of an Unity game running on a mobile system."
+  },
+  {
+   "t": 1877.44,
+   "d": 2.52,
+   "text": "It takes a moment to start because it's an older mobile phone,"
+  },
+  {
+   "t": 1880.04,
+   "d": 1.86,
+   "text": "but then I can move around and do things."
+  },
+  {
+   "t": 1883.78,
+   "d": 2.02,
+   "text": "That's not very impressive, but it's a first step."
+  },
+  {
+   "t": 1885.92,
+   "d": 2.0,
+   "text": "That was very important for us to be an Android."
+  },
+  {
+   "t": 1888.62,
+   "d": 0.64,
+   "text": "Thank you."
+  },
+  {
+   "t": 1893.58,
+   "d": 1.9,
+   "text": "I would say one more sentence."
+  },
+  {
+   "t": 1895.68,
+   "d": 2.86,
+   "text": "Thank you very much to my colleagues Bernd Cowling who helped with the ASCII interface"
+  },
+  {
+   "t": 1898.54,
+   "d": 0.52,
+   "text": "for Unity."
+  },
+  {
+   "t": 1899.3,
+   "d": 2.28,
+   "text": "Thanks to my colleague Christopher Gesting who helped us with the website."
+  },
+  {
+   "t": 1902.08,
+   "d": 2.04,
+   "text": "Without them we wouldn't have been finished for today."
+  },
+  {
+   "t": 1904.8,
+   "d": 0.98,
+   "text": "It was a bit tight in time."
+  },
+  {
+   "t": 1906.3,
+   "d": 0.44,
+   "text": "So that's it."
+  },
+  {
+   "t": 1906.88,
+   "d": 1.82,
+   "text": "I'm done with the presentation."
+  },
+  {
+   "t": 1908.96,
+   "d": 0.24,
+   "text": "Great."
+  },
+  {
+   "t": 1909.36,
+   "d": 0.54,
+   "text": "Thank you very much."
+  },
+  {
+   "t": 1914.14,
+   "d": 1.42,
+   "text": "We have time for a few questions."
+  },
+  {
+   "t": 1915.56,
+   "d": 3.76,
+   "text": "Spirits is going to run around with the microphone while I switch over laptops."
+  },
+  {
+   "t": 1921.28,
+   "d": 0.48,
+   "text": "Questions?"
+  },
+  {
+   "t": 1930.08,
+   "d": 3.78,
+   "text": "You mentioned at one point that there could be a connection between the original and the"
+  },
+  {
+   "t": 1933.86,
+   "d": 5.54,
+   "text": "ultimate and the first thing I had in my mind when you mentioned ultimate atem is would"
+  },
+  {
+   "t": 1939.4,
+   "d": 1.2,
+   "text": "you be able to port a character?"
+  },
+  {
+   "t": 1942.08,
+   "d": 4.76,
+   "text": "I don't think so, no. Probably not because the internal data structures are completely different."
+  },
+  {
+   "t": 1948.0,
+   "d": 4.58,
+   "text": "There is a theoretical way but I guess it's just too much work. No, so I don't think so."
+  },
+  {
+   "t": 1957.98,
+   "d": 0.86,
+   "text": "Other questions?"
+  },
+  {
+   "t": 1960.44,
+   "d": 1.46,
+   "text": "So, follow-up question."
+  },
+  {
+   "t": 1963.92,
+   "d": 3.74,
+   "text": "Could you have something like the story of the character be important?"
+  },
+  {
+   "t": 1967.66,
+   "d": 6.4,
+   "text": "Like your character, let's say you win the game, then your character becomes a rumor in the new game."
+  },
+  {
+   "t": 1974.7,
+   "d": 7.18,
+   "text": "That's actually something we are thinking about because the idea of being able to create content through playing is a very interesting one."
+  },
+  {
+   "t": 1982.1,
+   "d": 5.0,
+   "text": "So that, let's say, legends or stories or effects could arise from former experiences."
+  },
+  {
+   "t": 1987.46,
+   "d": 6.3,
+   "text": "Maybe even things like, for example, in Shadows of Mordor, if a monster kills your old character in ADOM,"
+  },
+  {
+   "t": 1994.3,
+   "d": 5.02,
+   "text": "there might be a small chance that this monster survives for a long while and then suddenly"
+  },
+  {
+   "t": 1999.32,
+   "d": 6.74,
+   "text": "shows up in Ultimate Adam with Gronkh the Elf Slayer as a name and certain special abilities."
+  },
+  {
+   "t": 2006.18,
+   "d": 5.38,
+   "text": "Yes we are thinking about that to really get an integrated emerging story but it's on the"
+  },
+  {
+   "t": 2011.56,
+   "d": 0.74,
+   "text": "to-do list."
+  },
+  {
+   "t": 2022.82,
+   "d": 5.72,
+   "text": "Hi, did you anticipate any complexity that this entity component system will bring to"
+  },
+  {
+   "t": 2028.54,
+   "d": 1.68,
+   "text": "the graphical part of the game?"
+  },
+  {
+   "t": 2030.36,
+   "d": 2.94,
+   "text": "Are you planning to have a graphical option for it?"
+  },
+  {
+   "t": 2033.46,
+   "d": 1.14,
+   "text": "Or I guess you are."
+  },
+  {
+   "t": 2034.88,
+   "d": 2.14,
+   "text": "So how do you guys thought about this?"
+  },
+  {
+   "t": 2037.68,
+   "d": 4.86,
+   "text": "I didn't mention it, but there definitely will be a very, hopefully, very good graphical"
+  },
+  {
+   "t": 2042.54,
+   "d": 0.44,
+   "text": "version."
+  },
+  {
+   "t": 2043.2,
+   "d": 3.52,
+   "text": "That's our prime focus because we want to enlarge the audience and ASCII alone doesn't"
+  },
+  {
+   "t": 2046.72,
+   "d": 0.28,
+   "text": "do it."
+  },
+  {
+   "t": 2047.38,
+   "d": 3.36,
+   "text": "The first ASCII version we have is basically so that we can start prototyping very fast"
+  },
+  {
+   "t": 2050.74,
+   "d": 4.02,
+   "text": "and probably also will be in some way in the game, but it's not, let's say, as much of"
+  },
+  {
+   "t": 2054.76,
+   "d": 1.58,
+   "text": "a focus as it's in the current game."
+  },
+  {
+   "t": 2057.76,
+   "d": 6.22,
+   "text": "I don't really expect problems with the graphical side of those many entities, but what we noticed"
+  },
+  {
+   "t": 2063.98,
+   "d": 5.38,
+   "text": "during our first tests is, to my surprise, that our Java version with a couple of million"
+  },
+  {
+   "t": 2069.36,
+   "d": 5.04,
+   "text": "objects runs like a hundred times faster than the C-sharp version. I'm still not quite sure"
+  },
+  {
+   "t": 2074.4,
+   "d": 4.34,
+   "text": "why that is so because there are no obvious things where you would say, wow, this is a very strange"
+  },
+  {
+   "t": 2078.74,
+   "d": 6.16,
+   "text": "code or anything. We still need to learn a bit more about performance in C-sharp, I have to admit."
+  },
+  {
+   "t": 2085.36,
+   "d": 4.3,
+   "text": "And I'm more afraid due to the algorithms and the game engine side that there might be a problem"
+  },
+  {
+   "t": 2089.66,
+   "d": 3.92,
+   "text": "then I'm for the graphical side because with Not-Io we have learned how to separate very"
+  },
+  {
+   "t": 2093.58,
+   "d": 4.4,
+   "text": "cleanly the game engine from the graphic interpretation and I think that's something"
+  },
+  {
+   "t": 2097.98,
+   "d": 4.22,
+   "text": "that will work quite nicely. I'm a bit concerned about the game engine, the complexity of this"
+  },
+  {
+   "t": 2102.2,
+   "d": 4.58,
+   "text": "internal architecture might be quite challenging for Unity but hopefully it's just our lack"
+  },
+  {
+   "t": 2106.78,
+   "d": 2.72,
+   "text": "of experience so far and we hope to grow there quickly."
+  },
+  {
+   "t": 2110.84,
+   "d": 1.76,
+   "text": "Okay, thank you so much."
+  },
+  {
+   "t": 2113.1,
+   "d": 0.62,
+   "text": "Thank you."
+  }
+ ],
+ "note": "Transcript made locally with speech-to-text (Whisper large-v3-turbo, language forced to English) because YouTube's only caption track for this video is a mis-detected German track."
+}

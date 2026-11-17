@@ -1,0 +1,4563 @@
+{
+ "id": "4-7TtPX5uhg",
+ "url": "https://www.youtube.com/watch?v=4-7TtPX5uhg",
+ "title": "Tarn Adams - Villains in Dwarf Fortress",
+ "speaker": "Tarn Adams",
+ "talk_title": "Villains in Dwarf Fortress",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-10",
+ "duration_s": 1981,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the 2018 Roguelike Celebration - http://roguelike.club. This design talk is about Villians and other updates to Dwarf Fortress!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 15,
+   "title": "The Talk"
+  },
+  {
+   "start": 35,
+   "title": "The Idea"
+  },
+  {
+   "start": 65,
+   "title": "The Problem"
+  },
+  {
+   "start": 169,
+   "title": "Requirements"
+  },
+  {
+   "start": 267,
+   "title": "Rogue like a vacation"
+  },
+  {
+   "start": 280,
+   "title": "Narrative structure"
+  },
+  {
+   "start": 405,
+   "title": "Villains and emergent narrative"
+  },
+  {
+   "start": 535,
+   "title": "Rogue as fire opposition"
+  },
+  {
+   "start": 1205,
+   "title": "Investigation"
+  },
+  {
+   "start": 1378,
+   "title": "Bandit Hideout"
+  },
+  {
+   "start": 1609,
+   "title": "Relationships"
+  },
+  {
+   "start": 1728,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6486,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.33,
+   "d": 2.55,
+   "text": "hello I saw that seems to be working"
+  },
+  {
+   "t": 2.88,
+   "d": 3.12,
+   "text": "okay so yeah this is I mean I'm gonna"
+  },
+  {
+   "t": 6.0,
+   "d": 1.92,
+   "text": "give a talk on procedural stories and"
+  },
+  {
+   "t": 7.92,
+   "d": 4.74,
+   "text": "roguelike application the the the talk"
+  },
+  {
+   "t": 12.66,
+   "d": 1.68,
+   "text": "here is about stuff that I'm kind of"
+  },
+  {
+   "t": 14.34,
+   "d": 3.33,
+   "text": "going going to do was thinking I would"
+  },
+  {
+   "t": 17.67,
+   "d": 1.47,
+   "text": "have done by now but you know how that"
+  },
+  {
+   "t": 19.14,
+   "d": 1.23,
+   "text": "goes"
+  },
+  {
+   "t": 20.37,
+   "d": 3.33,
+   "text": "so I but I should have some insight if"
+  },
+  {
+   "t": 23.7,
+   "d": 2.46,
+   "text": "people want to talk to me after you know"
+  },
+  {
+   "t": 26.16,
+   "d": 2.4,
+   "text": "on things that seem a little you know"
+  },
+  {
+   "t": 28.56,
+   "d": 1.8,
+   "text": "pie in the sky or whatever I think it's"
+  },
+  {
+   "t": 30.36,
+   "d": 2.25,
+   "text": "it's there's some hope so let's have"
+  },
+  {
+   "t": 32.61,
+   "d": 2.49,
+   "text": "hope throughout the conversation here"
+  },
+  {
+   "t": 35.1,
+   "d": 2.91,
+   "text": "so yeah the the idea here is that in"
+  },
+  {
+   "t": 38.01,
+   "d": 2.34,
+   "text": "Endor fortress we're going to be"
+  },
+  {
+   "t": 40.35,
+   "d": 2.85,
+   "text": "embarking pretty soon on this whole you"
+  },
+  {
+   "t": 43.2,
+   "d": 1.71,
+   "text": "know I gave a talk some years ago and"
+  },
+  {
+   "t": 44.91,
+   "d": 1.68,
+   "text": "I've you know been wanting to make good"
+  },
+  {
+   "t": 46.59,
+   "d": 2.25,
+   "text": "on that for quite a while now but of"
+  },
+  {
+   "t": 48.84,
+   "d": 2.76,
+   "text": "doing like creation myths that that you"
+  },
+  {
+   "t": 51.6,
+   "d": 2.19,
+   "text": "set a foundation for the fantasy setting"
+  },
+  {
+   "t": 53.79,
+   "d": 1.65,
+   "text": "you you and you can use those to make"
+  },
+  {
+   "t": 55.44,
+   "d": 1.83,
+   "text": "procedural magic systems with the"
+  },
+  {
+   "t": 57.27,
+   "d": 2.25,
+   "text": "problem is this is going to take you"
+  },
+  {
+   "t": 59.52,
+   "d": 3.6,
+   "text": "know a couple years and so what I want"
+  },
+  {
+   "t": 63.12,
+   "d": 4.68,
+   "text": "to do is is put a bandaid on in part the"
+  },
+  {
+   "t": 67.8,
+   "d": 1.92,
+   "text": "the adventure mode of the game which is"
+  },
+  {
+   "t": 69.72,
+   "d": 1.29,
+   "text": "what we'd consider the sort of more"
+  },
+  {
+   "t": 71.01,
+   "d": 3.18,
+   "text": "roguelike mode of the game and and give"
+  },
+  {
+   "t": 74.19,
+   "d": 1.92,
+   "text": "people something you know play around"
+  },
+  {
+   "t": 76.11,
+   "d": 2.34,
+   "text": "with us so this more entertaining than"
+  },
+  {
+   "t": 78.45,
+   "d": 1.89,
+   "text": "what we have now because it is going to"
+  },
+  {
+   "t": 80.34,
+   "d": 3.45,
+   "text": "be a long two years so you know how do"
+  },
+  {
+   "t": 83.79,
+   "d": 2.07,
+   "text": "you how do you fix something that's flat"
+  },
+  {
+   "t": 85.86,
+   "d": 1.56,
+   "text": "what I mean by flat is we basically have"
+  },
+  {
+   "t": 87.42,
+   "d": 2.94,
+   "text": "an open-world game where you wander"
+  },
+  {
+   "t": 90.36,
+   "d": 2.13,
+   "text": "around between towns where you can talk"
+  },
+  {
+   "t": 92.49,
+   "d": 1.38,
+   "text": "to a few people and there's some"
+  },
+  {
+   "t": 93.87,
+   "d": 1.5,
+   "text": "monsters and stuff you can kill but"
+  },
+  {
+   "t": 95.37,
+   "d": 2.91,
+   "text": "there's no sort of over arching"
+  },
+  {
+   "t": 98.28,
+   "d": 2.46,
+   "text": "structure to it and there's some bandits"
+  },
+  {
+   "t": 100.74,
+   "d": 1.65,
+   "text": "here and some dragons there and you"
+  },
+  {
+   "t": 102.39,
+   "d": 1.38,
+   "text": "usually just die right I mean that's"
+  },
+  {
+   "t": 103.77,
+   "d": 2.49,
+   "text": "just it's and people get more"
+  },
+  {
+   "t": 106.26,
+   "d": 1.77,
+   "text": "entertainment out of like being a bard"
+  },
+  {
+   "t": 108.03,
+   "d": 1.35,
+   "text": "and dancing"
+  },
+  {
+   "t": 109.38,
+   "d": 1.92,
+   "text": "and so forth which is cool but it's like"
+  },
+  {
+   "t": 111.3,
+   "d": 2.34,
+   "text": "normally you want some kind of structure"
+  },
+  {
+   "t": 113.64,
+   "d": 0.72,
+   "text": "you might want"
+  },
+  {
+   "t": 114.36,
+   "d": 1.98,
+   "text": "I mean you've played these games right"
+  },
+  {
+   "t": 116.34,
+   "d": 2.07,
+   "text": "there's a bunch of cool generated levels"
+  },
+  {
+   "t": 118.41,
+   "d": 2.25,
+   "text": "that go way down you you kind of wander"
+  },
+  {
+   "t": 120.66,
+   "d": 1.92,
+   "text": "through the world on those really"
+  },
+  {
+   "t": 122.58,
+   "d": 2.15,
+   "text": "horrible colors but I did this in paint"
+  },
+  {
+   "t": 124.73,
+   "d": 4.09,
+   "text": "and it's so that's that's a a kind of"
+  },
+  {
+   "t": 128.82,
+   "d": 2.85,
+   "text": "like you know quest type thing right you"
+  },
+  {
+   "t": 131.67,
+   "d": 1.17,
+   "text": "have structure and you"
+  },
+  {
+   "t": 132.84,
+   "d": 2.1,
+   "text": "kind of chart your progress and and and"
+  },
+  {
+   "t": 134.94,
+   "d": 1.56,
+   "text": "go through these these things and you"
+  },
+  {
+   "t": 136.5,
+   "d": 2.31,
+   "text": "find all kinds of interesting magic"
+  },
+  {
+   "t": 138.81,
+   "d": 2.31,
+   "text": "items and meet all sorts of creatures"
+  },
+  {
+   "t": 141.12,
+   "d": 3.36,
+   "text": "and we can't really do any of this I"
+  },
+  {
+   "t": 144.48,
+   "d": 1.83,
+   "text": "mean our idea for magic items is to use"
+  },
+  {
+   "t": 146.31,
+   "d": 1.98,
+   "text": "those creation myths and procedural"
+  },
+  {
+   "t": 148.29,
+   "d": 1.91,
+   "text": "systems and same thing with these"
+  },
+  {
+   "t": 150.2,
+   "d": 2.08,
+   "text": "monsters and doing that kind of"
+  },
+  {
+   "t": 152.28,
+   "d": 1.26,
+   "text": "improvement over the course of two or"
+  },
+  {
+   "t": 153.54,
+   "d": 2.58,
+   "text": "three months we just wouldn't be able to"
+  },
+  {
+   "t": 156.12,
+   "d": 3.87,
+   "text": "kind of do anything to fix our problem"
+  },
+  {
+   "t": 159.99,
+   "d": 2.01,
+   "text": "of adventure mode being flat so you know"
+  },
+  {
+   "t": 162.0,
+   "d": 3.09,
+   "text": "what what can we do that is is something"
+  },
+  {
+   "t": 165.09,
+   "d": 4.89,
+   "text": "that that can can fix our problem so"
+  },
+  {
+   "t": 169.98,
+   "d": 1.59,
+   "text": "what are the requirements here it needs"
+  },
+  {
+   "t": 171.57,
+   "d": 2.79,
+   "text": "to be something that has this emergent"
+  },
+  {
+   "t": 174.36,
+   "d": 1.74,
+   "text": "narrative feel to it right I mean that's"
+  },
+  {
+   "t": 176.1,
+   "d": 1.68,
+   "text": "something we're all used to talking to"
+  },
+  {
+   "t": 177.78,
+   "d": 2.13,
+   "text": "each other about the games and I can I"
+  },
+  {
+   "t": 179.91,
+   "d": 1.95,
+   "text": "mean I can't go too much into how you"
+  },
+  {
+   "t": 181.86,
+   "d": 1.71,
+   "text": "know my philosophy of an emergent"
+  },
+  {
+   "t": 183.57,
+   "d": 1.95,
+   "text": "narrative I have a like that talk I"
+  },
+  {
+   "t": 185.52,
+   "d": 1.98,
+   "text": "given in Northwestern University on"
+  },
+  {
+   "t": 187.5,
+   "d": 1.47,
+   "text": "emergent narrative I go in about half"
+  },
+  {
+   "t": 188.97,
+   "d": 2.7,
+   "text": "hour about just sort of interlocking"
+  },
+  {
+   "t": 191.67,
+   "d": 1.83,
+   "text": "mechanics making sure they're resonant"
+  },
+  {
+   "t": 193.5,
+   "d": 1.77,
+   "text": "with the the outside world but also"
+  },
+  {
+   "t": 195.27,
+   "d": 1.56,
+   "text": "internally consistent and allow the"
+  },
+  {
+   "t": 196.83,
+   "d": 1.53,
+   "text": "player to investigate things and then"
+  },
+  {
+   "t": 198.36,
+   "d": 2.46,
+   "text": "they can come back and talk to each"
+  },
+  {
+   "t": 200.82,
+   "d": 1.53,
+   "text": "other there's there's you know there's"
+  },
+  {
+   "t": 202.35,
+   "d": 1.77,
+   "text": "that that's something that we kind of"
+  },
+  {
+   "t": 204.12,
+   "d": 1.89,
+   "text": "understand at least intuitively when"
+  },
+  {
+   "t": 206.01,
+   "d": 1.23,
+   "text": "we're playing these games and you can"
+  },
+  {
+   "t": 207.24,
+   "d": 3.18,
+   "text": "use that that intuition to design then"
+  },
+  {
+   "t": 210.42,
+   "d": 1.08,
+   "text": "there's this whole tricky word of"
+  },
+  {
+   "t": 211.5,
+   "d": 2.16,
+   "text": "replayability big in the roguelike scene"
+  },
+  {
+   "t": 213.66,
+   "d": 1.74,
+   "text": "right and what that means it's kind of"
+  },
+  {
+   "t": 215.4,
+   "d": 1.98,
+   "text": "like what's your flavor of roguelike is"
+  },
+  {
+   "t": 217.38,
+   "d": 2.07,
+   "text": "what your definition of replayability is"
+  },
+  {
+   "t": 219.45,
+   "d": 1.05,
+   "text": "right I mean maybe you're just"
+  },
+  {
+   "t": 220.5,
+   "d": 1.74,
+   "text": "interested in mastering these sort of"
+  },
+  {
+   "t": 222.24,
+   "d": 2.37,
+   "text": "nethack different connections or just"
+  },
+  {
+   "t": 224.61,
+   "d": 2.01,
+   "text": "interested in seeing what surprise it"
+  },
+  {
+   "t": 226.62,
+   "d": 1.95,
+   "text": "throws at you right or you're interested"
+  },
+  {
+   "t": 228.57,
+   "d": 2.61,
+   "text": "in inhabiting this single-player game in"
+  },
+  {
+   "t": 231.18,
+   "d": 2.73,
+   "text": "in some kind of cave cave environment or"
+  },
+  {
+   "t": 233.91,
+   "d": 1.47,
+   "text": "something right so there's there's all"
+  },
+  {
+   "t": 235.38,
+   "d": 1.02,
+   "text": "kinds of ways you can think about in"
+  },
+  {
+   "t": 236.4,
+   "d": 1.71,
+   "text": "each one of those words is tricky in its"
+  },
+  {
+   "t": 238.11,
+   "d": 1.77,
+   "text": "own way in terms of expanding it out but"
+  },
+  {
+   "t": 239.88,
+   "d": 2.42,
+   "text": "just that general sense right and then"
+  },
+  {
+   "t": 242.3,
+   "d": 3.16,
+   "text": "well I so it's a it's a roguelike"
+  },
+  {
+   "t": 245.46,
+   "d": 1.11,
+   "text": "project right"
+  },
+  {
+   "t": 246.57,
+   "d": 2.73,
+   "text": "it has a archeological kind of history"
+  },
+  {
+   "t": 249.3,
+   "d": 2.49,
+   "text": "or geological history of layers of"
+  },
+  {
+   "t": 251.79,
+   "d": 2.1,
+   "text": "garbage just piled on top of each other"
+  },
+  {
+   "t": 253.89,
+   "d": 2.91,
+   "text": "right so we have no choice but to use"
+  },
+  {
+   "t": 256.8,
+   "d": 3.06,
+   "text": "what we have right and so these this is"
+  },
+  {
+   "t": 259.86,
+   "d": 1.68,
+   "text": "what I need I need to look at this stuff"
+  },
+  {
+   "t": 261.54,
+   "d": 1.77,
+   "text": "and say you know what what kind of"
+  },
+  {
+   "t": 263.31,
+   "d": 1.11,
+   "text": "feature can I add"
+  },
+  {
+   "t": 264.42,
+   "d": 2.79,
+   "text": "improve the game using these things and"
+  },
+  {
+   "t": 267.21,
+   "d": 2.46,
+   "text": "that's rogue like a vacation right it's"
+  },
+  {
+   "t": 269.67,
+   "d": 3.39,
+   "text": "like take take try and like put some"
+  },
+  {
+   "t": 273.06,
+   "d": 1.86,
+   "text": "emergent narrative replayability into"
+  },
+  {
+   "t": 274.92,
+   "d": 1.89,
+   "text": "your game be thinking of these these"
+  },
+  {
+   "t": 276.81,
+   "d": 5.28,
+   "text": "sort of things so for us the the idea"
+  },
+  {
+   "t": 282.09,
+   "d": 2.82,
+   "text": "here is is sprucing up this this idea"
+  },
+  {
+   "t": 284.91,
+   "d": 1.53,
+   "text": "that we already have these monsters in"
+  },
+  {
+   "t": 286.44,
+   "d": 1.17,
+   "text": "the world right"
+  },
+  {
+   "t": 287.61,
+   "d": 2.4,
+   "text": "different kinds like vampires and"
+  },
+  {
+   "t": 290.01,
+   "d": 2.46,
+   "text": "necromancer's but also like justjust"
+  },
+  {
+   "t": 292.47,
+   "d": 2.76,
+   "text": "rulers and you know people that are just"
+  },
+  {
+   "t": 295.23,
+   "d": 1.98,
+   "text": "you know have an ill nature living in a"
+  },
+  {
+   "t": 297.21,
+   "d": 1.29,
+   "text": "house somewhere right there's a lot of"
+  },
+  {
+   "t": 298.5,
+   "d": 4.11,
+   "text": "different kinds of villains and maps to"
+  },
+  {
+   "t": 302.61,
+   "d": 2.67,
+   "text": "traditional game structures of plots and"
+  },
+  {
+   "t": 305.28,
+   "d": 1.76,
+   "text": "acts and that kind of thing if you're"
+  },
+  {
+   "t": 307.04,
+   "d": 3.61,
+   "text": "going through these like like this"
+  },
+  {
+   "t": 310.65,
+   "d": 1.5,
+   "text": "trying to figure out who the villain is"
+  },
+  {
+   "t": 312.15,
+   "d": 1.95,
+   "text": "or what they're doing and so you can use"
+  },
+  {
+   "t": 314.1,
+   "d": 1.29,
+   "text": "a lot of your regular video game"
+  },
+  {
+   "t": 315.39,
+   "d": 1.83,
+   "text": "intuition that's and this is this is"
+  },
+  {
+   "t": 317.22,
+   "d": 1.23,
+   "text": "kind of like that you know I've write"
+  },
+  {
+   "t": 318.45,
+   "d": 1.62,
+   "text": "some takeaways here or whatever but"
+  },
+  {
+   "t": 320.07,
+   "d": 2.97,
+   "text": "that's like like saving yourself trouble"
+  },
+  {
+   "t": 323.04,
+   "d": 2.22,
+   "text": "on a project you're going to be working"
+  },
+  {
+   "t": 325.26,
+   "d": 1.62,
+   "text": "on for years you know when you get"
+  },
+  {
+   "t": 326.88,
+   "d": 2.7,
+   "text": "sucked into it just trying to cut"
+  },
+  {
+   "t": 329.58,
+   "d": 2.04,
+   "text": "corners this is really valuable just try"
+  },
+  {
+   "t": 331.62,
+   "d": 3.27,
+   "text": "and try and save yourself some time when"
+  },
+  {
+   "t": 334.89,
+   "d": 1.74,
+   "text": "we when we think about how the villains"
+  },
+  {
+   "t": 336.63,
+   "d": 3.32,
+   "text": "might be might be acting on the world"
+  },
+  {
+   "t": 339.95,
+   "d": 2.44,
+   "text": "through these sort of schemes which I'll"
+  },
+  {
+   "t": 342.39,
+   "d": 2.79,
+   "text": "be talking about in a bit it really does"
+  },
+  {
+   "t": 345.18,
+   "d": 1.2,
+   "text": "kind of a-line with a narrative"
+  },
+  {
+   "t": 346.38,
+   "d": 1.47,
+   "text": "structure if you think about like these"
+  },
+  {
+   "t": 347.85,
+   "d": 2.22,
+   "text": "interlocking mechanics where you know we"
+  },
+  {
+   "t": 350.07,
+   "d": 4.14,
+   "text": "have a story about you know what the the"
+  },
+  {
+   "t": 354.21,
+   "d": 2.46,
+   "text": "you know how the how the items interact"
+  },
+  {
+   "t": 356.67,
+   "d": 1.83,
+   "text": "with the ground and then how a monster"
+  },
+  {
+   "t": 358.5,
+   "d": 1.38,
+   "text": "pushed me into that not kind of the"
+  },
+  {
+   "t": 359.88,
+   "d": 2.21,
+   "text": "stories that we're telling having a"
+  },
+  {
+   "t": 362.09,
+   "d": 2.79,
+   "text": "villain that interlocks with"
+  },
+  {
+   "t": 364.88,
+   "d": 4.3,
+   "text": "townsperson who then speaks to the you"
+  },
+  {
+   "t": 369.18,
+   "d": 2.1,
+   "text": "know some somebody else to get a ball"
+  },
+  {
+   "t": 371.28,
+   "d": 2.4,
+   "text": "rolling it has a very similar sort of"
+  },
+  {
+   "t": 373.68,
+   "d": 2.58,
+   "text": "structure and I think it'll it'll you"
+  },
+  {
+   "t": 376.26,
+   "d": 3.36,
+   "text": "know allow the player to to tell stories"
+  },
+  {
+   "t": 379.62,
+   "d": 3.57,
+   "text": "and then be a creation right we we have"
+  },
+  {
+   "t": 383.19,
+   "d": 1.71,
+   "text": "all this crap sitting around"
+  },
+  {
+   "t": 384.9,
+   "d": 4.11,
+   "text": "and like like the the exact structure of"
+  },
+  {
+   "t": 389.01,
+   "d": 1.71,
+   "text": "the talk depends on all this stuff that"
+  },
+  {
+   "t": 390.72,
+   "d": 2.94,
+   "text": "dwarf fortress has but it would also"
+  },
+  {
+   "t": 393.66,
+   "d": 1.98,
+   "text": "work on a nice kind of more parent down"
+  },
+  {
+   "t": 395.64,
+   "d": 3.39,
+   "text": "system if you have the the the pieces"
+  },
+  {
+   "t": 399.03,
+   "d": 2.61,
+   "text": "that you have you can kind of glue them"
+  },
+  {
+   "t": 401.64,
+   "d": 1.56,
+   "text": "together in the ways that I'll be I'll"
+  },
+  {
+   "t": 403.2,
+   "d": 3.57,
+   "text": "be talking about here so when we think"
+  },
+  {
+   "t": 406.77,
+   "d": 2.4,
+   "text": "about villains you know what is what"
+  },
+  {
+   "t": 409.17,
+   "d": 2.34,
+   "text": "does it mean to be opposed by some kind"
+  },
+  {
+   "t": 411.51,
+   "d": 2.67,
+   "text": "of villainous force and what does that"
+  },
+  {
+   "t": 414.18,
+   "d": 2.45,
+   "text": "do to emergent narrative in an RPG"
+  },
+  {
+   "t": 416.63,
+   "d": 2.92,
+   "text": "traditional kind of RPG you have these"
+  },
+  {
+   "t": 419.55,
+   "d": 4.62,
+   "text": "sort of actual even like sub bosses and"
+  },
+  {
+   "t": 424.17,
+   "d": 3.09,
+   "text": "things or just events or quests that are"
+  },
+  {
+   "t": 427.26,
+   "d": 1.59,
+   "text": "all the same for everybody right that's"
+  },
+  {
+   "t": 428.85,
+   "d": 2.43,
+   "text": "these these yellow yellow kind of"
+  },
+  {
+   "t": 431.28,
+   "d": 2.16,
+   "text": "caution even time pins here and then"
+  },
+  {
+   "t": 433.44,
+   "d": 1.05,
+   "text": "there's the emergent narrative thread"
+  },
+  {
+   "t": 434.49,
+   "d": 1.14,
+   "text": "which is the other stuff you're doing"
+  },
+  {
+   "t": 435.63,
+   "d": 1.53,
+   "text": "right if someone's gonna walk up to you"
+  },
+  {
+   "t": 437.16,
+   "d": 1.17,
+   "text": "and tell you a score a story about"
+  },
+  {
+   "t": 438.33,
+   "d": 1.65,
+   "text": "Skyrim it's gonna be about buckets on"
+  },
+  {
+   "t": 439.98,
+   "d": 2.25,
+   "text": "people's heads and not about like did"
+  },
+  {
+   "t": 442.23,
+   "d": 1.89,
+   "text": "they fight the dragon right no and I've"
+  },
+  {
+   "t": 444.12,
+   "d": 2.52,
+   "text": "never heard anyone recount their boss"
+  },
+  {
+   "t": 446.64,
+   "d": 2.94,
+   "text": "battle in Skyrim to me right it's just"
+  },
+  {
+   "t": 449.58,
+   "d": 1.2,
+   "text": "not something people talk about because"
+  },
+  {
+   "t": 450.78,
+   "d": 1.53,
+   "text": "it's not an emergent narrative but"
+  },
+  {
+   "t": 452.31,
+   "d": 1.23,
+   "text": "people will talk about all these other"
+  },
+  {
+   "t": 453.54,
+   "d": 2.64,
+   "text": "kind of things and in a strategy game"
+  },
+  {
+   "t": 456.18,
+   "d": 2.64,
+   "text": "you have you know these the opposition"
+  },
+  {
+   "t": 458.82,
+   "d": 1.5,
+   "text": "but you have the the sort of playing"
+  },
+  {
+   "t": 460.32,
+   "d": 2.82,
+   "text": "field here which can be randomized and"
+  },
+  {
+   "t": 463.14,
+   "d": 2.49,
+   "text": "you you operate there you're you know"
+  },
+  {
+   "t": 465.63,
+   "d": 1.14,
+   "text": "when people talk about the stories"
+  },
+  {
+   "t": 466.77,
+   "d": 2.67,
+   "text": "they'll be talking about in sequence the"
+  },
+  {
+   "t": 469.44,
+   "d": 2.28,
+   "text": "the sort of how it behaved on the map"
+  },
+  {
+   "t": 471.72,
+   "d": 2.03,
+   "text": "and what the what the opposition did"
+  },
+  {
+   "t": 473.75,
+   "d": 2.89,
+   "text": "there are these these other models here"
+  },
+  {
+   "t": 476.64,
+   "d": 2.88,
+   "text": "this is kind of the sort of shadow of"
+  },
+  {
+   "t": 479.52,
+   "d": 1.65,
+   "text": "Mordor model right where it's like all"
+  },
+  {
+   "t": 481.17,
+   "d": 1.86,
+   "text": "the plot arcs are the same as an RPG"
+  },
+  {
+   "t": 483.03,
+   "d": 1.68,
+   "text": "except you're just kind of like fighting"
+  },
+  {
+   "t": 484.71,
+   "d": 1.92,
+   "text": "through this the organizational"
+  },
+  {
+   "t": 486.63,
+   "d": 3.9,
+   "text": "structure of this this this kingdom or"
+  },
+  {
+   "t": 490.53,
+   "d": 1.86,
+   "text": "whatever and and so there's some"
+  },
+  {
+   "t": 492.39,
+   "d": 1.59,
+   "text": "emergent narrative to be had in that way"
+  },
+  {
+   "t": 493.98,
+   "d": 3.27,
+   "text": "and then there's other interesting games"
+  },
+  {
+   "t": 497.25,
+   "d": 1.47,
+   "text": "when you think of something like pirates"
+  },
+  {
+   "t": 498.72,
+   "d": 2.4,
+   "text": "or drock's operative or something like"
+  },
+  {
+   "t": 501.12,
+   "d": 1.89,
+   "text": "that right you have these strategy game"
+  },
+  {
+   "t": 503.01,
+   "d": 2.31,
+   "text": "going on that you're not playing and"
+  },
+  {
+   "t": 505.32,
+   "d": 3.51,
+   "text": "then you're a small cog in the sort of"
+  },
+  {
+   "t": 508.83,
+   "d": 1.71,
+   "text": "strategy puzzle that has like some"
+  },
+  {
+   "t": 510.54,
+   "d": 2.28,
+   "text": "particular way of influencing how the"
+  },
+  {
+   "t": 512.82,
+   "d": 3.23,
+   "text": "overall situation unfold"
+  },
+  {
+   "t": 516.05,
+   "d": 1.68,
+   "text": "but you're also sort of beholden to it"
+  },
+  {
+   "t": 517.73,
+   "d": 2.19,
+   "text": "so all of these things here are ways to"
+  },
+  {
+   "t": 519.92,
+   "d": 2.58,
+   "text": "let that games traditionally get at"
+  },
+  {
+   "t": 522.5,
+   "d": 1.71,
+   "text": "emergent narrative and you have here"
+  },
+  {
+   "t": 524.21,
+   "d": 1.76,
+   "text": "conversations about all of these games"
+  },
+  {
+   "t": 525.97,
+   "d": 2.5,
+   "text": "in these in these ways so how can we"
+  },
+  {
+   "t": 528.47,
+   "d": 2.25,
+   "text": "kind of get at all of this right we want"
+  },
+  {
+   "t": 530.72,
+   "d": 1.68,
+   "text": "we want everything that we can we can"
+  },
+  {
+   "t": 532.4,
+   "d": 4.32,
+   "text": "squeeze out right right now so what"
+  },
+  {
+   "t": 536.72,
+   "d": 1.56,
+   "text": "would it mean to sort of rogue like a"
+  },
+  {
+   "t": 538.28,
+   "d": 1.86,
+   "text": "fire opposition to sort of maximize"
+  },
+  {
+   "t": 540.14,
+   "d": 1.44,
+   "text": "replayability and emergent narrative"
+  },
+  {
+   "t": 541.58,
+   "d": 2.82,
+   "text": "while using the things that we have so"
+  },
+  {
+   "t": 544.4,
+   "d": 1.53,
+   "text": "well sure I mean you could just say oh I"
+  },
+  {
+   "t": 545.93,
+   "d": 1.23,
+   "text": "want to generate our villains right"
+  },
+  {
+   "t": 547.16,
+   "d": 1.68,
+   "text": "generate our villains and give them"
+  },
+  {
+   "t": 548.84,
+   "d": 2.58,
+   "text": "these kind of goals and org charts why"
+  },
+  {
+   "t": 551.42,
+   "d": 1.74,
+   "text": "not build the org charts too right you"
+  },
+  {
+   "t": 553.16,
+   "d": 1.86,
+   "text": "can build an org chart yeah and and you"
+  },
+  {
+   "t": 555.02,
+   "d": 1.47,
+   "text": "know if something goes wrong in there"
+  },
+  {
+   "t": 556.49,
+   "d": 1.53,
+   "text": "they can repair it or whatever right and"
+  },
+  {
+   "t": 558.02,
+   "d": 3.0,
+   "text": "act all over this world kind of got"
+  },
+  {
+   "t": 561.02,
+   "d": 1.29,
+   "text": "their schemes going here"
+  },
+  {
+   "t": 562.31,
+   "d": 1.5,
+   "text": "and then I mean that's I mean there's"
+  },
+  {
+   "t": 563.81,
+   "d": 2.1,
+   "text": "something like a strategy game in there"
+  },
+  {
+   "t": 565.91,
+   "d": 1.41,
+   "text": "right but then when you think about this"
+  },
+  {
+   "t": 567.32,
+   "d": 1.83,
+   "text": "in the thick of it principle when this"
+  },
+  {
+   "t": 569.15,
+   "d": 3.54,
+   "text": "is going on you have these player facing"
+  },
+  {
+   "t": 572.69,
+   "d": 3.03,
+   "text": "sort of mechanisms of how you can you"
+  },
+  {
+   "t": 575.72,
+   "d": 2.67,
+   "text": "interact with this network that you've"
+  },
+  {
+   "t": 578.39,
+   "d": 2.67,
+   "text": "built in the world by sort of"
+  },
+  {
+   "t": 581.06,
+   "d": 2.67,
+   "text": "investigating what's going on deciding"
+  },
+  {
+   "t": 583.73,
+   "d": 2.4,
+   "text": "what to do and then having the world"
+  },
+  {
+   "t": 586.13,
+   "d": 2.57,
+   "text": "kind of react to you right so that's"
+  },
+  {
+   "t": 588.7,
+   "d": 2.5,
+   "text": "kind of what we're shooting at doing and"
+  },
+  {
+   "t": 591.2,
+   "d": 1.92,
+   "text": "that's why I was like give you this sort"
+  },
+  {
+   "t": 593.12,
+   "d": 1.77,
+   "text": "of pie-in-the-sky warning it just sounds"
+  },
+  {
+   "t": 594.89,
+   "d": 1.23,
+   "text": "like what a lot of people say about"
+  },
+  {
+   "t": 596.12,
+   "d": 1.35,
+   "text": "we're gonna have everything that's gonna"
+  },
+  {
+   "t": 597.47,
+   "d": 1.71,
+   "text": "be great or whatever right so let's just"
+  },
+  {
+   "t": 599.18,
+   "d": 1.94,
+   "text": "talk about specifically how you know"
+  },
+  {
+   "t": 601.12,
+   "d": 2.89,
+   "text": "what we've got kind of so far here"
+  },
+  {
+   "t": 604.01,
+   "d": 4.02,
+   "text": "here's a little static situation yeah so"
+  },
+  {
+   "t": 608.03,
+   "d": 1.98,
+   "text": "so let me let me this is kind of a Dwarf"
+  },
+  {
+   "t": 610.01,
+   "d": 2.52,
+   "text": "Fortress II sort of world so I'll just"
+  },
+  {
+   "t": 612.53,
+   "d": 1.83,
+   "text": "explain briefly this is this would be"
+  },
+  {
+   "t": 614.36,
+   "d": 1.5,
+   "text": "like a situation you'd start with you"
+  },
+  {
+   "t": 615.86,
+   "d": 1.53,
+   "text": "have a human Kingdom up there with a"
+  },
+  {
+   "t": 617.39,
+   "d": 2.31,
+   "text": "ruler there's some new positions now"
+  },
+  {
+   "t": 619.7,
+   "d": 1.92,
+   "text": "that we put in like an advisor and the K"
+  },
+  {
+   "t": 621.62,
+   "d": 1.62,
+   "text": "is for keeper of the seals which is a"
+  },
+  {
+   "t": 623.24,
+   "d": 1.53,
+   "text": "randomized name that's just kind of the"
+  },
+  {
+   "t": 624.77,
+   "d": 2.19,
+   "text": "spymaster of that civilization you don't"
+  },
+  {
+   "t": 626.96,
+   "d": 1.23,
+   "text": "have to worry too much about the details"
+  },
+  {
+   "t": 628.19,
+   "d": 2.28,
+   "text": "and we just have you know they say"
+  },
+  {
+   "t": 630.47,
+   "d": 2.43,
+   "text": "there's a village and a necromancer that"
+  },
+  {
+   "t": 632.9,
+   "d": 1.83,
+   "text": "got kicked out of it peace with the"
+  },
+  {
+   "t": 634.73,
+   "d": 2.01,
+   "text": "elves which is you know sometimes that"
+  },
+  {
+   "t": 636.74,
+   "d": 0.47,
+   "text": "happens"
+  },
+  {
+   "t": 637.21,
+   "d": 2.64,
+   "text": "before they decide to eat you and then"
+  },
+  {
+   "t": 639.85,
+   "d": 2.08,
+   "text": "yeah so we have this with this kind of"
+  },
+  {
+   "t": 641.93,
+   "d": 2.04,
+   "text": "situation and that's what we've got now"
+  },
+  {
+   "t": 643.97,
+   "d": 0.99,
+   "text": "and this is kind of what I mean by like"
+  },
+  {
+   "t": 644.96,
+   "d": 1.44,
+   "text": "in a static world you were just kind of"
+  },
+  {
+   "t": 646.4,
+   "d": 2.52,
+   "text": "romp through that do what you want to do"
+  },
+  {
+   "t": 648.92,
+   "d": 0.63,
+   "text": "nothing"
+  },
+  {
+   "t": 649.55,
+   "d": 2.76,
+   "text": "change right so if you if you've got a"
+  },
+  {
+   "t": 652.31,
+   "d": 3.36,
+   "text": "if you give this necromancer goals they"
+  },
+  {
+   "t": 655.67,
+   "d": 1.56,
+   "text": "can kind of be based on what happened in"
+  },
+  {
+   "t": 657.23,
+   "d": 3.03,
+   "text": "the world generation process so they"
+  },
+  {
+   "t": 660.26,
+   "d": 1.74,
+   "text": "have their sort of inherent goals that"
+  },
+  {
+   "t": 662.0,
+   "d": 1.8,
+   "text": "come from their necromancy which is I"
+  },
+  {
+   "t": 663.8,
+   "d": 1.65,
+   "text": "just want more bodies and I want to turn"
+  },
+  {
+   "t": 665.45,
+   "d": 1.56,
+   "text": "them into zombies that's like my thing"
+  },
+  {
+   "t": 667.01,
+   "d": 2.67,
+   "text": "right and then you have specific goals"
+  },
+  {
+   "t": 669.68,
+   "d": 1.68,
+   "text": "that come out of the the history of them"
+  },
+  {
+   "t": 671.36,
+   "d": 1.41,
+   "text": "so they just don't like this village"
+  },
+  {
+   "t": 672.77,
+   "d": 1.47,
+   "text": "because they got kicked out necromancer"
+  },
+  {
+   "t": 674.24,
+   "d": 1.41,
+   "text": "we get kicked out when they don't appear"
+  },
+  {
+   "t": 675.65,
+   "d": 1.32,
+   "text": "to age and people are just like what's"
+  },
+  {
+   "t": 676.97,
+   "d": 1.29,
+   "text": "going on there and they boot him out"
+  },
+  {
+   "t": 678.26,
+   "d": 2.7,
+   "text": "right before they they're powerful and"
+  },
+  {
+   "t": 680.96,
+   "d": 1.74,
+   "text": "have their little towers and so forth so"
+  },
+  {
+   "t": 682.7,
+   "d": 2.01,
+   "text": "what can this kind of lead to you have"
+  },
+  {
+   "t": 684.71,
+   "d": 1.98,
+   "text": "simple motivations and you can program"
+  },
+  {
+   "t": 686.69,
+   "d": 1.95,
+   "text": "in some some goals if you know what"
+  },
+  {
+   "t": 688.64,
+   "d": 2.49,
+   "text": "you're doing right so we have this human"
+  },
+  {
+   "t": 691.13,
+   "d": 1.68,
+   "text": "civilization they're looking at but I"
+  },
+  {
+   "t": 692.81,
+   "d": 2.31,
+   "text": "mean what what really kind of analysis"
+  },
+  {
+   "t": 695.12,
+   "d": 1.14,
+   "text": "can you do that what are you gonna do"
+  },
+  {
+   "t": 696.26,
+   "d": 1.41,
+   "text": "what's your big scheme right it's like"
+  },
+  {
+   "t": 697.67,
+   "d": 1.23,
+   "text": "I'm gonna go up to the king and tell"
+  },
+  {
+   "t": 698.9,
+   "d": 1.26,
+   "text": "them what's what or whatever I there's"
+  },
+  {
+   "t": 700.16,
+   "d": 1.38,
+   "text": "no scheme there so the first thing we"
+  },
+  {
+   "t": 701.54,
+   "d": 0.84,
+   "text": "did and this parts done"
+  },
+  {
+   "t": 702.38,
+   "d": 3.42,
+   "text": "is just add a bunch of new relationships"
+  },
+  {
+   "t": 705.8,
+   "d": 2.76,
+   "text": "friendships lovers we had an occasion to"
+  },
+  {
+   "t": 708.56,
+   "d": 1.53,
+   "text": "had divorce to the game there that it"
+  },
+  {
+   "t": 710.09,
+   "d": 3.12,
+   "text": "just came out of this and new kind of"
+  },
+  {
+   "t": 713.21,
+   "d": 2.28,
+   "text": "structures here to get these these"
+  },
+  {
+   "t": 715.49,
+   "d": 1.86,
+   "text": "civilizations more interesting layered"
+  },
+  {
+   "t": 717.35,
+   "d": 1.53,
+   "text": "so that you can think about schemes"
+  },
+  {
+   "t": 718.88,
+   "d": 3.39,
+   "text": "acting on them and then you need we"
+  },
+  {
+   "t": 722.27,
+   "d": 1.14,
+   "text": "already have apprentices for the"
+  },
+  {
+   "t": 723.41,
+   "d": 2.22,
+   "text": "necromancer so I mean I don't try and"
+  },
+  {
+   "t": 725.63,
+   "d": 1.38,
+   "text": "read that text if it's hard to read I'm"
+  },
+  {
+   "t": 727.01,
+   "d": 1.5,
+   "text": "just gonna kind of talk about it anyway"
+  },
+  {
+   "t": 728.51,
+   "d": 4.29,
+   "text": "so the the apprentice promise you know"
+  },
+  {
+   "t": 732.8,
+   "d": 1.11,
+   "text": "you're going to be an immortal when I"
+  },
+  {
+   "t": 733.91,
+   "d": 1.35,
+   "text": "teach you the secrets of life and death"
+  },
+  {
+   "t": 735.26,
+   "d": 3.33,
+   "text": "but for now just go out there and cause"
+  },
+  {
+   "t": 738.59,
+   "d": 1.38,
+   "text": "trouble for me and this is the first"
+  },
+  {
+   "t": 739.97,
+   "d": 1.44,
+   "text": "linkage in the system this is kind of"
+  },
+  {
+   "t": 741.41,
+   "d": 1.5,
+   "text": "the new the new stuff where they would"
+  },
+  {
+   "t": 742.91,
+   "d": 1.62,
+   "text": "go to this town we already have these"
+  },
+  {
+   "t": 744.53,
+   "d": 1.95,
+   "text": "agents to go to go to towns to spy on"
+  },
+  {
+   "t": 746.48,
+   "d": 0.9,
+   "text": "people to get information about"
+  },
+  {
+   "t": 747.38,
+   "d": 1.64,
+   "text": "artifacts right so I'm just building on"
+  },
+  {
+   "t": 749.02,
+   "d": 2.35,
+   "text": "these structures we have but this would"
+  },
+  {
+   "t": 751.37,
+   "d": 2.04,
+   "text": "also be a starting point for that if I"
+  },
+  {
+   "t": 753.41,
+   "d": 2.37,
+   "text": "didn't have that so you just have some"
+  },
+  {
+   "t": 755.78,
+   "d": 1.23,
+   "text": "roles you know if you if you're just"
+  },
+  {
+   "t": 757.01,
+   "d": 1.74,
+   "text": "reduced rolling dice in there you know"
+  },
+  {
+   "t": 758.75,
+   "d": 1.47,
+   "text": "what we know what end what ends up"
+  },
+  {
+   "t": 760.22,
+   "d": 2.88,
+   "text": "happening is you you can find a node"
+  },
+  {
+   "t": 763.1,
+   "d": 1.47,
+   "text": "based on these relationships all of"
+  },
+  {
+   "t": 764.57,
+   "d": 1.11,
+   "text": "these relationships just have little"
+  },
+  {
+   "t": 765.68,
+   "d": 2.16,
+   "text": "flags on them like you know these people"
+  },
+  {
+   "t": 767.84,
+   "d": 1.59,
+   "text": "don't like each other these people have"
+  },
+  {
+   "t": 769.43,
+   "d": 0.87,
+   "text": "history and they all have these little"
+  },
+  {
+   "t": 770.3,
+   "d": 1.32,
+   "text": "personality things and you can just"
+  },
+  {
+   "t": 771.62,
+   "d": 1.23,
+   "text": "think of those is like traits that you"
+  },
+  {
+   "t": 772.85,
+   "d": 1.32,
+   "text": "have in a video game someone's greedy or"
+  },
+  {
+   "t": 774.17,
+   "d": 2.16,
+   "text": "whatever it's just just a little few"
+  },
+  {
+   "t": 776.33,
+   "d": 1.62,
+   "text": "little flags here and there and then you"
+  },
+  {
+   "t": 777.95,
+   "d": 1.71,
+   "text": "can sort of apply your espionage"
+  },
+  {
+   "t": 779.66,
+   "d": 2.16,
+   "text": "principles to one of those people pick"
+  },
+  {
+   "t": 781.82,
+   "d": 0.49,
+   "text": "them out"
+  },
+  {
+   "t": 782.31,
+   "d": 2.37,
+   "text": "so mice is just kind of a standard"
+  },
+  {
+   "t": 784.68,
+   "d": 2.64,
+   "text": "acronym from the the counterintelligence"
+  },
+  {
+   "t": 787.32,
+   "d": 4.1,
+   "text": "money ideology coercion and ego is one"
+  },
+  {
+   "t": 791.42,
+   "d": 2.05,
+   "text": "possible there's a bunch of different"
+  },
+  {
+   "t": 793.47,
+   "d": 1.8,
+   "text": "ways people spell it out but those are"
+  },
+  {
+   "t": 795.27,
+   "d": 1.86,
+   "text": "just ways to manipulate people they can"
+  },
+  {
+   "t": 797.13,
+   "d": 1.05,
+   "text": "all just be kind of just these little"
+  },
+  {
+   "t": 798.18,
+   "d": 2.04,
+   "text": "these little numbers that you're rolling"
+  },
+  {
+   "t": 800.22,
+   "d": 1.05,
+   "text": "when you're just getting the simulation"
+  },
+  {
+   "t": 801.27,
+   "d": 1.35,
+   "text": "going again this is not a game that"
+  },
+  {
+   "t": 802.62,
+   "d": 1.32,
+   "text": "you're playing you're just sort of"
+  },
+  {
+   "t": 803.94,
+   "d": 2.4,
+   "text": "setting the stage for for the player to"
+  },
+  {
+   "t": 806.34,
+   "d": 3.38,
+   "text": "have something to look at here that's"
+  },
+  {
+   "t": 809.72,
+   "d": 4.66,
+   "text": "chained and nested so once they turn it"
+  },
+  {
+   "t": 814.38,
+   "d": 1.26,
+   "text": "around you can just start feeding goals"
+  },
+  {
+   "t": 815.64,
+   "d": 4.14,
+   "text": "down the system so we want bodies we can"
+  },
+  {
+   "t": 819.78,
+   "d": 5.97,
+   "text": "create bodies I so it's like and that's"
+  },
+  {
+   "t": 825.75,
+   "d": 1.68,
+   "text": "and that's that's that's a simple thing"
+  },
+  {
+   "t": 827.43,
+   "d": 1.17,
+   "text": "that you can just kind of is I mean a"
+  },
+  {
+   "t": 828.6,
+   "d": 1.53,
+   "text": "lot of things in roguelikes are"
+  },
+  {
+   "t": 830.13,
+   "d": 1.29,
+   "text": "hard-coded at first and that would just"
+  },
+  {
+   "t": 831.42,
+   "d": 2.31,
+   "text": "be something that we know war creates"
+  },
+  {
+   "t": 833.73,
+   "d": 2.22,
+   "text": "bodies we get a war started and if we"
+  },
+  {
+   "t": 835.95,
+   "d": 1.17,
+   "text": "want to be more interesting with our"
+  },
+  {
+   "t": 837.12,
+   "d": 2.16,
+   "text": "goals later we can we can do that"
+  },
+  {
+   "t": 839.28,
+   "d": 3.87,
+   "text": "another one will have early on is the"
+  },
+  {
+   "t": 843.15,
+   "d": 5.76,
+   "text": "the this revenge motive where the the"
+  },
+  {
+   "t": 848.91,
+   "d": 2.31,
+   "text": "necromancer just kind of sends out the"
+  },
+  {
+   "t": 851.22,
+   "d": 1.23,
+   "text": "message that they want people they hate"
+  },
+  {
+   "t": 852.45,
+   "d": 1.92,
+   "text": "dead into this system that they've"
+  },
+  {
+   "t": 854.37,
+   "d": 4.56,
+   "text": "co-opted and then we have everybody has"
+  },
+  {
+   "t": 858.93,
+   "d": 2.07,
+   "text": "kind of got a simple like these are my"
+  },
+  {
+   "t": 861.0,
+   "d": 2.49,
+   "text": "goals these are my tools right so the"
+  },
+  {
+   "t": 863.49,
+   "d": 1.5,
+   "text": "keeper of seals knows how to assassinate"
+  },
+  {
+   "t": 864.99,
+   "d": 2.22,
+   "text": "people and we can just just send the"
+  },
+  {
+   "t": 867.21,
+   "d": 2.13,
+   "text": "messages down the line now this sets a"
+  },
+  {
+   "t": 869.34,
+   "d": 3.18,
+   "text": "you knows what's a more interesting kind"
+  },
+  {
+   "t": 872.52,
+   "d": 2.04,
+   "text": "of situation using just a few simple"
+  },
+  {
+   "t": 874.56,
+   "d": 3.78,
+   "text": "linkages and the idea the thing is we've"
+  },
+  {
+   "t": 878.34,
+   "d": 2.1,
+   "text": "got an RPG plot sitting here now right"
+  },
+  {
+   "t": 880.44,
+   "d": 1.38,
+   "text": "just kind of this thing that's that's"
+  },
+  {
+   "t": 881.82,
+   "d": 3.75,
+   "text": "nested layered and we can we can play"
+  },
+  {
+   "t": 885.57,
+   "d": 2.73,
+   "text": "with that now once you've got all these"
+  },
+  {
+   "t": 888.3,
+   "d": 1.89,
+   "text": "bodies here you have also sort of this"
+  },
+  {
+   "t": 890.19,
+   "d": 2.07,
+   "text": "overarching possibility that you get"
+  },
+  {
+   "t": 892.26,
+   "d": 2.76,
+   "text": "kind of this end of the world situation"
+  },
+  {
+   "t": 895.02,
+   "d": 2.01,
+   "text": "which is kind of popular in RPGs or"
+  },
+  {
+   "t": 897.03,
+   "d": 1.71,
+   "text": "whatever so we we know we may get into"
+  },
+  {
+   "t": 898.74,
+   "d": 2.31,
+   "text": "that but kind of doubt it but that's"
+  },
+  {
+   "t": 901.05,
+   "d": 2.49,
+   "text": "possible but now so so I was talking"
+  },
+  {
+   "t": 903.54,
+   "d": 1.26,
+   "text": "about network repair you have to be"
+  },
+  {
+   "t": 904.8,
+   "d": 2.1,
+   "text": "careful in simulations about what"
+  },
+  {
+   "t": 906.9,
+   "d": 1.17,
+   "text": "happens when things just break because"
+  },
+  {
+   "t": 908.07,
+   "d": 1.23,
+   "text": "more fortress things die all the time"
+  },
+  {
+   "t": 909.3,
+   "d": 1.77,
+   "text": "right so it's like if the necromancer"
+  },
+  {
+   "t": 911.07,
+   "d": 2.67,
+   "text": "just dies you know can you understand"
+  },
+  {
+   "t": 913.74,
+   "d": 0.4,
+   "text": "this"
+  },
+  {
+   "t": 914.14,
+   "d": 2.16,
+   "text": "without the game being broken with every"
+  },
+  {
+   "t": 916.3,
+   "d": 1.53,
+   "text": "node kind of thinking locally about what"
+  },
+  {
+   "t": 917.83,
+   "d": 3.96,
+   "text": "they're doing and manin I yeah quite"
+  },
+  {
+   "t": 921.79,
+   "d": 1.23,
+   "text": "optimistic about this so the The"
+  },
+  {
+   "t": 923.02,
+   "d": 1.86,
+   "text": "Apprentice can check their motivation it"
+  },
+  {
+   "t": 924.88,
+   "d": 0.87,
+   "text": "doesn't matter if they're checking it"
+  },
+  {
+   "t": 925.75,
+   "d": 0.71,
+   "text": "that often"
+  },
+  {
+   "t": 926.46,
+   "d": 3.01,
+   "text": "am I going to get my immortality anymore"
+  },
+  {
+   "t": 929.47,
+   "d": 2.64,
+   "text": "it's a simple check and no no they"
+  },
+  {
+   "t": 932.11,
+   "d": 2.13,
+   "text": "wander off or whatever and then the"
+  },
+  {
+   "t": 934.24,
+   "d": 1.47,
+   "text": "thing keeps going though right I mean"
+  },
+  {
+   "t": 935.71,
+   "d": 2.04,
+   "text": "this is not a not a conspiracy that ends"
+  },
+  {
+   "t": 937.75,
+   "d": 2.07,
+   "text": "immediately just because the the handler"
+  },
+  {
+   "t": 939.82,
+   "d": 2.37,
+   "text": "disappears right I mean the ruler still"
+  },
+  {
+   "t": 942.19,
+   "d": 1.53,
+   "text": "hates those people because he was told a"
+  },
+  {
+   "t": 943.72,
+   "d": 1.11,
+   "text": "gnome or whatever right cause he's"
+  },
+  {
+   "t": 944.83,
+   "d": 1.32,
+   "text": "basically an empty vessel for whatever"
+  },
+  {
+   "t": 946.15,
+   "d": 2.94,
+   "text": "his advisor says in this scenario and"
+  },
+  {
+   "t": 949.09,
+   "d": 2.07,
+   "text": "yeah so we still got a war story I still"
+  },
+  {
+   "t": 951.16,
+   "d": 1.56,
+   "text": "got targeted murders you have to think a"
+  },
+  {
+   "t": 952.72,
+   "d": 1.38,
+   "text": "little bit about like what is it like"
+  },
+  {
+   "t": 954.1,
+   "d": 4.17,
+   "text": "for the player to go through this"
+  },
+  {
+   "t": 958.27,
+   "d": 2.04,
+   "text": "experience without having the big kind"
+  },
+  {
+   "t": 960.31,
+   "d": 1.68,
+   "text": "of necromancer payoff at the end but I"
+  },
+  {
+   "t": 961.99,
+   "d": 1.38,
+   "text": "think it's kind of satisfying to find"
+  },
+  {
+   "t": 963.37,
+   "d": 1.16,
+   "text": "the apprentice at the end whose"
+  },
+  {
+   "t": 964.53,
+   "d": 3.01,
+   "text": "necromancer is dead and is just kind of"
+  },
+  {
+   "t": 967.54,
+   "d": 2.43,
+   "text": "like wandering depressed about how they"
+  },
+  {
+   "t": 969.97,
+   "d": 1.71,
+   "text": "didn't get to be an immortal and then"
+  },
+  {
+   "t": 971.68,
+   "d": 2.1,
+   "text": "you understand this kind of backstory of"
+  },
+  {
+   "t": 973.78,
+   "d": 2.19,
+   "text": "what happened right and in the mix of"
+  },
+  {
+   "t": 975.97,
+   "d": 1.47,
+   "text": "everything else going on I think that'd"
+  },
+  {
+   "t": 977.44,
+   "d": 2.25,
+   "text": "be that'd still be kind of cool if the"
+  },
+  {
+   "t": 979.69,
+   "d": 3.0,
+   "text": "apprentice dies or is otherwise taken"
+  },
+  {
+   "t": 982.69,
+   "d": 1.74,
+   "text": "out of the situation then you think"
+  },
+  {
+   "t": 984.43,
+   "d": 1.26,
+   "text": "about this is like the real kind of"
+  },
+  {
+   "t": 985.69,
+   "d": 1.56,
+   "text": "network repair stuff it's like do I have"
+  },
+  {
+   "t": 987.25,
+   "d": 3.69,
+   "text": "another agent I know who who my my"
+  },
+  {
+   "t": 990.94,
+   "d": 1.68,
+   "text": "apprentice was talking to what I risk"
+  },
+  {
+   "t": 992.62,
+   "d": 1.71,
+   "text": "talking to them myself this is just"
+  },
+  {
+   "t": 994.33,
+   "d": 1.86,
+   "text": "another kind of things that are all just"
+  },
+  {
+   "t": 996.19,
+   "d": 1.59,
+   "text": "sort of like these localized check when"
+  },
+  {
+   "t": 997.78,
+   "d": 0.87,
+   "text": "we were talking about like entity"
+  },
+  {
+   "t": 998.65,
+   "d": 2.15,
+   "text": "component systems that kind of thing you"
+  },
+  {
+   "t": 1000.8,
+   "d": 3.22,
+   "text": "can make sure that your behavior is"
+  },
+  {
+   "t": 1004.02,
+   "d": 3.12,
+   "text": "coming out of local nodes without having"
+  },
+  {
+   "t": 1007.14,
+   "d": 3.45,
+   "text": "to do global analysis that often then it"
+  },
+  {
+   "t": 1010.59,
+   "d": 1.5,
+   "text": "can still be kind of fast and simple to"
+  },
+  {
+   "t": 1012.09,
+   "d": 1.86,
+   "text": "think about and you just like let it"
+  },
+  {
+   "t": 1013.95,
+   "d": 3.09,
+   "text": "screw up sometimes and that's fun at the"
+  },
+  {
+   "t": 1017.04,
+   "d": 2.61,
+   "text": "same time if you're if your actual"
+  },
+  {
+   "t": 1019.65,
+   "d": 3.27,
+   "text": "person dies you could consider going up"
+  },
+  {
+   "t": 1022.92,
+   "d": 1.38,
+   "text": "the chain right this is just another"
+  },
+  {
+   "t": 1024.3,
+   "d": 1.98,
+   "text": "simple local operation go up the chain"
+  },
+  {
+   "t": 1026.28,
+   "d": 1.05,
+   "text": "now you can speak to the adviser"
+  },
+  {
+   "t": 1027.33,
+   "d": 0.99,
+   "text": "directly because they've already"
+  },
+  {
+   "t": 1028.32,
+   "d": 2.25,
+   "text": "compromised themselves and we are"
+  },
+  {
+   "t": 1030.57,
+   "d": 1.89,
+   "text": "tracking compromised through just the"
+  },
+  {
+   "t": 1032.46,
+   "d": 1.65,
+   "text": "number of agreements that they've kind"
+  },
+  {
+   "t": 1034.11,
+   "d": 3.45,
+   "text": "of carried out already right each one of"
+  },
+  {
+   "t": 1037.56,
+   "d": 2.04,
+   "text": "these actions is a little little just"
+  },
+  {
+   "t": 1039.6,
+   "d": 2.01,
+   "text": "structure object thingy we save that"
+  },
+  {
+   "t": 1041.61,
+   "d": 2.43,
+   "text": "just says you've agreed to pass this"
+  },
+  {
+   "t": 1044.04,
+   "d": 1.32,
+   "text": "name along you've agreed to"
+  },
+  {
+   "t": 1045.36,
+   "d": 1.62,
+   "text": "this and then you that that's good for"
+  },
+  {
+   "t": 1046.98,
+   "d": 1.92,
+   "text": "exposition because they can just cackle"
+  },
+  {
+   "t": 1048.9,
+   "d": 1.2,
+   "text": "about it when they're doing their kind"
+  },
+  {
+   "t": 1050.1,
+   "d": 1.53,
+   "text": "of villain talk correct or whatever like"
+  },
+  {
+   "t": 1051.63,
+   "d": 1.14,
+   "text": "the little things that they've done and"
+  },
+  {
+   "t": 1052.77,
+   "d": 1.74,
+   "text": "the same time it can be used to continue"
+  },
+  {
+   "t": 1054.51,
+   "d": 1.59,
+   "text": "the chain through a kind of blackmail"
+  },
+  {
+   "t": 1056.1,
+   "d": 2.94,
+   "text": "thing advisor dies you're in big trouble"
+  },
+  {
+   "t": 1059.04,
+   "d": 2.22,
+   "text": "right you don't have a connection to the"
+  },
+  {
+   "t": 1061.26,
+   "d": 2.37,
+   "text": "ruler anymore going up to a ruler and"
+  },
+  {
+   "t": 1063.63,
+   "d": 1.35,
+   "text": "telling them of the things they did is"
+  },
+  {
+   "t": 1064.98,
+   "d": 1.62,
+   "text": "not really something you can do and part"
+  },
+  {
+   "t": 1066.6,
+   "d": 1.11,
+   "text": "of the layering here is that you simply"
+  },
+  {
+   "t": 1067.71,
+   "d": 1.8,
+   "text": "have no access to the ruler anyway as"
+  },
+  {
+   "t": 1069.51,
+   "d": 2.91,
+   "text": "the as the necromancer so that's that's"
+  },
+  {
+   "t": 1072.42,
+   "d": 1.29,
+   "text": "something where they just need to kind"
+  },
+  {
+   "t": 1073.71,
+   "d": 2.04,
+   "text": "of start over you know use the people"
+  },
+  {
+   "t": 1075.75,
+   "d": 1.68,
+   "text": "that compromise that they have they have"
+  },
+  {
+   "t": 1077.43,
+   "d": 1.38,
+   "text": "that they still have that person but"
+  },
+  {
+   "t": 1078.81,
+   "d": 1.11,
+   "text": "that person is not as important anymore"
+  },
+  {
+   "t": 1079.92,
+   "d": 2.64,
+   "text": "the one that was compromised so it's"
+  },
+  {
+   "t": 1082.56,
+   "d": 1.41,
+   "text": "just you know too bad"
+  },
+  {
+   "t": 1083.97,
+   "d": 2.84,
+   "text": "the adviser died if the ruler dies I"
+  },
+  {
+   "t": 1086.81,
+   "d": 2.74,
+   "text": "mean you that's just chaos right I mean"
+  },
+  {
+   "t": 1089.55,
+   "d": 2.4,
+   "text": "it's it's I mean it's it's it's not good"
+  },
+  {
+   "t": 1091.95,
+   "d": 1.95,
+   "text": "for anybody when the the ruler dies"
+  },
+  {
+   "t": 1093.9,
+   "d": 2.13,
+   "text": "unless more bodies are created in the"
+  },
+  {
+   "t": 1096.03,
+   "d": 2.16,
+   "text": "process aside from just the ruler but"
+  },
+  {
+   "t": 1098.19,
+   "d": 2.55,
+   "text": "the rule is a good body too so it's yeah"
+  },
+  {
+   "t": 1100.74,
+   "d": 1.71,
+   "text": "I mean that's that's that's kind of the"
+  },
+  {
+   "t": 1102.45,
+   "d": 2.64,
+   "text": "the sort of situations where we think in"
+  },
+  {
+   "t": 1105.09,
+   "d": 2.04,
+   "text": "advance like in advance what kind of"
+  },
+  {
+   "t": 1107.13,
+   "d": 2.19,
+   "text": "problems can go wrong as best you can"
+  },
+  {
+   "t": 1109.32,
+   "d": 1.56,
+   "text": "and then the rest you're gonna have to"
+  },
+  {
+   "t": 1110.88,
+   "d": 3.05,
+   "text": "fix after you release it but this is"
+  },
+  {
+   "t": 1113.93,
+   "d": 2.2,
+   "text": "this is I mean that's oh you can do some"
+  },
+  {
+   "t": 1116.13,
+   "d": 1.17,
+   "text": "forethought right and you can think"
+  },
+  {
+   "t": 1117.3,
+   "d": 1.41,
+   "text": "about think about these things so I"
+  },
+  {
+   "t": 1118.71,
+   "d": 1.11,
+   "text": "think I mean it's I'm kind of optimistic"
+  },
+  {
+   "t": 1119.82,
+   "d": 1.5,
+   "text": "but and then you get into the whole"
+  },
+  {
+   "t": 1121.32,
+   "d": 1.5,
+   "text": "situation while okay now the adventurer"
+  },
+  {
+   "t": 1122.82,
+   "d": 1.56,
+   "text": "shows up right and they just start in"
+  },
+  {
+   "t": 1124.38,
+   "d": 2.1,
+   "text": "this village there's this giant messy"
+  },
+  {
+   "t": 1126.48,
+   "d": 1.92,
+   "text": "situation and that's kind of a crappy"
+  },
+  {
+   "t": 1128.4,
+   "d": 1.8,
+   "text": "game you know I mean what do you do"
+  },
+  {
+   "t": 1130.2,
+   "d": 1.71,
+   "text": "right it's just there's kind of a"
+  },
+  {
+   "t": 1131.91,
+   "d": 1.62,
+   "text": "parallel that's there do you just walk"
+  },
+  {
+   "t": 1133.53,
+   "d": 1.14,
+   "text": "over and kill the necromancer but of"
+  },
+  {
+   "t": 1134.67,
+   "d": 2.31,
+   "text": "course you you know you get that yeah so"
+  },
+  {
+   "t": 1136.98,
+   "d": 1.77,
+   "text": "you get this this kind of word in the"
+  },
+  {
+   "t": 1138.75,
+   "d": 1.59,
+   "text": "village there's the village murders but"
+  },
+  {
+   "t": 1140.34,
+   "d": 1.26,
+   "text": "there's all this other information but"
+  },
+  {
+   "t": 1141.6,
+   "d": 2.52,
+   "text": "you don't actually have that information"
+  },
+  {
+   "t": 1144.12,
+   "d": 3.99,
+   "text": "so there's this there's just going to be"
+  },
+  {
+   "t": 1148.11,
+   "d": 3.27,
+   "text": "a step-by-step process and that's"
+  },
+  {
+   "t": 1151.38,
+   "d": 1.83,
+   "text": "natural that's a natural occurrence"
+  },
+  {
+   "t": 1153.21,
+   "d": 2.61,
+   "text": "because you know the players initial"
+  },
+  {
+   "t": 1155.82,
+   "d": 1.41,
+   "text": "information is literally nothing and"
+  },
+  {
+   "t": 1157.23,
+   "d": 2.97,
+   "text": "then they only get what they see locally"
+  },
+  {
+   "t": 1160.2,
+   "d": 2.04,
+   "text": "and they the parts that are I've"
+  },
+  {
+   "t": 1162.24,
+   "d": 2.4,
+   "text": "darkened slightly are things that they"
+  },
+  {
+   "t": 1164.64,
+   "d": 1.74,
+   "text": "could get through conversation like they"
+  },
+  {
+   "t": 1166.38,
+   "d": 1.2,
+   "text": "could hear about the necromancer just"
+  },
+  {
+   "t": 1167.58,
+   "d": 2.01,
+   "text": "talking to people they could realize"
+  },
+  {
+   "t": 1169.59,
+   "d": 1.24,
+   "text": "like who the"
+  },
+  {
+   "t": 1170.83,
+   "d": 1.26,
+   "text": "you know who the ruler is by"
+  },
+  {
+   "t": 1172.09,
+   "d": 1.29,
+   "text": "conversation they know there's a war"
+  },
+  {
+   "t": 1173.38,
+   "d": 1.86,
+   "text": "with the elves and so forth but they"
+  },
+  {
+   "t": 1175.24,
+   "d": 2.13,
+   "text": "don't know anything about the threads"
+  },
+  {
+   "t": 1177.37,
+   "d": 1.74,
+   "text": "that connect them and that's good right"
+  },
+  {
+   "t": 1179.11,
+   "d": 1.53,
+   "text": "that's good for kind of solving a"
+  },
+  {
+   "t": 1180.64,
+   "d": 2.55,
+   "text": "mystery right we have no initial"
+  },
+  {
+   "t": 1183.19,
+   "d": 2.28,
+   "text": "information except what's what's going"
+  },
+  {
+   "t": 1185.47,
+   "d": 3.84,
+   "text": "on right in front of us and then you get"
+  },
+  {
+   "t": 1189.31,
+   "d": 2.13,
+   "text": "into you know it's sort of this whole"
+  },
+  {
+   "t": 1191.44,
+   "d": 2.04,
+   "text": "divide and conquer type thing or"
+  },
+  {
+   "t": 1193.48,
+   "d": 1.26,
+   "text": "whatever when you're when you're doing"
+  },
+  {
+   "t": 1194.74,
+   "d": 4.47,
+   "text": "it or piecemeal as Josh said for the the"
+  },
+  {
+   "t": 1199.21,
+   "d": 2.07,
+   "text": "kind of like how you work on a roguelike"
+  },
+  {
+   "t": 1201.28,
+   "d": 1.62,
+   "text": "I mean that that applies even if your"
+  },
+  {
+   "t": 1202.9,
+   "d": 1.8,
+   "text": "rug likes you know kicking around for a"
+  },
+  {
+   "t": 1204.7,
+   "d": 3.78,
+   "text": "while we look just at this investigation"
+  },
+  {
+   "t": 1208.48,
+   "d": 3.02,
+   "text": "process right now that's like a holes"
+  },
+  {
+   "t": 1211.5,
+   "d": 2.47,
+   "text": "potential sub-genre of computer games"
+  },
+  {
+   "t": 1213.97,
+   "d": 1.89,
+   "text": "right I mean we can make the"
+  },
+  {
+   "t": 1215.86,
+   "d": 2.01,
+   "text": "investigation it is complicated messy as"
+  },
+  {
+   "t": 1217.87,
+   "d": 2.49,
+   "text": "we want but the thing the reason you"
+  },
+  {
+   "t": 1220.36,
+   "d": 1.23,
+   "text": "know another reason this is like a"
+  },
+  {
+   "t": 1221.59,
+   "d": 2.58,
+   "text": "candidate for what we want to do is when"
+  },
+  {
+   "t": 1224.17,
+   "d": 1.77,
+   "text": "you're making decisions about what what"
+  },
+  {
+   "t": 1225.94,
+   "d": 3.0,
+   "text": "features you add this could be"
+  },
+  {
+   "t": 1228.94,
+   "d": 2.13,
+   "text": "arbitrarily simple - right I mean"
+  },
+  {
+   "t": 1231.07,
+   "d": 1.17,
+   "text": "someone could walk up to you and be like"
+  },
+  {
+   "t": 1232.24,
+   "d": 2.04,
+   "text": "the bandits did it or whatever right and"
+  },
+  {
+   "t": 1234.28,
+   "d": 1.74,
+   "text": "that's and I'm glad I have that escape"
+  },
+  {
+   "t": 1236.02,
+   "d": 2.46,
+   "text": "hatch right because if I fail to do this"
+  },
+  {
+   "t": 1238.48,
+   "d": 2.7,
+   "text": "thing with the clues or whatever you"
+  },
+  {
+   "t": 1241.18,
+   "d": 2.19,
+   "text": "know we do in this investigatory process"
+  },
+  {
+   "t": 1243.37,
+   "d": 2.28,
+   "text": "I can always just jettison out and still"
+  },
+  {
+   "t": 1245.65,
+   "d": 2.7,
+   "text": "have a complete game arc and the other"
+  },
+  {
+   "t": 1248.35,
+   "d": 1.83,
+   "text": "stuff can carry it right so you can"
+  },
+  {
+   "t": 1250.18,
+   "d": 2.64,
+   "text": "think of like what is the entire player"
+  },
+  {
+   "t": 1252.82,
+   "d": 1.53,
+   "text": "experience you want to have and then"
+  },
+  {
+   "t": 1254.35,
+   "d": 1.41,
+   "text": "focus on the parts where you actually"
+  },
+  {
+   "t": 1255.76,
+   "d": 2.82,
+   "text": "feel you can do a good job and we don't"
+  },
+  {
+   "t": 1258.58,
+   "d": 0.75,
+   "text": "know if we're going to do a good job"
+  },
+  {
+   "t": 1259.33,
+   "d": 3.21,
+   "text": "here we have these ideas about you know"
+  },
+  {
+   "t": 1262.54,
+   "d": 2.58,
+   "text": "giving partial clues to people mistaken"
+  },
+  {
+   "t": 1265.12,
+   "d": 1.65,
+   "text": "identifications and how that affects"
+  },
+  {
+   "t": 1266.77,
+   "d": 1.71,
+   "text": "your reputation and we have some of"
+  },
+  {
+   "t": 1268.48,
+   "d": 2.34,
+   "text": "these systems in place to make this a"
+  },
+  {
+   "t": 1270.82,
+   "d": 2.64,
+   "text": "little bit easier but you know at the"
+  },
+  {
+   "t": 1273.46,
+   "d": 2.63,
+   "text": "same time it might just not not work out"
+  },
+  {
+   "t": 1276.09,
+   "d": 3.01,
+   "text": "there's also one of these kind of tricky"
+  },
+  {
+   "t": 1279.1,
+   "d": 3.6,
+   "text": "questions of like if your character has"
+  },
+  {
+   "t": 1282.7,
+   "d": 2.61,
+   "text": "a skill of observation or so forth it"
+  },
+  {
+   "t": 1285.31,
+   "d": 2.1,
+   "text": "can feed you more information about"
+  },
+  {
+   "t": 1287.41,
+   "d": 1.59,
+   "text": "clues you can see them we have kind of"
+  },
+  {
+   "t": 1289.0,
+   "d": 1.32,
+   "text": "this thing with like the tracking of"
+  },
+  {
+   "t": 1290.32,
+   "d": 1.41,
+   "text": "footprints on the ground right now and"
+  },
+  {
+   "t": 1291.73,
+   "d": 2.28,
+   "text": "or fortress it's kind of weird but it"
+  },
+  {
+   "t": 1294.01,
+   "d": 1.38,
+   "text": "would actually be more applicable in a"
+  },
+  {
+   "t": 1295.39,
+   "d": 2.91,
+   "text": "situation like this but at the same time"
+  },
+  {
+   "t": 1298.3,
+   "d": 1.8,
+   "text": "the player can kind of metagame these"
+  },
+  {
+   "t": 1300.1,
+   "d": 2.52,
+   "text": "things once they see enough of them but"
+  },
+  {
+   "t": 1302.62,
+   "d": 1.6,
+   "text": "that's and that's that's a really real"
+  },
+  {
+   "t": 1304.22,
+   "d": 1.47,
+   "text": "kind of thing right I mean you just kind"
+  },
+  {
+   "t": 1305.69,
+   "d": 1.35,
+   "text": "of learn to get better at the game but"
+  },
+  {
+   "t": 1307.04,
+   "d": 1.92,
+   "text": "still your character matters so it's"
+  },
+  {
+   "t": 1308.96,
+   "d": 3.18,
+   "text": "it's actually good for us it also has"
+  },
+  {
+   "t": 1312.14,
+   "d": 2.88,
+   "text": "kind of this roguelike principle of you"
+  },
+  {
+   "t": 1315.02,
+   "d": 1.56,
+   "text": "know how you balance your resources and"
+  },
+  {
+   "t": 1316.58,
+   "d": 2.31,
+   "text": "your risk and so forth if you want to"
+  },
+  {
+   "t": 1318.89,
+   "d": 4.47,
+   "text": "try and investigate more or if you want"
+  },
+  {
+   "t": 1323.36,
+   "d": 2.82,
+   "text": "to it's essentially like reading a"
+  },
+  {
+   "t": 1326.18,
+   "d": 2.01,
+   "text": "stroll or something when you when you"
+  },
+  {
+   "t": 1328.19,
+   "d": 2.55,
+   "text": "accuse you you know make whoa that was"
+  },
+  {
+   "t": 1330.74,
+   "d": 3.6,
+   "text": "dangerous but yeah so that you you kind"
+  },
+  {
+   "t": 1334.34,
+   "d": 1.95,
+   "text": "of have different tools at your disposal"
+  },
+  {
+   "t": 1336.29,
+   "d": 1.71,
+   "text": "in terms of like whether you're going to"
+  },
+  {
+   "t": 1338.0,
+   "d": 2.04,
+   "text": "try and intimidate roll on somebody that"
+  },
+  {
+   "t": 1340.04,
+   "d": 2.49,
+   "text": "you suspect of the murder and you know"
+  },
+  {
+   "t": 1342.53,
+   "d": 2.01,
+   "text": "you may not be good at that that kind of"
+  },
+  {
+   "t": 1344.54,
+   "d": 1.53,
+   "text": "thing so yeah I mean there's a lot of"
+  },
+  {
+   "t": 1346.07,
+   "d": 1.8,
+   "text": "potential there but we also don't need"
+  },
+  {
+   "t": 1347.87,
+   "d": 2.73,
+   "text": "to tap into it and another thing that"
+  },
+  {
+   "t": 1350.6,
+   "d": 3.54,
+   "text": "you can do is if you want to have"
+  },
+  {
+   "t": 1354.14,
+   "d": 1.56,
+   "text": "another kind of a skate patch or"
+  },
+  {
+   "t": 1355.7,
+   "d": 2.64,
+   "text": "whatever if you you you can talk to say"
+  },
+  {
+   "t": 1358.34,
+   "d": 1.71,
+   "text": "other people in the town and they can"
+  },
+  {
+   "t": 1360.05,
+   "d": 2.34,
+   "text": "feed you sort of an arbitrary amount if"
+  },
+  {
+   "t": 1362.39,
+   "d": 2.61,
+   "text": "it understands the actual plot then it"
+  },
+  {
+   "t": 1365.0,
+   "d": 2.91,
+   "text": "can give you hints because it knows what"
+  },
+  {
+   "t": 1367.91,
+   "d": 2.1,
+   "text": "you haven't found yet so there's there's"
+  },
+  {
+   "t": 1370.01,
+   "d": 1.68,
+   "text": "a lot a lot we can do there to make this"
+  },
+  {
+   "t": 1371.69,
+   "d": 1.65,
+   "text": "this process sort of fun there's a lot"
+  },
+  {
+   "t": 1373.34,
+   "d": 1.83,
+   "text": "of tuning apparatuses we have which is"
+  },
+  {
+   "t": 1375.17,
+   "d": 2.96,
+   "text": "something to kind of keep an eye out for"
+  },
+  {
+   "t": 1378.13,
+   "d": 2.38,
+   "text": "then you get to you know assuming you've"
+  },
+  {
+   "t": 1380.51,
+   "d": 1.92,
+   "text": "made the right decision you grab a"
+  },
+  {
+   "t": 1382.43,
+   "d": 3.33,
+   "text": "couple villagers and go over to the over"
+  },
+  {
+   "t": 1385.76,
+   "d": 1.92,
+   "text": "to the bandit hideout and have a"
+  },
+  {
+   "t": 1387.68,
+   "d": 1.71,
+   "text": "roguelike game right I mean the bandit"
+  },
+  {
+   "t": 1389.39,
+   "d": 2.64,
+   "text": "hideout is as arbitrarily interesting as"
+  },
+  {
+   "t": 1392.03,
+   "d": 1.32,
+   "text": "you want it to be it's a very"
+  },
+  {
+   "t": 1393.35,
+   "d": 2.21,
+   "text": "traditional adventure environment and"
+  },
+  {
+   "t": 1395.56,
+   "d": 2.47,
+   "text": "there's there's bandits there they can"
+  },
+  {
+   "t": 1398.03,
+   "d": 2.28,
+   "text": "if another escape hatch if you just want"
+  },
+  {
+   "t": 1400.31,
+   "d": 1.17,
+   "text": "them once you're there they can just"
+  },
+  {
+   "t": 1401.48,
+   "d": 1.5,
+   "text": "scream out what they did or whatever but"
+  },
+  {
+   "t": 1402.98,
+   "d": 2.34,
+   "text": "on the other hand you can put clues like"
+  },
+  {
+   "t": 1405.32,
+   "d": 1.86,
+   "text": "they were paid or whatever to do this"
+  },
+  {
+   "t": 1407.18,
+   "d": 1.59,
+   "text": "then there's the money or there's the"
+  },
+  {
+   "t": 1408.77,
+   "d": 1.92,
+   "text": "incriminating note right I mean that's"
+  },
+  {
+   "t": 1410.69,
+   "d": 2.1,
+   "text": "really a popular RPGs it's like why not"
+  },
+  {
+   "t": 1412.79,
+   "d": 2.45,
+   "text": "sign everything right I mean it's just"
+  },
+  {
+   "t": 1415.24,
+   "d": 2.95,
+   "text": "so it's just sitting there and then"
+  },
+  {
+   "t": 1418.19,
+   "d": 1.26,
+   "text": "again that's kind of like an escape"
+  },
+  {
+   "t": 1419.45,
+   "d": 2.19,
+   "text": "hatch if the investigation stuff is not"
+  },
+  {
+   "t": 1421.64,
+   "d": 1.32,
+   "text": "something that you can confront them"
+  },
+  {
+   "t": 1422.96,
+   "d": 1.2,
+   "text": "with I mean they always have to talk a"
+  },
+  {
+   "t": 1424.16,
+   "d": 2.76,
+   "text": "little bit but basically can lean on"
+  },
+  {
+   "t": 1426.92,
+   "d": 1.62,
+   "text": "these roguelike methods right that's"
+  },
+  {
+   "t": 1428.54,
+   "d": 3.27,
+   "text": "that's not something we have we have"
+  },
+  {
+   "t": 1431.81,
+   "d": 1.65,
+   "text": "these notes we have these villainous"
+  },
+  {
+   "t": 1433.46,
+   "d": 2.1,
+   "text": "kind of exposition so we can this this"
+  },
+  {
+   "t": 1435.56,
+   "d": 1.56,
+   "text": "is kind of the part where that feels"
+  },
+  {
+   "t": 1437.12,
+   "d": 3.21,
+   "text": "like we can slide just slide on through"
+  },
+  {
+   "t": 1440.33,
+   "d": 3.33,
+   "text": "to the next step and yeah I just kind of"
+  },
+  {
+   "t": 1443.66,
+   "d": 1.17,
+   "text": "said a little bit quickly what these"
+  },
+  {
+   "t": 1444.83,
+   "d": 1.41,
+   "text": "what these notes on the side were but"
+  },
+  {
+   "t": 1446.24,
+   "d": 6.3,
+   "text": "it's it's like it's not yeah so some"
+  },
+  {
+   "t": 1452.54,
+   "d": 2.91,
+   "text": "optimism there but at the same time the"
+  },
+  {
+   "t": 1455.45,
+   "d": 1.17,
+   "text": "player is always going to screw things"
+  },
+  {
+   "t": 1456.62,
+   "d": 2.58,
+   "text": "up I mean if they go in and just you"
+  },
+  {
+   "t": 1459.2,
+   "d": 1.71,
+   "text": "know fire crossbow bolts at everybody no"
+  },
+  {
+   "t": 1460.91,
+   "d": 3.24,
+   "text": "one gets a chance to talk then you don't"
+  },
+  {
+   "t": 1464.15,
+   "d": 1.77,
+   "text": "know what happened right you don't hear"
+  },
+  {
+   "t": 1465.92,
+   "d": 1.47,
+   "text": "about the keeper of the seals or you"
+  },
+  {
+   "t": 1467.39,
+   "d": 1.26,
+   "text": "don't hear about anything right and the"
+  },
+  {
+   "t": 1468.65,
+   "d": 1.32,
+   "text": "thread is actually broken the"
+  },
+  {
+   "t": 1469.97,
+   "d": 3.33,
+   "text": "investigatory thread is that a big deal"
+  },
+  {
+   "t": 1473.3,
+   "d": 3.15,
+   "text": "um I mean it's it's it's it's not"
+  },
+  {
+   "t": 1476.45,
+   "d": 1.11,
+   "text": "something that you would have known"
+  },
+  {
+   "t": 1477.56,
+   "d": 1.77,
+   "text": "existed right and you've solved the"
+  },
+  {
+   "t": 1479.33,
+   "d": 1.95,
+   "text": "murders brought the murderers to some"
+  },
+  {
+   "t": 1481.28,
+   "d": 2.76,
+   "text": "sort of justice and feel good about it"
+  },
+  {
+   "t": 1484.04,
+   "d": 1.35,
+   "text": "right and then the villain keeps working"
+  },
+  {
+   "t": 1485.39,
+   "d": 2.94,
+   "text": "right keeps on moving the simulation"
+  },
+  {
+   "t": 1488.33,
+   "d": 1.32,
+   "text": "keeps happening and then you encounter"
+  },
+  {
+   "t": 1489.65,
+   "d": 1.41,
+   "text": "something else and you can also"
+  },
+  {
+   "t": 1491.06,
+   "d": 3.24,
+   "text": "encounter the old thread if you if you"
+  },
+  {
+   "t": 1494.3,
+   "d": 1.92,
+   "text": "happen to be higher up the chain later"
+  },
+  {
+   "t": 1496.22,
+   "d": 2.1,
+   "text": "on so it's really not a problem"
+  },
+  {
+   "t": 1498.32,
+   "d": 2.04,
+   "text": "I think and in terms of network repair"
+  },
+  {
+   "t": 1500.36,
+   "d": 2.64,
+   "text": "or whatever this is I mean just a simple"
+  },
+  {
+   "t": 1503.0,
+   "d": 2.19,
+   "text": "breakage of the investigation is it's"
+  },
+  {
+   "t": 1505.19,
+   "d": 4.2,
+   "text": "fine mostly stuck and yeah and so I"
+  },
+  {
+   "t": 1509.39,
+   "d": 2.1,
+   "text": "mentioned I mentioned before if you if"
+  },
+  {
+   "t": 1511.49,
+   "d": 1.86,
+   "text": "you you know make a false accusation or"
+  },
+  {
+   "t": 1513.35,
+   "d": 2.04,
+   "text": "attack a random bandit camp or something"
+  },
+  {
+   "t": 1515.39,
+   "d": 1.44,
+   "text": "you know you'll just you're just"
+  },
+  {
+   "t": 1516.83,
+   "d": 1.44,
+   "text": "bringing trouble to yourself so there's"
+  },
+  {
+   "t": 1518.27,
+   "d": 1.94,
+   "text": "actually a you know positive feedback to"
+  },
+  {
+   "t": 1520.21,
+   "d": 3.37,
+   "text": "to the kind of investigatory methods and"
+  },
+  {
+   "t": 1523.58,
+   "d": 4.8,
+   "text": "making proper decisions so you get to"
+  },
+  {
+   "t": 1528.38,
+   "d": 2.1,
+   "text": "the final step here in this process"
+  },
+  {
+   "t": 1530.48,
+   "d": 1.83,
+   "text": "we've gone through like a whole"
+  },
+  {
+   "t": 1532.31,
+   "d": 2.13,
+   "text": "adventure stage right this is like an"
+  },
+  {
+   "t": 1534.44,
+   "d": 2.49,
+   "text": "RPG thing we moved forward exit out the"
+  },
+  {
+   "t": 1536.93,
+   "d": 2.55,
+   "text": "Bandit camp and we have assuming now we"
+  },
+  {
+   "t": 1539.48,
+   "d": 2.37,
+   "text": "have information to go talk to the next"
+  },
+  {
+   "t": 1541.85,
+   "d": 2.97,
+   "text": "link in the chain so that's where we're"
+  },
+  {
+   "t": 1544.82,
+   "d": 2.82,
+   "text": "basically setting up a kind of game loop"
+  },
+  {
+   "t": 1547.64,
+   "d": 2.49,
+   "text": "or it feels like a game spiral kind of"
+  },
+  {
+   "t": 1550.13,
+   "d": 2.61,
+   "text": "going upward into new mechanisms and so"
+  },
+  {
+   "t": 1552.74,
+   "d": 2.73,
+   "text": "forth but it's just using these these"
+  },
+  {
+   "t": 1555.47,
+   "d": 3.93,
+   "text": "tools that are kind of you know cut up"
+  },
+  {
+   "t": 1559.4,
+   "d": 1.35,
+   "text": "simple so that we can think about them"
+  },
+  {
+   "t": 1560.75,
+   "d": 3.0,
+   "text": "and it also makes the game more exciting"
+  },
+  {
+   "t": 1563.75,
+   "d": 2.31,
+   "text": "because you've made your presence known"
+  },
+  {
+   "t": 1566.06,
+   "d": 2.67,
+   "text": "you can just propagate that up the chain"
+  },
+  {
+   "t": 1568.73,
+   "d": 2.7,
+   "text": "and then whatever weird things happen to"
+  },
+  {
+   "t": 1571.43,
+   "d": 2.46,
+   "text": "you after that you you've kind of"
+  },
+  {
+   "t": 1573.89,
+   "d": 1.38,
+   "text": "brought them on yourself but it's also"
+  },
+  {
+   "t": 1575.27,
+   "d": 1.38,
+   "text": "just more information right if you're"
+  },
+  {
+   "t": 1576.65,
+   "d": 4.14,
+   "text": "suddenly attacked by a zombie you know"
+  },
+  {
+   "t": 1580.79,
+   "d": 1.71,
+   "text": "if you once you're an experienced player"
+  },
+  {
+   "t": 1582.5,
+   "d": 3.06,
+   "text": "you'll start to understand that that's a"
+  },
+  {
+   "t": 1585.56,
+   "d": 1.83,
+   "text": "clue right I mean it's it's telling you"
+  },
+  {
+   "t": 1587.39,
+   "d": 1.23,
+   "text": "something it's like those things that"
+  },
+  {
+   "t": 1588.62,
+   "d": 1.86,
+   "text": "attack you and your dreams and moral"
+  },
+  {
+   "t": 1590.48,
+   "d": 1.65,
+   "text": "wonder over that worked right I don't"
+  },
+  {
+   "t": 1592.13,
+   "d": 2.28,
+   "text": "quite remember but it was a yeah dream"
+  },
+  {
+   "t": 1594.41,
+   "d": 1.5,
+   "text": "this dream that and weird elephant"
+  },
+  {
+   "t": 1595.91,
+   "d": 2.64,
+   "text": "trunks right so it's like it's a clue"
+  },
+  {
+   "t": 1598.55,
+   "d": 2.64,
+   "text": "and you can you can kind of have these"
+  },
+  {
+   "t": 1601.19,
+   "d": 2.79,
+   "text": "traditional RPG structures mapped into"
+  },
+  {
+   "t": 1603.98,
+   "d": 6.48,
+   "text": "the game piece by piece and also once"
+  },
+  {
+   "t": 1610.46,
+   "d": 3.09,
+   "text": "you have things that are generalized"
+  },
+  {
+   "t": 1613.55,
+   "d": 1.44,
+   "text": "right we've been talking about how to"
+  },
+  {
+   "t": 1614.99,
+   "d": 2.46,
+   "text": "you know break your data structures"
+  },
+  {
+   "t": 1617.45,
+   "d": 2.61,
+   "text": "apart that kind of thing and if you"
+  },
+  {
+   "t": 1620.06,
+   "d": 2.19,
+   "text": "think about the relationship between the"
+  },
+  {
+   "t": 1622.25,
+   "d": 1.59,
+   "text": "necromancer and their apprentice that's"
+  },
+  {
+   "t": 1623.84,
+   "d": 2.22,
+   "text": "stored we have things like loyalty trust"
+  },
+  {
+   "t": 1626.06,
+   "d": 1.74,
+   "text": "those kind of things that you can just"
+  },
+  {
+   "t": 1627.8,
+   "d": 1.59,
+   "text": "throw into dice rolls and stuff right I"
+  },
+  {
+   "t": 1629.39,
+   "d": 1.47,
+   "text": "mean it's it's old it's pretty simple"
+  },
+  {
+   "t": 1630.86,
+   "d": 3.42,
+   "text": "bond and the mission goal is is is"
+  },
+  {
+   "t": 1634.28,
+   "d": 1.83,
+   "text": "simple in some sense right there go go"
+  },
+  {
+   "t": 1636.11,
+   "d": 1.95,
+   "text": "just sort of compulsively expand your"
+  },
+  {
+   "t": 1638.06,
+   "d": 2.01,
+   "text": "network is kind of our default behavior"
+  },
+  {
+   "t": 1640.07,
+   "d": 3.32,
+   "text": "just look around for ways to to do that"
+  },
+  {
+   "t": 1643.39,
+   "d": 2.32,
+   "text": "but that's just a little goal and a"
+  },
+  {
+   "t": 1645.71,
+   "d": 1.77,
+   "text": "mission on a person that that leaves"
+  },
+  {
+   "t": 1647.48,
+   "d": 2.25,
+   "text": "that presence of the necromancer and"
+  },
+  {
+   "t": 1649.73,
+   "d": 4.67,
+   "text": "does something right so when you have a"
+  },
+  {
+   "t": 1654.4,
+   "d": 2.95,
+   "text": "person that's joined up with you which"
+  },
+  {
+   "t": 1657.35,
+   "d": 1.38,
+   "text": "we've you know had in the game for quite"
+  },
+  {
+   "t": 1658.73,
+   "d": 2.34,
+   "text": "a long time it's just like a dog right"
+  },
+  {
+   "t": 1661.07,
+   "d": 3.27,
+   "text": "and that hack or something then you can"
+  },
+  {
+   "t": 1664.34,
+   "d": 2.4,
+   "text": "do the same thing right I mean it's it's"
+  },
+  {
+   "t": 1666.74,
+   "d": 1.92,
+   "text": "obviously there's some some cost to be"
+  },
+  {
+   "t": 1668.66,
+   "d": 2.16,
+   "text": "paid here right I mean you have to set"
+  },
+  {
+   "t": 1670.82,
+   "d": 2.34,
+   "text": "up like this interface to talk to them"
+  },
+  {
+   "t": 1673.16,
+   "d": 1.47,
+   "text": "and give them the goals and you'd have"
+  },
+  {
+   "t": 1674.63,
+   "d": 1.71,
+   "text": "to set up like something right just say"
+  },
+  {
+   "t": 1676.34,
+   "d": 3.57,
+   "text": "like go go here and go cost trouble"
+  },
+  {
+   "t": 1679.91,
+   "d": 1.35,
+   "text": "right you could just say go cause"
+  },
+  {
+   "t": 1681.26,
+   "d": 1.98,
+   "text": "trouble and they would just start do"
+  },
+  {
+   "t": 1683.24,
+   "d": 2.25,
+   "text": "Network building actions and try and"
+  },
+  {
+   "t": 1685.49,
+   "d": 2.94,
+   "text": "cause strife in this area using these"
+  },
+  {
+   "t": 1688.43,
+   "d": 1.26,
+   "text": "mechanisms that are already in the game"
+  },
+  {
+   "t": 1689.69,
+   "d": 1.11,
+   "text": "once we're finished with the villain"
+  },
+  {
+   "t": 1690.8,
+   "d": 2.6,
+   "text": "stuff what else right what"
+  },
+  {
+   "t": 1693.4,
+   "d": 3.96,
+   "text": "other dev time are we eating here maybe"
+  },
+  {
+   "t": 1697.36,
+   "d": 2.88,
+   "text": "that's it right I mean so so having the"
+  },
+  {
+   "t": 1700.24,
+   "d": 3.36,
+   "text": "player be a villain in quotes just some"
+  },
+  {
+   "t": 1703.6,
+   "d": 3.06,
+   "text": "kind of actor and having that be a whole"
+  },
+  {
+   "t": 1706.66,
+   "d": 2.4,
+   "text": "tool that you can use in in the"
+  },
+  {
+   "t": 1709.06,
+   "d": 1.92,
+   "text": "roguelike game it's something that's"
+  },
+  {
+   "t": 1710.98,
+   "d": 1.68,
+   "text": "actually kind of just sitting there"
+  },
+  {
+   "t": 1712.66,
+   "d": 3.87,
+   "text": "waiting for us to use so yeah that's it"
+  },
+  {
+   "t": 1716.53,
+   "d": 3.03,
+   "text": "is it seems seems like it'll be an"
+  },
+  {
+   "t": 1719.56,
+   "d": 3.45,
+   "text": "exciting some months hopefully not as"
+  },
+  {
+   "t": 1723.01,
+   "d": 2.07,
+   "text": "long as the the magic wait but I think"
+  },
+  {
+   "t": 1725.08,
+   "d": 1.53,
+   "text": "it's I mean it seems little bite off"
+  },
+  {
+   "t": 1726.61,
+   "d": 3.92,
+   "text": "apples us that's the that's the idea"
+  },
+  {
+   "t": 1740.49,
+   "d": 3.01,
+   "text": "awesome we have time for a few questions"
+  },
+  {
+   "t": 1743.5,
+   "d": 2.4,
+   "text": "so if anyone in the audience has a"
+  },
+  {
+   "t": 1745.9,
+   "d": 3.63,
+   "text": "question and then Mike is gonna switch"
+  },
+  {
+   "t": 1749.53,
+   "d": 6.21,
+   "text": "over the computers Frederick's talk hey"
+  },
+  {
+   "t": 1755.74,
+   "d": 0.66,
+   "text": "thank you"
+  },
+  {
+   "t": 1756.4,
+   "d": 2.37,
+   "text": "I was wondering so I kind of get how"
+  },
+  {
+   "t": 1758.77,
+   "d": 2.37,
+   "text": "these plots might emerge from your"
+  },
+  {
+   "t": 1761.14,
+   "d": 2.37,
+   "text": "simulation but I was wondering if you if"
+  },
+  {
+   "t": 1763.51,
+   "d": 1.86,
+   "text": "your agents need to somewhat be aware"
+  },
+  {
+   "t": 1765.37,
+   "d": 3.09,
+   "text": "that a plot has occurred and that they"
+  },
+  {
+   "t": 1768.46,
+   "d": 1.71,
+   "text": "know some a person what the threads of"
+  },
+  {
+   "t": 1770.17,
+   "d": 2.79,
+   "text": "it and if they do how do they do it how"
+  },
+  {
+   "t": 1772.96,
+   "d": 2.49,
+   "text": "do you identify that blood so so the the"
+  },
+  {
+   "t": 1775.45,
+   "d": 1.47,
+   "text": "agent meaning the one that's actually"
+  },
+  {
+   "t": 1776.92,
+   "d": 1.89,
+   "text": "involved in the plot themselves exactly"
+  },
+  {
+   "t": 1778.81,
+   "d": 1.8,
+   "text": "yeah yeah so when I when I say that"
+  },
+  {
+   "t": 1780.61,
+   "d": 3.9,
+   "text": "there's the the the form of blackmail we"
+  },
+  {
+   "t": 1784.51,
+   "d": 1.59,
+   "text": "have is that we keep track of the"
+  },
+  {
+   "t": 1786.1,
+   "d": 1.68,
+   "text": "agreements that people make like when an"
+  },
+  {
+   "t": 1787.78,
+   "d": 1.56,
+   "text": "agent is involved in a plot the various"
+  },
+  {
+   "t": 1789.34,
+   "d": 1.08,
+   "text": "other first thing that happens to the"
+  },
+  {
+   "t": 1790.42,
+   "d": 1.83,
+   "text": "apprentice is then there's a link"
+  },
+  {
+   "t": 1792.25,
+   "d": 1.71,
+   "text": "between the necromancer and the"
+  },
+  {
+   "t": 1793.96,
+   "d": 1.29,
+   "text": "apprentice that gets stored in both of"
+  },
+  {
+   "t": 1795.25,
+   "d": 2.73,
+   "text": "their heads that says we've made an"
+  },
+  {
+   "t": 1797.98,
+   "d": 2.07,
+   "text": "agreement to go target human"
+  },
+  {
+   "t": 1800.05,
+   "d": 2.19,
+   "text": "civilization X for this purpose and"
+  },
+  {
+   "t": 1802.24,
+   "d": 1.56,
+   "text": "that's sitting in their head and also"
+  },
+  {
+   "t": 1803.8,
+   "d": 1.86,
+   "text": "like your progress toward that goal so"
+  },
+  {
+   "t": 1805.66,
+   "d": 1.53,
+   "text": "forth just like regular kind of missions"
+  },
+  {
+   "t": 1807.19,
+   "d": 1.92,
+   "text": "stuff sitting in their head and then"
+  },
+  {
+   "t": 1809.11,
+   "d": 2.25,
+   "text": "that agent is aware of that element of"
+  },
+  {
+   "t": 1811.36,
+   "d": 1.89,
+   "text": "the plot they don't know further down"
+  },
+  {
+   "t": 1813.25,
+   "d": 1.11,
+   "text": "the chain they don't even necessarily"
+  },
+  {
+   "t": 1814.36,
+   "d": 2.25,
+   "text": "know that that that banditry murder"
+  },
+  {
+   "t": 1816.61,
+   "d": 3.72,
+   "text": "thing is even going on and they so they"
+  },
+  {
+   "t": 1820.33,
+   "d": 1.63,
+   "text": "operate with that that in mind"
+  },
+  {
+   "t": 1821.96,
+   "d": 1.05,
+   "text": "they have they're kind of overeat"
+  },
+  {
+   "t": 1823.01,
+   "d": 1.86,
+   "text": "overarching goal and then they have the"
+  },
+  {
+   "t": 1824.87,
+   "d": 2.1,
+   "text": "the plot they're involved in and then"
+  },
+  {
+   "t": 1826.97,
+   "d": 1.8,
+   "text": "they can just kind of check up every"
+  },
+  {
+   "t": 1828.77,
+   "d": 1.5,
+   "text": "once in a while for kind of like local"
+  },
+  {
+   "t": 1830.27,
+   "d": 4.08,
+   "text": "repair purposes is the idea I mean what"
+  },
+  {
+   "t": 1834.35,
+   "d": 3.27,
+   "text": "happens when when nodes start to wrap"
+  },
+  {
+   "t": 1837.62,
+   "d": 1.77,
+   "text": "around right because you get you get"
+  },
+  {
+   "t": 1839.39,
+   "d": 1.95,
+   "text": "these feedback sort of things where"
+  },
+  {
+   "t": 1841.34,
+   "d": 1.7,
+   "text": "people can send spies against each other"
+  },
+  {
+   "t": 1843.04,
+   "d": 2.98,
+   "text": "people and that's I mean that's how it"
+  },
+  {
+   "t": 1846.02,
+   "d": 1.56,
+   "text": "works that's fine I mean if there's two"
+  },
+  {
+   "t": 1847.58,
+   "d": 2.7,
+   "text": "advisors from separate kingdoms advising"
+  },
+  {
+   "t": 1850.28,
+   "d": 2.43,
+   "text": "each other's ruler to make terrible"
+  },
+  {
+   "t": 1852.71,
+   "d": 0.69,
+   "text": "decisions"
+  },
+  {
+   "t": 1853.4,
+   "d": 2.13,
+   "text": "I'm mnsure that's happened in real life"
+  },
+  {
+   "t": 1855.53,
+   "d": 3.03,
+   "text": "many times it's just that's fine I mean"
+  },
+  {
+   "t": 1858.56,
+   "d": 1.32,
+   "text": "it's actually going to be really"
+  },
+  {
+   "t": 1859.88,
+   "d": 1.92,
+   "text": "entertaining when when people find those"
+  },
+  {
+   "t": 1861.8,
+   "d": 2.46,
+   "text": "stories or the pieces of the stories and"
+  },
+  {
+   "t": 1864.26,
+   "d": 1.56,
+   "text": "then they can go into legends mode and"
+  },
+  {
+   "t": 1865.82,
+   "d": 2.7,
+   "text": "see the whole story right and and"
+  },
+  {
+   "t": 1868.52,
+   "d": 1.89,
+   "text": "realize what a terrible thing they've"
+  },
+  {
+   "t": 1870.41,
+   "d": 2.85,
+   "text": "done when they make those decisions but"
+  },
+  {
+   "t": 1873.26,
+   "d": 1.83,
+   "text": "yeah I don't know if that that addresses"
+  },
+  {
+   "t": 1875.09,
+   "d": 2.78,
+   "text": "wait yeah thanks"
+  },
+  {
+   "t": 1886.88,
+   "d": 2.77,
+   "text": "how much can the players find themselves"
+  },
+  {
+   "t": 1889.65,
+   "d": 2.72,
+   "text": "in roles other than de facto villain"
+  },
+  {
+   "t": 1892.37,
+   "d": 2.83,
+   "text": "yeah so it's like what what decisions"
+  },
+  {
+   "t": 1895.2,
+   "d": 2.66,
+   "text": "can you actually like make that are"
+  },
+  {
+   "t": 1897.86,
+   "d": 2.38,
+   "text": "positive with the with the with the kind"
+  },
+  {
+   "t": 1900.24,
+   "d": 3.51,
+   "text": "of system like here you talk you"
+  },
+  {
+   "t": 1903.75,
+   "d": 1.41,
+   "text": "specifically about the ending stuff"
+  },
+  {
+   "t": 1905.16,
+   "d": 1.05,
+   "text": "where you can send someone off on a"
+  },
+  {
+   "t": 1906.21,
+   "d": 6.6,
+   "text": "mission or yeah because I mean there's"
+  },
+  {
+   "t": 1912.81,
+   "d": 1.23,
+   "text": "the roles they used to have which is"
+  },
+  {
+   "t": 1914.04,
+   "d": 1.2,
+   "text": "just going around killing stuff and"
+  },
+  {
+   "t": 1915.24,
+   "d": 1.47,
+   "text": "being investigating these things right"
+  },
+  {
+   "t": 1916.71,
+   "d": 2.7,
+   "text": "that's one one way to do it and that's"
+  },
+  {
+   "t": 1919.41,
+   "d": 1.47,
+   "text": "not that's not a villain then right"
+  },
+  {
+   "t": 1920.88,
+   "d": 2.49,
+   "text": "that's a hero or whatever right but once"
+  },
+  {
+   "t": 1923.37,
+   "d": 2.46,
+   "text": "you have this tool to send people off I"
+  },
+  {
+   "t": 1925.83,
+   "d": 1.98,
+   "text": "mean that the the kind of goals that"
+  },
+  {
+   "t": 1927.81,
+   "d": 1.35,
+   "text": "will have it first are all going to be"
+  },
+  {
+   "t": 1929.16,
+   "d": 4.26,
+   "text": "these sort of intrigue schemes but the"
+  },
+  {
+   "t": 1933.42,
+   "d": 2.61,
+   "text": "thing is it is a generalized mechanism"
+  },
+  {
+   "t": 1936.03,
+   "d": 4.02,
+   "text": "the the we have a thing called an army"
+  },
+  {
+   "t": 1940.05,
+   "d": 2.01,
+   "text": "controller which is it was what we're"
+  },
+  {
+   "t": 1942.06,
+   "d": 1.98,
+   "text": "what we're using for all this stuff so"
+  },
+  {
+   "t": 1944.04,
+   "d": 2.07,
+   "text": "if you send one of your companions off"
+  },
+  {
+   "t": 1946.11,
+   "d": 2.07,
+   "text": "on a mission you you could tell them to"
+  },
+  {
+   "t": 1948.18,
+   "d": 1.41,
+   "text": "do any of the things that dwarf squads"
+  },
+  {
+   "t": 1949.59,
+   "d": 2.03,
+   "text": "can currently do that's the same system"
+  },
+  {
+   "t": 1951.62,
+   "d": 4.09,
+   "text": "so it's really the things that we don't"
+  },
+  {
+   "t": 1955.71,
+   "d": 3.83,
+   "text": "have are like things like nice things"
+  },
+  {
+   "t": 1959.54,
+   "d": 3.19,
+   "text": "and that's just diplomacy right I mean"
+  },
+  {
+   "t": 1962.73,
+   "d": 1.38,
+   "text": "one way that those hold the whole thing"
+  },
+  {
+   "t": 1964.11,
+   "d": 2.16,
+   "text": "is actually a model for diplomacy in the"
+  },
+  {
+   "t": 1966.27,
+   "d": 4.14,
+   "text": "future the future of course because we"
+  },
+  {
+   "t": 1970.41,
+   "d": 1.26,
+   "text": "always have to break things first"
+  },
+  {
+   "t": 1971.67,
+   "d": 1.58,
+   "text": "because we're not good people but that's"
+  },
+  {
+   "t": 1973.25,
+   "d": 4.75,
+   "text": "that's alright I think cool thank you so"
+  },
+  {
+   "t": 1978.0,
+   "d": 2.35,
+   "text": "much turn"
+  },
+  {
+   "t": 1980.35,
+   "d": 2.09,
+   "text": "[Applause]"
+  }
+ ]
+}

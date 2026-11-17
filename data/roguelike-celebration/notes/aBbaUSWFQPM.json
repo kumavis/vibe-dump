@@ -1,0 +1,179 @@
+{
+  "id": "aBbaUSWFQPM",
+  "title": "Julian Day - Poetry at the Edge of Roguelikes: Writing Around Iterative Media",
+  "speaker": "Julian Day",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=aBbaUSWFQPM",
+  "talk_type": "culture",
+  "summary": "Julian Day, creator of the roguelike Shadow of the Wyrm, looks at three intersections of poetry and roguelikes. First, poetry inside games: ADOM's minstrel poems that carry lore and hints, and his own long Spenserian-style poem and prose-poetry item descriptions in Shadow of the Wyrm, arguing that how a game conveys information shapes what kind of world it is. Second, Matthew Henderson's poetry collection Roguelike, which uses runs, permadeath, transformation and community mythmaking to work through grief over the poet's mother. Third, Christian Bök's Xenotext project, which uses a substitution cipher and bacterial gene expression to make a poem that procedurally generates a second poem and might outlast humanity.",
+  "games": [
+    "ADOM",
+    "Shadow of the Wyrm",
+    "NetHack",
+    "Dwarf Fortress",
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "poetry",
+      "kind": "example",
+      "claim": "ADOM uses poems from a minstrel character to deliver information about places, people and lore, which Day calls new and still rare in roguelikes.",
+      "detail": "Day notes you do not need to care about the minstrel for a regular win, but he is central to the game in several ways and his poems convey information much as NetHack conveys it in other forms; doing it with poetry was novel.",
+      "t": 185,
+      "quote": "He uses them to give information on places and people and the Dracula lore chain game mechanics",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "information delivery",
+      "kind": "principle",
+      "claim": "Every roguelike decision, including how information is described to the player, builds the world: conveying lore through prose gives a world with prose, and through poetry a world with poetry.",
+      "detail": "Day lists graphics vs ASCII, what the ASCII looks like, and features like monster memory or item lookup as each creating a certain kind of world. How you describe and impart information takes that further.",
+      "t": 254,
+      "quote": "If this comes via endgame books are pros you have suddenly created a world with pros. If you do it with poetry, your world has poetry",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "writing",
+      "kind": "warning",
+      "claim": "Roguelike writing tends to be neglected because most projects are solo and most developers are not writers, so text is treated as a chore before getting back to mechanics.",
+      "detail": "Day says this is why few roguelikes explicitly use poetry: writing is seen as something to get through to return to implementing cool mechanics, even though every decision is a step toward building a world.",
+      "t": 211,
+      "quote": "Most teams are teams of one and most Roguelike developers are not writers",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "optional lore",
+      "kind": "example",
+      "claim": "Shadow of the Wyrm includes a long original poem in a modernized Spenserian stanza that tells early-world lore purely for players who enjoy lore.",
+      "detail": "Day began it after reading The Faerie Queene to de-stress, when its rhythms stuck with him. The poem tells lore about the early game world and is meant for lore lovers like himself.",
+      "t": 368,
+      "quote": "It tells lore about the early game world but no views in game. It is meant as lore for people who like lore",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "poetic technique",
+      "kind": "technique",
+      "claim": "To make a Spenserian-style stanza read as modern, Day uses modern diction and imperfect rhymes to widen the available rhymes.",
+      "detail": "He gives the example of rhyming 'dread' and 'stretch' on the shared middle vowel sound, alongside sticking almost always with modern English word choice.",
+      "t": 489,
+      "quote": "To allow myself a greater set of rhymes I use imperfect rhymes like dread and stretch",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "poetic technique",
+      "kind": "technique",
+      "claim": "Breaking lines mid-sentence, leaving the middle lines unrhymed and closing stanzas with an alexandrine gives Day's game poem more varied, natural rhythm than its Spenserian model.",
+      "detail": "Breaking on mid-sentence rather than punctuation varies sentence length and reduces the sameness of The Faerie Queene; not rhyming lines 4 and 5 creates a more natural feel. He breaks the alexandrine ending only once, for a specific reason.",
+      "t": 502,
+      "quote": "I break lines mid sentence rather than on punctuation with commas and periods",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "item descriptions",
+      "kind": "example",
+      "claim": "Shadow of the Wyrm writes prose poetry into the descriptions shown by its item lookup command, and players enjoy stumbling on them inside an otherwise violent game.",
+      "detail": "Rather than describe things clinically, Day used prose poems (paragraph poems) for descriptions, avoiding a giant block of poetry. His example is the description of a blue wildflower, reached by looking it up with the lookup key.",
+      "t": 615,
+      "quote": "Players told me how nice it is to stumble across the descriptions and tucked inside what is otherwise a goblin murder simulator",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "tone",
+      "kind": "principle",
+      "claim": "Deliberately limited poetic touches, like Shadow of the Wyrm's wildflower descriptions, can make a roguelike's world about poetry and art as well as monsters and dungeons.",
+      "detail": "Day says using poetry in this limited way was always intentional; he hoped it would enrich the small strange world and see it as an underexplored space compared with more streamlined roguelikes.",
+      "t": 663,
+      "quote": "I wanted it to be a world of not just monsters and dudgeons but poetry and art",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "poetry",
+      "kind": "example",
+      "claim": "Matthew Henderson's poetry collection Roguelike uses roguelike concepts, especially runs and the permanence of death, to explore grief over his mother's death and addiction.",
+      "detail": "Day describes the collection as about the poet's relationship with his dead mother and her addiction to pills, about helplessness and coping. Henderson writes about cheat codes, runs and glitching, and uses Caves of Qud as a backdrop for searching for his lost mother.",
+      "t": 776,
+      "quote": "He uses the concept of the genre to layout the ground work for myth making and the ultimate central feature of Roguelikes had unbreakable permanence of death",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "mythmaking",
+      "kind": "principle",
+      "claim": "Mythmaking is central to roguelikes, less in the games than in the community, which retells stories of memorable characters and deaths across forums, Twitter and newsgroups.",
+      "detail": "Day points to Dwarf Fortress tales he read online, created as a save file was passed between players, which became shared experience for participants and readers and turned into myth.",
+      "t": 801,
+      "quote": "We create stories about our best and most unfortunate friends and share them on forums, Twitter, and post to news groups back in the day",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "transformation",
+      "kind": "principle",
+      "claim": "Transformation is common in roguelikes (a kitten growing into a cat, ADOM mutations, NetHack polypiling) and matters because it promotes the belief that things can change in an understandable way.",
+      "detail": "Day draws this from Henderson's collection, where transformation is central and the mother is reimagined as a killdeer or a raven, all pivoting around the fact that she is gone.",
+      "t": 869,
+      "quote": "Transformation is so important because it promotes the belief that things can change in an easy, understandable way",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "runs",
+      "kind": "principle",
+      "claim": "The run structure normalizes a roguelike's extreme difficulty and expected failure, since there is always another run, even though runs are ultimately an escape.",
+      "detail": "Day estimates thousands of ADOM games, has won ADOM four times and never won NetHack, 'but who cares'. He contrasts endlessly replayable runs with the single life we actually have, which is Henderson's message.",
+      "t": 923,
+      "quote": "Runs become a way of normalizing the incredibly difficulty and expected failure when playing a Roguelike",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "biological generation",
+      "kind": "example",
+      "claim": "Christian Bök's Xenotext project uses bacteria as a procedural generator: a poem encoded into a gene is expressed by the organism to produce a second poem, aiming for a poem that outlasts humanity.",
+      "detail": "Day frames it as roguelike-style procedural generation harnessed biologically, motivated by the precariousness of oral and written art in the face of physical and cultural genocide. Bök started with E. coli but targeted an extremophile bacterium that survives cold, acid, dehydration and radiation.",
+      "t": 1202,
+      "quote": "Book harnesses it in a biological way using the mechanisms of bacteria to make one poem and generate another over and over again",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "constrained writing",
+      "kind": "technique",
+      "claim": "The Xenotext needs a substitution cipher under which both a source poem and its encoded output are meaningful, found by searching for word pairs that decode to other real words.",
+      "detail": "Bök wrote a Python program to find candidate ciphers; Day assumes it lists co-meaningful words (e.g. a word that decodes to 'ice'). Bök then chose a cipher and wrote the source poem, mapping each letter to a codon so the expressed protein spells the output poem.",
+      "t": 1299,
+      "quote": "To create a meaningful source code himself that decodes to a second",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "biological generation",
+      "kind": "open-question",
+      "claim": "The Xenotext worked in E. coli but the extremophile host quickly undid the gene, raising open questions about stopping evolution from changing a generative artwork.",
+      "detail": "Bök has worked on it since 2002 and spent over $100,000. Day asks how it would fare in an ecosystem even if it survived in the lab, and contrasts it with the Voyager records as another attempt to outlast us.",
+      "t": 1485,
+      "quote": "He has found proof that nature is resistant to our novel and clever ideas",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "cut-up poetry",
+      "kind": "technique",
+      "claim": "Cut-up poetry, cutting source poems into pieces and reassembling them by hand or algorithm, is a constraint that suits procedural poetry generation.",
+      "detail": "Asked in Q&A which poetic constraints work in procedural spaces, Day named cut-up poetry as a favorite he has experimented with and wants to explore more.",
+      "t": 1756,
+      "quote": "you can take source poems, cut them into pieces, and reassemble them in various ways like using either, you know, just your own creativity or algorithms",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

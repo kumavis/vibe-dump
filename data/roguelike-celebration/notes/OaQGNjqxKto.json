@@ -1,0 +1,161 @@
+{
+  "id": "OaQGNjqxKto",
+  "title": "Ben McGraw - Building an Engaging Character Creator",
+  "speaker": "Ben McGraw",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=OaQGNjqxKto",
+  "talk_type": "design",
+  "summary": "Ben McGraw, executive producer of Dungeons of Dredmor, argues that a roguelike's character build screen can carry players through the punishing first minutes of repeated deaths. He reviews ways to soften early deaths (humour, low death penalty, making deaths feel meaningful, gifts to future runs), then draws on his teenage obsession with Master of Magic to show how a build screen full of rule-changing choices invites players to 'build their way out' of failure while learning the game. Citing Wizards of the Coast's 'Johnny' psychographic, he notes that the combinatorial build space (e.g. 55 choose 7 in Dredmor) cannot be balanced before release, and recommends balancing the early game while accepting fun brokenness at high levels, which he calls the Disgaea effect.",
+  "games": [
+    "Dungeons of Dredmor",
+    "Master of Magic",
+    "Master of Orion",
+    "Spelunky",
+    "Super Meat Boy",
+    "Disgaea",
+    "Magic: The Gathering"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "first five minutes",
+      "kind": "warning",
+      "claim": "A roguelike's first five minutes typically consist of choosing a build and dying several times, which can drive both veterans and newcomers to quit before they see the fun.",
+      "detail": "McGraw describes the new player cycle of build, die, reroll, die again. Experienced players wonder what the game adds over all the other deaths they've had, and newcomers unfamiliar with roguelike lethality may head straight for the refund page.",
+      "t": 241,
+      "quote": "people who aren't into roguelikes yet or aren't familiar with the lethality of our tropes they've died like four times in five minutes",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "death and humour",
+      "kind": "example",
+      "claim": "Dungeons of Dredmor used humour, such as a mocking death screen and achievements for common early deaths, to keep players entertained when they died.",
+      "detail": "McGraw's favourite was an achievement for dying by kicking down a door. He cautions that well-paced humour is hard to write, may not suit a game's theme, and repeating the same gag gets old fast.",
+      "t": 285,
+      "quote": "having clever achieve interactions you'd immediately encounter in the first few minutes there's like several about very common deaths",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "death penalty",
+      "kind": "example",
+      "claim": "Spelunky softens its early-game deaths with an extremely low death penalty, letting players jump straight back in.",
+      "detail": "McGraw says this is one of the best things Spelunky gets right for the opening experience and that games without character build systems should leverage it, though it fits less well for games with long build screens.",
+      "t": 340,
+      "quote": "the incredibly low penalty to death like you are you're just jumping back into the game immediately in spelunky",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "example",
+      "claim": "Super Meat Boy makes many deaths feel rewarding by replaying all of a level's recorded attempts simultaneously after the player beats it.",
+      "detail": "Each death becomes part of a spectacle of exploding Meat Boys, so once the player sees it the deaths stop feeling like a penalty and the player feels badass instead of discouraged.",
+      "t": 402,
+      "quote": "all of your runs are recorded and they're played back simultaneously so it's making its making death feel rewarding",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "technique",
+      "claim": "Roguelikes can give gifts from previous runs, such as currency to unlock starting items or a dead character bequeathing an item to a future character, so deaths do not feel wasted.",
+      "detail": "McGraw cites a Windows 3.1-themed roguelike that does both: currency accumulates across deaths, and a dying character can bequeath a specific item as a one-time gift to a new character.",
+      "t": 453,
+      "quote": "when a character dies you can have them bequeath a specific item the bat character had as a one-time gift to a future new character",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character creation",
+      "kind": "principle",
+      "claim": "In roguelikes with complex build screens, the build screen occupies much of the first minutes and must sell the game before the gameplay does.",
+      "detail": "Dungeons of Dredmor's opening skill selection offers 55 skills. McGraw excludes appearance customisation and simple stat allocation, which he says say little about gameplay.",
+      "t": 529,
+      "quote": "the possibilities in that many of themselves need to sell the game far in advance to the gameplay",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character creation",
+      "kind": "example",
+      "claim": "Master of Magic's custom wizard screen offers picks for magic books and skills that change fundamental game rules, and experimenting with them reveals constraints and hidden options.",
+      "detail": "McGraw walks through builds: skills like Alchemy and Artificer change core rules; he discovers life and death magic cannot be combined; spreading picks fails while specialising works; and putting all 11 picks into sorcery unlocks uncommon and rare starting spells.",
+      "t": 815,
+      "quote": "Hey look at this alchemy skill it changes fundamental rules of the game",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "build experimentation",
+      "kind": "principle",
+      "claim": "A build screen rich in interactions keeps players returning to a punishing game because they believe they can build their way out of failure, and they learn the rest of the game along the way.",
+      "detail": "McGraw says the joy of discovering skill and spell interactions in Master of Magic, hinting at deeper design, lessened the pain of dying. Each set of builds taught him enough to want new builds, and meanwhile he got good at the game.",
+      "t": 985,
+      "quote": "the pain and annoyance of the many deaths was lessened for me by the idea that maybe I could build my way out of it",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player psychographics",
+      "kind": "principle",
+      "claim": "Wizards of the Coast's 'Johnny' player archetype craves finding combos and new interactions, and these players are drawn to build systems with large design spaces.",
+      "detail": "McGraw recommends Magic: The Gathering's design articles as broadly applicable to video games and singles out the Johnny psychographic from its three player archetypes.",
+      "t": 1077,
+      "quote": "who is defined by among other things a craving to find combos and discover new interactions",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build variety",
+      "kind": "example",
+      "claim": "Dungeons of Dredmor lets players pick 7 of 55 flat-cost skills, a design space too large to plan or balance every combination.",
+      "detail": "McGraw computes 55 choose 7 as the number of unique builds, a huge space Johnny-type players love but which developers cannot easily balance.",
+      "t": 1153,
+      "quote": "you can't really plan for everything you you don't get to balance everything easily with a with that many with that many decisions",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "balance",
+      "kind": "warning",
+      "claim": "Balancing a game with interacting effects and massive combinatorics is a long slog of patching, and even a mathematical exchange rate between skills will miss something.",
+      "detail": "McGraw notes games with active communities probing combinations were patched repeatedly: nerfs, tweaks, bans and counter skills. Setting point-value equivalences between skills helps but will almost certainly miss interactions.",
+      "t": 1229,
+      "quote": "if you're going to make a game with interactive effects and massive combinatorics and you want balance you are in for a long slog",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "broken combos",
+      "kind": "principle",
+      "claim": "Broken combinations can be fun: discovering exploits makes players feel powerful and fuels community discussion, as happened in Dungeons of Dredmor's early forums.",
+      "detail": "McGraw says Dredmor's most active community period centred on discovering such combos, with the team responding by patching. He grants some destructive interactions warrant nerfs but urges letting players have fun.",
+      "t": 1289,
+      "quote": "broken things can be fun it's fun to break system it's fun to discover exploits it makes you feel good",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "balance",
+      "kind": "principle",
+      "claim": "Single-player games can be balanced at low levels but broken by design at high levels, which McGraw calls the Disgaea effect.",
+      "detail": "Single-player games can get away with brokenness because it does not ruin another player's day. Disgaea's story is balanced and beatable around level 60, while extra content goes up to level 9999; in Master of Magic, busted late interactions are what keep it fun for him.",
+      "t": 1386,
+      "quote": "this whole balanced at low levels broken by design at higher levels concept I call the Disgaea effect",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build variety",
+      "kind": "principle",
+      "claim": "Offering many game-changing choices at character creation attracts combo-seeking players but creates more possibility than can be handled before release, so developers must either keep tweaking or accept it.",
+      "detail": "McGraw concludes that engaging players early with rule-changing choices means accepting a combinatorially complex road, with the payoff of interesting Johnny players.",
+      "t": 1464,
+      "quote": "the downside is that you've created too much possibility to humanly deal with before release no matter how well you you've thought about it",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

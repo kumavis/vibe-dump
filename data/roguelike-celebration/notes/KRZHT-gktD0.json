@@ -1,0 +1,112 @@
+{
+  "id": "KRZHT-gktD0",
+  "title": "Yong Zhen Zhou: Who Controls the Controller? Thinking about physical player interactions",
+  "speaker": "Yong Zhen Zhou",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=KRZHT-gktD0",
+  "talk_type": "design",
+  "summary": "Yong Zhen Zhou, an HCI researcher and maker of alternative-control (alt.ctrl) games, surveys games played with unconventional controllers and argues that redesigning the controller expands the game into the player's body, space and social surroundings. Physical properties of input can be used as design levers: real costs instead of stamina bars, embarrassment as a cost, and changed semantics of the player's role. He then shows that conventional games already exploit this, through fighting-game motion inputs and multi-button bursts, heavy-attack triggers, and Slay the Spire's card flinging on mobile.",
+  "games": [
+    "Pastry Panic",
+    "BARC",
+    "Line Wobbler",
+    "Coal Rush",
+    "Planet Licker",
+    "Slay the Spire",
+    "Street Fighter",
+    "Super Mario"
+  ],
+  "insights": [
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "alternative controllers",
+      "kind": "principle",
+      "claim": "Redesigning a game's controller expands what the game is: the experience stops being confined to the screen and involves the player's body, surrounding space and the people nearby.",
+      "detail": "Zhou says conventional game design focuses on what happens behind the screen, whereas alt.ctrl design also designs the interface and sometimes the display. His hypothetical is a horror game wired to smart-home lights that switch off as a health bar, so the house layout, your running speed and whether others can help become part of play.",
+      "t": 348,
+      "quote": "by how redesigning the controller of the game it expends what constitutes the game",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "alternative controllers",
+      "kind": "example",
+      "claim": "Line Wobbler is a one-dimensional dungeon crawler played on a single LED strip, controlled by a spring door stopper because it wobbles nicely.",
+      "detail": "Zhou lists it among many alt.ctrl examples, alongside games where you shovel golf balls as coal into a train, pull a rope to make a chicken climb, or lick the controller.",
+      "t": 215,
+      "quote": "Line Wobbler which is a one dimensional Dungeon Crawler played on a single LED strip",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "physical costs",
+      "kind": "technique",
+      "claim": "Physical-world properties can replace abstract balancing resources: tearing pages from a real book instead of spending consumables, physical stamina instead of a stamina bar, or embarrassing actions as a 'sanity cost'.",
+      "detail": "Zhou says, like digital mechanics, physical aspects of play can be used to design the experience, such as a tangible cost that limits an action. Making people lick a controller, shout in public or do a silly dance is a cost instead of a cool action.",
+      "t": 504,
+      "quote": "Perhaps there is a tangible cost to a certain action which limits it",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "input semantics",
+      "kind": "principle",
+      "claim": "How a player controls an object changes their relationship to it: pressing A to jump makes you Mario's puppeteer, while voice control would make you his drill sergeant.",
+      "detail": "Zhou says every controller has a semantic, immersive aspect, and changing the input method changes the semantics of the whole experience.",
+      "t": 581,
+      "quote": "If it was suddenly voice controlled your role is like a drill sergeant",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "motion inputs",
+      "kind": "example",
+      "claim": "Fighting-game motion inputs put a physical cost on stronger attacks, mirroring the character's exertion, and impose physical limits on when moves can be used.",
+      "detail": "Zhou cites a Core-A Gaming video on the topic. Guile's Sonic Boom requires holding down-back to charge, so it cannot be used while moving forward. In Q&A he adds that motions carry momentum matching the move (forward motions send the character forward) and that practising them reliably is itself a reward.",
+      "t": 659,
+      "quote": "a motion input kind of puts a physical cost for a stronger attack",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "input effort",
+      "kind": "technique",
+      "claim": "Map high-effort actions to high-effort inputs: fighting-game 'burst' breakers require all four attack buttons like slamming the table, and action games put heavy attacks on harder-to-press triggers or multi-button combos.",
+      "detail": "Zhou says pressing four buttons gives the feeling of 'get off of me'. Gamepad triggers have become more weapon-like and take more effort than buttons, so action games use them for heavy attacks and skills; more buttons pressed means more power and more effort.",
+      "t": 805,
+      "quote": "Things that would seem to require more effort, again, require more effort on the player's part",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "platforms and input",
+      "kind": "example",
+      "claim": "Slay the Spire plays identically across platforms, but a hand full of Shivs feels better on mobile because you physically fling the cards out.",
+      "detail": "Zhou argues that even when developers don't design the controller, every input still has a physical sensation that contributes to the experience, so considering the person behind the controller can lead to interesting design.",
+      "t": 848,
+      "quote": "I believe this feels superior on a mobile phone because when you play your shifts in this state",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "input accessibility",
+      "kind": "open-question",
+      "claim": "Simplifying physically demanding inputs improves accessibility but may strip away energy and fantasy that players value.",
+      "detail": "Host Alexei relays an Alex Jaffe argument that hardcore fighting-game players want to live the fantasy of executing esoteric moves. Zhou calls it a mixed bag: simplification makes games more accessible, but the motions give the game energy, act as a limiter, and reward practice.",
+      "t": 983,
+      "quote": "It does make it a lot more accessibility but the motions give the game energy and the motion is part of the game",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "custom controllers",
+      "kind": "technique",
+      "claim": "Building an alt.ctrl input starts with deciding the physical interaction to detect, then how to sense it, usually with an Arduino and a button, or by hacking an existing controller for reliability.",
+      "detail": "Zhou points to altctrl.info as a resource. As an example, the golf-ball shoveling game reportedly used break-beam or IR distance sensors to detect each ball shoveled in, with balls rolling back out for endless shoveling.",
+      "t": 1098,
+      "quote": "You can hack an existing controller. That's always an a nice one. Probably more reliable than an Arduino",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

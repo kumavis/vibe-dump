@@ -1,0 +1,204 @@
+{
+  "id": "UZ7XqQYDM7o",
+  "title": "Shawn Main - Randomness in Games",
+  "speaker": "Shawn Main",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=UZ7XqQYDM7o",
+  "talk_type": "design",
+  "summary": "Former Magic: The Gathering designer Shawn Main argues against the common view that players simply dislike losing to randomness, laying out what randomness does for games: variety, drama, skill at adapting, cross-skill play and a scapegoat for losses. He distinguishes setup (pre-decision) randomness from results (post-decision) randomness, uses chess variants and poker to show randomness and skill are not opposites, and closes by proposing that games need a source of uncertainty rather than randomness per se, listing candidate sources. Q&A covers gambling versus satisfying randomness, critical successes and failures in tabletop RPGs, and how first-play experiences skew playtest feedback.",
+  "games": [
+    "Magic: The Gathering",
+    "Heroes Unlimited",
+    "Dungeons & Dragons",
+    "Spelunky",
+    "Chess",
+    "Fischer Random Chess",
+    "Poker",
+    "Portal",
+    "Road Not Taken",
+    "Betrayal at House on the Hill"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "random character generation",
+      "kind": "example",
+      "claim": "Palladium's Heroes Unlimited generated characters (alien origin, powers, backstory) via random tables, producing characters a player would never have chosen and that felt more personal as a result.",
+      "detail": "Main recalls rolling that he was an alien and ending up a doglike person from an ice planet with electricity powers. The tables also covered narrative elements such as why you came to Earth and even how many disguises or suits of clothing you own, not just stats.",
+      "t": 150,
+      "quote": "this is just like a character that I never would have come up with on my own and that was fascinating to me",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "principle",
+      "claim": "Randomness creates variety, and variety multiplies how long players stay engaged with a game.",
+      "detail": "Main calls this the biggest point of the talk: the more possible experiences a game offers, the more total time players will spend in it. He contrasts this with a game design book that only said players dislike losing to randomness before moving on to math.",
+      "t": 207,
+      "quote": "randomness is creating variety and variety is leading to sort of engagement with the game",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "principle",
+      "claim": "A random roll at a decisive moment creates drama by spinning the story in a new direction, in narrative games like RPGs and competitive games like poker alike.",
+      "detail": "Main describes leaning in to see whether a die roll is a critical failure or success, and the emotional highs of a big poker bet paying off or not. Roguelikes share this dramatic moment with RPGs.",
+      "t": 234,
+      "quote": "the randomness is creating drama you you roll the die you lean in is it a critical failure is a critical success",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "setup vs results randomness",
+      "kind": "principle",
+      "claim": "Setup (pre-decision) randomness generates the starting map, position or characters and lets players adapt with agency, offering novelty rather than frustration.",
+      "detail": "Main points to Spelunky and roguelikes: something about the game is generated, then players adapt to those circumstances with real choices. More variety in setup offers more novelty.",
+      "t": 298,
+      "quote": "setup randomness is that idea that you are generating something about your game the starting position the map starting characters",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "setup vs results randomness",
+      "kind": "warning",
+      "claim": "Results (post-decision) randomness, where a roll decides the outcome of a choice, produces the highest emotion but is also where players feel they lost to the dice.",
+      "detail": "Main contrasts it with setup randomness: the player acts, then randomness decides the result. He notes the two form a spectrum; Magic randomizes the opening hand (setup) but each turn's draw can leave a player needing one specific card to win, which is very emotional and makes people swear at the game.",
+      "t": 351,
+      "quote": "this is more likely where you're gonna run into damn it I lost due to a roll of the dice",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and skill",
+      "kind": "example",
+      "claim": "Fischer Random Chess shows that setup randomness can make a game more skill-testing, by replacing memorized openings with improvisation.",
+      "detail": "Main contrasts it with Richard Garfield's toy example of rolling a die after checkmate, which keeps all chess skill but adds arbitrary uncertainty at the end. Fischer shuffled the back row to stop chess testing rote memorization of starting positions, so players must adapt to novel circumstances.",
+      "t": 541,
+      "quote": "using that kind of setup randomness actually increases certain kinds of skills that you are testing",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "randomness and skill",
+      "kind": "warning",
+      "claim": "Heavy outcome randomness, as in poker, can obscure skill, because players get rewarded for bad decisions and punished for good ones and learn the wrong lessons.",
+      "detail": "Poker's skill is understanding and mitigating risk, but a newcomer can make the correct play, lose, and conclude it was wrong. Main says this obfuscation has both good and bad qualities.",
+      "t": 618,
+      "quote": "the presence of this randomness can actually obfuscate a lot of the skill involved",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "warning",
+      "claim": "Losing to randomness frustrates players mainly through a feeling of powerlessness, when looking back they see nothing they could have done differently.",
+      "detail": "Main identifies this as one of two factors behind the frustration. The test is whether, at the end, a player reviewing their choices concludes they did everything right and it was just the roll.",
+      "t": 643,
+      "quote": "the feeling of powerlessness that you can experience as a player when you don't feel like you had any agency to affect your circumstances",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player psychology",
+      "kind": "principle",
+      "claim": "Randomness gives players something to blame for a loss, which protects their ego and can be a useful scapegoat.",
+      "detail": "From Magic, Main notes many complaints about top-decks and mana screw are not the real reason someone lost, but a convenient scapegoat; he sees that emotional protection as genuinely valuable.",
+      "t": 677,
+      "quote": "gives players something to blame for their losses which is a real way of protecting your ego",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "skill reward",
+      "kind": "warning",
+      "claim": "As a community spends longer with a game, it identifies where overt randomness decides wins and losses and demands more reward for skill.",
+      "detail": "Main says the second source of frustration is players feeling their skill is not rewarded, which grows with experience and especially with community-wide understanding of the game's pain points.",
+      "t": 738,
+      "quote": "they start to really understand kind of those pain points and those points where overt randomness is causing wins and losses",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "principle",
+      "claim": "More randomness lets players of very different skill levels play together with a real chance for the weaker player.",
+      "detail": "Main says he could play Magic against one of the world's best and have a decent shot, but playing a chess grandmaster would be a miserable experience of being walked over.",
+      "t": 755,
+      "quote": "more randomness often lets players of very different skill levels play together",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "uncertainty",
+      "kind": "principle",
+      "claim": "Games do not need randomness, but they do need a source of uncertainty; once a game like Portal is fully known it no longer invites replay.",
+      "detail": "Main contrasts tic-tac-toe, which nobody plays, with rock-paper-scissors, where the opponent's choice is unknown. He has played Portal once and will not replay it because he knows all the puzzles and narrative.",
+      "t": 823,
+      "quote": "do games need randomness and this is obviously a rhetorical question because obviously the answer is no but I I do think they need a source of uncertainty",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "sources of uncertainty",
+      "kind": "technique",
+      "claim": "Main proposes a list of sources of uncertainty a design can draw on: physical skill, an opponent, hidden information, delayed narrative consequences, complex systems with cascading effects, and overt randomness.",
+      "detail": "He calls it a half-formed list. Hidden information covers prediction, memory and observation; complex systems are like a match-3 game where one drop sets off unexpected chains; he cites the puzzle game Road Not Taken as procedural setup on a puzzle.",
+      "t": 932,
+      "quote": "a complex system you know where one action is gonna kind of have cascading consequences",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "system mastery",
+      "kind": "principle",
+      "claim": "In roguelikes, randomness means some elements appear only occasionally, so learning the game's systems requires repeatedly encountering and dying to them, which makes the game harder.",
+      "detail": "This was an audience member's statement in Q&A; Main responded that for him the appeal of procedural games is instead the personal story each run creates, which is erased on death and replaced by a different one.",
+      "t": 1022,
+      "quote": "the randomness makes it so certain elements of the game don't appear every time and so to understand them you have to interact with them and die to them",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and agency",
+      "kind": "principle",
+      "claim": "Variance with big emotional highs and lows is powerful, as long as the player still feels agency; smoothing it out turns a game into flat micro-optimization.",
+      "detail": "Answering a question on how satisfying randomness differs from gambling, Main says games that smooth out uncertainty often become a minute optimization problem that feels flat. The key is that the game should not feel like it is playing the player.",
+      "t": 1197,
+      "quote": "highs and lows are really powerful you just you want to make sure the player still has agency",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "randomness removal",
+      "kind": "principle",
+      "claim": "Removing either kind of randomness from a roguelike tends to turn it into a puzzle game: fixed setup with random results, or random setup with deterministic results.",
+      "detail": "This was an audience member's observation in Q&A, e.g. random setup combined with a static 'I'll do five damage to this monster'. Main said he had not thought of it that way.",
+      "t": 1229,
+      "quote": "if you have random setup but you have a like a static sort of like I'll do five damage you know to this monster it also creates a puzzle game",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "critical successes",
+      "kind": "principle",
+      "claim": "Critical failures and successes matter because a single roll can redirect a story; results randomness then becomes the setup randomness for the next story beat.",
+      "detail": "Answering a dungeon master, Main recalls D&D sessions defined by someone rolling a one under critical-failure rules. He says rolling dice for two hours where you slightly over- or under-perform does not engage him; he wants randomness that takes the story in its own direction.",
+      "t": 1392,
+      "quote": "post decision randomness becomes kind of the the setup randomness to the next stage in the story",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "first experience",
+      "kind": "technique",
+      "claim": "Because first plays shape players' sense of a random game's difficulty, digital games should curate early content so a first action never feels like it screwed the player over.",
+      "detail": "A board game designer asked how to handle playtesters judging difficulty from one bad first experience. Main suggested curating early game content so players are not walked into an unsatisfying start, or that they understand the shape of the experience, citing someone sliding into the basement in Betrayal at House on the Hill.",
+      "t": 1536,
+      "quote": "making sure you don't have like that point where you take your first action and it feels like it screwed you over",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

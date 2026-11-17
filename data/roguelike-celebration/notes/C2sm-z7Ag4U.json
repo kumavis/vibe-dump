@@ -1,0 +1,200 @@
+{
+  "id": "C2sm-z7Ag4U",
+  "title": "Darren Grey - What Is A *Rogue* Like?",
+  "speaker": "Darren Grey",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=C2sm-z7Ag4U",
+  "talk_type": "design",
+  "summary": "Darren Grey examines the word 'rogue' (its etymology, cultural archetypes and the Dungeons & Dragons thief class) and argues that the game Rogue embodies roguishness: a weak character surrounded by unknowns, under pressure, who survives through ingenuity rather than heroism. He names the 'hero trap', where players arriving from standard RPGs take heroic options and die, and contrasts heroes with rogues. He then gives design advice for making players feel like rogues: thematic framing, escape options, threat signalling, hard choices, opportunities to feel clever, and making the player mechanically different from enemies, illustrated with his 7DRL Toby the Trapper.",
+  "games": [
+    "Rogue",
+    "FTL",
+    "Brogue",
+    "Toby the Trapper",
+    "NetHack",
+    "Dungeons & Dragons"
+  ],
+  "insights": [
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ascii aesthetics",
+      "kind": "principle",
+      "claim": "Roguelikes' traditional ASCII aesthetic reflects a priority of utilitarian gameplay over looks, which Grey frames as fitting the rogue archetype.",
+      "detail": "Grey jokes that rogues are not 'rouge': they don't stop to look good. The dominant early ASCII aesthetic can be prettied up, as in Brogue, but gameplay utility matters more than appearance.",
+      "t": 81,
+      "quote": "ultimately the utilitarianism of the gameplay is more important than the looks so in this way roguelikes are like rogues and not rouge",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue naming",
+      "kind": "history",
+      "claim": "Glenn Wichman said Rogue was named that because the word is short and quick to type in Unix terminals, though Grey argues the word's cultural connotations still shaped its design.",
+      "detail": "Grey relays Wichman's answer from a Roguelike Radio interview and says he doesn't believe it is the whole story; calling it 'Hero' would have meant something different. In Q&A, a message relayed from Wichman added that being a rogue also meant being alone rather than part of a team, since it was single-player.",
+      "t": 616,
+      "quote": "his answer was because the word is short so it's quick to type into unix terminals",
+      "weight": 1
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "rogue design pillars",
+      "kind": "example",
+      "claim": "Rogue makes the player feel like a rogue by starting them weak and surrounding them with unknowns through item identification, line of sight and procedural generation, plus a hunger clock that prevents resting.",
+      "detail": "Grey lists these features as all contributing to a sense of unknown threat. The hunger clock means you are never safe and must keep advancing, and you can die pathetically of starvation while clutching a powerful item.",
+      "t": 668,
+      "quote": "you're not a strong character you're not a big muscly heroic character you're surrounded by unknowns it's got the item identification system",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "ingenuity",
+      "kind": "principle",
+      "claim": "The heart of the roguelike is escalating threat paired with items and abilities that, used cleverly, let the player solve always-new problems.",
+      "detail": "Grey says Rogue gives lots of opportunities to find clever solutions to new problems, letting players feel special and roguish when they solve them. He calls this the real heart of what a rogue is about.",
+      "t": 736,
+      "quote": "also opportunities for ingenuity and this to me comes to the real heart of what a rogue is about",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hero trap",
+      "kind": "example",
+      "claim": "FTL's giant alien spiders event is a 'hero trap': players from standard RPGs pick the heroic option to send crew to help and get punished, because heroism is not how you survive in roguelikes.",
+      "detail": "Experienced FTL players know to choose 'no thanks, leave them alone'. Grey argues newcomers who say yes to every quest by default die a lot, because they expect to be the hero.",
+      "t": 871,
+      "quote": "people coming to roguelikes expecting to be the hero suddenly find that being a hero is not the way to survive",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "heroes vs rogues",
+      "kind": "principle",
+      "claim": "Destiny and divine-quest framing clashes with roguelikes, because a character who dies repeatedly cannot plausibly be the chosen one; rogues act from self-interest or accident.",
+      "detail": "Grey contrasts the hero (noble cause, defender of the establishment, destined) with the rogue (self-interest, rebel, accidentally involved). You cannot be the one true destiny person when you are the 1048th player killed this month.",
+      "t": 943,
+      "quote": "the idea of a destiny a divine quest a heroic quest doesn't gel well with a roguelike theme of game",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "heroes vs rogues",
+      "kind": "principle",
+      "claim": "Rogue-style play favours caution, fleeing and backstabbing over bravery and honourable duels, winning by craftiness rather than strength.",
+      "detail": "Grey's list: heroes have big swords, rogues small daggers; heroes are brave, rogues cautious or actively running away; heroes duel honourably, rogues sneak up and backstab; rogues win by craftiness and intelligence.",
+      "t": 960,
+      "quote": "heroes are brave rogues are cautious if not actively running away",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "thematic framing",
+      "kind": "principle",
+      "claim": "A roguelike's theme and presentation should emphasise threat, danger and trickiness rather than a muscly heroic protagonist, so players anticipate the right style of play.",
+      "detail": "If artwork and names emphasise a heroic warrior, players are set up badly. Grey links this to complaints about permadeath in reviews: much of it comes down to framing, because players who approach it like a standard RPG don't behave as the game needs.",
+      "t": 1058,
+      "quote": "if your theme emphasizes the threat emphasizes the challenge um emphasizes the danger then that better uh incorporates the idea that that is a rogue they're playing",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "framing",
+      "kind": "warning",
+      "claim": "Mechanics like trap detection and status effects are optional extras in standard RPGs but core requirements in roguelikes, so players who misread the genre neglect them.",
+      "detail": "Grey argues that without proper framing players treat these as side features. Reinforcing up front how the game should be approached helps players take advantage of systems that are actually essential.",
+      "t": 1148,
+      "quote": "often they're just like little optional side extras in a standard rpg whereas they end up becoming core required features",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "escape options",
+      "kind": "principle",
+      "claim": "Roguelikes should give players real escape options and can include unkillable monsters to teach that running away, not fighting, is sometimes required.",
+      "detail": "Running away is a core part of being a rogue; you don't need to kill a monster to progress and can head for the stairs. Monsters that are literally impossible to kill teach the player that repeatedly attacking just leads to death.",
+      "t": 1179,
+      "quote": "a game needs to give the player escape options running away is a core part of being a rogue",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "threat signalling",
+      "kind": "technique",
+      "claim": "Games should signal danger clearly (flashing the screen red, special threat messages, different wall colours on hard levels, highlighted bosses) to break the player out of a heroic-charge mindset.",
+      "detail": "Grey argues for mental breaks that push players from charging in to re-evaluating. He also warns against monsters that look cuddly but are terrifying; players should know which things they really need to care about.",
+      "t": 1221,
+      "quote": "some games do this with warning signs flashing uh you're flashing the screen red things like that there's various ways to reinforce you're in danger",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "hard choices",
+      "kind": "principle",
+      "claim": "Item choices should be genuinely hard, using pressures like inventory limits, rather than obvious upgrades like a +2 sword replacing a +1.",
+      "detail": "Grey says the player should never simply 'press X to win'. Inventory limits force them to assess the value of what they carry, and choices between X and Y should really not be easy.",
+      "t": 1273,
+      "quote": "things like inventory limits force them to assess the value of different items that they have to carry",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "combinable systems",
+      "kind": "principle",
+      "claim": "Give players combinable items and systems that offer clever escapes from seemingly impossible situations, and keep those options clear rather than buried in junk.",
+      "detail": "Grey calls opportunities to feel clever the really important thing. He warns that some bigger games fill themselves with so much junk that you forget what's important or clever, so the clever options must be signalled.",
+      "t": 1337,
+      "quote": "some of the bigger games fill the game with so much junk that you forget what's important",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "player asymmetry",
+      "kind": "principle",
+      "claim": "Even though the player is integrated into the world like a monster, the player should function mechanically differently from enemies to express a rogue's separateness from the herd.",
+      "detail": "Grey distinguishes the old 'player is a monster' notion (a bomb affects you like it affects enemies) from mechanics. He thinks the player character working differently from other entities signals separatism.",
+      "t": 1363,
+      "quote": "your player functions in a different way from the other entities in the game to signal that idea of separatism",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "indirect combat",
+      "kind": "example",
+      "claim": "In Grey's 7DRL Toby the Trapper the gnome player cannot attack ogres directly, dies in one hit, can only harm enemies with chainable traps and moves at double enemy speed, so fleeing and trickery are intrinsic.",
+      "detail": "The design keeps the player always feeling threatened and surrounded, yet clever movement and trap placement offer ways around enemies. Grey presents it as an example of all his rogue-design points together.",
+      "t": 1407,
+      "quote": "you can only harm enemies by laying traps right that's the only thing you can do but there's various different clever traps that you can chain together",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "environmental manipulation",
+      "kind": "example",
+      "claim": "Brogue makes players feel like rogues by letting them be powerful without feeling powerful: manipulating monsters into lava, setting fields on fire, or triggering gas traps while the character stays weak.",
+      "detail": "Answering which game feels most roguish, Grey says Brogue's items let you use external power sources rather than raw personal strength, which makes you feel clever.",
+      "t": 1564,
+      "quote": "brogue is very good at it because it's got lots of opportunities for um being powerful without feeling powerful",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "hunger clock",
+      "kind": "warning",
+      "claim": "Many big roguelikes copy Rogue mechanics like the hunger clock blindly, without a design reason beyond Rogue having had it.",
+      "detail": "Asked whether the genre would differ if Rogue had another name, Grey says probably not, because many games don't think about this. He cites wondering why NetHack and ADOM bother with hunger apart from Rogue having it.",
+      "t": 1617,
+      "quote": "a lot of the big roguelikes don't don't think too much about this they implement some of the rogue mechanics quite blindly",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "single character pacing",
+      "kind": "principle",
+      "claim": "Controlling a single character lets the player move quickly when safe and slow down to think carefully when things get hairy, a rhythm squad-based games don't offer in the same way.",
+      "detail": "Responding to a relayed message from Glenn Wichman that being a rogue meant being alone, Grey says this had a big effect on roguelikes and contrasts it with squad-based games discussed earlier at the conference.",
+      "t": 1668,
+      "quote": "you can move quite quickly whenever you want to and then when things get hairy you can stop and really take your time and think",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

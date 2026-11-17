@@ -1,0 +1,142 @@
+{
+  "id": "-e4gF_SKWPk",
+  "title": "Lee Tusman - Lower Dimensional Dungeons",
+  "speaker": "Lee Tusman",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=-e4gF_SKWPk",
+  "talk_type": "design",
+  "summary": "Artist, educator and Babycastles co-organizer Lee Tusman surveys one-dimensional roguelikes and dungeon crawlers as a way to strip the genre down to its innermost parts. He tours Cosmic Crown, Corey Johnson's URL Hunter (played in the browser URL bar), the hardware game Line Wobbler, the tweet-sized Rogue 280 and its sequel, the one-day 7DRL-style Stutterstep, his own One Dimensional Dungeon and a micro:bit Hunt the Wumpus, and one-dimensional chess variants. The recurring argument is that extreme constraint makes systems easy to understand and quick to build while still producing surprising, emergent play, and can upend genre conventions.",
+  "games": [
+    "Cosmic Crown",
+    "URL Hunter",
+    "Line Wobbler",
+    "Rogue 280",
+    "Stutterstep",
+    "One Dimensional Dungeon",
+    "Hunt the Wumpus",
+    "Rogue"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "one-dimensional roguelikes",
+      "kind": "principle",
+      "claim": "Reducing a roguelike to one dimension strips the genre and its procedural generation down to their innermost parts, making the underlying systems quick to understand.",
+      "detail": "Tusman, an educator who breaks things down into smaller parts, says he loves simplicity and being able to quickly grasp the structures and systems of lower-dimensional dungeons.",
+      "t": 128,
+      "quote": "Thinking about one dimensional dungeons is one way I have been able to strip down the genre ge procedural generation into their innermost parts",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "onboarding",
+      "kind": "example",
+      "claim": "Cosmic Crown's one-dimensional design drew in a player put off by traditional roguelikes' many keys and inventories, while still delivering surprising emergent mechanics.",
+      "detail": "In Cosmic Crown you move forward one or two spaces toward a crown that descends you, with items like a lightning bolt that stops machinery. Tusman, without a D&D or RPG background, found memorizing a million keys and inventory hard, and the simplicity let him focus on understanding the system.",
+      "t": 188,
+      "quote": "I found the UI of memorizing a million keys as hard to wrap my mind around and inventory as well",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "simplicity",
+      "kind": "principle",
+      "claim": "A very simple game can still produce surprising, emergent play, and the simplicity lets the player focus on understanding how the system works.",
+      "detail": "Tusman says this is what attracted him to Cosmic Crown and to lower-dimensional dungeons generally.",
+      "t": 204,
+      "quote": "I was attracted to this game's simplicity where it was still surprising and emergent gameplay mechanics and yet I could focus on that alone",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "unusual platforms",
+      "kind": "example",
+      "claim": "Corey Johnson's URL Hunter is a one-dimensional hunting game played inside the browser's URL bar, showing how a 1D form lets designers upend genre conventions.",
+      "detail": "You are an O hunting little As in the URL bar. It is neither turn-based nor a roguelike, but Tusman values how one-dimensionality permits experiments with conventions.",
+      "t": 271,
+      "quote": "This let's you upend some of the conventions of these kinds of genres and kind of try different kind of experiments",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "hardware games",
+      "kind": "example",
+      "claim": "Line Wobbler, a hand-made one-dimensional dungeon crawler on an LED strip controlled by a spring, inspires Tusman to hope for hardware roguelikes.",
+      "detail": "Its levels are premade and it is real-time, but you move a green light toward a flashing exit with different motions and attacks. Tusman praises how it upends conventions.",
+      "t": 327,
+      "quote": "I love how it up ends conventions. I hope it inspires people to make hardware Roguelikes",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "constraints",
+      "kind": "principle",
+      "claim": "Extreme constraints like writing a roguelike in 280 characters (Rogue 280) let developers build something quickly that still delights and challenges and plays with emergence and procedural generation.",
+      "detail": "Rogue 280 has an @, HP, level and stairs but invisible monsters; version 2 adds terrain and altars that raise HP. Tusman contrasts such constraints with working on games for years.",
+      "t": 407,
+      "quote": "working with these kinds of constraints let's you build something much more rapidly that can still delight and challenge you",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "1d interface",
+      "kind": "example",
+      "claim": "Stutterstep plays along a single horizontal line but shows items and equipment along a second dimension, a smart way to fit a UI around a one-dimensional constraint.",
+      "detail": "Made in a day, it has staffs, shields, lava and medpacks; picking up items appears on the other axis.",
+      "t": 459,
+      "quote": "your UI is along this other dimension which I think is a really interesting approach",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "status effects",
+      "kind": "example",
+      "claim": "Tusman's One Dimensional Dungeon collapses Rogue to a line while keeping recognizable systems like hallucination from hitting a toad and blindness from a floating eye.",
+      "detail": "It has bats, rats, hobgoblins and snakes, gold and potions. Tusman built it from scratch without a library or engine and still plays it a lot.",
+      "t": 511,
+      "quote": "When you hit a toad for example, you hallucinate which you can see happening. If you get attacked by a floating eye it renders you blind",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run length",
+      "kind": "example",
+      "claim": "One Dimensional Dungeon is designed as an 'espresso roguelike', a 2-3 minute run aimed at a high score, shorter even than a coffee-break roguelike.",
+      "detail": "Tusman frames this as part of working within constraints.",
+      "t": 527,
+      "quote": "It is not just a coffee break Roguelike. It is an espresso Roguelike. This is a game you can play 2-3 minutes",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "orientation",
+      "kind": "example",
+      "claim": "One Dimensional Dungeon can be played vertically, and a flip-flop mode switches orientation each level.",
+      "detail": "Tusman found this fun to build in.",
+      "t": 571,
+      "quote": "you can hit a button to switch to the vertical or choose flip-flop mode and each level it switches to a different orientation",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "hardware games",
+      "kind": "example",
+      "claim": "Tusman's Hunt the Wumpus variant runs on a BBC micro:bit as a one-dimensional looping dungeon with icon graphics for the player, wumpus and slime pits.",
+      "detail": "He programmed it in TypeScript, noting the micro:bit can also be programmed with a block editor.",
+      "t": 623,
+      "quote": "It is a one dimensional dungeon in a loop",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "chess variants",
+      "kind": "example",
+      "claim": "One-dimensional chess variants, including one by Martin Gardner, explore emergent gameplay from minimal rule sets rather than procedural generation.",
+      "detail": "Tusman mentions them because many roguelike fans are interested in chess, another turn-based game with a long history of variants.",
+      "t": 658,
+      "quote": "This is another way to explore constraint and not procedural generation so much as emergent gameplay with kind of minimal rule sets",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

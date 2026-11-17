@@ -1,0 +1,4842 @@
+{
+ "id": "SDojcmObQzw",
+ "url": "https://www.youtube.com/watch?v=SDojcmObQzw",
+ "title": "Roguelike Celebration 2016 - Lightning Talks",
+ "speaker": null,
+ "talk_title": null,
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 2049,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nFive-minute talks covering any topic that an attendee wants to talk about.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 203,
+   "title": "Sean Mayne"
+  },
+  {
+   "start": 313,
+   "title": "Casey"
+  },
+  {
+   "start": 445,
+   "title": "Steve"
+  },
+  {
+   "start": 540,
+   "title": "Russ"
+  },
+  {
+   "start": 910,
+   "title": "Dan"
+  },
+  {
+   "start": 1126,
+   "title": "Ian"
+  },
+  {
+   "start": 1685,
+   "title": "Alex"
+  },
+  {
+   "start": 1795,
+   "title": "Gabriel"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5729,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.08,
+   "d": 2.88,
+   "text": "yeah come on up"
+  },
+  {
+   "t": 4.8,
+   "d": 3.2,
+   "text": "hello my name is tariq"
+  },
+  {
+   "t": 8.0,
+   "d": 2.88,
+   "text": "i am the developer of a platformer"
+  },
+  {
+   "t": 10.88,
+   "d": 0.88,
+   "text": "roguelike"
+  },
+  {
+   "t": 11.76,
+   "d": 2.72,
+   "text": "called catacomb kids it's an early"
+  },
+  {
+   "t": 14.48,
+   "d": 2.4,
+   "text": "access and whatnot uh"
+  },
+  {
+   "t": 16.88,
+   "d": 2.48,
+   "text": "and a week or two ago i guess whenever"
+  },
+  {
+   "t": 19.36,
+   "d": 0.96,
+   "text": "pax was"
+  },
+  {
+   "t": 20.32,
+   "d": 2.64,
+   "text": "i was at impacts and i was at pax dev on"
+  },
+  {
+   "t": 22.96,
+   "d": 0.8,
+   "text": "a panel with"
+  },
+  {
+   "t": 23.76,
+   "d": 2.88,
+   "text": "tarn and several other developers"
+  },
+  {
+   "t": 26.64,
+   "d": 2.32,
+   "text": "speaking about procedural generation"
+  },
+  {
+   "t": 28.96,
+   "d": 3.28,
+   "text": "and uh one topic that i kind of wanted"
+  },
+  {
+   "t": 32.24,
+   "d": 0.64,
+   "text": "to get to"
+  },
+  {
+   "t": 32.88,
+   "d": 1.6,
+   "text": "that i didn't because it was kind of"
+  },
+  {
+   "t": 34.48,
+   "d": 1.92,
+   "text": "weird and tangential and i"
+  },
+  {
+   "t": 36.4,
+   "d": 1.44,
+   "text": "only like just thought about it sort of"
+  },
+  {
+   "t": 37.84,
+   "d": 2.16,
+   "text": "the night before is um"
+  },
+  {
+   "t": 40.0,
+   "d": 1.68,
+   "text": "one of the questions on the panel that i"
+  },
+  {
+   "t": 41.68,
+   "d": 2.24,
+   "text": "knew that we were going to have was"
+  },
+  {
+   "t": 43.92,
+   "d": 2.0,
+   "text": "if you could add or remove procedural"
+  },
+  {
+   "t": 45.92,
+   "d": 1.2,
+   "text": "generation from any"
+  },
+  {
+   "t": 47.12,
+   "d": 2.64,
+   "text": "game like what would it be and why and"
+  },
+  {
+   "t": 49.76,
+   "d": 1.84,
+   "text": "how do you think that would change it"
+  },
+  {
+   "t": 51.6,
+   "d": 2.64,
+   "text": "and so what i ended up going with on the"
+  },
+  {
+   "t": 54.24,
+   "d": 1.12,
+   "text": "panel was"
+  },
+  {
+   "t": 55.36,
+   "d": 2.16,
+   "text": "zelda i would like make a procedurally"
+  },
+  {
+   "t": 57.52,
+   "d": 1.04,
+   "text": "generated zelda because"
+  },
+  {
+   "t": 58.56,
+   "d": 2.08,
+   "text": "i love me some zelda but what i really"
+  },
+  {
+   "t": 60.64,
+   "d": 1.2,
+   "text": "wanted to say was"
+  },
+  {
+   "t": 61.84,
+   "d": 2.64,
+   "text": "i would remove procedural generation"
+  },
+  {
+   "t": 64.48,
+   "d": 2.64,
+   "text": "from life"
+  },
+  {
+   "t": 67.44,
+   "d": 1.52,
+   "text": "and because because like i don't know"
+  },
+  {
+   "t": 68.96,
+   "d": 1.76,
+   "text": "why but like that thought just occurred"
+  },
+  {
+   "t": 70.72,
+   "d": 0.56,
+   "text": "to me"
+  },
+  {
+   "t": 71.28,
+   "d": 1.2,
+   "text": "when i read the question i was like what"
+  },
+  {
+   "t": 72.48,
+   "d": 1.36,
+   "text": "would i remove procedural generation"
+  },
+  {
+   "t": 73.84,
+   "d": 1.04,
+   "text": "from it's like"
+  },
+  {
+   "t": 74.88,
+   "d": 2.64,
+   "text": "life what would that even be like like"
+  },
+  {
+   "t": 77.52,
+   "d": 1.2,
+   "text": "would we all just"
+  },
+  {
+   "t": 78.72,
+   "d": 2.0,
+   "text": "like wake up in the same day so it would"
+  },
+  {
+   "t": 80.72,
+   "d": 2.16,
+   "text": "be like it would be like groundhog day"
+  },
+  {
+   "t": 82.88,
+   "d": 2.56,
+   "text": "but what like for your entire life and"
+  },
+  {
+   "t": 85.44,
+   "d": 1.92,
+   "text": "then you'd like wake up as someone else"
+  },
+  {
+   "t": 87.36,
+   "d": 1.44,
+   "text": "and like live through that same life"
+  },
+  {
+   "t": 88.8,
+   "d": 1.2,
+   "text": "like would that be"
+  },
+  {
+   "t": 90.0,
+   "d": 1.76,
+   "text": "life without a procedurally life without"
+  },
+  {
+   "t": 91.76,
+   "d": 1.68,
+   "text": "procedural generation"
+  },
+  {
+   "t": 93.44,
+   "d": 2.16,
+   "text": "but if that's the case then like we're"
+  },
+  {
+   "t": 95.6,
+   "d": 1.76,
+   "text": "all living"
+  },
+  {
+   "t": 97.36,
+   "d": 3.2,
+   "text": "the same setup like the world has the"
+  },
+  {
+   "t": 100.56,
+   "d": 1.76,
+   "text": "same initiating conditions"
+  },
+  {
+   "t": 102.32,
+   "d": 1.68,
+   "text": "as when we're born but we're still"
+  },
+  {
+   "t": 104.0,
+   "d": 1.6,
+   "text": "different people so we're making"
+  },
+  {
+   "t": 105.6,
+   "d": 0.96,
+   "text": "different choices"
+  },
+  {
+   "t": 106.56,
+   "d": 2.4,
+   "text": "like as in a game this that doesn't have"
+  },
+  {
+   "t": 108.96,
+   "d": 1.92,
+   "text": "procedural generations like oh"
+  },
+  {
+   "t": 110.88,
+   "d": 1.92,
+   "text": "like the world is the same but you can"
+  },
+  {
+   "t": 112.8,
+   "d": 1.6,
+   "text": "make different choices"
+  },
+  {
+   "t": 114.4,
+   "d": 1.92,
+   "text": "but then i was thinking what's even the"
+  },
+  {
+   "t": 116.32,
+   "d": 1.36,
+   "text": "point of that if you can't"
+  },
+  {
+   "t": 117.68,
+   "d": 2.4,
+   "text": "talk to anybody else about the different"
+  },
+  {
+   "t": 120.08,
+   "d": 1.52,
+   "text": "choices that you're making"
+  },
+  {
+   "t": 121.6,
+   "d": 1.6,
+   "text": "so that got me back to thinking about"
+  },
+  {
+   "t": 123.2,
+   "d": 2.32,
+   "text": "games and that like what's the point of"
+  },
+  {
+   "t": 125.52,
+   "d": 1.52,
+   "text": "having procedural generation"
+  },
+  {
+   "t": 127.04,
+   "d": 3.2,
+   "text": "in games if there's no community around"
+  },
+  {
+   "t": 130.24,
+   "d": 1.36,
+   "text": "to like discuss"
+  },
+  {
+   "t": 131.6,
+   "d": 3.52,
+   "text": "the differences of their experience"
+  },
+  {
+   "t": 135.12,
+   "d": 2.72,
+   "text": "and so that's that was my thought and i"
+  },
+  {
+   "t": 137.84,
+   "d": 1.76,
+   "text": "also had another thought"
+  },
+  {
+   "t": 139.6,
+   "d": 2.48,
+   "text": "on the same same sort of lines like oh"
+  },
+  {
+   "t": 142.08,
+   "d": 1.84,
+   "text": "if you remove procedural generation from"
+  },
+  {
+   "t": 143.92,
+   "d": 0.56,
+   "text": "life"
+  },
+  {
+   "t": 144.48,
+   "d": 2.64,
+   "text": "well like would we even exist like"
+  },
+  {
+   "t": 147.12,
+   "d": 1.12,
+   "text": "because like"
+  },
+  {
+   "t": 148.24,
+   "d": 1.84,
+   "text": "going back it's like what would even"
+  },
+  {
+   "t": 150.08,
+   "d": 1.52,
+   "text": "have made people"
+  },
+  {
+   "t": 151.6,
+   "d": 2.4,
+   "text": "because that's all procedural right so"
+  },
+  {
+   "t": 154.0,
+   "d": 1.52,
+   "text": "that got me thinking like oh"
+  },
+  {
+   "t": 155.52,
+   "d": 1.84,
+   "text": "there's there's kind of like these"
+  },
+  {
+   "t": 157.36,
+   "d": 1.76,
+   "text": "different"
+  },
+  {
+   "t": 159.12,
+   "d": 2.32,
+   "text": "areas like different beginnings of"
+  },
+  {
+   "t": 161.44,
+   "d": 2.08,
+   "text": "procedurality so it's like okay in games"
+  },
+  {
+   "t": 163.52,
+   "d": 1.68,
+   "text": "it's like okay you can do like the dwarf"
+  },
+  {
+   "t": 165.2,
+   "d": 1.6,
+   "text": "fortress way where you like"
+  },
+  {
+   "t": 166.8,
+   "d": 2.32,
+   "text": "generate the entire history like you'd"
+  },
+  {
+   "t": 169.12,
+   "d": 0.8,
+   "text": "go way"
+  },
+  {
+   "t": 169.92,
+   "d": 2.32,
+   "text": "back or you can do something like oh i"
+  },
+  {
+   "t": 172.24,
+   "d": 1.76,
+   "text": "just like generate the next room as soon"
+  },
+  {
+   "t": 174.0,
+   "d": 1.52,
+   "text": "as you enter it or like"
+  },
+  {
+   "t": 175.52,
+   "d": 1.76,
+   "text": "like as the first time you interact with"
+  },
+  {
+   "t": 177.28,
+   "d": 1.52,
+   "text": "someone it's like they've existed"
+  },
+  {
+   "t": 178.8,
+   "d": 1.6,
+   "text": "but they don't really exist until you"
+  },
+  {
+   "t": 180.4,
+   "d": 1.12,
+   "text": "talk to them it's like is that where the"
+  },
+  {
+   "t": 181.52,
+   "d": 1.44,
+   "text": "procedural generation comes from"
+  },
+  {
+   "t": 182.96,
+   "d": 1.92,
+   "text": "i don't know that's just i've been"
+  },
+  {
+   "t": 184.88,
+   "d": 1.76,
+   "text": "thinking about this for like two weeks"
+  },
+  {
+   "t": 186.64,
+   "d": 1.92,
+   "text": "and i haven't gotten further than that"
+  },
+  {
+   "t": 188.56,
+   "d": 3.36,
+   "text": "anyway that's it"
+  },
+  {
+   "t": 193.6,
+   "d": 4.8,
+   "text": "thank you thanks"
+  },
+  {
+   "t": 198.4,
+   "d": 4.8,
+   "text": "thank you okay come on up"
+  },
+  {
+   "t": 204.32,
+   "d": 2.24,
+   "text": "hey there uh my name is sean mayne uh"
+  },
+  {
+   "t": 206.56,
+   "d": 1.6,
+   "text": "and i'm a little bit of an exception in"
+  },
+  {
+   "t": 208.16,
+   "d": 0.4,
+   "text": "this"
+  },
+  {
+   "t": 208.56,
+   "d": 2.88,
+   "text": "uh space because i work on games but i"
+  },
+  {
+   "t": 211.44,
+   "d": 1.44,
+   "text": "work on an analog game"
+  },
+  {
+   "t": 212.88,
+   "d": 3.44,
+   "text": "um magic the gathering um and"
+  },
+  {
+   "t": 216.32,
+   "d": 1.76,
+   "text": "i i love it for a lot of the same"
+  },
+  {
+   "t": 218.08,
+   "d": 2.16,
+   "text": "reasons that i love roguelike games it's"
+  },
+  {
+   "t": 220.24,
+   "d": 1.92,
+   "text": "all about sort of combinatorics and all"
+  },
+  {
+   "t": 222.16,
+   "d": 2.0,
+   "text": "these various possibilities"
+  },
+  {
+   "t": 224.16,
+   "d": 2.32,
+   "text": "and at wizards i have this reputation uh"
+  },
+  {
+   "t": 226.48,
+   "d": 1.28,
+   "text": "for being someone"
+  },
+  {
+   "t": 227.76,
+   "d": 2.48,
+   "text": "who really likes randomness but that's"
+  },
+  {
+   "t": 230.24,
+   "d": 1.2,
+   "text": "not really true"
+  },
+  {
+   "t": 231.44,
+   "d": 2.16,
+   "text": "what i really like is games with this"
+  },
+  {
+   "t": 233.6,
+   "d": 2.72,
+   "text": "big big possibility space"
+  },
+  {
+   "t": 236.32,
+   "d": 3.2,
+   "text": "and one thing i think about a lot is"
+  },
+  {
+   "t": 239.52,
+   "d": 2.48,
+   "text": "sort of how randomness feeds into game"
+  },
+  {
+   "t": 242.0,
+   "d": 1.84,
+   "text": "design overall"
+  },
+  {
+   "t": 243.84,
+   "d": 2.4,
+   "text": "and i don't think games need this"
+  },
+  {
+   "t": 246.24,
+   "d": 1.04,
+   "text": "explicit uh"
+  },
+  {
+   "t": 247.28,
+   "d": 2.72,
+   "text": "randomness in in them but what they need"
+  },
+  {
+   "t": 250.0,
+   "d": 1.28,
+   "text": "is uncertainty"
+  },
+  {
+   "t": 251.28,
+   "d": 2.4,
+   "text": "because uncertainty creates drama so"
+  },
+  {
+   "t": 253.68,
+   "d": 1.12,
+   "text": "unless you have a game"
+  },
+  {
+   "t": 254.8,
+   "d": 2.4,
+   "text": "that's uh testing a physical skill a"
+  },
+  {
+   "t": 257.2,
+   "d": 0.72,
+   "text": "sport or"
+  },
+  {
+   "t": 257.92,
+   "d": 2.24,
+   "text": "a twitchy kind of game you need"
+  },
+  {
+   "t": 260.16,
+   "d": 1.6,
+   "text": "something that's going to create"
+  },
+  {
+   "t": 261.76,
+   "d": 3.84,
+   "text": "that sense of uncertainty in your game"
+  },
+  {
+   "t": 265.6,
+   "d": 2.0,
+   "text": "and that can most often especially"
+  },
+  {
+   "t": 267.6,
+   "d": 2.64,
+   "text": "historically most often that's generated"
+  },
+  {
+   "t": 270.24,
+   "d": 2.8,
+   "text": "from explicit randomness but there are"
+  },
+  {
+   "t": 273.04,
+   "d": 1.2,
+   "text": "other sources there are things like"
+  },
+  {
+   "t": 274.24,
+   "d": 1.68,
+   "text": "hidden information a game like"
+  },
+  {
+   "t": 275.92,
+   "d": 2.48,
+   "text": "diplomacy is really good at hiding"
+  },
+  {
+   "t": 278.4,
+   "d": 2.4,
+   "text": "information from the players so"
+  },
+  {
+   "t": 280.8,
+   "d": 1.6,
+   "text": "i'm making my move in secret you're"
+  },
+  {
+   "t": 282.4,
+   "d": 1.36,
+   "text": "making your move in secret we have"
+  },
+  {
+   "t": 283.76,
+   "d": 1.84,
+   "text": "imperfect information"
+  },
+  {
+   "t": 285.6,
+   "d": 3.12,
+   "text": "and uh or or puzzle games are a good"
+  },
+  {
+   "t": 288.72,
+   "d": 2.0,
+   "text": "kind of thing in this vein as well"
+  },
+  {
+   "t": 290.72,
+   "d": 1.92,
+   "text": "um although those just don't have the"
+  },
+  {
+   "t": 292.64,
+   "d": 1.84,
+   "text": "replayability so they don't have that"
+  },
+  {
+   "t": 294.48,
+   "d": 0.64,
+   "text": "really"
+  },
+  {
+   "t": 295.12,
+   "d": 4.16,
+   "text": "long wide tail kind of possibility space"
+  },
+  {
+   "t": 299.28,
+   "d": 3.52,
+   "text": "but anyway i was going somewhere with"
+  },
+  {
+   "t": 302.8,
+   "d": 1.6,
+   "text": "that thought and now i've lost it"
+  },
+  {
+   "t": 304.4,
+   "d": 6.32,
+   "text": "so thank you"
+  },
+  {
+   "t": 310.72,
+   "d": 2.32,
+   "text": "[Applause]"
+  },
+  {
+   "t": 313.04,
+   "d": 1.68,
+   "text": "hey uh the screen's i guess not on so"
+  },
+  {
+   "t": 314.72,
+   "d": 1.6,
+   "text": "i'll just talk um hi my name is casey"
+  },
+  {
+   "t": 316.32,
+   "d": 0.8,
+   "text": "colderop"
+  },
+  {
+   "t": 317.12,
+   "d": 2.08,
+   "text": "and um i host a twitch stream twice"
+  },
+  {
+   "t": 319.2,
+   "d": 2.24,
+   "text": "weekly called uh nethack nights"
+  },
+  {
+   "t": 321.44,
+   "d": 1.44,
+   "text": "this is an advertisement but also a"
+  },
+  {
+   "t": 322.88,
+   "d": 1.04,
+   "text": "police so i'll get the advertisement on"
+  },
+  {
+   "t": 323.92,
+   "d": 0.88,
+   "text": "the way real fast"
+  },
+  {
+   "t": 324.8,
+   "d": 1.28,
+   "text": "uh if you go on twitter and search for"
+  },
+  {
+   "t": 326.08,
+   "d": 1.28,
+   "text": "nethack underscore knights is the"
+  },
+  {
+   "t": 327.36,
+   "d": 0.56,
+   "text": "username"
+  },
+  {
+   "t": 327.92,
+   "d": 1.44,
+   "text": "or go on youtube and search for nethack"
+  },
+  {
+   "t": 329.36,
+   "d": 1.6,
+   "text": "nights you can see the episodes"
+  },
+  {
+   "t": 330.96,
+   "d": 2.32,
+   "text": "i actually only started playing hack in"
+  },
+  {
+   "t": 333.28,
+   "d": 0.72,
+   "text": "earnest"
+  },
+  {
+   "t": 334.0,
+   "d": 1.12,
+   "text": "this year when i started doing the"
+  },
+  {
+   "t": 335.12,
+   "d": 1.44,
+   "text": "twitch stream and so you can kind of"
+  },
+  {
+   "t": 336.56,
+   "d": 1.68,
+   "text": "watch the back episodes and see someone"
+  },
+  {
+   "t": 338.24,
+   "d": 0.88,
+   "text": "learning"
+  },
+  {
+   "t": 339.12,
+   "d": 1.68,
+   "text": "practically from scratch i kind of knew"
+  },
+  {
+   "t": 340.8,
+   "d": 1.36,
+   "text": "bits and pieces about the game but i"
+  },
+  {
+   "t": 342.16,
+   "d": 1.68,
+   "text": "probably never made it past like level"
+  },
+  {
+   "t": 343.84,
+   "d": 3.36,
+   "text": "five or six of the dungeon um so yeah uh"
+  },
+  {
+   "t": 347.2,
+   "d": 1.76,
+   "text": "the real plea here though is that all of"
+  },
+  {
+   "t": 348.96,
+   "d": 1.44,
+   "text": "you should be streaming that hack on"
+  },
+  {
+   "t": 350.4,
+   "d": 0.8,
+   "text": "twitch"
+  },
+  {
+   "t": 351.2,
+   "d": 2.08,
+   "text": "um there's like two people who do it i"
+  },
+  {
+   "t": 353.28,
+   "d": 1.76,
+   "text": "don't know if the great gilder sneeze is"
+  },
+  {
+   "t": 355.04,
+   "d": 1.2,
+   "text": "in the room he's like the one other"
+  },
+  {
+   "t": 356.24,
+   "d": 2.0,
+   "text": "person who does it that i see on twitch"
+  },
+  {
+   "t": 358.24,
+   "d": 2.48,
+   "text": "but um it's a really fun game obviously"
+  },
+  {
+   "t": 360.72,
+   "d": 1.12,
+   "text": "there's surprising things that can"
+  },
+  {
+   "t": 361.84,
+   "d": 0.48,
+   "text": "happen"
+  },
+  {
+   "t": 362.32,
+   "d": 1.92,
+   "text": "that can come out of any given you know"
+  },
+  {
+   "t": 364.24,
+   "d": 1.28,
+   "text": "playthrough of the game you all know"
+  },
+  {
+   "t": 365.52,
+   "d": 0.96,
+   "text": "this already"
+  },
+  {
+   "t": 366.48,
+   "d": 1.76,
+   "text": "um and it's just really fun to have"
+  },
+  {
+   "t": 368.24,
+   "d": 2.0,
+   "text": "people in the chat yelling at you"
+  },
+  {
+   "t": 370.24,
+   "d": 1.84,
+   "text": "uh asking questions people who know the"
+  },
+  {
+   "t": 372.08,
+   "d": 1.28,
+   "text": "game uh john"
+  },
+  {
+   "t": 373.36,
+   "d": 1.92,
+   "text": "and uh sir hell and if the people who"
+  },
+  {
+   "t": 375.28,
+   "d": 1.36,
+   "text": "watch me are regularly like"
+  },
+  {
+   "t": 376.64,
+   "d": 1.76,
+   "text": "screaming at me with the 20-second delay"
+  },
+  {
+   "t": 378.4,
+   "d": 1.68,
+   "text": "after i do something horrible"
+  },
+  {
+   "t": 380.08,
+   "d": 1.92,
+   "text": "um so yeah you should check it out"
+  },
+  {
+   "t": 382.0,
+   "d": 1.52,
+   "text": "streaming's really easy"
+  },
+  {
+   "t": 383.52,
+   "d": 1.52,
+   "text": "with nethack especially you don't need a"
+  },
+  {
+   "t": 385.04,
+   "d": 1.68,
+   "text": "fast computer obviously you just need to"
+  },
+  {
+   "t": 386.72,
+   "d": 1.44,
+   "text": "run the streaming software and then"
+  },
+  {
+   "t": 388.16,
+   "d": 2.72,
+   "text": "a terminal um so yeah everyone please"
+  },
+  {
+   "t": 390.88,
+   "d": 0.48,
+   "text": "check out"
+  },
+  {
+   "t": 391.36,
+   "d": 4.07,
+   "text": "twitch and play more nethack"
+  },
+  {
+   "t": 395.43,
+   "d": 5.21,
+   "text": "[Applause]"
+  },
+  {
+   "t": 400.64,
+   "d": 2.56,
+   "text": "come on so i can use the browser right"
+  },
+  {
+   "t": 403.2,
+   "d": 0.84,
+   "text": "is that correct"
+  },
+  {
+   "t": 404.04,
+   "d": 5.32,
+   "text": "yeah okay"
+  },
+  {
+   "t": 409.36,
+   "d": 2.72,
+   "text": "i just want to bring up a video yeah"
+  },
+  {
+   "t": 412.08,
+   "d": 0.96,
+   "text": "i'll just hold it for you"
+  },
+  {
+   "t": 413.04,
+   "d": 3.76,
+   "text": "guys the screen's not on"
+  },
+  {
+   "t": 416.8,
+   "d": 2.72,
+   "text": "so i don't need it necessarily i'll just"
+  },
+  {
+   "t": 419.52,
+   "d": 1.28,
+   "text": "tell the story i can show you guys later"
+  },
+  {
+   "t": 420.8,
+   "d": 1.92,
+   "text": "that's what i'm here to talk about"
+  },
+  {
+   "t": 422.72,
+   "d": 6.8,
+   "text": "you can okay"
+  },
+  {
+   "t": 429.52,
+   "d": 6.71,
+   "text": "but uh"
+  },
+  {
+   "t": 436.23,
+   "d": 3.1,
+   "text": "[Music]"
+  },
+  {
+   "t": 445.76,
+   "d": 3.44,
+   "text": "so hi i'm steve mason um"
+  },
+  {
+   "t": 449.2,
+   "d": 1.52,
+   "text": "i'm going to be showing a game that i've"
+  },
+  {
+   "t": 450.72,
+   "d": 2.32,
+   "text": "been working on for the last 10 months"
+  },
+  {
+   "t": 453.04,
+   "d": 3.2,
+   "text": "it is a rug like in vr"
+  },
+  {
+   "t": 456.24,
+   "d": 2.48,
+   "text": "i don't have a vr headset here but the"
+  },
+  {
+   "t": 458.72,
+   "d": 0.8,
+   "text": "game does"
+  },
+  {
+   "t": 459.52,
+   "d": 3.44,
+   "text": "run in non-vr mode so this was a very"
+  },
+  {
+   "t": 462.96,
+   "d": 0.8,
+   "text": "interesting"
+  },
+  {
+   "t": 463.76,
+   "d": 1.52,
+   "text": "design challenge like how do you take"
+  },
+  {
+   "t": 465.28,
+   "d": 2.64,
+   "text": "something as sort of abstract as a text"
+  },
+  {
+   "t": 467.92,
+   "d": 1.04,
+   "text": "game"
+  },
+  {
+   "t": 468.96,
+   "d": 2.72,
+   "text": "so it sort of ended up as a conflation"
+  },
+  {
+   "t": 471.68,
+   "d": 0.8,
+   "text": "of"
+  },
+  {
+   "t": 472.48,
+   "d": 2.56,
+   "text": "roguelikes and traditional roguelike"
+  },
+  {
+   "t": 475.04,
+   "d": 1.84,
+   "text": "conventions and also"
+  },
+  {
+   "t": 476.88,
+   "d": 2.88,
+   "text": "tabletop pen and paper d d style"
+  },
+  {
+   "t": 479.76,
+   "d": 0.8,
+   "text": "miniature"
+  },
+  {
+   "t": 480.56,
+   "d": 1.44,
+   "text": "action so that's sort of the"
+  },
+  {
+   "t": 482.0,
+   "d": 2.0,
+   "text": "representational form of the game"
+  },
+  {
+   "t": 484.0,
+   "d": 2.72,
+   "text": "and it's also a coffee break roguelike"
+  },
+  {
+   "t": 486.72,
+   "d": 1.44,
+   "text": "so anyway i'm just going to show a quick"
+  },
+  {
+   "t": 488.16,
+   "d": 1.04,
+   "text": "video because i don't know if"
+  },
+  {
+   "t": 489.2,
+   "d": 1.68,
+   "text": "everybody's going to have a chance"
+  },
+  {
+   "t": 490.88,
+   "d": 1.52,
+   "text": "to see it i can talk about something"
+  },
+  {
+   "t": 492.4,
+   "d": 2.72,
+   "text": "like 90 seconds"
+  },
+  {
+   "t": 495.12,
+   "d": 2.48,
+   "text": "so obviously there's no asterisk it's a"
+  },
+  {
+   "t": 497.6,
+   "d": 1.2,
+   "text": "little bit more"
+  },
+  {
+   "t": 498.8,
+   "d": 2.4,
+   "text": "literal in terms of its actual dungeon"
+  },
+  {
+   "t": 501.2,
+   "d": 0.96,
+   "text": "tiles and"
+  },
+  {
+   "t": 502.16,
+   "d": 3.44,
+   "text": "3d characters with monsters so it looks"
+  },
+  {
+   "t": 505.6,
+   "d": 1.52,
+   "text": "similar i think to like games like"
+  },
+  {
+   "t": 507.12,
+   "d": 1.52,
+   "text": "diablo or gauntlet but it's still"
+  },
+  {
+   "t": 508.64,
+   "d": 1.04,
+   "text": "turn-based"
+  },
+  {
+   "t": 509.68,
+   "d": 2.08,
+   "text": "the dungeons are all procedural the item"
+  },
+  {
+   "t": 511.76,
+   "d": 2.4,
+   "text": "drops are procedural etc etc"
+  },
+  {
+   "t": 514.16,
+   "d": 2.88,
+   "text": "so i tried as best as i could to honor"
+  },
+  {
+   "t": 517.04,
+   "d": 0.72,
+   "text": "the spirit"
+  },
+  {
+   "t": 517.76,
+   "d": 3.12,
+   "text": "of traditional roguelikes but it's"
+  },
+  {
+   "t": 520.88,
+   "d": 2.56,
+   "text": "in vr so anyway that's all i wanted to"
+  },
+  {
+   "t": 523.44,
+   "d": 0.8,
+   "text": "say"
+  },
+  {
+   "t": 524.24,
+   "d": 11.6,
+   "text": "oh minotaurs maze"
+  },
+  {
+   "t": 540.16,
+   "d": 3.92,
+   "text": "so hey guys uh my name's russ uh"
+  },
+  {
+   "t": 544.08,
+   "d": 2.96,
+   "text": "i uh i went to the univer uh the"
+  },
+  {
+   "t": 547.04,
+   "d": 1.2,
+   "text": "rochester institute of technology and"
+  },
+  {
+   "t": 548.24,
+   "d": 1.36,
+   "text": "did my master's degree there that'll be"
+  },
+  {
+   "t": 549.6,
+   "d": 1.12,
+   "text": "important later"
+  },
+  {
+   "t": 550.72,
+   "d": 2.8,
+   "text": "um this is somewhat of a love story"
+  },
+  {
+   "t": 553.52,
+   "d": 1.76,
+   "text": "about ned heck"
+  },
+  {
+   "t": 555.28,
+   "d": 3.28,
+   "text": "and uh it needs a decent bit of"
+  },
+  {
+   "t": 558.56,
+   "d": 0.56,
+   "text": "background"
+  },
+  {
+   "t": 559.12,
+   "d": 4.0,
+   "text": "um and so i joined the computer science"
+  },
+  {
+   "t": 563.12,
+   "d": 0.88,
+   "text": "house um with"
+  },
+  {
+   "t": 564.0,
+   "d": 2.64,
+   "text": "with this guy will here who's also well"
+  },
+  {
+   "t": 566.64,
+   "d": 0.56,
+   "text": "here"
+  },
+  {
+   "t": 567.2,
+   "d": 3.76,
+   "text": "um and uh uh they had a fairly strong"
+  },
+  {
+   "t": 570.96,
+   "d": 1.2,
+   "text": "nethack community"
+  },
+  {
+   "t": 572.16,
+   "d": 1.92,
+   "text": "internally uh and would run these things"
+  },
+  {
+   "t": 574.08,
+   "d": 1.52,
+   "text": "called binges where"
+  },
+  {
+   "t": 575.6,
+   "d": 2.08,
+   "text": "um they would spend you know 12 to 24"
+  },
+  {
+   "t": 577.68,
+   "d": 1.6,
+   "text": "hours basically straight playing that"
+  },
+  {
+   "t": 579.28,
+   "d": 0.8,
+   "text": "hack"
+  },
+  {
+   "t": 580.08,
+   "d": 2.56,
+   "text": "um and they would get in a room together"
+  },
+  {
+   "t": 582.64,
+   "d": 1.28,
+   "text": "and and do a lot of this and there was a"
+  },
+  {
+   "t": 583.92,
+   "d": 1.36,
+   "text": "decent amount of net hack"
+  },
+  {
+   "t": 585.28,
+   "d": 1.6,
+   "text": "actual development and you remember this"
+  },
+  {
+   "t": 586.88,
+   "d": 1.44,
+   "text": "is a technical school"
+  },
+  {
+   "t": 588.32,
+   "d": 2.0,
+   "text": "that would go on as well as far as i'm"
+  },
+  {
+   "t": 590.32,
+   "d": 1.92,
+   "text": "aware they never actually publicized any"
+  },
+  {
+   "t": 592.24,
+   "d": 1.6,
+   "text": "patches that they made or any"
+  },
+  {
+   "t": 593.84,
+   "d": 2.72,
+   "text": "even discussed it externally um but one"
+  },
+  {
+   "t": 596.56,
+   "d": 1.12,
+   "text": "of the things interesting things that"
+  },
+  {
+   "t": 597.68,
+   "d": 1.2,
+   "text": "they did was they built"
+  },
+  {
+   "t": 598.88,
+   "d": 2.16,
+   "text": "uh uh what they called the binge board"
+  },
+  {
+   "t": 601.04,
+   "d": 1.52,
+   "text": "um which was an end curses"
+  },
+  {
+   "t": 602.56,
+   "d": 4.24,
+   "text": "uh a view much like net.org's"
+  },
+  {
+   "t": 606.8,
+   "d": 1.68,
+   "text": "view of you know a player line that"
+  },
+  {
+   "t": 608.48,
+   "d": 1.68,
+   "text": "would update in real time"
+  },
+  {
+   "t": 610.16,
+   "d": 2.08,
+   "text": "as users played through and we would put"
+  },
+  {
+   "t": 612.24,
+   "d": 1.28,
+   "text": "that up on a projector"
+  },
+  {
+   "t": 613.52,
+   "d": 2.48,
+   "text": "uh and play nethack and uh that was"
+  },
+  {
+   "t": 616.0,
+   "d": 0.96,
+   "text": "really cool to me"
+  },
+  {
+   "t": 616.96,
+   "d": 3.28,
+   "text": "and uh i got really into that um and me"
+  },
+  {
+   "t": 620.24,
+   "d": 1.12,
+   "text": "and another friend"
+  },
+  {
+   "t": 621.36,
+   "d": 2.8,
+   "text": "and and will here uh me me clark ford"
+  },
+  {
+   "t": 624.16,
+   "d": 0.72,
+   "text": "and will"
+  },
+  {
+   "t": 624.88,
+   "d": 3.36,
+   "text": "um uh did did quite a bit of development"
+  },
+  {
+   "t": 628.24,
+   "d": 0.8,
+   "text": "on that"
+  },
+  {
+   "t": 629.04,
+   "d": 2.24,
+   "text": "um and we ended up adding a bunch of"
+  },
+  {
+   "t": 631.28,
+   "d": 0.88,
+   "text": "features"
+  },
+  {
+   "t": 632.16,
+   "d": 4.0,
+   "text": "uh you know i i i we tried very hard to"
+  },
+  {
+   "t": 636.16,
+   "d": 1.6,
+   "text": "to be true to kind of the spirit of the"
+  },
+  {
+   "t": 637.76,
+   "d": 1.52,
+   "text": "gameplay but we added like a lot of"
+  },
+  {
+   "t": 639.28,
+   "d": 1.52,
+   "text": "patches existing patches for like utf"
+  },
+  {
+   "t": 640.8,
+   "d": 1.76,
+   "text": "support all of that i ended up writing"
+  },
+  {
+   "t": 642.56,
+   "d": 0.4,
+   "text": "uh"
+  },
+  {
+   "t": 642.96,
+   "d": 2.72,
+   "text": "uh actually writing you know changing"
+  },
+  {
+   "t": 645.68,
+   "d": 1.6,
+   "text": "gameplay slightly i added the ring of"
+  },
+  {
+   "t": 647.28,
+   "d": 0.56,
+   "text": "power"
+  },
+  {
+   "t": 647.84,
+   "d": 3.36,
+   "text": "as a as an actual uh in-game item and"
+  },
+  {
+   "t": 651.2,
+   "d": 3.2,
+   "text": "um uh we also added a a bunch of other"
+  },
+  {
+   "t": 654.4,
+   "d": 1.44,
+   "text": "stuff we uh"
+  },
+  {
+   "t": 655.84,
+   "d": 1.44,
+   "text": "we made it so that games would actually"
+  },
+  {
+   "t": 657.28,
+   "d": 1.92,
+   "text": "write uh the the"
+  },
+  {
+   "t": 659.2,
+   "d": 2.72,
+   "text": "x stats the player stats to a database"
+  },
+  {
+   "t": 661.92,
+   "d": 0.8,
+   "text": "and we"
+  },
+  {
+   "t": 662.72,
+   "d": 1.52,
+   "text": "uh rendered a website and were able to"
+  },
+  {
+   "t": 664.24,
+   "d": 2.08,
+   "text": "grant uh achievements for like your"
+  },
+  {
+   "t": 666.32,
+   "d": 1.76,
+   "text": "first game ever played or"
+  },
+  {
+   "t": 668.08,
+   "d": 1.84,
+   "text": "you know you know a cross game"
+  },
+  {
+   "t": 669.92,
+   "d": 2.64,
+   "text": "achievements um"
+  },
+  {
+   "t": 672.56,
+   "d": 2.16,
+   "text": "i also had a twitter bot which would be"
+  },
+  {
+   "t": 674.72,
+   "d": 2.0,
+   "text": "uh you know tweeting games as you died"
+  },
+  {
+   "t": 676.72,
+   "d": 3.04,
+   "text": "um and uh uh"
+  },
+  {
+   "t": 679.76,
+   "d": 2.88,
+   "text": "one of the biggest issues though was in"
+  },
+  {
+   "t": 682.64,
+   "d": 2.16,
+   "text": "nethack and and similarly in rogue"
+  },
+  {
+   "t": 684.8,
+   "d": 2.24,
+   "text": "um when when you although rogues"
+  },
+  {
+   "t": 687.04,
+   "d": 1.52,
+   "text": "architecture is slightly different as i"
+  },
+  {
+   "t": 688.56,
+   "d": 0.8,
+   "text": "understand now"
+  },
+  {
+   "t": 689.36,
+   "d": 4.16,
+   "text": "um when you change uh anything about"
+  },
+  {
+   "t": 693.52,
+   "d": 2.88,
+   "text": "uh the player or many other things as"
+  },
+  {
+   "t": 696.4,
+   "d": 0.56,
+   "text": "well"
+  },
+  {
+   "t": 696.96,
+   "d": 2.4,
+   "text": "um in the in the game's source the way"
+  },
+  {
+   "t": 699.36,
+   "d": 0.64,
+   "text": "that the"
+  },
+  {
+   "t": 700.0,
+   "d": 1.68,
+   "text": "save game is structured uh you break all"
+  },
+  {
+   "t": 701.68,
+   "d": 1.44,
+   "text": "save games um"
+  },
+  {
+   "t": 703.12,
+   "d": 2.48,
+   "text": "and that's that's it's was one of the"
+  },
+  {
+   "t": 705.6,
+   "d": 1.68,
+   "text": "biggest limiting factors"
+  },
+  {
+   "t": 707.28,
+   "d": 1.6,
+   "text": "in the changes we made because we didn't"
+  },
+  {
+   "t": 708.88,
+   "d": 1.2,
+   "text": "really didn't want to break everyone's"
+  },
+  {
+   "t": 710.08,
+   "d": 1.36,
+   "text": "save games"
+  },
+  {
+   "t": 711.44,
+   "d": 3.04,
+   "text": "um and so i started down this this"
+  },
+  {
+   "t": 714.48,
+   "d": 4.0,
+   "text": "journey to find a way to"
+  },
+  {
+   "t": 718.48,
+   "d": 3.6,
+   "text": "to to have these forwards compatible"
+  },
+  {
+   "t": 722.08,
+   "d": 0.72,
+   "text": "save"
+  },
+  {
+   "t": 722.8,
+   "d": 1.92,
+   "text": "and save games and bones files actually"
+  },
+  {
+   "t": 724.72,
+   "d": 2.08,
+   "text": "bones files had the same problem"
+  },
+  {
+   "t": 726.8,
+   "d": 2.88,
+   "text": "uh and i was doing my computer science"
+  },
+  {
+   "t": 729.68,
+   "d": 0.4,
+   "text": "degree"
+  },
+  {
+   "t": 730.08,
+   "d": 3.52,
+   "text": "like i said it was bsms and um"
+  },
+  {
+   "t": 733.6,
+   "d": 2.48,
+   "text": "uh i i was looking through the the code"
+  },
+  {
+   "t": 736.08,
+   "d": 0.56,
+   "text": "and"
+  },
+  {
+   "t": 736.64,
+   "d": 2.48,
+   "text": "i was like okay i decided in order to do"
+  },
+  {
+   "t": 739.12,
+   "d": 0.72,
+   "text": "this"
+  },
+  {
+   "t": 739.84,
+   "d": 1.84,
+   "text": "i needed to and we can i can go into y"
+  },
+  {
+   "t": 741.68,
+   "d": 1.2,
+   "text": "but i'll skip that like"
+  },
+  {
+   "t": 742.88,
+   "d": 3.2,
+   "text": "i needed to have the save game format in"
+  },
+  {
+   "t": 746.08,
+   "d": 3.84,
+   "text": "json and uh in order to do that"
+  },
+  {
+   "t": 749.92,
+   "d": 2.56,
+   "text": "the core feature that was missing if for"
+  },
+  {
+   "t": 752.48,
+   "d": 1.12,
+   "text": "the computer scientists in the room was"
+  },
+  {
+   "t": 753.6,
+   "d": 0.72,
+   "text": "introspection"
+  },
+  {
+   "t": 754.32,
+   "d": 2.24,
+   "text": "in the c language uh and so i'm like"
+  },
+  {
+   "t": 756.56,
+   "d": 1.52,
+   "text": "okay in order to do this"
+  },
+  {
+   "t": 758.08,
+   "d": 1.68,
+   "text": "uh for the complexity of the nether code"
+  },
+  {
+   "t": 759.76,
+   "d": 1.6,
+   "text": "base i needed to"
+  },
+  {
+   "t": 761.36,
+   "d": 3.2,
+   "text": "change the c language uh and i'm like"
+  },
+  {
+   "t": 764.56,
+   "d": 3.04,
+   "text": "well i mean okay like why not"
+  },
+  {
+   "t": 767.6,
+   "d": 3.76,
+   "text": "um so it was a it was a long project and"
+  },
+  {
+   "t": 771.36,
+   "d": 1.28,
+   "text": "i was it was"
+  },
+  {
+   "t": 772.64,
+   "d": 1.28,
+   "text": "a long project in that i had no idea"
+  },
+  {
+   "t": 773.92,
+   "d": 2.08,
+   "text": "what i was doing um and"
+  },
+  {
+   "t": 776.0,
+   "d": 3.44,
+   "text": "i uh had that on the back burner for a"
+  },
+  {
+   "t": 779.44,
+   "d": 0.88,
+   "text": "long while"
+  },
+  {
+   "t": 780.32,
+   "d": 2.08,
+   "text": "and then when it came to time to figure"
+  },
+  {
+   "t": 782.4,
+   "d": 1.12,
+   "text": "out what i was doing for my master's"
+  },
+  {
+   "t": 783.52,
+   "d": 0.88,
+   "text": "thesis"
+  },
+  {
+   "t": 784.4,
+   "d": 1.76,
+   "text": "i i thought of this and i was like you"
+  },
+  {
+   "t": 786.16,
+   "d": 1.52,
+   "text": "know"
+  },
+  {
+   "t": 787.68,
+   "d": 1.76,
+   "text": "i'm like i really i've never done this"
+  },
+  {
+   "t": 789.44,
+   "d": 1.52,
+   "text": "before obviously a master's thesis like"
+  },
+  {
+   "t": 790.96,
+   "d": 1.68,
+   "text": "i have no idea what a master's thesis"
+  },
+  {
+   "t": 792.64,
+   "d": 3.04,
+   "text": "is or should be um what are the big"
+  },
+  {
+   "t": 795.68,
+   "d": 2.0,
+   "text": "projects that i really would like to do"
+  },
+  {
+   "t": 797.68,
+   "d": 1.92,
+   "text": "and i thought of this one so i found the"
+  },
+  {
+   "t": 799.6,
+   "d": 1.76,
+   "text": "faculty member in the university who"
+  },
+  {
+   "t": 801.36,
+   "d": 1.76,
+   "text": "seemed to be most appropriate for that"
+  },
+  {
+   "t": 803.12,
+   "d": 1.36,
+   "text": "kind of work and was"
+  },
+  {
+   "t": 804.48,
+   "d": 1.52,
+   "text": "and presented to him he's like yeah that"
+  },
+  {
+   "t": 806.0,
+   "d": 1.6,
+   "text": "seems reasonable"
+  },
+  {
+   "t": 807.6,
+   "d": 3.2,
+   "text": "um and so i ended up producing"
+  },
+  {
+   "t": 810.8,
+   "d": 2.56,
+   "text": "a body of work that in retrospect you"
+  },
+  {
+   "t": 813.36,
+   "d": 3.6,
+   "text": "know has some flaws but um"
+  },
+  {
+   "t": 816.96,
+   "d": 2.16,
+   "text": "the paper was entitled introspection via"
+  },
+  {
+   "t": 819.12,
+   "d": 0.88,
+   "text": "self-debugging"
+  },
+  {
+   "t": 820.0,
+   "d": 2.08,
+   "text": "i made the observation that a debugger"
+  },
+  {
+   "t": 822.08,
+   "d": 1.28,
+   "text": "can can"
+  },
+  {
+   "t": 823.36,
+   "d": 1.44,
+   "text": "i mean i don't want to get too far into"
+  },
+  {
+   "t": 824.8,
+   "d": 2.08,
+   "text": "the technical details but um"
+  },
+  {
+   "t": 826.88,
+   "d": 3.36,
+   "text": "i did end up being able to serialize"
+  },
+  {
+   "t": 830.24,
+   "d": 3.28,
+   "text": "these uh all these trucks to json um at"
+  },
+  {
+   "t": 833.52,
+   "d": 1.28,
+   "text": "that point i'd been working on it for"
+  },
+  {
+   "t": 834.8,
+   "d": 1.12,
+   "text": "literally a year"
+  },
+  {
+   "t": 835.92,
+   "d": 3.12,
+   "text": "um i'd spent like uh i don't know"
+  },
+  {
+   "t": 839.04,
+   "d": 1.84,
+   "text": "six months five months or so like"
+  },
+  {
+   "t": 840.88,
+   "d": 1.52,
+   "text": "unemployed while working on it"
+  },
+  {
+   "t": 842.4,
+   "d": 3.76,
+   "text": "uh so full completely full-time and um"
+  },
+  {
+   "t": 846.16,
+   "d": 2.72,
+   "text": "was honestly fed up so once it worked"
+  },
+  {
+   "t": 848.88,
+   "d": 1.36,
+   "text": "and i finished the paper and got the"
+  },
+  {
+   "t": 850.24,
+   "d": 0.48,
+   "text": "degree"
+  },
+  {
+   "t": 850.72,
+   "d": 1.52,
+   "text": "i put it down for a while it's been"
+  },
+  {
+   "t": 852.24,
+   "d": 1.52,
+   "text": "about three years since then"
+  },
+  {
+   "t": 853.76,
+   "d": 3.36,
+   "text": "um that said uh i"
+  },
+  {
+   "t": 857.12,
+   "d": 1.52,
+   "text": "really love this conference this is"
+  },
+  {
+   "t": 858.64,
+   "d": 2.32,
+   "text": "great um and it's"
+  },
+  {
+   "t": 860.96,
+   "d": 1.36,
+   "text": "kind of inspired me to want to try and"
+  },
+  {
+   "t": 862.32,
+   "d": 2.32,
+   "text": "put together a nethack binge"
+  },
+  {
+   "t": 864.64,
+   "d": 2.32,
+   "text": "here with everyone um and i'm probably"
+  },
+  {
+   "t": 866.96,
+   "d": 2.32,
+   "text": "gonna follow up later to try and do that"
+  },
+  {
+   "t": 869.28,
+   "d": 3.44,
+   "text": "um and and i was actually really excited"
+  },
+  {
+   "t": 872.72,
+   "d": 1.28,
+   "text": "to see that that that the"
+  },
+  {
+   "t": 874.0,
+   "d": 1.12,
+   "text": "you know guys who work on the head dot"
+  },
+  {
+   "t": 875.12,
+   "d": 2.24,
+   "text": "although good here was here um because"
+  },
+  {
+   "t": 877.36,
+   "d": 1.04,
+   "text": "we also"
+  },
+  {
+   "t": 878.4,
+   "d": 3.12,
+   "text": "uh me and and chris and will took"
+  },
+  {
+   "t": 881.52,
+   "d": 2.16,
+   "text": "uh the d game launch and all that stuff"
+  },
+  {
+   "t": 883.68,
+   "d": 1.28,
+   "text": "and we were running our own"
+  },
+  {
+   "t": 884.96,
+   "d": 3.36,
+   "text": "uh nethack.csh.rit.edu server"
+  },
+  {
+   "t": 888.32,
+   "d": 2.16,
+   "text": "with our own patches we called it binge"
+  },
+  {
+   "t": 890.48,
+   "d": 1.52,
+   "text": "hack um"
+  },
+  {
+   "t": 892.0,
+   "d": 1.92,
+   "text": "with this goal of being you know geared"
+  },
+  {
+   "t": 893.92,
+   "d": 1.44,
+   "text": "towards this collaborative work"
+  },
+  {
+   "t": 895.36,
+   "d": 1.68,
+   "text": "anyway that's all i wanted to say it's"
+  },
+  {
+   "t": 897.04,
+   "d": 1.76,
+   "text": "like a long story but sorry about that"
+  },
+  {
+   "t": 898.8,
+   "d": 2.24,
+   "text": "thanks"
+  },
+  {
+   "t": 907.44,
+   "d": 3.6,
+   "text": "thank you thank you hi everybody"
+  },
+  {
+   "t": 911.04,
+   "d": 3.04,
+   "text": "i'm dan i run a hardware startup we're"
+  },
+  {
+   "t": 914.08,
+   "d": 1.44,
+   "text": "based in the mission we are called"
+  },
+  {
+   "t": 915.52,
+   "d": 1.84,
+   "text": "veloute we make fuel tanks for hydrogen"
+  },
+  {
+   "t": 917.36,
+   "d": 1.52,
+   "text": "cars we are 13 people"
+  },
+  {
+   "t": 918.88,
+   "d": 2.64,
+   "text": "and i don't write games i don't write"
+  },
+  {
+   "t": 921.52,
+   "d": 1.76,
+   "text": "any programs but i play a heck of a lot"
+  },
+  {
+   "t": 923.28,
+   "d": 1.52,
+   "text": "of modern roguelikes so"
+  },
+  {
+   "t": 924.8,
+   "d": 1.52,
+   "text": "things with graphics sorry i'm not the"
+  },
+  {
+   "t": 926.32,
+   "d": 1.76,
+   "text": "ascii guy"
+  },
+  {
+   "t": 928.08,
+   "d": 2.4,
+   "text": "but boy did roguelikes make me a better"
+  },
+  {
+   "t": 930.48,
+   "d": 0.72,
+   "text": "ceo"
+  },
+  {
+   "t": 931.2,
+   "d": 1.36,
+   "text": "and i want to talk about that for two"
+  },
+  {
+   "t": 932.56,
+   "d": 2.24,
+   "text": "minutes and i think"
+  },
+  {
+   "t": 934.8,
+   "d": 2.32,
+   "text": "they can make you better at work also"
+  },
+  {
+   "t": 937.12,
+   "d": 0.88,
+   "text": "and i'm gonna"
+  },
+  {
+   "t": 938.0,
+   "d": 1.6,
+   "text": "have this talk have two purposes if you"
+  },
+  {
+   "t": 939.6,
+   "d": 1.36,
+   "text": "don't know the games i'm talking about"
+  },
+  {
+   "t": 940.96,
+   "d": 1.52,
+   "text": "take it as a game recommendation if you"
+  },
+  {
+   "t": 942.48,
+   "d": 1.76,
+   "text": "do know the games take it as business"
+  },
+  {
+   "t": 944.24,
+   "d": 4.0,
+   "text": "advice so game one darkest dungeon"
+  },
+  {
+   "t": 948.24,
+   "d": 4.32,
+   "text": "your team's mental health matters"
+  },
+  {
+   "t": 952.56,
+   "d": 1.92,
+   "text": "it's not just how hard they can hit"
+  },
+  {
+   "t": 954.48,
+   "d": 2.64,
+   "text": "things their feelings count"
+  },
+  {
+   "t": 957.12,
+   "d": 1.68,
+   "text": "if your friends are going crazy they"
+  },
+  {
+   "t": 958.8,
+   "d": 2.24,
+   "text": "will not get good work done"
+  },
+  {
+   "t": 961.04,
+   "d": 1.68,
+   "text": "learned this very hard at work and it"
+  },
+  {
+   "t": 962.72,
+   "d": 2.4,
+   "text": "turns out now 90 of my job is actually"
+  },
+  {
+   "t": 965.12,
+   "d": 1.92,
+   "text": "just working with my people making sure"
+  },
+  {
+   "t": 967.04,
+   "d": 1.36,
+   "text": "they're really cohesive getting what"
+  },
+  {
+   "t": 968.4,
+   "d": 1.28,
+   "text": "they need have what they need to do"
+  },
+  {
+   "t": 969.68,
+   "d": 1.04,
+   "text": "their jobs"
+  },
+  {
+   "t": 970.72,
+   "d": 3.04,
+   "text": "game two the sunless sea the boat will"
+  },
+  {
+   "t": 973.76,
+   "d": 2.48,
+   "text": "move at the [ __ ] speed that it wants"
+  },
+  {
+   "t": 976.24,
+   "d": 0.56,
+   "text": "to go"
+  },
+  {
+   "t": 976.8,
+   "d": 3.2,
+   "text": "and no faster"
+  },
+  {
+   "t": 981.36,
+   "d": 1.6,
+   "text": "no matter how much you want to rush"
+  },
+  {
+   "t": 982.96,
+   "d": 1.68,
+   "text": "development development moves"
+  },
+  {
+   "t": 984.64,
+   "d": 2.16,
+   "text": "at development's pace eventually you can"
+  },
+  {
+   "t": 986.8,
+   "d": 2.0,
+   "text": "pour tons of resources into going faster"
+  },
+  {
+   "t": 988.8,
+   "d": 1.76,
+   "text": "and you will go slightly faster but make"
+  },
+  {
+   "t": 990.56,
+   "d": 1.6,
+   "text": "that a project if it's going to be what"
+  },
+  {
+   "t": 992.16,
+   "d": 1.76,
+   "text": "you do"
+  },
+  {
+   "t": 993.92,
+   "d": 3.68,
+   "text": "game three enter the gungeon"
+  },
+  {
+   "t": 997.6,
+   "d": 4.56,
+   "text": "there is always room for another bad pun"
+  },
+  {
+   "t": 1002.4,
+   "d": 3.2,
+   "text": "it turns out that if you are actually in"
+  },
+  {
+   "t": 1005.6,
+   "d": 2.0,
+   "text": "a role of authority you really actually"
+  },
+  {
+   "t": 1007.6,
+   "d": 2.56,
+   "text": "have to control the jokes that you use"
+  },
+  {
+   "t": 1010.16,
+   "d": 4.08,
+   "text": "to make an inclusive workplace"
+  },
+  {
+   "t": 1014.32,
+   "d": 2.96,
+   "text": "curtailing your humor matters and so"
+  },
+  {
+   "t": 1017.28,
+   "d": 1.28,
+   "text": "what we would term as"
+  },
+  {
+   "t": 1018.56,
+   "d": 1.84,
+   "text": "dad jokes are actually relatively"
+  },
+  {
+   "t": 1020.4,
+   "d": 1.6,
+   "text": "universally appropriate"
+  },
+  {
+   "t": 1022.0,
+   "d": 2.8,
+   "text": "and having your team grown at them is"
+  },
+  {
+   "t": 1024.8,
+   "d": 1.44,
+   "text": "one way to build cohesion"
+  },
+  {
+   "t": 1026.24,
+   "d": 3.36,
+   "text": "it's not for everybody but find your"
+  },
+  {
+   "t": 1029.6,
+   "d": 3.52,
+   "text": "style use humor and be inclusive and i"
+  },
+  {
+   "t": 1033.12,
+   "d": 1.52,
+   "text": "think that game does a really excellent"
+  },
+  {
+   "t": 1034.64,
+   "d": 0.56,
+   "text": "job of"
+  },
+  {
+   "t": 1035.2,
+   "d": 2.56,
+   "text": "having a corny but really effective"
+  },
+  {
+   "t": 1037.76,
+   "d": 1.36,
+   "text": "humor style"
+  },
+  {
+   "t": 1039.12,
+   "d": 1.52,
+   "text": "i think i'm going to lump every"
+  },
+  {
+   "t": 1040.64,
+   "d": 2.88,
+   "text": "roguelike on the ios app store together"
+  },
+  {
+   "t": 1043.52,
+   "d": 2.16,
+   "text": "for this next one there are a lot of"
+  },
+  {
+   "t": 1045.68,
+   "d": 2.0,
+   "text": "companies out there that want to just"
+  },
+  {
+   "t": 1047.68,
+   "d": 3.68,
+   "text": "take your money and waste your time"
+  },
+  {
+   "t": 1051.76,
+   "d": 1.84,
+   "text": "i know there are some gems out there on"
+  },
+  {
+   "t": 1053.6,
+   "d": 1.36,
+   "text": "app stores but"
+  },
+  {
+   "t": 1054.96,
+   "d": 1.44,
+   "text": "boy are there a lot of things that call"
+  },
+  {
+   "t": 1056.4,
+   "d": 1.92,
+   "text": "themselves roguelike out roguelikes out"
+  },
+  {
+   "t": 1058.32,
+   "d": 1.52,
+   "text": "there that want your dollars"
+  },
+  {
+   "t": 1059.84,
+   "d": 1.92,
+   "text": "and don't do much similarly there are"
+  },
+  {
+   "t": 1061.76,
+   "d": 1.6,
+   "text": "lots of consultants and vendors and"
+  },
+  {
+   "t": 1063.36,
+   "d": 1.04,
+   "text": "suppliers"
+  },
+  {
+   "t": 1064.4,
+   "d": 2.96,
+   "text": "and contractors who promise you the moon"
+  },
+  {
+   "t": 1067.36,
+   "d": 0.64,
+   "text": "and just"
+  },
+  {
+   "t": 1068.0,
+   "d": 1.36,
+   "text": "want a couple of bucks to do something"
+  },
+  {
+   "t": 1069.36,
+   "d": 2.32,
+   "text": "that isn't that useful"
+  },
+  {
+   "t": 1071.68,
+   "d": 3.52,
+   "text": "number five i would say this is now"
+  },
+  {
+   "t": 1075.2,
+   "d": 2.88,
+   "text": "generally for roguelikes"
+  },
+  {
+   "t": 1078.08,
+   "d": 2.48,
+   "text": "fundamentally the thing that you get to"
+  },
+  {
+   "t": 1080.56,
+   "d": 1.36,
+   "text": "keep with you is whatever is in your"
+  },
+  {
+   "t": 1081.92,
+   "d": 1.04,
+   "text": "head"
+  },
+  {
+   "t": 1082.96,
+   "d": 3.76,
+   "text": "and so every day is a new play through"
+  },
+  {
+   "t": 1086.72,
+   "d": 2.0,
+   "text": "in some cases every company is a new"
+  },
+  {
+   "t": 1088.72,
+   "d": 1.44,
+   "text": "play through and"
+  },
+  {
+   "t": 1090.16,
+   "d": 2.72,
+   "text": "things are different every time but spot"
+  },
+  {
+   "t": 1092.88,
+   "d": 1.28,
+   "text": "the patterns"
+  },
+  {
+   "t": 1094.16,
+   "d": 2.24,
+   "text": "and don't make the same mistakes twice i"
+  },
+  {
+   "t": 1096.4,
+   "d": 1.52,
+   "text": "think that's a lesson"
+  },
+  {
+   "t": 1097.92,
+   "d": 1.84,
+   "text": "more than any other that i've learned"
+  },
+  {
+   "t": 1099.76,
+   "d": 1.84,
+   "text": "from these games that it's not the"
+  },
+  {
+   "t": 1101.6,
+   "d": 1.68,
+   "text": "experience points it's the actual"
+  },
+  {
+   "t": 1103.28,
+   "d": 1.12,
+   "text": "experience"
+  },
+  {
+   "t": 1104.4,
+   "d": 2.16,
+   "text": "and that can really make the difference"
+  },
+  {
+   "t": 1106.56,
+   "d": 1.52,
+   "text": "especially when you're"
+  },
+  {
+   "t": 1108.08,
+   "d": 1.28,
+   "text": "working with a collection of other"
+  },
+  {
+   "t": 1109.36,
+   "d": 2.56,
+   "text": "people who have their own wants and"
+  },
+  {
+   "t": 1111.92,
+   "d": 1.84,
+   "text": "needs and dreams and desires"
+  },
+  {
+   "t": 1113.76,
+   "d": 3.12,
+   "text": "that aren't changing that fast so that's"
+  },
+  {
+   "t": 1116.88,
+   "d": 6.79,
+   "text": "what i've got thanks everybody"
+  },
+  {
+   "t": 1123.67,
+   "d": 3.12,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1127.2,
+   "d": 2.08,
+   "text": "hi my name is ian bettencourt i'm"
+  },
+  {
+   "t": 1129.28,
+   "d": 1.68,
+   "text": "working on a roguelike for fun it is"
+  },
+  {
+   "t": 1130.96,
+   "d": 1.76,
+   "text": "mostly incomplete"
+  },
+  {
+   "t": 1132.72,
+   "d": 2.12,
+   "text": "and i'm kind of here to inspire people"
+  },
+  {
+   "t": 1134.84,
+   "d": 1.24,
+   "text": "to"
+  },
+  {
+   "t": 1136.08,
+   "d": 3.12,
+   "text": "do sort of what i'm doing because when i"
+  },
+  {
+   "t": 1139.2,
+   "d": 0.56,
+   "text": "started this"
+  },
+  {
+   "t": 1139.76,
+   "d": 3.2,
+   "text": "i was frankly a terrible programmer like"
+  },
+  {
+   "t": 1142.96,
+   "d": 0.72,
+   "text": "i"
+  },
+  {
+   "t": 1143.68,
+   "d": 1.92,
+   "text": "had took some programming classes in"
+  },
+  {
+   "t": 1145.6,
+   "d": 1.76,
+   "text": "high school and they taught me a lot"
+  },
+  {
+   "t": 1147.36,
+   "d": 2.0,
+   "text": "and not enough to let me know that i"
+  },
+  {
+   "t": 1149.36,
+   "d": 1.44,
+   "text": "know nothing"
+  },
+  {
+   "t": 1150.8,
+   "d": 2.8,
+   "text": "and so coming out of high school i"
+  },
+  {
+   "t": 1153.6,
+   "d": 0.88,
+   "text": "wanted to take"
+  },
+  {
+   "t": 1154.48,
+   "d": 2.48,
+   "text": "computer science classes in college and"
+  },
+  {
+   "t": 1156.96,
+   "d": 1.44,
+   "text": "one of them was"
+  },
+  {
+   "t": 1158.4,
+   "d": 1.52,
+   "text": "starting to learn how to use c and i"
+  },
+  {
+   "t": 1159.92,
+   "d": 2.8,
+   "text": "thought well i know nothing about c"
+  },
+  {
+   "t": 1162.72,
+   "d": 3.52,
+   "text": "i came from java and it's very different"
+  },
+  {
+   "t": 1166.24,
+   "d": 2.56,
+   "text": "so to learn it on my own before the"
+  },
+  {
+   "t": 1168.8,
+   "d": 1.68,
+   "text": "class started get a leg up on everyone"
+  },
+  {
+   "t": 1170.48,
+   "d": 0.96,
+   "text": "else i thought"
+  },
+  {
+   "t": 1171.44,
+   "d": 2.16,
+   "text": "why not write a roguelike in c it's the"
+  },
+  {
+   "t": 1173.6,
+   "d": 1.52,
+   "text": "thing that i've wanted to make"
+  },
+  {
+   "t": 1175.12,
+   "d": 1.44,
+   "text": "basically since i started programming"
+  },
+  {
+   "t": 1176.56,
+   "d": 1.6,
+   "text": "before i even knew roguelikes existed"
+  },
+  {
+   "t": 1178.16,
+   "d": 1.44,
+   "text": "i'd always imagined"
+  },
+  {
+   "t": 1179.6,
+   "d": 2.16,
+   "text": "just creating a fun little game with"
+  },
+  {
+   "t": 1181.76,
+   "d": 1.6,
+   "text": "characters that you see on the keyboard"
+  },
+  {
+   "t": 1183.36,
+   "d": 1.04,
+   "text": "moving them around in"
+  },
+  {
+   "t": 1184.4,
+   "d": 2.64,
+   "text": "a dungeon and so that's what i started"
+  },
+  {
+   "t": 1187.04,
+   "d": 1.04,
+   "text": "working on"
+  },
+  {
+   "t": 1188.08,
+   "d": 3.04,
+   "text": "and i started to show it to other people"
+  },
+  {
+   "t": 1191.12,
+   "d": 0.48,
+   "text": "and"
+  },
+  {
+   "t": 1191.6,
+   "d": 1.84,
+   "text": "they taught me things that the classes"
+  },
+  {
+   "t": 1193.44,
+   "d": 1.28,
+   "text": "never taught"
+  },
+  {
+   "t": 1194.72,
+   "d": 4.48,
+   "text": "like uh we were"
+  },
+  {
+   "t": 1199.2,
+   "d": 1.6,
+   "text": "like one of the major things that i"
+  },
+  {
+   "t": 1200.8,
+   "d": 2.48,
+   "text": "learned was decoupling code"
+  },
+  {
+   "t": 1203.28,
+   "d": 3.6,
+   "text": "and that was from my roommate uh like"
+  },
+  {
+   "t": 1206.88,
+   "d": 2.48,
+   "text": "uh we we we were taught things like data"
+  },
+  {
+   "t": 1209.36,
+   "d": 0.8,
+   "text": "structures"
+  },
+  {
+   "t": 1210.16,
+   "d": 1.68,
+   "text": "and yeah that's really useful i use"
+  },
+  {
+   "t": 1211.84,
+   "d": 1.84,
+   "text": "linked lists all the time"
+  },
+  {
+   "t": 1213.68,
+   "d": 2.88,
+   "text": "never trees like despite all the time we"
+  },
+  {
+   "t": 1216.56,
+   "d": 1.28,
+   "text": "spent learning about trees"
+  },
+  {
+   "t": 1217.84,
+   "d": 1.84,
+   "text": "and navigating them and all the"
+  },
+  {
+   "t": 1219.68,
+   "d": 1.36,
+   "text": "different kinds there are"
+  },
+  {
+   "t": 1221.04,
+   "d": 2.32,
+   "text": "i've used linked lists and arrays more"
+  },
+  {
+   "t": 1223.36,
+   "d": 1.36,
+   "text": "than anything else"
+  },
+  {
+   "t": 1224.72,
+   "d": 2.56,
+   "text": "and it's it's really easy to get started"
+  },
+  {
+   "t": 1227.28,
+   "d": 0.8,
+   "text": "with"
+  },
+  {
+   "t": 1228.08,
+   "d": 3.92,
+   "text": "this limited tool set like i actually"
+  },
+  {
+   "t": 1232.0,
+   "d": 1.92,
+   "text": "started writing basically my own engine"
+  },
+  {
+   "t": 1233.92,
+   "d": 1.36,
+   "text": "i didn't know things like lipstick"
+  },
+  {
+   "t": 1235.28,
+   "d": 3.12,
+   "text": "existed and i kind of like it more"
+  },
+  {
+   "t": 1238.4,
+   "d": 3.2,
+   "text": "to make every last piece my own so"
+  },
+  {
+   "t": 1241.6,
+   "d": 3.2,
+   "text": "i basically my engine is n curses which"
+  },
+  {
+   "t": 1244.8,
+   "d": 1.6,
+   "text": "if you don't know is what you can use to"
+  },
+  {
+   "t": 1246.4,
+   "d": 2.08,
+   "text": "put those little characters on the"
+  },
+  {
+   "t": 1248.48,
+   "d": 1.36,
+   "text": "terminal and color them"
+  },
+  {
+   "t": 1249.84,
+   "d": 2.64,
+   "text": "various colors and that's all you"
+  },
+  {
+   "t": 1252.48,
+   "d": 1.2,
+   "text": "basically need"
+  },
+  {
+   "t": 1253.68,
+   "d": 3.2,
+   "text": "c a compiler a debugger if"
+  },
+  {
+   "t": 1256.88,
+   "d": 0.96,
+   "text": "if you're actually going to be spending"
+  },
+  {
+   "t": 1257.84,
+   "d": 2.4,
+   "text": "a lot of time on it and"
+  },
+  {
+   "t": 1260.24,
+   "d": 2.8,
+   "text": "n curses you can get started and you can"
+  },
+  {
+   "t": 1263.04,
+   "d": 0.96,
+   "text": "learn a lot"
+  },
+  {
+   "t": 1264.0,
+   "d": 1.6,
+   "text": "by showing it to people there's quite"
+  },
+  {
+   "t": 1265.6,
+   "d": 2.32,
+   "text": "the community online for that people"
+  },
+  {
+   "t": 1267.92,
+   "d": 1.2,
+   "text": "several times up here have already"
+  },
+  {
+   "t": 1269.12,
+   "d": 2.4,
+   "text": "recommended recommended uh"
+  },
+  {
+   "t": 1271.52,
+   "d": 2.24,
+   "text": "our slash roguelike dev that's a great"
+  },
+  {
+   "t": 1273.76,
+   "d": 1.68,
+   "text": "resource tons of people out there very"
+  },
+  {
+   "t": 1275.44,
+   "d": 1.68,
+   "text": "friendly and willing to help you"
+  },
+  {
+   "t": 1277.12,
+   "d": 2.56,
+   "text": "and heck i i like talking to people i"
+  },
+  {
+   "t": 1279.68,
+   "d": 1.52,
+   "text": "like talking to people about this stuff"
+  },
+  {
+   "t": 1281.2,
+   "d": 1.92,
+   "text": "i don't have many people talk about it"
+  },
+  {
+   "t": 1283.12,
+   "d": 1.36,
+   "text": "on my own so yeah"
+  },
+  {
+   "t": 1284.48,
+   "d": 2.8,
+   "text": "send me a message if you'd like me to"
+  },
+  {
+   "t": 1287.28,
+   "d": 2.0,
+   "text": "take a look at what you've written"
+  },
+  {
+   "t": 1289.28,
+   "d": 3.04,
+   "text": "i'm again not amazing i'm not even close"
+  },
+  {
+   "t": 1292.32,
+   "d": 0.88,
+   "text": "to amazing"
+  },
+  {
+   "t": 1293.2,
+   "d": 2.48,
+   "text": "but i would love to help and help other"
+  },
+  {
+   "t": 1295.68,
+   "d": 1.12,
+   "text": "people get started"
+  },
+  {
+   "t": 1296.8,
+   "d": 2.68,
+   "text": "so my username on reddit is lankley"
+  },
+  {
+   "t": 1299.48,
+   "d": 1.72,
+   "text": "l-a-n-k-l-y"
+  },
+  {
+   "t": 1301.2,
+   "d": 1.64,
+   "text": "send me a message if you'd like to get"
+  },
+  {
+   "t": 1302.84,
+   "d": 2.62,
+   "text": "started"
+  },
+  {
+   "t": 1305.46,
+   "d": 3.12,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1311.92,
+   "d": 1.84,
+   "text": "hey everyone i'd like to show you a game"
+  },
+  {
+   "t": 1313.76,
+   "d": 1.52,
+   "text": "so i'm going to have some av setup to do"
+  },
+  {
+   "t": 1315.28,
+   "d": 1.44,
+   "text": "so i'd like to invite the next speaker"
+  },
+  {
+   "t": 1316.72,
+   "d": 0.56,
+   "text": "to go"
+  },
+  {
+   "t": 1317.28,
+   "d": 1.92,
+   "text": "ahead of me while i get the video"
+  },
+  {
+   "t": 1319.2,
+   "d": 1.28,
+   "text": "working thank you"
+  },
+  {
+   "t": 1320.48,
+   "d": 2.56,
+   "text": "any chance of the image from email did"
+  },
+  {
+   "t": 1323.04,
+   "d": 2.24,
+   "text": "it work"
+  },
+  {
+   "t": 1325.6,
+   "d": 1.68,
+   "text": "and then we can bring up the how do i"
+  },
+  {
+   "t": 1327.28,
+   "d": 2.72,
+   "text": "get to the email here"
+  },
+  {
+   "t": 1331.44,
+   "d": 1.52,
+   "text": "okay this may or may not work with the"
+  },
+  {
+   "t": 1332.96,
+   "d": 1.68,
+   "text": "image if not i've got on my phone i can"
+  },
+  {
+   "t": 1334.64,
+   "d": 1.2,
+   "text": "read you the important part but i just"
+  },
+  {
+   "t": 1335.84,
+   "d": 1.04,
+   "text": "want to talk about"
+  },
+  {
+   "t": 1336.88,
+   "d": 2.56,
+   "text": "my all time my all-time favorite death"
+  },
+  {
+   "t": 1339.44,
+   "d": 2.4,
+   "text": "in dungeon crawl stone soup"
+  },
+  {
+   "t": 1341.84,
+   "d": 2.96,
+   "text": "uh the demon spawn do we have demon"
+  },
+  {
+   "t": 1344.8,
+   "d": 1.2,
+   "text": "spawn fans"
+  },
+  {
+   "t": 1346.0,
+   "d": 2.16,
+   "text": "in the audience okay it's my all-time"
+  },
+  {
+   "t": 1348.16,
+   "d": 0.88,
+   "text": "favorite uh"
+  },
+  {
+   "t": 1349.04,
+   "d": 1.76,
+   "text": "race to play as they're very special"
+  },
+  {
+   "t": 1350.8,
+   "d": 1.92,
+   "text": "because they start out as rather frail"
+  },
+  {
+   "t": 1352.72,
+   "d": 1.28,
+   "text": "humanoids but"
+  },
+  {
+   "t": 1354.0,
+   "d": 2.0,
+   "text": "gain very powerful mutations as you"
+  },
+  {
+   "t": 1356.0,
+   "d": 2.08,
+   "text": "level up and each mutation comes in"
+  },
+  {
+   "t": 1358.08,
+   "d": 1.36,
+   "text": "phases of three"
+  },
+  {
+   "t": 1359.44,
+   "d": 2.08,
+   "text": "so you will start with a small pair of"
+  },
+  {
+   "t": 1361.52,
+   "d": 1.36,
+   "text": "horns on your head and then a pair of"
+  },
+  {
+   "t": 1362.88,
+   "d": 1.28,
+   "text": "horns in your head and then a"
+  },
+  {
+   "t": 1364.16,
+   "d": 2.24,
+   "text": "large pair of horns on your head that"
+  },
+  {
+   "t": 1366.4,
+   "d": 1.6,
+   "text": "gives you an extra melee attack but at"
+  },
+  {
+   "t": 1368.0,
+   "d": 2.24,
+   "text": "the cost of you can't wear helmets or"
+  },
+  {
+   "t": 1370.24,
+   "d": 1.44,
+   "text": "any headgear anymore"
+  },
+  {
+   "t": 1371.68,
+   "d": 2.0,
+   "text": "so what i love about this class is that"
+  },
+  {
+   "t": 1373.68,
+   "d": 1.28,
+   "text": "you have to roll with the punches you"
+  },
+  {
+   "t": 1374.96,
+   "d": 1.68,
+   "text": "have to adapt your play style like you"
+  },
+  {
+   "t": 1376.64,
+   "d": 1.28,
+   "text": "may have started with some"
+  },
+  {
+   "t": 1377.92,
+   "d": 2.32,
+   "text": "magic user intentions but you get some"
+  },
+  {
+   "t": 1380.24,
+   "d": 1.52,
+   "text": "really good stealth and melee"
+  },
+  {
+   "t": 1381.76,
+   "d": 1.92,
+   "text": "mutations maybe you should be going in"
+  },
+  {
+   "t": 1383.68,
+   "d": 1.44,
+   "text": "that direction"
+  },
+  {
+   "t": 1385.12,
+   "d": 3.12,
+   "text": "so uh did we find the thing okay i'm"
+  },
+  {
+   "t": 1388.24,
+   "d": 14.72,
+   "text": "gonna have to read it off my phone"
+  },
+  {
+   "t": 1402.96,
+   "d": 2.56,
+   "text": "okay so i'm a level 17 demon spawn i'm"
+  },
+  {
+   "t": 1405.52,
+   "d": 1.68,
+   "text": "in the shoals which has a lot of deep"
+  },
+  {
+   "t": 1407.2,
+   "d": 1.12,
+   "text": "water in it"
+  },
+  {
+   "t": 1408.32,
+   "d": 3.12,
+   "text": "uh and flight is like a must-have in the"
+  },
+  {
+   "t": 1411.44,
+   "d": 1.36,
+   "text": "shoals"
+  },
+  {
+   "t": 1412.8,
+   "d": 1.36,
+   "text": "you can use a ring of flight you can use"
+  },
+  {
+   "t": 1414.16,
+   "d": 2.32,
+   "text": "potions you can use magic but the ideal"
+  },
+  {
+   "t": 1416.48,
+   "d": 0.88,
+   "text": "like for"
+  },
+  {
+   "t": 1417.36,
+   "d": 2.56,
+   "text": "for anyone before they get to that point"
+  },
+  {
+   "t": 1419.92,
+   "d": 1.2,
+   "text": "is the boots of"
+  },
+  {
+   "t": 1421.12,
+   "d": 2.0,
+   "text": "flight because that's just perpetual"
+  },
+  {
+   "t": 1423.12,
+   "d": 1.28,
+   "text": "flight for free"
+  },
+  {
+   "t": 1424.4,
+   "d": 2.64,
+   "text": "and you can use every shortcut and you"
+  },
+  {
+   "t": 1427.04,
+   "d": 0.72,
+   "text": "can"
+  },
+  {
+   "t": 1427.76,
+   "d": 2.0,
+   "text": "engage monsters that swim out in the"
+  },
+  {
+   "t": 1429.76,
+   "d": 1.84,
+   "text": "middle of the ocean such as the snapping"
+  },
+  {
+   "t": 1431.6,
+   "d": 0.8,
+   "text": "turtle"
+  },
+  {
+   "t": 1432.4,
+   "d": 1.6,
+   "text": "and so i'm feeling really confident with"
+  },
+  {
+   "t": 1434.0,
+   "d": 2.08,
+   "text": "this demon spawn"
+  },
+  {
+   "t": 1436.08,
+   "d": 3.04,
+   "text": "and walk right up to the snapping turtle"
+  },
+  {
+   "t": 1439.12,
+   "d": 1.36,
+   "text": "actually fly right up to the snapping"
+  },
+  {
+   "t": 1440.48,
+   "d": 2.72,
+   "text": "turtle and"
+  },
+  {
+   "t": 1443.2,
+   "d": 2.48,
+   "text": "take a swing at it kill it in a couple"
+  },
+  {
+   "t": 1445.68,
+   "d": 1.52,
+   "text": "hits"
+  },
+  {
+   "t": 1447.2,
+   "d": 1.92,
+   "text": "and i'm going to read the text that"
+  },
+  {
+   "t": 1449.12,
+   "d": 2.96,
+   "text": "happens next"
+  },
+  {
+   "t": 1453.28,
+   "d": 2.88,
+   "text": "so you've reached level 17 your demonic"
+  },
+  {
+   "t": 1456.16,
+   "d": 2.08,
+   "text": "ancestry asserts itself"
+  },
+  {
+   "t": 1458.24,
+   "d": 2.56,
+   "text": "your feet mutate into hooves your plus"
+  },
+  {
+   "t": 1460.8,
+   "d": 2.72,
+   "text": "two pair of boots of flying falls away"
+  },
+  {
+   "t": 1463.52,
+   "d": 2.32,
+   "text": "you float gracefully downwards you fall"
+  },
+  {
+   "t": 1465.84,
+   "d": 1.12,
+   "text": "into the water"
+  },
+  {
+   "t": 1466.96,
+   "d": 3.28,
+   "text": "you sink like a stone you drown"
+  },
+  {
+   "t": 1470.24,
+   "d": 3.6,
+   "text": "you die"
+  },
+  {
+   "t": 1476.62,
+   "d": 5.14,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1481.76,
+   "d": 1.76,
+   "text": "i am not familiar with the av setup so"
+  },
+  {
+   "t": 1483.52,
+   "d": 3.28,
+   "text": "hopefully it'll work"
+  },
+  {
+   "t": 1496.88,
+   "d": 2.32,
+   "text": "let's see if i can get the necessary"
+  },
+  {
+   "t": 1499.2,
+   "d": 0.8,
+   "text": "linux"
+  },
+  {
+   "t": 1500.0,
+   "d": 4.4,
+   "text": "technical stuff so that this play works"
+  },
+  {
+   "t": 1507.12,
+   "d": 2.32,
+   "text": "i can tell a story in the meantime all"
+  },
+  {
+   "t": 1509.44,
+   "d": 1.36,
+   "text": "right so"
+  },
+  {
+   "t": 1510.8,
+   "d": 2.48,
+   "text": "i found it hack when i was like about 11"
+  },
+  {
+   "t": 1513.28,
+   "d": 1.52,
+   "text": "or 12 and i was just looking for like"
+  },
+  {
+   "t": 1514.8,
+   "d": 1.76,
+   "text": "mac os 8 shareware"
+  },
+  {
+   "t": 1516.56,
+   "d": 3.52,
+   "text": "like on altavister or whatever it was"
+  },
+  {
+   "t": 1520.08,
+   "d": 1.28,
+   "text": "and i downloaded this game and i"
+  },
+  {
+   "t": 1521.36,
+   "d": 1.04,
+   "text": "downloaded a bunch of other little"
+  },
+  {
+   "t": 1522.4,
+   "d": 1.04,
+   "text": "freeware games"
+  },
+  {
+   "t": 1523.44,
+   "d": 2.0,
+   "text": "and you know i had no idea what unix was"
+  },
+  {
+   "t": 1525.44,
+   "d": 1.52,
+   "text": "i had no idea what open source or the"
+  },
+  {
+   "t": 1526.96,
+   "d": 1.28,
+   "text": "command line i'd never heard of any of"
+  },
+  {
+   "t": 1528.24,
+   "d": 1.52,
+   "text": "those things i just had this old mac"
+  },
+  {
+   "t": 1529.76,
+   "d": 0.8,
+   "text": "right"
+  },
+  {
+   "t": 1530.56,
+   "d": 2.72,
+   "text": "and so fast forward several years later"
+  },
+  {
+   "t": 1533.28,
+   "d": 0.56,
+   "text": "and my like"
+  },
+  {
+   "t": 1533.84,
+   "d": 1.68,
+   "text": "cool technical friend is like oh brita"
+  },
+  {
+   "t": 1535.52,
+   "d": 1.36,
+   "text": "let me show you the command line"
+  },
+  {
+   "t": 1536.88,
+   "d": 2.4,
+   "text": "i was like okay that sounds scary and"
+  },
+  {
+   "t": 1539.28,
+   "d": 1.12,
+   "text": "then i look at it and i'm like"
+  },
+  {
+   "t": 1540.4,
+   "d": 1.6,
+   "text": "wait i know how this works this is just"
+  },
+  {
+   "t": 1542.0,
+   "d": 3.92,
+   "text": "like net hack that's my story"
+  },
+  {
+   "t": 1551.04,
+   "d": 3.12,
+   "text": "cool so hey everyone uh this has been"
+  },
+  {
+   "t": 1554.16,
+   "d": 3.28,
+   "text": "such an amazing experience like just"
+  },
+  {
+   "t": 1557.44,
+   "d": 2.24,
+   "text": "growing up with roguelikes i never ever"
+  },
+  {
+   "t": 1559.68,
+   "d": 1.12,
+   "text": "imagined i'd be"
+  },
+  {
+   "t": 1560.8,
+   "d": 1.52,
+   "text": "in a room with so many inspiring people"
+  },
+  {
+   "t": 1562.32,
+   "d": 1.52,
+   "text": "who made these things so thank you it"
+  },
+  {
+   "t": 1563.84,
+   "d": 1.2,
+   "text": "was awesome"
+  },
+  {
+   "t": 1565.04,
+   "d": 1.52,
+   "text": "i just want to show you a game that we"
+  },
+  {
+   "t": 1566.56,
+   "d": 1.68,
+   "text": "can play together in the show and tell"
+  },
+  {
+   "t": 1568.24,
+   "d": 2.64,
+   "text": "time that's coming up uh so"
+  },
+  {
+   "t": 1570.88,
+   "d": 2.96,
+   "text": "myself and a bunch of my classmates that"
+  },
+  {
+   "t": 1573.84,
+   "d": 0.24,
+   "text": "at"
+  },
+  {
+   "t": 1574.08,
+   "d": 1.6,
+   "text": "university got really hooked on this"
+  },
+  {
+   "t": 1575.68,
+   "d": 1.76,
+   "text": "version of engband"
+  },
+  {
+   "t": 1577.44,
+   "d": 2.24,
+   "text": "that's kind of weird and cool it's like"
+  },
+  {
+   "t": 1579.68,
+   "d": 1.28,
+   "text": "an old version of eggban"
+  },
+  {
+   "t": 1580.96,
+   "d": 1.68,
+   "text": "and they made it real time networked and"
+  },
+  {
+   "t": 1582.64,
+   "d": 1.52,
+   "text": "multiplayer so you can get like a bunch"
+  },
+  {
+   "t": 1584.16,
+   "d": 0.8,
+   "text": "of people"
+  },
+  {
+   "t": 1584.96,
+   "d": 2.24,
+   "text": "uh in a dungeon at the same time all"
+  },
+  {
+   "t": 1587.2,
+   "d": 1.44,
+   "text": "like interacting together"
+  },
+  {
+   "t": 1588.64,
+   "d": 1.36,
+   "text": "and there's a couple really weird things"
+  },
+  {
+   "t": 1590.0,
+   "d": 1.04,
+   "text": "about it that i thought would be kind of"
+  },
+  {
+   "t": 1591.04,
+   "d": 1.04,
+   "text": "fun to like"
+  },
+  {
+   "t": 1592.08,
+   "d": 3.52,
+   "text": "talk about um when i'll actually show"
+  },
+  {
+   "t": 1595.6,
+   "d": 2.56,
+   "text": "you but i need to connect to the server"
+  },
+  {
+   "t": 1598.16,
+   "d": 1.04,
+   "text": "so i'm going to put down the mic for a"
+  },
+  {
+   "t": 1599.2,
+   "d": 3.12,
+   "text": "sec and hope this works"
+  },
+  {
+   "t": 1602.32,
+   "d": 3.28,
+   "text": "oh come on come on network"
+  },
+  {
+   "t": 1605.6,
+   "d": 1.84,
+   "text": "anyway while it's trying to connect"
+  },
+  {
+   "t": 1607.44,
+   "d": 1.2,
+   "text": "there's some cool things about it if you"
+  },
+  {
+   "t": 1608.64,
+   "d": 1.44,
+   "text": "die you turn into a ghost"
+  },
+  {
+   "t": 1610.08,
+   "d": 1.12,
+   "text": "and other players can come down and"
+  },
+  {
+   "t": 1611.2,
+   "d": 1.84,
+   "text": "revive you it's super cool but if your"
+  },
+  {
+   "t": 1613.04,
+   "d": 1.92,
+   "text": "ghost dies then you're permadead"
+  },
+  {
+   "t": 1614.96,
+   "d": 2.64,
+   "text": "that's cool there's also a shared like"
+  },
+  {
+   "t": 1617.6,
+   "d": 1.2,
+   "text": "the base level"
+  },
+  {
+   "t": 1618.8,
+   "d": 2.0,
+   "text": "people can buy houses and they can put"
+  },
+  {
+   "t": 1620.8,
+   "d": 1.36,
+   "text": "inventory in those houses and they can"
+  },
+  {
+   "t": 1622.16,
+   "d": 1.92,
+   "text": "even make stores"
+  },
+  {
+   "t": 1624.08,
+   "d": 3.52,
+   "text": "and you can scum but"
+  },
+  {
+   "t": 1627.6,
+   "d": 3.68,
+   "text": "uh if it players in a level it will"
+  },
+  {
+   "t": 1631.28,
+   "d": 1.44,
+   "text": "persist as long as the player is in that"
+  },
+  {
+   "t": 1632.72,
+   "d": 2.0,
+   "text": "level so you have to kind of like ask"
+  },
+  {
+   "t": 1634.72,
+   "d": 0.64,
+   "text": "people to"
+  },
+  {
+   "t": 1635.36,
+   "d": 1.76,
+   "text": "to leave the level that you want to scum"
+  },
+  {
+   "t": 1637.12,
+   "d": 1.84,
+   "text": "for a while and then you come back"
+  },
+  {
+   "t": 1638.96,
+   "d": 2.0,
+   "text": "okay so it looks like maybe we might not"
+  },
+  {
+   "t": 1640.96,
+   "d": 1.52,
+   "text": "have a demo sorry"
+  },
+  {
+   "t": 1642.48,
+   "d": 3.12,
+   "text": "but uh yeah if you want to play this"
+  },
+  {
+   "t": 1645.6,
+   "d": 0.88,
+   "text": "game with me"
+  },
+  {
+   "t": 1646.48,
+   "d": 3.76,
+   "text": "uh come hit me up oh wait hang on"
+  },
+  {
+   "t": 1650.24,
+   "d": 4.48,
+   "text": "come hit me up uh after this"
+  },
+  {
+   "t": 1654.72,
+   "d": 2.16,
+   "text": "yeah okay on to the next speaker thanks"
+  },
+  {
+   "t": 1656.88,
+   "d": 2.4,
+   "text": "very much"
+  },
+  {
+   "t": 1662.25,
+   "d": 1.99,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1664.24,
+   "d": 5.6,
+   "text": "thank you oh i need that too"
+  },
+  {
+   "t": 1674.8,
+   "d": 4.24,
+   "text": "i have hdmi is that no what"
+  },
+  {
+   "t": 1679.04,
+   "d": 4.0,
+   "text": "works for you"
+  },
+  {
+   "t": 1683.04,
+   "d": 2.96,
+   "text": "so the green button is there's no green"
+  },
+  {
+   "t": 1686.0,
+   "d": 1.28,
+   "text": "hello uh while i get"
+  },
+  {
+   "t": 1687.28,
+   "d": 2.08,
+   "text": "set up here uh my name's alex handy i'm"
+  },
+  {
+   "t": 1689.36,
+   "d": 1.52,
+   "text": "the founder and director of the museum"
+  },
+  {
+   "t": 1690.88,
+   "d": 1.92,
+   "text": "of art and digital entertainment"
+  },
+  {
+   "t": 1692.8,
+   "d": 1.76,
+   "text": "and uh i'm currently watching people"
+  },
+  {
+   "t": 1694.56,
+   "d": 1.68,
+   "text": "play hack of course"
+  },
+  {
+   "t": 1696.24,
+   "d": 2.08,
+   "text": "so you know but anyway quickly i'll take"
+  },
+  {
+   "t": 1698.32,
+   "d": 0.96,
+   "text": "you through a deck"
+  },
+  {
+   "t": 1699.28,
+   "d": 3.44,
+   "text": "about the museum uh we opened in 2011"
+  },
+  {
+   "t": 1702.72,
+   "d": 2.48,
+   "text": "and we have been growing we have classes"
+  },
+  {
+   "t": 1705.2,
+   "d": 0.72,
+   "text": "we have"
+  },
+  {
+   "t": 1705.92,
+   "d": 1.76,
+   "text": "uh all sorts of stuff our classes are"
+  },
+  {
+   "t": 1707.68,
+   "d": 1.44,
+   "text": "all free we teach kids how to program"
+  },
+  {
+   "t": 1709.12,
+   "d": 1.6,
+   "text": "how to make games how to do art we have"
+  },
+  {
+   "t": 1710.72,
+   "d": 1.28,
+   "text": "tournaments and meetups"
+  },
+  {
+   "t": 1712.0,
+   "d": 1.36,
+   "text": "meetups are one of the reasons i wanted"
+  },
+  {
+   "t": 1713.36,
+   "d": 1.44,
+   "text": "to speak is because if any of you there"
+  },
+  {
+   "t": 1714.8,
+   "d": 1.28,
+   "text": "were a lot of people here who"
+  },
+  {
+   "t": 1716.08,
+   "d": 3.28,
+   "text": "said no i want to do xyz roguelike event"
+  },
+  {
+   "t": 1719.36,
+   "d": 2.32,
+   "text": "well you can do it at the museum we will"
+  },
+  {
+   "t": 1721.68,
+   "d": 2.08,
+   "text": "totally host anything game related uh"
+  },
+  {
+   "t": 1723.76,
+   "d": 1.12,
+   "text": "whether it's a"
+  },
+  {
+   "t": 1724.88,
+   "d": 2.72,
+   "text": "24 hour net hack bash or a wiki edit"
+  },
+  {
+   "t": 1727.6,
+   "d": 1.52,
+   "text": "whatever you guys want to so please come"
+  },
+  {
+   "t": 1729.12,
+   "d": 1.28,
+   "text": "up and talk to me afterwards if you have"
+  },
+  {
+   "t": 1730.4,
+   "d": 0.96,
+   "text": "an event"
+  },
+  {
+   "t": 1731.36,
+   "d": 2.0,
+   "text": "uh we do collaborations grant efforts"
+  },
+  {
+   "t": 1733.36,
+   "d": 1.68,
+   "text": "etc but one of the reasons that i really"
+  },
+  {
+   "t": 1735.04,
+   "d": 1.12,
+   "text": "wanted to talk to you"
+  },
+  {
+   "t": 1736.16,
+   "d": 2.56,
+   "text": "we inducted the 360 into our halls when"
+  },
+  {
+   "t": 1738.72,
+   "d": 1.68,
+   "text": "it was end of life"
+  },
+  {
+   "t": 1740.4,
+   "d": 1.76,
+   "text": "uh we're growing every day but one of"
+  },
+  {
+   "t": 1742.16,
+   "d": 1.36,
+   "text": "the reasons i really wanted this to"
+  },
+  {
+   "t": 1743.52,
+   "d": 1.04,
+   "text": "speak is because"
+  },
+  {
+   "t": 1744.56,
+   "d": 3.6,
+   "text": "our first exhibit was a proceed random"
+  },
+  {
+   "t": 1748.16,
+   "d": 2.0,
+   "text": "procedurally generated content games and"
+  },
+  {
+   "t": 1750.16,
+   "d": 1.52,
+   "text": "there are a lot of games in"
+  },
+  {
+   "t": 1751.68,
+   "d": 1.6,
+   "text": "i haven't heard anybody mention anything"
+  },
+  {
+   "t": 1753.28,
+   "d": 1.68,
+   "text": "but splunky today so we did"
+  },
+  {
+   "t": 1754.96,
+   "d": 2.24,
+   "text": "uh dungeons and dragons cloud mountain"
+  },
+  {
+   "t": 1757.2,
+   "d": 1.12,
+   "text": "on in television"
+  },
+  {
+   "t": 1758.32,
+   "d": 2.0,
+   "text": "bomberman and toe jam and earl and"
+  },
+  {
+   "t": 1760.32,
+   "d": 1.44,
+   "text": "spelunky and then later on we added"
+  },
+  {
+   "t": 1761.76,
+   "d": 1.36,
+   "text": "dwarf fortress and net hack when we"
+  },
+  {
+   "t": 1763.12,
+   "d": 1.44,
+   "text": "brought it into the museum so"
+  },
+  {
+   "t": 1764.56,
+   "d": 2.64,
+   "text": "if anybody out there who is uh in the"
+  },
+  {
+   "t": 1767.2,
+   "d": 1.6,
+   "text": "bay area and looking for"
+  },
+  {
+   "t": 1768.8,
+   "d": 1.52,
+   "text": "something to do or some place to"
+  },
+  {
+   "t": 1770.32,
+   "d": 1.68,
+   "text": "volunteer or wants to do a roguelike"
+  },
+  {
+   "t": 1772.0,
+   "d": 1.44,
+   "text": "event a meetup a game jam"
+  },
+  {
+   "t": 1773.44,
+   "d": 1.36,
+   "text": "anything like that we'll let you host it"
+  },
+  {
+   "t": 1774.8,
+   "d": 1.36,
+   "text": "for free at the museum just come talk to"
+  },
+  {
+   "t": 1776.16,
+   "d": 1.6,
+   "text": "me thank you very much"
+  },
+  {
+   "t": 1777.76,
+   "d": 1.84,
+   "text": "oh it's in oakland near kaiser if"
+  },
+  {
+   "t": 1779.6,
+   "d": 1.6,
+   "text": "anybody knows where kaiser is near"
+  },
+  {
+   "t": 1781.2,
+   "d": 2.08,
+   "text": "macarthur and broadway uh we're in"
+  },
+  {
+   "t": 1783.28,
+   "d": 1.76,
+   "text": "oakland you can go to the maid.org to"
+  },
+  {
+   "t": 1785.04,
+   "d": 2.64,
+   "text": "find us thanks"
+  },
+  {
+   "t": 1792.64,
+   "d": 3.2,
+   "text": "one minute okay you have one minute hey"
+  },
+  {
+   "t": 1795.84,
+   "d": 0.72,
+   "text": "i'm gabriel"
+  },
+  {
+   "t": 1796.56,
+   "d": 1.68,
+   "text": "and i wanted to talk very quickly to"
+  },
+  {
+   "t": 1798.24,
+   "d": 3.04,
+   "text": "everyone about ask your art"
+  },
+  {
+   "t": 1801.28,
+   "d": 3.44,
+   "text": "uh so top down view"
+  },
+  {
+   "t": 1804.72,
+   "d": 3.44,
+   "text": "in you know games like hack is great"
+  },
+  {
+   "t": 1808.16,
+   "d": 1.76,
+   "text": "for delivering data and i really like"
+  },
+  {
+   "t": 1809.92,
+   "d": 1.6,
+   "text": "what cogmine is doing"
+  },
+  {
+   "t": 1811.52,
+   "d": 3.92,
+   "text": "my goal with ascii art is to show"
+  },
+  {
+   "t": 1815.44,
+   "d": 3.12,
+   "text": "is to develop it as an art form"
+  },
+  {
+   "t": 1818.56,
+   "d": 3.2,
+   "text": "using games as a medium to deliver it"
+  },
+  {
+   "t": 1821.76,
+   "d": 0.72,
+   "text": "and"
+  },
+  {
+   "t": 1822.48,
+   "d": 1.92,
+   "text": "i really want to see how far ascii art"
+  },
+  {
+   "t": 1824.4,
+   "d": 2.24,
+   "text": "can be pushed"
+  },
+  {
+   "t": 1826.64,
+   "d": 1.92,
+   "text": "and i think this is really relevant if"
+  },
+  {
+   "t": 1828.56,
+   "d": 2.48,
+   "text": "you're trying to get a stronger"
+  },
+  {
+   "t": 1831.04,
+   "d": 2.24,
+   "text": "visual experience for your gamers so"
+  },
+  {
+   "t": 1833.28,
+   "d": 2.0,
+   "text": "this is a development process"
+  },
+  {
+   "t": 1835.28,
+   "d": 4.24,
+   "text": "that i used for this one boss fight"
+  },
+  {
+   "t": 1839.52,
+   "d": 3.28,
+   "text": "in the sacrificial pit and this is kind"
+  },
+  {
+   "t": 1842.8,
+   "d": 0.96,
+   "text": "of where it's"
+  },
+  {
+   "t": 1843.76,
+   "d": 1.52,
+   "text": "it turned a bit ugly here at the bottom"
+  },
+  {
+   "t": 1845.28,
+   "d": 1.52,
+   "text": "but then you know backing up a little"
+  },
+  {
+   "t": 1846.8,
+   "d": 2.08,
+   "text": "bit this is kind of where i'm happy"
+  },
+  {
+   "t": 1848.88,
+   "d": 1.68,
+   "text": "and then i just need to start animating"
+  },
+  {
+   "t": 1850.56,
+   "d": 1.84,
+   "text": "it"
+  },
+  {
+   "t": 1852.4,
+   "d": 1.52,
+   "text": "i built this trailer doesn't have any"
+  },
+  {
+   "t": 1853.92,
+   "d": 2.16,
+   "text": "audio it's one minute long i'm going to"
+  },
+  {
+   "t": 1856.08,
+   "d": 0.48,
+   "text": "play it"
+  },
+  {
+   "t": 1856.56,
+   "d": 2.32,
+   "text": "you guys tell me what you think if you"
+  },
+  {
+   "t": 1858.88,
+   "d": 1.2,
+   "text": "want to talk about"
+  },
+  {
+   "t": 1860.08,
+   "d": 2.88,
+   "text": "ascii art later show me you know i'm"
+  },
+  {
+   "t": 1862.96,
+   "d": 1.12,
+   "text": "always looking for"
+  },
+  {
+   "t": 1864.08,
+   "d": 3.52,
+   "text": "examples of things i haven't found yet"
+  },
+  {
+   "t": 1867.6,
+   "d": 12.24,
+   "text": "so let me know"
+  },
+  {
+   "t": 1906.0,
+   "d": 3.03,
+   "text": "and that's stone story"
+  },
+  {
+   "t": 1909.03,
+   "d": 5.37,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1914.4,
+   "d": 5.84,
+   "text": "okay um"
+  },
+  {
+   "t": 1920.24,
+   "d": 4.0,
+   "text": "ah great we're almost done"
+  },
+  {
+   "t": 1924.24,
+   "d": 3.44,
+   "text": "as always have more announcements um"
+  },
+  {
+   "t": 1927.68,
+   "d": 2.8,
+   "text": "so we're gonna watch bruno diaz's talk"
+  },
+  {
+   "t": 1930.48,
+   "d": 0.48,
+   "text": "about"
+  },
+  {
+   "t": 1930.96,
+   "d": 2.32,
+   "text": "voyager here on this screen because i"
+  },
+  {
+   "t": 1933.28,
+   "d": 1.52,
+   "text": "didn't want to split things"
+  },
+  {
+   "t": 1934.8,
+   "d": 1.84,
+   "text": "if you are tired of talk someone go play"
+  },
+  {
+   "t": 1936.64,
+   "d": 1.84,
+   "text": "video games you can go into homeroom"
+  },
+  {
+   "t": 1938.48,
+   "d": 3.36,
+   "text": "and do so um if you are one of the"
+  },
+  {
+   "t": 1941.84,
+   "d": 2.64,
+   "text": "speakers or developers we want to get a"
+  },
+  {
+   "t": 1944.48,
+   "d": 1.6,
+   "text": "group picture so come meet me"
+  },
+  {
+   "t": 1946.08,
+   "d": 3.04,
+   "text": "by that end sign after i'm done talking"
+  },
+  {
+   "t": 1949.12,
+   "d": 1.76,
+   "text": "and we can remember that we were all in"
+  },
+  {
+   "t": 1950.88,
+   "d": 3.04,
+   "text": "the same room at one point in our lives"
+  },
+  {
+   "t": 1953.92,
+   "d": 2.64,
+   "text": "um we're selling the extra merch if you"
+  },
+  {
+   "t": 1956.56,
+   "d": 1.28,
+   "text": "want to buy some of the extra merch"
+  },
+  {
+   "t": 1957.84,
+   "d": 1.68,
+   "text": "extra socks or t-shirts"
+  },
+  {
+   "t": 1959.52,
+   "d": 2.0,
+   "text": "you can go talk to ashish who's behind"
+  },
+  {
+   "t": 1961.52,
+   "d": 1.44,
+   "text": "me"
+  },
+  {
+   "t": 1962.96,
+   "d": 1.6,
+   "text": "and we are getting kicked out around"
+  },
+  {
+   "t": 1964.56,
+   "d": 1.84,
+   "text": "seven now"
+  },
+  {
+   "t": 1966.4,
+   "d": 1.76,
+   "text": "um i don't know why the schedule set a"
+  },
+  {
+   "t": 1968.16,
+   "d": 1.76,
+   "text": "different number we can all go out and"
+  },
+  {
+   "t": 1969.92,
+   "d": 0.88,
+   "text": "have dinner"
+  },
+  {
+   "t": 1970.8,
+   "d": 3.76,
+   "text": "and keep chatting so"
+  },
+  {
+   "t": 1974.72,
+   "d": 2.08,
+   "text": "yeah we have to be out by seven it's"
+  },
+  {
+   "t": 1976.8,
+   "d": 1.28,
+   "text": "it's so sad"
+  },
+  {
+   "t": 1978.08,
+   "d": 2.24,
+   "text": "we oh uh and tech shop which is right"
+  },
+  {
+   "t": 1980.32,
+   "d": 1.2,
+   "text": "down the street is not"
+  },
+  {
+   "t": 1981.52,
+   "d": 1.6,
+   "text": "it's a hacker space it has also cool"
+  },
+  {
+   "t": 1983.12,
+   "d": 1.76,
+   "text": "tools they do tours"
+  },
+  {
+   "t": 1984.88,
+   "d": 1.44,
+   "text": "so spar is going to lead some people"
+  },
+  {
+   "t": 1986.32,
+   "d": 2.72,
+   "text": "over there to"
+  },
+  {
+   "t": 1989.04,
+   "d": 1.84,
+   "text": "get a tour of their awesome milling"
+  },
+  {
+   "t": 1990.88,
+   "d": 1.68,
+   "text": "machines and they have like a magnet"
+  },
+  {
+   "t": 1992.56,
+   "d": 0.8,
+   "text": "printer and"
+  },
+  {
+   "t": 1993.36,
+   "d": 3.44,
+   "text": "lots of crazy stuff um"
+  },
+  {
+   "t": 1996.8,
+   "d": 2.32,
+   "text": "yes one other thing thank you all for"
+  },
+  {
+   "t": 1999.12,
+   "d": 2.4,
+   "text": "coming"
+  },
+  {
+   "t": 2002.84,
+   "d": 3.0,
+   "text": "uh"
+  },
+  {
+   "t": 2006.52,
+   "d": 4.6,
+   "text": "[Applause]"
+  },
+  {
+   "t": 2011.12,
+   "d": 1.84,
+   "text": "this is great i had a great time i hope"
+  },
+  {
+   "t": 2012.96,
+   "d": 1.6,
+   "text": "you all had a great time"
+  },
+  {
+   "t": 2014.56,
+   "d": 1.92,
+   "text": "we want to know what you thought of this"
+  },
+  {
+   "t": 2016.48,
+   "d": 1.52,
+   "text": "so we can do better if we ever"
+  },
+  {
+   "t": 2018.0,
+   "d": 2.4,
+   "text": "do this again we have an email address"
+  },
+  {
+   "t": 2020.4,
+   "d": 1.92,
+   "text": "you can email which is info"
+  },
+  {
+   "t": 2022.32,
+   "d": 3.28,
+   "text": "roguelike dot club or also contact"
+  },
+  {
+   "t": 2025.6,
+   "d": 2.56,
+   "text": "roguelike.club i think both of them work"
+  },
+  {
+   "t": 2028.16,
+   "d": 1.6,
+   "text": "they'll go to us the organizers"
+  },
+  {
+   "t": 2029.76,
+   "d": 1.68,
+   "text": "give us all of your feedback anything"
+  },
+  {
+   "t": 2031.44,
+   "d": 1.04,
+   "text": "that you thought went really well"
+  },
+  {
+   "t": 2032.48,
+   "d": 1.6,
+   "text": "anything you thought could be better"
+  },
+  {
+   "t": 2034.08,
+   "d": 2.24,
+   "text": "we're gonna compile it so we do not"
+  },
+  {
+   "t": 2036.32,
+   "d": 1.28,
+   "text": "forget these things"
+  },
+  {
+   "t": 2037.6,
+   "d": 1.92,
+   "text": "if we ever do this again thank you all"
+  },
+  {
+   "t": 2039.52,
+   "d": 1.92,
+   "text": "for coming it's really great"
+  },
+  {
+   "t": 2041.44,
+   "d": 1.76,
+   "text": "it's gonna be a cool talk on the screen"
+  },
+  {
+   "t": 2043.2,
+   "d": 1.44,
+   "text": "in one minute and then we'll get to hang"
+  },
+  {
+   "t": 2044.64,
+   "d": 0.48,
+   "text": "out"
+  },
+  {
+   "t": 2045.12,
+   "d": 1.6,
+   "text": "and people who need to be in group photo"
+  },
+  {
+   "t": 2046.72,
+   "d": 4.16,
+   "text": "over there"
+  }
+ ]
+}

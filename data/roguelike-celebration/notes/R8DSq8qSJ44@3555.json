@@ -1,0 +1,162 @@
+{
+  "id": "R8DSq8qSJ44@3555",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 3555,
+    "end": 5328
+  },
+  "title": "Roguelike Design = Instructional Design: Connecting Procgen and Pedagogy",
+  "speaker": "Gillian Smith",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=3555s",
+  "talk_type": "design",
+  "summary": "Gillian Smith, a professor at Worcester Polytechnic Institute, argues that roguelike design and instructional design are the same activity, using a university as an extended roguelike metaphor. Higher education can learn from roguelikes' fractal progression loops, their normalising of failure, and their practice of designing a space of possible experiences rather than one path. In an aside she argues the procedural generation community should lead public understanding of generative AI by framing generators as models, media and materials. Roguelikes in turn could borrow from progressive pedagogy (ungrading and self-assessment, integrative interdisciplinarity, asset mapping, Freire's Pedagogy of the Oppressed), and she closes by asking what roguelike designers, as educators, want players to learn.",
+  "games": [
+    "Attack Your Workload",
+    "AI Runner",
+    "Bots That Explode Most of the Time"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "education",
+      "kind": "example",
+      "claim": "A project-based university works like a multiplayer roguelike in which students keep most of what each run (class or project) gives them, juggle several runs at once, and are allowed to fail without permanent penalty.",
+      "detail": "Smith describes WPI as a 'roguelike' with more than 90 classes, encouraged multiclassing, unique boss battles and decades of legacy content. Its core aesthetic is that people learn by taking risks; there are no failing grades, and a poor result becomes an 'NR' (no record) that disappears from the transcript.",
+      "t": 3725,
+      "quote": "people learn through taking risks and one of the ways we exemplify that at WPI that's a little weird um is that there are no failing grades",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "gamification",
+      "kind": "principle",
+      "claim": "Bringing game design into learning should enhance what is already good about the activity ('caramelized cauliflower'), not disguise disliked work with points and badges ('chocolate-covered broccoli').",
+      "detail": "Smith says gamification in education usually turns the quantitative assessment parts of teaching into points-and-badges mechanics, which is product-focused. The cauliflower metaphor came from one of her students: build up existing flavours without numerically rating them.",
+      "t": 3818,
+      "quote": "it's in line with like enhancing the existing deliciousness of a thing",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "progression loops",
+      "kind": "principle",
+      "claim": "Roguelikes structure experience as fractal progression loops (moment to moment, room to room, run to run, meta across games) that mirror each other and hold each other in tension, unlike the linear, backward-designed progression of traditional instruction.",
+      "detail": "Traditional instructional design scaffolds skills in order and works backward from the desired graduate, e.g. a mechanical engineer. Smith maps the roguelike loops onto teaching: in-class activities mirror project work, which mirrors the curriculum, which mirrors a student's personal and professional development.",
+      "t": 3920,
+      "quote": "Rogike design on the other hand um I like to think about in terms of fractal progression loops",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "failure",
+      "kind": "principle",
+      "claim": "Failure is only fun when it is normalised: players (or students) need to be able to name what they carry away from it, and it ideally comes with a good story.",
+      "detail": "Smith says higher education talks about learning through failure but not about making failure feel okay, which roguelikes do. Her department made a 'failure wall' of post-it notes from students and faculty, then burned them in a metal bowl at the end of term, so failure could be shared, celebrated and seen in others.",
+      "t": 4010,
+      "quote": "failure can be fun. Um, but really only if it's normalized as part of your experience.",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "possibility space",
+      "kind": "principle",
+      "claim": "Procedural generation means designing an acceptable space of potential experiences rather than one perfectly crafted experience; that space must feel unified even though no two players or students take the same path.",
+      "detail": "Smith says designing as if everyone follows the same path is 'didactic' education, which is not how learning works. Thinking in spaces lets learners discover weird parts of the space themselves, and even extend and help curate the generative space together. She makes the obligatory 'oatmeal' reference.",
+      "t": 4086,
+      "quote": "creating a space of potential experiences instead of a single individual experience",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "agency",
+      "kind": "principle",
+      "claim": "A generative space for learners needs three things at once: agency to choose, exposure to possibilities they did not know existed, and guardrails that keep them from wandering somewhere useless.",
+      "detail": "Smith's 'metaphor within a metaphor' is oatmeal toppings: nobody learns from being force-fed bananas, a teacher's job includes showing that strawberries are possible, and guardrails ensure they still end up with oatmeal at all.",
+      "t": 4197,
+      "quote": "we want to be thinking about exposure though as well, like maybe they didn't know that it's possible to put strawberries on oatmeal",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generative ai",
+      "kind": "principle",
+      "claim": "The procedural generation community should lead the public conversation about AI, explaining generative systems as models (abstractions of reality made by flawed humans) and as media that carry messages and amplify human biases.",
+      "detail": "Smith teaches critical AI literacy to faculty and describes higher education's 'AI crisis': pressure to make students 'AI ready', the cheapening of intellectual labour, and cheating worries, which she thinks have older causes. She argues that big tech is driving a destructive narrative while this community knows how to design meaningful experiences with generative systems, and that roguelike generators are usually treated as a medium, not a replacement for human labour.",
+      "t": 4251,
+      "quote": "procedural generation people I think should be the ones who are kind of leading the narrative about AI in in the world",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generators as materials",
+      "kind": "principle",
+      "claim": "Designers can treat generative systems as materials with affordances, constraints and embedded ethics, choosing them by the goal of the experience rather than letting the technology drive it.",
+      "detail": "Smith compares them to paints: some are avoided because sourcing their dyes is unethical. She stresses that she is not saying to embrace generative AI, only that this metaphor helps people communicate how they feel about it.",
+      "t": 4472,
+      "quote": "designers are are well positioned to think about generative systems as materials right and those materials have infidences constraints and embedded ethics",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "games about ai",
+      "kind": "example",
+      "claim": "Student games such as AI Runner and Bots That Explode Most of the Time let players hand play over to an 'AI button' and feel what is lost when the game plays itself.",
+      "detail": "Smith has students make games to make sense of AI. In Attack Your Workload, by three first-year students, melee and ranged weapons for attacking homework can have AI mode on or off. In Abraham Goodman's game poem AI Runner, holding A makes the game play itself. In Bashar Alcasar's Bots That Explode Most of the Time you program a robot or press an AI button to do it for you.",
+      "t": 4575,
+      "quote": "you can play it regularly or you can hold A for AI and the game plays itself",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "self-assessment",
+      "kind": "principle",
+      "claim": "Ungrading, where learners say what they learned and assess themselves, avoids extrinsic rewards crowding out intrinsic motivation, and it reveals that the lesson actually learned is rarely the one intended; roguelikes could use the same idea.",
+      "detail": "Smith cites Jesse Stommel's book on ungrading and links it to talks the day before about players optimising the fun out of a game by chasing points. Metacognitive skills develop through agency and reflection, and after five or six years of ungrading she finds students' most important lesson is almost never the one she meant to teach, which is the kind of insight into what a player is actually learning that designers want.",
+      "t": 4652,
+      "quote": "the core idea behind ungrading is that grades suck. Um and that exttrinsic motivation styies uh and frustrates intrinsic motivation",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "interdisciplinary teams",
+      "kind": "principle",
+      "claim": "Beyond additive (A plus B) and multiplicative (expertise at the intersection) interdisciplinarity, an integrative model trains people as translators between disciplines, a role interdisciplinary game teams badly need.",
+      "detail": "Smith suggests the models also apply to what skills a player gains from picking a class. Her example: in a game design and robotics project to build a robot escape room, the two groups spent about six months not realising that the y-axis points out of the screen in robotics software but up in 3D modelling software, so 'operating on the y-axis' meant different things to each.",
+      "t": 4826,
+      "quote": "you treat interdicciplinary education as a translation activity rather than as a um uh as a sort of combined knowledge activity",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "asset mapping",
+      "kind": "open-question",
+      "claim": "Asset mapping, where each learner maps the skills they bring, the team combines the maps, and each person picks areas to grow before scoping a project, could become a roguelike mechanic, though how is unsolved.",
+      "detail": "The method was developed at WPI by Lisa Stoddard and Jeff Feifer, adapted from community activism. The maps also include cultural background and hobbies, to build interpersonal skills and counter stereotype threat and bias.",
+      "t": 4993,
+      "quote": "I do not know how it would be done, this would be a super cool thing to kind of bring to a bring into a into a rogike",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "self-assessment",
+      "kind": "open-question",
+      "claim": "Progressive pedagogy suggests untried roguelike mechanics: players identifying and self-assessing their own skills during play, inventory that atrophies unless reinforced, and designers and players talking inside the game.",
+      "detail": "Smith presents these as her open questions about bringing progressive pedagogy concretely into roguelike design, contrasting in-game conversation with conversation in Steam reviews.",
+      "t": 5126,
+      "quote": "What if we actually make the game where player inventory atrophies over time unless it gets reinforced?",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "games as pedagogy",
+      "kind": "principle",
+      "claim": "If educators are roguelike designers, roguelike designers are also educators, so they should ask what they want players to learn about the world's underlying systems and how players can shape the world, and what designers can learn from players.",
+      "detail": "Smith draws on Freire's Pedagogy of the Oppressed, which rejects the 'banking model' of transferring knowledge in favour of everyone teaching and learning in order to change the world, and on quotes from Toni Morrison, Richard Shaull and bell hooks. Her philosophical question is 'what is a roguelike of the oppressed?'",
+      "t": 5214,
+      "quote": "if educators are rogike designers, then by the transitive property of equality, rogike designers are also educators",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

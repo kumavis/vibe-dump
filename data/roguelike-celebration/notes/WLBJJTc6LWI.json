@@ -1,0 +1,194 @@
+{
+  "id": "WLBJJTc6LWI",
+  "title": "Shawn Main - You May Already Be A Roguelike",
+  "speaker": "Shawn Main",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=WLBJJTc6LWI",
+  "talk_type": "design",
+  "summary": "Shawn Main, a former Magic: The Gathering designer working at Riot on Legends of Runeterra, presents 'roguelike' as a framework other genres can borrow for replayability, drawn from building Runeterra's Lab of Legends mode. He defines a roguelike as a game whose core loop uses procedurality to increasingly challenge the player as they grow in power across a run, broken into inconsistent meaningful choices, inconsistent escalating challenges, and a finite run structure. He gives criteria for good choices (modularity, impact, recontextualisation, combinatorics), good challenges (multiple axes, rewarding skill) and good run structure (distinct starts, discouraging boring behaviour, permanent consequences, meta-progression), including a misstep where Lab of Legends softened permadeath.",
+  "games": [
+    "Legends of Runeterra",
+    "Spelunky",
+    "Super Mario Bros.",
+    "Dream Quest",
+    "Slay the Spire",
+    "Dicey Dungeons",
+    "Hades",
+    "NetHack",
+    "Rogue Legacy",
+    "Boyfriend Dungeon"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelike as framework",
+      "kind": "principle",
+      "claim": "A roguelike can be treated as a framework rather than a genre: a game whose core loop uses procedurality to increasingly challenge the player as they grow in power across a run.",
+      "detail": "Main offers this definition while admitting reasonable people could dispute every word. Its value is that designers in other genres can apply it to add replayability.",
+      "t": 445,
+      "quote": "a game whose core loop embraces procedurality to increasingly challenge the player as they grow in power",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "core components",
+      "kind": "principle",
+      "claim": "Main breaks the roguelike framework into three components: inconsistent meaningful choices that grow the player's power, inconsistent escalating challenges that test those choices, and a finite run structure.",
+      "detail": "The player should not have access to everything: decisions should be mutually exclusive (sword or shield, left or right). 'Inconsistent' is the key word in both, and is where procedurality comes in. Runs end in success or failure, and a new run means a new series of choices.",
+      "t": 480,
+      "quote": "give the player inconsistent meaningful choices that allow them to grow in power",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "card games",
+      "kind": "example",
+      "claim": "Legends of Runeterra added a roguelike mode because its generous card distribution removed the classic CCG feeling of power progression, which roguelike runs restore.",
+      "detail": "In a traditional CCG you replace weak cards with better ones over a career; Runeterra let players collect nearly everything, so play was about what to play, not climbing to the best deck. Lab of Legends added items that power up cards, a run of deck-upgrade choices, powers giving persistent bonuses, and AI opponents with distinct personalities and thematic decks.",
+      "t": 234,
+      "quote": "roguelikes are really uniquely set up to kind of give a player a sense of power progression",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player stories",
+      "kind": "example",
+      "claim": "Combinatorial choices that cause sharp power growth in a short time produce personal player stories, which Riot took as an early signal its Lab of Legends roguelike mode was working.",
+      "detail": "Main says players came back saying 'I had this power and this card, let me tell you about this', which showed the mode was succeeding.",
+      "t": 380,
+      "quote": "the combinatorics of that lead to these very personal stories",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "inconsistency",
+      "kind": "example",
+      "claim": "Super Mario Bros. is not roguelike because runs are consistent and content exhaustible, while Spelunky applies the same platformer structure inconsistently; CCGs have inconsistent challenges but lack mutually exclusive choices.",
+      "detail": "In Spelunky you cannot anticipate secrets or jumps, and power-ups vary: lots of bombs one run lets you skip sections, a shotgun another lets you fight aggressively. A CCG opponent is unpredictable, but you can freely adapt your deck. Dream Quest brought dungeon structure to deckbuilding, followed by Slay the Spire and Lab of Legends.",
+      "t": 669,
+      "quote": "one run to the next the player can't anticipate where those secrets are they can't anticipate um exactly what jump they're gonna need to make",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "modularity",
+      "kind": "principle",
+      "claim": "Good player choices are modular: they act on the same shared building blocks so systems readily interact, as dice do in Dicey Dungeons.",
+      "detail": "In Dicey Dungeons items manipulate dice in finite, discrete ways, turning a roll into damage or defence. In Q&A Main contrasted a choice between a longsword and ballroom dancing, which would not interact, and noted Boyfriend Dungeon makes both affect dating and dungeon progress; cosmetic and gameplay choices running in parallel give no chance for interaction.",
+      "t": 791,
+      "quote": "dice are great because you can manipulate them in finite ways",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "impactful choices",
+      "kind": "example",
+      "claim": "Good roguelike choices should be impactful enough to change the style of the run, as a Daedalus Hammer upgrade does in Hades.",
+      "detail": "Main says whether or not you get certain combinations in Hades gives a meaningfully different experience.",
+      "t": 816,
+      "quote": "the choices should be very impactful uh so hades is probably a great example of this",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "recontextualising choices",
+      "kind": "principle",
+      "claim": "Good choices recontextualise other choices: no option is definitively best because its value depends on what the player has built so far, and it shapes later choices.",
+      "detail": "His Lab of Legends example is a choice of three powers, one boosting units that survive damage and another boosting big units; which is better depends on the deck built so far.",
+      "t": 834,
+      "quote": "good choices are going to re-contextualize other choices",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "combinatorics",
+      "kind": "principle",
+      "claim": "Designers should ask how many unique combinations their choices give the player; Lab of Legends' 50-60 items across 500-600 cards let truly novel combinations surprise players.",
+      "detail": "Main says even he had never seen the item-card combination in his own screenshot, illustrating how a large combination space creates surprise and delight.",
+      "t": 873,
+      "quote": "how many unique combinations can you provide the player",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "multiple axes",
+      "kind": "principle",
+      "claim": "Challenges should test the player along multiple axes, because if one stat is always better the player just learns to pick it and choices stop mattering.",
+      "detail": "Main's example is a game he names in the captions as 'driftlands', in which the player manages two decks, one for talking and one for fighting; players choose which to improve and whether to fight or talk with each opponent, with different rewards and paths.",
+      "t": 915,
+      "quote": "testing the player along multiple axes uh if you know you can get faster or stronger but faster is always better",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "persistent health",
+      "kind": "technique",
+      "claim": "Persistent health across fights makes even easy encounters meaningful, since damage taken now matters later.",
+      "detail": "Main says this lets small challenges the player can readily overcome still demand skill: how many five-damage hits can you afford.",
+      "t": 989,
+      "quote": "you are fighting the easy enemy but did it deal some damage to you you will care about that later",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "optional objectives",
+      "kind": "example",
+      "claim": "Optional bonus objectives within a fight, like killing a golden wisp for extra gold, give players of every skill level a goal to strive for.",
+      "detail": "Main's example is a roguelike auto-battler-like game (captioned as 'dungeon beneath'). A novice is happy to win, a medium player to take no damage, and a skilled player can also chase the extra objective.",
+      "t": 1021,
+      "quote": "a novice player um could come to this and be happy that they won the battle a medium-skilled player could be happy that they didn't take any damage",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "starting positions",
+      "kind": "principle",
+      "claim": "Runs should start from enforced, distinct starting positions, such as NetHack's classes with randomised stats, Lab of Legends' champions, or Hades' first-room boon.",
+      "detail": "A class choice contextualises the run and randomised stats add variety. In Lab of Legends, Miss Fortune, Taliyah or Braum have very distinct decks even if the core after that is similar.",
+      "t": 1052,
+      "quote": "enforced kind of distinct uh novel starting positions",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hunger clock",
+      "kind": "principle",
+      "claim": "Discourage boring but useful behaviour, as NetHack's hunger system pushes players forward instead of searching every corner, because players will optimise themselves out of fun.",
+      "detail": "Main notes many games naturally encourage conservatism, with players becoming ever more careful; anything that keeps them pressing forward into the satisfying parts is powerful.",
+      "t": 1122,
+      "quote": "if the players can do something that is going to be against their fun but is useful they will probably engage in that",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "warning",
+      "claim": "Lab of Legends' later version softened permadeath into an RPG-style 'keep going', but without consequences for failure players could get stuck with bad choices and bang their heads against a wall.",
+      "detail": "The original mode had classic permadeath and unlocked higher difficulty tiers; the later version added map exploration and XP and, fearing permadeath limits wider appeal, let players continue after dying. Unlike a full RPG there was no way to grind out of failure, so players had to retire runs themselves.",
+      "t": 1274,
+      "quote": "if you failed those tests and died there was not a consequence to that",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "principle",
+      "claim": "Main argues meta-progression pairs naturally with a roguelike core because players want to be rewarded for their time, rather than relying purely on their own improving skill.",
+      "detail": "He acknowledges this is controversial to a roguelike audience. He cites Rogue Legacy as the classic example and Hades as making an art of it, with narrative elements in the meta-progression serving as a reward for doing well in runs.",
+      "t": 1327,
+      "quote": "meta progression is a real natural pairing with a roguelike core if the players the players want to be rewarded for their time",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "principle",
+      "claim": "When a strong core mechanic has many possible secondary loops, playtest early in the roughest possible form to learn what is fun and how to layer systems.",
+      "detail": "Answering an audience question, Main said rough approximations and watching what playtesters find fun teach you consistently, including how to layer systems together.",
+      "t": 1685,
+      "quote": "play test early um and play test in the roughest shape you can",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

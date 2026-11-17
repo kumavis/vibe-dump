@@ -1,0 +1,142 @@
+{
+  "id": "ZtXGg6ECwQ8",
+  "title": "Robin Mendoza: The Use of Knowledge in the Labyrinth: The price mechanism as a storytelling device",
+  "speaker": "Robin Mendoza",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=ZtXGg6ECwQ8",
+  "talk_type": "design",
+  "summary": "Robin Mendoza, a game designer and writer, proposes using prices as an environmental storytelling device in roguelikes. Drawing on Hayek's 'The Use of Knowledge in Society', he argues prices compress complex world information (scarcity, beliefs, politics, collusion, the player's own actions) into numbers players can infer from, making them passive quest hooks and aids to item identification. He discusses Pathologic's plague-driven price spikes and bartering, economic board games, 868-HACK's two currencies and Netrunner's click-to-credit valuation. He also cautions that fluctuating prices can be chaotic, break balance, push players toward spreadsheet thinking and duplicate other 'space-collapsing' systems like magic.",
+  "games": [
+    "Pathologic",
+    "868-HACK",
+    "Android: Netrunner",
+    "Offworld Trading Company",
+    "M.U.L.E.",
+    "Food Chain Magnate",
+    "Root",
+    "Go"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "price signaling",
+      "kind": "principle",
+      "claim": "Shop prices can act as compressed signals of what is happening in a game world, letting players infer events without being told directly.",
+      "detail": "Mendoza opens with a merchant outside a dungeon charging double for tarsier amulets, which could mean superstition, a subsidy, deforestation the player caused, or a real threat. Following Hayek's 1945 paper, he describes prices as quantitative indices that compress and transmit complex information across networks, like a cryptographic hash where any change in world conditions changes the numbers, though without revealing whether supply or demand moved.",
+      "t": 110,
+      "quote": "prices high at calls these quantitative indices that are able to compress and transmit complex information",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "price signaling",
+      "kind": "technique",
+      "claim": "Prices can encode resource distribution, community beliefs and prejudices, politics and subsidies, market collusion, and repercussions of the player's actions.",
+      "detail": "Mendoza lists these as information prices could carry in a roguelike: scarcity varying between games, merchants marking prices up or down by the player's class or race, which industries are subsidized, cornered markets, and consequences of what the player has done.",
+      "t": 181,
+      "quote": "some of the information that prices can encode which is a lot um it's like resource distribution",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest hooks",
+      "kind": "technique",
+      "claim": "Price movements can serve as passive quest hooks: instead of an NPC assigning a task, players infer opportunities from prices and choose to intervene before the facts are known.",
+      "detail": "Mendoza frames the adventurer as an amoral opportunist who meddles in affairs. Acting on price hunches gives a natural risk-reward, and players could buy or sell tips, while prices could reveal secrets or the activities of NPCs and factions.",
+      "t": 232,
+      "quote": "you can make inferences from uh from Price motions to uh try and see what's going on in the world and and intercede",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "technique",
+      "claim": "Prices can feed the roguelike item-identification minigame, for example verifying an item's provenance or hinting that a cheap item is cursed.",
+      "detail": "Mendoza suggests a price could confirm a legendary item's provenance or signal someone dumping a cursed item cheaply. The host adds that classic roguelikes already use price as an identification hint (an item at 30 gold might be identify), but that is a puzzle technique rather than telling you about the world.",
+      "t": 273,
+      "quote": "it could also feed into the traditional Rog like item identification miname you know where you could maybe verify the provence of an item",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "price signaling",
+      "kind": "example",
+      "claim": "In Pathologic, skyrocketing prices after the first day tell the player the plague news has spread, and push them into a bartering minigame.",
+      "detail": "The player is a healer arriving just before a plague; panic and scalping make items almost unaffordable. Players then barter with different groups (women, men, children) who want different things in a near-intransitive loop, and per-district reputation gives discounts, shaping the player's daily route through town.",
+      "t": 312,
+      "quote": "you might actually tell that the news of the plague has spread around um just because of these now ridiculously high prices",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "economic board games",
+      "kind": "example",
+      "claim": "Market simulators and economic board games such as Offworld Trading Company, M.U.L.E., 18xx train games and Splotter's Food Chain Magnate tell their stories through prices, stocks and reinvestment choices.",
+      "detail": "Mendoza notes these games have stock markets and financial options for screwing over other players, and since the richest player wins they pose the question of whether to reinvest or pocket profits. He recommends tabletop games generally as a rich resource for economic ideas in game form.",
+      "t": 374,
+      "quote": "free market simulators like offeral Trading Company and mule um that kind of tell their stories through the movements and prices",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "multiple currencies",
+      "kind": "example",
+      "claim": "868-HACK prices its programs in two currencies, credits and energy, making costs fuzzier and turning choices into multi-objective optimization that is harder to min-max.",
+      "detail": "Mendoza describes Michael Brough's 868-HACK, where using a program costs credits and/or energy. He also notes the score can be thought of as representing intrinsic rather than instrumental value.",
+      "t": 467,
+      "quote": "that makes the costs complex um just a lot fuzzier a lot harder to kind of minmax and optimize",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "valuation heuristics",
+      "kind": "technique",
+      "claim": "A mechanic that fixes an exchange rate between resources, like Netrunner's Magnum Opus converting one click to two credits, gives players a reference frame for cost-benefit analysis all game.",
+      "detail": "Mendoza compares this to the relative value of chess pieces: establishing that one click is worth about two credits gives a valuation heuristic, and designers might deliberately include such reference points.",
+      "t": 524,
+      "quote": "it might be good to think about having these kinds of things that sort of establish um these frames of reference for cost benefit analysis",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "dynamic pricing",
+      "kind": "warning",
+      "claim": "Organically fluctuating prices can be volatile, chaotic and exploitable, so designers may prefer setting prices by fiat to protect balance.",
+      "detail": "Mendoza cautions that dynamic prices can strain game balance, especially if players find exploits. Players may also struggle to think in quotients and rates when looking at absolute price numbers, needing extra aids.",
+      "t": 531,
+      "quote": "prices can be very volatile um they can be chaotic um they can definitely start game balance",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "abstraction vs situation",
+      "kind": "warning",
+      "claim": "Fluctuating market parameters can pull players out of concrete spatial puzzles into abacus-style objective-function calculation, losing the sense of presence in a situation.",
+      "detail": "Mendoza contrasts Go, a primordial territorial auction with no money, where thinking is spatial and about shape. Games can wrap economic ideas in first-person puzzle situations; prices' algebraic abstraction also makes comparing apples to oranges problematic.",
+      "t": 603,
+      "quote": "you might not want the player to get out the advocus and you know do this kind of objective function calculus",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "space-collapsing systems",
+      "kind": "open-question",
+      "claim": "Markets, cyberspace and magic all act as shortcuts that collapse space-time, so designers should ask whether a price system is redundant alongside a magic system.",
+      "detail": "Mendoza notes cyberspace in Netrunner lets a lone hacker interact with a megacorporation, and magic often performs the same collapsing role. He suggests considering whether prices on top of magic are redundant, or what else could serve this function.",
+      "t": 670,
+      "quote": "you could also think of prices as uh you know a kind of shortcut that collapses SpaceTime",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "world logic",
+      "kind": "open-question",
+      "claim": "Asking why a shopkeeper exists deep in a deadly dungeon, and how its supply chain works, commits a designer to substantial worldbuilding.",
+      "detail": "In Q&A, the host remarks that pricing a dungeon starts with questioning the shopkeeper on level six, a thread that unravels into worldbuilding; Mendoza agrees it is hard to know where it stops and might make players more paranoid. Mendoza adds prices suggest a more social world of interacting agents feeding a shared infrastructure.",
+      "t": 826,
+      "quote": "it also maybe sort of indicates um a more kind of social uh like world you know more agents who are interacting",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

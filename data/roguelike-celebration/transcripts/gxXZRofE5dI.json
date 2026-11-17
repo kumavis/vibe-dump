@@ -1,0 +1,2680 @@
+{
+ "id": "gxXZRofE5dI",
+ "url": "https://www.youtube.com/watch?v=gxXZRofE5dI",
+ "title": "Bjarke Alexander Larson - Corrupted Databases - Building a Repeatable Logic Puzzle in a Discord Bot",
+ "speaker": "Bjarke Alexander Larson",
+ "talk_title": "Corrupted Databases - Building a Repeatable Logic Puzzle in a Discord Bot",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 1010,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "How do you make a repeatable puzzle out of a badly designed database?\n\nThat was the question I asked myself when I began designing a logic puzzle for the Discord Bot game \"Telegrams from the Choir Train\". In this puzzle, players are tasked with finding names and addresses of fictional, procedurally generated people, in a sea of corrupted, incorrect databases, using inferences and duplicate information as clues.\n\nIn this talk, I will walk through the design iterations of this puzzle, how and why I made it, what was successful and what wasn't, and discuss how an inherent failure of the system provided one of my favorite pieces of player agency.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3429,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.4,
+   "d": 1.9,
+   "text": "Okay, we are now going to have a couple"
+  },
+  {
+   "t": 5.3,
+   "d": 2.6,
+   "text": "of lightning rounds to speed it up here."
+  },
+  {
+   "t": 7.9,
+   "d": 2.1,
+   "text": "Um, and then we'll head into our first"
+  },
+  {
+   "t": 10.0,
+   "d": 1.7,
+   "text": "little social block for the day and then"
+  },
+  {
+   "t": 11.7,
+   "d": 1.7,
+   "text": "we'll have even more talks after that."
+  },
+  {
+   "t": 13.4,
+   "d": 2.4,
+   "text": "So our lightning talk coming up next is"
+  },
+  {
+   "t": 15.8,
+   "d": 3.2,
+   "text": "from Bjarke A. Larsen. Hello Bjarke."
+  },
+  {
+   "t": 19.0,
+   "d": 1.7,
+   "text": "Here to talk about"
+  },
+  {
+   "t": 20.7,
+   "d": 0.6,
+   "text": "uh"
+  },
+  {
+   "t": 21.3,
+   "d": 2.3,
+   "text": "building repeatable logic puzzles in a"
+  },
+  {
+   "t": 23.6,
+   "d": 2.6,
+   "text": "Discord bot. Uh I'm just going to let"
+  },
+  {
+   "t": 26.2,
+   "d": 1.2,
+   "text": "you take it away because I want you to"
+  },
+  {
+   "t": 27.4,
+   "d": 2.1,
+   "text": "have as much time as possible."
+  },
+  {
+   "t": 29.5,
+   "d": 2.0,
+   "text": ">> Okay, thank you. Um, yeah, so I'm here"
+  },
+  {
+   "t": 31.5,
+   "d": 1.5,
+   "text": "to talk about uh"
+  },
+  {
+   "t": 33.0,
+   "d": 0.9,
+   "text": "uh"
+  },
+  {
+   "t": 33.9,
+   "d": 2.4,
+   "text": "database puzzles and have how I built"
+  },
+  {
+   "t": 36.3,
+   "d": 2.5,
+   "text": "one sort of on accident. Um, my name is"
+  },
+  {
+   "t": 38.8,
+   "d": 1.5,
+   "text": "Bjarke. I'm a"
+  },
+  {
+   "t": 40.3,
+   "d": 1.8,
+   "text": "technical narrative designer with a PhD"
+  },
+  {
+   "t": 42.1,
+   "d": 2.5,
+   "text": "from UC Santa Cruz, uh currently working"
+  },
+  {
+   "t": 44.6,
+   "d": 1.6,
+   "text": "as a narrative designer at Relic Reload."
+  },
+  {
+   "t": 46.2,
+   "d": 2.5,
+   "text": "But here I'm talking about a game I made"
+  },
+  {
+   "t": 48.7,
+   "d": 1.7,
+   "text": "last year um"
+  },
+  {
+   "t": 50.4,
+   "d": 1.3,
+   "text": "called Telegrams from the Quiet Train,"
+  },
+  {
+   "t": 51.7,
+   "d": 1.4,
+   "text": "which is a"
+  },
+  {
+   "t": 53.1,
+   "d": 0.7,
+   "text": "uh"
+  },
+  {
+   "t": 53.8,
+   "d": 1.3,
+   "text": "shortly described as a communal"
+  },
+  {
+   "t": 55.1,
+   "d": 1.9,
+   "text": "narrative game about shipping management"
+  },
+  {
+   "t": 57.0,
+   "d": 1.6,
+   "text": "and sacred trains that are played"
+  },
+  {
+   "t": 58.6,
+   "d": 1.5,
+   "text": "entirely via a Discord bot that you"
+  },
+  {
+   "t": 60.1,
+   "d": 2.3,
+   "text": "invite into your own server. Um,"
+  },
+  {
+   "t": 62.4,
+   "d": 1.5,
+   "text": "I will not have time to like explain"
+  },
+  {
+   "t": 63.9,
+   "d": 2.9,
+   "text": "this game in in in its in its totality"
+  },
+  {
+   "t": 66.8,
+   "d": 2.3,
+   "text": "in this talk, but I did a GDC"
+  },
+  {
+   "t": 69.1,
+   "d": 3.0,
+   "text": "presentation at at this year's GDC"
+  },
+  {
+   "t": 72.1,
+   "d": 1.9,
+   "text": "experimental games expo showcase. If"
+  },
+  {
+   "t": 74.0,
+   "d": 1.4,
+   "text": "you're curious to learn more, you can do"
+  },
+  {
+   "t": 75.4,
+   "d": 1.9,
+   "text": "that after this. Um,"
+  },
+  {
+   "t": 77.3,
+   "d": 2.7,
+   "text": "but briefly explaining what it is, uh"
+  },
+  {
+   "t": 80.0,
+   "d": 1.8,
+   "text": "players uh"
+  },
+  {
+   "t": 81.8,
+   "d": 1.3,
+   "text": "invite this bot into the server and then"
+  },
+  {
+   "t": 83.1,
+   "d": 1.5,
+   "text": "play as remote operators for the"
+  },
+  {
+   "t": 84.6,
+   "d": 2.2,
+   "text": "Connective Rail Company, which is a"
+  },
+  {
+   "t": 86.8,
+   "d": 1.8,
+   "text": "company that manages these quiet trains"
+  },
+  {
+   "t": 88.6,
+   "d": 1.0,
+   "text": "that you are then in charge of one of"
+  },
+  {
+   "t": 89.6,
+   "d": 3.0,
+   "text": "them uh traveling across a a fictional"
+  },
+  {
+   "t": 92.6,
+   "d": 2.1,
+   "text": "post-apocalyptic world and you are in"
+  },
+  {
+   "t": 94.7,
+   "d": 1.9,
+   "text": "charge of managing the freight on this"
+  },
+  {
+   "t": 96.6,
+   "d": 1.6,
+   "text": "train um entirely through your Discord"
+  },
+  {
+   "t": 98.2,
+   "d": 1.2,
+   "text": "server."
+  },
+  {
+   "t": 99.4,
+   "d": 1.4,
+   "text": "Uh the core loops of the game are pretty"
+  },
+  {
+   "t": 100.8,
+   "d": 2.3,
+   "text": "simple. You will receive a shipment"
+  },
+  {
+   "t": 103.1,
+   "d": 1.7,
+   "text": "contract like uh"
+  },
+  {
+   "t": 104.8,
+   "d": 0.7,
+   "text": "um"
+  },
+  {
+   "t": 105.5,
+   "d": 2.6,
+   "text": "you you get you you get an order someone"
+  },
+  {
+   "t": 108.1,
+   "d": 1.9,
+   "text": "in the world wants somewhere and you're"
+  },
+  {
+   "t": 110.0,
+   "d": 2.0,
+   "text": "in charge of buying that ware and then"
+  },
+  {
+   "t": 112.0,
+   "d": 1.5,
+   "text": "offloading the ware at the right station"
+  },
+  {
+   "t": 113.5,
+   "d": 2.3,
+   "text": "at the right time. Um,"
+  },
+  {
+   "t": 115.8,
+   "d": 1.6,
+   "text": "and in between that you have to wait in"
+  },
+  {
+   "t": 117.4,
+   "d": 2.0,
+   "text": "real time because it takes like real"
+  },
+  {
+   "t": 119.4,
+   "d": 1.49,
+   "text": "time uh"
+  },
+  {
+   "t": 120.89,
+   "d": 1.4,
+   "text": "uh for the train to arrive at certain"
+  },
+  {
+   "t": 122.29,
+   "d": 0.8,
+   "text": "places"
+  },
+  {
+   "t": 123.09,
+   "d": 1.9,
+   "text": "and the game's intended to be played for"
+  },
+  {
+   "t": 124.99,
+   "d": 2.8,
+   "text": "weeks and months as the as it takes"
+  },
+  {
+   "t": 127.79,
+   "d": 1.4,
+   "text": "actual days for the train train to"
+  },
+  {
+   "t": 129.19,
+   "d": 3.1,
+   "text": "arrive arrive at certain places um"
+  },
+  {
+   "t": 132.29,
+   "d": 1.7,
+   "text": "and uh"
+  },
+  {
+   "t": 133.99,
+   "d": 1.8,
+   "text": "and so as as you might notice all these"
+  },
+  {
+   "t": 135.79,
+   "d": 1.5,
+   "text": "activities happen while the train is"
+  },
+  {
+   "t": 137.29,
+   "d": 2.3,
+   "text": "stationary and so I wanted something"
+  },
+  {
+   "t": 139.59,
+   "d": 1.5,
+   "text": "that players could also do while the"
+  },
+  {
+   "t": 141.09,
+   "d": 2.7,
+   "text": "train was moving um and so I was trying"
+  },
+  {
+   "t": 143.79,
+   "d": 1.5,
+   "text": "to figure out how do I could turn what I"
+  },
+  {
+   "t": 145.29,
+   "d": 2.6,
+   "text": "already had into into a sort of into an"
+  },
+  {
+   "t": 147.89,
+   "d": 2.3,
+   "text": "activity and I already had a database of"
+  },
+  {
+   "t": 150.19,
+   "d": 1.6,
+   "text": "people and locations because I needed"
+  },
+  {
+   "t": 151.79,
+   "d": 2.6,
+   "text": "that for the shipping management aspect"
+  },
+  {
+   "t": 154.39,
+   "d": 2.2,
+   "text": "of the game to to work I needed"
+  },
+  {
+   "t": 156.59,
+   "d": 2.5,
+   "text": "people and and and addresses already um"
+  },
+  {
+   "t": 159.09,
+   "d": 1.4,
+   "text": "so I was looking into how do I turn this"
+  },
+  {
+   "t": 160.49,
+   "d": 1.8,
+   "text": "into a some sort of activity or some"
+  },
+  {
+   "t": 162.29,
+   "d": 2.8,
+   "text": "sort of puzzles um and I really liked I"
+  },
+  {
+   "t": 165.09,
+   "d": 1.9,
+   "text": "liked logic puzzles and I thought that"
+  },
+  {
+   "t": 166.99,
+   "d": 1.7,
+   "text": "and I liked database games so I thought"
+  },
+  {
+   "t": 168.69,
+   "d": 1.0,
+   "text": "there's something there I can try to"
+  },
+  {
+   "t": 169.69,
+   "d": 1.8,
+   "text": "figure out how to do so that's what this"
+  },
+  {
+   "t": 171.49,
+   "d": 1.9,
+   "text": "talk is about is my my journey into"
+  },
+  {
+   "t": 173.39,
+   "d": 2.1,
+   "text": "making this database puzzle it's like"
+  },
+  {
+   "t": 175.49,
+   "d": 2.3,
+   "text": "how I made it and why I did so and how"
+  },
+  {
+   "t": 177.79,
+   "d": 2.7,
+   "text": "sort of a a a an inherent flaw in in in"
+  },
+  {
+   "t": 180.49,
+   "d": 2.8,
+   "text": "the in in in the random nature I took to"
+  },
+  {
+   "t": 183.29,
+   "d": 2.3,
+   "text": "in in in in randomness uh"
+  },
+  {
+   "t": 185.59,
+   "d": 1.3,
+   "text": "became"
+  },
+  {
+   "t": 186.89,
+   "d": 2.4,
+   "text": "one of my favorite uh parts of of agency"
+  },
+  {
+   "t": 189.29,
+   "d": 2.2,
+   "text": "in the game um"
+  },
+  {
+   "t": 191.49,
+   "d": 3.1,
+   "text": "so to explain what this puzzle is uh"
+  },
+  {
+   "t": 194.59,
+   "d": 2.7,
+   "text": "when you when you do when you fulfill an"
+  },
+  {
+   "t": 197.29,
+   "d": 1.5,
+   "text": "order in this game you fill out this"
+  },
+  {
+   "t": 198.79,
+   "d": 1.3,
+   "text": "thing called an order slip which is like"
+  },
+  {
+   "t": 200.09,
+   "d": 2.0,
+   "text": "the piece of paper that identifies the"
+  },
+  {
+   "t": 202.09,
+   "d": 2.3,
+   "text": "ware and the"
+  },
+  {
+   "t": 204.39,
+   "d": 0.9,
+   "text": "and"
+  },
+  {
+   "t": 205.29,
+   "d": 1.7,
+   "text": "and the recipient's name and and the and"
+  },
+  {
+   "t": 206.99,
+   "d": 2.0,
+   "text": "the ultimate address and those two kind"
+  },
+  {
+   "t": 208.99,
+   "d": 1.5,
+   "text": "of thing those two things name and"
+  },
+  {
+   "t": 210.49,
+   "d": 1.0,
+   "text": "address are things that are pretty"
+  },
+  {
+   "t": 211.49,
+   "d": 1.4,
+   "text": "trivial to find in the real world"
+  },
+  {
+   "t": 212.89,
+   "d": 2.8,
+   "text": "because we know where we live but that's"
+  },
+  {
+   "t": 215.69,
+   "d": 1.7,
+   "text": "what the puzzle of this game is how do"
+  },
+  {
+   "t": 217.39,
+   "d": 2.1,
+   "text": "you find this name and address if the"
+  },
+  {
+   "t": 219.49,
+   "d": 3.5,
+   "text": "databases are all wrong um so the the"
+  },
+  {
+   "t": 222.99,
+   "d": 1.3,
+   "text": "law of this game is that all the"
+  },
+  {
+   "t": 224.29,
+   "d": 2.1,
+   "text": "databases because it's post apocalypse"
+  },
+  {
+   "t": 226.39,
+   "d": 1.9,
+   "text": "have all been shattered and corrupted by"
+  },
+  {
+   "t": 228.29,
+   "d": 2.2,
+   "text": "this distorting force force that caused"
+  },
+  {
+   "t": 230.49,
+   "d": 1.0,
+   "text": "this post"
+  },
+  {
+   "t": 231.49,
+   "d": 2.8,
+   "text": "the post apocalypse so all stored text"
+  },
+  {
+   "t": 234.29,
+   "d": 2.1,
+   "text": "have been decomposed and corrupted and"
+  },
+  {
+   "t": 236.39,
+   "d": 2.4,
+   "text": "changed to become untrustworthy over"
+  },
+  {
+   "t": 238.79,
+   "d": 1.1,
+   "text": "time"
+  },
+  {
+   "t": 239.89,
+   "d": 2.6,
+   "text": "um and so the databases of the game will"
+  },
+  {
+   "t": 242.49,
+   "d": 2.7,
+   "text": "give you a false, incorrect, or swapped"
+  },
+  {
+   "t": 245.19,
+   "d": 2.5,
+   "text": "or untrustworthy information"
+  },
+  {
+   "t": 247.69,
+   "d": 3.1,
+   "text": "in some ways. For example, if you query"
+  },
+  {
+   "t": 250.79,
+   "d": 2.3,
+   "text": "a person's name for where they"
+  },
+  {
+   "t": 253.09,
+   "d": 1.6,
+   "text": "for for where they might live, you might"
+  },
+  {
+   "t": 254.69,
+   "d": 2.7,
+   "text": "get four different addresses."
+  },
+  {
+   "t": 257.39,
+   "d": 2.1,
+   "text": "That's a possibilities. If you query"
+  },
+  {
+   "t": 259.49,
+   "d": 1.6,
+   "text": "what job they have, you might get three"
+  },
+  {
+   "t": 261.09,
+   "d": 1.4,
+   "text": "different answers."
+  },
+  {
+   "t": 262.49,
+   "d": 2.6,
+   "text": "And so on and so forth."
+  },
+  {
+   "t": 265.09,
+   "d": 2.7,
+   "text": "And this all becomes kind of a mess."
+  },
+  {
+   "t": 267.79,
+   "d": 2.0,
+   "text": "Quickly, there's a total of 13 databases"
+  },
+  {
+   "t": 269.79,
+   "d": 2.1,
+   "text": "in the game that all provides a unique"
+  },
+  {
+   "t": 271.89,
+   "d": 1.5,
+   "text": "version of the truth and it will gives"
+  },
+  {
+   "t": 273.39,
+   "d": 2.9,
+   "text": "different kind of of data"
+  },
+  {
+   "t": 276.29,
+   "d": 2.2,
+   "text": "depending on what you plug into them."
+  },
+  {
+   "t": 278.49,
+   "d": 1.5,
+   "text": "And that's what the puzzle is. It's find"
+  },
+  {
+   "t": 279.99,
+   "d": 3.1,
+   "text": "to find the truth in this mess. And the"
+  },
+  {
+   "t": 283.09,
+   "d": 1.6,
+   "text": "way you do that as a player is you"
+  },
+  {
+   "t": 284.69,
+   "d": 2.5,
+   "text": "correlate multiple databases to find the"
+  },
+  {
+   "t": 287.19,
+   "d": 1.9,
+   "text": "info that is most likely to be true"
+  },
+  {
+   "t": 289.09,
+   "d": 1.6,
+   "text": "based on what's"
+  },
+  {
+   "t": 290.69,
+   "d": 3.4,
+   "text": "based on the correlations that you find."
+  },
+  {
+   "t": 294.09,
+   "d": 2.4,
+   "text": "Let's let me walk you through an example"
+  },
+  {
+   "t": 296.49,
+   "d": 2.2,
+   "text": "of how one of these work."
+  },
+  {
+   "t": 298.69,
+   "d": 2.6,
+   "text": "So every order starts with a recipient"
+  },
+  {
+   "t": 301.29,
+   "d": 1.6,
+   "text": "ID. You can kind of think of this as"
+  },
+  {
+   "t": 302.89,
+   "d": 2.0,
+   "text": "like a social security number or a"
+  },
+  {
+   "t": 304.89,
+   "d": 2.0,
+   "text": "government ID. It's something we know to"
+  },
+  {
+   "t": 306.89,
+   "d": 2.0,
+   "text": "be true to start out with that gives us"
+  },
+  {
+   "t": 308.89,
+   "d": 1.9,
+   "text": "a a starting point for like let's figure"
+  },
+  {
+   "t": 310.79,
+   "d": 1.5,
+   "text": "out who this person is and where they"
+  },
+  {
+   "t": 312.29,
+   "d": 1.4,
+   "text": "live."
+  },
+  {
+   "t": 313.69,
+   "d": 2.2,
+   "text": "We plug that into the initial database,"
+  },
+  {
+   "t": 315.89,
+   "d": 1.8,
+   "text": "the personal identification database,"
+  },
+  {
+   "t": 317.69,
+   "d": 2.0,
+   "text": "and that gives us some information. Here"
+  },
+  {
+   "t": 319.69,
+   "d": 1.3,
+   "text": "we have learned that their name is A"
+  },
+  {
+   "t": 320.99,
+   "d": 2.3,
+   "text": "Bayek and we we don't know their job and"
+  },
+  {
+   "t": 323.29,
+   "d": 1.4,
+   "text": "we know their work address, but we don't"
+  },
+  {
+   "t": 324.69,
+   "d": 0.9,
+   "text": "know their home address or their"
+  },
+  {
+   "t": 325.59,
+   "d": 2.1,
+   "text": "district."
+  },
+  {
+   "t": 327.69,
+   "d": 1.6,
+   "text": "That's something though, so we can start"
+  },
+  {
+   "t": 329.29,
+   "d": 1.9,
+   "text": "plugging in their name into the voting"
+  },
+  {
+   "t": 331.19,
+   "d": 2.2,
+   "text": "registry database and then we"
+  },
+  {
+   "t": 333.39,
+   "d": 2.1,
+   "text": "get four different possible"
+  },
+  {
+   "t": 335.49,
+   "d": 1.8,
+   "text": "addresses. That's a little too many to"
+  },
+  {
+   "t": 337.29,
+   "d": 0.8,
+   "text": "like"
+  },
+  {
+   "t": 338.09,
+   "d": 1.3,
+   "text": "be"
+  },
+  {
+   "t": 339.39,
+   "d": 2.3,
+   "text": "to to like cleanly to easily check check"
+  },
+  {
+   "t": 341.69,
+   "d": 1.9,
+   "text": "them all. But we did did have another"
+  },
+  {
+   "t": 343.59,
+   "d": 1.5,
+   "text": "piece of information. We got their work"
+  },
+  {
+   "t": 345.09,
+   "d": 1.3,
+   "text": "address."
+  },
+  {
+   "t": 346.39,
+   "d": 0.9,
+   "text": "So we're going to plug that into the"
+  },
+  {
+   "t": 347.29,
+   "d": 1.3,
+   "text": "commuting registry, which is sort of"
+  },
+  {
+   "t": 348.59,
+   "d": 1.9,
+   "text": "like a like a database of"
+  },
+  {
+   "t": 350.49,
+   "d": 1.6,
+   "text": "like organized by laborers to track"
+  },
+  {
+   "t": 352.09,
+   "d": 2.6,
+   "text": "commuting trips."
+  },
+  {
+   "t": 354.69,
+   "d": 1.2,
+   "text": "So you plug in a work address and you"
+  },
+  {
+   "t": 355.89,
+   "d": 1.3,
+   "text": "get possible home addresses for the"
+  },
+  {
+   "t": 357.19,
+   "d": 1.6,
+   "text": "people who work there."
+  },
+  {
+   "t": 358.79,
+   "d": 2.1,
+   "text": "And that has five possibilities."
+  },
+  {
+   "t": 360.89,
+   "d": 3.0,
+   "text": "However, we do have a match. We we see"
+  },
+  {
+   "t": 363.89,
+   "d": 2.3,
+   "text": "an address that appears in both of them."
+  },
+  {
+   "t": 366.19,
+   "d": 1.1,
+   "text": "Um and that's a really good sign that"
+  },
+  {
+   "t": 367.3,
+   "d": 2.0,
+   "text": "it's a possible address for this person."
+  },
+  {
+   "t": 369.3,
+   "d": 1.6,
+   "text": "Um and therefore we can confirm this"
+  },
+  {
+   "t": 370.89,
+   "d": 2.3,
+   "text": "result by querying this address and a"
+  },
+  {
+   "t": 373.19,
+   "d": 2.5,
+   "text": "few other databases sort of the in in"
+  },
+  {
+   "t": 375.69,
+   "d": 1.8,
+   "text": "information database that gives us that"
+  },
+  {
+   "t": 377.5,
+   "d": 1.3,
+   "text": "that confirms to us that yes, this is an"
+  },
+  {
+   "t": 378.8,
+   "d": 1.9,
+   "text": "occupied residential address that a"
+  },
+  {
+   "t": 380.69,
+   "d": 2.4,
+   "text": "person can live in. And also we we look"
+  },
+  {
+   "t": 383.1,
+   "d": 1.7,
+   "text": "at the records of the state and and see"
+  },
+  {
+   "t": 384.8,
+   "d": 0.8,
+   "text": "that"
+  },
+  {
+   "t": 385.6,
+   "d": 2.2,
+   "text": "is a potential possible tenant in here"
+  },
+  {
+   "t": 387.8,
+   "d": 1.3,
+   "text": "or at least has been at some point. So"
+  },
+  {
+   "t": 389.1,
+   "d": 1.7,
+   "text": "that's three correlations. That's good"
+  },
+  {
+   "t": 390.8,
+   "d": 2.2,
+   "text": "enough for me. We plug that into our"
+  },
+  {
+   "t": 393.0,
+   "d": 2.2,
+   "text": "order slip and we move on with our day."
+  },
+  {
+   "t": 395.19,
+   "d": 1.3,
+   "text": "Um"
+  },
+  {
+   "t": 396.5,
+   "d": 2.0,
+   "text": "and that's how these these puzzles go."
+  },
+  {
+   "t": 398.5,
+   "d": 1.7,
+   "text": "Um some are easier, some are much"
+  },
+  {
+   "t": 400.19,
+   "d": 1.4,
+   "text": "harder. Some will require you to use"
+  },
+  {
+   "t": 401.6,
+   "d": 2.0,
+   "text": "almost all of the 13 databases and some"
+  },
+  {
+   "t": 403.6,
+   "d": 2.0,
+   "text": "of them will will require you to almost"
+  },
+  {
+   "t": 405.6,
+   "d": 1.5,
+   "text": "to to use just just a single one of"
+  },
+  {
+   "t": 407.1,
+   "d": 1.0,
+   "text": "them."
+  },
+  {
+   "t": 408.1,
+   "d": 1.8,
+   "text": "Um"
+  },
+  {
+   "t": 409.89,
+   "d": 2.3,
+   "text": "um but let's rewind a little bit and and"
+  },
+  {
+   "t": 412.19,
+   "d": 1.4,
+   "text": "talk about how"
+  },
+  {
+   "t": 413.6,
+   "d": 1.7,
+   "text": "how I got here because that's not the"
+  },
+  {
+   "t": 415.3,
+   "d": 1.7,
+   "text": "final design was not where I started. I"
+  },
+  {
+   "t": 417.0,
+   "d": 1.6,
+   "text": "started with something much simpler"
+  },
+  {
+   "t": 418.6,
+   "d": 1.7,
+   "text": "and much less interesting um because all"
+  },
+  {
+   "t": 420.3,
+   "d": 1.3,
+   "text": "I had in the beginning was names and"
+  },
+  {
+   "t": 421.6,
+   "d": 1.7,
+   "text": "addresses because that's all the"
+  },
+  {
+   "t": 423.3,
+   "d": 1.2,
+   "text": "shipping"
+  },
+  {
+   "t": 424.5,
+   "d": 2.1,
+   "text": "part of the game needs. Um"
+  },
+  {
+   "t": 426.6,
+   "d": 3.3,
+   "text": "uh so uh I I have I I had a ground truth"
+  },
+  {
+   "t": 429.89,
+   "d": 1.5,
+   "text": "of here's some here's a name and here"
+  },
+  {
+   "t": 431.39,
+   "d": 1.4,
+   "text": "and here's where they live. You might"
+  },
+  {
+   "t": 432.8,
+   "d": 2.0,
+   "text": "notice that they have multiple listed"
+  },
+  {
+   "t": 434.8,
+   "d": 2.2,
+   "text": "addresses here. This is not yet me doing"
+  },
+  {
+   "t": 437.0,
+   "d": 2.0,
+   "text": "corruption. This is me doing like a"
+  },
+  {
+   "t": 439.0,
+   "d": 2.7,
+   "text": "first pass of history. So like I"
+  },
+  {
+   "t": 441.69,
+   "d": 2.3,
+   "text": "I I I simulate an initial address and"
+  },
+  {
+   "t": 444.0,
+   "d": 1.6,
+   "text": "then I simulate like I think it's like"
+  },
+  {
+   "t": 445.6,
+   "d": 2.4,
+   "text": "50 to 100 years of them potentially"
+  },
+  {
+   "t": 448.0,
+   "d": 1.3,
+   "text": "moving to a different address and I'm"
+  },
+  {
+   "t": 449.3,
+   "d": 1.6,
+   "text": "destroying all of them in a list. So the"
+  },
+  {
+   "t": 450.89,
+   "d": 1.6,
+   "text": "newest address is the one they actually"
+  },
+  {
+   "t": 452.5,
+   "d": 1.4,
+   "text": "live in currently."
+  },
+  {
+   "t": 453.89,
+   "d": 1.3,
+   "text": "Um"
+  },
+  {
+   "t": 455.19,
+   "d": 1.6,
+   "text": "then I take that and then I and then I"
+  },
+  {
+   "t": 456.8,
+   "d": 2.3,
+   "text": "corrupted them. So I did some pretty"
+  },
+  {
+   "t": 459.1,
+   "d": 3.4,
+   "text": "naive simple uh corruptions. I uh I I"
+  },
+  {
+   "t": 462.5,
+   "d": 1.7,
+   "text": "randomly added new addresses. I randomly"
+  },
+  {
+   "t": 464.19,
+   "d": 1.6,
+   "text": "replaced some of them. I randomly"
+  },
+  {
+   "t": 465.8,
+   "d": 1.3,
+   "text": "removed some of them and I shuffled them"
+  },
+  {
+   "t": 467.1,
+   "d": 1.8,
+   "text": "around. Um and I do this a couple of"
+  },
+  {
+   "t": 468.89,
+   "d": 1.9,
+   "text": "different times to to get"
+  },
+  {
+   "t": 470.8,
+   "d": 2.8,
+   "text": "uh uh different like to get like three"
+  },
+  {
+   "t": 473.6,
+   "d": 1.1,
+   "text": "different"
+  },
+  {
+   "t": 474.69,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 475.89,
+   "d": 2.1,
+   "text": "corrupted versions of the truth"
+  },
+  {
+   "t": 478.0,
+   "d": 2.1,
+   "text": "that all look a little bit different but"
+  },
+  {
+   "t": 480.1,
+   "d": 1.9,
+   "text": "but they'll all have uh wrong"
+  },
+  {
+   "t": 482.0,
+   "d": 1.4,
+   "text": "information in them. So like if you look"
+  },
+  {
+   "t": 483.39,
+   "d": 1.3,
+   "text": "at this one, this is one of the"
+  },
+  {
+   "t": 484.69,
+   "d": 2.4,
+   "text": "corrupted ones on on right uh compared"
+  },
+  {
+   "t": 487.1,
+   "d": 2.4,
+   "text": "to the ground truth on on the left and"
+  },
+  {
+   "t": 489.5,
+   "d": 2.0,
+   "text": "you can see that an address"
+  },
+  {
+   "t": 491.5,
+   "d": 2.6,
+   "text": "where one had just just one correct one"
+  },
+  {
+   "t": 494.1,
+   "d": 1.8,
+   "text": "it it it then has like"
+  },
+  {
+   "t": 495.9,
+   "d": 1.2,
+   "text": "has four and only one of them is right"
+  },
+  {
+   "t": 497.1,
+   "d": 1.4,
+   "text": "and it's"
+  },
+  {
+   "t": 498.5,
+   "d": 1.1,
+   "text": "and it's in a wrong place and you don't"
+  },
+  {
+   "t": 499.6,
+   "d": 1.4,
+   "text": "know which one is right."
+  },
+  {
+   "t": 501.0,
+   "d": 1.5,
+   "text": "Um and I did this for a couple of"
+  },
+  {
+   "t": 502.5,
+   "d": 2.2,
+   "text": "different ones so like they're all I did"
+  },
+  {
+   "t": 504.7,
+   "d": 1.4,
+   "text": "this a couple of times to generate a few"
+  },
+  {
+   "t": 506.1,
+   "d": 2.0,
+   "text": "corrupted databases that are all wrong"
+  },
+  {
+   "t": 508.1,
+   "d": 2.6,
+   "text": "in different ways um"
+  },
+  {
+   "t": 510.7,
+   "d": 1.6,
+   "text": "uh"
+  },
+  {
+   "t": 512.3,
+   "d": 2.8,
+   "text": "uh but it turns out when I play tested"
+  },
+  {
+   "t": 515.1,
+   "d": 2.3,
+   "text": "with this version that was pretty boring"
+  },
+  {
+   "t": 517.4,
+   "d": 2.3,
+   "text": "um because there was a total of uh for"
+  },
+  {
+   "t": 519.7,
+   "d": 1.1,
+   "text": "two for kind of two reasons there were a"
+  },
+  {
+   "t": 520.8,
+   "d": 1.7,
+   "text": "total of five databases and they were"
+  },
+  {
+   "t": 522.5,
+   "d": 2.1,
+   "text": "all either you put it in a name to get"
+  },
+  {
+   "t": 524.6,
+   "d": 1.2,
+   "text": "possible addresses or put it in an"
+  },
+  {
+   "t": 525.8,
+   "d": 2.1,
+   "text": "address to get possible names"
+  },
+  {
+   "t": 527.9,
+   "d": 2.8,
+   "text": "and with that low amount of information"
+  },
+  {
+   "t": 530.7,
+   "d": 2.2,
+   "text": "of low low amount of of of queries it"
+  },
+  {
+   "t": 532.9,
+   "d": 2.5,
+   "text": "was relatively simple to just query all"
+  },
+  {
+   "t": 535.4,
+   "d": 1.8,
+   "text": "five and then immediately see the answer"
+  },
+  {
+   "t": 537.2,
+   "d": 2.6,
+   "text": "based on which uh which"
+  },
+  {
+   "t": 539.8,
+   "d": 2.1,
+   "text": "which value"
+  },
+  {
+   "t": 541.9,
+   "d": 1.7,
+   "text": "appeared the most frequently"
+  },
+  {
+   "t": 543.6,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 544.8,
+   "d": 1.5,
+   "text": "and it like pretty quickly to generate"
+  },
+  {
+   "t": 546.3,
+   "d": 1.4,
+   "text": "it into that as being like the most"
+  },
+  {
+   "t": 547.7,
+   "d": 1.5,
+   "text": "optimal play pattern and it wasn't that"
+  },
+  {
+   "t": 549.2,
+   "d": 1.1,
+   "text": "interesting."
+  },
+  {
+   "t": 550.3,
+   "d": 1.5,
+   "text": "Uh so I had to figure out a way to make"
+  },
+  {
+   "t": 551.8,
+   "d": 2.3,
+   "text": "it more to to to to to sort of make it"
+  },
+  {
+   "t": 554.1,
+   "d": 2.1,
+   "text": "more interesting and the first step I"
+  },
+  {
+   "t": 556.2,
+   "d": 1.7,
+   "text": "did was to actually sort of complicate"
+  },
+  {
+   "t": 557.9,
+   "d": 2.3,
+   "text": "everything and turning it from five"
+  },
+  {
+   "t": 560.2,
+   "d": 3.7,
+   "text": "databases into 13 databases um"
+  },
+  {
+   "t": 563.9,
+   "d": 3.8,
+   "text": "uh and uh uh simply just to make it much"
+  },
+  {
+   "t": 567.7,
+   "d": 1.6,
+   "text": "more difficult to just query the much"
+  },
+  {
+   "t": 569.3,
+   "d": 2.2,
+   "text": "less uh uh"
+  },
+  {
+   "t": 571.5,
+   "d": 1.6,
+   "text": "enticing to just query them all because"
+  },
+  {
+   "t": 573.1,
+   "d": 2.7,
+   "text": "it's more more annoying um but also I"
+  },
+  {
+   "t": 575.8,
+   "d": 2.2,
+   "text": "made them much more made them made them"
+  },
+  {
+   "t": 578.0,
+   "d": 1.3,
+   "text": "all different so they all have their own"
+  },
+  {
+   "t": 579.3,
+   "d": 2.4,
+   "text": "quirks and they all have their own uh uh"
+  },
+  {
+   "t": 581.7,
+   "d": 1.1,
+   "text": "um"
+  },
+  {
+   "t": 582.8,
+   "d": 1.1,
+   "text": "uh"
+  },
+  {
+   "t": 583.9,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 585.1,
+   "d": 1.9,
+   "text": "reasons for existing so like they're not"
+  },
+  {
+   "t": 587.0,
+   "d": 1.5,
+   "text": "just putting in names to get addresses"
+  },
+  {
+   "t": 588.5,
+   "d": 1.3,
+   "text": "you're putting in names to get one of"
+  },
+  {
+   "t": 589.8,
+   "d": 0.9,
+   "text": "them will give you address and one will"
+  },
+  {
+   "t": 590.7,
+   "d": 1.3,
+   "text": "give you jobs and one will give you work"
+  },
+  {
+   "t": 592.0,
+   "d": 2.1,
+   "text": "address and you can use addresses to get"
+  },
+  {
+   "t": 594.1,
+   "d": 3.0,
+   "text": "to get to get names or or or streets or"
+  },
+  {
+   "t": 597.1,
+   "d": 1.4,
+   "text": "work addresses and they're all like"
+  },
+  {
+   "t": 598.5,
+   "d": 2.2,
+   "text": "point you to a different parts par parts"
+  },
+  {
+   "t": 600.7,
+   "d": 3.4,
+   "text": "of of the of of the sort of whole"
+  },
+  {
+   "t": 604.1,
+   "d": 3.9,
+   "text": "database space um um in different ways"
+  },
+  {
+   "t": 608.0,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 608.8,
+   "d": 1.6,
+   "text": "and also on top of that I"
+  },
+  {
+   "t": 610.4,
+   "d": 1.6,
+   "text": "sort of intentionally corrupted them in"
+  },
+  {
+   "t": 612.0,
+   "d": 2.3,
+   "text": "different ways. So like some of them"
+  },
+  {
+   "t": 614.3,
+   "d": 1.7,
+   "text": "will have entirely only adding wrong"
+  },
+  {
+   "t": 616.0,
+   "d": 1.4,
+   "text": "answers. Some of them really meaning"
+  },
+  {
+   "t": 617.4,
+   "d": 1.3,
+   "text": "they'll always have at least the right"
+  },
+  {
+   "t": 618.7,
+   "d": 1.6,
+   "text": "answer somewhere. Some of them will be"
+  },
+  {
+   "t": 620.3,
+   "d": 1.5,
+   "text": "more shuffled. Some of them will be more"
+  },
+  {
+   "t": 621.8,
+   "d": 1.9,
+   "text": "corrupted than others and so on. So"
+  },
+  {
+   "t": 623.7,
+   "d": 1.8,
+   "text": "hopefully players over time like learn"
+  },
+  {
+   "t": 625.5,
+   "d": 2.1,
+   "text": "the textures of what kind of answers a"
+  },
+  {
+   "t": 627.6,
+   "d": 2.3,
+   "text": "database tends to give um and how useful"
+  },
+  {
+   "t": 629.9,
+   "d": 1.8,
+   "text": "they are um"
+  },
+  {
+   "t": 631.7,
+   "d": 1.3,
+   "text": "and and what kind of things they can be"
+  },
+  {
+   "t": 633.0,
+   "d": 1.1,
+   "text": "used for."
+  },
+  {
+   "t": 634.1,
+   "d": 3.6,
+   "text": "Um, I uh did this uh in it's kind of"
+  },
+  {
+   "t": 637.7,
+   "d": 1.9,
+   "text": "this pretty much the same way as I made"
+  },
+  {
+   "t": 639.6,
+   "d": 2.3,
+   "text": "the simple ones. I had a I made a ground"
+  },
+  {
+   "t": 641.9,
+   "d": 2.2,
+   "text": "truth that has all the information for a"
+  },
+  {
+   "t": 644.1,
+   "d": 1.7,
+   "text": "person, their job, their their address,"
+  },
+  {
+   "t": 645.8,
+   "d": 1.4,
+   "text": "their work address, etc."
+  },
+  {
+   "t": 647.2,
+   "d": 1.9,
+   "text": "And then I just took"
+  },
+  {
+   "t": 649.1,
+   "d": 3.3,
+   "text": "one part of that and then uh"
+  },
+  {
+   "t": 652.4,
+   "d": 1.8,
+   "text": "as an input and and made another part"
+  },
+  {
+   "t": 654.2,
+   "d": 1.4,
+   "text": "part of the output and then corrupted"
+  },
+  {
+   "t": 655.6,
+   "d": 3.1,
+   "text": "the output in various ways um."
+  },
+  {
+   "t": 658.7,
+   "d": 1.8,
+   "text": "Um, the second thing I did which was I"
+  },
+  {
+   "t": 660.5,
+   "d": 2.4,
+   "text": "think also pretty key is uh rather than"
+  },
+  {
+   "t": 662.9,
+   "d": 1.6,
+   "text": "always starting with a name and needing"
+  },
+  {
+   "t": 664.5,
+   "d": 1.9,
+   "text": "to find an address, I gave a very"
+  },
+  {
+   "t": 666.4,
+   "d": 1.9,
+   "text": "starting point. As you saw in the"
+  },
+  {
+   "t": 668.3,
+   "d": 2.3,
+   "text": "beginning, I'm providing an an ID that"
+  },
+  {
+   "t": 670.6,
+   "d": 2.2,
+   "text": "gives a range of possible information"
+  },
+  {
+   "t": 672.8,
+   "d": 1.5,
+   "text": "that can be kind of all the possible"
+  },
+  {
+   "t": 674.3,
+   "d": 1.9,
+   "text": "information that we have in the world uh"
+  },
+  {
+   "t": 676.2,
+   "d": 1.4,
+   "text": "because that's the crux of the puzzle"
+  },
+  {
+   "t": 677.6,
+   "d": 1.9,
+   "text": "really. If I have all the information I"
+  },
+  {
+   "t": 679.5,
+   "d": 1.3,
+   "text": "need, if I have the name and the and the"
+  },
+  {
+   "t": 680.8,
+   "d": 1.2,
+   "text": "home address"
+  },
+  {
+   "t": 682.0,
+   "d": 2.2,
+   "text": "from this initial query, then the puzzle"
+  },
+  {
+   "t": 684.2,
+   "d": 1.8,
+   "text": "is trivial and it's solved. But if I"
+  },
+  {
+   "t": 686.0,
+   "d": 1.3,
+   "text": "start with almost nothing here, if I"
+  },
+  {
+   "t": 687.3,
+   "d": 2.1,
+   "text": "only start with a job, then it's kind of"
+  },
+  {
+   "t": 689.4,
+   "d": 2.8,
+   "text": "like a almost impossible puzzle um."
+  },
+  {
+   "t": 692.2,
+   "d": 1.1,
+   "text": "Um,"
+  },
+  {
+   "t": 693.3,
+   "d": 1.7,
+   "text": "and the other thing this does is it"
+  },
+  {
+   "t": 695.0,
+   "d": 2.9,
+   "text": "gives each version each instance of the"
+  },
+  {
+   "t": 697.9,
+   "d": 2.1,
+   "text": "puzzle a unique path through the"
+  },
+  {
+   "t": 700.0,
+   "d": 1.4,
+   "text": "databases because if I'm starting with"
+  },
+  {
+   "t": 701.4,
+   "d": 1.9,
+   "text": "the name and job, like that gives me a"
+  },
+  {
+   "t": 703.3,
+   "d": 2.6,
+   "text": "different uh uh uh path through the web"
+  },
+  {
+   "t": 705.9,
+   "d": 2.0,
+   "text": "of databases I showed earlier than if"
+  },
+  {
+   "t": 707.9,
+   "d": 2.1,
+   "text": "I'm starting with the home address and"
+  },
+  {
+   "t": 710.0,
+   "d": 3.7,
+   "text": "the district etc. Um, so um"
+  },
+  {
+   "t": 713.7,
+   "d": 2.8,
+   "text": "and this is really key to making each"
+  },
+  {
+   "t": 716.5,
+   "d": 1.4,
+   "text": "instance of the puzzle feel more unique"
+  },
+  {
+   "t": 717.9,
+   "d": 1.7,
+   "text": "and more varied um"
+  },
+  {
+   "t": 719.6,
+   "d": 1.2,
+   "text": "and more interesting over time to keep"
+  },
+  {
+   "t": 720.8,
+   "d": 1.3,
+   "text": "you playing."
+  },
+  {
+   "t": 722.1,
+   "d": 1.9,
+   "text": "Uh another thing that I could use this"
+  },
+  {
+   "t": 724.0,
+   "d": 2.7,
+   "text": "sort of initial uh breakthrough for was"
+  },
+  {
+   "t": 726.7,
+   "d": 2.9,
+   "text": "uh to infer difficulty. Like it's it's"
+  },
+  {
+   "t": 729.6,
+   "d": 1.4,
+   "text": "based on how much information I'm giving"
+  },
+  {
+   "t": 731.0,
+   "d": 3.6,
+   "text": "up front is like is is a pretty key um"
+  },
+  {
+   "t": 734.6,
+   "d": 1.8,
+   "text": "uh uh indicator of how difficult a"
+  },
+  {
+   "t": 736.4,
+   "d": 2.6,
+   "text": "puzzle is. If I'm giving four four four"
+  },
+  {
+   "t": 739.0,
+   "d": 1.1,
+   "text": "out of the total five information you"
+  },
+  {
+   "t": 740.1,
+   "d": 1.5,
+   "text": "need, it's a much more easy puzzle to"
+  },
+  {
+   "t": 741.6,
+   "d": 2.0,
+   "text": "solve than if I'm only giving two of"
+  },
+  {
+   "t": 743.6,
+   "d": 2.2,
+   "text": "them. And that and that I'm using when"
+  },
+  {
+   "t": 745.8,
+   "d": 1.3,
+   "text": "people pick an order to sort of"
+  },
+  {
+   "t": 747.1,
+   "d": 1.6,
+   "text": "indicate, hey, this is a pretty"
+  },
+  {
+   "t": 748.7,
+   "d": 1.8,
+   "text": "corrupted database entry. You're going"
+  },
+  {
+   "t": 750.5,
+   "d": 1.8,
+   "text": "to have a harder time with this one or"
+  },
+  {
+   "t": 752.3,
+   "d": 1.2,
+   "text": "or"
+  },
+  {
+   "t": 753.5,
+   "d": 1.0,
+   "text": "um"
+  },
+  {
+   "t": 754.5,
+   "d": 1.4,
+   "text": "or this one's this one's fairly trivial."
+  },
+  {
+   "t": 755.9,
+   "d": 1.5,
+   "text": "And then people can sort of opt into the"
+  },
+  {
+   "t": 757.4,
+   "d": 1.3,
+   "text": "difficulty they want for these kind of"
+  },
+  {
+   "t": 758.7,
+   "d": 1.4,
+   "text": "puzzles."
+  },
+  {
+   "t": 760.1,
+   "d": 1.4,
+   "text": "Um"
+  },
+  {
+   "t": 761.5,
+   "d": 2.4,
+   "text": "now you might have noticed uh that I"
+  },
+  {
+   "t": 763.9,
+   "d": 1.4,
+   "text": "mentioned a couple of times that I that"
+  },
+  {
+   "t": 765.3,
+   "d": 1.9,
+   "text": "I'm just doing pretty naive random"
+  },
+  {
+   "t": 767.2,
+   "d": 2.0,
+   "text": "removals and replacements of when I'm"
+  },
+  {
+   "t": 769.2,
+   "d": 2.5,
+   "text": "doing the corrupted databases. Um"
+  },
+  {
+   "t": 771.7,
+   "d": 3.9,
+   "text": "and that uh uh will could easily create"
+  },
+  {
+   "t": 775.6,
+   "d": 1.8,
+   "text": "situations where I am just where I'm"
+  },
+  {
+   "t": 777.4,
+   "d": 2.0,
+   "text": "making a a literally impossible puzzle"
+  },
+  {
+   "t": 779.4,
+   "d": 1.8,
+   "text": "by move removing all the right answers"
+  },
+  {
+   "t": 781.2,
+   "d": 1.4,
+   "text": "and not inserting the right answer"
+  },
+  {
+   "t": 782.6,
+   "d": 1.1,
+   "text": "anywhere."
+  },
+  {
+   "t": 783.7,
+   "d": 1.0,
+   "text": "Um"
+  },
+  {
+   "t": 784.7,
+   "d": 1.8,
+   "text": "and that's true. That is a 100% the"
+  },
+  {
+   "t": 786.5,
+   "d": 1.9,
+   "text": "thing that can happen. And I initially"
+  },
+  {
+   "t": 788.4,
+   "d": 3.2,
+   "text": "thought that that was a going to be a a"
+  },
+  {
+   "t": 791.6,
+   "d": 2.2,
+   "text": "a design problem that I needed to fix at"
+  },
+  {
+   "t": 793.8,
+   "d": 1.7,
+   "text": "some point. Um"
+  },
+  {
+   "t": 795.5,
+   "d": 2.2,
+   "text": "um and I did and I had indeed fix it in"
+  },
+  {
+   "t": 797.7,
+   "d": 2.0,
+   "text": "the initial uh"
+  },
+  {
+   "t": 799.7,
+   "d": 1.2,
+   "text": "simple version of the puzzle because"
+  },
+  {
+   "t": 800.9,
+   "d": 1.6,
+   "text": "there was relatively trivial trivial to"
+  },
+  {
+   "t": 802.5,
+   "d": 2.6,
+   "text": "just uh do a check through all all the"
+  },
+  {
+   "t": 805.1,
+   "d": 1.6,
+   "text": "corrupted databases to make sure that"
+  },
+  {
+   "t": 806.7,
+   "d": 2.1,
+   "text": "the correct answer always at least"
+  },
+  {
+   "t": 808.8,
+   "d": 1.3,
+   "text": "appeared twice."
+  },
+  {
+   "t": 810.1,
+   "d": 1.5,
+   "text": "Um and if it did, then it was at least"
+  },
+  {
+   "t": 811.6,
+   "d": 1.5,
+   "text": "then I knew it was at least solvable."
+  },
+  {
+   "t": 813.1,
+   "d": 1.5,
+   "text": "There might still be false positives,"
+  },
+  {
+   "t": 814.6,
+   "d": 1.4,
+   "text": "but I knew that the right answer was at"
+  },
+  {
+   "t": 816.0,
+   "d": 0.9,
+   "text": "least there."
+  },
+  {
+   "t": 816.9,
+   "d": 2.1,
+   "text": "Um however, in the second version, it"
+  },
+  {
+   "t": 819.0,
+   "d": 2.5,
+   "text": "was a little less trivial to do this"
+  },
+  {
+   "t": 821.5,
+   "d": 2.6,
+   "text": "kind of post evaluation. So I just"
+  },
+  {
+   "t": 824.1,
+   "d": 2.5,
+   "text": "put it off for a bit. Um and I play"
+  },
+  {
+   "t": 826.6,
+   "d": 2.7,
+   "text": "tested without actually uh uh doing this"
+  },
+  {
+   "t": 829.3,
+   "d": 1.4,
+   "text": "check. Um"
+  },
+  {
+   "t": 830.7,
+   "d": 1.5,
+   "text": "and what I learned in that play test was"
+  },
+  {
+   "t": 832.2,
+   "d": 2.1,
+   "text": "pretty interesting. I learned that it"
+  },
+  {
+   "t": 834.3,
+   "d": 1.8,
+   "text": "was first of all much less an issue than"
+  },
+  {
+   "t": 836.1,
+   "d": 3.1,
+   "text": "I thought. It was the many layers and"
+  },
+  {
+   "t": 839.2,
+   "d": 3.1,
+   "text": "crisscrossing uh of databases meant that"
+  },
+  {
+   "t": 842.3,
+   "d": 1.5,
+   "text": "even puzzles that looked pretty"
+  },
+  {
+   "t": 843.8,
+   "d": 2.2,
+   "text": "impossible from the outset actually"
+  },
+  {
+   "t": 846.0,
+   "d": 2.7,
+   "text": "often had probable answers if you if you"
+  },
+  {
+   "t": 848.7,
+   "d": 2.0,
+   "text": "used uh"
+  },
+  {
+   "t": 850.7,
+   "d": 1.2,
+   "text": "if you really scrolled through the"
+  },
+  {
+   "t": 851.9,
+   "d": 2.0,
+   "text": "databases and and and like made some"
+  },
+  {
+   "t": 853.9,
+   "d": 2.0,
+   "text": "logical inferences. Um"
+  },
+  {
+   "t": 855.9,
+   "d": 1.1,
+   "text": "Um."
+  },
+  {
+   "t": 857.0,
+   "d": 1.3,
+   "text": "But what I also then found was that"
+  },
+  {
+   "t": 858.3,
+   "d": 1.8,
+   "text": "players uh"
+  },
+  {
+   "t": 860.1,
+   "d": 2.6,
+   "text": "ended up in a situation where you uh"
+  },
+  {
+   "t": 862.7,
+   "d": 1.7,
+   "text": "where they would give up because it it"
+  },
+  {
+   "t": 864.4,
+   "d": 1.8,
+   "text": "it they would perceive a puzzle they"
+  },
+  {
+   "t": 866.2,
+   "d": 1.1,
+   "text": "would perceive a puzzle as being"
+  },
+  {
+   "t": 867.3,
+   "d": 2.0,
+   "text": "impossible and feeling like it's"
+  },
+  {
+   "t": 869.3,
+   "d": 1.8,
+   "text": "impossible and it being impossible then"
+  },
+  {
+   "t": 871.1,
+   "d": 1.7,
+   "text": "often becomes the same thing."
+  },
+  {
+   "t": 872.8,
+   "d": 2.1,
+   "text": "And that's a sort of a feel bad moment"
+  },
+  {
+   "t": 874.9,
+   "d": 1.8,
+   "text": "that I needed to find a way to avoid. It"
+  },
+  {
+   "t": 876.7,
+   "d": 1.5,
+   "text": "was rather less about whether it was"
+  },
+  {
+   "t": 878.2,
+   "d": 2.4,
+   "text": "impossible but more about players just"
+  },
+  {
+   "t": 880.6,
+   "d": 1.8,
+   "text": "giving up. Um."
+  },
+  {
+   "t": 882.4,
+   "d": 1.9,
+   "text": "So I uh"
+  },
+  {
+   "t": 884.3,
+   "d": 1.8,
+   "text": "I sort of uh"
+  },
+  {
+   "t": 886.1,
+   "d": 1.9,
+   "text": "flipped it on the flip flipped it on its"
+  },
+  {
+   "t": 888.0,
+   "d": 2.7,
+   "text": "head and rather than solving uh the the"
+  },
+  {
+   "t": 890.7,
+   "d": 1.8,
+   "text": "the core underlying thing"
+  },
+  {
+   "t": 892.5,
+   "d": 3.6,
+   "text": "I gave uh uh a players an out. I I I"
+  },
+  {
+   "t": 896.1,
+   "d": 1.6,
+   "text": "essentially let them reported to the"
+  },
+  {
+   "t": 897.7,
+   "d": 2.0,
+   "text": "system that hey this this puzzle is"
+  },
+  {
+   "t": 899.7,
+   "d": 2.2,
+   "text": "impossible. I can't solve it. Um. And"
+  },
+  {
+   "t": 901.9,
+   "d": 1.8,
+   "text": "this works also narratively because what"
+  },
+  {
+   "t": 903.7,
+   "d": 2.7,
+   "text": "I'm doing is that I'm is"
+  },
+  {
+   "t": 906.4,
+   "d": 1.3,
+   "text": "what players are doing in the world is"
+  },
+  {
+   "t": 907.7,
+   "d": 1.9,
+   "text": "they're essentially like contracting a"
+  },
+  {
+   "t": 909.6,
+   "d": 2.0,
+   "text": "different company to to like find to"
+  },
+  {
+   "t": 911.6,
+   "d": 1.9,
+   "text": "like solve the corruption for them."
+  },
+  {
+   "t": 913.5,
+   "d": 1.9,
+   "text": "Um. And it cost therefore a little bit"
+  },
+  {
+   "t": 915.4,
+   "d": 1.6,
+   "text": "of money for the players and therefore"
+  },
+  {
+   "t": 917.0,
+   "d": 1.7,
+   "text": "like subtracts a little bit for the of"
+  },
+  {
+   "t": 918.7,
+   "d": 1.6,
+   "text": "of their reward but it feels a lot"
+  },
+  {
+   "t": 920.3,
+   "d": 1.6,
+   "text": "better than being stuck and it fits"
+  },
+  {
+   "t": 921.9,
+   "d": 3.1,
+   "text": "narratively and it thus like felt fine"
+  },
+  {
+   "t": 925.0,
+   "d": 2.3,
+   "text": "and players enjoyed it more and then it"
+  },
+  {
+   "t": 927.3,
+   "d": 2.6,
+   "text": "then and"
+  },
+  {
+   "t": 929.9,
+   "d": 3.6,
+   "text": "Um. And and it has this like in natural"
+  },
+  {
+   "t": 933.5,
+   "d": 2.9,
+   "text": "um didactic solution"
+  },
+  {
+   "t": 936.4,
+   "d": 1.4,
+   "text": "for how the world already would work"
+  },
+  {
+   "t": 937.8,
+   "d": 1.2,
+   "text": "because there would be databases that"
+  },
+  {
+   "t": 939.0,
+   "d": 1.7,
+   "text": "would be impossible to solve."
+  },
+  {
+   "t": 940.7,
+   "d": 2.4,
+   "text": "Um. And it also on top of that adds this"
+  },
+  {
+   "t": 943.1,
+   "d": 2.2,
+   "text": "provided benefit of like provides"
+  },
+  {
+   "t": 945.3,
+   "d": 1.2,
+   "text": "players an out if they just don't want"
+  },
+  {
+   "t": 946.5,
+   "d": 1.5,
+   "text": "to do these puzzles at all. If they just"
+  },
+  {
+   "t": 948.0,
+   "d": 1.0,
+   "text": "don't want to do any of them they can"
+  },
+  {
+   "t": 949.0,
+   "d": 1.3,
+   "text": "just like"
+  },
+  {
+   "t": 950.3,
+   "d": 1.8,
+   "text": "they they can just they can just"
+  },
+  {
+   "t": 952.1,
+   "d": 1.4,
+   "text": "they can just contract all of them out"
+  },
+  {
+   "t": 953.5,
+   "d": 1.7,
+   "text": "and and they have an easy out."
+  },
+  {
+   "t": 955.2,
+   "d": 2.8,
+   "text": "Um."
+  },
+  {
+   "t": 958.0,
+   "d": 1.4,
+   "text": "And this works so well I expanded it"
+  },
+  {
+   "t": 959.4,
+   "d": 1.7,
+   "text": "into a whole separate thing where where"
+  },
+  {
+   "t": 961.1,
+   "d": 2.6,
+   "text": "players can report uh uh uh"
+  },
+  {
+   "t": 963.7,
+   "d": 1.7,
+   "text": "these to a global database for all"
+  },
+  {
+   "t": 965.4,
+   "d": 1.5,
+   "text": "players and players can just collect the"
+  },
+  {
+   "t": 966.9,
+   "d": 1.3,
+   "text": "list or understanding which database"
+  },
+  {
+   "t": 968.2,
+   "d": 2.1,
+   "text": "entries are corrupted and which are not."
+  },
+  {
+   "t": 970.3,
+   "d": 1.1,
+   "text": "Uh."
+  },
+  {
+   "t": 971.4,
+   "d": 3.0,
+   "text": "Um. But yeah that's it. In conclusion uh"
+  },
+  {
+   "t": 974.4,
+   "d": 1.8,
+   "text": "database puzzles are more fun if you"
+  },
+  {
+   "t": 976.2,
+   "d": 2.6,
+   "text": "have um uh varied entry points and thus"
+  },
+  {
+   "t": 978.8,
+   "d": 1.2,
+   "text": "need to traverse the database in"
+  },
+  {
+   "t": 980.0,
+   "d": 1.6,
+   "text": "different ways each time and you can"
+  },
+  {
+   "t": 981.6,
+   "d": 1.7,
+   "text": "sometimes get away with totally"
+  },
+  {
+   "t": 983.3,
+   "d": 1.8,
+   "text": "randomness if players have a good way of"
+  },
+  {
+   "t": 985.1,
+   "d": 2.4,
+   "text": "feeling of of dealing with it."
+  },
+  {
+   "t": 987.5,
+   "d": 0.5,
+   "text": "Um"
+  },
+  {
+   "t": 988.0,
+   "d": 1.2,
+   "text": ">> Excellent."
+  },
+  {
+   "t": 989.2,
+   "d": 1.2,
+   "text": ">> Uh yeah, I had help help with this game"
+  },
+  {
+   "t": 990.4,
+   "d": 1.9,
+   "text": "from these wonderful people and uh"
+  },
+  {
+   "t": 992.3,
+   "d": 1.4,
+   "text": "that's it."
+  },
+  {
+   "t": 993.7,
+   "d": 2.0,
+   "text": ">> Thank you so much. Uh good job blasting"
+  },
+  {
+   "t": 995.7,
+   "d": 1.9,
+   "text": "through. I know lightning talks are uh"
+  },
+  {
+   "t": 997.6,
+   "d": 1.6,
+   "text": "information dense, [laughter]"
+  },
+  {
+   "t": 999.2,
+   "d": 0.4,
+   "text": "so"
+  },
+  {
+   "t": 999.6,
+   "d": 0.4,
+   "text": ">> Yeah."
+  },
+  {
+   "t": 1000.0,
+   "d": 0.8,
+   "text": ">> thank you very much."
+  },
+  {
+   "t": 1000.8,
+   "d": 1.3,
+   "text": ">> Hope it all made sense."
+  },
+  {
+   "t": 1002.1,
+   "d": 2.4,
+   "text": ">> Yes, and uh hopefully people can follow"
+  },
+  {
+   "t": 1004.5,
+   "d": 2.4,
+   "text": "up in the breakout rooms. So excellent."
+  },
+  {
+   "t": 1006.9,
+   "d": 1.1,
+   "text": "Thank you so much. We're going to move"
+  },
+  {
+   "t": 1008.0,
+   "d": 4.0,
+   "text": "on to our next lightning talk."
+  }
+ ]
+}

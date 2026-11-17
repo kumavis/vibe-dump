@@ -1,0 +1,173 @@
+{
+  "id": "QBZkvtGucBU",
+  "title": "George Moromisato - Love Letter to Nethack",
+  "speaker": "George Moromisato",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=QBZkvtGucBU",
+  "talk_type": "design",
+  "summary": "George Moromisato, creator of the space roguelike Transcendence, explains which design principles he took from NetHack and how well they translated into a sci-fi setting. He contrasts AAA games like Ultima (graphical immersion, quality, experience) with NetHack (interactive immersion, variety, mastery), and argues NetHack's depth comes from combinatorial complexity, an 'illusion of winnability', reliance on players' real-world knowledge, gradual revelation of verbs, attribute-based interactions, variable rewards and sheer breadth of content. He closes with lessons for indie developers: favour variety and mastery, and 'build a city instead of a resort' over decades of accretion. Note: the final transcript paragraph is the start of the next talk (Alexei on accessibility) and is not part of this talk.",
+  "games": [
+    "NetHack",
+    "Transcendence",
+    "Ultima",
+    "Rogue",
+    "Hack",
+    "Diablo",
+    "Skyrim",
+    "Civilization",
+    "Chess"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelikes vs aaa",
+      "kind": "principle",
+      "claim": "NetHack and AAA games like Ultima pursue opposite goals: interactive immersion versus graphical immersion, variety versus quality, and mastery versus a one-time experience.",
+      "detail": "Moromisato contrasts Ultima's high production values with NetHack as a tiny indie game of the same era, insisting neither is better. Roguelikes such as NetHack and Dwarf Fortress care that objects behave as you expect when you manipulate them, rather than that the world looks real.",
+      "t": 461,
+      "quote": "graphical immersion versus interactive immersion i think all of you guys know know what that means right triple a games uh focus on just having it be beautifully",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quality vs variety",
+      "kind": "principle",
+      "claim": "NetHack favours a huge number of monsters over polishing a small set, so that each game is different and the player keeps encountering something new.",
+      "detail": "Ultima has a relatively small monster set because each one gets animation and carefully balanced stats. NetHack does the opposite, aiming for so many monsters that every run differs.",
+      "t": 522,
+      "quote": "we just want we just want so many monsters that it's different every time and that whenever you go someplace you know you can encounter something new",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "mastery",
+      "kind": "principle",
+      "claim": "NetHack's enjoyment comes from mastery across many runs rather than from any single run's experience: the pleasure is figuring out a complex world and recognising patterns.",
+      "detail": "AAA games are like skydiving: you have the experience and you are done. In NetHack any one game matters little; what matters is how good you get, working out combinations and recognising how to escape situations.",
+      "t": 548,
+      "quote": "net hack is the opposite it's about mastery any one game it doesn't really matter that much it's about it's about how good you get",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "NetHack's frequent 'stupid deaths' sustain play because they create an illusion of winnability: the player always knows exactly why they died and believes they could have avoided it.",
+      "detail": "After dying players say they should have retreated or used a wand they had. Where Civilization's addictive cry is 'one more turn', NetHack's is 'one more game' because this time the player won't be stupid.",
+      "t": 668,
+      "quote": "even though it kills you all the time time it kills you it it it lets you you know exactly why you die",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "combinatorial complexity",
+      "kind": "principle",
+      "claim": "NetHack is hard despite being a turn-based 'open book test' because of combinatorial breadth: so many items, verbs and monsters that even one move is hard to evaluate, unlike chess whose difficulty comes from depth.",
+      "detail": "Chess has only six unique pieces, so the current move is easy to read and difficulty lies four or five moves ahead. In NetHack the sheer number of capabilities makes the immediate choice hard, which Moromisato sees as key to its richness and to its emphasis on mastery.",
+      "t": 725,
+      "quote": "the reason it's so hard is because this combinatorial explosion this the number of items that you have to deal with the number of verbs",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "warning",
+      "claim": "Combinatorial complexity risks 'guide dang it' design, where the only way to know the right action is to look it up, which takes away some of the pleasure of play.",
+      "detail": "Moromisato cites the TV Tropes term for mechanics whose solution must be searched for online. He says NetHack minimises this more than one might expect.",
+      "t": 828,
+      "quote": "when you've got a game mechanic that basically the the way to win is you just look up what the answer is",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "real-world knowledge",
+      "kind": "technique",
+      "claim": "NetHack avoids requiring spoilers by leaning on players' everyday knowledge, so interactions behave as common sense predicts (dragons resist fire, dipped scrolls get wet, dipped swords rust).",
+      "detail": "The developers worked to make things a player expected to work actually work as expected. Moromisato says this was hard to translate into Transcendence because sci-fi is far from everyday experience: nobody knows whether plasma bolts bounce off magnetic shields, so he has had to adapt.",
+      "t": 873,
+      "quote": "net hack uses your common knowledge and knowledge that you already have um to make sure that you never get into or rarely get into situations of guy dang it",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "verbs and commands",
+      "kind": "technique",
+      "claim": "NetHack supports a huge verb set without overwhelming newcomers by making movement (bump to attack) the core command and hiding rarer verbs in secondary menus, so players learn new verbs only as situations demand.",
+      "detail": "Diablo restricts the player to one default click action so no manual is needed. NetHack keeps all its verbs but reveals them bit by bit: a newbie just moves and attacks until meeting a closed door or needing to search, and finding a lamp prompts them to look up whether lamps can be rubbed.",
+      "t": 1037,
+      "quote": "the key command in nethack is is just move right and when you run into something you you know you attack it",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "material attributes",
+      "kind": "technique",
+      "claim": "NetHack makes 'the dev team thinks of everything' tractable by reducing items and monsters to shared attributes such as materials and resistances, then coding interactions between attributes rather than between every pair of objects.",
+      "detail": "Combinations like wielding a cockatrice corpse with or without gloves each had to be decided and coded. Moromisato, who adopted this for Transcendence, notes items are grouped by material (metal, leather, wood) and monsters by attributes like fire resistance; edge cases remain a lot of work but it becomes possible in a human lifetime.",
+      "t": 1161,
+      "quote": "reduce things to attributes just to make it a little bit more manageable",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "variable rewards",
+      "kind": "principle",
+      "claim": "Random, variable rewards (a chest that might hold nothing or a wand of wishing) reinforce repeat play in NetHack, but should be used responsibly as part of a complete design rather than as the only mechanic.",
+      "detail": "Moromisato illustrates with his dog, who pulled harder on the leash once pulling only sometimes worked. NetHack uses randomness in loot to keep players coming back hoping for the wand of wishing, but he warns that taken too far it becomes a slot machine.",
+      "t": 1307,
+      "quote": "this concept of variable rewards super important um that's why the rng always wins",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "content breadth",
+      "kind": "principle",
+      "claim": "Quantity can itself be quality: roguelikes like NetHack endure because of the breadth of monsters, levels and things to do, whereas a small set of things cannot sustain combinatorial interest.",
+      "detail": "Rogue had 26 monsters, Hack doubled it with lowercase letters, and NetHack added colours to reach hundreds; special levels like Vlad's Tower and the maze add further breadth. Moromisato notes few people still play Rogue, and NetHack developers usually improve the game by adding one more experience.",
+      "t": 1505,
+      "quote": "my point is quantity itself can be quality you know quantity of of the things you can experience of the things that you can do",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "monster count growth",
+      "kind": "history",
+      "claim": "Monster variety grew across the lineage: Rogue had one monster per letter, Hack doubled it with lowercase letters, and NetHack used colours to reach hundreds.",
+      "detail": "Moromisato offers this as evidence that the community repeatedly felt more variety was needed.",
+      "t": 1409,
+      "quote": "rogue started out with 26 monsters right you know one for each letter of the alphabet that people did hack they're like ah you know that's not enough",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "content curation",
+      "kind": "example",
+      "claim": "Even NetHack's additive culture has limits: a developer coded a Jedi class with a battery-powered lightsaber, but the others cut it because it did not fit.",
+      "detail": "Moromisato read this in a NetHack history and says he is unsure whether cutting it was right, using it to show that the team does not throw everything in.",
+      "t": 1481,
+      "quote": "one of the net hack developers wanted to add a jedi class a jedi client and coded it up",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "long-running projects",
+      "kind": "principle",
+      "claim": "'Build a city instead of a resort': a roguelike like NetHack can accrete mismatched content over decades into something living, rather than offering a tightly controlled experience.",
+      "detail": "AAA games are like resorts where you know what will happen. NetHack is not afraid to add things that don't quite fit, like a quantum mechanic fighting a vampire. Moromisato notes this takes decades; he plans to work on Transcendence for the rest of his life.",
+      "t": 1609,
+      "quote": "build a city instead of a resort this this is another great thing about net hack",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "design axes",
+      "kind": "open-question",
+      "claim": "The contrasts between AAA and roguelike design (graphical vs interactive immersion, quality vs variety, experience vs mastery) are sliders rather than binary choices, and balancing them is the designer's job.",
+      "detail": "In Q&A, asked whether the qualities could be mixed and matched, Moromisato said he didn't know but thought so, noting interactive immersion reinforces mastery, and that you don't want low quality in large quantity either.",
+      "t": 1783,
+      "quote": "really it's a slider right really there's there's a slider there and you can say well i want a little bit more graphical immersion",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

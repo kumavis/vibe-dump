@@ -1,0 +1,106 @@
+{
+  "id": "MyVigc1nDig",
+  "title": "Stav Hinenzon - A Messy Approach to Dynamic Narrative in Sunshine Shuffle",
+  "speaker": "Stav Hinenzon",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=MyVigc1nDig",
+  "talk_type": "postmortem",
+  "summary": "Stav Hinenzon presents a postmortem of the dialogue system in Sunshine Shuffle, a narrative poker game where animal characters tell a crime story while playing poker, with narrative and poker running simultaneously and independently. Conversations are storylets selected by preconditions and weighted randomness, authored in a node editor where every animation, face and turn is an atomic 'chore' fed to a shared priority queue. He explains how the atomic design proved unnecessary and slow once work consolidated into lines and turns, and how timing control was scattered across code instead of surfaced to designers. Despite this, the shared space and the independence of the two layers produce reinterpretation and emergent characterization in each playthrough; his takeaway is that flawed tools still ship games.",
+  "games": [
+    "Sunshine Shuffle",
+    "Poker Night at the Inventory"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "parallel layers",
+      "kind": "technique",
+      "claim": "Sunshine Shuffle runs its poker gameplay and its narrative conversation simultaneously and independently, so characters can bet, speak and pass in one flowing scene.",
+      "detail": "Unlike games where characters serve as background to poker, in Sunshine Shuffle poker is the background to an original thriller story told around the table.",
+      "t": 90,
+      "quote": "The poker and narrative layer happen simultaneously and independent of each other",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "storylets",
+      "kind": "technique",
+      "claim": "Sunshine Shuffle structures conversations as storylets with preconditions and post-conditions, picking the next one by weighted randomness from the next main conversation plus any unlocked optional ones.",
+      "detail": "The story is a linear sequence of main conversations with optional conversations unlocked at certain points; whenever the table needs a conversation at intervals, one is selected and played. Hinenzon recommends Emily Short's writing on storylets.",
+      "t": 226,
+      "quote": "when the table needed another conversation at certain intervals we would select from one of the available conversation based on weighted randomness",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "event priority queue",
+      "kind": "technique",
+      "claim": "Sunshine Shuffle feeds dialogue and poker events as 'chores' into one priority queue, giving blocking events like an all-in or showdown higher priority so they lock out conversation until resolved.",
+      "detail": "A parser turns node-graph nodes (animations, faces, poker turns) into chores; poker also enqueues events. After a big moment, a marker can be inserted to return to the conversation.",
+      "t": 436,
+      "quote": "any chore that could block other things from playing would get higher",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "tool granularity",
+      "kind": "warning",
+      "claim": "Sunshine Shuffle's dialogue tool was built to be fully atomic, but in practice chores consolidated into lines and turns, so the atomic node graph only added time-consuming authoring work.",
+      "detail": "Every node had to be created and linked by hand, which required people to spend time hooking up conversations, while lines (for dialogue) and turns (for poker) became the real units of control.",
+      "t": 549,
+      "quote": "That means that earlier atomic kind of conception of the chore graph wasn't necessary. It added a lot of time and work to creating conversations",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "designer timing control",
+      "kind": "warning",
+      "claim": "Timing is essential in narrative games and designers need direct control of it, but Sunshine Shuffle's timing lived in float variables scattered across C# scripts, costing iteration time.",
+      "detail": "The storylet and node-graph design did not surface timing controls, so programmers had to step in to tune the flow of conversation, poker and player load. Some timing was even tied to how long UI was hidden.",
+      "t": 598,
+      "quote": "timing is essential in any narrative game and designers should have control over that",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "shifting responsibilities",
+      "kind": "warning",
+      "claim": "In Sunshine Shuffle the chore queue was meant to show what was coming up, but responsibility drifted to the graph parser and the queue became just a tie-breaker.",
+      "detail": "The parser queued one line's chores, waited for permission to play the next, then converted the next line's nodes; chores rarely sat in the queue more than a few frames, mattering mainly when something had to lock everything else.",
+      "t": 668,
+      "quote": "in practice that responsibility shifted towards the graph parser",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "shared space",
+      "kind": "principle",
+      "claim": "Keeping dialogue, poker and menus in the same boat cabin makes Sunshine Shuffle's characters seem more alive, like actors performing secondary actions while delivering lines.",
+      "detail": "Because characters are engaged in things unrelated to what they are saying and there is no hard interface delineation, the space and characters feel livelier.",
+      "t": 785,
+      "quote": "there is no hard delineation in interface, it makes the space and characters in it seem more alive",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent characterization",
+      "kind": "example",
+      "claim": "Because Sunshine Shuffle's narrative and poker layers are independent, the same line lands differently depending on surrounding play, and players project intention onto the poker AI based on the story.",
+      "detail": "A line might follow an all-in, a daring raise or a cautious bet. Players read narrative motives into AI decisions whether or not a connection exists, and coincidences like a long scripted think after an awkward line create comedy, making each playthrough a little unique.",
+      "t": 827,
+      "quote": "players project intention on to the poker AI's decisions based on what just happened in the narrative regardless of whether or not that connection actually exists",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "tool design",
+      "kind": "principle",
+      "claim": "Hinenzon's takeaways are that tooling should be designed by talking with the people who will use it, and that flawed tools can still ship a game to be proud of.",
+      "detail": "The talk is framed around the tension between the tools' flaws and what the team managed to make with them.",
+      "t": 900,
+      "quote": "The tooling was directly done by talking to the person using the tool, what they felt comfortable with and what the game was going to be",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

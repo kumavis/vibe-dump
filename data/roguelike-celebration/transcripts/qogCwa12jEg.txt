@@ -1,0 +1,60 @@
+Eiríkr Åsheim: Uxn: Permacomputing & Roguelikes
+Speaker: Eiríkr Åsheim
+https://www.youtube.com/watch?v=qogCwa12jEg
+Year: 2024   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:03] ALEXIE: We are going to be continuing on from here. Running I think six minutes ahead of the normal schedule. Going to go to Eiríkr's talk and then after Brian's we will do attempt number two at Robin's talk. Thanks, everyone, for being flexible. Eiríkr is a programmer, musician, and artist. Years ago he helped maintain Angband; more recently he has been building tools and libraries for the Uxn/Varvara ecosystem. He's drawn to esoteric knowledge and cryptic systems. and was at Roguelike Celebration 2016. You came to my talk even though the developers of Rogue were speaking in the other room. I have fond memories. >> Welcome to my lightning talk "Uxn: Permacomputing & Roguelikes." I will explain what Uxn is and why I find it interesting. First a bit about myself. I have been programming
+
+## About Me
+
+[0:00:52] for a little over 20 years as a hobby and professionally. I help maintain Angband but it is more of a Matrious developer. I have worked with C, Python, and others. However, I have never worked in the game industry or sold games professionally to make a living. About three years ago, I discovered the Uxn ecosystem and started targeting all hobby programming toward Uxn. I have implemented many programs and libraries. It basically captured my imagination. It wascreted by Devon and the hundreds rabidity rabbit collective. Their
+
+## About Uxn
+
+[0:01:36] decision to become full time nomads living board a sailboat. I definitely encourage you to look them up after this talk. Uxn describes a small mostly self-contained ecosystem consisting of Uxn
+
+## Uxn Ecosystem
+
+[0:02:02] assembly language, virtual machine specification, emulators for various platforms, and ROMs implementing programs and games like NES ROMS. There are 64 kilobytes of memory. It is documented how to do I/O, play to the screen, sounds. There are emulators for many platforms. Such as SDL, X11 Nintendo handheld and a bunch more. Really exciting. ROMs implementing in games are pretty simple. A 45 Fe here are examples. 3450 bytes Mandel and so on. Here are additional limitations
+
+[0:03:04] I haven't mentioned yet. Built in data types are 8-16 bit integers. The VM is mostly single
+
+## Uxn Limitations
+
+[0:03:11] threaded. Sandbox to the directory only. Four figure display. These limitations are constraining but can be free constraining but can be freeing. This represents a significant upgrade over the original roguelike. Here are some examples of what UXN programs can look like. Really quickly.
+
+## Examples
+
+[0:03:38] Here is that mandebrot set. They are creating the rainbow colors. You can see this animating. I have it running and here is the total emulator. Just to prove this is handling all the control characters. And finally, here is the solitaire game. I am not going to make you watch me play solitaire. I will show you what exists and you can move the card around and so on. Some of you may be wondering what that is or what it has to do with Uxn. This is coined in 1978 to sustain agricultural. There
+
+## Permacomputing
+
+[0:04:42] is not a simple definition of permacomputing. I will give you directives to give you a sense of what permacomputing is. It is designed to keep older devices as useful as possible. It lets you do more with less and do less with less. Conserve energy materials. Hopefully this give a broad sense of permacomputing and reduce software and hardware and maximize the relative usefulness to us. Let's consider these in the context of what I said about Uxn. Uxn runs on 20 year old handheld devices and 30-year old computers as well as modern browsers. It should be possible to use on any system used today. Rom should continue to work as long as emulators are used. Nothing is certain. But if people want to run Uxn in the future and have the spec they probably can. I am curious
+
+[0:05:51] whether we can achieve the goals. Hopefully it is pretty self-explanatory and finally minimizing complexity. A simple one is easier to test. What about roguelikes? What do they have do
+
+## Roguelike
+
+[0:06:12] with permacomputing? Dennis Ritchie once said rogue was the biggest waste of CPU cycles in history. Was rogue wasteful? I would argue they targeted the system and hardware didn't need to be created. 40 years later we are still torque talking about Rogue and descendants. It used procedural generation to minimize assets and could be played over a phone line in the early '80s. Conserve energy materials. It was just one or a handful of people working on it to do this. It didn't make a lot of work. Minimizing complexity. Rogue was updated, ported, and remixed. It was influential because of the preciseness. This isn't the only way to look at video games from a permacomputing angle. It is just an interests interesting one for us to continue. Uxn is a good
+
+[0:07:18] fit for roguelikes because it is aligned with many things that made rogue and roguelikes successful.
+
+## Varvara
+
+[0:07:27] At this in the talk, I have been hoping to show off my own roguelike demo but unfortunately life got in the way and I don't have much to show yet. Instead I will take a moment to walk through how Varvara works. Program counter which is 16 bit value to the next instruction to decode and run. Two stacks for passing and working with values. 64 kilobytes of main memory. That's where you put everything in the program and data. And device ports for reading and writing and interacting with the actual emulator and drawing and playing sounds. That's it. That's all you have to care about. This is called reset since it happens when the VM starts the reset. They will run
+
+[0:08:28] other codes. The console vector runs when text is on standard input. Audio runs when a sound finishes playing. And the mouse and controller run on respective input. Which console you
+
+## Why Uxn
+
+[0:09:10] use might come down to what you value. Uxn and all the language you tend to work is much simpler than Python or Java. Similarly, while there are independent implementations of popular console, the effort seems larger and sometimes involves reverse engineering. I love creating games that people play on web browser or handheld device as they already have got. Here is my talk running on my 3DS. You can see going through the slides. Maybe if I had more courage I would have done the talk this way. Not quite that courageous. It is possible that I will eventually find some of the constraints limiting. In that case, I am confident I will be able to create a new one and port over. Devon has said they hope this inspires more people to create their own
+
+[0:10:13] computing systems. Regardless, the goal of my talk isn't to convince you the Roguelike Celebration to drop everything and start using Uxn only. Instead, my goal is to help encourage
+
+## Goal
+
+[0:10:25] you or help you consider whether a smaller, simpler, and cozier environment is adequate. ALEXEI: This is making me think. I recently bought a bunch of Zachtronic games. I miss programming and assembly when there were 10 things I could do. There is a longing for the simplicity of that type of puzzling. It is interesting to me that like that's compelling enough to be a game that people want to have artificial constraints that make them program things in a limited feature set. You know, you could be doing it. >> I love those games. Maybe I am just
+
+[0:11:28] drawn to this stuff. We should get someone to help us run the mud. >> I would love to help you do that. ALEXEI: Fantastic. Yes. Hopefully people will be able to follow up with you afterwards in Whip Show. Thank you very much. Great to have you back.

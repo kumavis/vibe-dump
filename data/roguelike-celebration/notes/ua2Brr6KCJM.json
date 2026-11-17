@@ -1,0 +1,77 @@
+{
+  "id": "ua2Brr6KCJM",
+  "title": "Cara Esten Hurtle: Telnet, a New Session, and transsexualizing the past",
+  "speaker": "Cara Esten Hurtle",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=ua2Brr6KCJM",
+  "talk_type": "culture",
+  "summary": "Cara Esten Hurtle, presenting in HyperCard, discusses the aesthetics of nostalgia through her projects: New Session, a literary zine of queer and trans work delivered over Telnet, and a NSFW HyperCard stack about her body. She argues nostalgia is often reactionary, a demand to return to a past that was hostile to queer and trans people, and warns against retro works that launder the past's harms. Instead she locates nostalgia's power in the friction between a retro aesthetic and unexpected content, and in reclaiming retrocomputing spaces whose queer history (such as Caper in the Castro) has been brushed aside. The talk has little direct game design content beyond remarks on retro constraints and aesthetics.",
+  "games": [
+    "Caves of Qud",
+    "Sigil",
+    "Caper in the Castro"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "retro aesthetics",
+      "kind": "principle",
+      "claim": "Constraints imposed by old software, such as the ASCII retro aesthetic of Caves of Qud and other roguelikes, are a breeding ground for creativity.",
+      "detail": "Hurtle says New Session began as a way to ask authors to work within particular constraints, and points to roguelikes' ASCII art as a constraint that breeds creativity.",
+      "t": 308,
+      "quote": "Look at Caves of Qud where you have this retroaesthetic. You can do that for ASCII art for all of the other roguelikes",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "old engines",
+      "kind": "example",
+      "claim": "John Romero said building the Sigil Doom maps in an old engine let him focus on the world he was building rather than on technical implementation details.",
+      "detail": "Hurtle offers Sigil as another case of an old technical constraint freeing a creator to think about content.",
+      "t": 329,
+      "quote": "engaging with this old engine allowed him to think about the world itself that he was building rather than the sort of technical implementation",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "nostalgia",
+      "kind": "principle",
+      "claim": "Nostalgia's creative power lies in the friction between a retro aesthetic and content that does not match what that aesthetic leads people to expect.",
+      "detail": "Hurtle argues nostalgia takes off when you ask what if things were different, opening a gap between the imagined and the historical. Her HyperCard stack of nudes with text about her trans body, made in response to retrocomputing groups' no-NSFW rules, exploits that delta.",
+      "t": 446,
+      "quote": "the friction that arises when the an aesthetic of a piece doesn't match the expected content of the piece",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "nostalgia",
+      "kind": "warning",
+      "claim": "Reimagining the past through a retro aesthetic can wash over the real harms of that era, which is a reactionary practice even when it looks inclusive.",
+      "detail": "Hurtle cites critiques of Hamilton's casting laundering the founders' legacy, and Stranger Things making tolerance easy to imagine while the AIDS pandemic was killing people in the background. She says we should not pretend things did not have these problems.",
+      "t": 382,
+      "quote": "You can also sort of create a new version of the past that washes over all the sins that legitimately existed",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "queer game history",
+      "kind": "history",
+      "claim": "Caper in the Castro, one of the first explicitly queer games, was a HyperCard stack with a NSFW warning, showing that queer and adult content has always been part of retrocomputing even when communities brush it aside.",
+      "detail": "Hurtle calls no-NSFW retrocomputing rules ahistorical and says much of the retro revival dresses up cis white male yearning for a simpler time as a hobby, while queer parts of that history were kept away from people like her.",
+      "t": 515,
+      "quote": "caper in the castro, one of the first explicitly queer games that was DECIDEDLY not safe for work",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "retro aesthetics",
+      "kind": "principle",
+      "claim": "Retro aesthetics are worth using when old technology tells a story that could not be told any other way, not for aesthetics' sake.",
+      "detail": "In Q&A Hurtle cites projects where noise and distortion from the old medium become part of the message, helping the audience understand the creator's intent, as with Game Boy Camera photography.",
+      "t": 915,
+      "quote": "The thing that matters is when you use old technology to tell a story that could not be told in any other way",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

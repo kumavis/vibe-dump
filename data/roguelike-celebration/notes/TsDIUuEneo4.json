@@ -1,0 +1,109 @@
+{
+  "id": "TsDIUuEneo4",
+  "title": "Aaron Santos - Optimizing procgen parameters using mini-batch gradient descent",
+  "speaker": "Aaron Santos",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=TsDIUuEneo4",
+  "talk_type": "technical",
+  "summary": "Aaron Santos, developer of the roguelike Robinson, argues that the hand-picked 'magic numbers' in procedural generators are fragile and undocumented, and shows how to let the computer pick them. He restructures a generator to take its parameters and its random input as arguments, scores outputs with a machine-learning-style loss function built from metrics like density and connectedness, and uses mini-batch gradient descent via differentiable programming (Python's jax) to optimize the parameters. He demonstrates a one-parameter cave generator and a 36-parameter corridor generator, and argues that loss functions also document the designer's goals.",
+  "games": [
+    "Robinson",
+    "NetHack",
+    "Dungeon Crawl Stone Soup",
+    "Angband",
+    "Pixel Dungeon"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "magic numbers",
+      "kind": "warning",
+      "claim": "Hand-tuned magic numbers in procedural generators interact unpredictably, break when code or balance changes, and are rarely documented, even in major roguelikes.",
+      "detail": "Santos describes picking a magic number until a generator works, then watching it break after generator changes or rebalancing. He looked at the source of NetHack, Crawl, Angband and Pixel Dungeon and found magic numbers within a minute in each, with the designer's intent hard to recover.",
+      "t": 97,
+      "quote": "it was easy to find magic numbers. It just took me a minute for like each of those. They're everywhere and they’re not well documented",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "parameter optimization",
+      "kind": "technique",
+      "claim": "To make a generator optimizable, pull its magic numbers out as explicit parameters and pass its random input in rather than calling rand inside it.",
+      "detail": "The generator becomes a function of (parameters, random input) that produces an artifact. This separation is the precondition for scoring outputs and automatically searching for parameter values.",
+      "t": 155,
+      "quote": "Instead of calling rand and getting random values inside the generator we’re just gonna pass those in",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "loss functions",
+      "kind": "technique",
+      "claim": "A loss function scores generator output by computing metrics such as density, connectedness, emptiness or jaggedness and comparing them to target values, e.g. by squared difference.",
+      "detail": "Borrowed from machine learning, the loss function takes the generator output, computes metrics suited to the goals, and measures how far they are from targets. Santos found these simple metrics worked well for dungeon generation.",
+      "t": 197,
+      "quote": "Some really common or really simple metrics that work well for me in loss functions were things like density, or connectedness, or emptiness or jaggedness",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "cave generation",
+      "kind": "example",
+      "claim": "A cave generator that sums neighbor values, subtracts a threshold and squashes through a sigmoid, optimized only for 50% density, produced caves that were not always connected because connectivity was never in the loss.",
+      "detail": "The generator has a single magic number, the threshold, and repeats the neighbor-sum step 3-4 times. With density as the only loss target the output was half filled as desired, but disconnected areas appeared, showing the optimizer only satisfies what the loss function measures.",
+      "t": 307,
+      "quote": "One thing I didn't consider was connectivity. So the generator and the loss function don't really care about that at all",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "corridor generation",
+      "kind": "example",
+      "claim": "A generator with 36 learned neighbor weights, optimized for minimal corridor density plus maximal connectivity, produced tree-like corridor layouts with many dead ends.",
+      "detail": "Combining two goals in the loss gave a tree-based structure. Because dead ends were not penalized there were many; Santos notes he would only need to add a dead-end term to the loss, not change the generator, to fix that.",
+      "t": 391,
+      "quote": "It doesn't penalize dead ends, so this generator will produce a lot of dead ends. If I wanted to adjust that I would have to add that as another goal",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "gradient descent",
+      "kind": "technique",
+      "claim": "Generator parameters can be tuned by mini-batch gradient descent, using differentiable programming to get the slope of the loss with respect to the magic numbers.",
+      "detail": "Santos used jax, a drop-in replacement for numpy that can differentiate suitably structured programs. Start with tiny random parameter values, evaluate a batch of random inputs (he used 32) so the descent path is neither too noisy nor too slow, and nudge parameters along the slope until they converge.",
+      "t": 498,
+      "quote": "you can find the derivative of a computer program if it is structured in the right way. That’s a programming technique called differential programming",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "gradient descent",
+      "kind": "technique",
+      "claim": "Mini-batches balance optimization stability against compute cost: single examples give a wandering descent path while huge batches are slow to compute.",
+      "detail": "Santos picks a middle ground batch size of 32 random inputs and targets per step, which is where the 'mini-batch' in the method's name comes from.",
+      "t": 567,
+      "quote": "if you just kind of take one example at a time you’re gonna find a really windy path down that mountain",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "loss functions",
+      "kind": "principle",
+      "claim": "Encoding generator goals in a loss function lets developers change generator code or goals without fear, and serves as lasting documentation of design intent.",
+      "detail": "Once the loss function finds good magic numbers automatically, the generator can be changed and re-optimized, or new metrics added to get new parameters. The metrics crystallize the designer's goals for later in development.",
+      "t": 687,
+      "quote": "The loss functions with those metrics inside of them are really good ways to document the goals we are embedding",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "genetic algorithms",
+      "kind": "open-question",
+      "claim": "Differentiable optimization requires continuous floating-point parameters but is very efficient, whereas genetic algorithms handle discontinuity better but may optimize more slowly.",
+      "detail": "Answering an audience question comparing his approach with a genetic algorithm and fitness function, Santos said this was his tentative impression from limited experience; he also admitted not all code can be made differentiable but said the approach worked for him.",
+      "t": 813,
+      "quote": "The big constraint that the differentiable programming imposes is that sort of all the numbers have to be continuous",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

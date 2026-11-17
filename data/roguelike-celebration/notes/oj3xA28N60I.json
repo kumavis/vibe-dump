@@ -1,0 +1,117 @@
+{
+  "id": "oj3xA28N60I",
+  "title": "Greg L - Bitwise Black Magic: How to Computer, Better Faster Stronger",
+  "speaker": "Greg L",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=oj3xA28N60I",
+  "talk_type": "technical",
+  "summary": "Greg L gives a primer on bitwise operations and number representation, using PICO-8 to show how low-level bit manipulation enables effects and performance on platforms designed not to have them. He argues numbers on a computer are really rows of 'light switches', covers shifts, rotates, AND/OR/XOR/NOT, two's complement, fixed point (PICO-8's 16.16) and floating point, then applies them: bitfields for visited-map flags and controller input, saving destructible procedural maps as one bit per object, a word-parallel flood fill, a screen-space bloom/anti-aliasing convolution done with a single multiply, live font updates, and a Game of Life step processing eight cells in seven operations. He closes by deriving the Quake III fast inverse square root as an exponent manipulation.",
+  "games": [
+    "PICO-8",
+    "Quake III Arena",
+    "The Legend of Zelda"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "bitwise operations",
+      "kind": "principle",
+      "claim": "Numbers on a computer should be thought of as rows of on/off switches with low-level operations on them, not as mathematical numbers; understanding this unlocks effects on constrained platforms.",
+      "detail": "Greg says that in 'x = 5' x isn't a number and '=' doesn't mean equality, which is why x = x + 5 works. He presents shifts, rotates, AND, OR, XOR and NOT as manipulations of switches, emphasizing there is no real concept of counting at this level.",
+      "t": 193,
+      "quote": "I think everything you know about numbers on the computer is a lie",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "bitfields",
+      "kind": "technique",
+      "claim": "Packing many yes/no flags into one integer as a bitfield, such as which map rooms have been visited, lets a game test them cheaply with a bitwise AND.",
+      "detail": "Greg shows a PICO-8 game's minimap code that ANDs the visited value with a single-bit mask and draws a room dark blue if the result is nonzero. 'Visited is not a number. It is 32 separate yes/no questions.' He notes the same pattern in controller input and collision layers.",
+      "t": 442,
+      "quote": "Visited is not a number. It is 32 separate yes/no questions.",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "save systems",
+      "kind": "technique",
+      "claim": "A procedurally generated world with destructible objects can be saved as just one bit per destructible object, since the map itself can be regenerated from the seed.",
+      "detail": "Greg describes a PICO-8 game with randomly generated stone and trees that remembers what you dug out across reloads: at generation it records every destructible object, and the save packs a destroyed/not-destroyed bit for each as tightly as possible using peek and poke. He suggests this for web games, online saves, or huge maps.",
+      "t": 548,
+      "quote": "you can make a map, and only need to save one bit per thing that can be dugout, and we all know how to regenerate maps",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "number representation",
+      "kind": "technique",
+      "claim": "Fixed-width integers wrap around, which is why 8-bit games like The Legend of Zelda cap values at 255 and why adding one to 127 in a signed byte yields -128.",
+      "detail": "Greg explains binary place values as powers of two, two's complement for negatives (flip bits, add one) so negative and positive zero are the same, and the resulting functional range of -128 to 127 for a signed byte.",
+      "t": 656,
+      "quote": "Games like Legend of Zelda had 255. That's the maximum number you could store.",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "fixed point",
+      "kind": "technique",
+      "claim": "PICO-8 uses 16.16 fixed-point numbers, which shift the binary window so the low bits represent halves, quarters and eighths, while floating point stores sign, exponent and mantissa like scientific notation.",
+      "detail": "Greg presents fixed point as a simple way to get fractions that behaves like integer math with an adjustment after multiplication, and floating point as a sliding window of precision on the same power-of-two grid.",
+      "t": 902,
+      "quote": "in peco8 which is 16.16 format meaning these are the whole numbers and these are the fractions",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "flood fill",
+      "kind": "technique",
+      "claim": "A flood fill can process a whole row of cells at once by treating packed bits as a word and using tricks like subtracting one and XORing to isolate a run of empty cells.",
+      "detail": "Naive per-pixel recursive flood fill over 16,000 tiles is too slow on PICO-8. Greg finds region edges with bit tricks (x minus 1 borrows down to the first 1; XOR then isolates the changed bits), fills a whole span at once, and recurses to neighbouring rows, surrounding the screen with solid so it stays bounded.",
+      "t": 1030,
+      "quote": "But we had all these ones and zeros so could we do them all at the same time? The is answer is yes.",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "bloom effect",
+      "kind": "technique",
+      "claim": "A screen-space blur/bloom on PICO-8 can run in about 3 ms per frame by doing a 1-3-1 convolution kernel on packed 4-bit pixels with a single multiply by hex 1.31-style constant, then remapping the palette to a gradient.",
+      "detail": "PICO-8 has 16 on-screen colours mappable from 32, enabling a brightness ramp. Drawing in ones over a zero background, multiplying a packed row by a constant spreads each pixel to its neighbours in one operation; rows are processed with above/current/below buffers and poked back into screen memory. Greg reports it costs about a fifth of a frame.",
+      "t": 1356,
+      "quote": "That's about 3 milliseconds and plenty of time to make a game on top of it.",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "cellular automata",
+      "kind": "technique",
+      "claim": "Conway's Game of Life can be computed eight cells at a time with packed bits: a convolution gives neighbour sums and seven bitwise operations apply the birth and survival rules.",
+      "detail": "Greg's version sums neighbours with a different convolution kernel, then checks whether the sum is 2 or 3 and whether the cell is alive or the sum odd, masking away garbage bits. Seven cycles handle eight pixels, letting it run at 180 frames per second on a Game Boy-class fantasy console.",
+      "t": 1545,
+      "quote": "This is seven operations. Seven cycles on a computer and it does eight pixels",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "fast inverse square root",
+      "kind": "technique",
+      "claim": "The Quake III fast inverse square root works by treating a float's bits as an integer and linearly halving and negating the exponent with a shift and a subtraction from a magic constant that corrects the exponent bias.",
+      "detail": "Greg explains the function was needed to normalize vectors for lighting before graphics cards. Reading the float as an integer, shifting right divides the exponent by two (square root) and subtracting from the constant negates it (reciprocal); before any refinement step the result is only about 3% off. He attributes the original to Greg Walsh.",
+      "t": 1616,
+      "quote": "What we want to do with this exponent is do a linear operation, divide it by 2, and make it negative",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "low-level optimization",
+      "kind": "principle",
+      "claim": "Bit-level tricks are becoming more relevant, not less, because modern graphics hardware relies on them, such as very small floating-point formats.",
+      "detail": "Greg cites Nvidia's four-bit floating-point format as an example and encourages developers to learn the topic to make computers work better than they expect.",
+      "t": 1748,
+      "quote": "there is a lot of stuff using this bit hacking especially in graphic cards today",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

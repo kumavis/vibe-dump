@@ -1,0 +1,86 @@
+{
+  "id": "f1t4yPjfZyM",
+  "title": "Thomas Robertson - Towards a New Understanding of Procedural Super Attacks",
+  "speaker": "Thomas Robertson",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=f1t4yPjfZyM",
+  "talk_type": "technical",
+  "summary": "Thomas Robertson describes his work-in-progress system for procedurally generating flashy Final Fantasy 7-style super attacks, since roguelike developers cannot afford to hand-animate hundreds of unique moves like Pokémon's 826. Attacks are built from atomic effect pieces held in lists that tick and draw them, with atoms able to spawn other atoms, and with both a blocking and a concurrent list. He proposes a trio of dictionary (procedurally generates the list of available attacks), choreographer (builds an attack script from atoms) and director (plays it), shows a live test bed generating 15 attacks, and stresses making it easy to add new effect atoms.",
+  "games": [
+    "Final Fantasy VII",
+    "Pokémon"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural effects",
+      "kind": "principle",
+      "claim": "Roguelike developers without large art teams can use procedural generation to produce many unique super-attack presentations, like Final Fantasy 7's limit breaks or Pokémon's 826 moves.",
+      "detail": "Robertson notes those games had resources to hire many artists to give every move a unique presentation; procgen is roguelike devs' own 'super attack'. He stresses the system is a work in progress, not a perfected solution.",
+      "t": 95,
+      "quote": "we roguelike devs just don't have the resources to do that kind of thing but we can use proc gym",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "effect atoms",
+      "kind": "technique",
+      "claim": "Build super attacks from atomic effect pieces kept in a list that ticks and draws each atom and removes it when done, with atoms able to spawn new atoms.",
+      "detail": "Focusing on small pieces avoids being overwhelmed, and pieces are mixed and matched into a complete attack. A projectile atom can create an explosion atom when it reaches its destination, which makes chaining flexible.",
+      "t": 169,
+      "quote": "the atomic pieces should be added to a list and the list you know took responsibility for ticking and drawing each atomic piece",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "input blocking",
+      "kind": "technique",
+      "claim": "Unlike most game juice, big super attacks halt play, so input can be inhibited simply while the effect-atom list is non-empty, with skip or fast-forward offered to avoid holding the player up.",
+      "detail": "Robertson contrasts this with an earlier juice talk's advice not to stop the player moving: Final Fantasy-style super attacks have always stopped everything because they are a big deal.",
+      "t": 240,
+      "quote": "super attacks are a little different they're a big deal they stop everything while the attack happens",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "blocking and concurrent",
+      "kind": "technique",
+      "claim": "Keep both a blocking list (atoms play one after another) and a concurrent list (atoms play at once), since complex super attacks need both.",
+      "detail": "Each list ticks and draws its atoms, and atoms can go in either. In his code an atom can carry child blocks that move into the concurrent list when it finishes, so they all start immediately.",
+      "t": 310,
+      "quote": "you should make a concurrent list and a blocking list and each one can contain attack atoms",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "attack generation",
+      "kind": "technique",
+      "claim": "Robertson's procedural super-attack architecture is a trio: a dictionary that generates the list of available attacks, a choreographer that scripts each attack from atoms, and a director that plays the script.",
+      "detail": "The dictionary is like a Pokémon move chart or spell book that units pick from. His key insight was that the director knows about all the atoms and can inform the dictionary, so attacks are defined around the 'middle' atoms that travel between source and target. In practice choreograph became a function on the director.",
+      "t": 353,
+      "quote": "i came up with a theory of a basic trio the dictionary the choreographer and the director",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "seeded generation",
+      "kind": "technique",
+      "claim": "Each generated attack record stores a name, colour, tags, level and random seed, so the choreographer regenerates the same attack every time.",
+      "detail": "In the test bed, the dictionary built five attacks at power levels one to five for each of three 'middle' atoms the director exposed, giving 15 attacks. Robertson uses maps with string tags so code can ask for 'the middle ones' or 'the red ones'.",
+      "t": 603,
+      "quote": "the seat that's the random seed so that when you hand off the attack record to the choreograph function it's always going to generate the same attack",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "ease of iteration",
+      "kind": "principle",
+      "claim": "Make adding new content pieces easy, because if adding a fire effect is hard you won't get around to it, and if it's easy you'll add ice too.",
+      "detail": "Robertson says the most important thing he did was set himself up for success: once the structure made new effect atoms easy to add and integrate, he immediately made more and had fun doing so.",
+      "t": 491,
+      "quote": "if it's difficult to add a new fire effect you're not going to get around to it if it's easy you do it right away",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

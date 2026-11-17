@@ -1,0 +1,1249 @@
+{
+ "id": "NklQJfhZT3k",
+ "url": "https://www.youtube.com/watch?v=NklQJfhZT3k",
+ "title": "Cezar Capacle: Enhancing Narrative Through Randomness and Complications",
+ "speaker": "Cezar Capacle",
+ "talk_title": "Enhancing Narrative Through Randomness and Complications",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1929,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Discover how randomness, particularly through oracles and partial successes, can transform game narratives from predictable paths into dynamic, unique stories. This talk will explore how random elements can drive compelling plotlines without relying on predefined lore, and how diverse complications can turn failures into opportunities for narrative branching. Through practical examples and case studies, we'll explore how structured randomness can lead to emergent storytelling that surprises both players and creators alike.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 58,
+   "title": "Welcome"
+  },
+  {
+   "start": 90,
+   "title": "Railroad vs Sandbox"
+  },
+  {
+   "start": 146,
+   "title": "Two Assumptions"
+  },
+  {
+   "start": 201,
+   "title": "Our Approach"
+  },
+  {
+   "start": 264,
+   "title": "The Oracle"
+  },
+  {
+   "start": 343,
+   "title": "Whats in the Chest"
+  },
+  {
+   "start": 404,
+   "title": "In Context"
+  },
+  {
+   "start": 490,
+   "title": "Random Encounters"
+  },
+  {
+   "start": 523,
+   "title": "Cognitive Biases"
+  },
+  {
+   "start": 603,
+   "title": "The Sweet Spot"
+  },
+  {
+   "start": 692,
+   "title": "Random is different from meaningless"
+  },
+  {
+   "start": 735,
+   "title": "Without a game master"
+  },
+  {
+   "start": 770,
+   "title": "Fail Forward"
+  },
+  {
+   "start": 831,
+   "title": "Avoiding Dead Ends"
+  },
+  {
+   "start": 891,
+   "title": "Partial Success"
+  },
+  {
+   "start": 978,
+   "title": "Indiana Jones Effect"
+  },
+  {
+   "start": 1050,
+   "title": "Limitations of Complications"
+  },
+  {
+   "start": 1259,
+   "title": "Using Procedures"
+  },
+  {
+   "start": 1300,
+   "title": "FL Flowchart"
+  },
+  {
+   "start": 1463,
+   "title": "Summary"
+  },
+  {
+   "start": 1553,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3764,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.04,
+   "d": 9.4,
+   "text": "ALEXEI: Next up we have Cezar Capacle who is a Brazilian table top designer. He has been creating"
+  },
+  {
+   "t": 12.44,
+   "d": 6.68,
+   "text": "games since 2016 and dedicated full time to creating games for the last three years releasing"
+  },
+  {
+   "t": 19.12,
+   "d": 7.12,
+   "text": "over 30 games which is very impressive. Known for light rules and corky mechanics and after"
+  },
+  {
+   "t": 26.24,
+   "d": 5.68,
+   "text": "getting recognition into the community they have been translated into eight different languages."
+  },
+  {
+   "t": 33.36,
+   "d": 4.12,
+   "text": "Lots of fun stuff to check out. Is here to talk about \"Enhancing Narrative Through Randomness"
+  },
+  {
+   "t": 37.48,
+   "d": 3.84,
+   "text": "and Complications.\" I am excited for this as a cross-knowledge"
+  },
+  {
+   "t": 41.32,
+   "d": 19.88,
+   "text": "sharing from table top into roguelikes CEZAR: Thanks for having me. Thanks, guys."
+  },
+  {
+   "t": 61.92,
+   "d": 10.92,
+   "text": "Pleasure being here and thanks to the organizers for the invitation. I am a table top designer so I"
+  },
+  {
+   "t": 72.84,
+   "d": 10.6,
+   "text": "am excited to share insight from the pen and paper side of game design. The topic today is \"Enhancing"
+  },
+  {
+   "t": 83.44,
+   "d": 6.08,
+   "text": "Narrative Through Randomness and Complications.\" We have a lot of cover so let's jump right in."
+  },
+  {
+   "t": 91.92,
+   "d": 6.52,
+   "text": "If you are familiar with table top RPGs one of the many multiple ways that we can analyze how"
+  },
+  {
+   "t": 98.44,
+   "d": 9.04,
+   "text": "RPG adventures are conducted is dividing them between railroad or sandbox. Those terms mean"
+  },
+  {
+   "t": 107.48,
+   "d": 5.64,
+   "text": "generally -- they have different interpretations but generally it means pre-established events"
+  },
+  {
+   "t": 113.12,
+   "d": 6.72,
+   "text": "that unfold in a set sequence. So there is a clear past to the story. Players move along"
+  },
+  {
+   "t": 120.44,
+   "d": 5.96,
+   "text": "this path. There is little deviation from the plot points that have been planned. In the other"
+  },
+  {
+   "t": 126.4,
+   "d": 6.44,
+   "text": "hand we have sandbox adventures that are like the open world approach where players have the"
+  },
+  {
+   "t": 132.84,
+   "d": 6.96,
+   "text": "freedom to interact with the world however they chose. The stories depends on the interaction"
+  },
+  {
+   "t": 139.8,
+   "d": 10.24,
+   "text": "and what they choose to interact with. There is more flexibility. Regardless of which approach"
+  },
+  {
+   "t": 150.04,
+   "d": 10.08,
+   "text": "you chose, there are two assumptions that work for both of them. There are key things. There"
+  },
+  {
+   "t": 160.12,
+   "d": 8.8,
+   "text": "is a predefined world with existing lure, fractions, and ongoing events. It is a"
+  },
+  {
+   "t": 168.92,
+   "d": 7.52,
+   "text": "living breathing world created before gameplay starts. The second traditional assumption is"
+  },
+  {
+   "t": 176.44,
+   "d": 5.56,
+   "text": "that there is a game master which is a person different responsibilities from"
+  },
+  {
+   "t": 182.0,
+   "d": 5.92,
+   "text": "the other players which is responsibility for preparing everything. The adventure, the world,"
+  },
+  {
+   "t": 187.92,
+   "d": 7.44,
+   "text": "block points, or populate the world with MPC locations and everything regardless of if it is"
+  },
+  {
+   "t": 195.36,
+   "d": 7.96,
+   "text": "railroad or a sandbox. Those two assumptions are traditionally considered the case usually. Now,"
+  },
+  {
+   "t": 203.32,
+   "d": 8.04,
+   "text": "in the games I design and enjoy and many other people also do, we tend to challenge these two"
+  },
+  {
+   "t": 211.36,
+   "d": 11.04,
+   "text": "traditional consumptions. We have an anti-canon approach with no predefined lure. Lure is created,"
+  },
+  {
+   "t": 222.4,
+   "d": 8.2,
+   "text": "developed, and experienced as we play. There is no world building. Perhaps brush"
+  },
+  {
+   "t": 230.6,
+   "d": 9.44,
+   "text": "strokes and that's it. Also, I tend to enjoy more GM-less games which there is no single person for"
+  },
+  {
+   "t": 240.04,
+   "d": 9.4,
+   "text": "prepping the world so the game doesn't rely on an intelligent being bringing outside knowledge into"
+  },
+  {
+   "t": 249.44,
+   "d": 7.04,
+   "text": "the game to clarify and fill out blank spots. Everything is generated and decided within the"
+  },
+  {
+   "t": 256.48,
+   "d": 10.2,
+   "text": "game itself. And together collaboratively amongst all players. How is that possible? One of the"
+  },
+  {
+   "t": 266.68,
+   "d": 7.56,
+   "text": "tools we use is called the Oracle. The Oracle is mechanical and it answers questions that a"
+  },
+  {
+   "t": 274.24,
+   "d": 7.0,
+   "text": "game master would typically handle. Simple yes or no questions, for example. We arrive at a town."
+  },
+  {
+   "t": 281.24,
+   "d": 7.28,
+   "text": "Is it raining? Yes or no. Or do I recognize this person? If you don't have this preset,"
+  },
+  {
+   "t": 288.52,
+   "d": 7.76,
+   "text": "you have to have a tool to answer those questions. You will either roll dice, draw cards, modified"
+  },
+  {
+   "t": 296.28,
+   "d": 7.36,
+   "text": "by probabilities or likelihood and get a yes or no answer. Now, there are also complex questions"
+  },
+  {
+   "t": 303.64,
+   "d": 7.8,
+   "text": "that can't be answered with yes and no. There are open-ended questions like what, where, why and how"
+  },
+  {
+   "t": 311.44,
+   "d": 9.52,
+   "text": "that you have to have different tools to answer that. The Oracle uses prompts or randomly selected"
+  },
+  {
+   "t": 320.96,
+   "d": 10.76,
+   "text": "words that work like tarot carts. They don't have predefined interpretation and rely on the players"
+  },
+  {
+   "t": 331.72,
+   "d": 9.24,
+   "text": "using their imagination and context to create answers on the fly without someone who holds"
+  },
+  {
+   "t": 340.96,
+   "d": 10.32,
+   "text": "all of the truth to the game. A classic example is what's in the chest? You stumble upon a chest"
+  },
+  {
+   "t": 351.28,
+   "d": 7.44,
+   "text": "and under a traditional setting the GM would be responsible for that. If it wasn't prepared"
+  },
+  {
+   "t": 360.24,
+   "d": 6.96,
+   "text": "in advanced, they would reply on tables, treasure tables or specific tables for that dudgeon."
+  },
+  {
+   "t": 370.16,
+   "d": 7.72,
+   "text": "They rely on participation meaning you have to anticipate all interactions that players have to"
+  },
+  {
+   "t": 377.88,
+   "d": 12.16,
+   "text": "your world and perhaps have a dedicated table for each one of those circumstances which can be open"
+  },
+  {
+   "t": 390.04,
+   "d": 6.52,
+   "text": "ended Oracles are used instead because they don't rely on those assumptions because you"
+  },
+  {
+   "t": 396.56,
+   "d": 9.6,
+   "text": "can use those random worlds. Let me give you an example. What's in the chest. One way to approach"
+  },
+  {
+   "t": 406.16,
+   "d": 10.6,
+   "text": "this is what mythic game master emulator, one of the original systems to play GM-less defines as"
+  },
+  {
+   "t": 416.76,
+   "d": 8.04,
+   "text": "meaning tables meaning you will run using a D-100 dice and combine these two world do is interpret"
+  },
+  {
+   "t": 424.8,
+   "d": 11.92,
+   "text": "the context of the story. What's in the chest here. I roll heal and fear. There is a healing"
+  },
+  {
+   "t": 436.72,
+   "d": 7.04,
+   "text": "potion that removes the fear condition you can say. That's fine. If you were considering the"
+  },
+  {
+   "t": 443.76,
+   "d": 6.12,
+   "text": "context of this story and perhaps your character is afraid of mimics and you know the monster that"
+  },
+  {
+   "t": 449.88,
+   "d": 7.64,
+   "text": "takes the shape of the object especially chests. You open the chest and there is nothing inside."
+  },
+  {
+   "t": 457.52,
+   "d": 7.88,
+   "text": "Heal and fear could mean in the context of this specific storyline, the fact you open the chest"
+  },
+  {
+   "t": 465.4,
+   "d": 6.8,
+   "text": "and nothing bad happened to you, it kind of helped you overcome your fear of mimics. It"
+  },
+  {
+   "t": 472.2,
+   "d": 7.52,
+   "text": "is tied more to the specific narrative of your character, your party, and of your"
+  },
+  {
+   "t": 479.72,
+   "d": 12.52,
+   "text": "adventure specifically. That's the power of random words used in context as a definition tool. One"
+  },
+  {
+   "t": 492.24,
+   "d": 7.76,
+   "text": "might say creating everything on the fly, and creating -- is all based on random encounters and"
+  },
+  {
+   "t": 500.0,
+   "d": 9.8,
+   "text": "random worlds. We will generate a scenario with situations that don't stretch together a series"
+  },
+  {
+   "t": 509.8,
+   "d": 11.8,
+   "text": "of undefined events with no cohesion and chaotic mass as a result. From my experience that's"
+  },
+  {
+   "t": 521.6,
+   "d": 8.52,
+   "text": "not what happens really. That's because we as human beings have a tendency to find patterns"
+  },
+  {
+   "t": 530.12,
+   "d": 9.88,
+   "text": "in everything. The mind's ability which in the real world can be seen as cognitive biases that"
+  },
+  {
+   "t": 540.0,
+   "d": 8.24,
+   "text": "can be very harmful in real world situations are actually helpful in role-playing games when you"
+  },
+  {
+   "t": 548.24,
+   "d": 7.2,
+   "text": "are creating everything as you go along because you can rely on thing like the tendency of the"
+  },
+  {
+   "t": 555.44,
+   "d": 8.16,
+   "text": "human brain to perceive patterns and connections in unrelated data and conformation bias which is"
+  },
+  {
+   "t": 563.6,
+   "d": 6.08,
+   "text": "the tendency to interpret information in a way that confirms existing beliefs or expectations."
+  },
+  {
+   "t": 569.68,
+   "d": 8.72,
+   "text": "When we are faced with random Oracle results or encounters we tend to weave them into a cohesive"
+  },
+  {
+   "t": 578.4,
+   "d": 12.56,
+   "text": "narrative similar to how we interpret definition tools. Everything that seems like random stuff"
+  },
+  {
+   "t": 590.96,
+   "d": 8.2,
+   "text": "when integrated back into the narrative, using human nature and relying on this behavior,"
+  },
+  {
+   "t": 599.16,
+   "d": 10.12,
+   "text": "we tend to create cohesive worlds and even be surprised our own definitions and interpretations"
+  },
+  {
+   "t": 609.28,
+   "d": 8.68,
+   "text": "of those random encounters and scenario. The sweet spot for me is offering a balance"
+  },
+  {
+   "t": 617.96,
+   "d": 11.48,
+   "text": "between surprise and confirming expectations. Oracles should provide responses that break away"
+  },
+  {
+   "t": 629.44,
+   "d": 14.84,
+   "text": "from the things we expect and confirm expectations at the same time to confirm the coherence within"
+  },
+  {
+   "t": 644.28,
+   "d": 7.88,
+   "text": "the story we are developing. When you reach that sweet spot that you go of course that's"
+  },
+  {
+   "t": 652.16,
+   "d": 7.48,
+   "text": "the answer for that. That's why I found this chest here. That's why she recognized me. It is a small"
+  },
+  {
+   "t": 659.64,
+   "d": 8.52,
+   "text": "surprise but it feels like you are foreshadowed that revelation in the past even though you are"
+  },
+  {
+   "t": 668.16,
+   "d": 8.04,
+   "text": "creating the answer at the very moment. This gives the player a sense of satisfaction and cleverness"
+  },
+  {
+   "t": 676.2,
+   "d": 5.16,
+   "text": "because you were able to connect all these facts and come up to this conclusion that can be both"
+  },
+  {
+   "t": 681.36,
+   "d": 6.92,
+   "text": "surprising and also fulfill the expectation of a possible shadow created from other random events"
+  },
+  {
+   "t": 688.28,
+   "d": 9.64,
+   "text": "you rolled previously in your narrative. So what I mean to say here is that random is different"
+  },
+  {
+   "t": 697.92,
+   "d": 6.72,
+   "text": "from meaningless. A randomly generated world is not meaningless. With our ability to create"
+  },
+  {
+   "t": 704.64,
+   "d": 7.32,
+   "text": "patterns we can craft compelling narratives even if we create them as playing. If we refer back to"
+  },
+  {
+   "t": 711.96,
+   "d": 7.28,
+   "text": "the elements we introduce and create connections these events create a cohesive world in the end."
+  },
+  {
+   "t": 720.96,
+   "d": 8.68,
+   "text": "This approach often leads to more interesting outcomes that we could even have written without"
+  },
+  {
+   "t": 729.64,
+   "d": 7.88,
+   "text": "these tools. They can be more surprising, different, and less predictable. Now without"
+  },
+  {
+   "t": 737.52,
+   "d": 8.48,
+   "text": "a game master, there is no one to push the story forward, or decide what happens next."
+  },
+  {
+   "t": 746.0,
+   "d": 6.64,
+   "text": "We have interesting elements being created by the Oracles but players still need move the narrative"
+  },
+  {
+   "t": 752.64,
+   "d": 9.52,
+   "text": "along. In a typical RPGs players to look there GM and ask what happens next? Without this person,"
+  },
+  {
+   "t": 762.16,
+   "d": 11.52,
+   "text": "how do we ensure that story progresses and the players stay engaged and know what to do? I like"
+  },
+  {
+   "t": 773.68,
+   "d": 10.32,
+   "text": "doing this by complications and most specifically the concept of fail forward which is where even"
+  },
+  {
+   "t": 784.0,
+   "d": 9.92,
+   "text": "failures push the story forward often creating new avenues to be explored. Stories thrive on"
+  },
+  {
+   "t": 793.92,
+   "d": 8.08,
+   "text": "drama which is built from conflict. Conflicts arise when characters don't get exactly what"
+  },
+  {
+   "t": 802.0,
+   "d": 7.12,
+   "text": "they want. Fail forward is a way to ensure that even when players fail a test or a role"
+  },
+  {
+   "t": 810.8,
+   "d": 8.24,
+   "text": "the narrative continues instead of offering stop block. Complications don't stop progress. Instead"
+  },
+  {
+   "t": 819.04,
+   "d": 6.68,
+   "text": "they offer narrative paths. This concept has become a significant development in more modern"
+  },
+  {
+   "t": 825.72,
+   "d": 12.12,
+   "text": "RPGs that maintain those this momentum avoiding dead ends. Conflict resolution in RPGs used to be"
+  },
+  {
+   "t": 837.84,
+   "d": 8.88,
+   "text": "binary. You role a dice, often add modifiers, and have to meet or beat a target number or difficulty"
+  },
+  {
+   "t": 846.72,
+   "d": 7.8,
+   "text": "rating, however you may call it. Success means you get things you want and failure means you don't."
+  },
+  {
+   "t": 854.52,
+   "d": 6.52,
+   "text": "In many cases those failures lead to blockage in the story, right? For example, you are trying to"
+  },
+  {
+   "t": 861.04,
+   "d": 6.44,
+   "text": "pick a lock. You will roll over picking a lock and you fail and the story stalls. What happens"
+  },
+  {
+   "t": 867.48,
+   "d": 10.28,
+   "text": "next? Without the game master we need tools to push the story forward. With this binary system,"
+  },
+  {
+   "t": 877.76,
+   "d": 8.24,
+   "text": "there are many instances in which the results were kind of dull. You either walk away with success,"
+  },
+  {
+   "t": 886.0,
+   "d": 7.48,
+   "text": "or you hit a dead end with a fill area. It breaks the momentum of the narrative. Now,"
+  },
+  {
+   "t": 894.48,
+   "d": 12.0,
+   "text": "with partial successes that have been popularized by the apocalypse world games and hundreds of"
+  },
+  {
+   "t": 906.48,
+   "d": 4.88,
+   "text": "variations that have been created, although mind you, that was not first game to use it"
+  },
+  {
+   "t": 911.36,
+   "d": 12.12,
+   "text": "but probably the most popular one nowadays, you have this new middle ground of results which is"
+  },
+  {
+   "t": 923.48,
+   "d": 8.4,
+   "text": "the partial success. In this case, you would roll the traditional six-sided dice and add modifiers."
+  },
+  {
+   "t": 931.88,
+   "d": 7.2,
+   "text": "On a six or less, it is a miss. A miss is not that nothing happens. Something happens that you didn't"
+  },
+  {
+   "t": 939.08,
+   "d": 6.12,
+   "text": "want to happen. So failure means it is not what you wanted. For example, pick a lock, trying to"
+  },
+  {
+   "t": 945.2,
+   "d": 6.64,
+   "text": "pick a lock, and you alert the guards or practice the tools. 7-9 is a partial success where you get"
+  },
+  {
+   "t": 951.84,
+   "d": 7.52,
+   "text": "what you want but there is a cost, compromise or complication. You pick the lock but lose time"
+  },
+  {
+   "t": 959.36,
+   "d": 8.24,
+   "text": "and find an enemy behind the door as you open it. 10 plus is a full success where you achieve"
+  },
+  {
+   "t": 967.6,
+   "d": 6.96,
+   "text": "the goal and sometimes with an ad benefit like you pick the lock and find something valuable"
+  },
+  {
+   "t": 975.36,
+   "d": 9.32,
+   "text": "or avoid a potential danger. For me the 7-9 range is the goldy lock zone of the partial"
+  },
+  {
+   "t": 984.68,
+   "d": 6.48,
+   "text": "success. This is what drives the story forward. I call this the Indiana Jones effect. You get what"
+  },
+  {
+   "t": 991.16,
+   "d": 7.64,
+   "text": "you want but someone needs another complication and you keep the action moving forward. Resolving"
+  },
+  {
+   "t": 998.8,
+   "d": 10.64,
+   "text": "one conflict creates the next. You move from one obstacle to the other without halting the story."
+  },
+  {
+   "t": 1011.32,
+   "d": 9.52,
+   "text": "After the first initial push of the inciting incident, you rely on these roles to make sure"
+  },
+  {
+   "t": 1020.84,
+   "d": 8.08,
+   "text": "the story moves forward without the need to inject anything else. Statistically players in"
+  },
+  {
+   "t": 1028.92,
+   "d": 10.0,
+   "text": "the 7-9 range most often creating a balance of getting the satisfaction and the stakes of the"
+  },
+  {
+   "t": 1038.92,
+   "d": 9.92,
+   "text": "complication. You neither waltz away with success nor come to a dead end with a complete failure."
+  },
+  {
+   "t": 1051.12,
+   "d": 8.92,
+   "text": "However, those complications and partial successes can get very tiring very fast and have informed"
+  },
+  {
+   "t": 1060.04,
+   "d": 8.0,
+   "text": "the ways I design games but the majority of my games have partial success. After you use"
+  },
+  {
+   "t": 1068.04,
+   "d": 9.08,
+   "text": "them for a while they can become taxing after long sessions. About one third of your results land in"
+  },
+  {
+   "t": 1077.12,
+   "d": 7.52,
+   "text": "the partial success range. You have to constantly creatively come up with new complications and new"
+  },
+  {
+   "t": 1084.64,
+   "d": 8.44,
+   "text": "story paths. It can become a little repetitive or predictable like relying to default outcomes like"
+  },
+  {
+   "t": 1093.08,
+   "d": 7.8,
+   "text": "you get this but you get hurt in the process. Or it can get overly complex. You keep adding"
+  },
+  {
+   "t": 1100.88,
+   "d": 6.44,
+   "text": "layers and layers of threats and story paths to a point that you don't even recognize what was the"
+  },
+  {
+   "t": 1107.32,
+   "d": 7.2,
+   "text": "original storyline that you were following. Your mission has been deviated so far from the original"
+  },
+  {
+   "t": 1114.52,
+   "d": 22.2,
+   "text": "task you don't even recognize it any more. You can reply on those using the random words I showed you"
+  },
+  {
+   "t": 1136.72,
+   "d": 8.6,
+   "text": "affordable care act have a dedicated list of the predefined complications. However, I want to show"
+  },
+  {
+   "t": 1145.32,
+   "d": 14.16,
+   "text": "here a middle ground approach you have a dedicated Oracle that lies in between random words and"
+  },
+  {
+   "t": 1159.48,
+   "d": 9.68,
+   "text": "specific predetermined complications. I deskilled six words. Break, harm, lose, escalate, drain,"
+  },
+  {
+   "t": 1169.16,
+   "d": 9.64,
+   "text": "and expose and coupled them with a few keywords to interpret those outcomes that give you guidance"
+  },
+  {
+   "t": 1178.8,
+   "d": 10.56,
+   "text": "in ways you can create engaging complications but don't fix you into a predefined narrative."
+  },
+  {
+   "t": 1189.36,
+   "d": 8.76,
+   "text": "For example, you are picking the lock. Your role escalates suspicion or tension. You can say that"
+  },
+  {
+   "t": 1199.32,
+   "d": 8.52,
+   "text": "I am messing with the key mere. And we narrate a cut seen showing that the guards hear a noise"
+  },
+  {
+   "t": 1207.84,
+   "d": 8.16,
+   "text": "and say that's probably nothing. You have two advantages here. One you create complications"
+  },
+  {
+   "t": 1216.0,
+   "d": 8.44,
+   "text": "that you couldn't have thought without the use of this tool and second you can get a break and"
+  },
+  {
+   "t": 1224.44,
+   "d": 8.2,
+   "text": "do not add complications that completely deviates the story to another direction. In this case, the"
+  },
+  {
+   "t": 1232.64,
+   "d": 7.12,
+   "text": "example I gave, you can keep going forward in the direction that you have but you know that there is"
+  },
+  {
+   "t": 1239.76,
+   "d": 8.86,
+   "text": "a rising tension on the horizon. A looming threat that might put at-risk the story or mission you"
+  },
+  {
+   "t": 1248.62,
+   "d": 9.98,
+   "text": "are following. It avoids repetitiveness but offers a way to keep the main narrative going forward."
+  },
+  {
+   "t": 1261.64,
+   "d": 7.6,
+   "text": "I talk about Oracles to offer inspiration and complications to push the story forward. However,"
+  },
+  {
+   "t": 1269.24,
+   "d": 6.44,
+   "text": "there are tools, isolated tools. They need a structure to function smoothly. For me,"
+  },
+  {
+   "t": 1275.68,
+   "d": 6.36,
+   "text": "this is where procedures come in. I advocate for established procedures in table top RPGs because"
+  },
+  {
+   "t": 1282.04,
+   "d": 8.84,
+   "text": "they create a framework for what I like to call structured randomness. Procedures guide players"
+  },
+  {
+   "t": 1290.88,
+   "d": 7.2,
+   "text": "on when and how to use those tools like Oracles and complication tables. So there is clarity and"
+  },
+  {
+   "t": 1298.08,
+   "d": 7.68,
+   "text": "consistency in gameplay. Sometimes I even include flow charts like this one. I start here and frame"
+  },
+  {
+   "t": 1305.76,
+   "d": 7.4,
+   "text": "the scene you are in. You decide what kind of complication arises, you decide on your approach,"
+  },
+  {
+   "t": 1313.16,
+   "d": 5.8,
+   "text": "and then you roll to see what happens if there are paths that go in a different direction. You"
+  },
+  {
+   "t": 1318.96,
+   "d": 10.24,
+   "text": "conclude the seen and then you start over creating a new challenge or a new scenario. This allows for"
+  },
+  {
+   "t": 1329.2,
+   "d": 7.64,
+   "text": "players playing without a game master to look at the narrative and progress the narrative even when"
+  },
+  {
+   "t": 1336.84,
+   "d": 10.76,
+   "text": "they think they don't know what to do next because there is this structure there to back them. Now,"
+  },
+  {
+   "t": 1347.6,
+   "d": 6.32,
+   "text": "there is resistance somehow still in the table top RPG community to structure procedures because"
+  },
+  {
+   "t": 1353.92,
+   "d": 8.44,
+   "text": "they can seem to be restrictive or similar to a board game like experience. RPGs are not supposed"
+  },
+  {
+   "t": 1362.36,
+   "d": 7.24,
+   "text": "to be freedom of choice and you can do whatever you want. Providing a fixed structure procedure"
+  },
+  {
+   "t": 1369.6,
+   "d": 5.52,
+   "text": "structure like that wouldn't compromise the open ended free form spirit of role-playing"
+  },
+  {
+   "t": 1375.12,
+   "d": 7.0,
+   "text": "games -- no, this concern stems from the misunderstanding that those procedures"
+  },
+  {
+   "t": 1382.12,
+   "d": 6.56,
+   "text": "predetermine the story beats or plot points in a specific order. This is not the case. We are not"
+  },
+  {
+   "t": 1388.68,
+   "d": 5.28,
+   "text": "talking about a railroad where everything is preplanned or predictable. This experience is"
+  },
+  {
+   "t": 1393.96,
+   "d": 7.52,
+   "text": "not going to be a pre-set series of events that players just follow. No. Instead the procedures"
+  },
+  {
+   "t": 1401.48,
+   "d": 6.44,
+   "text": "work on the mechanical level not on the story level and guide you on how and when to use those"
+  },
+  {
+   "t": 1407.92,
+   "d": 9.08,
+   "text": "shares to ensure the gameplay is lose and moving forward. They don't detect story beats. Instead"
+  },
+  {
+   "t": 1417.0,
+   "d": 11.0,
+   "text": "this structure support a variety of narratives and keep things moving. When the procedure mechanisms"
+  },
+  {
+   "t": 1428.0,
+   "d": 7.48,
+   "text": "are running in the background, the players have a freer or more diverse storytelling experience"
+  },
+  {
+   "t": 1435.48,
+   "d": 5.68,
+   "text": "not a more constricted one from my experience. You can play the stories, focus on the stories,"
+  },
+  {
+   "t": 1441.16,
+   "d": 4.8,
+   "text": "and if at any moment you feel like you don't know what should happen next, you look at the mechanics"
+  },
+  {
+   "t": 1445.96,
+   "d": 8.72,
+   "text": "and see I can inject an Oracle there determine what's the motivation of this NPC or I failed"
+  },
+  {
+   "t": 1454.68,
+   "d": 5.16,
+   "text": "this role, how can I insert a complication here to raise the stakes of the story,"
+  },
+  {
+   "t": 1459.84,
+   "d": 15.36,
+   "text": "for example. So to summarize, I believe that Oracles, when well crafted with evoc TV curated"
+  },
+  {
+   "t": 1475.2,
+   "d": 7.36,
+   "text": "words combined with the human ability to create patterns and connections, allow players to work"
+  },
+  {
+   "t": 1482.56,
+   "d": 7.76,
+   "text": "beyond their expectations and consumptions and create interesting, cohesive worlds without the"
+  },
+  {
+   "t": 1490.32,
+   "d": 6.92,
+   "text": "need of a pre-set pre-defined gigantic lore. That together with embracing complications, drama, and"
+  },
+  {
+   "t": 1497.24,
+   "d": 6.36,
+   "text": "conflict are the drivers of interesting narratives and pushes the story forward in interesting and"
+  },
+  {
+   "t": 1503.6,
+   "d": 9.64,
+   "text": "unexpected directions. It encourages to follow brain chain stories and surprise yourself with"
+  },
+  {
+   "t": 1513.24,
+   "d": 8.76,
+   "text": "the results of the dice. All these together with a clear, well oiled procedure that organizes the"
+  },
+  {
+   "t": 1522.0,
+   "d": 7.88,
+   "text": "flow of the gameplay gives you a framework that you can trust. It is a game that you can trust."
+  },
+  {
+   "t": 1529.88,
+   "d": 5.96,
+   "text": "I think that is very important. That will tell you what happens, what to do next. Together these"
+  },
+  {
+   "t": 1535.84,
+   "d": 9.6,
+   "text": "elements can result in a richer, more engaging, and satisfying role-playing experience. Stories"
+  },
+  {
+   "t": 1545.44,
+   "d": 10.16,
+   "text": "emerge dynamically and organically and naturally as you play. That's all I have for today. Thank"
+  },
+  {
+   "t": 1555.6,
+   "d": 8.2,
+   "text": "you. Made it to the end. Yay. My name is Cezar Capacle. You can find all my links, social, at"
+  },
+  {
+   "t": 1564.48,
+   "d": 10.56,
+   "text": "quirky.games. I will be available for questions. ALEXEI: Wonderful. Oh, the confetti at the end."
+  },
+  {
+   "t": 1575.04,
+   "d": 6.8,
+   "text": "Yeah, no, that was fantastic. Yeah, lots of enjoyment in the chat. It was reminding people"
+  },
+  {
+   "t": 1581.84,
+   "d": 7.24,
+   "text": "of their favorite games and Oracle decks. Lots of links I think ended up in the obelisk from this"
+  },
+  {
+   "t": 1589.08,
+   "d": 5.24,
+   "text": "which is great. We have one question up already and go ahead and add more questions. I think"
+  },
+  {
+   "t": 1594.32,
+   "d": 5.28,
+   "text": "we will have time for a couple. Silence walker wanted to clarify what is the difference between"
+  },
+  {
+   "t": 1599.6,
+   "d": 6.32,
+   "text": "a table and an Oracle if both of them curated beforehand to fit the moon theme of the game?"
+  },
+  {
+   "t": 1607.64,
+   "d": 10.59,
+   "text": "CEZAR: There is definitely a Venn Diagram with some juxtaposition and overlapping of"
+  },
+  {
+   "t": 1618.23,
+   "d": 3.49,
+   "text": "those concepts. Some people treat them as the same thing. What I like to call out as the distinction"
+  },
+  {
+   "t": 1621.72,
+   "d": 9.32,
+   "text": "here is what I like to call Oracles are the ones that are not pre-defined statements. For example,"
+  },
+  {
+   "t": 1632.24,
+   "d": 5.12,
+   "text": "a treasure random table is like you find a 100 gold pieces, this is a random table, and there"
+  },
+  {
+   "t": 1637.36,
+   "d": 11.96,
+   "text": "is five sapphires, a helmet and 20 piece and those are hard coded whereas an Oracle gives you random"
+  },
+  {
+   "t": 1649.32,
+   "d": 7.64,
+   "text": "worlds that might provoke a thought. That doesn't mean Oracles can't be curated even if they are"
+  },
+  {
+   "t": 1656.96,
+   "d": 7.2,
+   "text": "not pre-specified results. You can have, as I have done in the past, you can curate some worlds that"
+  },
+  {
+   "t": 1664.16,
+   "d": 7.36,
+   "text": "the inspire and evoke the feeling for those kinds of specific things. You could have an Oracle for"
+  },
+  {
+   "t": 1671.52,
+   "d": 6.8,
+   "text": "magical items and treasure in which you have a lot of verbs that evoke, for example, magical effects,"
+  },
+  {
+   "t": 1678.32,
+   "d": 11.08,
+   "text": "like transparent, void, fire, shadow, freeze, or mishaps of magical effects like corruption,"
+  },
+  {
+   "t": 1689.4,
+   "d": 10.96,
+   "text": "decay, metamorphis, and mutant then you roll both and know the power and what corruption it"
+  },
+  {
+   "t": 1700.36,
+   "d": 6.64,
+   "text": "might have if you use it in the wrong way. But there is still in a way open to interpretation."
+  },
+  {
+   "t": 1707.0,
+   "d": 9.76,
+   "text": "I have made a companion supplement called random realities. I have a set of tables"
+  },
+  {
+   "t": 1716.76,
+   "d": 8.76,
+   "text": "for crafting locations, crafting cities, NPCs, magical items, scenes, obstacles,"
+  },
+  {
+   "t": 1725.52,
+   "d": 8.32,
+   "text": "monsters and everything. They are still open to interpretation but you kind of direct those"
+  },
+  {
+   "t": 1733.84,
+   "d": 6.72,
+   "text": "interpretations when you offer words that are more relevant to things you trying to create."
+  },
+  {
+   "t": 1740.56,
+   "d": 9.6,
+   "text": "ALEXEI: I wonder do you have advice or techniques because you were sharing the list of partial"
+  },
+  {
+   "t": 1750.16,
+   "d": 7.84,
+   "text": "success keywords that were quite evocative. I feel like forms of procgen and randomness is"
+  },
+  {
+   "t": 1758.0,
+   "d": 7.24,
+   "text": "like finding the right level of abstraction where it isn't too specific or vague. What techniques"
+  },
+  {
+   "t": 1765.24,
+   "d": 9.48,
+   "text": "do you use to narrow down the six sweet words or finding the sweet spot of abstraction."
+  },
+  {
+   "t": 1774.72,
+   "d": 11.8,
+   "text": "CEZAR: Alder is a game designer I love. They wrote monster hearts, monster hearts 2,"
+  },
+  {
+   "t": 1790.6,
+   "d": 5.52,
+   "text": "dream apart and dream cue and they said once on Twitter that game design is working for four"
+  },
+  {
+   "t": 1796.12,
+   "d": 10.96,
+   "text": "hours and saying there, I have a list of 12 words. Sometimes you write 25 20 pages of specific things"
+  },
+  {
+   "t": 1808.44,
+   "d": 10.48,
+   "text": "in a day and to create and curate six words on a random table it takes a week. Because distilling"
+  },
+  {
+   "t": 1818.92,
+   "d": 11.12,
+   "text": "those concentrated and very evocative words is not easy so my tip for that is consuming as much as"
+  },
+  {
+   "t": 1830.04,
+   "d": 6.92,
+   "text": "possible of other people's worth. This is what I did. That includes other published games and"
+  },
+  {
+   "t": 1836.96,
+   "d": 8.24,
+   "text": "even videos of people saying this is my favorite way do this in my home games and red Reddit posts"
+  },
+  {
+   "t": 1845.2,
+   "d": 12.88,
+   "text": "and everything. I compiled like 200 different words and by trial and error I tried to come"
+  },
+  {
+   "t": 1858.08,
+   "d": 7.4,
+   "text": "up with a broader and I have in fact, in the game I mentioned, for the complications I showed,"
+  },
+  {
+   "t": 1865.48,
+   "d": 6.2,
+   "text": "and one for advantages when you have success in your tests that is more than what you expected"
+  },
+  {
+   "t": 1871.68,
+   "d": 7.48,
+   "text": "and those have also six words. If you are trying to find a balance between two random"
+  },
+  {
+   "t": 1879.16,
+   "d": 8.4,
+   "text": "or two specific my goal would be to actually consume a lot and try to find words that are"
+  },
+  {
+   "t": 1888.16,
+   "d": 7.76,
+   "text": "too similar or either too broad or too specific and then you kind of write it down and you kind of"
+  },
+  {
+   "t": 1895.92,
+   "d": 7.5,
+   "text": "see the words that sit in between those and you go for that sweet spot between random and specific."
+  },
+  {
+   "t": 1903.42,
+   "d": 7.3,
+   "text": "ALEXEI: Excellent. I think that's great advice. This is why game design is a job."
+  },
+  {
+   "t": 1910.72,
+   "d": 6.36,
+   "text": "It is very specific. Wonderful. Thank you so much, Cezar. It has been wonderful to have you."
+  },
+  {
+   "t": 1917.08,
+   "d": 4.0,
+   "text": "I hope you enjoy the rest of the conference. If people want to discuss this further at the"
+  },
+  {
+   "t": 1921.08,
+   "d": 7.44,
+   "text": "breakout it will be in the Joust Arena. CEZAR: I will be there. Thank you."
+  }
+ ]
+}

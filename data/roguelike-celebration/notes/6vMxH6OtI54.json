@@ -1,0 +1,96 @@
+{
+  "id": "6vMxH6OtI54",
+  "title": "Josh Galecki - Procedurally Generating Puzzles",
+  "speaker": "Josh Galecki",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=6vMxH6OtI54",
+  "talk_type": "technical",
+  "summary": "Josh Galecki, solo developer of the nonviolent farming roguelite Moondrop, explains how to put puzzles in a repetition-driven genre by designing puzzle systems that generate solvable puzzles on demand. He distinguishes an analytic strategy (proving every configuration of a puzzle space is solvable, shown with a 2x4 Lights Out variant) from a constructive strategy (building a puzzle around a known solution, shown with a river-and-dams grid). He also covers search-based construction with a wheat maze and a failure case where the maze could become unsolvable, and how he guarded against it. He closes by recommending mathematics, especially graph theory, as a source of themed puzzle ideas.",
+  "games": [
+    "Moondrop",
+    "Lights Out"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "puzzles",
+      "kind": "principle",
+      "claim": "Because roguelikes are built around repetition and a puzzle is trivial the second time and a chore the twentieth, roguelike puzzles must come from puzzle systems that generate new instances on demand.",
+      "detail": "Galecki made Moondrop, a nonviolent farming roguelike, and used puzzles instead of combat to challenge players exploring its dungeons. Puzzles also change pace in action games and deliver the 'a-ha' moment.",
+      "t": 106,
+      "quote": "solving a puzzle once is fun. Solving it twice is trivial. And solving it for the 20th time is a chore",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "solvability",
+      "kind": "technique",
+      "claim": "There are two strategies for guaranteeing generated puzzles are solvable: analytic (prove every configuration of the puzzle space can be solved) and constructive (build each puzzle around a known solution).",
+      "detail": "Galecki draws on his maths and computer science study: maths classes proved a solution exists, CS classes gave an algorithm producing one. Like the mathematician in his opening joke, the goal is just to show a solution exists.",
+      "t": 194,
+      "quote": "the analytic shows any generated puzzle has to be solvable and the constructive is building a particular puzzle so that it has a known solution",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "analytic solvability",
+      "kind": "example",
+      "claim": "Moondrop's 2x4 Lights Out lantern puzzle can start from any random configuration because move cancellation, single-switch toggle sequences and board symmetry together prove every state is solvable.",
+      "detail": "Toggling a switch twice cancels out regardless of moves in between; sequences exist to toggle the top-left and top-middle switches alone; symmetry extends these to all eight. So any configuration is solvable, and a minimal solution needs at most eight moves, without the designer needing to know the solutions.",
+      "t": 372,
+      "quote": "That means that I can generate any initial configuration of on and off lanterns and I know a solution exists",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constructive solvability",
+      "kind": "technique",
+      "claim": "Moondrop's river-grid puzzle is built constructively: place locked dams, place must-close and must-open toggleable dams, record target water levels at four vertices, then randomise the toggles before the player arrives.",
+      "detail": "Water flows down and right through a 4x4 directed graph; vertex level is the sum of incoming edges. Because the solution was built in, Galecki knows at least one exists and is fine if there are more.",
+      "t": 572,
+      "quote": "I know that it is a solvable puzzle and there has to be because that's the way I built it",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "maze generation",
+      "kind": "technique",
+      "claim": "Moondrop's wheat maze grows by repeatedly opening a candidate tile with exactly one open neighbour and walling candidates with more, producing a loop-free branching maze that usually spans the grid.",
+      "detail": "The maze's tiles all look alike so players can't easily tell their location. Galecki shows open, possible and wall tiles during construction.",
+      "t": 627,
+      "quote": "we take a possible tile that has exactly 1 open neighbor and we make it open. If it has more than one open neighbor, it becomes a wall",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator debugging",
+      "kind": "warning",
+      "claim": "Search-based puzzle generators can fail silently, as Moondrop's maze could wall off its last tile and become unsolvable, so designers must hunt for counterexamples and add guards.",
+      "detail": "If the algorithm picked the wrong one of two final candidate tiles, the maze had no solution. Galecki's fix: if no open neighbour is found, carve a path toward the start until one is, guaranteeing solvability at the cost of the no-loops property.",
+      "t": 673,
+      "quote": "If your algorithm is searching for the solution you have to be aware of the bugs and in math speak you have to look for the counter example",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constructive solvability",
+      "kind": "principle",
+      "claim": "When generating puzzles constructively, it is easiest to start from a solution and add red herrings, though it is also possible to build up toward a solution.",
+      "detail": "Galecki's summary: every puzzle must be solvable; analytic proof or constructive generation guarantees it; and building toward a solution needs extra attention to bugs.",
+      "t": 743,
+      "quote": "it is easiest to start off with a solution and add red herrings and trapped doors but it is possible to build up to a solution",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "puzzle themes",
+      "kind": "technique",
+      "claim": "Galecki sources Moondrop's puzzles from interesting maths problems, particularly graph theory, then gives them a theme that fits the cozy game, like fishing and the river grid on the damp trail.",
+      "detail": "Moondrop has four elemental dungeons on a mountaintop and avoids hazards like lava pits, so he looked for cozier themed puzzles.",
+      "t": 847,
+      "quote": "Kind of looking for an interesting math problems and seeing if I can give them a theme that fits with what I am going for",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

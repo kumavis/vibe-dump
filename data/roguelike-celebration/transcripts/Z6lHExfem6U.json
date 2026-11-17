@@ -1,0 +1,4866 @@
+{
+ "id": "Z6lHExfem6U",
+ "url": "https://www.youtube.com/watch?v=Z6lHExfem6U",
+ "title": "Ben Berman - Machine Learning and Level Generation",
+ "speaker": "Ben Berman",
+ "talk_title": "Machine Learning and Level Generation",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 2156,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Ben Berman talks about level generation using machine learning.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 51,
+   "title": "What Machine Learning Is"
+  },
+  {
+   "start": 480,
+   "title": "Monte Carlo Markov Chain Design"
+  },
+  {
+   "start": 524,
+   "title": "Wavefunction Collapse"
+  },
+  {
+   "start": 616,
+   "title": "Neural Network Animated Character"
+  },
+  {
+   "start": 683,
+   "title": "Spaceship Generator"
+  },
+  {
+   "start": 880,
+   "title": "Sonic Adventure"
+  },
+  {
+   "start": 1047,
+   "title": "Model a Roguelike"
+  },
+  {
+   "start": 1287,
+   "title": "Loss Function"
+  },
+  {
+   "start": 1748,
+   "title": "Functional Game Content"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6687,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.03,
+   "d": 3.2,
+   "text": "yeah this is gonna be a pretty big talk"
+  },
+  {
+   "t": 3.23,
+   "d": 2.47,
+   "text": "level generation using machine learning"
+  },
+  {
+   "t": 5.7,
+   "d": 1.38,
+   "text": "you know this sounds like a pretty great"
+  },
+  {
+   "t": 7.08,
+   "d": 2.52,
+   "text": "thing definitely a lot of people want to"
+  },
+  {
+   "t": 9.6,
+   "d": 2.28,
+   "text": "experiment with it I like to think of it"
+  },
+  {
+   "t": 11.88,
+   "d": 1.29,
+   "text": "as a form of magical fantasy"
+  },
+  {
+   "t": 13.17,
+   "d": 2.85,
+   "text": "problem-solving I think that the level"
+  },
+  {
+   "t": 16.02,
+   "d": 1.92,
+   "text": "of anticipation for what you're gonna"
+  },
+  {
+   "t": 17.94,
+   "d": 2.79,
+   "text": "get out of these systems is absolutely"
+  },
+  {
+   "t": 20.73,
+   "d": 4.77,
+   "text": "preposterous I think I'm gonna give you"
+  },
+  {
+   "t": 25.5,
+   "d": 2.55,
+   "text": "like a really big review of how this is"
+  },
+  {
+   "t": 28.05,
+   "d": 2.76,
+   "text": "being used how to get started"
+  },
+  {
+   "t": 30.81,
+   "d": 2.73,
+   "text": "other research and my experience as"
+  },
+  {
+   "t": 33.54,
+   "d": 2.13,
+   "text": "somebody who's doing this for some"
+  },
+  {
+   "t": 35.67,
+   "d": 2.07,
+   "text": "commercial games that are going to ship"
+  },
+  {
+   "t": 37.74,
+   "d": 2.93,
+   "text": "in the short term and as a researcher of"
+  },
+  {
+   "t": 40.67,
+   "d": 2.53,
+   "text": "recently from MIT who use some"
+  },
+  {
+   "t": 43.2,
+   "d": 2.97,
+   "text": "technology to to kind of you know really"
+  },
+  {
+   "t": 46.17,
+   "d": 3.33,
+   "text": "explore the fantasy part of generating"
+  },
+  {
+   "t": 49.5,
+   "d": 2.88,
+   "text": "levels and if you don't know what"
+  },
+  {
+   "t": 52.38,
+   "d": 2.13,
+   "text": "machine learning is I'm gonna put it"
+  },
+  {
+   "t": 54.51,
+   "d": 1.11,
+   "text": "really simply for you"
+  },
+  {
+   "t": 55.62,
+   "d": 1.62,
+   "text": "it's about teaching a computer using"
+  },
+  {
+   "t": 57.24,
+   "d": 1.77,
+   "text": "data and there are a lot a lot of"
+  },
+  {
+   "t": 59.01,
+   "d": 2.1,
+   "text": "different ways you can do that the most"
+  },
+  {
+   "t": 61.11,
+   "d": 3.48,
+   "text": "interesting kind of kind of detail about"
+  },
+  {
+   "t": 64.59,
+   "d": 3.27,
+   "text": "this is there's a trade-off there's if"
+  },
+  {
+   "t": 67.86,
+   "d": 2.13,
+   "text": "you want to do this well you need either"
+  },
+  {
+   "t": 69.99,
+   "d": 2.19,
+   "text": "a lot of data or there's some methods"
+  },
+  {
+   "t": 72.18,
+   "d": 2.73,
+   "text": "that use very little data the trade-off"
+  },
+  {
+   "t": 74.91,
+   "d": 1.86,
+   "text": "is it's about telling the computer"
+  },
+  {
+   "t": 76.77,
+   "d": 1.68,
+   "text": "what's important about knowing how to"
+  },
+  {
+   "t": 78.45,
+   "d": 2.67,
+   "text": "learn or giving it additional tips or"
+  },
+  {
+   "t": 81.12,
+   "d": 2.73,
+   "text": "instincts I like to think of it that"
+  },
+  {
+   "t": 83.85,
+   "d": 1.92,
+   "text": "help the computer learn the most from"
+  },
+  {
+   "t": 85.77,
+   "d": 4.68,
+   "text": "their data this trade-off kanya"
+  },
+  {
+   "t": 90.45,
+   "d": 2.16,
+   "text": "characterizes the field of machine"
+  },
+  {
+   "t": 92.61,
+   "d": 1.98,
+   "text": "learning not just for content generation"
+  },
+  {
+   "t": 94.59,
+   "d": 3.66,
+   "text": "but very very broadly and you know for"
+  },
+  {
+   "t": 98.25,
+   "d": 1.53,
+   "text": "many of you have tried this"
+  },
+  {
+   "t": 99.78,
+   "d": 1.56,
+   "text": "you're gonna recognize some of these"
+  },
+  {
+   "t": 101.34,
+   "d": 1.62,
+   "text": "things you're gonna have heard of maybe"
+  },
+  {
+   "t": 102.96,
+   "d": 2.34,
+   "text": "approximate Bayesian computation design"
+  },
+  {
+   "t": 105.3,
+   "d": 3.45,
+   "text": "for the very first time a lot of this"
+  },
+  {
+   "t": 108.75,
+   "d": 2.37,
+   "text": "kind of exists in in a very flimsy"
+  },
+  {
+   "t": 111.12,
+   "d": 2.43,
+   "text": "research realm or an experimental realm"
+  },
+  {
+   "t": 113.55,
+   "d": 1.83,
+   "text": "but you'll see kind of in the upper left"
+  },
+  {
+   "t": 115.38,
+   "d": 1.68,
+   "text": "corner like these are concrete things if"
+  },
+  {
+   "t": 117.06,
+   "d": 1.14,
+   "text": "you have lots of data and you tell the"
+  },
+  {
+   "t": 118.2,
+   "d": 1.95,
+   "text": "program what's important you can do"
+  },
+  {
+   "t": 120.15,
+   "d": 1.53,
+   "text": "great ad tech you can make a ton of"
+  },
+  {
+   "t": 121.68,
+   "d": 1.95,
+   "text": "money selling ads and high energy"
+  },
+  {
+   "t": 123.63,
+   "d": 2.82,
+   "text": "physics the kind of lots of data you"
+  },
+  {
+   "t": 126.45,
+   "d": 1.47,
+   "text": "tell the program a little bit more"
+  },
+  {
+   "t": 127.92,
+   "d": 1.5,
+   "text": "what's important this is this is like"
+  },
+  {
+   "t": 129.42,
+   "d": 1.02,
+   "text": "automotive"
+  },
+  {
+   "t": 130.44,
+   "d": 3.45,
+   "text": "official intelligence applications a lot"
+  },
+  {
+   "t": 133.89,
+   "d": 1.77,
+   "text": "of folks for content generation they're"
+  },
+  {
+   "t": 135.66,
+   "d": 1.14,
+   "text": "in the upper right corner you're not"
+  },
+  {
+   "t": 136.8,
+   "d": 1.62,
+   "text": "really telling the computer what's"
+  },
+  {
+   "t": 138.42,
+   "d": 1.86,
+   "text": "important for something like we're Curl"
+  },
+  {
+   "t": 140.28,
+   "d": 1.77,
+   "text": "net recurrent neural networks you're"
+  },
+  {
+   "t": 142.05,
+   "d": 1.86,
+   "text": "giving it this really broad intuition"
+  },
+  {
+   "t": 143.91,
+   "d": 1.89,
+   "text": "but you generally need a lot of data to"
+  },
+  {
+   "t": 145.8,
+   "d": 2.46,
+   "text": "do it well and then a lot of folks use"
+  },
+  {
+   "t": 148.26,
+   "d": 1.59,
+   "text": "natural language processing you know you"
+  },
+  {
+   "t": 149.85,
+   "d": 1.77,
+   "text": "you know what the rules of grammar are"
+  },
+  {
+   "t": 151.62,
+   "d": 1.59,
+   "text": "and if you've specified them correctly"
+  },
+  {
+   "t": 153.21,
+   "d": 1.5,
+   "text": "it doesn't matter if you give it a"
+  },
+  {
+   "t": 154.71,
+   "d": 1.89,
+   "text": "corpus of ten words or a million words"
+  },
+  {
+   "t": 156.6,
+   "d": 1.8,
+   "text": "you know it's gonna work if what you're"
+  },
+  {
+   "t": 158.4,
+   "d": 2.34,
+   "text": "interested in is generating English text"
+  },
+  {
+   "t": 160.74,
+   "d": 2.19,
+   "text": "so this this trade-off is pretty pretty"
+  },
+  {
+   "t": 162.93,
+   "d": 2.28,
+   "text": "important and all the way in the lower"
+  },
+  {
+   "t": 165.21,
+   "d": 1.8,
+   "text": "right corner that's like strong AI you"
+  },
+  {
+   "t": 167.01,
+   "d": 1.29,
+   "text": "know we don't we don't have anything"
+  },
+  {
+   "t": 168.3,
+   "d": 2.34,
+   "text": "that does that discovers what's"
+  },
+  {
+   "t": 170.64,
+   "d": 1.68,
+   "text": "important and works with very little"
+  },
+  {
+   "t": 172.32,
+   "d": 3.24,
+   "text": "data that just doesn't exist yet this is"
+  },
+  {
+   "t": 175.56,
+   "d": 2.34,
+   "text": "a big presence these techniques at rogue"
+  },
+  {
+   "t": 177.9,
+   "d": 2.34,
+   "text": "cell you know we saw caves of cod"
+  },
+  {
+   "t": 180.24,
+   "d": 2.76,
+   "text": "actually they for some levels of their"
+  },
+  {
+   "t": 183.0,
+   "d": 2.13,
+   "text": "some aspect of their level generation"
+  },
+  {
+   "t": 185.13,
+   "d": 1.89,
+   "text": "they use a tool that we're gonna see"
+  },
+  {
+   "t": 187.02,
+   "d": 3.45,
+   "text": "that you could genuinely call a machine"
+  },
+  {
+   "t": 190.47,
+   "d": 2.22,
+   "text": "learning technique that's really"
+  },
+  {
+   "t": 192.69,
+   "d": 1.98,
+   "text": "fascinating but definitely talk to them"
+  },
+  {
+   "t": 194.67,
+   "d": 1.62,
+   "text": "afterwards to get kind of the most"
+  },
+  {
+   "t": 196.29,
+   "d": 3.18,
+   "text": "concrete details on how that works we"
+  },
+  {
+   "t": 199.47,
+   "d": 2.22,
+   "text": "also saw Botnick which uses natural"
+  },
+  {
+   "t": 201.69,
+   "d": 2.28,
+   "text": "language processing you know engrams a"
+  },
+  {
+   "t": 203.97,
+   "d": 2.76,
+   "text": "way of generating a grammatically"
+  },
+  {
+   "t": 206.73,
+   "d": 3.69,
+   "text": "cohesive text it's again that's way deep"
+  },
+  {
+   "t": 210.42,
+   "d": 1.83,
+   "text": "in that lower left corner like something"
+  },
+  {
+   "t": 212.25,
+   "d": 1.47,
+   "text": "that you don't have a lot of data for"
+  },
+  {
+   "t": 213.72,
+   "d": 1.83,
+   "text": "but you tell it exactly what's important"
+  },
+  {
+   "t": 215.55,
+   "d": 1.35,
+   "text": "you get great results and they"
+  },
+  {
+   "t": 216.9,
+   "d": 1.8,
+   "text": "definitely experimented with character"
+  },
+  {
+   "t": 218.7,
+   "d": 1.44,
+   "text": "recurrent neural networks we're gonna"
+  },
+  {
+   "t": 220.14,
+   "d": 0.75,
+   "text": "see that later"
+  },
+  {
+   "t": 220.89,
+   "d": 4.02,
+   "text": "to further flesh out this system we also"
+  },
+  {
+   "t": 224.91,
+   "d": 2.28,
+   "text": "saw computational floor nerve generating"
+  },
+  {
+   "t": 227.19,
+   "d": 2.24,
+   "text": "that poetry recurrent neural networks"
+  },
+  {
+   "t": 229.43,
+   "d": 2.26,
+   "text": "max Kaminsky actually works in the"
+  },
+  {
+   "t": 231.69,
+   "d": 3.66,
+   "text": "department that does a lot of content"
+  },
+  {
+   "t": 235.35,
+   "d": 1.92,
+   "text": "generation in video games that there's a"
+  },
+  {
+   "t": 237.27,
+   "d": 2.1,
+   "text": "lot of research there you look at his"
+  },
+  {
+   "t": 239.37,
+   "d": 2.28,
+   "text": "pots and microsites he uses a lot of"
+  },
+  {
+   "t": 241.65,
+   "d": 1.92,
+   "text": "different stuff Sam and Darius Kazemi"
+  },
+  {
+   "t": 243.57,
+   "d": 2.13,
+   "text": "went on stage said we don't use machine"
+  },
+  {
+   "t": 245.7,
+   "d": 2.4,
+   "text": "learning uh you know for him and LP"
+  },
+  {
+   "t": 248.1,
+   "d": 1.56,
+   "text": "thats concept net you know it's"
+  },
+  {
+   "t": 249.66,
+   "d": 1.62,
+   "text": "something again that kind of fits in"
+  },
+  {
+   "t": 251.28,
+   "d": 2.34,
+   "text": "that scope it occupies is very good and"
+  },
+  {
+   "t": 253.62,
+   "d": 2.49,
+   "text": "very powerful niche we also have Ian"
+  },
+  {
+   "t": 256.11,
+   "d": 2.1,
+   "text": "Holmes uses these games in micro sites"
+  },
+  {
+   "t": 258.21,
+   "d": 2.1,
+   "text": "he's gonna show cellular automata and a"
+  },
+  {
+   "t": 260.31,
+   "d": 1.35,
+   "text": "set of heuristics to generate things"
+  },
+  {
+   "t": 261.66,
+   "d": 2.43,
+   "text": "like game levels and visuals and text"
+  },
+  {
+   "t": 264.09,
+   "d": 1.59,
+   "text": "if you look at mainstream commercial"
+  },
+  {
+   "t": 265.68,
+   "d": 3.24,
+   "text": "games you know there they tend to not do"
+  },
+  {
+   "t": 268.92,
+   "d": 2.01,
+   "text": "content generation all something like a"
+  },
+  {
+   "t": 270.93,
+   "d": 1.5,
+   "text": "League of Legends there's some kind of"
+  },
+  {
+   "t": 272.43,
+   "d": 2.01,
+   "text": "unsupervised machine learning this very"
+  },
+  {
+   "t": 274.44,
+   "d": 1.89,
+   "text": "sophisticated technique to analyze the"
+  },
+  {
+   "t": 276.33,
+   "d": 2.16,
+   "text": "client that downloads a copy of your"
+  },
+  {
+   "t": 278.49,
+   "d": 3.57,
+   "text": "game clash royale matchmaking is widely"
+  },
+  {
+   "t": 282.06,
+   "d": 3.54,
+   "text": "believed to to use a system to match"
+  },
+  {
+   "t": 285.6,
+   "d": 1.95,
+   "text": "make people that's more sophisticated in"
+  },
+  {
+   "t": 287.55,
+   "d": 2.58,
+   "text": "just your skill and then when it comes"
+  },
+  {
+   "t": 290.13,
+   "d": 1.65,
+   "text": "to add tech or making money"
+  },
+  {
+   "t": 291.78,
+   "d": 2.22,
+   "text": "you know this stuff really shines it's"
+  },
+  {
+   "t": 294.0,
+   "d": 2.07,
+   "text": "not really of interest to us but this is"
+  },
+  {
+   "t": 296.07,
+   "d": 2.28,
+   "text": "really in the kind of commercial gaming"
+  },
+  {
+   "t": 298.35,
+   "d": 2.13,
+   "text": "it's it's absolutely all over the place"
+  },
+  {
+   "t": 300.48,
+   "d": 2.4,
+   "text": "it's it's you know some of it is really"
+  },
+  {
+   "t": 302.88,
+   "d": 2.25,
+   "text": "old like from 1987 the tools that people"
+  },
+  {
+   "t": 305.13,
+   "d": 5.04,
+   "text": "use to do advertising targeting is it's"
+  },
+  {
+   "t": 310.17,
+   "d": 1.77,
+   "text": "very advanced in machine learning tools"
+  },
+  {
+   "t": 311.94,
+   "d": 2.19,
+   "text": "but it's very old and this kind of puts"
+  },
+  {
+   "t": 314.13,
+   "d": 1.95,
+   "text": "us in a in a very different world of"
+  },
+  {
+   "t": 316.08,
+   "d": 3.0,
+   "text": "where are we gonna see this you know all"
+  },
+  {
+   "t": 319.08,
+   "d": 1.68,
+   "text": "the way on the left content generation"
+  },
+  {
+   "t": 320.76,
+   "d": 1.2,
+   "text": "you tend to look at these more"
+  },
+  {
+   "t": 321.96,
+   "d": 2.25,
+   "text": "experimental Gabe's games of cut it's in"
+  },
+  {
+   "t": 324.21,
+   "d": 2.94,
+   "text": "this really cool like little spot where"
+  },
+  {
+   "t": 327.15,
+   "d": 1.53,
+   "text": "they're they're really on the vanguard"
+  },
+  {
+   "t": 328.68,
+   "d": 2.52,
+   "text": "of using something that's a little bit"
+  },
+  {
+   "t": 331.2,
+   "d": 1.62,
+   "text": "off the beaten path to generate levels"
+  },
+  {
+   "t": 332.82,
+   "d": 1.77,
+   "text": "you look at Triple A commercial games"
+  },
+  {
+   "t": 334.59,
+   "d": 2.13,
+   "text": "basically you know the bigger the title"
+  },
+  {
+   "t": 336.72,
+   "d": 1.29,
+   "text": "the more likely it is they're just using"
+  },
+  {
+   "t": 338.01,
+   "d": 1.32,
+   "text": "this for add text something that"
+  },
+  {
+   "t": 339.33,
+   "d": 3.5,
+   "text": "resembles monetization optimization"
+  },
+  {
+   "t": 342.83,
+   "d": 2.29,
+   "text": "guess my point is research is way ahead"
+  },
+  {
+   "t": 345.12,
+   "d": 3.09,
+   "text": "of commercial games so don't expect to"
+  },
+  {
+   "t": 348.21,
+   "d": 3.3,
+   "text": "find like a big GDC talk about you know"
+  },
+  {
+   "t": 351.51,
+   "d": 2.07,
+   "text": "how is this being used in my huge game"
+  },
+  {
+   "t": 353.58,
+   "d": 2.04,
+   "text": "because it's it's just so far off but"
+  },
+  {
+   "t": 355.62,
+   "d": 1.83,
+   "text": "definitely they're a lot of experiences"
+  },
+  {
+   "t": 357.45,
+   "d": 1.11,
+   "text": "that's that's kind of what I want to"
+  },
+  {
+   "t": 358.56,
+   "d": 2.31,
+   "text": "share with you some of the key"
+  },
+  {
+   "t": 360.87,
+   "d": 2.19,
+   "text": "researchers and academia are doing this"
+  },
+  {
+   "t": 363.06,
+   "d": 2.7,
+   "text": "Michael Matea season max from Minsky's"
+  },
+  {
+   "t": 365.76,
+   "d": 2.28,
+   "text": "Department UCSC he does a lot of"
+  },
+  {
+   "t": 368.04,
+   "d": 1.77,
+   "text": "different research specifically on level"
+  },
+  {
+   "t": 369.81,
+   "d": 2.1,
+   "text": "generation one of his graduate students"
+  },
+  {
+   "t": 371.91,
+   "d": 1.02,
+   "text": "did that work"
+  },
+  {
+   "t": 372.93,
+   "d": 3.03,
+   "text": "this guy Julian to galius at NYU also"
+  },
+  {
+   "t": 375.96,
+   "d": 1.5,
+   "text": "does a lot of fascinating research and"
+  },
+  {
+   "t": 377.46,
+   "d": 3.66,
+   "text": "Dan Richie who was a Pixar technical"
+  },
+  {
+   "t": 381.12,
+   "d": 2.4,
+   "text": "director now professor at Brown does"
+  },
+  {
+   "t": 383.52,
+   "d": 2.7,
+   "text": "really fascinating a graphics generation"
+  },
+  {
+   "t": 386.22,
+   "d": 2.25,
+   "text": "and you know when graphics big problem"
+  },
+  {
+   "t": 388.47,
+   "d": 0.72,
+   "text": "in roguelikes"
+  },
+  {
+   "t": 389.19,
+   "d": 1.44,
+   "text": "and if you think more critically about"
+  },
+  {
+   "t": 390.63,
+   "d": 1.89,
+   "text": "what does making a compelling level"
+  },
+  {
+   "t": 392.52,
+   "d": 2.01,
+   "text": "really mean it can often mean making"
+  },
+  {
+   "t": 394.53,
+   "d": 2.4,
+   "text": "something that's pretty and I think you"
+  },
+  {
+   "t": 396.93,
+   "d": 0.36,
+   "text": "know if you"
+  },
+  {
+   "t": 397.29,
+   "d": 1.65,
+   "text": "want to see something cool you should"
+  },
+  {
+   "t": 398.94,
+   "d": 1.62,
+   "text": "check him out there are a lot of"
+  },
+  {
+   "t": 400.56,
+   "d": 2.22,
+   "text": "influential demos a lot of people saw"
+  },
+  {
+   "t": 402.78,
+   "d": 1.44,
+   "text": "this unreasonable effectiveness of"
+  },
+  {
+   "t": 404.22,
+   "d": 1.59,
+   "text": "recurrent neural networks by this guy"
+  },
+  {
+   "t": 405.81,
+   "d": 1.38,
+   "text": "Android car partha he now works in"
+  },
+  {
+   "t": 407.19,
+   "d": 2.48,
+   "text": "automotive artificial intelligence"
+  },
+  {
+   "t": 409.67,
+   "d": 2.32,
+   "text": "people saw this they were instantly"
+  },
+  {
+   "t": 411.99,
+   "d": 1.29,
+   "text": "floored they use it for a bajillion"
+  },
+  {
+   "t": 413.28,
+   "d": 1.38,
+   "text": "different things this is recurrent"
+  },
+  {
+   "t": 414.66,
+   "d": 1.29,
+   "text": "character-based recurrent neural"
+  },
+  {
+   "t": 415.95,
+   "d": 1.77,
+   "text": "networks that's what he wrote this thing"
+  },
+  {
+   "t": 417.72,
+   "d": 1.8,
+   "text": "wavefunction collapse will see this demo"
+  },
+  {
+   "t": 419.52,
+   "d": 1.95,
+   "text": "this is texture synthesis is what caves"
+  },
+  {
+   "t": 421.47,
+   "d": 2.61,
+   "text": "of cod experiments with I want to show"
+  },
+  {
+   "t": 424.08,
+   "d": 2.52,
+   "text": "you this fantastic animation phase"
+  },
+  {
+   "t": 426.6,
+   "d": 2.19,
+   "text": "function neural networks for character"
+  },
+  {
+   "t": 428.79,
+   "d": 1.53,
+   "text": "control will see that demo it's"
+  },
+  {
+   "t": 430.32,
+   "d": 2.33,
+   "text": "fantastic and deep dream kind of"
+  },
+  {
+   "t": 432.65,
+   "d": 1.63,
+   "text": "hallucinations of a neural network"
+  },
+  {
+   "t": 434.28,
+   "d": 1.71,
+   "text": "really started a lot of interest in"
+  },
+  {
+   "t": 435.99,
+   "d": 2.73,
+   "text": "using machine learning for content"
+  },
+  {
+   "t": 438.72,
+   "d": 1.65,
+   "text": "generation kind of predates all of this"
+  },
+  {
+   "t": 440.37,
+   "d": 4.05,
+   "text": "work the major techniques you know this"
+  },
+  {
+   "t": 444.42,
+   "d": 2.28,
+   "text": "is a we're gonna explain what these can"
+  },
+  {
+   "t": 446.7,
+   "d": 1.62,
+   "text": "creat lis mean but it's basically"
+  },
+  {
+   "t": 448.32,
+   "d": 1.92,
+   "text": "different ways of looking at the problem"
+  },
+  {
+   "t": 450.24,
+   "d": 1.92,
+   "text": "and what again what you're telling the"
+  },
+  {
+   "t": 452.16,
+   "d": 1.17,
+   "text": "computer what you're telling the"
+  },
+  {
+   "t": 453.33,
+   "d": 1.5,
+   "text": "computer is important versus how much"
+  },
+  {
+   "t": 454.83,
+   "d": 3.51,
+   "text": "data you have and texture synthesis make"
+  },
+  {
+   "t": 458.34,
+   "d": 1.74,
+   "text": "a picture treat a level like a picture"
+  },
+  {
+   "t": 460.08,
+   "d": 2.82,
+   "text": "maybe you showed other pictures it"
+  },
+  {
+   "t": 462.9,
+   "d": 1.74,
+   "text": "learns how to make pictures or like the"
+  },
+  {
+   "t": 464.64,
+   "d": 2.01,
+   "text": "picture you showed it recurrent neural"
+  },
+  {
+   "t": 466.65,
+   "d": 2.55,
+   "text": "networks treat the level like like"
+  },
+  {
+   "t": 469.2,
+   "d": 1.95,
+   "text": "something you explore over time and make"
+  },
+  {
+   "t": 471.15,
+   "d": 2.43,
+   "text": "the assumption that the future should"
+  },
+  {
+   "t": 473.58,
+   "d": 2.25,
+   "text": "resemble the past and this is a really"
+  },
+  {
+   "t": 475.83,
+   "d": 1.77,
+   "text": "really important intuition that works"
+  },
+  {
+   "t": 477.6,
+   "d": 2.46,
+   "text": "great for for level generation and"
+  },
+  {
+   "t": 480.06,
+   "d": 2.22,
+   "text": "finally there's Monte Carlo Markov chain"
+  },
+  {
+   "t": 482.28,
+   "d": 2.73,
+   "text": "design there's this thing HMC inference"
+  },
+  {
+   "t": 485.01,
+   "d": 3.03,
+   "text": "so when you can specify things that you"
+  },
+  {
+   "t": 488.04,
+   "d": 1.65,
+   "text": "know are important like a level should"
+  },
+  {
+   "t": 489.69,
+   "d": 1.8,
+   "text": "be symmetric I'm gonna talk about that"
+  },
+  {
+   "t": 491.49,
+   "d": 3.27,
+   "text": "or maybe it's your room should have good"
+  },
+  {
+   "t": 494.76,
+   "d": 2.76,
+   "text": "layout and it will keep trying to"
+  },
+  {
+   "t": 497.52,
+   "d": 2.52,
+   "text": "generate levels until it has a process"
+  },
+  {
+   "t": 500.04,
+   "d": 2.16,
+   "text": "that makes stuff that fits those"
+  },
+  {
+   "t": 502.2,
+   "d": 1.74,
+   "text": "measurements so it's a it's a really"
+  },
+  {
+   "t": 503.94,
+   "d": 2.16,
+   "text": "fascinating kind of in-between that you"
+  },
+  {
+   "t": 506.1,
+   "d": 1.89,
+   "text": "know people kind of do automatically"
+  },
+  {
+   "t": 507.99,
+   "d": 3.36,
+   "text": "every single roguelike today that uses"
+  },
+  {
+   "t": 511.35,
+   "d": 2.19,
+   "text": "heuristic level generation is really"
+  },
+  {
+   "t": 513.54,
+   "d": 2.63,
+   "text": "special case of Monte Carlo Markov chain"
+  },
+  {
+   "t": 516.17,
+   "d": 3.04,
+   "text": "design where you have just decided like"
+  },
+  {
+   "t": 519.21,
+   "d": 1.62,
+   "text": "this is kind of what I want as opposed"
+  },
+  {
+   "t": 520.83,
+   "d": 2.7,
+   "text": "to the computer figuring it out so let's"
+  },
+  {
+   "t": 523.53,
+   "d": 1.29,
+   "text": "look at some of these some of these"
+  },
+  {
+   "t": 524.82,
+   "d": 1.98,
+   "text": "demos wavefunction collapse this is a"
+  },
+  {
+   "t": 526.8,
+   "d": 2.55,
+   "text": "video of a generator that somebody made"
+  },
+  {
+   "t": 529.35,
+   "d": 1.65,
+   "text": "over a three dimension"
+  },
+  {
+   "t": 531.0,
+   "d": 3.93,
+   "text": "this started with a layout of what a"
+  },
+  {
+   "t": 534.93,
+   "d": 2.7,
+   "text": "city tile scape should look like and you"
+  },
+  {
+   "t": 537.63,
+   "d": 2.28,
+   "text": "can see me kind of editing like I want"
+  },
+  {
+   "t": 539.91,
+   "d": 1.41,
+   "text": "to remove some blocks and give me a"
+  },
+  {
+   "t": 541.32,
+   "d": 2.61,
+   "text": "reasonable geometry that fits it there's"
+  },
+  {
+   "t": 543.93,
+   "d": 1.8,
+   "text": "some constraints like oh you know"
+  },
+  {
+   "t": 545.73,
+   "d": 1.68,
+   "text": "certain tiles can only be adjacent to"
+  },
+  {
+   "t": 547.41,
+   "d": 1.32,
+   "text": "certain other tiles that's what makes it"
+  },
+  {
+   "t": 548.73,
+   "d": 1.8,
+   "text": "look pretty but what makes it look"
+  },
+  {
+   "t": 550.53,
+   "d": 2.73,
+   "text": "natural is this the system"
+  },
+  {
+   "t": 553.26,
+   "d": 3.69,
+   "text": "it looks at other examples of like what"
+  },
+  {
+   "t": 556.95,
+   "d": 2.46,
+   "text": "your voxel Iced city should look like"
+  },
+  {
+   "t": 559.41,
+   "d": 2.34,
+   "text": "your voxel eyes building and it tries to"
+  },
+  {
+   "t": 561.75,
+   "d": 1.77,
+   "text": "make things that if you kind of blur"
+  },
+  {
+   "t": 563.52,
+   "d": 1.91,
+   "text": "your eyes it'll still look the right way"
+  },
+  {
+   "t": 565.43,
+   "d": 2.53,
+   "text": "you'll see some great 2d examples of"
+  },
+  {
+   "t": 567.96,
+   "d": 1.95,
+   "text": "this online and this is something that"
+  },
+  {
+   "t": 569.91,
+   "d": 3.72,
+   "text": "caves a cut guys you know they'll talk"
+  },
+  {
+   "t": 573.63,
+   "d": 2.42,
+   "text": "to you about how that you how that works"
+  },
+  {
+   "t": 576.05,
+   "d": 4.12,
+   "text": "for Super Mario this is from a different"
+  },
+  {
+   "t": 580.17,
+   "d": 1.98,
+   "text": "website but this is research at Adam"
+  },
+  {
+   "t": 582.15,
+   "d": 3.51,
+   "text": "Somerville UCSC did this was generated"
+  },
+  {
+   "t": 585.66,
+   "d": 1.59,
+   "text": "by recurrent character based recurrent"
+  },
+  {
+   "t": 587.25,
+   "d": 2.13,
+   "text": "neural network all that system knew is"
+  },
+  {
+   "t": 589.38,
+   "d": 1.77,
+   "text": "that I have some text representation of"
+  },
+  {
+   "t": 591.15,
+   "d": 1.86,
+   "text": "the level and that the future part of"
+  },
+  {
+   "t": 593.01,
+   "d": 1.92,
+   "text": "the levels somehow is related to the"
+  },
+  {
+   "t": 594.93,
+   "d": 2.67,
+   "text": "past plus my fuzzy picture of everything"
+  },
+  {
+   "t": 597.6,
+   "d": 1.62,
+   "text": "that's going on makes this really really"
+  },
+  {
+   "t": 599.22,
+   "d": 2.16,
+   "text": "reasonable Mario level like this is this"
+  },
+  {
+   "t": 601.38,
+   "d": 2.16,
+   "text": "playable this is pretty good I'm sure"
+  },
+  {
+   "t": 603.54,
+   "d": 1.8,
+   "text": "was curated but it didn't know anything"
+  },
+  {
+   "t": 605.34,
+   "d": 1.62,
+   "text": "about the rules and know anything about"
+  },
+  {
+   "t": 606.96,
+   "d": 1.71,
+   "text": "jumping or difficulty it just kind of"
+  },
+  {
+   "t": 608.67,
+   "d": 2.19,
+   "text": "looked at a bunch of Mario levels and"
+  },
+  {
+   "t": 610.86,
+   "d": 1.62,
+   "text": "made something that given that"
+  },
+  {
+   "t": 612.48,
+   "d": 3.9,
+   "text": "assumption is pretty good I want to show"
+  },
+  {
+   "t": 616.38,
+   "d": 1.38,
+   "text": "you this neural network animated"
+  },
+  {
+   "t": 617.76,
+   "d": 2.04,
+   "text": "character I think if you want to make"
+  },
+  {
+   "t": 619.8,
+   "d": 2.1,
+   "text": "more accessible roguelikes you have to"
+  },
+  {
+   "t": 621.9,
+   "d": 2.78,
+   "text": "start thinking about art very critically"
+  },
+  {
+   "t": 624.68,
+   "d": 2.38,
+   "text": "nobody animated this this wasn't"
+  },
+  {
+   "t": 627.06,
+   "d": 2.76,
+   "text": "programmed for with all this I K I don't"
+  },
+  {
+   "t": 629.82,
+   "d": 1.23,
+   "text": "know how many people are familiar with"
+  },
+  {
+   "t": 631.05,
+   "d": 3.2,
+   "text": "3d animation but this is an absolutely"
+  },
+  {
+   "t": 634.25,
+   "d": 2.83,
+   "text": "stunning film level quality animation"
+  },
+  {
+   "t": 637.08,
+   "d": 1.92,
+   "text": "all this all you're giving as input is"
+  },
+  {
+   "t": 639.0,
+   "d": 2.76,
+   "text": "your controller and a neural network is"
+  },
+  {
+   "t": 641.76,
+   "d": 2.31,
+   "text": "generating the movements of the arms and"
+  },
+  {
+   "t": 644.07,
+   "d": 2.52,
+   "text": "legs it was it was using motion capture"
+  },
+  {
+   "t": 646.59,
+   "d": 3.09,
+   "text": "data 30 hours of it to to understand how"
+  },
+  {
+   "t": 649.68,
+   "d": 3.15,
+   "text": "people move but you can watch this guy"
+  },
+  {
+   "t": 652.83,
+   "d": 2.0,
+   "text": "just explore his space completely"
+  },
+  {
+   "t": 654.83,
+   "d": 1.78,
+   "text": "dynamically and this is this is just"
+  },
+  {
+   "t": 656.61,
+   "d": 1.65,
+   "text": "mind-blowing it's better than Assassin's"
+  },
+  {
+   "t": 658.26,
+   "d": 2.91,
+   "text": "Creed and you know was made by three"
+  },
+  {
+   "t": 661.17,
+   "d": 2.4,
+   "text": "people and you're gonna see later you"
+  },
+  {
+   "t": 663.57,
+   "d": 0.9,
+   "text": "know let's say you're"
+  },
+  {
+   "t": 664.47,
+   "d": 2.04,
+   "text": "level generator its height maps the"
+  },
+  {
+   "t": 666.51,
+   "d": 1.41,
+   "text": "character can interact with your hike"
+  },
+  {
+   "t": 667.92,
+   "d": 2.82,
+   "text": "map world you know super realistically"
+  },
+  {
+   "t": 670.74,
+   "d": 2.66,
+   "text": "runs into walls climbs your staircases"
+  },
+  {
+   "t": 673.4,
+   "d": 3.31,
+   "text": "this you can use in a game today if you"
+  },
+  {
+   "t": 676.71,
+   "d": 1.35,
+   "text": "if you look carefully and I can"
+  },
+  {
+   "t": 678.06,
+   "d": 1.32,
+   "text": "definitely help people are interested in"
+  },
+  {
+   "t": 679.38,
+   "d": 3.03,
+   "text": "doing that I want to show you also Dan"
+  },
+  {
+   "t": 682.41,
+   "d": 2.46,
+   "text": "Ritchie's work this is a spaceship"
+  },
+  {
+   "t": 684.87,
+   "d": 1.53,
+   "text": "generator I give it this blocked out"
+  },
+  {
+   "t": 686.4,
+   "d": 2.91,
+   "text": "spaceship and then it generates you know"
+  },
+  {
+   "t": 689.31,
+   "d": 2.58,
+   "text": "finer detail spaceships for it you know"
+  },
+  {
+   "t": 691.89,
+   "d": 1.56,
+   "text": "if you really want it to like approach"
+  },
+  {
+   "t": 693.45,
+   "d": 3.03,
+   "text": "art his methods MCMC methods they're"
+  },
+  {
+   "t": 696.48,
+   "d": 2.97,
+   "text": "gonna be the main way you do it in a way"
+  },
+  {
+   "t": 699.45,
+   "d": 1.53,
+   "text": "where you as a designer can guide"
+  },
+  {
+   "t": 700.98,
+   "d": 2.58,
+   "text": "exactly what you want and get these"
+  },
+  {
+   "t": 703.56,
+   "d": 3.3,
+   "text": "really fascinating generated results I"
+  },
+  {
+   "t": 706.86,
+   "d": 2.43,
+   "text": "also want to show you an MCMC method"
+  },
+  {
+   "t": 709.29,
+   "d": 2.01,
+   "text": "where you put stuff in a room and it"
+  },
+  {
+   "t": 711.3,
+   "d": 4.08,
+   "text": "uses interior design logic to lay it out"
+  },
+  {
+   "t": 715.38,
+   "d": 2.07,
+   "text": "in a pretty way you'll see the system"
+  },
+  {
+   "t": 717.45,
+   "d": 4.11,
+   "text": "work over time a lot of people want to"
+  },
+  {
+   "t": 721.56,
+   "d": 2.13,
+   "text": "stop making games that use tiles you"
+  },
+  {
+   "t": 723.69,
+   "d": 2.43,
+   "text": "know but decorating a room when you"
+  },
+  {
+   "t": 726.12,
+   "d": 1.23,
+   "text": "don't have tiles is really challenging"
+  },
+  {
+   "t": 727.35,
+   "d": 2.4,
+   "text": "there's actually software that can help"
+  },
+  {
+   "t": 729.75,
+   "d": 2.01,
+   "text": "you do that so you know think think"
+  },
+  {
+   "t": 731.76,
+   "d": 1.43,
+   "text": "about the future next five to ten years"
+  },
+  {
+   "t": 733.19,
+   "d": 2.83,
+   "text": "this is gonna be a big part of creating"
+  },
+  {
+   "t": 736.02,
+   "d": 3.72,
+   "text": "a you know 3d action roguelike"
+  },
+  {
+   "t": 739.74,
+   "d": 1.86,
+   "text": "experience you're gonna use procedural"
+  },
+  {
+   "t": 741.6,
+   "d": 2.34,
+   "text": "generation that that really references"
+  },
+  {
+   "t": 743.94,
+   "d": 3.3,
+   "text": "this work from five years ago so let's"
+  },
+  {
+   "t": 747.24,
+   "d": 1.86,
+   "text": "talk about how you would concretely use"
+  },
+  {
+   "t": 749.1,
+   "d": 2.37,
+   "text": "it this is gonna be a whirlwind tour but"
+  },
+  {
+   "t": 751.47,
+   "d": 1.41,
+   "text": "I want it I really want to give you a"
+  },
+  {
+   "t": 752.88,
+   "d": 2.07,
+   "text": "super important objective this is how"
+  },
+  {
+   "t": 754.95,
+   "d": 4.35,
+   "text": "I've found great success in using"
+  },
+  {
+   "t": 759.3,
+   "d": 1.74,
+   "text": "machine learning for level generation I"
+  },
+  {
+   "t": 761.04,
+   "d": 1.71,
+   "text": "really focus on making stuff that looks"
+  },
+  {
+   "t": 762.75,
+   "d": 3.17,
+   "text": "like it's made by hand not by a computer"
+  },
+  {
+   "t": 765.92,
+   "d": 3.1,
+   "text": "this contrasts really significantly with"
+  },
+  {
+   "t": 769.02,
+   "d": 1.71,
+   "text": "the heuristics that the people use"
+  },
+  {
+   "t": 770.73,
+   "d": 1.71,
+   "text": "because you kind of eyeball things to"
+  },
+  {
+   "t": 772.44,
+   "d": 2.28,
+   "text": "look look like they're they're made by"
+  },
+  {
+   "t": 774.72,
+   "d": 2.49,
+   "text": "hand but it's very rare it's very very"
+  },
+  {
+   "t": 777.21,
+   "d": 1.17,
+   "text": "difficult to achieve something's"
+  },
+  {
+   "t": 778.38,
+   "d": 1.83,
+   "text": "computer-generated that looks like a"
+  },
+  {
+   "t": 780.21,
+   "d": 2.58,
+   "text": "human being made it and I'd like to"
+  },
+  {
+   "t": 782.79,
+   "d": 2.01,
+   "text": "reference this this platformer that very"
+  },
+  {
+   "t": 784.8,
+   "d": 3.36,
+   "text": "ambitiously set out to make difficulty"
+  },
+  {
+   "t": 788.16,
+   "d": 1.8,
+   "text": "the one parameter that defines the"
+  },
+  {
+   "t": 789.96,
+   "d": 2.22,
+   "text": "levels that are generated there and it's"
+  },
+  {
+   "t": 792.18,
+   "d": 3.15,
+   "text": "an it's amazing games try it"
+  },
+  {
+   "t": 795.33,
+   "d": 1.74,
+   "text": "cloudberry Kingdom he worked on it for"
+  },
+  {
+   "t": 797.07,
+   "d": 1.2,
+   "text": "three hours"
+  },
+  {
+   "t": 798.27,
+   "d": 2.52,
+   "text": "three years um thousands of hours"
+  },
+  {
+   "t": 800.79,
+   "d": 1.95,
+   "text": "thousands of hours I wish you know you"
+  },
+  {
+   "t": 802.74,
+   "d": 2.58,
+   "text": "could do it in three hours but when you"
+  },
+  {
+   "t": 805.32,
+   "d": 1.8,
+   "text": "look at the levels they obviously look"
+  },
+  {
+   "t": 807.12,
+   "d": 2.1,
+   "text": "like they're made by a computer but you"
+  },
+  {
+   "t": 809.22,
+   "d": 1.8,
+   "text": "know he had a very specific objective in"
+  },
+  {
+   "t": 811.02,
+   "d": 1.98,
+   "text": "mind so you know how do you how do you"
+  },
+  {
+   "t": 813.0,
+   "d": 1.38,
+   "text": "look to the future I think you know"
+  },
+  {
+   "t": 814.38,
+   "d": 2.37,
+   "text": "we've Jordan Fisher has solved that this"
+  },
+  {
+   "t": 816.75,
+   "d": 1.83,
+   "text": "solved the difficulty problem let's talk"
+  },
+  {
+   "t": 818.58,
+   "d": 2.34,
+   "text": "about you know making stuff that looks"
+  },
+  {
+   "t": 820.92,
+   "d": 1.86,
+   "text": "like a computer really means rejecting"
+  },
+  {
+   "t": 822.78,
+   "d": 1.88,
+   "text": "difficulty as your parameter you know"
+  },
+  {
+   "t": 824.66,
+   "d": 2.26,
+   "text": "roguelikes are already hard enough so"
+  },
+  {
+   "t": 826.92,
+   "d": 3.93,
+   "text": "don't you know don't sweat it so one of"
+  },
+  {
+   "t": 830.85,
+   "d": 2.55,
+   "text": "the things that people like to make some"
+  },
+  {
+   "t": 833.4,
+   "d": 1.74,
+   "text": "of you have seen these videos all you're"
+  },
+  {
+   "t": 835.14,
+   "d": 2.61,
+   "text": "doing in this level is just pressing"
+  },
+  {
+   "t": 837.75,
+   "d": 4.02,
+   "text": "right and Mario kind of he explores this"
+  },
+  {
+   "t": 841.77,
+   "d": 3.24,
+   "text": "level automatically the human built but"
+  },
+  {
+   "t": 845.01,
+   "d": 1.68,
+   "text": "it's really really fun to watch because"
+  },
+  {
+   "t": 846.69,
+   "d": 1.89,
+   "text": "it's kind of subverting this idea that"
+  },
+  {
+   "t": 848.58,
+   "d": 1.92,
+   "text": "that a level that looks like this if you"
+  },
+  {
+   "t": 850.5,
+   "d": 2.55,
+   "text": "actually try to play it would be so"
+  },
+  {
+   "t": 853.05,
+   "d": 2.91,
+   "text": "impossibly challenging but it's it's"
+  },
+  {
+   "t": 855.96,
+   "d": 1.8,
+   "text": "just fun you know this is something"
+  },
+  {
+   "t": 857.76,
+   "d": 3.21,
+   "text": "that's made by a person that looks like"
+  },
+  {
+   "t": 860.97,
+   "d": 1.53,
+   "text": "it should have been made by a computer"
+  },
+  {
+   "t": 862.5,
+   "d": 2.7,
+   "text": "but that we really enjoy so I think you"
+  },
+  {
+   "t": 865.2,
+   "d": 1.95,
+   "text": "know level generation think outside the"
+  },
+  {
+   "t": 867.15,
+   "d": 2.64,
+   "text": "box you know this this is this is a this"
+  },
+  {
+   "t": 869.79,
+   "d": 1.2,
+   "text": "is something that has literally zero"
+  },
+  {
+   "t": 870.99,
+   "d": 3.78,
+   "text": "difficulty that's really really fun one"
+  },
+  {
+   "t": 874.77,
+   "d": 1.59,
+   "text": "of my favorite levels it really does"
+  },
+  {
+   "t": 876.36,
+   "d": 2.97,
+   "text": "this well best levels in any platformer"
+  },
+  {
+   "t": 879.33,
+   "d": 2.37,
+   "text": "ever made this opening scene to Sonic"
+  },
+  {
+   "t": 881.7,
+   "d": 2.82,
+   "text": "Adventure you're literally I guess"
+  },
+  {
+   "t": 884.52,
+   "d": 2.42,
+   "text": "you're snowboarding down asphalt and"
+  },
+  {
+   "t": 886.94,
+   "d": 2.41,
+   "text": "there's some really awesome music that"
+  },
+  {
+   "t": 889.35,
+   "d": 2.13,
+   "text": "plays and you're you're on you're in"
+  },
+  {
+   "t": 891.48,
+   "d": 1.26,
+   "text": "this theme park you know you're on the"
+  },
+  {
+   "t": 892.74,
+   "d": 2.67,
+   "text": "in a many ways a roller coaster"
+  },
+  {
+   "t": 895.41,
+   "d": 2.43,
+   "text": "figurative and literal like this is this"
+  },
+  {
+   "t": 897.84,
+   "d": 1.95,
+   "text": "is something was made by person very"
+  },
+  {
+   "t": 899.79,
+   "d": 1.77,
+   "text": "lovingly and very carefully thought-out"
+  },
+  {
+   "t": 901.56,
+   "d": 2.22,
+   "text": "like I think we should aspire to make"
+  },
+  {
+   "t": 903.78,
+   "d": 2.16,
+   "text": "stuff like this it's try it it's it's"
+  },
+  {
+   "t": 905.94,
+   "d": 4.26,
+   "text": "like the so so refreshing so good really"
+  },
+  {
+   "t": 910.2,
+   "d": 1.68,
+   "text": "comes down to you know best difficulty"
+  },
+  {
+   "t": 911.88,
+   "d": 3.39,
+   "text": "sometimes it's none random placement"
+  },
+  {
+   "t": 915.27,
+   "d": 1.95,
+   "text": "especially kind of organic feeling"
+  },
+  {
+   "t": 917.22,
+   "d": 1.62,
+   "text": "random placement this kind of plane"
+  },
+  {
+   "t": 918.84,
+   "d": 2.13,
+   "text": "playing a little slowly but this is a"
+  },
+  {
+   "t": 920.97,
+   "d": 1.41,
+   "text": "game where you just move the ball left"
+  },
+  {
+   "t": 922.38,
+   "d": 1.05,
+   "text": "and right you can watch me play"
+  },
+  {
+   "t": 923.43,
+   "d": 1.77,
+   "text": "everything's kind of place a little bit"
+  },
+  {
+   "t": 925.2,
+   "d": 1.71,
+   "text": "off like very organically but you can"
+  },
+  {
+   "t": 926.91,
+   "d": 1.64,
+   "text": "tell that's procedurally generated"
+  },
+  {
+   "t": 928.55,
+   "d": 2.08,
+   "text": "because it's kind of this random"
+  },
+  {
+   "t": 930.63,
+   "d": 1.17,
+   "text": "placement"
+  },
+  {
+   "t": 931.8,
+   "d": 1.92,
+   "text": "when things are made by people they tend"
+  },
+  {
+   "t": 933.72,
+   "d": 1.38,
+   "text": "to have symmetry they tend to have this"
+  },
+  {
+   "t": 935.1,
+   "d": 2.31,
+   "text": "this certain pay scene and kind of"
+  },
+  {
+   "t": 937.41,
+   "d": 2.01,
+   "text": "regular features this tile based game"
+  },
+  {
+   "t": 939.42,
+   "d": 2.07,
+   "text": "you know you roguelikes are tile based"
+  },
+  {
+   "t": 941.49,
+   "d": 1.95,
+   "text": "games use that to your advantage make"
+  },
+  {
+   "t": 943.44,
+   "d": 1.62,
+   "text": "stuff that looks symmetrical and feels"
+  },
+  {
+   "t": 945.06,
+   "d": 1.77,
+   "text": "pace because that's what makes it feel"
+  },
+  {
+   "t": 946.83,
+   "d": 2.43,
+   "text": "like it's made by hand and actually"
+  },
+  {
+   "t": 949.26,
+   "d": 2.07,
+   "text": "expressing symmetry it's really really"
+  },
+  {
+   "t": 951.33,
+   "d": 2.07,
+   "text": "simple it's it's something that you'll"
+  },
+  {
+   "t": 953.4,
+   "d": 2.04,
+   "text": "see later that that I've experimented"
+  },
+  {
+   "t": 955.44,
+   "d": 2.07,
+   "text": "with it that you can definitely express"
+  },
+  {
+   "t": 957.51,
+   "d": 1.38,
+   "text": "to these different techniques make it"
+  },
+  {
+   "t": 958.89,
+   "d": 2.67,
+   "text": "work well this is binding of issac which"
+  },
+  {
+   "t": 961.56,
+   "d": 2.01,
+   "text": "I think uses symmetry beautifully to"
+  },
+  {
+   "t": 963.57,
+   "d": 1.23,
+   "text": "convince you that these things were"
+  },
+  {
+   "t": 964.8,
+   "d": 2.37,
+   "text": "handcrafted you can see on one half you"
+  },
+  {
+   "t": 967.17,
+   "d": 1.47,
+   "text": "know that's my negative X on the other"
+  },
+  {
+   "t": 968.64,
+   "d": 2.07,
+   "text": "half that's my X I could just take the"
+  },
+  {
+   "t": 970.71,
+   "d": 1.95,
+   "text": "left half of the screen and flip it and"
+  },
+  {
+   "t": 972.66,
+   "d": 2.01,
+   "text": "that mirroring gives me something"
+  },
+  {
+   "t": 974.67,
+   "d": 2.31,
+   "text": "symmetrical whereas if it if it if you"
+  },
+  {
+   "t": 976.98,
+   "d": 2.55,
+   "text": "place the rocks where the dot of circles"
+  },
+  {
+   "t": 979.53,
+   "d": 1.41,
+   "text": "are you know just wouldn't look as good"
+  },
+  {
+   "t": 980.94,
+   "d": 1.86,
+   "text": "it just wouldn't feel like it's made by"
+  },
+  {
+   "t": 982.8,
+   "d": 3.24,
+   "text": "person if you use overly precise numbers"
+  },
+  {
+   "t": 986.04,
+   "d": 2.25,
+   "text": "I think that kind of undermines your"
+  },
+  {
+   "t": 988.29,
+   "d": 1.98,
+   "text": "ability to to make something feel like"
+  },
+  {
+   "t": 990.27,
+   "d": 2.46,
+   "text": "it's made by person this was made by"
+  },
+  {
+   "t": 992.73,
+   "d": 2.22,
+   "text": "person clash Royale the numbers in the"
+  },
+  {
+   "t": 994.95,
+   "d": 2.7,
+   "text": "in the game they they are made by human"
+  },
+  {
+   "t": 997.65,
+   "d": 1.17,
+   "text": "designers but they feel like they're"
+  },
+  {
+   "t": 998.82,
+   "d": 2.99,
+   "text": "triangulated to like stiff you and"
+  },
+  {
+   "t": 1001.81,
+   "d": 2.41,
+   "text": "that's definitely people's experience"
+  },
+  {
+   "t": 1004.22,
+   "d": 1.74,
+   "text": "with a lot of free to play games like if"
+  },
+  {
+   "t": 1005.96,
+   "d": 2.64,
+   "text": "you use numbers if you have three digits"
+  },
+  {
+   "t": 1008.6,
+   "d": 2.13,
+   "text": "you know it's it's instantly telling you"
+  },
+  {
+   "t": 1010.73,
+   "d": 1.41,
+   "text": "like something's procedural or"
+  },
+  {
+   "t": 1012.14,
+   "d": 3.06,
+   "text": "something's like really to fine it feels"
+  },
+  {
+   "t": 1015.2,
+   "d": 2.88,
+   "text": "it feels to triangulated I like to"
+  },
+  {
+   "t": 1018.08,
+   "d": 2.31,
+   "text": "contrast this we'll say you know our"
+  },
+  {
+   "t": 1020.39,
+   "d": 2.85,
+   "text": "stones card game by Blizzard the numbers"
+  },
+  {
+   "t": 1023.24,
+   "d": 1.38,
+   "text": "appear on this card I don't know if"
+  },
+  {
+   "t": 1024.62,
+   "d": 1.32,
+   "text": "you've ever played yugioh but the"
+  },
+  {
+   "t": 1025.94,
+   "d": 2.01,
+   "text": "numbers have 30 digits and in this game"
+  },
+  {
+   "t": 1027.95,
+   "d": 2.79,
+   "text": "numbers have one digit and you feel like"
+  },
+  {
+   "t": 1030.74,
+   "d": 2.16,
+   "text": "there's a lot of important consideration"
+  },
+  {
+   "t": 1032.9,
+   "d": 2.49,
+   "text": "like why is it to one-one whelps y's are"
+  },
+  {
+   "t": 1035.39,
+   "d": 3.24,
+   "text": "the cost for six two like you feel like"
+  },
+  {
+   "t": 1038.63,
+   "d": 2.31,
+   "text": "a human being thought about this and it"
+  },
+  {
+   "t": 1040.94,
+   "d": 1.44,
+   "text": "just came from using really small"
+  },
+  {
+   "t": 1042.38,
+   "d": 2.73,
+   "text": "numbers you can kind of reason about I"
+  },
+  {
+   "t": 1045.11,
+   "d": 2.43,
+   "text": "want to talk about how would you"
+  },
+  {
+   "t": 1047.54,
+   "d": 2.1,
+   "text": "actually model a roguelike you know"
+  },
+  {
+   "t": 1049.64,
+   "d": 1.8,
+   "text": "we've seen what the objective is make"
+  },
+  {
+   "t": 1051.44,
+   "d": 2.25,
+   "text": "something feels like it's made by person"
+  },
+  {
+   "t": 1053.69,
+   "d": 3.03,
+   "text": "I think something that really unshackles"
+  },
+  {
+   "t": 1056.72,
+   "d": 1.8,
+   "text": "use you got to think of it as a 1d"
+  },
+  {
+   "t": 1058.52,
+   "d": 2.01,
+   "text": "platformer all you make is a decision to"
+  },
+  {
+   "t": 1060.53,
+   "d": 2.31,
+   "text": "go left or right and time kind of brings"
+  },
+  {
+   "t": 1062.84,
+   "d": 1.59,
+   "text": "you forward this this is easier than"
+  },
+  {
+   "t": 1064.43,
+   "d": 0.72,
+   "text": "treating"
+  },
+  {
+   "t": 1065.15,
+   "d": 3.21,
+   "text": "things is 2-dimensional it opens you to"
+  },
+  {
+   "t": 1068.36,
+   "d": 2.34,
+   "text": "basically every machine learning tool"
+  },
+  {
+   "t": 1070.7,
+   "d": 2.46,
+   "text": "that exists today it just liberates you"
+  },
+  {
+   "t": 1073.16,
+   "d": 3.12,
+   "text": "and one example would be well in a Mario"
+  },
+  {
+   "t": 1076.28,
+   "d": 2.1,
+   "text": "level you sort of only go forward sure"
+  },
+  {
+   "t": 1078.38,
+   "d": 1.77,
+   "text": "you can you can explore backwards and"
+  },
+  {
+   "t": 1080.15,
+   "d": 1.23,
+   "text": "that's just part of the rules of the"
+  },
+  {
+   "t": 1081.38,
+   "d": 2.82,
+   "text": "game but for the generator that that"
+  },
+  {
+   "t": 1084.2,
+   "d": 2.04,
+   "text": "Adam made that was really successful it"
+  },
+  {
+   "t": 1086.24,
+   "d": 1.86,
+   "text": "uses a technique that assumed you sort"
+  },
+  {
+   "t": 1088.1,
+   "d": 1.71,
+   "text": "of only go forward it just happens to"
+  },
+  {
+   "t": 1089.81,
+   "d": 2.16,
+   "text": "work so you know try it always try it"
+  },
+  {
+   "t": 1091.97,
+   "d": 2.34,
+   "text": "for something like bonyen of Isaac you"
+  },
+  {
+   "t": 1094.31,
+   "d": 1.56,
+   "text": "know it would be more challenging but"
+  },
+  {
+   "t": 1095.87,
+   "d": 2.01,
+   "text": "there's a way where you can express a 2d"
+  },
+  {
+   "t": 1097.88,
+   "d": 2.43,
+   "text": "level as multiple 1d levels and you'll"
+  },
+  {
+   "t": 1100.31,
+   "d": 1.2,
+   "text": "find that just with maybe a little"
+  },
+  {
+   "t": 1101.51,
+   "d": 2.16,
+   "text": "heuristic to tweak it you'll end up with"
+  },
+  {
+   "t": 1103.67,
+   "d": 1.8,
+   "text": "something that works to generate 2d"
+  },
+  {
+   "t": 1105.47,
+   "d": 0.48,
+   "text": "levels"
+  },
+  {
+   "t": 1105.95,
+   "d": 2.58,
+   "text": "that's explored in this sort of way that"
+  },
+  {
+   "t": 1108.53,
+   "d": 2.67,
+   "text": "was generated by computer and used a lot"
+  },
+  {
+   "t": 1111.2,
+   "d": 2.19,
+   "text": "of different tools um"
+  },
+  {
+   "t": 1113.39,
+   "d": 2.49,
+   "text": "you collect data right a lot of the"
+  },
+  {
+   "t": 1115.88,
+   "d": 1.8,
+   "text": "techniques I showed you on that on that"
+  },
+  {
+   "t": 1117.68,
+   "d": 1.59,
+   "text": "big cross slide you need data to make"
+  },
+  {
+   "t": 1119.27,
+   "d": 2.31,
+   "text": "these systems work you can rip data from"
+  },
+  {
+   "t": 1121.58,
+   "d": 1.62,
+   "text": "existing games you know don't"
+  },
+  {
+   "t": 1123.2,
+   "d": 1.98,
+   "text": "necessarily commit yourself to the multi"
+  },
+  {
+   "t": 1125.18,
+   "d": 1.8,
+   "text": "hundred million dollar project that"
+  },
+  {
+   "t": 1126.98,
+   "d": 2.22,
+   "text": "Facebook and Google has to collect data"
+  },
+  {
+   "t": 1129.2,
+   "d": 2.25,
+   "text": "to really do the science of what they're"
+  },
+  {
+   "t": 1131.45,
+   "d": 2.97,
+   "text": "doing with on the vanguard of artificial"
+  },
+  {
+   "t": 1134.42,
+   "d": 2.07,
+   "text": "intelligence there's a lot of content"
+  },
+  {
+   "t": 1136.49,
+   "d": 1.95,
+   "text": "that you can already rip especially for"
+  },
+  {
+   "t": 1138.44,
+   "d": 2.49,
+   "text": "stuff like art but even for levels you"
+  },
+  {
+   "t": 1140.93,
+   "d": 2.94,
+   "text": "know I went through five different games"
+  },
+  {
+   "t": 1143.87,
+   "d": 3.6,
+   "text": "six to really see can I extract data can"
+  },
+  {
+   "t": 1147.47,
+   "d": 1.92,
+   "text": "I do something with it and I succeeded"
+  },
+  {
+   "t": 1149.39,
+   "d": 2.4,
+   "text": "for all of these all of these really"
+  },
+  {
+   "t": 1151.79,
+   "d": 1.74,
+   "text": "fantastic games you know they use"
+  },
+  {
+   "t": 1153.53,
+   "d": 2.28,
+   "text": "different engines but there's a way"
+  },
+  {
+   "t": 1155.81,
+   "d": 1.53,
+   "text": "because of the modding community that"
+  },
+  {
+   "t": 1157.34,
+   "d": 2.34,
+   "text": "lets you get get to the data and even if"
+  },
+  {
+   "t": 1159.68,
+   "d": 1.65,
+   "text": "you train these systems and like this is"
+  },
+  {
+   "t": 1161.33,
+   "d": 2.82,
+   "text": "a raw level out of a geometry dash you"
+  },
+  {
+   "t": 1164.15,
+   "d": 3.59,
+   "text": "know it can Jen it can look at this"
+  },
+  {
+   "t": 1167.74,
+   "d": 2.29,
+   "text": "hexadecimal and it can create working"
+  },
+  {
+   "t": 1170.03,
+   "d": 1.56,
+   "text": "levels you can copy and paste into"
+  },
+  {
+   "t": 1171.59,
+   "d": 2.01,
+   "text": "geometry dash and play it's absolutely"
+  },
+  {
+   "t": 1173.6,
+   "d": 2.37,
+   "text": "fascinating so definitely put in the"
+  },
+  {
+   "t": 1175.97,
+   "d": 1.71,
+   "text": "effort to try it there's free data"
+  },
+  {
+   "t": 1177.68,
+   "d": 3.3,
+   "text": "everywhere when in terms of libraries"
+  },
+  {
+   "t": 1180.98,
+   "d": 1.86,
+   "text": "there's always a lot of different"
+  },
+  {
+   "t": 1182.84,
+   "d": 1.32,
+   "text": "technology being developed a lot of"
+  },
+  {
+   "t": 1184.16,
+   "d": 2.19,
+   "text": "different systems I'm going to take a"
+  },
+  {
+   "t": 1186.35,
+   "d": 1.83,
+   "text": "very mainstream view use tensor flow"
+  },
+  {
+   "t": 1188.18,
+   "d": 2.55,
+   "text": "it's good to kind of be the future of of"
+  },
+  {
+   "t": 1190.73,
+   "d": 2.31,
+   "text": "what a lot of academic work is done in"
+  },
+  {
+   "t": 1193.04,
+   "d": 2.1,
+   "text": "it's super flexible supports a lot of"
+  },
+  {
+   "t": 1195.14,
+   "d": 2.5,
+   "text": "languages it's got huge commercial back"
+  },
+  {
+   "t": 1197.64,
+   "d": 3.03,
+   "text": "it's going to kind of subsume a lot of"
+  },
+  {
+   "t": 1200.67,
+   "d": 1.31,
+   "text": "different work in law different places"
+  },
+  {
+   "t": 1201.98,
+   "d": 3.21,
+   "text": "and it has a lot of the best examples"
+  },
+  {
+   "t": 1205.19,
+   "d": 2.08,
+   "text": "what I want to specifically talk about"
+  },
+  {
+   "t": 1207.27,
+   "d": 1.77,
+   "text": "what I've had a lot of success with is"
+  },
+  {
+   "t": 1209.04,
+   "d": 2.58,
+   "text": "um these LST Mouse's recurrent neural"
+  },
+  {
+   "t": 1211.62,
+   "d": 2.01,
+   "text": "networks character neural networks Andre"
+  },
+  {
+   "t": 1213.63,
+   "d": 2.22,
+   "text": "Carpathia's bog stuff that people are"
+  },
+  {
+   "t": 1215.85,
+   "d": 3.18,
+   "text": "already using I want to talk about you"
+  },
+  {
+   "t": 1219.03,
+   "d": 1.71,
+   "text": "know some of the details because this"
+  },
+  {
+   "t": 1220.74,
+   "d": 1.44,
+   "text": "stuff you know it's really challenging"
+  },
+  {
+   "t": 1222.18,
+   "d": 1.92,
+   "text": "and time-consuming you're not gonna get"
+  },
+  {
+   "t": 1224.1,
+   "d": 2.64,
+   "text": "like you're gonna get something just"
+  },
+  {
+   "t": 1226.74,
+   "d": 3.33,
+   "text": "like as Mike artfully said like that you"
+  },
+  {
+   "t": 1230.07,
+   "d": 2.25,
+   "text": "could curate to make really good but if"
+  },
+  {
+   "t": 1232.32,
+   "d": 1.38,
+   "text": "you want to achieve like a real-time"
+  },
+  {
+   "t": 1233.7,
+   "d": 2.22,
+   "text": "experience you know we all know that's"
+  },
+  {
+   "t": 1235.92,
+   "d": 1.8,
+   "text": "gonna be super super challenging to"
+  },
+  {
+   "t": 1237.72,
+   "d": 3.33,
+   "text": "produce a 99% hit rate instead of a 1%"
+  },
+  {
+   "t": 1241.05,
+   "d": 2.97,
+   "text": "win hit rate and I want to share with"
+  },
+  {
+   "t": 1244.02,
+   "d": 1.53,
+   "text": "you like some of the things that you can"
+  },
+  {
+   "t": 1245.55,
+   "d": 1.83,
+   "text": "do for level generation specifically a"
+  },
+  {
+   "t": 1247.38,
+   "d": 1.29,
+   "text": "lot of this comes out in my commercial"
+  },
+  {
+   "t": 1248.67,
+   "d": 3.84,
+   "text": "work to to get something successful you"
+  },
+  {
+   "t": 1252.51,
+   "d": 1.89,
+   "text": "know ultimately these tools are miracle"
+  },
+  {
+   "t": 1254.4,
+   "d": 1.32,
+   "text": "you know you're gonna get a lot out of"
+  },
+  {
+   "t": 1255.72,
+   "d": 2.37,
+   "text": "them so so let's let's actually first"
+  },
+  {
+   "t": 1258.09,
+   "d": 2.85,
+   "text": "understand how they work like I said you"
+  },
+  {
+   "t": 1260.94,
+   "d": 1.53,
+   "text": "have this big chunk of level and you're"
+  },
+  {
+   "t": 1262.47,
+   "d": 1.41,
+   "text": "just trying to predict you're just"
+  },
+  {
+   "t": 1263.88,
+   "d": 1.71,
+   "text": "trying to like say what tile would go in"
+  },
+  {
+   "t": 1265.59,
+   "d": 2.61,
+   "text": "this green box and this system is so"
+  },
+  {
+   "t": 1268.2,
+   "d": 1.83,
+   "text": "powerful because it remembers something"
+  },
+  {
+   "t": 1270.03,
+   "d": 1.47,
+   "text": "about which tiles are adjacent to other"
+  },
+  {
+   "t": 1271.5,
+   "d": 2.67,
+   "text": "tiles that's my simplified explanation"
+  },
+  {
+   "t": 1274.17,
+   "d": 2.61,
+   "text": "if you follow tutorials on discs there"
+  },
+  {
+   "t": 1276.78,
+   "d": 1.77,
+   "text": "people's full time jobs is teaching this"
+  },
+  {
+   "t": 1278.55,
+   "d": 2.43,
+   "text": "like go go with them but this is just"
+  },
+  {
+   "t": 1280.98,
+   "d": 2.01,
+   "text": "help you understand our goal is we look"
+  },
+  {
+   "t": 1282.99,
+   "d": 1.26,
+   "text": "at this level and you want to see what"
+  },
+  {
+   "t": 1284.25,
+   "d": 3.39,
+   "text": "goes inside that green green box there's"
+  },
+  {
+   "t": 1287.64,
+   "d": 1.41,
+   "text": "something called a loss function this is"
+  },
+  {
+   "t": 1289.05,
+   "d": 1.74,
+   "text": "like like how do you tell the score how"
+  },
+  {
+   "t": 1290.79,
+   "d": 1.53,
+   "text": "do you tell the computer how well it's"
+  },
+  {
+   "t": 1292.32,
+   "d": 2.73,
+   "text": "doing and I'm gonna regularly say"
+  },
+  {
+   "t": 1295.05,
+   "d": 1.68,
+   "text": "minimize loss that means improve this"
+  },
+  {
+   "t": 1296.73,
+   "d": 1.5,
+   "text": "score that means make it do its job"
+  },
+  {
+   "t": 1298.23,
+   "d": 2.67,
+   "text": "better one of the first things you'll"
+  },
+  {
+   "t": 1300.9,
+   "d": 1.53,
+   "text": "notice is stuff is super buggy online"
+  },
+  {
+   "t": 1302.43,
+   "d": 3.27,
+   "text": "it's really really crazy how many of"
+  },
+  {
+   "t": 1305.7,
+   "d": 1.68,
+   "text": "these implementations are totally"
+  },
+  {
+   "t": 1307.38,
+   "d": 2.51,
+   "text": "objective roken I'll give you an example"
+  },
+  {
+   "t": 1309.89,
+   "d": 2.77,
+   "text": "public implementations of character are"
+  },
+  {
+   "t": 1312.66,
+   "d": 1.41,
+   "text": "an ends you know they make this very"
+  },
+  {
+   "t": 1314.07,
+   "d": 1.32,
+   "text": "specific bog you're gonna see it"
+  },
+  {
+   "t": 1315.39,
+   "d": 2.34,
+   "text": "Illustrated it exists and stuff that was"
+  },
+  {
+   "t": 1317.73,
+   "d": 2.61,
+   "text": "just six months ago in super well"
+  },
+  {
+   "t": 1320.34,
+   "d": 1.71,
+   "text": "exposed mainstream code that people"
+  },
+  {
+   "t": 1322.05,
+   "d": 3.57,
+   "text": "downloading use online specifically it's"
+  },
+  {
+   "t": 1325.62,
+   "d": 1.89,
+   "text": "like misunderstanding some detail and"
+  },
+  {
+   "t": 1327.51,
+   "d": 1.5,
+   "text": "Python you know you'll see this is the"
+  },
+  {
+   "t": 1329.01,
+   "d": 2.19,
+   "text": "correct code April 2017"
+  },
+  {
+   "t": 1331.2,
+   "d": 3.21,
+   "text": "June 2016 you know if you duplicate an"
+  },
+  {
+   "t": 1334.41,
+   "d": 2.76,
+   "text": "array like that you're getting a"
+  },
+  {
+   "t": 1337.17,
+   "d": 2.7,
+   "text": "reference to something a certain number"
+  },
+  {
+   "t": 1339.87,
+   "d": 3.06,
+   "text": "of times instead of making a copy this"
+  },
+  {
+   "t": 1342.93,
+   "d": 2.46,
+   "text": "stuff has pitfalls but this was six"
+  },
+  {
+   "t": 1345.39,
+   "d": 2.1,
+   "text": "months ago if you tried using this thing"
+  },
+  {
+   "t": 1347.49,
+   "d": 1.5,
+   "text": "if you were maybe the Botnick folks"
+  },
+  {
+   "t": 1348.99,
+   "d": 1.23,
+   "text": "you're like oh you know this is big"
+  },
+  {
+   "t": 1350.22,
+   "d": 1.65,
+   "text": "ambitious thing you try piece of code"
+  },
+  {
+   "t": 1351.87,
+   "d": 1.47,
+   "text": "online you're like oh none of this works"
+  },
+  {
+   "t": 1353.34,
+   "d": 3.24,
+   "text": "I'll go literally been buggy and it's"
+  },
+  {
+   "t": 1356.58,
+   "d": 3.12,
+   "text": "it's just so stressful it gets fixed but"
+  },
+  {
+   "t": 1359.7,
+   "d": 2.13,
+   "text": "it's it's really like you'll discover"
+  },
+  {
+   "t": 1361.83,
+   "d": 1.62,
+   "text": "these things and like man actually this"
+  },
+  {
+   "t": 1363.45,
+   "d": 2.91,
+   "text": "could have possibly worked there's a lot"
+  },
+  {
+   "t": 1366.36,
+   "d": 2.76,
+   "text": "about like dividing how do you think of"
+  },
+  {
+   "t": 1369.12,
+   "d": 1.95,
+   "text": "a level what what makes up a chunk of a"
+  },
+  {
+   "t": 1371.07,
+   "d": 2.46,
+   "text": "level there's a solution here you know"
+  },
+  {
+   "t": 1373.53,
+   "d": 2.34,
+   "text": "you'll post the slides online or you'll"
+  },
+  {
+   "t": 1375.87,
+   "d": 3.21,
+   "text": "read about it more but can't NX the"
+  },
+  {
+   "t": 1379.08,
+   "d": 1.86,
+   "text": "performance of your algorithm this would"
+  },
+  {
+   "t": 1380.94,
+   "d": 3.12,
+   "text": "be a correct way of interpreting a Mario"
+  },
+  {
+   "t": 1384.06,
+   "d": 2.4,
+   "text": "level in my opinion some of our UCSC"
+  },
+  {
+   "t": 1386.46,
+   "d": 2.19,
+   "text": "research you know discovered that if you"
+  },
+  {
+   "t": 1388.65,
+   "d": 2.73,
+   "text": "snake along the tiles you'll get better"
+  },
+  {
+   "t": 1391.38,
+   "d": 2.4,
+   "text": "results if you say like the path the way"
+  },
+  {
+   "t": 1393.78,
+   "d": 1.8,
+   "text": "that you look at time you start at Aisle"
+  },
+  {
+   "t": 1395.58,
+   "d": 1.56,
+   "text": "number one and then you follow that"
+  },
+  {
+   "t": 1397.14,
+   "d": 1.71,
+   "text": "snake and then finally you end up at"
+  },
+  {
+   "t": 1398.85,
+   "d": 1.65,
+   "text": "that green tile this is a very valid"
+  },
+  {
+   "t": 1400.5,
+   "d": 2.25,
+   "text": "interpretation you need you special"
+  },
+  {
+   "t": 1402.75,
+   "d": 1.38,
+   "text": "coats like use chunks that are"
+  },
+  {
+   "t": 1404.13,
+   "d": 2.79,
+   "text": "differently sized but it all exists this"
+  },
+  {
+   "t": 1406.92,
+   "d": 2.19,
+   "text": "is if you just download android Condrey"
+  },
+  {
+   "t": 1409.11,
+   "d": 2.34,
+   "text": "karpati stuff off the internet it kind"
+  },
+  {
+   "t": 1411.45,
+   "d": 2.63,
+   "text": "of looks at the world as these kind of"
+  },
+  {
+   "t": 1414.08,
+   "d": 2.44,
+   "text": "unevenly chunked things that doesn't"
+  },
+  {
+   "t": 1416.52,
+   "d": 1.62,
+   "text": "really you know you don't really care"
+  },
+  {
+   "t": 1418.14,
+   "d": 3.51,
+   "text": "about predicting a sky tile you know you"
+  },
+  {
+   "t": 1421.65,
+   "d": 1.62,
+   "text": "have to you have to really look at this"
+  },
+  {
+   "t": 1423.27,
+   "d": 1.8,
+   "text": "stuff critically to make sure that that"
+  },
+  {
+   "t": 1425.07,
+   "d": 2.01,
+   "text": "it's gonna be it's gonna be doing what"
+  },
+  {
+   "t": 1427.08,
+   "d": 2.58,
+   "text": "you want to do encoding is a big problem"
+  },
+  {
+   "t": 1429.66,
+   "d": 1.65,
+   "text": "how do I turn my data into something"
+  },
+  {
+   "t": 1431.31,
+   "d": 2.34,
+   "text": "these systems can understand something I"
+  },
+  {
+   "t": 1433.65,
+   "d": 2.97,
+   "text": "found very successful I'll show you an"
+  },
+  {
+   "t": 1436.62,
+   "d": 1.83,
+   "text": "illustration of this but this can twenty"
+  },
+  {
+   "t": 1438.45,
+   "d": 2.87,
+   "text": "acts the performance of your level a"
+  },
+  {
+   "t": 1441.32,
+   "d": 3.04,
+   "text": "system level generator performance in"
+  },
+  {
+   "t": 1444.36,
+   "d": 1.59,
+   "text": "terms of you know would this be"
+  },
+  {
+   "t": 1445.95,
+   "d": 2.46,
+   "text": "something that if a human guessed what"
+  },
+  {
+   "t": 1448.41,
+   "d": 2.22,
+   "text": "should go in your piece of level what"
+  },
+  {
+   "t": 1450.63,
+   "d": 3.47,
+   "text": "would that human designer put this is a"
+  },
+  {
+   "t": 1454.1,
+   "d": 2.23,
+   "text": "Mario level you can represent as a piece"
+  },
+  {
+   "t": 1456.33,
+   "d": 2.97,
+   "text": "of tax from from a great little blog you"
+  },
+  {
+   "t": 1459.3,
+   "d": 2.55,
+   "text": "can see like B characters mean pipes and"
+  },
+  {
+   "t": 1461.85,
+   "d": 2.04,
+   "text": "equal signs mean ground and"
+  },
+  {
+   "t": 1463.89,
+   "d": 3.12,
+   "text": "this - means sky but that's a lot of"
+  },
+  {
+   "t": 1467.01,
+   "d": 1.71,
+   "text": "different characters for the system to"
+  },
+  {
+   "t": 1468.72,
+   "d": 2.76,
+   "text": "understand what if I said I'm gonna"
+  },
+  {
+   "t": 1471.48,
+   "d": 2.55,
+   "text": "character I'm gonna categorize my tiles"
+  },
+  {
+   "t": 1474.03,
+   "d": 1.59,
+   "text": "and I say they're passable tiles they're"
+  },
+  {
+   "t": 1475.62,
+   "d": 1.83,
+   "text": "interactable tiles or reward tiles so"
+  },
+  {
+   "t": 1477.45,
+   "d": 2.19,
+   "text": "maybe a coin block it's just a reward"
+  },
+  {
+   "t": 1479.64,
+   "d": 2.34,
+   "text": "tile that's interactable whereas a"
+  },
+  {
+   "t": 1481.98,
+   "d": 2.7,
+   "text": "breakable brick is an interactive tile"
+  },
+  {
+   "t": 1484.68,
+   "d": 2.67,
+   "text": "that's neither passable more reward okay"
+  },
+  {
+   "t": 1487.35,
+   "d": 3.27,
+   "text": "and I look at my world now as ones and"
+  },
+  {
+   "t": 1490.62,
+   "d": 2.13,
+   "text": "zeroes instead of a bunch of bunch of"
+  },
+  {
+   "t": 1492.75,
+   "d": 2.61,
+   "text": "characters this is what Mario level"
+  },
+  {
+   "t": 1495.36,
+   "d": 1.5,
+   "text": "might look like if you just consider is"
+  },
+  {
+   "t": 1496.86,
+   "d": 2.13,
+   "text": "it passable and you'll see like oh I can"
+  },
+  {
+   "t": 1498.99,
+   "d": 1.5,
+   "text": "make out the platforms I can make out"
+  },
+  {
+   "t": 1500.49,
+   "d": 2.16,
+   "text": "the ground something makes sense to you"
+  },
+  {
+   "t": 1502.65,
+   "d": 1.11,
+   "text": "you know you can look at you can"
+  },
+  {
+   "t": 1503.76,
+   "d": 2.04,
+   "text": "instantly tell there's a problem though"
+  },
+  {
+   "t": 1505.8,
+   "d": 1.8,
+   "text": "if you look at the rewards you know"
+  },
+  {
+   "t": 1507.6,
+   "d": 2.04,
+   "text": "where the coins like there might be just"
+  },
+  {
+   "t": 1509.64,
+   "d": 2.46,
+   "text": "two coins and this huge see you know of"
+  },
+  {
+   "t": 1512.1,
+   "d": 1.86,
+   "text": "nothingness and these systems they don't"
+  },
+  {
+   "t": 1513.96,
+   "d": 1.95,
+   "text": "they don't work with rarity very well"
+  },
+  {
+   "t": 1515.91,
+   "d": 2.58,
+   "text": "so you know you might be able to"
+  },
+  {
+   "t": 1518.49,
+   "d": 1.71,
+   "text": "characterize your data in a way that"
+  },
+  {
+   "t": 1520.2,
+   "d": 2.7,
+   "text": "makes good semantic sense but it it kind"
+  },
+  {
+   "t": 1522.9,
+   "d": 2.16,
+   "text": "of has these like oh it's this noise"
+  },
+  {
+   "t": 1525.06,
+   "d": 1.71,
+   "text": "that's lost in the sea there's no way"
+  },
+  {
+   "t": 1526.77,
+   "d": 2.82,
+   "text": "that this stuff will learn it there's a"
+  },
+  {
+   "t": 1529.59,
+   "d": 2.67,
+   "text": "little trick that basically reduces to"
+  },
+  {
+   "t": 1532.26,
+   "d": 2.46,
+   "text": "well what if I record where I switch"
+  },
+  {
+   "t": 1534.72,
+   "d": 2.1,
+   "text": "columns I saw interactable stuff for"
+  },
+  {
+   "t": 1536.82,
+   "d": 2.7,
+   "text": "which columns I saw rewards and now you"
+  },
+  {
+   "t": 1539.52,
+   "d": 4.05,
+   "text": "know I've 10x the amount of ones that"
+  },
+  {
+   "t": 1543.57,
+   "d": 1.89,
+   "text": "appear even though it's not meat doesn't"
+  },
+  {
+   "t": 1545.46,
+   "d": 2.1,
+   "text": "mean the same thing but these sorts of"
+  },
+  {
+   "t": 1547.56,
+   "d": 2.1,
+   "text": "systems just giving them more data hacks"
+  },
+  {
+   "t": 1549.66,
+   "d": 1.59,
+   "text": "that you might be able to reinterpret"
+  },
+  {
+   "t": 1551.25,
+   "d": 1.95,
+   "text": "with some heuristic it'll get something"
+  },
+  {
+   "t": 1553.2,
+   "d": 1.65,
+   "text": "it works a lot better this is actually"
+  },
+  {
+   "t": 1554.85,
+   "d": 1.53,
+   "text": "called a convolution it's beyond the"
+  },
+  {
+   "t": 1556.38,
+   "d": 2.04,
+   "text": "scope of this presentation but when you"
+  },
+  {
+   "t": 1558.42,
+   "d": 2.52,
+   "text": "look at like real breakthroughs in"
+  },
+  {
+   "t": 1560.94,
+   "d": 1.83,
+   "text": "machine learning using recurrent neural"
+  },
+  {
+   "t": 1562.77,
+   "d": 1.86,
+   "text": "networks they tend to integrate some"
+  },
+  {
+   "t": 1564.63,
+   "d": 1.73,
+   "text": "kind of convolution some way of"
+  },
+  {
+   "t": 1566.36,
+   "d": 2.35,
+   "text": "reinterpreting the data that helps helps"
+  },
+  {
+   "t": 1568.71,
+   "d": 2.07,
+   "text": "turn noise into something that's big"
+  },
+  {
+   "t": 1570.78,
+   "d": 2.46,
+   "text": "that they can see also lets you train"
+  },
+  {
+   "t": 1573.24,
+   "d": 2.61,
+   "text": "all across multiple games so if you want"
+  },
+  {
+   "t": 1575.85,
+   "d": 1.92,
+   "text": "to make a platformer that uses data not"
+  },
+  {
+   "t": 1577.77,
+   "d": 1.86,
+   "text": "just from aria but a lot of others you"
+  },
+  {
+   "t": 1579.63,
+   "d": 2.01,
+   "text": "know this you'll have to have to kind of"
+  },
+  {
+   "t": 1581.64,
+   "d": 1.35,
+   "text": "semantically interpret what you're"
+  },
+  {
+   "t": 1582.99,
+   "d": 3.18,
+   "text": "looking at I think the biggest problem"
+  },
+  {
+   "t": 1586.17,
+   "d": 2.76,
+   "text": "is noise you know you you generate this"
+  },
+  {
+   "t": 1588.93,
+   "d": 1.38,
+   "text": "stuff and if it isn't a human being"
+  },
+  {
+   "t": 1590.31,
+   "d": 2.4,
+   "text": "curating it whether it's text and you"
+  },
+  {
+   "t": 1592.71,
+   "d": 2.16,
+   "text": "just get like nonsense grammar or it's"
+  },
+  {
+   "t": 1594.87,
+   "d": 2.3,
+   "text": "levels and it just puts blocks and ran"
+  },
+  {
+   "t": 1597.17,
+   "d": 1.83,
+   "text": "places that you didn't want like you"
+  },
+  {
+   "t": 1599.0,
+   "d": 1.95,
+   "text": "just look at it you just feel because it"
+  },
+  {
+   "t": 1600.95,
+   "d": 3.27,
+   "text": "breaks some some rule of interior design"
+  },
+  {
+   "t": 1604.22,
+   "d": 1.59,
+   "text": "or architecture just like uh it's so"
+  },
+  {
+   "t": 1605.81,
+   "d": 2.82,
+   "text": "noisy there's a trick you know big noise"
+  },
+  {
+   "t": 1608.63,
+   "d": 2.16,
+   "text": "your level treat it like a picture use"
+  },
+  {
+   "t": 1610.79,
+   "d": 1.95,
+   "text": "use just like you do in Photoshop get"
+  },
+  {
+   "t": 1612.74,
+   "d": 1.74,
+   "text": "rid of the noise or you can use"
+  },
+  {
+   "t": 1614.48,
+   "d": 1.02,
+   "text": "something that's really sophisticated"
+  },
+  {
+   "t": 1615.5,
+   "d": 3.57,
+   "text": "that gives you some some more stuff too"
+  },
+  {
+   "t": 1619.07,
+   "d": 1.95,
+   "text": "I'll show you what this looks like this"
+  },
+  {
+   "t": 1621.02,
+   "d": 1.95,
+   "text": "is uh what what it really means to D"
+  },
+  {
+   "t": 1622.97,
+   "d": 2.22,
+   "text": "noise if you look at the images on the"
+  },
+  {
+   "t": 1625.19,
+   "d": 3.36,
+   "text": "right they all have they're all wrong by"
+  },
+  {
+   "t": 1628.55,
+   "d": 1.74,
+   "text": "the same amount relative to the"
+  },
+  {
+   "t": 1630.29,
+   "d": 0.54,
+   "text": "reference"
+  },
+  {
+   "t": 1630.83,
+   "d": 2.97,
+   "text": "even though qualitatively they're level"
+  },
+  {
+   "t": 1633.8,
+   "d": 3.3,
+   "text": "they're they're images that look a lot"
+  },
+  {
+   "t": 1637.1,
+   "d": 2.4,
+   "text": "better than others if I just naively say"
+  },
+  {
+   "t": 1639.5,
+   "d": 2.22,
+   "text": "how different is images along the circle"
+  },
+  {
+   "t": 1641.72,
+   "d": 1.56,
+   "text": "to the image in the middle they're all"
+  },
+  {
+   "t": 1643.28,
+   "d": 2.04,
+   "text": "the same difference but definitely that"
+  },
+  {
+   "t": 1645.32,
+   "d": 2.1,
+   "text": "upper left corner you know it's it's it"
+  },
+  {
+   "t": 1647.42,
+   "d": 1.83,
+   "text": "looks the best and in the lower right"
+  },
+  {
+   "t": 1649.25,
+   "d": 1.98,
+   "text": "corner it looks worse level architecture"
+  },
+  {
+   "t": 1651.23,
+   "d": 2.61,
+   "text": "has the same sort of features you can"
+  },
+  {
+   "t": 1653.84,
+   "d": 2.22,
+   "text": "use a method that says well I want to"
+  },
+  {
+   "t": 1656.06,
+   "d": 2.55,
+   "text": "kind of drag these like random to bricks"
+  },
+  {
+   "t": 1658.61,
+   "d": 1.65,
+   "text": "that might have appeared in the middle"
+  },
+  {
+   "t": 1660.26,
+   "d": 1.68,
+   "text": "of my level I kind of want to push them"
+  },
+  {
+   "t": 1661.94,
+   "d": 1.68,
+   "text": "against the wall and then maybe have"
+  },
+  {
+   "t": 1663.62,
+   "d": 1.26,
+   "text": "some heuristic that turns them into"
+  },
+  {
+   "t": 1664.88,
+   "d": 1.74,
+   "text": "bookcases you know there's something"
+  },
+  {
+   "t": 1666.62,
+   "d": 3.45,
+   "text": "that works and it's a more sophisticated"
+  },
+  {
+   "t": 1670.07,
+   "d": 2.28,
+   "text": "way of looking at your data there's also"
+  },
+  {
+   "t": 1672.35,
+   "d": 2.64,
+   "text": "this idea well well you know the clean"
+  },
+  {
+   "t": 1674.99,
+   "d": 2.34,
+   "text": "part of my image is the mirror and I"
+  },
+  {
+   "t": 1677.33,
+   "d": 2.16,
+   "text": "want to both get rid of noise and I want"
+  },
+  {
+   "t": 1679.49,
+   "d": 1.5,
+   "text": "to make it more symmetrical so I just"
+  },
+  {
+   "t": 1680.99,
+   "d": 2.43,
+   "text": "say tweak the left-half to make it look"
+  },
+  {
+   "t": 1683.42,
+   "d": 1.74,
+   "text": "more like the right half if you're only"
+  },
+  {
+   "t": 1685.16,
+   "d": 2.01,
+   "text": "removing noise not by changing anything"
+  },
+  {
+   "t": 1687.17,
+   "d": 4.01,
+   "text": "else fabulously a powerful way to get"
+  },
+  {
+   "t": 1691.18,
+   "d": 2.41,
+   "text": "architectural cohesive levels using the"
+  },
+  {
+   "t": 1693.59,
+   "d": 3.81,
+   "text": "curl note neural networks something you"
+  },
+  {
+   "t": 1697.4,
+   "d": 2.07,
+   "text": "might encounter finally performance is"
+  },
+  {
+   "t": 1699.47,
+   "d": 1.65,
+   "text": "poor you know this just takes a long"
+  },
+  {
+   "t": 1701.12,
+   "d": 2.1,
+   "text": "time to run actually in my experience"
+  },
+  {
+   "t": 1703.22,
+   "d": 1.95,
+   "text": "because there's so little data don't go"
+  },
+  {
+   "t": 1705.17,
+   "d": 1.98,
+   "text": "with big optimizations don't do stuff"
+  },
+  {
+   "t": 1707.15,
+   "d": 1.74,
+   "text": "that's too complicated like just try to"
+  },
+  {
+   "t": 1708.89,
+   "d": 1.26,
+   "text": "get something that looks good and be"
+  },
+  {
+   "t": 1710.15,
+   "d": 2.76,
+   "text": "patient you can actually download off my"
+  },
+  {
+   "t": 1712.91,
+   "d": 2.28,
+   "text": "website a build of tensorflow for Macs"
+  },
+  {
+   "t": 1715.19,
+   "d": 3.57,
+   "text": "for GPUs they don't support it any more"
+  },
+  {
+   "t": 1718.76,
+   "d": 3.45,
+   "text": "you can get my build it's also shared"
+  },
+  {
+   "t": 1722.21,
+   "d": 3.39,
+   "text": "and like variations on tensor flows get"
+  },
+  {
+   "t": 1725.6,
+   "d": 2.67,
+   "text": "up to just see you know maybe you do"
+  },
+  {
+   "t": 1728.27,
+   "d": 2.04,
+   "text": "have this performance problem download"
+  },
+  {
+   "t": 1730.31,
+   "d": 2.64,
+   "text": "that software but I don't think level"
+  },
+  {
+   "t": 1732.95,
+   "d": 2.25,
+   "text": "generations it's it's not really what"
+  },
+  {
+   "t": 1735.2,
+   "d": 2.01,
+   "text": "what's gonna make a difference like how"
+  },
+  {
+   "t": 1737.21,
+   "d": 2.85,
+   "text": "do you generate monster behaviors or how"
+  },
+  {
+   "t": 1740.06,
+   "d": 2.46,
+   "text": "do you generate you know the not just"
+  },
+  {
+   "t": 1742.52,
+   "d": 1.95,
+   "text": "the text but something that make that"
+  },
+  {
+   "t": 1744.47,
+   "d": 1.59,
+   "text": "has functional game rules you know"
+  },
+  {
+   "t": 1746.06,
+   "d": 1.62,
+   "text": "that's something something that has to"
+  },
+  {
+   "t": 1747.68,
+   "d": 0.87,
+   "text": "do with the code"
+  },
+  {
+   "t": 1748.55,
+   "d": 1.83,
+   "text": "it's called functional game content this"
+  },
+  {
+   "t": 1750.38,
+   "d": 1.71,
+   "text": "is what I've been really experimenting"
+  },
+  {
+   "t": 1752.09,
+   "d": 2.85,
+   "text": "with you'll see this an example of"
+  },
+  {
+   "t": 1754.94,
+   "d": 1.62,
+   "text": "something I'll release you guys which is"
+  },
+  {
+   "t": 1756.56,
+   "d": 3.66,
+   "text": "just generating carts functional playing"
+  },
+  {
+   "t": 1760.22,
+   "d": 3.2,
+   "text": "cards for hearthstone like games"
+  },
+  {
+   "t": 1763.42,
+   "d": 2.92,
+   "text": "something that I think they're totally"
+  },
+  {
+   "t": 1766.34,
+   "d": 2.91,
+   "text": "different methods used to generate"
+  },
+  {
+   "t": 1769.25,
+   "d": 2.52,
+   "text": "something that's functional of a"
+  },
+  {
+   "t": 1771.77,
+   "d": 1.35,
+   "text": "hearthstone card is really just a"
+  },
+  {
+   "t": 1773.12,
+   "d": 2.04,
+   "text": "monster and we're in a roguelike in"
+  },
+  {
+   "t": 1775.16,
+   "d": 3.36,
+   "text": "disguise like the way that it behaves"
+  },
+  {
+   "t": 1778.52,
+   "d": 2.55,
+   "text": "and this is something that I hope to"
+  },
+  {
+   "t": 1781.07,
+   "d": 1.77,
+   "text": "share with the community very shortly to"
+  },
+  {
+   "t": 1782.84,
+   "d": 2.1,
+   "text": "just kind of advance really what is the"
+  },
+  {
+   "t": 1784.94,
+   "d": 1.74,
+   "text": "next five to ten years"
+  },
+  {
+   "t": 1786.68,
+   "d": 1.98,
+   "text": "I think it's functional game content and"
+  },
+  {
+   "t": 1788.66,
+   "d": 2.31,
+   "text": "you know if you're still really lost you"
+  },
+  {
+   "t": 1790.97,
+   "d": 2.7,
+   "text": "talk to me afterwards but ultimately you"
+  },
+  {
+   "t": 1793.67,
+   "d": 1.74,
+   "text": "know I would say the mission is make it"
+  },
+  {
+   "t": 1795.41,
+   "d": 1.59,
+   "text": "look like it's made by person on my"
+  },
+  {
+   "t": 1797.0,
+   "d": 1.8,
+   "text": "computer that's that's what's gonna get"
+  },
+  {
+   "t": 1798.8,
+   "d": 2.7,
+   "text": "you the most out of these systems and"
+  },
+  {
+   "t": 1801.5,
+   "d": 2.43,
+   "text": "really clarify your goals functional"
+  },
+  {
+   "t": 1803.93,
+   "d": 1.56,
+   "text": "game content happens to be that thing"
+  },
+  {
+   "t": 1805.49,
+   "d": 1.86,
+   "text": "that right now you need game designers"
+  },
+  {
+   "t": 1807.35,
+   "d": 1.83,
+   "text": "to write the behavior of the monster and"
+  },
+  {
+   "t": 1809.18,
+   "d": 3.27,
+   "text": "you have to think like how will that be"
+  },
+  {
+   "t": 1812.45,
+   "d": 2.4,
+   "text": "generated and that's really what I've"
+  },
+  {
+   "t": 1814.85,
+   "d": 1.53,
+   "text": "been working on I think it's the future"
+  },
+  {
+   "t": 1816.38,
+   "d": 1.92,
+   "text": "and you know I invite you all to talk to"
+  },
+  {
+   "t": 1818.3,
+   "d": 2.67,
+   "text": "me afterwards but that's that's machine"
+  },
+  {
+   "t": 1820.97,
+   "d": 1.71,
+   "text": "learning in a nutshell for for level"
+  },
+  {
+   "t": 1822.68,
+   "d": 2.43,
+   "text": "generation game content in total I think"
+  },
+  {
+   "t": 1825.11,
+   "d": 1.27,
+   "text": "so much"
+  },
+  {
+   "t": 1826.38,
+   "d": 5.79,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1832.17,
+   "d": 4.47,
+   "text": "um we have time for a few questions"
+  },
+  {
+   "t": 1836.64,
+   "d": 8.95,
+   "text": "yeah Hey thank you I don't get lost in"
+  },
+  {
+   "t": 1845.59,
+   "d": 2.1,
+   "text": "the weeds but could you talk about the"
+  },
+  {
+   "t": 1847.69,
+   "d": 1.95,
+   "text": "sneaking concept again you were"
+  },
+  {
+   "t": 1849.64,
+   "d": 1.71,
+   "text": "searching tiles and a snake pattern and"
+  },
+  {
+   "t": 1851.35,
+   "d": 1.26,
+   "text": "then you just kind of stopped and then"
+  },
+  {
+   "t": 1852.61,
+   "d": 2.1,
+   "text": "he said this is better and I not suss"
+  },
+  {
+   "t": 1854.71,
+   "d": 3.36,
+   "text": "out why yeah thank you yeah so why why"
+  },
+  {
+   "t": 1858.07,
+   "d": 2.4,
+   "text": "is sneaking better uh there's some"
+  },
+  {
+   "t": 1860.47,
+   "d": 3.27,
+   "text": "hypotheses if you read the paper that I"
+  },
+  {
+   "t": 1863.74,
+   "d": 3.18,
+   "text": "got it from this is the Mateus advisor"
+  },
+  {
+   "t": 1866.92,
+   "d": 4.05,
+   "text": "in the US see us University of"
+  },
+  {
+   "t": 1870.97,
+   "d": 4.2,
+   "text": "California Santa Cruz Department they"
+  },
+  {
+   "t": 1875.17,
+   "d": 1.71,
+   "text": "speculate a little bit that may be"
+  },
+  {
+   "t": 1876.88,
+   "d": 2.67,
+   "text": "sneaking looking at things in the"
+  },
+  {
+   "t": 1879.55,
+   "d": 1.89,
+   "text": "sneaking pattern as opposed to just as a"
+  },
+  {
+   "t": 1881.44,
+   "d": 2.79,
+   "text": "linear structure tells you more about"
+  },
+  {
+   "t": 1884.23,
+   "d": 3.84,
+   "text": "like can actually pull up the slide here"
+  },
+  {
+   "t": 1888.07,
+   "d": 3.06,
+   "text": "where you'll see this but it tells you a"
+  },
+  {
+   "t": 1891.13,
+   "d": 1.83,
+   "text": "little bit about a little bit more about"
+  },
+  {
+   "t": 1892.96,
+   "d": 4.47,
+   "text": "what's important so in this case it's"
+  },
+  {
+   "t": 1897.43,
+   "d": 4.35,
+   "text": "it's important that the green tile if"
+  },
+  {
+   "t": 1901.78,
+   "d": 3.27,
+   "text": "you if you follow this line you catch at"
+  },
+  {
+   "t": 1905.05,
+   "d": 2.61,
+   "text": "the beginning like oh there might be six"
+  },
+  {
+   "t": 1907.66,
+   "d": 2.52,
+   "text": "sky tiles and you'll see six sky tiles"
+  },
+  {
+   "t": 1910.18,
+   "d": 2.37,
+   "text": "appears a lot and it might learn to"
+  },
+  {
+   "t": 1912.55,
+   "d": 1.77,
+   "text": "count the number of sky tiles and it's"
+  },
+  {
+   "t": 1914.32,
+   "d": 1.89,
+   "text": "like I've hit six sky tiles and now I"
+  },
+  {
+   "t": 1916.21,
+   "d": 1.92,
+   "text": "play something sometimes I place a brick"
+  },
+  {
+   "t": 1918.13,
+   "d": 2.34,
+   "text": "or if it's sky and you'll just see that"
+  },
+  {
+   "t": 1920.47,
+   "d": 2.4,
+   "text": "if you count along this line it's easier"
+  },
+  {
+   "t": 1922.87,
+   "d": 1.98,
+   "text": "for the designer to come up with a roll"
+  },
+  {
+   "t": 1924.85,
+   "d": 1.41,
+   "text": "like after you've counted this many"
+  },
+  {
+   "t": 1926.26,
+   "d": 2.31,
+   "text": "times place something here like make a"
+  },
+  {
+   "t": 1928.57,
+   "d": 2.22,
+   "text": "decision that's a big part of what"
+  },
+  {
+   "t": 1930.79,
+   "d": 1.44,
+   "text": "recurrent neural networks learn to do"
+  },
+  {
+   "t": 1932.23,
+   "d": 0.84,
+   "text": "they learn to count"
+  },
+  {
+   "t": 1933.07,
+   "d": 2.01,
+   "text": "I think sneaking helps it count and"
+  },
+  {
+   "t": 1935.08,
+   "d": 2.97,
+   "text": "that's probably the the core part of why"
+  },
+  {
+   "t": 1938.05,
+   "d": 1.59,
+   "text": "this little innovation that this"
+  },
+  {
+   "t": 1939.64,
+   "d": 3.57,
+   "text": "academic paper did vastly improve the"
+  },
+  {
+   "t": 1943.21,
+   "d": 2.75,
+   "text": "performance on generating Mario levels"
+  },
+  {
+   "t": 1945.96,
+   "d": 2.22,
+   "text": "sorry just following it seems like this"
+  },
+  {
+   "t": 1948.18,
+   "d": 2.17,
+   "text": "potentially some overlap between that"
+  },
+  {
+   "t": 1950.35,
+   "d": 1.65,
+   "text": "and the other idea you mentioned about"
+  },
+  {
+   "t": 1952.0,
+   "d": 2.94,
+   "text": "introducing some kind of CNN or some"
+  },
+  {
+   "t": 1954.94,
+   "d": 2.31,
+   "text": "kind of convolution Josh column do you"
+  },
+  {
+   "t": 1957.25,
+   "d": 1.44,
+   "text": "know if anyone's tried doing that sort"
+  },
+  {
+   "t": 1958.69,
+   "d": 1.95,
+   "text": "of worrying a CNN into an RNN"
+  },
+  {
+   "t": 1960.64,
+   "d": 5.19,
+   "text": "and building level that UCSC department"
+  },
+  {
+   "t": 1965.83,
+   "d": 4.46,
+   "text": "actually is researching how do you apply"
+  },
+  {
+   "t": 1970.29,
+   "d": 2.62,
+   "text": "platform levels from multiple games and"
+  },
+  {
+   "t": 1972.91,
+   "d": 2.16,
+   "text": "reinterpret the levels so that you know"
+  },
+  {
+   "t": 1975.07,
+   "d": 1.5,
+   "text": "you can train a system that seen"
+  },
+  {
+   "t": 1976.57,
+   "d": 2.64,
+   "text": "multiple games they do the convolution"
+  },
+  {
+   "t": 1979.21,
+   "d": 1.92,
+   "text": "this idea of changing like some bigger"
+  },
+  {
+   "t": 1981.13,
+   "d": 2.4,
+   "text": "block of data into something simpler by"
+  },
+  {
+   "t": 1983.53,
+   "d": 2.43,
+   "text": "hands they do it you know they adapt"
+  },
+  {
+   "t": 1985.96,
+   "d": 1.62,
+   "text": "their own data they're essentially doing"
+  },
+  {
+   "t": 1987.58,
+   "d": 2.19,
+   "text": "a convolution you can have a system that"
+  },
+  {
+   "t": 1989.77,
+   "d": 3.12,
+   "text": "does this automatically but you know max"
+  },
+  {
+   "t": 1992.89,
+   "d": 2.55,
+   "text": "you know he actually is a researcher"
+  },
+  {
+   "t": 1995.44,
+   "d": 2.01,
+   "text": "there he's gonna be talking later it's"
+  },
+  {
+   "t": 1997.45,
+   "d": 1.26,
+   "text": "something that I think he'll be able to"
+  },
+  {
+   "t": 1998.71,
+   "d": 3.57,
+   "text": "speak to really precisely you said"
+  },
+  {
+   "t": 2002.28,
+   "d": 1.92,
+   "text": "something about a pity system for loot"
+  },
+  {
+   "t": 2004.2,
+   "d": 2.34,
+   "text": "yeah and I had never heard that idea"
+  },
+  {
+   "t": 2006.54,
+   "d": 4.08,
+   "text": "before so could you yeah the super short"
+  },
+  {
+   "t": 2010.62,
+   "d": 2.73,
+   "text": "of it is you know if you didn't unpack"
+  },
+  {
+   "t": 2013.35,
+   "d": 3.33,
+   "text": "an awesome item after trying 40 times"
+  },
+  {
+   "t": 2016.68,
+   "d": 2.01,
+   "text": "the system feels pity for you and gives"
+  },
+  {
+   "t": 2018.69,
+   "d": 1.83,
+   "text": "you an awesome item anyway so even if it"
+  },
+  {
+   "t": 2020.52,
+   "d": 3.18,
+   "text": "appears to be random it subverts and"
+  },
+  {
+   "t": 2023.7,
+   "d": 3.63,
+   "text": "reinforces on the it subverts the"
+  },
+  {
+   "t": 2027.33,
+   "d": 3.0,
+   "text": "gamblers fallacy which is usually as a"
+  },
+  {
+   "t": 2030.33,
+   "d": 2.1,
+   "text": "gambler you think oh well I've lost so"
+  },
+  {
+   "t": 2032.43,
+   "d": 2.76,
+   "text": "many times I'm bound to win and in a"
+  },
+  {
+   "t": 2035.19,
+   "d": 1.35,
+   "text": "video game world well you can actually"
+  },
+  {
+   "t": 2036.54,
+   "d": 1.68,
+   "text": "make things work that way that's what a"
+  },
+  {
+   "t": 2038.22,
+   "d": 1.59,
+   "text": "pity's algorithm so if you're a human"
+  },
+  {
+   "t": 2039.81,
+   "d": 2.25,
+   "text": "being who has a gambling problem"
+  },
+  {
+   "t": 2042.06,
+   "d": 2.37,
+   "text": "pity systems are kind of the you know"
+  },
+  {
+   "t": 2044.43,
+   "d": 1.65,
+   "text": "they're your oxycontin you know they're"
+  },
+  {
+   "t": 2046.08,
+   "d": 1.44,
+   "text": "really gonna make you addicted to what"
+  },
+  {
+   "t": 2047.52,
+   "d": 2.82,
+   "text": "they're giving you I have a question"
+  },
+  {
+   "t": 2050.34,
+   "d": 1.92,
+   "text": "about kind of like your very end your"
+  },
+  {
+   "t": 2052.26,
+   "d": 1.89,
+   "text": "last slide was was like the goal of this"
+  },
+  {
+   "t": 2054.15,
+   "d": 2.43,
+   "text": "is to you know we should make them yeah"
+  },
+  {
+   "t": 2056.58,
+   "d": 2.7,
+   "text": "do you mind he's like make it feel like"
+  },
+  {
+   "t": 2059.28,
+   "d": 2.28,
+   "text": "was made by person not a computer yeah"
+  },
+  {
+   "t": 2061.56,
+   "d": 1.74,
+   "text": "and I guess I'm wondering what why"
+  },
+  {
+   "t": 2063.3,
+   "d": 3.27,
+   "text": "actually aren't we in an era where we're"
+  },
+  {
+   "t": 2066.57,
+   "d": 3.93,
+   "text": "adapting more to I don't even know what"
+  },
+  {
+   "t": 2070.5,
+   "d": 1.38,
+   "text": "the word is but aren't we adapting to"
+  },
+  {
+   "t": 2071.88,
+   "d": 1.59,
+   "text": "this where things are made by algorithms"
+  },
+  {
+   "t": 2073.47,
+   "d": 2.01,
+   "text": "and and that's becoming the new normal"
+  },
+  {
+   "t": 2075.48,
+   "d": 3.42,
+   "text": "and I understand maybe like a feel which"
+  },
+  {
+   "t": 2078.9,
+   "d": 1.8,
+   "text": "is really hard to categorize and you're"
+  },
+  {
+   "t": 2080.7,
+   "d": 1.11,
+   "text": "talking about like symmetry and things"
+  },
+  {
+   "t": 2081.81,
+   "d": 1.23,
+   "text": "like that yeah but maybe you were"
+  },
+  {
+   "t": 2083.04,
+   "d": 1.26,
+   "text": "actually becoming more and more used to"
+  },
+  {
+   "t": 2084.3,
+   "d": 1.74,
+   "text": "it and I guess I'm kind of wondering"
+  },
+  {
+   "t": 2086.04,
+   "d": 4.83,
+   "text": "about that why that's your yeah your end"
+  },
+  {
+   "t": 2090.87,
+   "d": 1.74,
+   "text": "kind of judgment I guess on it or"
+  },
+  {
+   "t": 2092.61,
+   "d": 1.26,
+   "text": "because I think when"
+  },
+  {
+   "t": 2093.87,
+   "d": 2.49,
+   "text": "look at like really influential examples"
+  },
+  {
+   "t": 2096.36,
+   "d": 3.18,
+   "text": "of computer generated content it almost"
+  },
+  {
+   "t": 2099.54,
+   "d": 1.94,
+   "text": "always involves some form of curation"
+  },
+  {
+   "t": 2101.48,
+   "d": 2.56,
+   "text": "and you could say that it sort of"
+  },
+  {
+   "t": 2104.04,
+   "d": 1.59,
+   "text": "disguises the fact that these systems"
+  },
+  {
+   "t": 2105.63,
+   "d": 1.98,
+   "text": "might make stuff that doesn't feel like"
+  },
+  {
+   "t": 2107.61,
+   "d": 1.62,
+   "text": "it's made by person ninety-nine percent"
+  },
+  {
+   "t": 2109.23,
+   "d": 2.07,
+   "text": "of the time but one percent of the time"
+  },
+  {
+   "t": 2111.3,
+   "d": 1.86,
+   "text": "it does and a human being actually went"
+  },
+  {
+   "t": 2113.16,
+   "d": 1.58,
+   "text": "and picked it out you could call that"
+  },
+  {
+   "t": 2114.74,
+   "d": 2.11,
+   "text": "making something look like it's made by"
+  },
+  {
+   "t": 2116.85,
+   "d": 2.1,
+   "text": "person but I think if you want to hit"
+  },
+  {
+   "t": 2118.95,
+   "d": 2.64,
+   "text": "that 99 percent performance level you"
+  },
+  {
+   "t": 2121.59,
+   "d": 1.44,
+   "text": "have to think about you know like how am"
+  },
+  {
+   "t": 2123.03,
+   "d": 3.42,
+   "text": "i curating and the systems that do that"
+  },
+  {
+   "t": 2126.45,
+   "d": 1.08,
+   "text": "they're really gonna push the envelope"
+  },
+  {
+   "t": 2127.53,
+   "d": 1.8,
+   "text": "on research so definitely as an"
+  },
+  {
+   "t": 2129.33,
+   "d": 2.76,
+   "text": "experimenter I'm interested in that but"
+  },
+  {
+   "t": 2132.09,
+   "d": 1.74,
+   "text": "you're absolutely right that you know"
+  },
+  {
+   "t": 2133.83,
+   "d": 2.79,
+   "text": "people are you know that catch app game"
+  },
+  {
+   "t": 2136.62,
+   "d": 3.12,
+   "text": "with randomly placed obstacles its"
+  },
+  {
+   "t": 2139.74,
+   "d": 1.62,
+   "text": "enormous ly popular people are satisfied"
+  },
+  {
+   "t": 2141.36,
+   "d": 1.83,
+   "text": "with that from a gameplay point of view"
+  },
+  {
+   "t": 2143.19,
+   "d": 1.44,
+   "text": "and roguelikes are definitely a"
+  },
+  {
+   "t": 2144.63,
+   "d": 1.68,
+   "text": "testament to you know you still have"
+  },
+  {
+   "t": 2146.31,
+   "d": 1.68,
+   "text": "something in the gameplay sense is very"
+  },
+  {
+   "t": 2147.99,
+   "d": 2.1,
+   "text": "appealing so it's it's definitely a"
+  },
+  {
+   "t": 2150.09,
+   "d": 3.27,
+   "text": "complicated question great thank you so"
+  },
+  {
+   "t": 2153.36,
+   "d": 2.33,
+   "text": "much"
+  }
+ ]
+}

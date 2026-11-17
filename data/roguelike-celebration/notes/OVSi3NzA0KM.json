@@ -1,0 +1,221 @@
+{
+  "id": "OVSi3NzA0KM",
+  "title": "Tyriq Plummer - Roguelikes and Platformers",
+  "speaker": "Tyriq Plummer",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=OVSi3NzA0KM",
+  "talk_type": "design",
+  "summary": "Tyriq Plummer, developer of the roguelike platformer Catacomb Kids, explains why he combined the two genres and proposes four 'dimensions of roguelikitude' (procedural space, emergent complexity, room for strategic/tactical forethought, permanence of consequence) for placing hybrid games on a spectrum. He compares Downwell, Red Rogue, Spelunky, Vagante and Catacomb Kids, showing how the mix and the specific choice of borrowed mechanics produce very different games. He then examines how specific roguelike mechanics (line of sight and darkness, hunger clocks, inventories, gods and shrines) are adapted or dropped in platformers, including his failed hunger experiment and the resulting food queue system. Q&A covers level size in platformers, his room-based level generator, and choosing what to borrow.",
+  "games": [
+    "Catacomb Kids",
+    "Powder",
+    "Angband",
+    "ADOM",
+    "Downwell",
+    "Red Rogue",
+    "Spelunky",
+    "Vagante",
+    "Dungeon Crawl Stone Soup",
+    "Diablo",
+    "Super Smash Bros.",
+    "Crystal Catacombs",
+    "Cave Blazers",
+    "Tower Climb",
+    "Roguelight",
+    "Rogue Legacy",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "genre hybrids",
+      "kind": "principle",
+      "claim": "Roguelikes and platformers combine productively because their defining aspects barely overlap, which forces uniqueness and innovation rather than one genre simply mapping onto the other.",
+      "detail": "Plummer contrasts this with a beat-'em-up plus Zelda-style game, where basic interactions map to each other, or an arena shooter plus roguelike, where perspective and movement overlap. He frames hybrids as recipes where the proportion of each ingredient, and how thoroughly they are mixed, matters.",
+      "t": 272,
+      "quote": "the two styles are fundamentally different enough to force uniqueness and innovation when they're combined",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelikeness dimensions",
+      "kind": "technique",
+      "claim": "Plummer measures how roguelike a non-traditional game is along four graded dimensions: procedural space, emergent complex situations, possibility of strategic/tactical forethought, and permanence of consequence.",
+      "detail": "These are dimensions, not checkboxes; a game can be a little or very present on each. Forethought means how much assessing a situation is possible and encouraged, and permanence includes not just permadeath but micro-decisions that change a run's trajectory and one-chance opportunities.",
+      "t": 415,
+      "quote": "it's important to note that their dimensions and not just checkboxes they aren't just there or not there",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelikeness dimensions",
+      "kind": "example",
+      "claim": "Downwell has procedural levels but little emergence, and its upgrade choices happen in a safe zone away from situational context, so it is a platformer shooter with only a tinge of roguelike.",
+      "detail": "Plummer contrasts it with Catacomb Kids, which has more complex level generation, a focus on emergent situations, rewards for planning ahead, and choices with long-lasting consequences beyond permadeath.",
+      "t": 440,
+      "quote": "that stuff always happens in a safe zone away from any immediate situational context",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn-based platformer",
+      "kind": "example",
+      "claim": "Red Rogue offers both a real-time action mode and a mode where time only advances when the player acts, alongside bump attacks, a message log, item identification and a pet-like skeleton minion.",
+      "detail": "Plummer calls it the hybrid closest to traditional roguelike conventions; there is not even jumping unless you have a specific item. In the turn-based mode the game stops dead, even particle effects, when the player stops giving input.",
+      "t": 540,
+      "quote": "as long as the player has control over the character time does not progress without their consent",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "positioning",
+      "kind": "example",
+      "claim": "Red Rogue's side view makes vertical and horizontal positioning tactical: dropping onto enemies from above stuns them, while ranged weapons fire only horizontally, conflicting with seeking high ground.",
+      "detail": "Players use ladders and platforms to gain height; the same stun applies if enemies drop on the player. To use ranged weapons you need horizontal distance on the same level. Plummer says this one twist turns an otherwise standard roguelike into something fresh, showing how little of one genre is needed.",
+      "t": 601,
+      "quote": "if you drop down onto enemies from higher position it inflicts a long stun on them",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "shared rule set",
+      "kind": "principle",
+      "claim": "What makes Spelunky a roguelike platformer rather than just a platformer with permadeath is a shared rule set for players, NPCs and items, which gives rise to emergence.",
+      "detail": "Plummer cites Derek Yu's book on Spelunky naming three Berlin interpretation values that guided its design: randomized levels, permanent death and a shared rule set. Everything is equally subject to spike traps and explosions and equally pick-up-able and throwable.",
+      "t": 773,
+      "quote": "a shared rule set for players NPCs and items and I think that's the important part",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "predictable enemies",
+      "kind": "principle",
+      "claim": "Despite its arcade feel, Spelunky supports forethought because enemy behaviours and traps are simple and consistent enough to predict and plan around.",
+      "detail": "Plummer says it is not a split-second reaction fest unless you play it that way, e.g. speedrunning; it is usually beneficial to survey a situation before jumping in. He also notes Spelunky's prominent score goads players into taking excess risk for treasure.",
+      "t": 830,
+      "quote": "enemy behaviors are both simplistic enough and consistent enough that they can be easily predicted and therefore planned around",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "genre hybrids",
+      "kind": "principle",
+      "claim": "Vagante and Catacomb Kids borrow nearly the same roguelike mechanics yet feel completely different, showing that which mechanics are borrowed and how they are applied matters more than proportion.",
+      "detail": "Both have classes, reactive evasive combat, randomly generated equipment, fog of war, unidentified potions and spellbooks. But Vagante's classes are classic RPG roles inspired by Diablo, while Catacomb Kids' classes define the rules for generating characters; Vagante's combat is evasive due to enemy behaviour, Catacomb Kids' due to Smash Bros.-inspired directional attacks and dodge.",
+      "t": 897,
+      "quote": "it becomes less about the proportion of each stuff of stuff each game borrows from roguelikes and more about which things they borrow specifically",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "line of sight",
+      "kind": "example",
+      "claim": "Line of sight, nearly universal in traditional roguelikes, is rare in roguelike platformers; most use fog of war or darkness instead, and Spelunky uses darkness only for occasional special dark floors.",
+      "detail": "Catacomb Kids and Vagante use roguelike fog of war; Red Rogue and Crystal Catacombs have darkness, but only Red Rogue uses line of sight. Plummer tried line of sight in Catacomb Kids but could not make it run efficiently in real time, and the game is now designed without it.",
+      "t": 1108,
+      "quote": "line-of-sight is the one that's nearly universal in traditional roguelikes that seems to be much less common in roguelike platformers",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "light as resource",
+      "kind": "example",
+      "claim": "In Roguelight the player has no vision radius and depends on environmental light, using a limited supply of flaming arrows both to light the way and to kill enemies.",
+      "detail": "Plummer offers it as proof that light and visibility remain worth exploring in platformers; the dual use of arrows creates a resource management trade-off.",
+      "t": 1189,
+      "quote": "you have to make use of your limited number of flaming arrows to both light the way ahead and to defeat enemies",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hunger clock",
+      "kind": "principle",
+      "claim": "In real-time games with regenerating health a hunger clock reduces to time pressure, which Spelunky's ghost and Crystal Catacombs' timer use to stop players clearing every level and to keep an arcade pace.",
+      "detail": "In traditional roguelikes starvation enforces efficiency and discourages waiting around to heal. Spelunky's ghost appears after five minutes; Crystal Catacombs keeps levels straightforward so its timer is not onerous unless players are very slow.",
+      "t": 1215,
+      "quote": "in games that have health written Minori man mana regeneration in real-time games this ends up just translating to time pressure",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hunger clock",
+      "kind": "warning",
+      "claim": "Adding starvation to Catacomb Kids ruined its pace, because time pressure punished the thoughtfulness and caution the game wanted, and it made pacifist runs impossible.",
+      "detail": "Corpse eating had only restored health and felt mechanically boring, so Plummer added the 'other half' of the mechanic, a need to eat. Players then had to kill things to eat, and he does not want to force anyone to fight, so he removed it quickly.",
+      "t": 1310,
+      "quote": "it ruined the pace of the game to have this time pressure where I was trying to encourage thoughtfulness and caution",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "food queue",
+      "kind": "technique",
+      "claim": "Catacomb Kids' food queue grants a bonus for every five items eaten, with specific foods in specific orders producing stronger, more unusual effects, rewarding experimentation without punishing players who ignore it.",
+      "detail": "A random mix generally gives a small heal or spell-charge restore. Eating five grumbles (goblin-type enemies) gives the 'butcher' meal effect: all other healing is reduced to one or two HP, but every corpse or piece of meat heals extra. It came out of the failed hunger experiment.",
+      "t": 1362,
+      "quote": "if you're more picky about what you eat and eat certain things in a certain order then the bonuses can become more powerful and unique",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "inventory",
+      "kind": "example",
+      "claim": "Vagante and Cave Blazers do not pause while the inventory is open, so swapping gear or hunting for healing items mid-combat is risky.",
+      "detail": "Plummer notes inventory management is nearly universal in roguelike platformers, often as a list or grid like in RPGs.",
+      "t": 1426,
+      "quote": "pause the game while you're looking at your inventory so equipping weapons and armor while we're looking through your backpack for healing items can be risky",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "inventory",
+      "kind": "technique",
+      "claim": "Catacomb Kids applies a 'no hammerspace' rule: everything carried must be physically on the character, in five equipment slots, one hand and one small pocket, building on Spelunky's minimal inventory.",
+      "detail": "Spelunky splits items into carryable objects (only one held at a time) and permanent passive accessories, so there are no menus taking you out of the game space. In Catacomb Kids anything not in a slot (head, body, weapon, offhand, shoes), hand or pocket lies on the dungeon floor.",
+      "t": 1481,
+      "quote": "anything that you're carrying has to actually be present on your person you don't get a nebulous void space within which to tuck away like a dozen swords",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "gods and shrines",
+      "kind": "example",
+      "claim": "Gods and shrines are surprisingly common in roguelike platformers, usually reduced to one unseen deity, though Vagante keeps a pantheon with distinct personalities inspired by Dungeon Crawl Stone Soup.",
+      "detail": "Spelunky, Cave Blazers, Vagante, Red Rogue and Rogue Legacy all let players pray or sacrifice items, creatures or health for a boon. Vagante's simplified gods still convey a world with living, fickle gods.",
+      "t": 1547,
+      "quote": "only Vogon take keeps the idea of a pantheon of gods with differing personalities desires and rewards",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "level size",
+      "kind": "principle",
+      "claim": "Because traversal is the fun in a platformer and cannot be auto-travelled as in roguelikes, roguelike platformers tend to use smaller, denser levels packed with interactions.",
+      "detail": "Answering a question about fast map traversal in roguelikes, Plummer says he uses smaller levels too, but also argues that the sense of getting lost in a vast unknown space is part of roguelikes' appeal and not necessarily something to avoid.",
+      "t": 1652,
+      "quote": "they're much more compact and within that that space there they try to fit a lot of interesting things and interesting interactions",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room-based generation",
+      "kind": "technique",
+      "claim": "Catacomb Kids generates a grid of rooms, shifts them off-grid, connects them with tunnels, then fills some with Spelunky-style text-file templates with probabilistic tiles, mixed with fully random rooms.",
+      "detail": "Plummer gave this overview in Q&A and pointed to his earlier GDC talk for details. Template rooms can define tiles with a probabilistic chance of appearing.",
+      "t": 1707,
+      "quote": "I generate a grid of rooms and I can like define their dimensions and that sort of thing and then I shift them around",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "borrowing mechanics",
+      "kind": "principle",
+      "claim": "Choosing which mechanics to borrow is personal preference, and trying a borrowed idea that fails, as with Catacomb Kids' hunger mechanic, is fine.",
+      "detail": "Plummer found Spelunky's single attack too straightforward and drew Catacomb Kids' combat from Smash Bros. instead. He says when something does not work it becomes obvious, and preferences guide you toward something enjoyable.",
+      "t": 1830,
+      "quote": "I don't really think there's a problem with trying something and then finding out it doesn't work",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

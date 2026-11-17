@@ -1,0 +1,44 @@
+Duke Dougal - My 30 year quest to find a lost Roguelike
+Speaker: Duke Dougal
+https://www.youtube.com/watch?v=xgBGrgucH2s
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Introduction to the quest
+
+[0:00:11] Our last talk of the day is Duke Dougal who is going to talk about his search for a long lost game. >> Thanks so much. Lost in the wilderness. This is the story of my 40 years quest to find wilderness a 1979 Roguelike. The story begins of course back in 1979 when I had just started high school.
+
+## Origins at school
+
+[0:00:40] I was 11 years old and I was there with my older brother Paul who was about 13. He was the next year level up and you can see here in the picture this is the high school that we went to. It looks more like Hogwarts than it does a high school. There was a church that had been converted into high school so that was a bit magical but one thing that was really magical was the science teacher. He was a real character. A guy with a big bushy beard, excentric and had a passion for teaching science. He had a science room that was full of test tubes and vander graph generators and all sorts of weird stuff. One of things that he did was that he actually bought with his own money a personal computer. Back in 1979 in Australia most people had never even heard of what a computer was so
+
+[0:01:42] it was completely extraordinary this science teacher had bought one. It would have cost him about a month worth of his own salary and he brought it into the school for the kids to use. He was trusting enough for the kids to use it. Where it was located in the school is you would go into the great hall you see and up to the back of the hall and there was an alter there and the behind the alter was there was a set of stairs and at the bottom of the set of stairs was the room called the cookers nest and inside the cookers nest taus computer. The computer was a fabulous machine. It was a sorcery computer which was a Z80 machine. No color, no sound. Black and white. No graphics. It was not much to ride home about but we absolutely loved it.
+
+[0:02:44] Paul and I and all our nerdy friends would spend as much time as we possibly could in the cooker nest using the computer, the and writing games.
+
+## Locating the lost game
+
+[0:02:55] Wilderness was one of the games and was everything you would recognize to be a Roguelike. It was magic, casting spells and scrolls, finding treasure, wandering through the wilderness, encountering random monsters, leveling up and hit points. It was terrific. But of course, Paul and I ended up leaving that school and moved on to other things. And the sourcery became an obsolete computer but over the years Paul and I continued to speak about wilderness and were nostalgic for wilderness. What we did was we continued to talk about it. I searched for Wilderness for many years and there was no sign of it. I would post messages in the forums and you can see there is a picture I found a YouTube
+
+[0:04:01] video where a guy made a video of his types and one said Wilderness so I knew it was out there. I posted a message to the thread and he didn't reply. I started collecting vintage computers and did it for 15 years with no sign of one turning up. Eventually one day, I saw on a local classified sites one came up for sale and it was only down the road. I went down the road, gave him the money, put the equipment in my car and sat there and felt like my God, I may have found Wilderness after all these years. It was an incredible find. It wasn't just the X80 computer but the expansion unit. It was two disk drives. A green screen monitor and a whole bunch of floppy disks. I took it all back home and turned it on and bang pop and the smell of smoke and, of course,
+
+[0:05:08] the 40-year old capacitors are not survived, so I had to send the machine off to get it repaired and when I got it back, I had to try again to get it fired up. I got the machine fired up and started having a look through the disks. Of course, fortunately on one of the disk there was a file called wilder.dos and I knew it was found. There it was.
+
+## Playing original Wilderness
+
+[0:05:36] After 40 years I had found Wilderness. Where found by brother Paul who lives in London and is watching today. I said Paul I found Wilderness and he couldn't believe I had found it and gone to the trouble of digging it up and I had to write a file transfer program to get it off the computer. Let's have a look at what Wilderness is like. Let's play wilderness. We will talk in run because it is a basic program. We will select beginner because as far as Roguelikes go this is a brutally difficult game. We have good stuff. The way you play the game is hit A to advance through the wilderness.
+
+[0:06:41] It paints that little map. You can see you are the person in the middle of the map and you are surrounded by trees. As you advance through the Wilderness, you can see other things appear on the map. That was a U which was an entrance to the underworld. The F indicate the monster. We will type ID to identify the monster. They are bats. Let's attack with our sword. We killed a bat and went up a level. What the you can do is type in AX to see the experience levels that you need to go up and how many experience points you need. You can type in A0 to get a list of all monsters in the game. There is all kinds of weird ones. There is also -- we can continue through the wilderness
+
+[0:07:45] and there is an entrance to the underworld and we will type ID to enter the under world. Entrance to underworld found. Going down. Yes we are. Now, the underworld in wilderness is a strange thing because it is very much like the old game hunt the whompers. When you land in a room you have to hit ID to see if there is other monsters. M slash and the room number to go to a different room number. This room has four big worms in it. We are going to be in big trouble unless we can cast magic to sort them out. Let's read a scroll. We will read a power wood killed scroll. The power wood killed four greeblies.
+
+[0:08:46] That is awesome. We will search. That is a quick look at what Wilderness is about. OK. As a bonus, one other thing is that Paul and I actually a few years later in 1984, mostly
+
+## Commodore 64 version
+
+[0:09:05] Paul wrote a version of wilderness for our own home computer which was a Commodore 64. I helped Paul write it. It was preserved because I sent a printout who printed it in a magazine and I kept a copy for all of the years. For the Roguelike Celebration 2020 I added into a mushine and edited to get all the bugs out and got it running just to give you a quick demo. Let's have a quick look at wilderness for the 64. This is a rapid look at the c-64 version of wilderness built by Paul and I on the C-64 that we eventually got at home. Let's move through the Wilderness. It paints a similar map to Wilderness.
+
+[0:10:07] Person in the center and trees all around. You move through the wildernize -- wilderness, monsters are likely to appear. We killed the greeblie and let's keep moving through the Wilderness. That is the C-64 version of Wilderness that Paul and I built way back in 1984.
+
+## Conclusion and mystery
+
+[0:10:41] >> And the final mystery, who wrote Wilderness? I don't think we will ever know. I couldn't mind it in all of my research and nothing in the source code to indicate who wrote it. The source code is on GitHub if you want to have a look. Thanks for listening and happy questing. EMCEE: People in the chat were very excited and they are going to look at the sources on GitHub.

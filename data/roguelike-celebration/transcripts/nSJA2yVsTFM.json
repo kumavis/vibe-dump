@@ -1,0 +1,1836 @@
+{
+ "id": "nSJA2yVsTFM",
+ "url": "https://www.youtube.com/watch?v=nSJA2yVsTFM",
+ "title": "Nic Tringali- Abstract Space Exploration in The Banished Vault",
+ "speaker": "Nic Tringali",
+ "talk_title": "Abstract Space Exploration in The Banished Vault",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 1761,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "The Banished Vault features heavily abstracted solar systems, but nevertheless has a large degree of exploration that combine multiple kinds of costs, terrain, and rewards. Designer Nic Tringali breaks down all the various components of the exploration model, discussing how some elements are inverted from typical models, and the ultimate design goals and player experience.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 112,
+   "title": "Game Overview"
+  },
+  {
+   "start": 143,
+   "title": "Delta V Map"
+  },
+  {
+   "start": 197,
+   "title": "Grid"
+  },
+  {
+   "start": 232,
+   "title": "Dice Rolls"
+  },
+  {
+   "start": 276,
+   "title": "Size"
+  },
+  {
+   "start": 473,
+   "title": "Starting Points"
+  },
+  {
+   "start": 752,
+   "title": "Player Goals"
+  },
+  {
+   "start": 892,
+   "title": "Player Exploration"
+  },
+  {
+   "start": 1070,
+   "title": "Planning"
+  },
+  {
+   "start": 1352,
+   "title": "Theme"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4218,
+ "trimmed": {
+  "segments": 177,
+  "words": 1813
+ },
+ "segments": [
+  {
+   "t": 7.14,
+   "d": 1.0,
+   "text": "NIC: Hi."
+  },
+  {
+   "t": 8.14,
+   "d": 1.0,
+   "text": "Thank you."
+  },
+  {
+   "t": 10.44,
+   "d": 1.0,
+   "text": "ALEXEI: Let me do your intro."
+  },
+  {
+   "t": 14.11,
+   "d": 1.0,
+   "text": "We are very excited our second speaker is Nic Tringali who is a game designer at Bithell"
+  },
+  {
+   "t": 19.29,
+   "d": 1.0,
+   "text": "Games' Lunar Division."
+  },
+  {
+   "t": 26.87,
+   "d": 2.09,
+   "text": "They are most known The Banished Vault, sun dogs and have a particular interest in science"
+  },
+  {
+   "t": 28.96,
+   "d": 1.73,
+   "text": "fiction, Tabletop and analog design and the rich interaction between players and game"
+  },
+  {
+   "t": 30.69,
+   "d": 1.0,
+   "text": "systems."
+  },
+  {
+   "t": 31.69,
+   "d": 5.54,
+   "text": "I am very excited to have you at Roguelike Celebration because man a lot of people were"
+  },
+  {
+   "t": 37.23,
+   "d": 3.01,
+   "text": "very happy with The Banished Vault."
+  },
+  {
+   "t": 40.24,
+   "d": 1.0,
+   "text": "NIC: That's great."
+  },
+  {
+   "t": 41.24,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 42.24,
+   "d": 4.77,
+   "text": "I am glad they were not very mad at the game then."
+  },
+  {
+   "t": 47.01,
+   "d": 3.93,
+   "text": "ALEXEI: Go ahead and take it away."
+  },
+  {
+   "t": 50.94,
+   "d": 1.13,
+   "text": "NIC: Thank you."
+  },
+  {
+   "t": 52.07,
+   "d": 1.14,
+   "text": "I am Nic."
+  },
+  {
+   "t": 53.21,
+   "d": 3.53,
+   "text": "I have been in the industry for I don't know 8-10 years."
+  },
+  {
+   "t": 56.74,
+   "d": 4.69,
+   "text": "I have worked on I think about 9 games in that time."
+  },
+  {
+   "t": 61.43,
+   "d": 5.02,
+   "text": "The Banished Vault we released this year is a game about procedurally exploring procedurally"
+  },
+  {
+   "t": 66.45,
+   "d": 6.01,
+   "text": "generated solar systems doing resource and tile management and you have a crew of exiles"
+  },
+  {
+   "t": 72.46,
+   "d": 8.19,
+   "text": "going around to planets, you roll dice, try to get out before your time is up, and what"
+  },
+  {
+   "t": 80.65,
+   "d": 3.93,
+   "text": "I want to talk about today is the exploration design."
+  },
+  {
+   "t": 84.58,
+   "d": 3.02,
+   "text": "How the player kind of explores the game."
+  },
+  {
+   "t": 87.6,
+   "d": 8.53,
+   "text": "A lot of this is not something we set out from the beginning necessarily, and just some"
+  },
+  {
+   "t": 96.13,
+   "d": 4.52,
+   "text": "lessons that you kind of learned after my game is out and watching people play, so there"
+  },
+  {
+   "t": 100.65,
+   "d": 5.07,
+   "text": "is a little bit of -- our goals from the beginning and some kind of figuring things out and seeing"
+  },
+  {
+   "t": 105.72,
+   "d": 4.46,
+   "text": "how people interact with the game afterwards."
+  },
+  {
+   "t": 110.18,
+   "d": 3.48,
+   "text": "And that is not working so I will -- great."
+  },
+  {
+   "t": 113.66,
+   "d": 4.02,
+   "text": "First I want to go through a couple screen shots of the game and setup the sort of loop"
+  },
+  {
+   "t": 117.68,
+   "d": 2.68,
+   "text": "or the general pattern that the players go under."
+  },
+  {
+   "t": 120.36,
+   "d": 6.07,
+   "text": "So you first arrive in a solar system with your vault which is a gothic monastery that's"
+  },
+  {
+   "t": 126.43,
+   "d": 6.01,
+   "text": "a generation ship and you are kind of on the run traveling from the solar system and the"
+  },
+  {
+   "t": 132.44,
+   "d": 3.83,
+   "text": "vault carries everything the player has."
+  },
+  {
+   "t": 136.27,
+   "d": 7.36,
+   "text": "Characters which are exiles and the resources, your ships, and all that."
+  },
+  {
+   "t": 143.63,
+   "d": 6.75,
+   "text": "You then are presented with the map of the game which is a kind of tree structure of"
+  },
+  {
+   "t": 150.38,
+   "d": 1.41,
+   "text": "the solar system."
+  },
+  {
+   "t": 151.79,
+   "d": 3.31,
+   "text": "This is essentially what's called a delta v map."
+  },
+  {
+   "t": 155.1,
+   "d": 6.45,
+   "text": "What it does is heavily abstract the solar system, right?"
+  },
+  {
+   "t": 161.55,
+   "d": 5.52,
+   "text": "As opposed to kind of seeing, you know, orbiting bodies floating around the sun, you see everything"
+  },
+  {
+   "t": 167.07,
+   "d": 5.07,
+   "text": "in terms of energy to go from one stable orbit to another stable orbit."
+  },
+  {
+   "t": 172.14,
+   "d": 5.97,
+   "text": "You can see all the little nodes and locations on the solar system in between the planets"
+  },
+  {
+   "t": 178.11,
+   "d": 4.47,
+   "text": "and moons and so on have an energy cost to travel in between."
+  },
+  {
+   "t": 182.58,
+   "d": 5.55,
+   "text": "As opposed to thinking through travel as like this kind of continuous problem of distance"
+  },
+  {
+   "t": 188.13,
+   "d": 5.8,
+   "text": "and timing and so on, the player just has one number or maybe two of like energy or"
+  },
+  {
+   "t": 193.93,
+   "d": 4.41,
+   "text": "thrust."
+  },
+  {
+   "t": 198.34,
+   "d": 6.26,
+   "text": "Once the player arrives at planet, you are presented with a grid and the grid has resources"
+  },
+  {
+   "t": 204.6,
+   "d": 5.25,
+   "text": "and a kind of terrain that the player will gather resources from, you construct buildings"
+  },
+  {
+   "t": 209.85,
+   "d": 6.87,
+   "text": "on and eventually create fuel and stasis and the things you need to survive the solar system"
+  },
+  {
+   "t": 216.72,
+   "d": 4.96,
+   "text": "and complete the run of the game itself."
+  },
+  {
+   "t": 221.68,
+   "d": 7.47,
+   "text": "There are also secondary objectives like the artifacts or just, you know, more long term"
+  },
+  {
+   "t": 229.15,
+   "d": 4.24,
+   "text": "plans as opposed to just your survival."
+  },
+  {
+   "t": 233.39,
+   "d": 3.77,
+   "text": "And then lastly, the player encounters a lot of randomness and a lot of uncertainty in"
+  },
+  {
+   "t": 237.16,
+   "d": 1.44,
+   "text": "the game."
+  },
+  {
+   "t": 238.6,
+   "d": 5.14,
+   "text": "Probably the most visible one to the player are the dice rolls that represent the hazards."
+  },
+  {
+   "t": 243.74,
+   "d": 4.3,
+   "text": "So moving between two certain locations in the solar system will be hazardous."
+  },
+  {
+   "t": 248.04,
+   "d": 5.48,
+   "text": "You have to roll some dice or constructing buildings over certain space on the grid will"
+  },
+  {
+   "t": 253.52,
+   "d": 1.58,
+   "text": "require you to roll some dice."
+  },
+  {
+   "t": 255.1,
+   "d": 6.32,
+   "text": "And the dice roll essentially just cost the player an additional resource that is unknown."
+  },
+  {
+   "t": 261.42,
+   "d": 5.37,
+   "text": "It might be your exile's faith or they might lose actions or you get penalized and lose"
+  },
+  {
+   "t": 266.79,
+   "d": 5.22,
+   "text": "other resources you were carrying with you but it resolves down to you suffer an additional"
+  },
+  {
+   "t": 272.01,
+   "d": 5.68,
+   "text": "penalty if you can't succeed in the dice roll."
+  },
+  {
+   "t": 277.69,
+   "d": 7.35,
+   "text": "From the beginning, we had some kind of emotional goals that we wanted to set out for the player"
+  },
+  {
+   "t": 285.04,
+   "d": 1.44,
+   "text": "to experience."
+  },
+  {
+   "t": 286.48,
+   "d": 2.41,
+   "text": "The first one being size."
+  },
+  {
+   "t": 288.89,
+   "d": 4.99,
+   "text": "The game is, you know, somewhat abstract in its presentation but we wanted to emphasize"
+  },
+  {
+   "t": 293.88,
+   "d": 5.43,
+   "text": "to the player these planets are very big, space is very huge, it takes a long time to"
+  },
+  {
+   "t": 299.31,
+   "d": 2.36,
+   "text": "travel from one to another."
+  },
+  {
+   "t": 301.67,
+   "d": 8.18,
+   "text": "We want the game to be hostile to the player and have the emotion of hostility of traveling"
+  },
+  {
+   "t": 309.85,
+   "d": 2.39,
+   "text": "in outer space."
+  },
+  {
+   "t": 312.24,
+   "d": 7.81,
+   "text": "And unpredictability is the general concept of roguelikes and run-base games and ultimately"
+  },
+  {
+   "t": 320.05,
+   "d": 5.0,
+   "text": "all three are wrapped up given to the player and we want the player to overcome those because"
+  },
+  {
+   "t": 325.05,
+   "d": 5.72,
+   "text": "they are imposing on the experience and if they can overcome it that is the positive"
+  },
+  {
+   "t": 330.77,
+   "d": 4.88,
+   "text": "emotion we want the player to have."
+  },
+  {
+   "t": 335.65,
+   "d": 8.78,
+   "text": "The size is important because the player needs to feel isolated and it should feel difficult"
+  },
+  {
+   "t": 344.43,
+   "d": 7.33,
+   "text": "and large and vast as opposed to what the visual presentation of the game is quite abstract,"
+  },
+  {
+   "t": 351.76,
+   "d": 6.51,
+   "text": "you know, you can zoom out and see most of the solar system in one kind of view on screen,"
+  },
+  {
+   "t": 358.27,
+   "d": 1.0,
+   "text": "right?"
+  },
+  {
+   "t": 359.27,
+   "d": 7.36,
+   "text": "And so the size is brought back in with how the player understands the resources and how"
+  },
+  {
+   "t": 366.63,
+   "d": 3.83,
+   "text": "they understand movement throughout the solar system."
+  },
+  {
+   "t": 370.46,
+   "d": 6.82,
+   "text": "The abstraction of the numbers starts to say OK, well, if this, you know, going from orbit"
+  },
+  {
+   "t": 377.28,
+   "d": 4.78,
+   "text": "to the surface of this planet is only five energy that might only cost a little bit of"
+  },
+  {
+   "t": 382.06,
+   "d": 9.82,
+   "text": "fuel but if you see another planet that takes 10 energy to land the fuel cost might be three"
+  },
+  {
+   "t": 391.88,
+   "d": 2.11,
+   "text": "times as much as opposed to double."
+  },
+  {
+   "t": 393.99,
+   "d": 6.44,
+   "text": "So the size becomes an important factor in how all the values of the resources play together"
+  },
+  {
+   "t": 400.43,
+   "d": 4.75,
+   "text": "to counteract the abstraction of the map."
+  },
+  {
+   "t": 405.18,
+   "d": 6.75,
+   "text": "The hostility theme is tricky because it does not really work for everyone."
+  },
+  {
+   "t": 411.93,
+   "d": 5.53,
+   "text": "It is not necessarily like a positive or interesting thing inherently."
+  },
+  {
+   "t": 417.46,
+   "d": 4.33,
+   "text": "But it was something that we realized was sort of coming into the game given some other"
+  },
+  {
+   "t": 421.79,
+   "d": 2.26,
+   "text": "elements that I will go into."
+  },
+  {
+   "t": 424.05,
+   "d": 5.88,
+   "text": "Once we realize that was kind of a factor in what the game was doing, we sort of leaned"
+  },
+  {
+   "t": 429.93,
+   "d": 7.71,
+   "text": "into it, and the theme became this more gothic, harsh and austere presentation and esthetic"
+  },
+  {
+   "t": 437.64,
+   "d": 6.93,
+   "text": "but from a design point of view the hostility is brought in in how the player's mistakes"
+  },
+  {
+   "t": 444.57,
+   "d": 9.8,
+   "text": "are punished which are very quickly and usually quite sharp with a lot of impacts throughout"
+  },
+  {
+   "t": 454.37,
+   "d": 5.04,
+   "text": "the overall player's state and how they will achieve their goals."
+  },
+  {
+   "t": 459.41,
+   "d": 4.64,
+   "text": "The unpredictability is what the rest of the talk is about."
+  },
+  {
+   "t": 464.05,
+   "d": 6.16,
+   "text": "Exploration is about resolving an unpredictable situation."
+  },
+  {
+   "t": 470.21,
+   "d": 4.64,
+   "text": "That's essentially what I am going to be going into further."
+  },
+  {
+   "t": 474.85,
+   "d": 5.49,
+   "text": "And with the starting points on the design, from the beginning of the game, we had a few"
+  },
+  {
+   "t": 480.34,
+   "d": 2.65,
+   "text": "key elements to bring in."
+  },
+  {
+   "t": 482.99,
+   "d": 2.05,
+   "text": "The first was starting with realistic math."
+  },
+  {
+   "t": 485.04,
+   "d": 6.79,
+   "text": "This image-only the screen is the -- on the -- is the rocket equation which is essentially"
+  },
+  {
+   "t": 491.83,
+   "d": 10.17,
+   "text": "just like if you have a transit craft -- Tsiolkovsky rocket -- and you will gain mass."
+  },
+  {
+   "t": 502.0,
+   "d": 6.02,
+   "text": "Essentially we wanted the player to know that beneath the hood, right, there is an almost"
+  },
+  {
+   "t": 508.02,
+   "d": 6.77,
+   "text": "very realistic math going on so that they can understand how the size of the solar systems"
+  },
+  {
+   "t": 514.79,
+   "d": 1.49,
+   "text": "are generated, right?"
+  },
+  {
+   "t": 516.28,
+   "d": 5.09,
+   "text": "It is not necessarily oh, I can just spend an easy amount of fuel to get wherever I want"
+  },
+  {
+   "t": 521.37,
+   "d": 1.18,
+   "text": "to go."
+  },
+  {
+   "t": 522.55,
+   "d": 5.82,
+   "text": "Once the player knows that the fuel I'm bringing on to the ship or how the ship's mass relates"
+  },
+  {
+   "t": 528.37,
+   "d": 5.64,
+   "text": "to the energy that they can create with the fuel and engine that they have, they can start"
+  },
+  {
+   "t": 534.01,
+   "d": 5.93,
+   "text": "to understand oh, this planet that is maybe only a few steps away from the planet I am"
+  },
+  {
+   "t": 539.94,
+   "d": 4.92,
+   "text": "on but it takes twice as much energy to get there which means it will take four times"
+  },
+  {
+   "t": 544.86,
+   "d": 5.9,
+   "text": "as much fuel begins to kind of impress upon the player how far away everything actually"
+  },
+  {
+   "t": 550.76,
+   "d": 2.1,
+   "text": "is."
+  },
+  {
+   "t": 552.86,
+   "d": 6.17,
+   "text": "The second design starting element was the idea of physically located resources."
+  },
+  {
+   "t": 559.03,
+   "d": 6.51,
+   "text": "In a typical kind of colony or city building game or whatever the player gathers a resource,"
+  },
+  {
+   "t": 565.54,
+   "d": 7.61,
+   "text": "and it is either immediately whist away into an ether where they can get it later or it"
+  },
+  {
+   "t": 573.15,
+   "d": 6.6,
+   "text": "an agent puts it into a warehouse and later when they want to access it the agent takes"
+  },
+  {
+   "t": 579.75,
+   "d": 2.21,
+   "text": "it back."
+  },
+  {
+   "t": 581.96,
+   "d": 8.1,
+   "text": "The player may notice efficiency but it is more obfuscated."
+  },
+  {
+   "t": 590.06,
+   "d": 6.77,
+   "text": "I wanted to say here when you gather a resource on a planet it is on that planet."
+  },
+  {
+   "t": 596.83,
+   "d": 6.85,
+   "text": "If you want to take it somewhere else, you need ship, fuel, engine, navigator, and figure"
+  },
+  {
+   "t": 603.68,
+   "d": 5.29,
+   "text": "out how much that is going to cost to bring that resource scenario else to do whatever"
+  },
+  {
+   "t": 608.97,
+   "d": 2.07,
+   "text": "-- somewhere -- it is with it."
+  },
+  {
+   "t": 611.04,
+   "d": 9.44,
+   "text": "This imposition the player is how the hostility thing kale came about."
+  },
+  {
+   "t": 620.48,
+   "d": 10.22,
+   "text": "I need to bring this water and didn't bring enough fuel because you are still learning"
+  },
+  {
+   "t": 630.7,
+   "d": 8.98,
+   "text": "the game and that's difficult for the players as you learn the game to unpack and gather."
+  },
+  {
+   "t": 639.68,
+   "d": 2.12,
+   "text": "This also relates to the size theme as well."
+  },
+  {
+   "t": 641.8,
+   "d": 7.67,
+   "text": "You can see there is water here but iron there and it is sort of pulls everything apart or"
+  },
+  {
+   "t": 649.47,
+   "d": 6.75,
+   "text": "sorry spreads everything apart for the player's goals and understandings on how they will"
+  },
+  {
+   "t": 656.22,
+   "d": 2.88,
+   "text": "get to what they want to do."
+  },
+  {
+   "t": 659.1,
+   "d": 7.07,
+   "text": "And then the last much more vague design element that I was thinking about at the beginning"
+  },
+  {
+   "t": 666.17,
+   "d": 1.6,
+   "text": "was the idea of like believability, right?"
+  },
+  {
+   "t": 667.77,
+   "d": 3.1,
+   "text": "Just kind of space exploration being believable."
+  },
+  {
+   "t": 670.87,
+   "d": 6.11,
+   "text": "This was a little bit before the gothic theme came in but persisted throughout sort of."
+  },
+  {
+   "t": 676.98,
+   "d": 6.82,
+   "text": "And where this started was a thought I had about space exploration now, right?"
+  },
+  {
+   "t": 683.8,
+   "d": 3.7,
+   "text": "Humans exploring space with probes or whatever."
+  },
+  {
+   "t": 687.5,
+   "d": 7.08,
+   "text": "And this idea that we know quite a bit about the places in our solar system, or even in"
+  },
+  {
+   "t": 694.58,
+   "d": 6.3,
+   "text": "our galaxy, we can take spectrographic analysis of planets and moons and say, you know, there"
+  },
+  {
+   "t": 700.88,
+   "d": 6.82,
+   "text": "is iron on mars or water on wherever, you know, volcanos and so on."
+  },
+  {
+   "t": 707.7,
+   "d": 10.6,
+   "text": "We have no much information but it is so distant and when we arrive it isn't what we knew and"
+  },
+  {
+   "t": 718.3,
+   "d": 8.82,
+   "text": "there is so much process of getting there so it becomes an unknown journey with a relatively"
+  },
+  {
+   "t": 727.12,
+   "d": 3.86,
+   "text": "known goal."
+  },
+  {
+   "t": 730.98,
+   "d": 8.65,
+   "text": "This is like you are in a desert and wandering around and quest the Dune and see an oasis"
+  },
+  {
+   "t": 739.63,
+   "d": 5.64,
+   "text": "and you might know there is an oasis in the Dune but you don't know."
+  },
+  {
+   "t": 745.27,
+   "d": 7.35,
+   "text": "There is a weird inversion there I thought was interesting and wanted to play with."
+  },
+  {
+   "t": 752.62,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 753.62,
+   "d": 6.59,
+   "text": "So to kind of switch perspectives to the player's point of view, the player has goals."
+  },
+  {
+   "t": 760.21,
+   "d": 3.92,
+   "text": "They arrive in a solar system and have a set of things they want to do."
+  },
+  {
+   "t": 764.13,
+   "d": 2.36,
+   "text": "The first is they need resources."
+  },
+  {
+   "t": 766.49,
+   "d": 4.88,
+   "text": "There is a set of basic resources that you can gather from planets and there is some"
+  },
+  {
+   "t": 771.37,
+   "d": 4.85,
+   "text": "slightly more important ones or ones that are slightly more vital for immediate survival"
+  },
+  {
+   "t": 776.22,
+   "d": 9.6,
+   "text": "-- iron, water, titanium to make stasis and then the player looks for space to build buildings."
+  },
+  {
+   "t": 785.82,
+   "d": 6.15,
+   "text": "Constructing a building lets you gather resource and convert them into making fuel or stasis"
+  },
+  {
+   "t": 791.97,
+   "d": 1.56,
+   "text": "or whatever."
+  },
+  {
+   "t": 793.53,
+   "d": 5.77,
+   "text": "Building space is a very limited, you know, kind of resource that the player has because"
+  },
+  {
+   "t": 799.3,
+   "d": 3.91,
+   "text": "you can't move or destroy a building once it is constructed, right?"
+  },
+  {
+   "t": 803.21,
+   "d": 4.78,
+   "text": "So there is some figuring out the player has to know on, you know, where am I going to"
+  },
+  {
+   "t": 807.99,
+   "d": 6.76,
+   "text": "build some buildings, on which planets, how much space do I actually have and so on."
+  },
+  {
+   "t": 814.75,
+   "d": 8.55,
+   "text": "After that the player will start examining secondary so getting artifacts to unlock abilities"
+  },
+  {
+   "t": 823.3,
+   "d": 2.74,
+   "text": "or other buildings."
+  },
+  {
+   "t": 826.04,
+   "d": 9.61,
+   "text": "And/or resources that are long term style like creating a faith which takes down every"
+  },
+  {
+   "t": 835.65,
+   "d": 3.55,
+   "text": "exile over the course of the game or the run."
+  },
+  {
+   "t": 839.2,
+   "d": 5.68,
+   "text": "And then all together the player is thinking about optimization in a weigh sense."
+  },
+  {
+   "t": 844.88,
+   "d": 9.26,
+   "text": "So the value -- vague -- and element create an abstract terrain in the player's mind."
+  },
+  {
+   "t": 854.14,
+   "d": 8.28,
+   "text": "They can see where all the are resources are, where the action any is the best utilized"
+  },
+  {
+   "t": 862.42,
+   "d": 5.54,
+   "text": "and then the player will start assembling the shortest route to create as many goals."
+  },
+  {
+   "t": 867.96,
+   "d": 10.92,
+   "text": "They want to do as many things as possible while spending as few resources as they can."
+  },
+  {
+   "t": 878.88,
+   "d": 8.23,
+   "text": "So then the exploration starts to essentially say how does the player convert the amount"
+  },
+  {
+   "t": 887.11,
+   "d": 4.26,
+   "text": "of unknown information in the solar system to known information to then complete those"
+  },
+  {
+   "t": 891.37,
+   "d": 1.85,
+   "text": "goals?"
+  },
+  {
+   "t": 893.22,
+   "d": 5.35,
+   "text": "So we will start by examining what does the player know when they arrive in a solar system."
+  },
+  {
+   "t": 898.57,
+   "d": 3.84,
+   "text": "What they know is where actually all the resources are."
+  },
+  {
+   "t": 902.41,
+   "d": 3.47,
+   "text": "Right from the start, you can see exactly where everything is."
+  },
+  {
+   "t": 905.88,
+   "d": 6.42,
+   "text": "There is no secret or hidden resources, no surprise resources, everything is shown to"
+  },
+  {
+   "t": 912.3,
+   "d": 2.84,
+   "text": "you clearly on the map."
+  },
+  {
+   "t": 915.14,
+   "d": 6.91,
+   "text": "The player has a good idea of which resources they need to complete their goals, right?"
+  },
+  {
+   "t": 922.05,
+   "d": 6.61,
+   "text": "The game's manual says you need this much of this to build a building."
+  },
+  {
+   "t": 928.66,
+   "d": 7.38,
+   "text": "The player can specifically say how much fuel it will take to get to any specific place"
+  },
+  {
+   "t": 936.04,
+   "d": 1.89,
+   "text": "in the solar system."
+  },
+  {
+   "t": 937.93,
+   "d": 9.83,
+   "text": "There is no way you might accidentally spend more fuel unless you make a mistake, I suppose."
+  },
+  {
+   "t": 947.76,
+   "d": 6.44,
+   "text": "And then lastly, the cost to actually get those resources, right, the kind of input"
+  },
+  {
+   "t": 954.2,
+   "d": 9.0,
+   "text": "of fuel, and time and whatever is mostly known because of hazards and so that will then start"
+  },
+  {
+   "t": 963.2,
+   "d": 5.89,
+   "text": "to transition to what are the players not knowing about the environment that they are"
+  },
+  {
+   "t": 969.09,
+   "d": 1.0,
+   "text": "in."
+  },
+  {
+   "t": 970.09,
+   "d": 5.76,
+   "text": "The exact cost of travel is a bit unknown because of the hazard result, right?"
+  },
+  {
+   "t": 975.85,
+   "d": 6.1,
+   "text": "You can say, OK, it will take me this much fuel and I can bring this many things with"
+  },
+  {
+   "t": 981.95,
+   "d": 4.8,
+   "text": "me when I arrive at this planet, but I will have to cross a hazard which rolls dice and"
+  },
+  {
+   "t": 986.75,
+   "d": 9.24,
+   "text": "that hazard may impose another penalty on me in action or faith or whatever, right?"
+  },
+  {
+   "t": 995.99,
+   "d": 5.68,
+   "text": "Then they don't know what the grid on the location has for them; right?"
+  },
+  {
+   "t": 1001.67,
+   "d": 6.45,
+   "text": "The grid space is semi randomized in how it will fit building and how large it is."
+  },
+  {
+   "t": 1008.12,
+   "d": 4.45,
+   "text": "Additionally, resources can actually be mutually exclusive."
+  },
+  {
+   "t": 1012.57,
+   "d": 5.47,
+   "text": "If you look in the background of the grid on this slide here, on the kind of center"
+  },
+  {
+   "t": 1018.04,
+   "d": 6.73,
+   "text": "right, there is a Titanium and iron resource and everything is a building that can't be"
+  },
+  {
+   "t": 1024.77,
+   "d": 7.59,
+   "text": "moved or deleted so constructing either would preclude the player from constructing the"
+  },
+  {
+   "t": 1032.36,
+   "d": 1.11,
+   "text": "other one."
+  },
+  {
+   "t": 1033.47,
+   "d": 5.84,
+   "text": "So while every potential resource is shown to the player on the map view, when you arrive"
+  },
+  {
+   "t": 1039.31,
+   "d": 5.49,
+   "text": "at a planet it might actually resolve into only a subset of those."
+  },
+  {
+   "t": 1044.8,
+   "d": 5.13,
+   "text": "And then finally, the exact costs of then accessing those resources specifically, right?"
+  },
+  {
+   "t": 1049.93,
+   "d": 3.57,
+   "text": "Which are hazards again and then as well as concept of depth."
+  },
+  {
+   "t": 1053.5,
+   "d": 9.22,
+   "text": "A resource like the titanium can be at a depth of 1, 2, 3 which requires an excavator building"
+  },
+  {
+   "t": 1062.72,
+   "d": 8.4,
+   "text": "which is a cost of resources and grid space because it is in itself a building."
+  },
+  {
+   "t": 1071.12,
+   "d": 6.8,
+   "text": "All together this creates a model that the exploration operates under which is the player"
+  },
+  {
+   "t": 1077.92,
+   "d": 3.18,
+   "text": "knows what they will get but not at what cost."
+  },
+  {
+   "t": 1081.1,
+   "d": 5.29,
+   "text": "So the outcome is pretty set in their goals, right?"
+  },
+  {
+   "t": 1086.39,
+   "d": 6.67,
+   "text": "Resources, actions, the kind of economy of all those things but the unknown costs starts"
+  },
+  {
+   "t": 1093.06,
+   "d": 8.54,
+   "text": "to affect what the player does with how they start to attack those goals, right?"
+  },
+  {
+   "t": 1101.6,
+   "d": 4.28,
+   "text": "Which is what do you bring on your ships to construct your buildings?"
+  },
+  {
+   "t": 1105.88,
+   "d": 4.7,
+   "text": "Do you want to bring in extra spare resources to account for variability?"
+  },
+  {
+   "t": 1110.58,
+   "d": 2.55,
+   "text": "And so on."
+  },
+  {
+   "t": 1113.13,
+   "d": 6.75,
+   "text": "What this does in kind of totality for the player is create a big frontloaded kind of"
+  },
+  {
+   "t": 1119.88,
+   "d": 3.82,
+   "text": "overhead of planning."
+  },
+  {
+   "t": 1123.7,
+   "d": 8.2,
+   "text": "Planning is essentially the entire exploration of the game which is what the player does"
+  },
+  {
+   "t": 1131.9,
+   "d": 2.67,
+   "text": "before they do anything."
+  },
+  {
+   "t": 1134.57,
+   "d": 6.78,
+   "text": "Firstly, planning is the player trying to search for an optimal route through the abstract"
+  },
+  {
+   "t": 1141.35,
+   "d": 1.74,
+   "text": "terrain."
+  },
+  {
+   "t": 1143.09,
+   "d": 3.82,
+   "text": "They have this big, you know, multivariable problem in front of them and they are trying"
+  },
+  {
+   "t": 1146.91,
+   "d": 3.44,
+   "text": "to unpack it and figure out what they want to do with it."
+  },
+  {
+   "t": 1150.35,
+   "d": 6.63,
+   "text": "The game by extension me as the designer are trying to destabilize the player from doing"
+  },
+  {
+   "t": 1156.98,
+   "d": 1.0,
+   "text": "those things."
+  },
+  {
+   "t": 1157.98,
+   "d": 4.12,
+   "text": "I don't want there to be one clear path to their goal."
+  },
+  {
+   "t": 1162.1,
+   "d": 8.15,
+   "text": "I will always want there to be options or two difficult routes or tradeoffs or whatever."
+  },
+  {
+   "t": 1170.25,
+   "d": 7.88,
+   "text": "Secondly, the player, the planning is managing the risk of unknown costs."
+  },
+  {
+   "t": 1178.13,
+   "d": 5.18,
+   "text": "That risk almost becomes a sort of like meta resource that the player starts grappling"
+  },
+  {
+   "t": 1183.31,
+   "d": 5.79,
+   "text": "which can be extra resources to construct the excavator buildings you might need or"
+  },
+  {
+   "t": 1189.1,
+   "d": 6.6,
+   "text": "if you lose resources during a hazard you might consider risk as an exile of another"
+  },
+  {
+   "t": 1195.7,
+   "d": 4.14,
+   "text": "character to bring on your ship unless you roll a hazard poorly and they lose faith and"
+  },
+  {
+   "t": 1199.84,
+   "d": 5.41,
+   "text": "can't navigate and that has knock on effects so you might bring in more spare people which"
+  },
+  {
+   "t": 1205.25,
+   "d": 2.71,
+   "text": "is more actions."
+  },
+  {
+   "t": 1207.96,
+   "d": 7.25,
+   "text": "The risks becomes this broader category that the player will start thinking about."
+  },
+  {
+   "t": 1215.21,
+   "d": 8.74,
+   "text": "The planning starts to then become the player charting an order path through chaotic but"
+  },
+  {
+   "t": 1223.95,
+   "d": 1.96,
+   "text": "known information."
+  },
+  {
+   "t": 1225.91,
+   "d": 4.33,
+   "text": "There is a set amount of information in a sense but it is so broad and so chaotic you"
+  },
+  {
+   "t": 1230.24,
+   "d": 4.98,
+   "text": "can't fully grapple with it and have to figure out what you want to do."
+  },
+  {
+   "t": 1235.22,
+   "d": 6.22,
+   "text": "This is only true because the game tells you where your goals are."
+  },
+  {
+   "t": 1241.44,
+   "d": 6.64,
+   "text": "The player in a sense does not necessarily explore by getting new information about their"
+  },
+  {
+   "t": 1248.08,
+   "d": 1.0,
+   "text": "goals."
+  },
+  {
+   "t": 1249.08,
+   "d": 7.04,
+   "text": "The player explores by determining what route they want to take through this chaos, right?"
+  },
+  {
+   "t": 1256.12,
+   "d": 5.32,
+   "text": "If the reverse were true about the game being hidden the game would be too hard and the"
+  },
+  {
+   "t": 1261.44,
+   "d": 5.58,
+   "text": "amount of time the player has to spend to the goals and the physicality of the resources"
+  },
+  {
+   "t": 1267.02,
+   "d": 5.23,
+   "text": "becomes unfair and from the player's point of view starts to feel too much like output"
+  },
+  {
+   "t": 1272.25,
+   "d": 4.38,
+   "text": "randomness even though it is not."
+  },
+  {
+   "t": 1276.63,
+   "d": 6.49,
+   "text": "The second to last plan, there planning is essentially the player creating a system to"
+  },
+  {
+   "t": 1283.12,
+   "d": 4.63,
+   "text": "unravel the game and from my point of view, hopefully a flawed system."
+  },
+  {
+   "t": 1287.75,
+   "d": 4.33,
+   "text": "I don't want the player to perfectly succeed at their goals."
+  },
+  {
+   "t": 1292.08,
+   "d": 8.97,
+   "text": "I want there to always be some kind of uncertainty and in a sense, the truest uncertainty and"
+  },
+  {
+   "t": 1301.05,
+   "d": 7.01,
+   "text": "exploration is the player's doubt in thinking through every possibility to make that perfect"
+  },
+  {
+   "t": 1308.06,
+   "d": 1.91,
+   "text": "plan to unravel the game."
+  },
+  {
+   "t": 1309.97,
+   "d": 6.58,
+   "text": "And secondly, that once they do enact this plan, they will then make a mistake in executing"
+  },
+  {
+   "t": 1316.55,
+   "d": 1.89,
+   "text": "upon it."
+  },
+  {
+   "t": 1318.44,
+   "d": 5.91,
+   "text": "So at the end of the day, the planning is then, you know, that feeling and that emotion"
+  },
+  {
+   "t": 1324.35,
+   "d": 4.92,
+   "text": "of overcoming the game in the elements of the size and hostility and unpredictability."
+  },
+  {
+   "t": 1329.27,
+   "d": 6.22,
+   "text": "When the player arrives in a solar system, they might spend 10-30 minutes looking at"
+  },
+  {
+   "t": 1335.49,
+   "d": 5.54,
+   "text": "the map and not making any moves and turning over all of the information that the game"
+  },
+  {
+   "t": 1341.03,
+   "d": 5.18,
+   "text": "dumps upon them for the solar system and figuring out all of the different paths and all of"
+  },
+  {
+   "t": 1346.21,
+   "d": 6.54,
+   "text": "the methods they could take to achieve their goals."
+  },
+  {
+   "t": 1352.75,
+   "d": 9.14,
+   "text": "And then, lastly, just as a small coda, this sort of planning path through the chaos reinforces"
+  },
+  {
+   "t": 1361.89,
+   "d": 3.07,
+   "text": "the game's esthetic theme and presentation."
+  },
+  {
+   "t": 1364.96,
+   "d": 5.53,
+   "text": "The theme is the player is on a failed colony mission on the run throughout the galaxy and"
+  },
+  {
+   "t": 1370.49,
+   "d": 8.71,
+   "text": "broadly that the universe is noble in the abstract but impossible to predict in the"
+  },
+  {
+   "t": 1379.2,
+   "d": 1.7,
+   "text": "details."
+  },
+  {
+   "t": 1380.9,
+   "d": 1.69,
+   "text": "-- colony."
+  },
+  {
+   "t": 1382.59,
+   "d": 2.59,
+   "text": "That's T. Thank you very much."
+  },
+  {
+   "t": 1385.18,
+   "d": 2.63,
+   "text": "The game is available on Steam."
+  },
+  {
+   "t": 1387.81,
+   "d": 3.08,
+   "text": "You think find me on Cohost, blue sky, and Twitter."
+  },
+  {
+   "t": 1390.89,
+   "d": 1.0,
+   "text": "ALEXEI: Thank you so much."
+  },
+  {
+   "t": 1391.89,
+   "d": 1.43,
+   "text": "Lots of people loving the art."
+  },
+  {
+   "t": 1393.32,
+   "d": 14.45,
+   "text": "Some people had not seen the game were like I need to check out this game."
+  },
+  {
+   "t": 1407.77,
+   "d": 1.91,
+   "text": "We have a little bit of time for questions."
+  },
+  {
+   "t": 1409.68,
+   "d": 2.13,
+   "text": "Feel free to keep adding questions to the board, folks."
+  },
+  {
+   "t": 1411.81,
+   "d": 1.27,
+   "text": "One from Dr. Game right away."
+  },
+  {
+   "t": 1413.08,
+   "d": 6.1,
+   "text": "Did you play space board games like high frontier before or while designing the game?"
+  },
+  {
+   "t": 1419.18,
+   "d": 5.36,
+   "text": "If so, did any of those influence your thought process?"
+  },
+  {
+   "t": 1424.54,
+   "d": 5.12,
+   "text": "NIC: Yes, I played them before starting working on the game."
+  },
+  {
+   "t": 1429.66,
+   "d": 8.53,
+   "text": "Both had a pretty -- I wouldn't say like strong influence but both of those games abstract"
+  },
+  {
+   "t": 1438.19,
+   "d": 7.05,
+   "text": "exploration in a very fascinating way but because they are board games and the kind"
+  },
+  {
+   "t": 1445.24,
+   "d": 6.53,
+   "text": "of expectation on the player's time, they have a few different rules and mechanical"
+  },
+  {
+   "t": 1451.77,
+   "d": 3.12,
+   "text": "considerations I couldn't quite bring over."
+  },
+  {
+   "t": 1454.89,
+   "d": 4.75,
+   "text": "The one I realized is you might be playing high frontier which is a very mathematical"
+  },
+  {
+   "t": 1459.64,
+   "d": 6.98,
+   "text": "and detailed game and you might spend an hour of physical real-time planning like I am going"
+  },
+  {
+   "t": 1466.62,
+   "d": 5.69,
+   "text": "to go two Saturn and back and that is going to be like a quarter of my game time, right?"
+  },
+  {
+   "t": 1472.31,
+   "d": 5.58,
+   "text": "For The Banished Vault we were like no, you should go from one planet to another in like"
+  },
+  {
+   "t": 1477.89,
+   "d": 2.53,
+   "text": "two minutes or whatever."
+  },
+  {
+   "t": 1480.42,
+   "d": 2.32,
+   "text": "Once it was like OK, what are these things doing?"
+  },
+  {
+   "t": 1482.74,
+   "d": 5.46,
+   "text": "Well I don't want to then make the player spend hours planning a journey."
+  },
+  {
+   "t": 1488.2,
+   "d": 6.93,
+   "text": "Yeah, both games are fascinating in how they abstract and very closely mimic actual space"
+  },
+  {
+   "t": 1495.13,
+   "d": 1.0,
+   "text": "travel."
+  },
+  {
+   "t": 1496.13,
+   "d": 1.0,
+   "text": "ALEXEI: That's interesting."
+  },
+  {
+   "t": 1497.13,
+   "d": 12.13,
+   "text": "What do you think is some of that difference of why is it OK in a board game context where"
+  },
+  {
+   "t": 1509.26,
+   "d": 5.52,
+   "text": "people don't mind taking an hour to go to Saturn but do in a digital game?"
+  },
+  {
+   "t": 1514.78,
+   "d": 1.57,
+   "text": "NIC: I wish I knew."
+  },
+  {
+   "t": 1516.35,
+   "d": 5.89,
+   "text": "Why do I not mind spending 5 minutes playing a quick card game in real life but if you"
+  },
+  {
+   "t": 1522.24,
+   "d": 6.31,
+   "text": "told me oh, this is a 5 minute digital card game it feels like a materially different"
+  },
+  {
+   "t": 1528.55,
+   "d": 1.91,
+   "text": "use of time."
+  },
+  {
+   "t": 1530.46,
+   "d": 1.0,
+   "text": "I don't know."
+  },
+  {
+   "t": 1531.46,
+   "d": 2.58,
+   "text": "I will let you know if I answer that."
+  },
+  {
+   "t": 1534.04,
+   "d": 2.52,
+   "text": "ALEXEI: Another roguelike topic."
+  },
+  {
+   "t": 1536.56,
+   "d": 2.7,
+   "text": "[Laughter] NIC: Why do we want to waste our time more"
+  },
+  {
+   "t": 1539.26,
+   "d": 1.0,
+   "text": "in person?"
+  },
+  {
+   "t": 1540.26,
+   "d": 4.11,
+   "text": "ALEXEI: What is it about physicality?"
+  },
+  {
+   "t": 1544.37,
+   "d": 3.26,
+   "text": "Here is another question from Claire met calf."
+  },
+  {
+   "t": 1547.63,
+   "d": 3.26,
+   "text": "What did the design process look like?"
+  },
+  {
+   "t": 1550.89,
+   "d": 6.31,
+   "text": "Did you start with the premise you describe before creating the game or did you have the"
+  },
+  {
+   "t": 1557.2,
+   "d": 3.06,
+   "text": "game idea and built the premise out of it?"
+  },
+  {
+   "t": 1560.26,
+   "d": 8.18,
+   "text": "NIC: I am not sure what you mean by premise specifically but the starting point was -- let's"
+  },
+  {
+   "t": 1568.44,
+   "d": 5.38,
+   "text": "explore procedurally generated solar system and each solar system is presented in this"
+  },
+  {
+   "t": 1573.82,
+   "d": 1.0,
+   "text": "delta v map."
+  },
+  {
+   "t": 1574.82,
+   "d": 1.78,
+   "text": "That was the start."
+  },
+  {
+   "t": 1576.6,
+   "d": 5.33,
+   "text": "A couple weeks after we decided to do it, we had the math model and moving around and"
+  },
+  {
+   "t": 1581.93,
+   "d": 7.87,
+   "text": "then it was OK, is it interesting to figure out the kind of puzzle of get from one place"
+  },
+  {
+   "t": 1589.8,
+   "d": 3.07,
+   "text": "to another using as little fuel as possible."
+  },
+  {
+   "t": 1592.87,
+   "d": 6.22,
+   "text": "From there it was a lot of giving the player context to what they are doing and goals with"
+  },
+  {
+   "t": 1599.09,
+   "d": 3.36,
+   "text": "survival and so on."
+  },
+  {
+   "t": 1602.45,
+   "d": 3.28,
+   "text": "That was the sort of starting point I suppose."
+  },
+  {
+   "t": 1605.73,
+   "d": 5.11,
+   "text": "Then the theme of the kind of gothic monastery came in later."
+  },
+  {
+   "t": 1610.84,
+   "d": 4.46,
+   "text": "ALEXEI: Kind of wanting to do something with the delta and have that space exploration"
+  },
+  {
+   "t": 1615.3,
+   "d": 1.58,
+   "text": "was the initial core?"
+  },
+  {
+   "t": 1616.88,
+   "d": 1.15,
+   "text": "NIC: Exactly."
+  },
+  {
+   "t": 1618.03,
+   "d": 10.44,
+   "text": "Trying to solve that efficiency puzzle in a sense was the very beginning of it."
+  },
+  {
+   "t": 1628.47,
+   "d": 3.32,
+   "text": "ALEXEI: Interesting."
+  },
+  {
+   "t": 1631.79,
+   "d": 1.66,
+   "text": "Right."
+  },
+  {
+   "t": 1633.45,
+   "d": 5.07,
+   "text": "Here is a good question I suspect is maybe a hard question."
+  },
+  {
+   "t": 1638.52,
+   "d": 1.0,
+   "text": "Is there a specific way you tune the information given to the player to make it feel challenging"
+  },
+  {
+   "t": 1639.52,
+   "d": 1.0,
+   "text": "but overcome able enough?"
+  },
+  {
+   "t": 1640.52,
+   "d": 1.0,
+   "text": "NIC: Um."
+  },
+  {
+   "t": 1641.52,
+   "d": 2.6,
+   "text": "I don't know if there is a specific way."
+  },
+  {
+   "t": 1644.12,
+   "d": 5.05,
+   "text": "The interesting thing about creating a game that is \"hard\" is you have a little bit of"
+  },
+  {
+   "t": 1649.17,
+   "d": 3.16,
+   "text": "wiggle room on the high end."
+  },
+  {
+   "t": 1652.33,
+   "d": 1.74,
+   "text": "But not so much, right?"
+  },
+  {
+   "t": 1654.07,
+   "d": 5.84,
+   "text": "At the beginning I actually initially thought OK, well well what I will do is define the"
+  },
+  {
+   "t": 1659.91,
+   "d": 5.62,
+   "text": "physical characteristics of every planet and then the numbers will sprout out of that and"
+  },
+  {
+   "t": 1665.53,
+   "d": 4.76,
+   "text": "basically the arc of that idea is slowly not doing that over the course of the production"
+  },
+  {
+   "t": 1670.29,
+   "d": 6.15,
+   "text": "and saying the poon is three minus plus one or whatever."
+  },
+  {
+   "t": 1676.44,
+   "d": 2.23,
+   "text": "-- moon."
+  },
+  {
+   "t": 1678.67,
+   "d": 3.59,
+   "text": "So the tuning is interesting."
+  },
+  {
+   "t": 1682.26,
+   "d": 8.19,
+   "text": "I don't think I have a like definitive answer for you besides a lot of testing and a lot"
+  },
+  {
+   "t": 1690.45,
+   "d": 6.13,
+   "text": "of -- it look a very long time for the game to feel complete and then it was a lot of"
+  },
+  {
+   "t": 1696.58,
+   "d": 7.05,
+   "text": "things like the player should be gathering a lot less of this resource to allow for more,"
+  },
+  {
+   "t": 1703.63,
+   "d": 3.54,
+   "text": "you know, brain space or whatever."
+  },
+  {
+   "t": 1707.17,
+   "d": 5.55,
+   "text": "I suppose the most interesting response to that is for the majority of the production,"
+  },
+  {
+   "t": 1712.72,
+   "d": 4.0,
+   "text": "we played the game on the middle of the three difficulties, and then later on were like"
+  },
+  {
+   "t": 1716.72,
+   "d": 9.44,
+   "text": "it is actually starting people on the easy version, \"easy\" in strong sarcasm quotes."
+  },
+  {
+   "t": 1726.16,
+   "d": 3.79,
+   "text": "And have you progress further from that."
+  },
+  {
+   "t": 1729.95,
+   "d": 3.17,
+   "text": "That's probably the most straightforward answer to tuning."
+  },
+  {
+   "t": 1733.12,
+   "d": 1.0,
+   "text": "ALEXEI: That makes sense."
+  },
+  {
+   "t": 1734.12,
+   "d": 5.7,
+   "text": "I think that the answer play it a lot and make adjustments is a common one."
+  },
+  {
+   "t": 1739.82,
+   "d": 4.29,
+   "text": "NIC: I will say if it helps anybody it is very difficult for me to play and requires"
+  },
+  {
+   "t": 1744.11,
+   "d": 3.36,
+   "text": "a lot of mental energy spent for us on the development side."
+  },
+  {
+   "t": 1747.47,
+   "d": 4.9,
+   "text": "So it is not like we are having a great time and everyone else is playing the hard game."
+  },
+  {
+   "t": 1752.37,
+   "d": 2.0,
+   "text": "It is hard for us as well."
+  },
+  {
+   "t": 1754.37,
+   "d": 1.0,
+   "text": "ALEXEI: That's good to know."
+  },
+  {
+   "t": 1755.37,
+   "d": 1.0,
+   "text": "Thank you very much, Nic."
+  },
+  {
+   "t": 1756.37,
+   "d": 1.0,
+   "text": "That was wonderful."
+  },
+  {
+   "t": 1757.37,
+   "d": 1.0,
+   "text": "Thank you for coming."
+  }
+ ],
+ "note": "re-timed 5 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 15 s off the audio)"
+}

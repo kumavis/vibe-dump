@@ -1,0 +1,905 @@
+{
+ "id": "2BHfpAF76J8",
+ "url": "https://www.youtube.com/watch?v=2BHfpAF76J8",
+ "title": "Andrea Roberts - That's the Way the Ball Bounces: Using Physics to Manifest Chance in Roundguard",
+ "speaker": "Andrea Roberts",
+ "talk_title": "That's the Way the Ball Bounces: Using Physics to Manifest Chance in Roundguard",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 799,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nAndrea is the co-founder of Wonderbelly Games, a tiny studio working on a bouncy physics-based roguelike called Roundguard. Before that, she spent a decade in Narrative, UX, and Game Design at Microsoft. She splits her days between making games and raising her three-year-old, and on any given afternoon, Andrea may be a princess, a triceratops, or a triceratops-princess.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Roundguard"
+  },
+  {
+   "start": 92,
+   "title": "Physics as a system of chance"
+  },
+  {
+   "start": 185,
+   "title": "Decision-making and strategy"
+  },
+  {
+   "start": 313,
+   "title": "Improvisation in roguelikes"
+  },
+  {
+   "start": 442,
+   "title": "Seeking new design inspiration"
+  },
+  {
+   "start": 691,
+   "title": "Q&A and design philosophy"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1857,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.18,
+   "d": 1.65,
+   "text": "ANDREA ROBERTS: Hey, so, I’m Andrea."
+  },
+  {
+   "t": 1.83,
+   "d": 2.1,
+   "text": "I’m gonna be talking about Roundguard."
+  },
+  {
+   "t": 3.93,
+   "d": 5.98,
+   "text": "I am the designer and I also do the art."
+  },
+  {
+   "t": 9.91,
+   "d": 5.28,
+   "text": "There we go, that’s my next button."
+  },
+  {
+   "t": 15.19,
+   "d": 5.54,
+   "text": "This talk is about systems of luck and chance and more specifically like in Roundguard how"
+  },
+  {
+   "t": 20.73,
+   "d": 2.3,
+   "text": "we use physics as a system of chance."
+  },
+  {
+   "t": 23.03,
+   "d": 5.14,
+   "text": "I kind of want to leave us with all thinking about I don't know, what else could we be"
+  },
+  {
+   "t": 28.17,
+   "d": 5.01,
+   "text": "using for those systems?"
+  },
+  {
+   "t": 33.18,
+   "d": 3.34,
+   "text": "Quick overview of Roundguard for those who haven't seen it."
+  },
+  {
+   "t": 36.52,
+   "d": 2.93,
+   "text": "It is a Roguelike-inspired game."
+  },
+  {
+   "t": 39.45,
+   "d": 3.61,
+   "text": "A Roguelike-like maybe?"
+  },
+  {
+   "t": 43.06,
+   "d": 1.0,
+   "text": "I don't know."
+  },
+  {
+   "t": 44.06,
+   "d": 4.25,
+   "text": "You know, it’s a game where you are exploring a procedurally generated dungeon, you’re"
+  },
+  {
+   "t": 48.31,
+   "d": 3.54,
+   "text": "defeating monsters with complex behavior, you’re picking up loot, you’re trying"
+  },
+  {
+   "t": 51.85,
+   "d": 3.4,
+   "text": "to survive the constant threat of permadeath, all that good stuff."
+  },
+  {
+   "t": 55.25,
+   "d": 4.81,
+   "text": "It is turn based kinda (I’ll get back to that)."
+  },
+  {
+   "t": 60.06,
+   "d": 2.25,
+   "text": "Movement is where things get very different."
+  },
+  {
+   "t": 62.31,
+   "d": 6.3,
+   "text": "Instead of moving your hero on a grid, you are loading them into a ballista, aiming and"
+  },
+  {
+   "t": 68.61,
+   "d": 2.61,
+   "text": "firing them into a dungeon to bounce around."
+  },
+  {
+   "t": 71.22,
+   "d": 1.17,
+   "text": "Does my movie play?"
+  },
+  {
+   "t": 72.39,
+   "d": 1.0,
+   "text": "Oh, no!"
+  },
+  {
+   "t": 73.39,
+   "d": 1.0,
+   "text": "ANDREA ROBERTS: Okay!"
+  },
+  {
+   "t": 74.39,
+   "d": 1.24,
+   "text": "So there we go."
+  },
+  {
+   "t": 75.63,
+   "d": 3.04,
+   "text": "There’s my hero bouncing through the dungeon."
+  },
+  {
+   "t": 78.67,
+   "d": 1.67,
+   "text": "AUDIENCE: Woo!"
+  },
+  {
+   "t": 80.34,
+   "d": 3.35,
+   "text": "ANDREA ROBERTS: Thank you."
+  },
+  {
+   "t": 83.69,
+   "d": 3.51,
+   "text": "So, basically it’s like Peggle plus a roguelike."
+  },
+  {
+   "t": 87.2,
+   "d": 2.5,
+   "text": "Okay, now you know about Roundguard."
+  },
+  {
+   "t": 89.7,
+   "d": 3.41,
+   "text": "Let's talk about luck."
+  },
+  {
+   "t": 93.11,
+   "d": 8.38,
+   "text": "So like all of us I am sure in this room, we very much believe in, pray to the random"
+  },
+  {
+   "t": 101.49,
+   "d": 1.11,
+   "text": "number generator."
+  },
+  {
+   "t": 102.6,
+   "d": 7.36,
+   "text": "We use it throughout our systems for dungeon generation, loot drops, we’ve got item properties"
+  },
+  {
+   "t": 109.96,
+   "d": 6.26,
+   "text": "with things like 25% chance to polymorph an enemy into a frog when you hit them."
+  },
+  {
+   "t": 116.22,
+   "d": 1.45,
+   "text": "That kinda good stuff."
+  },
+  {
+   "t": 117.67,
+   "d": 6.4,
+   "text": "But, as a druid practitioner, I also like to draw from the natural world and that's"
+  },
+  {
+   "t": 124.07,
+   "d": 2.28,
+   "text": "where physics comes into play."
+  },
+  {
+   "t": 126.35,
+   "d": 10.34,
+   "text": "We use physics in the hero movement to represent something that could be expressed as a hero's"
+  },
+  {
+   "t": 136.69,
+   "d": 4.96,
+   "text": "percent chance to hit or percent chance to evade an enemy."
+  },
+  {
+   "t": 141.65,
+   "d": 7.01,
+   "text": "But you could say physics is not a chance-based system at all."
+  },
+  {
+   "t": 148.66,
+   "d": 3.29,
+   "text": "Physics is not random and you would be absolutely correct."
+  },
+  {
+   "t": 151.95,
+   "d": 5.2,
+   "text": "This is me cranking up my aim prediction system all the way, way beyond where it would go"
+  },
+  {
+   "t": 157.15,
+   "d": 1.05,
+   "text": "in the game."
+  },
+  {
+   "t": 158.2,
+   "d": 5.28,
+   "text": "You can see the computer knows where the hero is going to go, and she does follow that line."
+  },
+  {
+   "t": 163.48,
+   "d": 4.83,
+   "text": "We’re not doing weird random chances under the hood on where the bounces end up."
+  },
+  {
+   "t": 168.31,
+   "d": 2.86,
+   "text": "It’s a physics system."
+  },
+  {
+   "t": 171.17,
+   "d": 8.21,
+   "text": "But also, things like Plinko exist."
+  },
+  {
+   "t": 179.38,
+   "d": 4.05,
+   "text": "This guy right here obviously is feeling very lucky."
+  },
+  {
+   "t": 183.43,
+   "d": 1.93,
+   "text": "So what’s going on here?"
+  },
+  {
+   "t": 185.36,
+   "d": 5.65,
+   "text": "So while physics isn't a system of chance I guess, let's broaden that term to say it’s"
+  },
+  {
+   "t": 191.01,
+   "d": 8.03,
+   "text": "a system of uncertainty, which really is any system that is that complicated that we can't"
+  },
+  {
+   "t": 199.04,
+   "d": 1.09,
+   "text": "model it out."
+  },
+  {
+   "t": 200.13,
+   "d": 4.25,
+   "text": "Physics is intuitive enough we know what's going on but once you get to several bounces"
+  },
+  {
+   "t": 204.38,
+   "d": 2.05,
+   "text": "it becomes a mess in our head, right?"
+  },
+  {
+   "t": 206.43,
+   "d": 5.92,
+   "text": "So there’s a good deal of uncertainty there and your decision making process moves from"
+  },
+  {
+   "t": 212.35,
+   "d": 7.68,
+   "text": "decided outcomes to looking at more like what are the likely outcomes here."
+  },
+  {
+   "t": 220.03,
+   "d": 2.55,
+   "text": "Let's walk-through that process in a shot."
+  },
+  {
+   "t": 222.58,
+   "d": 6.51,
+   "text": "Back to that shot I showed earlier, this is the normal length of our aim prediction line."
+  },
+  {
+   "t": 229.09,
+   "d": 4.11,
+   "text": "I am 100% certain at this point I am going to be bouncing off of that pot right there."
+  },
+  {
+   "t": 233.2,
+   "d": 6.49,
+   "text": "I’m pretty comfortable with the system, so I can draw a pretty good line here in my"
+  },
+  {
+   "t": 239.69,
+   "d": 1.0,
+   "text": "head."
+  },
+  {
+   "t": 240.69,
+   "d": 3.59,
+   "text": "I’m confident I am going to be hitting that orc right over there."
+  },
+  {
+   "t": 244.28,
+   "d": 4.29,
+   "text": "But after this point things start to get a lot more complicated."
+  },
+  {
+   "t": 248.57,
+   "d": 2.36,
+   "text": "I think the momentum is going to carry me forward."
+  },
+  {
+   "t": 250.93,
+   "d": 3.13,
+   "text": "I’m probably going to be bouncing off that way towards the middle screen but there’s"
+  },
+  {
+   "t": 254.06,
+   "d": 2.75,
+   "text": "still a good chance I might reflect back."
+  },
+  {
+   "t": 256.81,
+   "d": 3.83,
+   "text": "I’m hitting him at the top angle of the head and maybe I will go down that left side"
+  },
+  {
+   "t": 260.64,
+   "d": 1.66,
+   "text": "of the screen."
+  },
+  {
+   "t": 262.3,
+   "d": 3.72,
+   "text": "Then my brain starts to shift into these sorta areas of likeliness."
+  },
+  {
+   "t": 266.02,
+   "d": 5.45,
+   "text": "I’m like OK, most likely I am bouncing around the middle and maybe picking up some of those"
+  },
+  {
+   "t": 271.47,
+   "d": 1.87,
+   "text": "health pots, hitting those goblins."
+  },
+  {
+   "t": 273.34,
+   "d": 5.55,
+   "text": "There’s a chance possible that I’m bouncing back down the left side of the screen, I see"
+  },
+  {
+   "t": 278.89,
+   "d": 1.53,
+   "text": "there are orcs over there."
+  },
+  {
+   "t": 280.42,
+   "d": 7.0,
+   "text": "They hit harder, I’m already at half health, maybe that’ll make me reconsider this move."
+  },
+  {
+   "t": 287.42,
+   "d": 4.47,
+   "text": "I’m pretty positive I am not going to be on the right side of the screen, which as"
+  },
+  {
+   "t": 291.89,
+   "d": 3.84,
+   "text": "I look over there, there are some mana pots."
+  },
+  {
+   "t": 295.73,
+   "d": 4.06,
+   "text": "I am full on mana right now so that’s a good thing, I don't want to waste those resources."
+  },
+  {
+   "t": 299.79,
+   "d": 4.54,
+   "text": "That also means this is a good turn for me to start using some skills."
+  },
+  {
+   "t": 304.33,
+   "d": 4.43,
+   "text": "That brings us to the second half of a Roundguard turn."
+  },
+  {
+   "t": 308.76,
+   "d": 6.12,
+   "text": "We’ve got this planning prediction phase, and then there’s the reaction phase, where"
+  },
+  {
+   "t": 314.88,
+   "d": 2.65,
+   "text": "you’re reacting with your skills."
+  },
+  {
+   "t": 317.53,
+   "d": 4.86,
+   "text": "Every hero, we’ve got a few different classes, they each have access to a handful of skills"
+  },
+  {
+   "t": 322.39,
+   "d": 3.91,
+   "text": "they can pick up, and you can use them while you’re bouncing around."
+  },
+  {
+   "t": 326.3,
+   "d": 4.88,
+   "text": "In this case I’m taking a pretty mediocre shot and using the Rogue's double jump to"
+  },
+  {
+   "t": 331.18,
+   "d": 6.07,
+   "text": "avoid the spike at the bottom and taking advantage of the height I gained to improvise and get"
+  },
+  {
+   "t": 337.25,
+   "d": 9.86,
+   "text": "a shot in on that red spider and then I got a good bounce on the cushion at the end there."
+  },
+  {
+   "t": 347.11,
+   "d": 1.46,
+   "text": "Good shot."
+  },
+  {
+   "t": 348.57,
+   "d": 5.46,
+   "text": "This is obviously very different of a feeling from a classic grid-based Roguelike."
+  },
+  {
+   "t": 354.03,
+   "d": 7.12,
+   "text": "In a classic grid-based Roguelike you have 100% control over your hero's movement."
+  },
+  {
+   "t": 361.15,
+   "d": 7.86,
+   "text": "The uncertainty comes into play with how are the enemies moving and behaving."
+  },
+  {
+   "t": 369.01,
+   "d": 5.84,
+   "text": "In Roundguard, we’ve kind of flipped that on its head so whereas the enemies are very"
+  },
+  {
+   "t": 374.85,
+   "d": 5.37,
+   "text": "predictable, they are often either completely stationary or moving very along set paths."
+  },
+  {
+   "t": 380.22,
+   "d": 5.6,
+   "text": "Their behaviors may be complex but once you’ve learned them they do the same behaviors under"
+  },
+  {
+   "t": 385.82,
+   "d": 7.83,
+   "text": "set conditions, but the uncertainty is really coming into play with your hero's movement."
+  },
+  {
+   "t": 393.65,
+   "d": 4.64,
+   "text": "It’s requiring you to react to your own unpredictability."
+  },
+  {
+   "t": 398.29,
+   "d": 5.5,
+   "text": "I think there is, like, there’s a very different textural feel here."
+  },
+  {
+   "t": 403.79,
+   "d": 4.78,
+   "text": "You’re having to embrace that uncertainty in yourself, you’ve having to kind of give"
+  },
+  {
+   "t": 408.57,
+   "d": 6.71,
+   "text": "in to the whims of physics a bit and learn how to react to your own unpredictability."
+  },
+  {
+   "t": 415.28,
+   "d": 5.24,
+   "text": "I think it creates a bunch of drama and surprise where you go like, oh my God what did I just"
+  },
+  {
+   "t": 420.52,
+   "d": 3.17,
+   "text": "do, which is fun."
+  },
+  {
+   "t": 423.69,
+   "d": 3.74,
+   "text": "I also think it’s interesting at a high level."
+  },
+  {
+   "t": 427.43,
+   "d": 6.29,
+   "text": "We’re still using a lot of the same brain patterns of trying to make a prediction in"
+  },
+  {
+   "t": 433.72,
+   "d": 6.59,
+   "text": "a very unpredictable world and then having to react when things don't necessarily go"
+  },
+  {
+   "t": 440.31,
+   "d": 1.0,
+   "text": "to plan."
+  },
+  {
+   "t": 441.31,
+   "d": 5.32,
+   "text": "I think that’s one of the real beauties of Roguelikes to me, it’s that real emphasis"
+  },
+  {
+   "t": 446.63,
+   "d": 3.06,
+   "text": "on improvisation."
+  },
+  {
+   "t": 449.69,
+   "d": 6.93,
+   "text": "You can take a game like Mario and really rehearse a level over and over again, memorize"
+  },
+  {
+   "t": 456.62,
+   "d": 3.81,
+   "text": "where you need to make the jumps, where the enemies are coming in."
+  },
+  {
+   "t": 460.43,
+   "d": 4.69,
+   "text": "It’s about really focusing on perfection execution."
+  },
+  {
+   "t": 465.12,
+   "d": 7.18,
+   "text": "And a Spelunky player doesn't have the luxury of memorization, instead really what they"
+  },
+  {
+   "t": 472.3,
+   "d": 10.29,
+   "text": "need to do is really tease apart the underlying principles of the game and build up a palate"
+  },
+  {
+   "t": 482.59,
+   "d": 6.86,
+   "text": "of reactions to all of the different contexts."
+  },
+  {
+   "t": 489.45,
+   "d": 4.79,
+   "text": "I think ultimately that means really good Roguelike players know the design of the games"
+  },
+  {
+   "t": 494.24,
+   "d": 5.34,
+   "text": "that they’re playing as well as the game designers do, or, frankly, from our beta players"
+  },
+  {
+   "t": 499.58,
+   "d": 6.98,
+   "text": "there have been times where they taught me implications of our game design and I think"
+  },
+  {
+   "t": 506.56,
+   "d": 2.36,
+   "text": "that's super awesome."
+  },
+  {
+   "t": 508.92,
+   "d": 5.45,
+   "text": "Yeah, like all of this is really coming from these systems of uncertainty."
+  },
+  {
+   "t": 514.37,
+   "d": 3.57,
+   "text": "So like I said we’re using random number generators."
+  },
+  {
+   "t": 517.94,
+   "d": 6.96,
+   "text": "They are often constrained in ways to simulate a die roll, a bag pull, deck shuffle."
+  },
+  {
+   "t": 524.9,
+   "d": 4.4,
+   "text": "We’re also using physics in the bounce of the hero's movement."
+  },
+  {
+   "t": 529.3,
+   "d": 2.83,
+   "text": "We have another expression of physics in the game."
+  },
+  {
+   "t": 532.13,
+   "d": 8.35,
+   "text": "There’s a big Wheel of Fortune moment where you get to spin the wheel and get a trinket."
+  },
+  {
+   "t": 540.48,
+   "d": 2.06,
+   "text": "What else is out there?"
+  },
+  {
+   "t": 542.54,
+   "d": 5.24,
+   "text": "What else are you using in your games or what could you be using as systems of uncertainty?"
+  },
+  {
+   "t": 547.78,
+   "d": 7.85,
+   "text": "And what kind of textures and what kind of feelings does that make for players?"
+  },
+  {
+   "t": 555.63,
+   "d": 1.15,
+   "text": "I don't have these answers."
+  },
+  {
+   "t": 556.78,
+   "d": 5.09,
+   "text": "I would love to hear these ideas from you but I have some ideas of other places to look"
+  },
+  {
+   "t": 561.87,
+   "d": 4.49,
+   "text": "for inspiration besides this room."
+  },
+  {
+   "t": 566.36,
+   "d": 5.74,
+   "text": "Obviously like gambling is something that is focused on uncertainty."
+  },
+  {
+   "t": 572.1,
+   "d": 1.66,
+   "text": "Games go hand and hand."
+  },
+  {
+   "t": 573.76,
+   "d": 5.08,
+   "text": "We’ve done a good job of mining a ton of systems from gambling but are there some systems"
+  },
+  {
+   "t": 578.84,
+   "d": 3.62,
+   "text": "in there that have been overlooked?"
+  },
+  {
+   "t": 582.46,
+   "d": 5.71,
+   "text": "Gambling spreads across all cultures and maybe there’s some interesting things we haven't"
+  },
+  {
+   "t": 588.17,
+   "d": 1.8,
+   "text": "pulled apart yet."
+  },
+  {
+   "t": 589.97,
+   "d": 5.91,
+   "text": "Science, obviously, deals regularly in very complex models."
+  },
+  {
+   "t": 595.88,
+   "d": 4.63,
+   "text": "I know a lot of you here in the room are doing amazing things with artificial intelligence"
+  },
+  {
+   "t": 600.51,
+   "d": 4.64,
+   "text": "and machine learning and neural networks and things that I don't understand well enough"
+  },
+  {
+   "t": 605.15,
+   "d": 2.73,
+   "text": "to summarize and would love to learn more about."
+  },
+  {
+   "t": 607.88,
+   "d": 5.46,
+   "text": "There’s also human psychology models."
+  },
+  {
+   "t": 613.34,
+   "d": 5.19,
+   "text": "Jim's talk was awesome on relationships, I think that’s a really cool place to play."
+  },
+  {
+   "t": 618.53,
+   "d": 7.78,
+   "text": "There’s a ton of things in other complex models, like is there gameplay mechanics in"
+  },
+  {
+   "t": 626.31,
+   "d": 7.43,
+   "text": "the system of genetic mutation or climate models or whatever."
+  },
+  {
+   "t": 633.74,
+   "d": 5.14,
+   "text": "I think religion is also a really fun place to look."
+  },
+  {
+   "t": 638.92,
+   "d": 6.76,
+   "text": "Humans have a long history of exploring fortune telling and divination."
+  },
+  {
+   "t": 645.68,
+   "d": 5.83,
+   "text": "If you want to go down a fun Wikipedia rabbit hole I suggest looking up cleromancy."
+  },
+  {
+   "t": 651.51,
+   "d": 12.61,
+   "text": "It’s the method of divination where you take random outputs like pulling of lots or"
+  },
+  {
+   "t": 664.12,
+   "d": 4.36,
+   "text": "throwing of beans and use that to interpret the will of God."
+  },
+  {
+   "t": 668.48,
+   "d": 4.92,
+   "text": "There are a bunch of interesting systems in there, might be some cool game mechanics we"
+  },
+  {
+   "t": 673.4,
+   "d": 1.6,
+   "text": "could find."
+  },
+  {
+   "t": 675.0,
+   "d": 1.61,
+   "text": "Thank you."
+  },
+  {
+   "t": 676.61,
+   "d": 4.82,
+   "text": "If you want to learn more about Roundguard, we are up at wonderbellygames.com."
+  },
+  {
+   "t": 681.43,
+   "d": 10.22,
+   "text": "If you ever want to talk about systems of uncertainty, I would love to hear more, so"
+  },
+  {
+   "t": 691.65,
+   "d": 5.17,
+   "text": "give me a shout."
+  },
+  {
+   "t": 696.82,
+   "d": 9.15,
+   "text": "[Applause] >> We have time for a question if anyone has"
+  },
+  {
+   "t": 705.97,
+   "d": 1.19,
+   "text": "any."
+  },
+  {
+   "t": 707.16,
+   "d": 7.35,
+   "text": "Want to switch over the talks while we do this?"
+  },
+  {
+   "t": 714.51,
+   "d": 2.64,
+   "text": "AUDIENCE: Hi."
+  },
+  {
+   "t": 717.15,
+   "d": 9.98,
+   "text": "I would say players are the main thing missing from that list of inputs of uncertainty and"
+  },
+  {
+   "t": 727.13,
+   "d": 7.58,
+   "text": "a big factor in PvP games comes from that but also co-op experiences."
+  },
+  {
+   "t": 734.71,
+   "d": 1.0,
+   "text": "ANDREA ROBERTS: Absolutely."
+  },
+  {
+   "t": 735.71,
+   "d": 4.87,
+   "text": "That's a great call."
+  },
+  {
+   "t": 740.58,
+   "d": 4.56,
+   "text": "Multiplayer experiences."
+  },
+  {
+   "t": 745.14,
+   "d": 6.01,
+   "text": "AUDIENCE: In some of the games that we have worked on we do a lot of massaging randomness"
+  },
+  {
+   "t": 751.15,
+   "d": 3.62,
+   "text": "so players don't feel bad about outlier experiences."
+  },
+  {
+   "t": 754.77,
+   "d": 3.16,
+   "text": "Do you find yourself doing that with physics-based systems?"
+  },
+  {
+   "t": 757.93,
+   "d": 4.4,
+   "text": "ANDREA ROBERTS: We don't do under the hood."
+  },
+  {
+   "t": 762.33,
+   "d": 5.99,
+   "text": "We don’t do - I know Peggle did some things where it would correct a bounce."
+  },
+  {
+   "t": 768.32,
+   "d": 1.7,
+   "text": "We don’t do any of that."
+  },
+  {
+   "t": 770.02,
+   "d": 5.49,
+   "text": "We have some things where we do slowdowns at certain moments when we know it’s going"
+  },
+  {
+   "t": 775.51,
+   "d": 6.6,
+   "text": "to be very dramatic, like a near miss of you’re coming in for a final hit."
+  },
+  {
+   "t": 782.11,
+   "d": 9.59,
+   "text": "Those can be times that give the player a little bit of extra, a moment to react."
+  },
+  {
+   "t": 791.94,
+   "d": 2.76,
+   "text": ">>Cool, thank you so much!"
+  }
+ ]
+}

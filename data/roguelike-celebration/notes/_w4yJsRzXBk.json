@@ -1,0 +1,113 @@
+{
+  "id": "_w4yJsRzXBk",
+  "title": "Sherveen Uduwana: Persistence and Resistence: How narrative in roguelikes is currently underused",
+  "speaker": "Sherveen Uduwana",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=_w4yJsRzXBk",
+  "talk_type": "design",
+  "summary": "Sherveen Uduwana, developer of the roguelike MidAutumn, argues that roguelikes are especially well suited to stories games usually struggle with: systemic, sociological stories rather than single-protagonist ones. He uses the music-theory idea that repetition legitimizes to argue that the genre's cyclical structure lets designers take narrative risks. Through three hypothetical case studies (class struggle in the vein of Les Mis, vignette-driven work like the film Andrei Rublev, and unreliable narrators like Rashomon) he points to roguelike traits such as changing protagonists, expected failure and unresolved, non-linear structure, and concludes the genre has much unexplored narrative ground.",
+  "games": [
+    "MidAutumn",
+    "The Swindle",
+    "Rogue Legacy",
+    "Wildermyth",
+    "Cultist Simulator",
+    "Outer Wilds",
+    "Rain World",
+    "The Stanley Parable",
+    "Her Story"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "systemic stories",
+      "kind": "principle",
+      "claim": "Roguelikes suit stories about systemic change and societies, rather than single individuals, because the genre's inherent elements do much of the heavy lifting.",
+      "detail": "Uduwana calls roguelikes his favourite way to tell stories, saying they suit stories games as a medium often struggle with. He is drawn to sociological narratives about moments in time or societies rather than a focus on one character.",
+      "t": 144,
+      "quote": "The types of stories I am fascinated with are often stories about systemic change, sociological narratives about particular moments in time, or societies",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "mental models",
+      "kind": "principle",
+      "claim": "Because games force players to build a mental model of the system to experience the narrative, designers can use that conscious modelling as a storytelling tool.",
+      "detail": "Uduwana says other media also do this but games make it overt, and that players consciously engaging with the model is compelling material to work with.",
+      "t": 179,
+      "quote": "players are forced often to create a mental model of the game in order to experience the narrative",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "repetition",
+      "kind": "principle",
+      "claim": "Repetition legitimizes: the cyclical repetition of roguelikes lets designers take narrative risks that would read as mistakes in other genres.",
+      "detail": "Uduwana borrows from music theory: a 'wrong' jazz note repeated several times starts to sound intentional, and genre expectations shape what sounds correct. He also notes Voronoi patterns as a useful noise and generation tool whose repetition reveals the underlying pattern.",
+      "t": 302,
+      "quote": "the way that repetition occurs in roguelikes also allow us to use this legitimizing factor to do really interesting narrative risks",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "rotating protagonists",
+      "kind": "principle",
+      "claim": "Because roguelikes do not need a single protagonist, a game about class struggle can vary characters across runs so their social class shapes events.",
+      "detail": "Uduwana imagines a roguelike set in revolutionary France like Les Mis that explores the book's ideas instead of being an action game with period trappings. Different characters per run let social context and class textures influence gameplay and narrative.",
+      "t": 381,
+      "quote": "because of the repetitive cyclical nature you don't deed need a single protagonist. It allows differences in characters through the runs",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "failure in narrative",
+      "kind": "principle",
+      "claim": "Because players expect failure in roguelikes, characters can fail in the story without the dissonance of a cutscene undoing a player's success.",
+      "detail": "Uduwana contrasts linear games where you play a sequence well and a cutscene shows the character failing. Roguelike genre expectations reduce the drive to optimize success, permitting more complex, dynamic narratives with failure in them.",
+      "t": 455,
+      "quote": "roguelikes are very, very effecive in letting you avoid that dissonance while allowing moments of failure in the narrative",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "character succession",
+      "kind": "example",
+      "claim": "The Swindle, Rogue Legacy and Wildermyth replace or vary characters on failure, letting character quirks and vibes colour how similar events play out.",
+      "detail": "In The Swindle you lose your character if a heist fails and get a new one. Rogue Legacy has you play descendants with unique quirks while making overall progress, and Wildermyth lets characters' feel influence how they respond to similar events.",
+      "t": 468,
+      "quote": "I really like the way it happens in the swindle where you kind of lose your character if you fail a heist and have a new character",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "vignettes",
+      "kind": "principle",
+      "claim": "Less reliance on a linear run lets a roguelike tell a story through disparate vignettes on unrelated ideas while keeping an overall context.",
+      "detail": "Uduwana's example is the 1960s film Andrei Rublev, about an artist keeping creative and religious integrity amid conflict between Christianity and paganism. He cites Cultist Simulator, Outer Wilds and Rain World as games whose experience differs greatly by how you engage systems, and wants a roguelike with those qualities.",
+      "t": 586,
+      "quote": "less reliance on a linear runs mean you can explore disparate or unrelated ideas and have that context overall still",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "unreliable narrators",
+      "kind": "open-question",
+      "claim": "Repeated runs could let players experience unreliable narrators like Rashomon and gradually distill what is objective, yet no roguelike clearly does this.",
+      "detail": "Uduwana says such stories fall outside Western three-act tropes, and roguelikes fit because randomness means they need not resolve tidily. The Stanley Parable and Her Story explore similar ideas, but he has found no definitive roguelike example and doesn't see why the genre isn't full of them.",
+      "t": 673,
+      "quote": "repeated runs allows you to experience unreliable narrators in an interesting way and lets you kind of distill what is objective and what isn't over time",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "genre saturation",
+      "kind": "principle",
+      "claim": "The idea that roguelikes are an overdone genre is wrong because much new ground, especially narrative, remains unbroken.",
+      "detail": "Uduwana hopes developers, especially from marginalized groups, will make roguelikes that exploit these narrative strengths. He suggests an exercise: when a story seems not to work as a game, ask whether it would work better as a roguelike.",
+      "t": 755,
+      "quote": "I think there is lots of new ground we haven't broken especially in terms of narrative and those elements",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

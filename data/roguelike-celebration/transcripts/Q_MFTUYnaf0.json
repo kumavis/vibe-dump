@@ -1,0 +1,1496 @@
+{
+ "id": "Q_MFTUYnaf0",
+ "url": "https://www.youtube.com/watch?v=Q_MFTUYnaf0",
+ "title": "Mark Gritter - Procedurally Generating Economies with Graph Grammars (and Math)",
+ "speaker": "Mark Gritter",
+ "talk_title": "Procedurally Generating Economies with Graph Grammars (and Math)",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 617,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nMark is a startup and math nerd who imprinted on NetHack at an early age. He live in Minnesota, where I've been working remotely for Bay Area companies for seventeen years. He identifies as an Artificer - and is interested in how to make tools more usable and systems more understandable.\n\nMark is fascinated with NetHack's shopkeepers, Dwarf Fortress' caravans, and Elite's varied planetary economies. Who is on the other side of my trade? Where do all those stone mugs end up? Why does trade exist in *your* game? While game economics are ultimately in the service of fun, not realism, Mark discusses how we can open up new and interesting challenges by procedurally generating the items that are traded and the reasons for trade. He demonstrates how we can use a graph grammar to create an economic \"web\" of production, then use simple mathematical techniques to drive more realistic models of supply and demand.\n\nFind him on Twitter: https://twitter.com/markgritter",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 46,
+   "title": "QUESTIONS"
+  },
+  {
+   "start": 105,
+   "title": "I MAKE A LOT OF GRAPHS"
+  },
+  {
+   "start": 139,
+   "title": "TRANSFORMATIONS"
+  },
+  {
+   "start": 153,
+   "title": "CHOICES"
+  },
+  {
+   "start": 212,
+   "title": "WHY GRAPH GRAMMARS?"
+  },
+  {
+   "start": 239,
+   "title": "A MODERATELY COMPLEX RULE"
+  },
+  {
+   "start": 271,
+   "title": "UTILITY"
+  },
+  {
+   "start": 312,
+   "title": "OPTIMIZING"
+  },
+  {
+   "start": 347,
+   "title": "GRADIENT DESCENT"
+  },
+  {
+   "start": 391,
+   "title": "REAL ECONOMIES AREN'T PERFECT"
+  },
+  {
+   "start": 408,
+   "title": "MESS WITH THE GRAPH"
+  },
+  {
+   "start": 458,
+   "title": "POST-101 ECON"
+  },
+  {
+   "start": 492,
+   "title": "AN AUCTION MECHANISM FOR TRADES"
+  },
+  {
+   "start": 544,
+   "title": "EXAMPLE"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 1801,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.2,
+   "d": 4.2,
+   "text": "All right. Um, and last but not least is"
+  },
+  {
+   "t": 4.4,
+   "d": 1.7,
+   "text": "Mark Greter."
+  },
+  {
+   "t": 6.1,
+   "d": 1.3,
+   "text": "Welcome to the stage."
+  },
+  {
+   "t": 7.4,
+   "d": 1.4,
+   "text": "Hello."
+  },
+  {
+   "t": 8.8,
+   "d": 1.3,
+   "text": "Uh,"
+  },
+  {
+   "t": 10.1,
+   "d": 0.9,
+   "text": "I'm going to be talking about"
+  },
+  {
+   "t": 11.0,
+   "d": 1.8,
+   "text": "procedurally generating economies with"
+  },
+  {
+   "t": 12.8,
+   "d": 3.6,
+   "text": "graph grammars and math. Uh, I like both"
+  },
+  {
+   "t": 16.4,
+   "d": 2.2,
+   "text": "I like all of those. My introduction to"
+  },
+  {
+   "t": 18.6,
+   "d": 2.6,
+   "text": "roguelikes was NetHack on a PC, and one"
+  },
+  {
+   "t": 21.2,
+   "d": 1.5,
+   "text": "of the things I really loved was the"
+  },
+  {
+   "t": 22.7,
+   "d": 1.7,
+   "text": "shopkeepers."
+  },
+  {
+   "t": 24.4,
+   "d": 1.8,
+   "text": "Uh, I played a lot of Elite too on my"
+  },
+  {
+   "t": 26.2,
+   "d": 2.1,
+   "text": "Commodore 64, which has trade as its"
+  },
+  {
+   "t": 28.3,
+   "d": 2.2,
+   "text": "focus and still does have that as a"
+  },
+  {
+   "t": 30.5,
+   "d": 2.9,
+   "text": "major component in its current version."
+  },
+  {
+   "t": 33.4,
+   "d": 1.9,
+   "text": "Uh, I played a game called RPG Maker"
+  },
+  {
+   "t": 35.3,
+   "d": 1.3,
+   "text": "called Stuart Smith's Adventure"
+  },
+  {
+   "t": 36.6,
+   "d": 2.0,
+   "text": "Construction Set, and I spent so much"
+  },
+  {
+   "t": 38.6,
+   "d": 1.4,
+   "text": "time building shops that I usually"
+  },
+  {
+   "t": 40.0,
+   "d": 3.2,
+   "text": "didn't finish building the adventures."
+  },
+  {
+   "t": 43.2,
+   "d": 2.0,
+   "text": "Uh, Dwarf Fortress, of course, has trade"
+  },
+  {
+   "t": 45.2,
+   "d": 1.1,
+   "text": "too."
+  },
+  {
+   "t": 46.3,
+   "d": 1.5,
+   "text": "But I have a lot of questions about"
+  },
+  {
+   "t": 47.8,
+   "d": 2.4,
+   "text": "what's going on here. Who buys all that"
+  },
+  {
+   "t": 50.2,
+   "d": 2.6,
+   "text": "junk you sell to shops, and why? What"
+  },
+  {
+   "t": 52.8,
+   "d": 1.8,
+   "text": "does the merchant do with all the stone"
+  },
+  {
+   "t": 54.6,
+   "d": 2.0,
+   "text": "tableware your fortune your fortress"
+  },
+  {
+   "t": 56.6,
+   "d": 1.9,
+   "text": "sells them? And how the heck does an"
+  },
+  {
+   "t": 58.5,
+   "d": 3.4,
+   "text": "entire planet end up as agricultural?"
+  },
+  {
+   "t": 61.9,
+   "d": 1.6,
+   "text": "Uh, fundamentally, most of all, does"
+  },
+  {
+   "t": 63.5,
+   "d": 1.8,
+   "text": "trade in the broader economy make it a"
+  },
+  {
+   "t": 65.3,
+   "d": 1.6,
+   "text": "difference in a game world, or is it"
+  },
+  {
+   "t": 66.9,
+   "d": 1.8,
+   "text": "just decoration?"
+  },
+  {
+   "t": 68.7,
+   "d": 2.0,
+   "text": "So I'm going to talk about my experience"
+  },
+  {
+   "t": 70.7,
+   "d": 3.5,
+   "text": "with a project called Emoji Economy."
+  },
+  {
+   "t": 74.2,
+   "d": 2.1,
+   "text": "It builds toy economies through these"
+  },
+  {
+   "t": 76.3,
+   "d": 1.8,
+   "text": "four steps."
+  },
+  {
+   "t": 78.1,
+   "d": 2.1,
+   "text": "Build a graph that represents a flow of"
+  },
+  {
+   "t": 80.2,
+   "d": 2.9,
+   "text": "items, apply a utility function that has"
+  },
+  {
+   "t": 83.1,
+   "d": 3.0,
+   "text": "a decreasing marginal utility and sets"
+  },
+  {
+   "t": 86.1,
+   "d": 1.9,
+   "text": "the choices represented in that graph to"
+  },
+  {
+   "t": 88.0,
+   "d": 2.6,
+   "text": "maximize that utility, to maximize"
+  },
+  {
+   "t": 90.6,
+   "d": 1.4,
+   "text": "happiness."
+  },
+  {
+   "t": 92.0,
+   "d": 1.8,
+   "text": "We create different regions, each with a"
+  },
+  {
+   "t": 93.8,
+   "d": 2.3,
+   "text": "copy of that graph, slightly altered to"
+  },
+  {
+   "t": 96.1,
+   "d": 3.1,
+   "text": "break or maybe specialize each region,"
+  },
+  {
+   "t": 99.2,
+   "d": 2.2,
+   "text": "and we find trade routes between regions"
+  },
+  {
+   "t": 101.4,
+   "d": 1.6,
+   "text": "that exchange goods and bring the"
+  },
+  {
+   "t": 103.0,
+   "d": 2.5,
+   "text": "utility back up."
+  },
+  {
+   "t": 105.5,
+   "d": 1.7,
+   "text": "So here's an example of the sort of"
+  },
+  {
+   "t": 107.2,
+   "d": 1.6,
+   "text": "graph I'm talking about, not the one"
+  },
+  {
+   "t": 108.8,
+   "d": 2.2,
+   "text": "Lisa Simpson has made. Uh, you already"
+  },
+  {
+   "t": 111.0,
+   "d": 2.2,
+   "text": "got an example earlier. It has circles"
+  },
+  {
+   "t": 113.2,
+   "d": 2.1,
+   "text": "called nodes and arrows called edges,"
+  },
+  {
+   "t": 115.3,
+   "d": 2.5,
+   "text": "and each can have some label attached."
+  },
+  {
+   "t": 117.8,
+   "d": 2.59,
+   "text": "Each node represents either a good, like"
+  },
+  {
+   "t": 120.39,
+   "d": 2.7,
+   "text": "melon and lemon at the top,"
+  },
+  {
+   "t": 123.09,
+   "d": 3.2,
+   "text": "or a process that transforms the goods,"
+  },
+  {
+   "t": 126.29,
+   "d": 2.8,
+   "text": "like the Olympic and the axe here."
+  },
+  {
+   "t": 129.09,
+   "d": 2.2,
+   "text": "From an initial set of natural goods"
+  },
+  {
+   "t": 131.29,
+   "d": 1.9,
+   "text": "like plants, the economy produces a"
+  },
+  {
+   "t": 133.19,
+   "d": 3.2,
+   "text": "variety of other consumables like pie at"
+  },
+  {
+   "t": 136.39,
+   "d": 2.1,
+   "text": "the bottom here."
+  },
+  {
+   "t": 138.49,
+   "d": 2.2,
+   "text": "So in my prototype, I had just two types"
+  },
+  {
+   "t": 140.69,
+   "d": 2.7,
+   "text": "of transformations of goods. Factories"
+  },
+  {
+   "t": 143.39,
+   "d": 2.1,
+   "text": "that put two units together to create a"
+  },
+  {
+   "t": 145.49,
+   "d": 3.0,
+   "text": "single new unit, or processing plants"
+  },
+  {
+   "t": 148.49,
+   "d": 2.1,
+   "text": "that split a single unit into its"
+  },
+  {
+   "t": 150.59,
+   "d": 3.1,
+   "text": "component parts."
+  },
+  {
+   "t": 153.89,
+   "d": 2.2,
+   "text": "So the sink of the graph represents"
+  },
+  {
+   "t": 156.09,
+   "d": 2.0,
+   "text": "consumption of goods by the population."
+  },
+  {
+   "t": 158.09,
+   "d": 3.0,
+   "text": "We want as many goods as possible to to"
+  },
+  {
+   "t": 161.09,
+   "d": 1.7,
+   "text": "be used."
+  },
+  {
+   "t": 162.79,
+   "d": 1.9,
+   "text": "And in a graph like this, a good could"
+  },
+  {
+   "t": 164.69,
+   "d": 2.2,
+   "text": "have more than one possible use. We"
+  },
+  {
+   "t": 166.89,
+   "d": 2.6,
+   "text": "could eat a plant directly,"
+  },
+  {
+   "t": 169.49,
+   "d": 3.4,
+   "text": "uh like this left left right hand uh"
+  },
+  {
+   "t": 172.89,
+   "d": 2.8,
+   "text": "edge, or we could process it into beer."
+  },
+  {
+   "t": 175.69,
+   "d": 1.7,
+   "text": "And this gives us some play in the"
+  },
+  {
+   "t": 177.39,
+   "d": 1.9,
+   "text": "economy. We have to make decisions"
+  },
+  {
+   "t": 179.29,
+   "d": 1.7,
+   "text": "rather than just everything flowing"
+  },
+  {
+   "t": 180.99,
+   "d": 2.7,
+   "text": "through the graph."
+  },
+  {
+   "t": 183.99,
+   "d": 1.9,
+   "text": "In Emoji Economy, these graphs are"
+  },
+  {
+   "t": 185.89,
+   "d": 2.4,
+   "text": "produced with a graph grammar."
+  },
+  {
+   "t": 188.29,
+   "d": 1.3,
+   "text": "And a graph grammar is a set of"
+  },
+  {
+   "t": 189.59,
+   "d": 2.3,
+   "text": "production rules that matches some set"
+  },
+  {
+   "t": 191.89,
+   "d": 1.9,
+   "text": "of labeled nodes and edges within a"
+  },
+  {
+   "t": 193.79,
+   "d": 2.4,
+   "text": "graph and makes an alteration."
+  },
+  {
+   "t": 196.19,
+   "d": 1.8,
+   "text": "For example, on the left hand side, I've"
+  },
+  {
+   "t": 197.99,
+   "d": 2.0,
+   "text": "illustrated a rule that takes a source"
+  },
+  {
+   "t": 199.99,
+   "d": 2.5,
+   "text": "and sink node and constructs a new plant"
+  },
+  {
+   "t": 202.49,
+   "d": 2.9,
+   "text": "in between them. So a new plant is grown"
+  },
+  {
+   "t": 205.39,
+   "d": 1.9,
+   "text": "and it's eaten directly."
+  },
+  {
+   "t": 207.29,
+   "d": 1.5,
+   "text": "The right hand side shows this being"
+  },
+  {
+   "t": 208.79,
+   "d": 1.7,
+   "text": "applied to an existing graph that"
+  },
+  {
+   "t": 210.49,
+   "d": 3.4,
+   "text": "already has some some uh some flow."
+  },
+  {
+   "t": 213.89,
+   "d": 2.0,
+   "text": "So Doris Dormans has used graph grammars"
+  },
+  {
+   "t": 215.89,
+   "d": 2.0,
+   "text": "to create effect in Unexplored. And"
+  },
+  {
+   "t": 217.89,
+   "d": 1.9,
+   "text": "there the the strength of a graph"
+  },
+  {
+   "t": 219.79,
+   "d": 1.8,
+   "text": "grammar is that it makes it easy to"
+  },
+  {
+   "t": 221.59,
+   "d": 3.0,
+   "text": "preserve structural invariance. So in a"
+  },
+  {
+   "t": 224.59,
+   "d": 2.0,
+   "text": "dungeon, the graph grammar knows not to"
+  },
+  {
+   "t": 226.59,
+   "d": 2.4,
+   "text": "move the key behind the door it opens."
+  },
+  {
+   "t": 228.99,
+   "d": 2.4,
+   "text": "In Emoji Economy, we we can ensure that"
+  },
+  {
+   "t": 231.39,
+   "d": 2.4,
+   "text": "inputs or outputs remain hooked up so"
+  },
+  {
+   "t": 233.79,
+   "d": 1.7,
+   "text": "that there aren't any consumable items"
+  },
+  {
+   "t": 235.49,
+   "d": 1.2,
+   "text": "just hanging"
+  },
+  {
+   "t": 236.69,
+   "d": 3.2,
+   "text": "out being unused."
+  },
+  {
+   "t": 239.89,
+   "d": 2.2,
+   "text": "Here's is example of a a moderately"
+  },
+  {
+   "t": 242.09,
+   "d": 2.3,
+   "text": "complex from Oort economy. It says if"
+  },
+  {
+   "t": 244.39,
+   "d": 2.5,
+   "text": "there's some good that's used by a"
+  },
+  {
+   "t": 246.89,
+   "d": 1.6,
+   "text": "factory"
+  },
+  {
+   "t": 248.49,
+   "d": 3.1,
+   "text": "um and we have a token that allows us to"
+  },
+  {
+   "t": 251.59,
+   "d": 2.2,
+   "text": "use another plant product, then we"
+  },
+  {
+   "t": 253.79,
+   "d": 2.2,
+   "text": "create a new process which produces the"
+  },
+  {
+   "t": 255.99,
+   "d": 1.7,
+   "text": "same good"
+  },
+  {
+   "t": 257.69,
+   "d": 1.9,
+   "text": "as well as another byproduct not cooked"
+  },
+  {
+   "t": 259.59,
+   "d": 1.6,
+   "text": "up to anything."
+  },
+  {
+   "t": 261.19,
+   "d": 1.8,
+   "text": "So another rule could use that or maybe"
+  },
+  {
+   "t": 262.99,
+   "d": 1.7,
+   "text": "convert it into a garbage type with"
+  },
+  {
+   "t": 264.69,
+   "d": 2.4,
+   "text": "negative utility, but this provides two"
+  },
+  {
+   "t": 267.09,
+   "d": 4.6,
+   "text": "ways of feeding that that factory."
+  },
+  {
+   "t": 271.79,
+   "d": 3.1,
+   "text": "So let's switch to talking about what"
+  },
+  {
+   "t": 274.89,
+   "d": 2.2,
+   "text": "what does an economy look like besides a"
+  },
+  {
+   "t": 277.09,
+   "d": 1.7,
+   "text": "graph? So"
+  },
+  {
+   "t": 278.79,
+   "d": 2.2,
+   "text": "economists are favor and and game"
+  },
+  {
+   "t": 280.99,
+   "d": 3.0,
+   "text": "theorists are fond of utility, which is"
+  },
+  {
+   "t": 283.99,
+   "d": 2.0,
+   "text": "circularly defined as whatever people"
+  },
+  {
+   "t": 285.99,
+   "d": 2.3,
+   "text": "attempt to maximize. So we can think of"
+  },
+  {
+   "t": 288.29,
+   "d": 1.6,
+   "text": "it as happiness."
+  },
+  {
+   "t": 289.89,
+   "d": 1.8,
+   "text": "And virtually any real good has"
+  },
+  {
+   "t": 291.69,
+   "d": 2.4,
+   "text": "diminishing marginal utility, which just"
+  },
+  {
+   "t": 294.09,
+   "d": 2.5,
+   "text": "means that the n plus one of it is not"
+  },
+  {
+   "t": 296.59,
+   "d": 2.3,
+   "text": "worth as much to you as the n."
+  },
+  {
+   "t": 298.89,
+   "d": 2.5,
+   "text": "If you have 999 lemons, then the"
+  },
+  {
+   "t": 301.39,
+   "d": 2.0,
+   "text": "thousandth lemon really doesn't make a"
+  },
+  {
+   "t": 303.39,
+   "d": 2.0,
+   "text": "whole, you know, doesn't help you a lot."
+  },
+  {
+   "t": 305.39,
+   "d": 2.1,
+   "text": "So I modeled this as a sigmoid function"
+  },
+  {
+   "t": 307.49,
+   "d": 4.1,
+   "text": "which asymptotically reaches some limit."
+  },
+  {
+   "t": 312.59,
+   "d": 1.5,
+   "text": "So what have we got? We've got a set of"
+  },
+  {
+   "t": 314.09,
+   "d": 2.4,
+   "text": "choices about what to do with goods. In"
+  },
+  {
+   "t": 316.49,
+   "d": 2.0,
+   "text": "the simple graph here, we've got apples"
+  },
+  {
+   "t": 318.49,
+   "d": 2.3,
+   "text": "which we could eat directly or make into"
+  },
+  {
+   "t": 320.79,
+   "d": 2.2,
+   "text": "juice or use for apple butter."
+  },
+  {
+   "t": 322.99,
+   "d": 1.7,
+   "text": "Uh the constraint is our choices have to"
+  },
+  {
+   "t": 324.69,
+   "d": 2.4,
+   "text": "add up to 100%. We can't magically get"
+  },
+  {
+   "t": 327.09,
+   "d": 2.6,
+   "text": "more juice than we have apples."
+  },
+  {
+   "t": 329.69,
+   "d": 1.5,
+   "text": "Um and we've got a constraint we want to"
+  },
+  {
+   "t": 331.19,
+   "d": 2.8,
+   "text": "max maximize under those of a function"
+  },
+  {
+   "t": 333.99,
+   "d": 1.4,
+   "text": "we want to maximize under those"
+  },
+  {
+   "t": 335.39,
+   "d": 2.3,
+   "text": "constraints, but our objective on that"
+  },
+  {
+   "t": 337.69,
+   "d": 1.2,
+   "text": "we saw on the previous slide is"
+  },
+  {
+   "t": 338.89,
+   "d": 2.0,
+   "text": "nonlinear and so the effect of our"
+  },
+  {
+   "t": 340.89,
+   "d": 1.9,
+   "text": "choices, so we can't use an easy"
+  },
+  {
+   "t": 342.79,
+   "d": 2.3,
+   "text": "algorithm like linear program. This is"
+  },
+  {
+   "t": 345.09,
+   "d": 2.6,
+   "text": "actually a a tough problem."
+  },
+  {
+   "t": 347.69,
+   "d": 1.2,
+   "text": "Um"
+  },
+  {
+   "t": 348.89,
+   "d": 1.5,
+   "text": "the solution I picked is a standard"
+  },
+  {
+   "t": 350.39,
+   "d": 2.1,
+   "text": "method called gradient descent. Uh I"
+  },
+  {
+   "t": 352.49,
+   "d": 1.7,
+   "text": "won't go into all this. A lot of the"
+  },
+  {
+   "t": 354.19,
+   "d": 2.2,
+   "text": "math looks abstruse, but it's really"
+  },
+  {
+   "t": 356.39,
+   "d": 2.2,
+   "text": "actually a very simple idea. Just move"
+  },
+  {
+   "t": 358.59,
+   "d": 1.3,
+   "text": "in the direction that makes things"
+  },
+  {
+   "t": 359.89,
+   "d": 1.8,
+   "text": "better and if you end up making things"
+  },
+  {
+   "t": 361.69,
+   "d": 2.2,
+   "text": "worse, take smaller steps next time."
+  },
+  {
+   "t": 363.89,
+   "d": 1.6,
+   "text": "Don't you know, sort of roll that back"
+  },
+  {
+   "t": 365.5,
+   "d": 1.2,
+   "text": "and don't do it."
+  },
+  {
+   "t": 366.69,
+   "d": 1.8,
+   "text": "Uh one problem I should mention is that"
+  },
+  {
+   "t": 368.5,
+   "d": 2.7,
+   "text": "we might been following this best path"
+  },
+  {
+   "t": 371.19,
+   "d": 1.6,
+   "text": "make the choices at"
+  },
+  {
+   "t": 372.8,
+   "d": 3.1,
+   "text": "more than 100% and the solution is just"
+  },
+  {
+   "t": 375.89,
+   "d": 3.3,
+   "text": "pull them back to the nearest point that"
+  },
+  {
+   "t": 379.19,
+   "d": 2.0,
+   "text": "does match the constraint. And there's a"
+  },
+  {
+   "t": 381.19,
+   "d": 1.9,
+   "text": "very cool and simple algorithm that does"
+  },
+  {
+   "t": 383.1,
+   "d": 2.0,
+   "text": "this which is surprisingly was only"
+  },
+  {
+   "t": 385.1,
+   "d": 3.0,
+   "text": "invented in 2011. It was kind of far"
+  },
+  {
+   "t": 388.1,
+   "d": 4.0,
+   "text": "along our tech tree for some reason."
+  },
+  {
+   "t": 392.1,
+   "d": 2.0,
+   "text": "But really you know there's a good point"
+  },
+  {
+   "t": 394.1,
+   "d": 2.0,
+   "text": "here which is real economies are not"
+  },
+  {
+   "t": 396.1,
+   "d": 2.2,
+   "text": "perfect and your simulated economy"
+  },
+  {
+   "t": 398.3,
+   "d": 1.4,
+   "text": "doesn't have to either. I think it's"
+  },
+  {
+   "t": 399.69,
+   "d": 1.8,
+   "text": "actually cool if"
+  },
+  {
+   "t": 401.5,
+   "d": 2.2,
+   "text": "players notice that a sub optimal choice"
+  },
+  {
+   "t": 403.69,
+   "d": 2.1,
+   "text": "has been made if they have the power to"
+  },
+  {
+   "t": 405.8,
+   "d": 2.9,
+   "text": "do something about it."
+  },
+  {
+   "t": 408.69,
+   "d": 2.0,
+   "text": "So now that everything's working mostly"
+  },
+  {
+   "t": 410.69,
+   "d": 1.7,
+   "text": "like it should we can start breaking the"
+  },
+  {
+   "t": 412.39,
+   "d": 2.0,
+   "text": "economy. Our perfect economy might fail"
+  },
+  {
+   "t": 414.39,
+   "d": 1.8,
+   "text": "in different ways. Maybe some regions"
+  },
+  {
+   "t": 416.19,
+   "d": 1.6,
+   "text": "can't grow apples, maybe it lacks the"
+  },
+  {
+   "t": 417.8,
+   "d": 2.2,
+   "text": "infrastructure to make apple juice. And"
+  },
+  {
+   "t": 420.0,
+   "d": 1.5,
+   "text": "some of these differences, most of these"
+  },
+  {
+   "t": 421.5,
+   "d": 2.0,
+   "text": "differences I think can be simulated by"
+  },
+  {
+   "t": 423.5,
+   "d": 2.6,
+   "text": "removing parts of the original graph."
+  },
+  {
+   "t": 426.1,
+   "d": 1.9,
+   "text": "That's what I did in emoji economy. This"
+  },
+  {
+   "t": 428.0,
+   "d": 2.7,
+   "text": "usually lowers the utility because there"
+  },
+  {
+   "t": 430.69,
+   "d": 3.6,
+   "text": "are not as many goods or you know not as"
+  },
+  {
+   "t": 434.3,
+   "d": 2.8,
+   "text": "many choices in each region."
+  },
+  {
+   "t": 437.1,
+   "d": 2.2,
+   "text": "So trade can repair some of the damage."
+  },
+  {
+   "t": 439.3,
+   "d": 2.6,
+   "text": "The partially broken economies give some"
+  },
+  {
+   "t": 441.89,
+   "d": 3.2,
+   "text": "motivation to move goods back and forth."
+  },
+  {
+   "t": 445.1,
+   "d": 2.4,
+   "text": "Uh the simple econ 101 version looks"
+  },
+  {
+   "t": 447.5,
+   "d": 1.9,
+   "text": "like this. A can make juice but not"
+  },
+  {
+   "t": 449.39,
+   "d": 2.4,
+   "text": "butter. B can make apple butter but not"
+  },
+  {
+   "t": 451.8,
+   "d": 2.2,
+   "text": "apple juice. If they trade equal amounts"
+  },
+  {
+   "t": 454.0,
+   "d": 3.2,
+   "text": "both are better off."
+  },
+  {
+   "t": 457.3,
+   "d": 2.2,
+   "text": "But there are two problems, one"
+  },
+  {
+   "t": 459.5,
+   "d": 2.5,
+   "text": "theoretical and one practical. So the"
+  },
+  {
+   "t": 462.0,
+   "d": 1.7,
+   "text": "theoretical problem is how do two"
+  },
+  {
+   "t": 463.69,
+   "d": 2.7,
+   "text": "negotiators come to an agreement? Maybe"
+  },
+  {
+   "t": 466.39,
+   "d": 2.0,
+   "text": "A demands more than its fair share."
+  },
+  {
+   "t": 468.39,
+   "d": 2.1,
+   "text": "Should be give in just because there's"
+  },
+  {
+   "t": 470.5,
+   "d": 2.2,
+   "text": "some benefits better than none?"
+  },
+  {
+   "t": 472.69,
+   "d": 2.1,
+   "text": "Uh economists developed several models"
+  },
+  {
+   "t": 474.8,
+   "d": 2.1,
+   "text": "all of which disagree and the bad news"
+  },
+  {
+   "t": 476.89,
+   "d": 3.3,
+   "text": "is that when we study real humans uh"
+  },
+  {
+   "t": 480.19,
+   "d": 1.4,
+   "text": "they don't behave in a way consistent"
+  },
+  {
+   "t": 481.6,
+   "d": 2.5,
+   "text": "with any of them. So who knows?"
+  },
+  {
+   "t": 484.1,
+   "d": 2.4,
+   "text": "And practically this is a hard problem"
+  },
+  {
+   "t": 486.5,
+   "d": 2.4,
+   "text": "to identify all the good opportunities"
+  },
+  {
+   "t": 488.9,
+   "d": 1.8,
+   "text": "to trade. Is there any efficient way of"
+  },
+  {
+   "t": 490.7,
+   "d": 1.9,
+   "text": "doing so?"
+  },
+  {
+   "t": 492.6,
+   "d": 1.6,
+   "text": "So here's an algorithm I came up with."
+  },
+  {
+   "t": 494.2,
+   "d": 1.7,
+   "text": "It produces results that I think are"
+  },
+  {
+   "t": 495.9,
+   "d": 2.6,
+   "text": "okay. We just proceed in rounds. One"
+  },
+  {
+   "t": 498.5,
+   "d": 2.1,
+   "text": "region becomes the seller and says, hey,"
+  },
+  {
+   "t": 500.6,
+   "d": 2.4,
+   "text": "I have 100 limes. What have you got?"
+  },
+  {
+   "t": 503.0,
+   "d": 3.4,
+   "text": "Each other region makes a honest bid the"
+  },
+  {
+   "t": 506.4,
+   "d": 1.8,
+   "text": "maximum they'll pay for those limes."
+  },
+  {
+   "t": 508.2,
+   "d": 3.7,
+   "text": "Maybe five video games or 16 slime molds"
+  },
+  {
+   "t": 511.9,
+   "d": 1.8,
+   "text": "or 200 yarn."
+  },
+  {
+   "t": 513.7,
+   "d": 1.9,
+   "text": "And the seller reruns his bobble and"
+  },
+  {
+   "t": 515.6,
+   "d": 2.5,
+   "text": "says, okay, if I subtract my limes and"
+  },
+  {
+   "t": 518.1,
+   "d": 3.1,
+   "text": "add in the yarn, what does my utility"
+  },
+  {
+   "t": 521.2,
+   "d": 1.5,
+   "text": "look like? They pick the bid that"
+  },
+  {
+   "t": 522.7,
+   "d": 2.7,
+   "text": "maximizes their utility or they just"
+  },
+  {
+   "t": 525.4,
+   "d": 1.7,
+   "text": "reject them all if the game is too"
+  },
+  {
+   "t": 527.1,
+   "d": 1.9,
+   "text": "small."
+  },
+  {
+   "t": 529.0,
+   "d": 2.9,
+   "text": "So this produces, I think, realistic"
+  },
+  {
+   "t": 531.9,
+   "d": 2.0,
+   "text": "looking trades, but it's lots and lots"
+  },
+  {
+   "t": 533.9,
+   "d": 2.7,
+   "text": "of optimization runs. It's way too slow."
+  },
+  {
+   "t": 536.6,
+   "d": 1.7,
+   "text": "The alternative is to pick trades"
+  },
+  {
+   "t": 538.3,
+   "d": 2.6,
+   "text": "randomly, use them if they're positive,"
+  },
+  {
+   "t": 540.9,
+   "d": 1.9,
+   "text": "and this is fast but produces sort of"
+  },
+  {
+   "t": 542.8,
+   "d": 2.4,
+   "text": "weird results. So here's an example."
+  },
+  {
+   "t": 545.2,
+   "d": 2.4,
+   "text": "We've got uh sort of the on the left"
+  },
+  {
+   "t": 547.6,
+   "d": 2.3,
+   "text": "hand side we got an optimally balanced"
+  },
+  {
+   "t": 549.9,
+   "d": 1.9,
+   "text": "economy that's perfect. On the right"
+  },
+  {
+   "t": 551.8,
+   "d": 1.5,
+   "text": "hand side we took"
+  },
+  {
+   "t": 553.3,
+   "d": 2.0,
+   "text": "uh nine different regions and broke them"
+  },
+  {
+   "t": 555.3,
+   "d": 2.1,
+   "text": "all and ran this algorithm. And I I like"
+  },
+  {
+   "t": 557.4,
+   "d": 2.6,
+   "text": "that we got a nice dense network of"
+  },
+  {
+   "t": 560.0,
+   "d": 2.6,
+   "text": "trade with with, you know, things that"
+  },
+  {
+   "t": 562.6,
+   "d": 1.9,
+   "text": "are traded that make sense, but there's"
+  },
+  {
+   "t": 564.5,
+   "d": 2.0,
+   "text": "still a lot of variety going on."
+  },
+  {
+   "t": 566.5,
+   "d": 1.8,
+   "text": "I'm your one minute timer."
+  },
+  {
+   "t": 568.3,
+   "d": 1.5,
+   "text": "All right. All the trades are"
+  },
+  {
+   "t": 569.8,
+   "d": 1.7,
+   "text": "bidirectional. There's no triangle"
+  },
+  {
+   "t": 571.5,
+   "d": 1.6,
+   "text": "trades, although they occur in real"
+  },
+  {
+   "t": 573.1,
+   "d": 1.9,
+   "text": "life. So there's there's a lot of room"
+  },
+  {
+   "t": 575.0,
+   "d": 2.1,
+   "text": "to do better. I also ignored any cost of"
+  },
+  {
+   "t": 577.1,
+   "d": 2.0,
+   "text": "moving goods or geographic"
+  },
+  {
+   "t": 579.1,
+   "d": 1.7,
+   "text": "considerations. I think those could be"
+  },
+  {
+   "t": 580.8,
+   "d": 2.6,
+   "text": "added in and and make interesting"
+  },
+  {
+   "t": 583.4,
+   "d": 1.6,
+   "text": "modifications to what you get as the"
+  },
+  {
+   "t": 585.0,
+   "d": 1.4,
+   "text": "output."
+  },
+  {
+   "t": 586.4,
+   "d": 2.4,
+   "text": "So this code is available on GitHub"
+  },
+  {
+   "t": 588.8,
+   "d": 2.4,
+   "text": "under mgridder/emojieconomy."
+  },
+  {
+   "t": 591.2,
+   "d": 1.3,
+   "text": "If you have any trouble, please let me"
+  },
+  {
+   "t": 592.5,
+   "d": 3.1,
+   "text": "know. My documentation's very poor. Uh I"
+  },
+  {
+   "t": 595.6,
+   "d": 2.3,
+   "text": "based this on my old own graph grammar"
+  },
+  {
+   "t": 597.9,
+   "d": 2.4,
+   "text": "implementation called Sofie as an homage"
+  },
+  {
+   "t": 600.3,
+   "d": 2.3,
+   "text": "to Tracery, uh which has mainly failed"
+  },
+  {
+   "t": 602.6,
+   "d": 1.7,
+   "text": "in its design goals. So I'm looking"
+  },
+  {
+   "t": 604.3,
+   "d": 1.6,
+   "text": "forward to rewriting it, but I'll be"
+  },
+  {
+   "t": 605.9,
+   "d": 2.0,
+   "text": "giving a talk on it next Saturday as"
+  },
+  {
+   "t": 607.9,
+   "d": 3.3,
+   "text": "part of Minibar, my local unconference."
+  },
+  {
+   "t": 611.2,
+   "d": 1.4,
+   "text": "That's it."
+  },
+  {
+   "t": 612.6,
+   "d": 2.2,
+   "text": "Excellent. Thank you so much. Uh we'll"
+  },
+  {
+   "t": 614.8,
+   "d": 1.6,
+   "text": "try and make sure those links get shared"
+  },
+  {
+   "t": 616.4,
+   "d": 2.8,
+   "text": "out. Excellent talk."
+  }
+ ]
+}

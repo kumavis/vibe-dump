@@ -1,0 +1,471 @@
+{
+ "id": "s6Kxh_Zyiqs",
+ "url": "https://www.youtube.com/watch?v=s6Kxh_Zyiqs",
+ "title": "Younès Rabii-There’s A Skull In My Garden: Simple interactions give new meanings to generated things",
+ "speaker": "Younès Rabii-There’s A Skull In My Garden",
+ "talk_title": "Simple interactions give new meanings to generated things",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 534,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nYounès is a PhD student exploring how generative AI and PCG techniques can be used to create whole new kinds of game experience. In this lightning talk he discusses surprising emergent phenomena they encountered when designing a simple game containing items with generated visuals. This explains how very simple game mechanics (eg: carrying an item) and generative system (eg: generating a symmetric image) can interact to create a context where players give their own meaning to found artifacts (eg: is that a cowboy hat on my head ? or from the title : There's A Skull in My Garden)\n\nFind him on Twitter: https://twitter.com/Pyrofoux\nMax Kreminski's talk on gardening as a mode of play: https://www.youtube.com/watch?v=TvlZinAvpwg&t=3s",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 42,
+   "title": "what - Player Interpretation"
+  },
+  {
+   "start": 77,
+   "title": "why - Meaningful Stories"
+  },
+  {
+   "start": 129,
+   "title": "how - Tea Garden"
+  },
+  {
+   "start": 170,
+   "title": "Flower Generation"
+  },
+  {
+   "start": 204,
+   "title": "Interpretation & Attachment"
+  },
+  {
+   "start": 262,
+   "title": "new interaction: Pick Up"
+  },
+  {
+   "start": 305,
+   "title": "interaction : Place on Ground"
+  },
+  {
+   "start": 397,
+   "title": "new interaction : Wear"
+  },
+  {
+   "start": 452,
+   "title": "Beware!"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1346,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 2.88,
+   "d": 4.72,
+   "text": "Hi everyone, I'm Younès Rabii I've been a game dev for the past 5 years and I'm also"
+  },
+  {
+   "t": 7.6,
+   "d": 5.76,
+   "text": "a new phd student in game and AI and today i'd like to tell you about how simple interactions"
+  },
+  {
+   "t": 13.36,
+   "d": 4.48,
+   "text": "can give new meanings to generated things or \"There's A Skull In My Garden\""
+  },
+  {
+   "t": 18.96,
+   "d": 5.92,
+   "text": "Let's delve into the what, why, and how of this project I'm going to tell you about"
+  },
+  {
+   "t": 24.88,
+   "d": 4.96,
+   "text": "the way players can attach more meaning to generated things and it's important for us"
+  },
+  {
+   "t": 30.56,
+   "d": 5.92,
+   "text": "because it's at the heart of what we like in rogue like and i'm going to explore"
+  },
+  {
+   "t": 36.48,
+   "d": 4.4,
+   "text": "that with you by using the observations i made while designing a roguelike myself"
+  },
+  {
+   "t": 42.8,
+   "d": 6.24,
+   "text": "So what's player interpretation well in the 20th century people used to play games"
+  },
+  {
+   "t": 49.04,
+   "d": 4.96,
+   "text": "in what was called console mods where instead of the fancy new graphics that you have today"
+  },
+  {
+   "t": 54.0,
+   "d": 3.84,
+   "text": "they used to represent things on screen with keyboard characters"
+  },
+  {
+   "t": 58.96,
+   "d": 6.8,
+   "text": "so a thing like on the screen that looks like an ampy with a slash and a green 'g' letter"
+  },
+  {
+   "t": 65.76,
+   "d": 4.96,
+   "text": "will be interpreted by the player as \"I'm holding a sword and five"
+  },
+  {
+   "t": 70.72,
+   "d": 5.28,
+   "text": "meters to the right there's a goblin\" this step is what i call Player Interpretation"
+  },
+  {
+   "t": 78.64,
+   "d": 4.88,
+   "text": "and Player Interpretation is actually very important for roguelike players and game"
+  },
+  {
+   "t": 83.52,
+   "d": 6.16,
+   "text": "devs um because it it helps us going from the screenshots of dwarf fortress"
+  },
+  {
+   "t": 90.8,
+   "d": 7.2,
+   "text": "that looks like someone just smashed their keyboard to whole stories with drama, with funny"
+  },
+  {
+   "t": 98.0,
+   "d": 6.32,
+   "text": "moments, with plot twists and everything and the key to do that is Player Interpretation on what's"
+  },
+  {
+   "t": 104.32,
+   "d": 9.2,
+   "text": "happening on screen and we care a lot about these stories we love them they are dear, to us and we"
+  },
+  {
+   "t": 113.52,
+   "d": 6.64,
+   "text": "love them so much that we made a whole conference about about them so Player Interpretation is"
+  },
+  {
+   "t": 120.16,
+   "d": 7.68,
+   "text": "actually very important you can also see designing roguelikes as shaping player interpretation"
+  },
+  {
+   "t": 129.28,
+   "d": 6.56,
+   "text": "let's see how we can do that a bit so i'm going to speak about tea garden which is a"
+  },
+  {
+   "t": 135.84,
+   "d": 5.68,
+   "text": "little roguelike that i started after watching Max Kreminsky talk in Roguelike Celebration"
+  },
+  {
+   "t": 141.52,
+   "d": 7.12,
+   "text": "last year it was my attempt to make a gardening roguelike not just in the theme of the game but"
+  },
+  {
+   "t": 148.64,
+   "d": 8.0,
+   "text": "in the way it is played. the gameplay loop is very simple you can brew tea and this tea can give you"
+  },
+  {
+   "t": 156.64,
+   "d": 6.0,
+   "text": "dreams and in your dreams you can collect, you can see strange flowers which are generated by"
+  },
+  {
+   "t": 162.64,
+   "d": 4.72,
+   "text": "the game and you can bring back to the real world the flowers that you liked"
+  },
+  {
+   "t": 169.12,
+   "d": 5.2,
+   "text": "and the recipe to create a flower in the game is actually very very simple"
+  },
+  {
+   "t": 174.32,
+   "d": 6.72,
+   "text": "you just take a six by six pixel grid you put some symmetry on it, horizontal symmetry,"
+  },
+  {
+   "t": 181.04,
+   "d": 4.72,
+   "text": "diagonal symmetry ,everything and you color this pattern with at most two colors"
+  },
+  {
+   "t": 187.36,
+   "d": 6.0,
+   "text": "since this is a pico 8 game this means that the colors i use are always"
+  },
+  {
+   "t": 195.12,
+   "d": 3.2,
+   "text": "balanced they are already, they already match well together"
+  },
+  {
+   "t": 199.68,
+   "d": 6.48,
+   "text": "so the visuals they are strange but sometimes they seem compelling and some players"
+  },
+  {
+   "t": 207.36,
+   "d": 5.12,
+   "text": "give meaning to them even though the games the game doesn't attach one explicitly"
+  },
+  {
+   "t": 213.2,
+   "d": 7.12,
+   "text": "and for instance this orange thing is just like an orange thing but this pink one looks kinda"
+  },
+  {
+   "t": 220.32,
+   "d": 5.76,
+   "text": "like a butterfly and the green one looks like a frog face it's a bit like looking at clouds like"
+  },
+  {
+   "t": 227.28,
+   "d": 7.28,
+   "text": "approximately 90% of the things you see is junk is it has no perceived meaning"
+  },
+  {
+   "t": 234.56,
+   "d": 7.2,
+   "text": "whatsoever to any player but in the in the last 10 persons you can actually see things"
+  },
+  {
+   "t": 241.76,
+   "d": 5.92,
+   "text": "that appeal to you and the more you you can recognize them the more you are attached to them"
+  },
+  {
+   "t": 248.32,
+   "d": 7.28,
+   "text": "for instance i'm a pretty fan of this frog face myself it's round it's lovable it's previous to me"
+  },
+  {
+   "t": 256.24,
+   "d": 3.12,
+   "text": "and these notions they are very different from player to player"
+  },
+  {
+   "t": 263.36,
+   "d": 7.04,
+   "text": "but they can also be influenced by the game here's an example when i designed the game i added a new"
+  },
+  {
+   "t": 270.4,
+   "d": 6.24,
+   "text": "interaction to it it was picking up something and since the character has no arms whatsoever"
+  },
+  {
+   "t": 276.64,
+   "d": 6.72,
+   "text": "they just put objects on their heads and suddenly what happened is that flowers that had no meaning"
+  },
+  {
+   "t": 284.72,
+   "d": 6.8,
+   "text": "before starting being seen as hats by players like this orange thing became cowboy hats"
+  },
+  {
+   "t": 291.52,
+   "d": 6.48,
+   "text": "and suddenly it became their favorite flower - player interaction can help"
+  },
+  {
+   "t": 298.0,
+   "d": 6.32,
+   "text": "can help meaningless visuals becoming something that holds a genuine meaning to the player"
+  },
+  {
+   "t": 305.52,
+   "d": 4.56,
+   "text": "another example because you can pick up things you can also place them on ground"
+  },
+  {
+   "t": 310.08,
+   "d": 7.84,
+   "text": "and suddenly it gave the player the ability to create arrangement of things and to to"
+  },
+  {
+   "t": 317.92,
+   "d": 6.48,
+   "text": "to see in flowers things that could be arranged for instance since letters come from words the"
+  },
+  {
+   "t": 324.4,
+   "d": 6.8,
+   "text": "player began to see some flowers as a letter a thing that they did not do before"
+  },
+  {
+   "t": 332.72,
+   "d": 4.16,
+   "text": "what happens i think it is still my personal theory"
+  },
+  {
+   "t": 336.88,
+   "d": 6.56,
+   "text": "is that actually the game creates a language with you the player and you you play an actual role"
+  },
+  {
+   "t": 343.44,
+   "d": 7.36,
+   "text": "into creating this language even if you don't - even if you're not conscious about it for instance"
+  },
+  {
+   "t": 351.36,
+   "d": 6.96,
+   "text": "the game tells you that something is pink and you tell yourself oh something that looks like this"
+  },
+  {
+   "t": 358.32,
+   "d": 5.68,
+   "text": "it should be... and you're feeling the blank yourself here it could be a butterfly but"
+  },
+  {
+   "t": 364.0,
+   "d": 4.72,
+   "text": "by adding a new interaction you're actually giving more opportunities to a player to"
+  },
+  {
+   "t": 369.84,
+   "d": 6.16,
+   "text": "to fill in more blanks and give more meaning to what's in the game for instance here's something"
+  },
+  {
+   "t": 376.0,
+   "d": 5.12,
+   "text": "that i can put on my head well it must be a hat or a crown or a helmet or something"
+  },
+  {
+   "t": 383.44,
+   "d": 5.76,
+   "text": "that means that an interaction in the game can have a lot of impacts on player interpretation"
+  },
+  {
+   "t": 389.2,
+   "d": 6.24,
+   "text": "and therefore the stories they create together what's interesting is that it can actually go"
+  },
+  {
+   "t": 395.44,
+   "d": 7.76,
+   "text": "the other way too here's an example for instance um i know that i can wear a hat in the game but"
+  },
+  {
+   "t": 403.76,
+   "d": 4.56,
+   "text": "sometimes i look at things and i see a mask in them and maybe i'd like to wear them too"
+  },
+  {
+   "t": 409.04,
+   "d": 4.48,
+   "text": "but it's not a thing that i can do in the game but since i'm the developer i just"
+  },
+  {
+   "t": 413.52,
+   "d": 5.2,
+   "text": "implant implemented this functionality because i wanted it it was organically natural for me"
+  },
+  {
+   "t": 419.92,
+   "d": 6.72,
+   "text": "the interpretation i had influenced my desire for new interactions and what's cool is that"
+  },
+  {
+   "t": 426.64,
+   "d": 6.0,
+   "text": "since we saw it before new interactions can help create new interpretations it's it's like a loop"
+  },
+  {
+   "t": 432.64,
+   "d": 7.2,
+   "text": "that creates more and more meaning into the game and it means that not only player interpretation"
+  },
+  {
+   "t": 439.84,
+   "d": 7.68,
+   "text": "has a role into how we give meaning to games but it also has a role into how we make games"
+  },
+  {
+   "t": 447.52,
+   "d": 6.96,
+   "text": "or how we mod games or how we customize them too but you must be cautious because"
+  },
+  {
+   "t": 455.04,
+   "d": 6.64,
+   "text": "it's very cool to to be able to evoke meaningful concepts to a player and they can be very powerful"
+  },
+  {
+   "t": 461.68,
+   "d": 5.76,
+   "text": "but you cannot control them - they can be very positive like for instance these flowers that"
+  },
+  {
+   "t": 467.44,
+   "d": 7.12,
+   "text": "is shaped like a little T and it's blue and pink and which i gave myself the meaning of"
+  },
+  {
+   "t": 474.56,
+   "d": 6.32,
+   "text": "trans rights activism and it's very positive and it's very strong it's embedded in the real world but"
+  },
+  {
+   "t": 481.76,
+   "d": 5.84,
+   "text": "i also came across flowers that were like crosses with four branches and it looked"
+  },
+  {
+   "t": 487.6,
+   "d": 4.72,
+   "text": "to me like fascist imagery and it was not something that had wanted to to be in my game"
+  },
+  {
+   "t": 492.96,
+   "d": 4.48,
+   "text": "you have to ask yourself is it something that you want to put to to be able to evoke"
+  },
+  {
+   "t": 497.44,
+   "d": 6.64,
+   "text": "in your game and there's no easy solution to prevent that also there's something very very"
+  },
+  {
+   "t": 505.2,
+   "d": 8.48,
+   "text": "fearsome with these concepts: it can spook the game dev one day i just wandered in into one"
+  },
+  {
+   "t": 513.68,
+   "d": 8.24,
+   "text": "of my generated gardens for debugging purposes and i just came across a skull my own game spooked"
+  },
+  {
+   "t": 521.92,
+   "d": 6.56,
+   "text": "me very scary well thank you thanks a lot for listening to my talk if you have any questions"
+  },
+  {
+   "t": 528.48,
+   "d": 5.36,
+   "text": "or if you like to discuss it with me just reach me out on twitter thank you a lot for being there"
+  }
+ ]
+}

@@ -1,0 +1,145 @@
+{
+  "id": "SBjsVcffOHg",
+  "title": "Sonat Uzun: Procedural Music of Tea Garden",
+  "speaker": "Sonat Uzun",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=SBjsVcffOHg",
+  "talk_type": "technical",
+  "summary": "Sonat Uzun, composer of the PICO-8 game Tea Garden (made with Younès Rabii), explains the motif-based procedural music generator he built so each procedurally generated garden and dream gets its own music. Short motifs (strings of numbers and special symbols) are drawn from pools for every musical aspect (melody, arpeggio, bass, drums, effects, instrument, volume), combined into parts, and placed in a musical context of scale, chords and chord progression. Variation comes from shifting motifs, special symbols such as silence, jumps and chord-tone targeting, and voices colliding in PICO-8's limited channels. He credits PICO-8's token limit with inspiring the code-sharing design, which fits the generator in about 1500 tokens.",
+  "games": [
+    "Tea Garden"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural music",
+      "kind": "principle",
+      "claim": "Procedural music fits Tea Garden because the game is about exploration and discovery, so players can discover music they enjoy just as they discover flowers and dreams.",
+      "detail": "Uzun's goals were to capture the vibe of a tea garden, generate distinct music for each garden, and make exploring dreams feel magical. In Tea Garden the player decorates a garden with procedurally generated flowers and visits procedurally generated dream worlds.",
+      "t": 202,
+      "quote": "This is a perfect match for Procedural music because the game we think is primarily about exploration and discovery",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural music",
+      "kind": "principle",
+      "claim": "Tea Garden's music generator is deliberately built for one game rather than all genres, though Uzun believes its methods transfer to other generators.",
+      "detail": "Uzun says he does not want an all-genres music generator but one specific to Tea Garden. He encourages others to explore the ideas in their own generators.",
+      "t": 367,
+      "quote": "What I want with this project is not an all genres music generator. But I want a music generator specifically for Tea Garden",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "motif-based generation",
+      "kind": "technique",
+      "claim": "Tea Garden's motif-based generation represents each musical aspect as a looping motif string of numbers and symbols, chosen randomly from a pool per aspect.",
+      "detail": "A motif like 1,2,3,4 is written to PICO-8 music memory note by note and loops back to the start when finished. There are motifs not just for melody, arpeggio, bass, kick and snare but for effects, instruments and volume; combining them yields a part.",
+      "t": 812,
+      "quote": "Motif-based generation is finding important aspects of the music, defining a pool of possible motifs from each and choose randomly",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "controlling generators",
+      "kind": "technique",
+      "claim": "A pool-based generator like Tea Garden's music system is controlled by editing the contents of its pools, which changes the motifs and thus the output.",
+      "detail": "Uzun shows a diagram where a motif is chosen from each pool and fed to the generator. His pools were quite small; to steer the music he alters what the pools contain.",
+      "t": 835,
+      "quote": "We can alter the pools, contents of the pools, and then motifs will be different as well, and then the resulting music will be different as well",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "happy accidents",
+      "kind": "example",
+      "claim": "A glitch in Tea Garden's early music generator produced a surprising song that inspired a new feature, and Uzun was often surprised by his own generator's output.",
+      "detail": "Uzun says the generator 'broke' and produced an awesome song he hadn't intended. That glitch led to the idea of making every aspect, such as instruments, a motif.",
+      "t": 706,
+      "quote": "something really surprising happened and generator broke. There was a glitch in that. It made this awesome song",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "scales and chords",
+      "kind": "technique",
+      "claim": "Tea Garden's motifs are only recipes; context from a scale, chords that are subsets of the scale, and a randomly selected chord progression determines the actual notes.",
+      "detail": "Melodies use only the notes of the chosen scale, and switching from major to minor greatly alters the vibe. Arpeggios use only chord tones, and each piece follows a randomly selected chord progression.",
+      "t": 1018,
+      "quote": "Motifs are just recipes and in order to cook we should add context. Scale is a set of notes",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "variation",
+      "kind": "warning",
+      "claim": "Random combinations alone produced many Tea Garden songs that sounded similar, so variation had to be deliberately engineered.",
+      "detail": "After choosing random motifs and context, Uzun found most combinations sounded alike. He wanted each song to sound unique, so he added explicit variation mechanisms such as the shift motif.",
+      "t": 1133,
+      "quote": "there are many combinations but most sound similar and we don't want that. We want each of them to sound different and unique",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "motif symbols",
+      "kind": "technique",
+      "claim": "Tea Garden's music generator adds variation with shift motifs and special symbols for silence, loop start, random jumps, speed changes, chord-tone targeting and octave jumps.",
+      "detail": "A shift motif transposes the whole motif. Symbols include X for silence, B to begin the loop, J to jump randomly, S for speed, D to target a chord tone below, and O for an octave higher; any needed behaviour can get its own symbol.",
+      "t": 1194,
+      "quote": "X for silence and B means begin the loop and J jump to random location in motif, S means change speed",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "channel collisions",
+      "kind": "technique",
+      "claim": "Cramming up to six parts into PICO-8's three music channels makes voices block each other, creating variation that often sounds intentional.",
+      "detail": "A snare can block a melody note; combining an arpeggio motif with a kick motif yields a new pattern unlike the arpeggio alone. Uzun says this emerged by accident and he capitalized on it.",
+      "t": 1295,
+      "quote": "When you cram up to six different parts into three channels sometimes voices block each other",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "authored structure",
+      "kind": "technique",
+      "claim": "Tea Garden's song structures are hand-written, not random, because if enough other elements are random each song still feels different.",
+      "detail": "Song structures briefly describe which part enters when, which Uzun finds fun to write. Each song follows a random chord progression, so the authored structure still feels varied.",
+      "t": 1389,
+      "quote": "This is nice in the way I don't have to make everything random. If enough stuff is random it will feel different every time",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "pico-8 token limit",
+      "kind": "technique",
+      "claim": "PICO-8's 8192-token limit pushed Tea Garden's music generator toward heavy code sharing, keeping it to about 1500 tokens.",
+      "detail": "Uzun lists the PICO-8 ways to cut tokens: simplify code, improve code sharing, and generate data. Because all motifs are processed by the same iterative loop and all parts use the same write function, the constraint effectively helped invent motif-based generation.",
+      "t": 1477,
+      "quote": "Token limits help me invent motif-base generation",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "generator debug tools",
+      "kind": "technique",
+      "claim": "Uzun is building a tool that displays the parts and motifs behind each Tea Garden song and can force specific motifs, to fine-tune the generator.",
+      "detail": "He plans to influence generation by the qualities of dream gardens by restricting context and motifs, and to refine motif pools and sound, including a reverb on PICO-8's extra channel.",
+      "t": 1524,
+      "quote": "It shows there the parts and motifs that make up the pieces and I can force the generator to use certain motifs",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "mood control",
+      "kind": "technique",
+      "claim": "Tea Garden's generator can target a mood by selecting distinctive scales (e.g. spooky ones) and motifs with more silences, while otherwise trusting randomness.",
+      "detail": "Answering Younès Rabii's question, Uzun says he has some control and doesn't need much, because randomness will produce something good; the showcased songs came from barely curated random motifs. He is considering feeding game state, e.g. into reverb.",
+      "t": 1725,
+      "quote": "I don't need to have a lot of control because I can trust randomness and that something good will happen at some point",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

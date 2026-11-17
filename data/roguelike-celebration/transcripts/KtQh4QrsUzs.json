@@ -1,0 +1,650 @@
+{
+ "id": "KtQh4QrsUzs",
+ "url": "https://www.youtube.com/watch?v=KtQh4QrsUzs",
+ "title": "Pandamander: \"Out of Book\": The Psychology of Why Roguelikes Keep Us Playing",
+ "speaker": "Pandamander",
+ "talk_title": "\"Out of Book\": The Psychology of Why Roguelikes Keep Us Playing",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 968,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Why do humans love roguelikes? What's the difference between games that last for 5 hours or 500 hours, or even a lifetime? As a former Lead Game Systems Designer at Warner Bros, it was my job to create worlds that answered these questions. The secrets arise from patterns that come pre-installed in our brains that make us excited, build anticipation, and create joy from the pursuit of a goal. In this talk, I'll dive into common behaviorist patterns in roguelikes and why people love them. We'll explore ancient games like Chess and Go, and modern titles like Oregon Trail, Slay the Spire, and Hades. I’ll discuss how dopamine truly works to create feelings of motivation and the psychological impact of randomness and procedural generation. We’ll also talk about the emotional impact of permadeath, how repeated failures lead to skill development and mastery, and what makes roguelikes infinitely replayable.",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2183,
+ "trimmed": {
+  "segments": 2,
+  "words": 33
+ },
+ "segments": [
+  {
+   "t": 2.52,
+   "d": 7.37,
+   "text": "more dopamine from talking about roguelikes. I am excited to announce the next speaker, Pandamander,"
+  },
+  {
+   "t": 9.88,
+   "d": 4.4,
+   "text": "who has been a pro Game Designer for over 10 years at big studios like EA and Warner Bros. Games. Now"
+  },
+  {
+   "t": 14.28,
+   "d": 5.16,
+   "text": "they do indie development working on a cozy roguelike deckbuilder called"
+  },
+  {
+   "t": 19.44,
+   "d": 11.16,
+   "text": "World's Goodest Pup. They will share with us how roguelikes play with our dopamine"
+  },
+  {
+   "t": 30.6,
+   "d": 7.6,
+   "text": "and why we like them so much. Take it away. PANDAMANDER: Hey, everyone. Hope everyone is"
+  },
+  {
+   "t": 38.2,
+   "d": 10.08,
+   "text": "having a good celebration. The talks have been a lot of fun. I would like to start this talk"
+  },
+  {
+   "t": 48.28,
+   "d": 21.2,
+   "text": "with a bold claim which is that -- I would like to make a case for why this is true. One is our"
+  },
+  {
+   "t": 69.48,
+   "d": 10.36,
+   "text": "brain's dopamine system. We will get into how this works and engaging system one and system"
+  },
+  {
+   "t": 79.84,
+   "d": 9.36,
+   "text": "two. This is part of psychology and behavioral psychology and it works well it roguelikes. Three"
+  },
+  {
+   "t": 89.2,
+   "d": 6.68,
+   "text": "is ample out of book play which is a concept I hope every roguelike developer and player"
+  },
+  {
+   "t": 95.88,
+   "d": 7.56,
+   "text": "is aware of. If not, we will talk about it. I am Pandamander. Thank you for the in 'tro."
+  },
+  {
+   "t": 103.44,
+   "d": 10.0,
+   "text": "I have been at EA and Warner Bros game. I am on a cozy deckbuilder which is a game about"
+  },
+  {
+   "t": 113.44,
+   "d": 6.72,
+   "text": "dog shows and dog competitions. I want to talk about the first section. Roguelikes use"
+  },
+  {
+   "t": 120.16,
+   "d": 4.6,
+   "text": "dopamine centers of the brain in a very optimal way. Let me explain this."
+  },
+  {
+   "t": 124.76,
+   "d": 7.12,
+   "text": "How does dopamine work? People know this term. It is a neurotransmitter. People think of it as"
+  },
+  {
+   "t": 131.88,
+   "d": 6.92,
+   "text": "the neurotransmitter of pleasure and reward. That's not quite exactly how this works. The"
+  },
+  {
+   "t": 138.8,
+   "d": 5.36,
+   "text": "idea is about three years out of date due to recent research happening in the past"
+  },
+  {
+   "t": 144.16,
+   "d": 7.4,
+   "text": "decades. There is a great talk from Ben Lewis Evans from epic games a couple years ago. This"
+  },
+  {
+   "t": 151.56,
+   "d": 7.44,
+   "text": "talk is a follow-up to that. Dopamine is closer to being the neurotransmitter of motivation, drive,"
+  },
+  {
+   "t": 159.0,
+   "d": 6.84,
+   "text": "craving, and can desire. It is the drive that gets you somewhere and not the big explosion"
+  },
+  {
+   "t": 165.84,
+   "d": 3.6,
+   "text": "of confetti once you alive. Let's talk about how this works. This -- get there. Let's talk about"
+  },
+  {
+   "t": 169.44,
+   "d": 12.8,
+   "text": "how this works. When you anticipate something that's rewarding dopamine levels start rising"
+  },
+  {
+   "t": 182.24,
+   "d": 8.56,
+   "text": "and when the brain gets what it is seeking levels drop down to baseline. This could be ice cream,"
+  },
+  {
+   "t": 190.8,
+   "d": 7.12,
+   "text": "a big reward, a coffee, having a big success in work -- something your brain is trying to get to."
+  },
+  {
+   "t": 198.72,
+   "d": 7.88,
+   "text": "I am a big fan of Slay the Spire. Hopefully people have played that game. Grand finale is a card in"
+  },
+  {
+   "t": 206.6,
+   "d": 8.6,
+   "text": "Slay the Spire. It is not selected often. It only works if you have a small draw pile and a lot of"
+  },
+  {
+   "t": 215.2,
+   "d": 5.8,
+   "text": "card draw in your deck. A lot of times you might be playing along as you go through a Slay the"
+  },
+  {
+   "t": 221.0,
+   "d": 6.92,
+   "text": "Spire run and think this is a useless card. Every once in a while you might be going through your"
+  },
+  {
+   "t": 227.92,
+   "d": 6.32,
+   "text": "run and anticipating that hey, I am actually kind of getting some cards that play well with that."
+  },
+  {
+   "t": 234.24,
+   "d": 8.0,
+   "text": "I might have a card called acrobatics, get to an empty draw pile, and you might start anticipating"
+  },
+  {
+   "t": 242.24,
+   "d": 5.04,
+   "text": "this. If that's something you are looking for and working towards, this is the part where the"
+  },
+  {
+   "t": 247.28,
+   "d": 8.24,
+   "text": "brain rises and dopamine. Once in a blue moon it all lines up. You get the right cards, the grand"
+  },
+  {
+   "t": 255.52,
+   "d": 10.76,
+   "text": "finality card, and you get to do damage to all 50. It feels like an amazing moment. This is something"
+  },
+  {
+   "t": 266.28,
+   "d": 6.32,
+   "text": "where afterwards it is over and it is the kind of event people make YouTube videos about. They will"
+  },
+  {
+   "t": 273.4,
+   "d": 5.48,
+   "text": "show it and it as a big moment. People talk about it for the rest of their life. The key distinction"
+  },
+  {
+   "t": 279.84,
+   "d": 7.16,
+   "text": "is this is the important part -- the buildup. That's the fun part. It is not hitting the peek."
+  },
+  {
+   "t": 287.0,
+   "d": 11.28,
+   "text": "The build up is the part that is the enjoyable part. Another thing is you can't build up forever."
+  },
+  {
+   "t": 298.28,
+   "d": 9.12,
+   "text": "This trough has a built-in mechanism to recover from these spikes. Building those troughs into"
+  },
+  {
+   "t": 307.4,
+   "d": 10.68,
+   "text": "the games are designing is important. You can overdo it. You can't keep stacking and stacking"
+  },
+  {
+   "t": 319.08,
+   "d": 6.2,
+   "text": "dopamine. Imagine games where you get a rare drop, then another rare drop, then a mythical drop, and"
+  },
+  {
+   "t": 326.08,
+   "d": 7.24,
+   "text": "all these incredible drops and at some point your brain is like this is a little suspicious. This is"
+  },
+  {
+   "t": 333.32,
+   "d": 5.2,
+   "text": "not like -- these aren't really rare. These aren't special moments. Mobile games tend to do this a"
+  },
+  {
+   "t": 338.52,
+   "d": 4.6,
+   "text": "lot. If anyone is making mobile games. No shade on mobile games. I have made a lot of mobile games"
+  },
+  {
+   "t": 343.12,
+   "d": 6.2,
+   "text": "in my day but it is something where your brain adjusts and says wait a minute, I know what is"
+  },
+  {
+   "t": 349.32,
+   "d": 8.76,
+   "text": "going on. This is not exciting for any more. In games that are roguelikes that have rare drops,"
+  },
+  {
+   "t": 358.08,
+   "d": 10.96,
+   "text": "special moments, you want to manage your dopamine levels through the highs and loads. It involves"
+  },
+  {
+   "t": 369.04,
+   "d": 10.24,
+   "text": "planning these troughs in a balanced way. You want to think more like the Eiffel tower in a back lit"
+  },
+  {
+   "t": 380.8,
+   "d": 6.2,
+   "text": "setting versus Vegas where it is on all of the time and your brain becomes tired of that and it"
+  },
+  {
+   "t": 387.0,
+   "d": 5.8,
+   "text": "all starts to feel the same. Key things for making roguelikes around this is you want to keep rare"
+  },
+  {
+   "t": 392.8,
+   "d": 5.92,
+   "text": "moments rare. You want to allow time for building anticipation. That's the fun part. You want to"
+  },
+  {
+   "t": 398.72,
+   "d": 6.4,
+   "text": "allow for lows and relaxing moments. If you don't, it is going to get stale and you will get bored."
+  },
+  {
+   "t": 407.4,
+   "d": 10.0,
+   "text": "System one and two. A foundational behavioral economist developed this theory about the two"
+  },
+  {
+   "t": 417.4,
+   "d": 10.4,
+   "text": "types of thinking our brain does. System one is fast, intuitive and handles immediate reactions"
+  },
+  {
+   "t": 427.8,
+   "d": 7.12,
+   "text": "without deliberate analysis and happens without you thinking about it. I would like everyone to"
+  },
+  {
+   "t": 434.92,
+   "d": 4.24,
+   "text": "look at this person. I am going to show you a picture and tell me if you are able to look"
+  },
+  {
+   "t": 439.16,
+   "d": 7.44,
+   "text": "at this person without identifying who it is. OK. Are you able to look at this and not know this is"
+  },
+  {
+   "t": 446.6,
+   "d": 6.8,
+   "text": "Keane Reaves. Here is another example. I would like you to look at this and not identify what"
+  },
+  {
+   "t": 453.4,
+   "d": 10.2,
+   "text": "animal this is. It is impossible. You can't look at this and not know this is an elephant. A lot"
+  },
+  {
+   "t": 463.6,
+   "d": 5.64,
+   "text": "of times this happens in more action oriented games. You see it happening and you know it is"
+  },
+  {
+   "t": 469.24,
+   "d": 8.24,
+   "text": "happening. There is a jump, punch or dash. Double jumping is an example. Blocking. A lot of action"
+  },
+  {
+   "t": 477.48,
+   "d": 7.32,
+   "text": "games rely a lot on training system one. In roguelike, system one appears most obviously."
+  },
+  {
+   "t": 486.48,
+   "d": 14.24,
+   "text": "Dashing in Hades and moving to avoid injury in binding Isaacs. System one also appears in a lot"
+  },
+  {
+   "t": 500.72,
+   "d": 5.6,
+   "text": "of the moment to moment gameplay. Even in the slower paced or turn-based roguelikes. This is"
+  },
+  {
+   "t": 506.32,
+   "d": 5.64,
+   "text": "where you get people talking about Slay the Spire is chill sometimes. This is when you go through"
+  },
+  {
+   "t": 511.96,
+   "d": 6.88,
+   "text": "and automatically select the block cards. It is a trough of relaxation and you understand how to"
+  },
+  {
+   "t": 518.84,
+   "d": 5.8,
+   "text": "work through this part and you are moving through and clicking and maybe watching a YouTube video"
+  },
+  {
+   "t": 524.64,
+   "d": 8.15,
+   "text": "or something else. This is an enjoyable thing. System two is different. It is deliberate. It"
+  },
+  {
+   "t": 532.79,
+   "d": 5.29,
+   "text": "is analytical and also conscious. This is what we think of when we think of like thinking hard,"
+  },
+  {
+   "t": 538.08,
+   "d": 7.8,
+   "text": "concentrating, it is responsible for complex computation, logical thinking and decision making."
+  },
+  {
+   "t": 545.88,
+   "d": 7.88,
+   "text": "System two is good. It takes a while. It can do a lot of things but it takes time. Activities that"
+  },
+  {
+   "t": 553.76,
+   "d": 7.56,
+   "text": "system two are solving a complex math problem or planning a trip or thinking about is it logical to"
+  },
+  {
+   "t": 561.32,
+   "d": 14.08,
+   "text": "spend $5,000 on a custom game table? That's using system two thinking. I did not end up"
+  },
+  {
+   "t": 575.4,
+   "d": 7.8,
+   "text": "getting that. That would not be a wise choice. Anthony Giovannetti talks about this and says"
+  },
+  {
+   "t": 583.2,
+   "d": 14.24,
+   "text": "card picking is what it is about. When you are choosing upgrades in roguelikes, that's the slow"
+  },
+  {
+   "t": 597.44,
+   "d": 7.68,
+   "text": "deliberate choice that balances out the system one of these types of play, and makes it so these are"
+  },
+  {
+   "t": 605.12,
+   "d": 10.36,
+   "text": "just very enjoyable. In Splunki making choices on which types of risks are worth taking. Or in"
+  },
+  {
+   "t": 615.48,
+   "d": 7.6,
+   "text": "binding of Isaac, what are the items you want to be picking up? These require thinking. In my game,"
+  },
+  {
+   "t": 624.16,
+   "d": 7.68,
+   "text": "the breed you select of the dog affects the type of runs and challenges you want to go after and"
+  },
+  {
+   "t": 631.84,
+   "d": 9.6,
+   "text": "overcome. For building really great and really satisfying experiences then roguelike does want"
+  },
+  {
+   "t": 641.44,
+   "d": 8.96,
+   "text": "to make sure your game has a selection official both system one and system two. They are both"
+  },
+  {
+   "t": 650.4,
+   "d": 6.92,
+   "text": "possible and important. Let's talk about out of book play. This is one of my favorite concepts."
+  },
+  {
+   "t": 657.32,
+   "d": 6.72,
+   "text": "When I came across this a couple years ago, I was like this has changed my view of games forever."
+  },
+  {
+   "t": 664.04,
+   "d": 7.88,
+   "text": "What is out of book? Out of book is a concept in competitive chess. As a side note, we can debate"
+  },
+  {
+   "t": 671.92,
+   "d": 8.56,
+   "text": "this in the chat, chess is technically a roguelike it has permadeath, turn-based,"
+  },
+  {
+   "t": 680.48,
+   "d": 7.0,
+   "text": "grid base, random environment generation as you move the pieces, so we can debate"
+  },
+  {
+   "t": 687.48,
+   "d": 5.6,
+   "text": "that afterwards. I don't know if people agree with that. That's just a side note. Out of book. Chess"
+  },
+  {
+   "t": 693.08,
+   "d": 6.32,
+   "text": "games are really well documented. Originally this was done in books. That's where the book in out"
+  },
+  {
+   "t": 699.4,
+   "d": 6.64,
+   "text": "of book comes from. In chess, how it works is, you have a chess board, you start making moves and the"
+  },
+  {
+   "t": 706.04,
+   "d": 7.32,
+   "text": "decision tree here starts branching exponentially. Someone moves a pawn, someone moves a knight,"
+  },
+  {
+   "t": 713.36,
+   "d": 6.0,
+   "text": "someone moves another knight, someone move as bishop, and each of these is like opening"
+  },
+  {
+   "t": 719.36,
+   "d": 6.0,
+   "text": "up in the probability space. For the first couple moves, the players are making what's called book"
+  },
+  {
+   "t": 725.36,
+   "d": 7.56,
+   "text": "moves. This means they are doing moves that have been done before, recorded in chest -- chess"
+  },
+  {
+   "t": 733.48,
+   "d": 7.12,
+   "text": "books. Grand masters study the move sets. There are possible responses that are well known."
+  },
+  {
+   "t": 740.6,
+   "d": 6.4,
+   "text": "There is a lot of study going into these opening moves. A lot of training in chess is around the"
+  },
+  {
+   "t": 747.0,
+   "d": 7.04,
+   "text": "memorization of the opening inbook patterns. Ruby Lopez, Italian game, Sicilian defense,"
+  },
+  {
+   "t": 754.04,
+   "d": 5.36,
+   "text": "you know the answer and sequence because these are things that have been seen before, they have"
+  },
+  {
+   "t": 759.4,
+   "d": 4.44,
+   "text": "been studied, and they are a well known part of the game and someone makes that move and you know"
+  },
+  {
+   "t": 763.84,
+   "d": 7.76,
+   "text": "the best couple of ways to respond. However, there is this special moment usually around move 10-15,"
+  },
+  {
+   "t": 772.36,
+   "d": 11.28,
+   "text": "and it always happens which is makes it so incredible. It always happens where one of the"
+  },
+  {
+   "t": 783.64,
+   "d": 9.16,
+   "text": "players moves into a space where they make a move that has never been recorded. They do a move where"
+  },
+  {
+   "t": 792.8,
+   "d": 6.76,
+   "text": "there is no record of this exact sequence of moves every happening before in any of the millions of"
+  },
+  {
+   "t": 799.56,
+   "d": 5.32,
+   "text": "chess games that have ever happened because the possibility space is so large that you break"
+  },
+  {
+   "t": 804.88,
+   "d": 6.24,
+   "text": "into this every time. This is an amazing moment. This is out of book. This is when you step out of"
+  },
+  {
+   "t": 811.12,
+   "d": 6.56,
+   "text": "the known world and you step into the infinite void. You are now in a place where no human has"
+  },
+  {
+   "t": 817.68,
+   "d": 12.16,
+   "text": "ever gone before. You are in this gameplay space that has never been encountered. When"
+  },
+  {
+   "t": 829.84,
+   "d": 5.68,
+   "text": "you remove memorization and scenario that people are familiar with that can be studied and all the"
+  },
+  {
+   "t": 835.52,
+   "d": 6.92,
+   "text": "advice you have gotten what's left? How do you deal with this? Luckily your brain is ready for"
+  },
+  {
+   "t": 842.44,
+   "d": 6.32,
+   "text": "this. Your brain is a pattern matching machine. Human brains love applying what they have learned"
+  },
+  {
+   "t": 848.76,
+   "d": 8.04,
+   "text": "to novel situations generalizing, extrapolating, thinking, feeling, going on instinct. The reason"
+  },
+  {
+   "t": 856.8,
+   "d": 4.8,
+   "text": "that I love roguelikes so much and I think they are the ultimate genre is because going out of"
+  },
+  {
+   "t": 861.6,
+   "d": 7.44,
+   "text": "book the signature move of roguelike style games. There are so many other games where it is just"
+  },
+  {
+   "t": 869.76,
+   "d": 7.4,
+   "text": "one path. Like everyone has the same experience. Roguelikes are not like this. Each randomly"
+  },
+  {
+   "t": 877.16,
+   "d": 7.84,
+   "text": "generated cave is unique, each map. They have a low probability of occurring once you get to a"
+  },
+  {
+   "t": 885.0,
+   "d": 9.24,
+   "text": "certain point. Every run is memorable and personal and every permadeath is meaningful. This is your"
+  },
+  {
+   "t": 894.24,
+   "d": 4.52,
+   "text": "chance to know after everything you have been through, after all your practice and"
+  },
+  {
+   "t": 899.56,
+   "d": 5.76,
+   "text": "understanding of the game mechanics what are the choices you are going make. As a game dev this is"
+  },
+  {
+   "t": 905.32,
+   "d": 8.28,
+   "text": "exciting. Making sure the games allow the out of book moments and that the design and systems have"
+  },
+  {
+   "t": 913.6,
+   "d": 7.88,
+   "text": "enough space to expand so that very frequently, similar to chess, then you open up into these"
+  },
+  {
+   "t": 921.48,
+   "d": 5.04,
+   "text": "spaces where no one has ever been before. You want to avoid strategies that are super dominating and"
+  },
+  {
+   "t": 926.52,
+   "d": 5.44,
+   "text": "can get 100% of the time where you can just like kind of roll through because that's the"
+  },
+  {
+   "t": 931.96,
+   "d": 6.0,
+   "text": "difference between games that last 50 hours and last 5,000 hours. How much does it let you break"
+  },
+  {
+   "t": 937.96,
+   "d": 8.83,
+   "text": "into this different space. I would like all of us roguelike game players and developers, as you"
+  },
+  {
+   "t": 946.79,
+   "d": 4.69,
+   "text": "are making these games, creating these incredible experiences, you are not just making and playing"
+  },
+  {
+   "t": 951.48,
+   "d": 7.44,
+   "text": "games. You are helping people to reach infinity. HAYLEE: Thank you so much,"
+  },
+  {
+   "t": 961.88,
+   "d": 6.46,
+   "text": "Pandamander. That was amazing. I am looking to reaching deep space more often. We will"
+  }
+ ]
+}

@@ -1,0 +1,3700 @@
+{
+ "id": "MNEG1sLSRcM",
+ "url": "https://www.youtube.com/watch?v=MNEG1sLSRcM",
+ "title": "Emilia Lazer-Walker - Emergent Storytelling in Physical Spaces (or, \"Is Sleep No More A Roguelike?\")",
+ "speaker": "Emilia Lazer-Walker",
+ "talk_title": "Emergent Storytelling in Physical Spaces (or, \"Is Sleep No More A Roguelike?\")",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1583,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Emilia Lazer-Walker talks about procedural generation and emergent storytelling in real-world / AR games.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5129,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 3.27,
+   "text": "excellent hey everybody I was Noah said"
+  },
+  {
+   "t": 3.27,
+   "d": 1.38,
+   "text": "I'm Mike and this is emergent"
+  },
+  {
+   "t": 4.65,
+   "d": 2.4,
+   "text": "storytelling in physical spaces are the"
+  },
+  {
+   "t": 7.05,
+   "d": 2.31,
+   "text": "sort of provoke provocative version is"
+  },
+  {
+   "t": 9.36,
+   "d": 3.24,
+   "text": "is sleep no more roguelike so what I do"
+  },
+  {
+   "t": 12.6,
+   "d": 1.89,
+   "text": "is I make games and toys and things that"
+  },
+  {
+   "t": 14.49,
+   "d": 2.82,
+   "text": "are kind of like games but really what I"
+  },
+  {
+   "t": 17.31,
+   "d": 1.59,
+   "text": "do is I make things that look like games"
+  },
+  {
+   "t": 18.9,
+   "d": 1.38,
+   "text": "but are actually interaction design"
+  },
+  {
+   "t": 20.28,
+   "d": 2.46,
+   "text": "research looking at how can we take"
+  },
+  {
+   "t": 22.74,
+   "d": 1.77,
+   "text": "weird novel physical interactions of"
+  },
+  {
+   "t": 24.51,
+   "d": 2.94,
+   "text": "Technology and what does that change"
+  },
+  {
+   "t": 27.45,
+   "d": 1.14,
+   "text": "about your interaction with some"
+  },
+  {
+   "t": 28.59,
+   "d": 2.7,
+   "text": "experience or the real world so I'm"
+  },
+  {
+   "t": 31.29,
+   "d": 1.2,
+   "text": "gonna take us a little farther afield"
+  },
+  {
+   "t": 32.49,
+   "d": 3.78,
+   "text": "than we've talked so far so we've talked"
+  },
+  {
+   "t": 36.27,
+   "d": 1.65,
+   "text": "a lot about very formal traditional"
+  },
+  {
+   "t": 37.92,
+   "d": 1.95,
+   "text": "roguelikes with top-down ASCII graphics"
+  },
+  {
+   "t": 39.87,
+   "d": 2.72,
+   "text": "and turn-based dungeon-crawling"
+  },
+  {
+   "t": 42.59,
+   "d": 2.23,
+   "text": "we've talked about things that we still"
+  },
+  {
+   "t": 44.82,
+   "d": 1.29,
+   "text": "call roguelikes now they have a lot of"
+  },
+  {
+   "t": 46.11,
+   "d": 1.62,
+   "text": "the same mechanics but they don't look"
+  },
+  {
+   "t": 47.73,
+   "d": 2.19,
+   "text": "like the sort of top-down dungeon"
+  },
+  {
+   "t": 49.92,
+   "d": 1.4,
+   "text": "crawler but they're still digital games"
+  },
+  {
+   "t": 51.32,
+   "d": 3.46,
+   "text": "we've talked about twitter bots and"
+  },
+  {
+   "t": 54.78,
+   "d": 1.41,
+   "text": "things they use procedural generation in"
+  },
+  {
+   "t": 56.19,
+   "d": 3.51,
+   "text": "cool ways I want to talk about wandering"
+  },
+  {
+   "t": 59.7,
+   "d": 1.86,
+   "text": "around in physical space I'm an"
+  },
+  {
+   "t": 61.56,
+   "d": 2.49,
+   "text": "immersive theater and these things seem"
+  },
+  {
+   "t": 64.05,
+   "d": 1.44,
+   "text": "superficially very different from"
+  },
+  {
+   "t": 65.49,
+   "d": 2.76,
+   "text": "roguelikes but I'm curious set in what"
+  },
+  {
+   "t": 68.25,
+   "d": 1.59,
+   "text": "ways are they actually kind of similar I"
+  },
+  {
+   "t": 69.84,
+   "d": 1.59,
+   "text": "mean what ways are the ways they tell"
+  },
+  {
+   "t": 71.43,
+   "d": 4.22,
+   "text": "stories actually maybe even the same"
+  },
+  {
+   "t": 75.65,
+   "d": 1.57,
+   "text": "specifically I'm gonna talk a bit about"
+  },
+  {
+   "t": 77.22,
+   "d": 2.19,
+   "text": "computational Flener this is a"
+  },
+  {
+   "t": 79.41,
+   "d": 2.34,
+   "text": "generative of poetry walk I built for"
+  },
+  {
+   "t": 81.75,
+   "d": 1.49,
+   "text": "the come out and play Festival last year"
+  },
+  {
+   "t": 83.24,
+   "d": 2.11,
+   "text": "came out of my research with the MIT"
+  },
+  {
+   "t": 85.35,
+   "d": 2.73,
+   "text": "Media Lab so this is an experience you"
+  },
+  {
+   "t": 88.08,
+   "d": 2.54,
+   "text": "go to Fort Mason here in San Francisco"
+  },
+  {
+   "t": 90.62,
+   "d": 2.65,
+   "text": "you put your headphones in you wander"
+  },
+  {
+   "t": 93.27,
+   "d": 1.38,
+   "text": "around the park and as you wander a"
+  },
+  {
+   "t": 94.65,
+   "d": 1.95,
+   "text": "robot makes up and reads you poetry"
+  },
+  {
+   "t": 96.6,
+   "d": 2.28,
+   "text": "based on where you go so you walk by the"
+  },
+  {
+   "t": 98.88,
+   "d": 2.46,
+   "text": "water here are poems of the sea you walk"
+  },
+  {
+   "t": 101.34,
+   "d": 2.49,
+   "text": "by the cannons here poems of war that"
+  },
+  {
+   "t": 103.83,
+   "d": 1.29,
+   "text": "sort of thing"
+  },
+  {
+   "t": 105.12,
+   "d": 1.95,
+   "text": "and so in a sense you can already see"
+  },
+  {
+   "t": 107.07,
+   "d": 1.38,
+   "text": "this sort of feels maybe like a"
+  },
+  {
+   "t": 108.45,
+   "d": 1.62,
+   "text": "roguelike there's a lot of procedural"
+  },
+  {
+   "t": 110.07,
+   "d": 2.01,
+   "text": "generation you're exploring a physical"
+  },
+  {
+   "t": 112.08,
+   "d": 2.76,
+   "text": "space I think there are two things in"
+  },
+  {
+   "t": 114.84,
+   "d": 1.77,
+   "text": "particular I really want to get into one"
+  },
+  {
+   "t": 116.61,
+   "d": 2.04,
+   "text": "of them is that and sort of we've talked"
+  },
+  {
+   "t": 118.65,
+   "d": 2.67,
+   "text": "a lot about what it means for procedural"
+  },
+  {
+   "t": 121.32,
+   "d": 1.29,
+   "text": "generation to work and what is"
+  },
+  {
+   "t": 122.61,
+   "d": 1.77,
+   "text": "interesting proc Jen how does that"
+  },
+  {
+   "t": 124.38,
+   "d": 1.32,
+   "text": "change when you're now dealing with"
+  },
+  {
+   "t": 125.7,
+   "d": 2.52,
+   "text": "atoms instead of bits what are the"
+  },
+  {
+   "t": 128.22,
+   "d": 2.46,
+   "text": "practical considerations but I also want"
+  },
+  {
+   "t": 130.68,
+   "d": 1.23,
+   "text": "to talk more broadly about stories"
+  },
+  {
+   "t": 131.91,
+   "d": 0.84,
+   "text": "having"
+  },
+  {
+   "t": 132.75,
+   "d": 2.16,
+   "text": "sort of how do how did Gaines tell"
+  },
+  {
+   "t": 134.91,
+   "d": 2.64,
+   "text": "stories and if this is sort of one part"
+  },
+  {
+   "t": 137.55,
+   "d": 2.04,
+   "text": "immersive theater one part procedural"
+  },
+  {
+   "t": 139.59,
+   "d": 2.07,
+   "text": "generation to a roguelike you know how"
+  },
+  {
+   "t": 141.66,
+   "d": 2.19,
+   "text": "are how does this merge those traditions"
+  },
+  {
+   "t": 143.85,
+   "d": 1.65,
+   "text": "in a way that says something about how"
+  },
+  {
+   "t": 145.5,
+   "d": 3.45,
+   "text": "we can make better stories so for that"
+  },
+  {
+   "t": 148.95,
+   "d": 1.74,
+   "text": "second part let's start by talking about"
+  },
+  {
+   "t": 150.69,
+   "d": 2.91,
+   "text": "what is emergent storytelling which is"
+  },
+  {
+   "t": 153.6,
+   "d": 3.87,
+   "text": "really how do games tell stories so if"
+  },
+  {
+   "t": 157.47,
+   "d": 2.58,
+   "text": "you take a Final Fantasy or a legend of"
+  },
+  {
+   "t": 160.05,
+   "d": 2.34,
+   "text": "zelda or you're like a gamey game of"
+  },
+  {
+   "t": 162.39,
+   "d": 2.4,
+   "text": "choice they're really two stories going"
+  },
+  {
+   "t": 164.79,
+   "d": 2.4,
+   "text": "on there is the story of the big evil"
+  },
+  {
+   "t": 167.19,
+   "d": 1.92,
+   "text": "bad is trying to save the world or take"
+  },
+  {
+   "t": 169.11,
+   "d": 0.6,
+   "text": "over the world"
+  },
+  {
+   "t": 169.71,
+   "d": 1.59,
+   "text": "you're the hero you have to save them"
+  },
+  {
+   "t": 171.3,
+   "d": 1.71,
+   "text": "you have to go to the dungeon that's one"
+  },
+  {
+   "t": 173.01,
+   "d": 1.59,
+   "text": "story there's also the story of you the"
+  },
+  {
+   "t": 174.6,
+   "d": 1.98,
+   "text": "player making specific individual"
+  },
+  {
+   "t": 176.58,
+   "d": 2.55,
+   "text": "choices this is sort of much more part"
+  },
+  {
+   "t": 179.13,
+   "d": 2.67,
+   "text": "of the games discourse a decade ago I"
+  },
+  {
+   "t": 181.8,
+   "d": 2.85,
+   "text": "like Marc Laidlaw from valve worked on"
+  },
+  {
+   "t": 184.65,
+   "d": 1.32,
+   "text": "half-life and portal and a bunch of"
+  },
+  {
+   "t": 185.97,
+   "d": 1.77,
+   "text": "great games he talks about embedded"
+  },
+  {
+   "t": 187.74,
+   "d": 2.46,
+   "text": "versus emergent narrative emergent"
+  },
+  {
+   "t": 190.2,
+   "d": 1.2,
+   "text": "narrative or these individual player"
+  },
+  {
+   "t": 191.4,
+   "d": 1.86,
+   "text": "driven stories embedded narrative is the"
+  },
+  {
+   "t": 193.26,
+   "d": 1.32,
+   "text": "authored content that exists within"
+  },
+  {
+   "t": 194.58,
+   "d": 2.58,
+   "text": "there I really like this framing because"
+  },
+  {
+   "t": 197.16,
+   "d": 2.52,
+   "text": "it means that the game itself exists and"
+  },
+  {
+   "t": 199.68,
+   "d": 1.62,
+   "text": "that's where the story is but then you"
+  },
+  {
+   "t": 201.3,
+   "d": 1.47,
+   "text": "can also stud it with hand authored"
+  },
+  {
+   "t": 202.77,
+   "d": 1.38,
+   "text": "content instead of thinking of it as"
+  },
+  {
+   "t": 204.15,
+   "d": 1.77,
+   "text": "here's a story and then you're gonna"
+  },
+  {
+   "t": 205.92,
+   "d": 4.62,
+   "text": "play some game every so often but when"
+  },
+  {
+   "t": 210.54,
+   "d": 1.35,
+   "text": "you think about roguelikes like"
+  },
+  {
+   "t": 211.89,
+   "d": 2.28,
+   "text": "roguelikes can have both of these we've"
+  },
+  {
+   "t": 214.17,
+   "d": 1.68,
+   "text": "seen some great examples this weekend of"
+  },
+  {
+   "t": 215.85,
+   "d": 1.08,
+   "text": "roguelikes that have really good"
+  },
+  {
+   "t": 216.93,
+   "d": 2.13,
+   "text": "embedded narrative whether it's Tim"
+  },
+  {
+   "t": 219.06,
+   "d": 2.34,
+   "text": "talking about here's studying and"
+  },
+  {
+   "t": 221.4,
+   "d": 1.38,
+   "text": "authored content into a roguelike"
+  },
+  {
+   "t": 222.78,
+   "d": 2.76,
+   "text": "procedurally generated game or Jason"
+  },
+  {
+   "t": 225.54,
+   "d": 2.28,
+   "text": "just now talking about how does a bot"
+  },
+  {
+   "t": 227.82,
+   "d": 2.25,
+   "text": "hand author that content and I guess"
+  },
+  {
+   "t": 230.07,
+   "d": 1.38,
+   "text": "Jason's examples a little weird cuz that"
+  },
+  {
+   "t": 231.45,
+   "d": 1.86,
+   "text": "definitely ties into the mechanics but"
+  },
+  {
+   "t": 233.31,
+   "d": 2.16,
+   "text": "there is a sense with which like that is"
+  },
+  {
+   "t": 235.47,
+   "d": 3.09,
+   "text": "that is embedded narrative but"
+  },
+  {
+   "t": 238.56,
+   "d": 1.47,
+   "text": "roguelikes are really special at and I"
+  },
+  {
+   "t": 240.03,
+   "d": 1.98,
+   "text": "think better than any other genre of"
+  },
+  {
+   "t": 242.01,
+   "d": 1.74,
+   "text": "game is a submergent storytelling and"
+  },
+  {
+   "t": 243.75,
+   "d": 1.68,
+   "text": "creating space for players to come up"
+  },
+  {
+   "t": 245.43,
+   "d": 3.18,
+   "text": "with their own stories so what does that"
+  },
+  {
+   "t": 248.61,
+   "d": 2.37,
+   "text": "even mean like what is emergence if"
+  },
+  {
+   "t": 250.98,
+   "d": 0.96,
+   "text": "we're going to talk about emergent"
+  },
+  {
+   "t": 251.94,
+   "d": 2.49,
+   "text": "storytelling this is a Systems Theory"
+  },
+  {
+   "t": 254.43,
+   "d": 3.66,
+   "text": "concept where basically you have these"
+  },
+  {
+   "t": 258.09,
+   "d": 1.56,
+   "text": "small objects that interact with each"
+  },
+  {
+   "t": 259.65,
+   "d": 1.8,
+   "text": "other and create these sort of larger"
+  },
+  {
+   "t": 261.45,
+   "d": 1.53,
+   "text": "objects and structures that have some"
+  },
+  {
+   "t": 262.98,
+   "d": 1.68,
+   "text": "sort of behavior that the smaller things"
+  },
+  {
+   "t": 264.66,
+   "d": 1.2,
+   "text": "don't exhibit"
+  },
+  {
+   "t": 265.86,
+   "d": 2.64,
+   "text": "like this is a textbook example the"
+  },
+  {
+   "t": 268.5,
+   "d": 2.94,
+   "text": "glider in Conway's Game of Life condo"
+  },
+  {
+   "t": 271.44,
+   "d": 0.96,
+   "text": "exam with life is very straightforward"
+  },
+  {
+   "t": 272.4,
+   "d": 1.56,
+   "text": "you have these little individual cells"
+  },
+  {
+   "t": 273.96,
+   "d": 1.92,
+   "text": "with very specific rules about when"
+  },
+  {
+   "t": 275.88,
+   "d": 1.98,
+   "text": "they'll ever die and somehow out of that"
+  },
+  {
+   "t": 277.86,
+   "d": 2.13,
+   "text": "you get the sort of self-replicating"
+  },
+  {
+   "t": 279.99,
+   "d": 1.77,
+   "text": "pattern that shows up and flies across"
+  },
+  {
+   "t": 281.76,
+   "d": 1.53,
+   "text": "the screen you wouldn't have guessed"
+  },
+  {
+   "t": 283.29,
+   "d": 1.74,
+   "text": "that from rules about when a cell lives"
+  },
+  {
+   "t": 285.03,
+   "d": 3.21,
+   "text": "or dies and roguelikes with their sort"
+  },
+  {
+   "t": 288.24,
+   "d": 2.07,
+   "text": "of very complex simulations of the world"
+  },
+  {
+   "t": 290.31,
+   "d": 2.19,
+   "text": "create this very well you have very very"
+  },
+  {
+   "t": 292.5,
+   "d": 2.7,
+   "text": "small rules if here is here's how water"
+  },
+  {
+   "t": 295.2,
+   "d": 1.02,
+   "text": "works in this world"
+  },
+  {
+   "t": 296.22,
+   "d": 2.91,
+   "text": "here is how kobolds move and that raised"
+  },
+  {
+   "t": 299.13,
+   "d": 1.26,
+   "text": "gift that gives away two really"
+  },
+  {
+   "t": 300.39,
+   "d": 2.94,
+   "text": "interesting stories like a game of chess"
+  },
+  {
+   "t": 303.33,
+   "d": 2.25,
+   "text": "as interesting emergent storytelling"
+  },
+  {
+   "t": 305.58,
+   "d": 1.89,
+   "text": "like two people sitting down and playing"
+  },
+  {
+   "t": 307.47,
+   "d": 2.52,
+   "text": "a game of chess has really interesting"
+  },
+  {
+   "t": 309.99,
+   "d": 1.92,
+   "text": "meaningful stories that come out of the"
+  },
+  {
+   "t": 311.91,
+   "d": 1.71,
+   "text": "rules of chess and a competitive meta"
+  },
+  {
+   "t": 313.62,
+   "d": 2.37,
+   "text": "and sort of two different people trying"
+  },
+  {
+   "t": 315.99,
+   "d": 1.11,
+   "text": "to think of what the other person's"
+  },
+  {
+   "t": 317.1,
+   "d": 2.1,
+   "text": "going to do but that seems different to"
+  },
+  {
+   "t": 319.2,
+   "d": 2.84,
+   "text": "me than the sort of human-computer"
+  },
+  {
+   "t": 322.04,
+   "d": 2.5,
+   "text": "interface and collaboration of how can"
+  },
+  {
+   "t": 324.54,
+   "d": 1.92,
+   "text": "how can i stumbling through this"
+  },
+  {
+   "t": 326.46,
+   "d": 2.37,
+   "text": "possibility space created by dynamic"
+  },
+  {
+   "t": 328.83,
+   "d": 1.92,
+   "text": "systems tell something interesting and"
+  },
+  {
+   "t": 330.75,
+   "d": 2.7,
+   "text": "meaningful a really bad example is this"
+  },
+  {
+   "t": 333.45,
+   "d": 2.58,
+   "text": "sort of popular clickbait door fortress"
+  },
+  {
+   "t": 336.03,
+   "d": 2.85,
+   "text": "bug where you know someone would go to"
+  },
+  {
+   "t": 338.88,
+   "d": 1.56,
+   "text": "the bar in the morning and there'd be"
+  },
+  {
+   "t": 340.44,
+   "d": 2.16,
+   "text": "cat vomit everywhere it turns out like"
+  },
+  {
+   "t": 342.6,
+   "d": 1.74,
+   "text": "when dogs drink they spill beer on the"
+  },
+  {
+   "t": 344.34,
+   "d": 1.98,
+   "text": "floor cats walk on the floor they get"
+  },
+  {
+   "t": 346.32,
+   "d": 1.62,
+   "text": "beer in their paws they're positive"
+  },
+  {
+   "t": 347.94,
+   "d": 2.13,
+   "text": "dirty they lick the paws they get drunk"
+  },
+  {
+   "t": 350.07,
+   "d": 1.65,
+   "text": "they throw up"
+  },
+  {
+   "t": 351.72,
+   "d": 1.62,
+   "text": "and again like I think this isn't a"
+  },
+  {
+   "t": 353.34,
+   "d": 1.71,
+   "text": "great example because this is this isn't"
+  },
+  {
+   "t": 355.05,
+   "d": 1.71,
+   "text": "a player story this is just a story of a"
+  },
+  {
+   "t": 356.76,
+   "d": 3.93,
+   "text": "simulation going but it gets at sort of"
+  },
+  {
+   "t": 360.69,
+   "d": 1.35,
+   "text": "what happens when you have these really"
+  },
+  {
+   "t": 362.04,
+   "d": 1.5,
+   "text": "interesting systems colliding an"
+  },
+  {
+   "t": 363.54,
+   "d": 1.29,
+   "text": "interesting way as a combinatorial"
+  },
+  {
+   "t": 364.83,
+   "d": 3.06,
+   "text": "explosion of complexity I'm not gonna"
+  },
+  {
+   "t": 367.89,
+   "d": 1.14,
+   "text": "get too much into it but if you're"
+  },
+  {
+   "t": 369.03,
+   "d": 1.86,
+   "text": "interested in this last year Brian"
+  },
+  {
+   "t": 370.89,
+   "d": 1.77,
+   "text": "Walker gave an amazing talk about"
+  },
+  {
+   "t": 372.66,
+   "d": 2.4,
+   "text": "designing brogue specifically looking at"
+  },
+  {
+   "t": 375.06,
+   "d": 2.55,
+   "text": "this like what does it mean to design a"
+  },
+  {
+   "t": 377.61,
+   "d": 2.43,
+   "text": "game so that like an advanced level"
+  },
+  {
+   "t": 380.04,
+   "d": 1.32,
+   "text": "player who's play the game a million"
+  },
+  {
+   "t": 381.36,
+   "d": 2.07,
+   "text": "times still has interesting stories"
+  },
+  {
+   "t": 383.43,
+   "d": 3.27,
+   "text": "emerge on YouTube but so I'm going to"
+  },
+  {
+   "t": 386.7,
+   "d": 1.38,
+   "text": "take a total left turn and talk more"
+  },
+  {
+   "t": 388.08,
+   "d": 2.19,
+   "text": "about physical spaces this is sleep no"
+  },
+  {
+   "t": 390.27,
+   "d": 2.04,
+   "text": "more how many of you know it or if seen"
+  },
+  {
+   "t": 392.31,
+   "d": 2.91,
+   "text": "it are cool maybe about half maybe a"
+  },
+  {
+   "t": 395.22,
+   "d": 2.85,
+   "text": "little less it is ostensibly a theater"
+  },
+  {
+   "t": 398.07,
+   "d": 1.56,
+   "text": "production of"
+  },
+  {
+   "t": 399.63,
+   "d": 2.16,
+   "text": "Shakespeare's Macbeth and Hitchcock's"
+  },
+  {
+   "t": 401.79,
+   "d": 1.95,
+   "text": "Rebecca told their interpretive dance"
+  },
+  {
+   "t": 403.74,
+   "d": 3.15,
+   "text": "but it's not really like you show up at"
+  },
+  {
+   "t": 406.89,
+   "d": 3.36,
+   "text": "the space and the set is a six or seven"
+  },
+  {
+   "t": 410.25,
+   "d": 1.29,
+   "text": "story building that takes up a whole"
+  },
+  {
+   "t": 411.54,
+   "d": 2.07,
+   "text": "city block in Manhattan there's also a"
+  },
+  {
+   "t": 413.61,
+   "d": 2.82,
+   "text": "Shanghai production now and you're given"
+  },
+  {
+   "t": 416.43,
+   "d": 1.74,
+   "text": "a mask and told to go wherever you want"
+  },
+  {
+   "t": 418.17,
+   "d": 1.89,
+   "text": "and for the two or three hours you're"
+  },
+  {
+   "t": 420.06,
+   "d": 1.89,
+   "text": "there the idea is if you want to follow"
+  },
+  {
+   "t": 421.95,
+   "d": 1.71,
+   "text": "a character you can do that if you want"
+  },
+  {
+   "t": 423.66,
+   "d": 1.32,
+   "text": "to sit in a single room and see what"
+  },
+  {
+   "t": 424.98,
+   "d": 1.62,
+   "text": "happens you can do that if you want to"
+  },
+  {
+   "t": 426.6,
+   "d": 1.53,
+   "text": "hang out in the library and eat the"
+  },
+  {
+   "t": 428.13,
+   "d": 2.28,
+   "text": "candy in the candy shop that is also a"
+  },
+  {
+   "t": 430.41,
+   "d": 1.98,
+   "text": "perfectly viable way to experience Sleep"
+  },
+  {
+   "t": 432.39,
+   "d": 4.74,
+   "text": "No More and so this is also like this is"
+  },
+  {
+   "t": 437.13,
+   "d": 1.5,
+   "text": "also a system for generating player"
+  },
+  {
+   "t": 438.63,
+   "d": 2.19,
+   "text": "stories like it is not it is not about"
+  },
+  {
+   "t": 440.82,
+   "d": 2.4,
+   "text": "the embedded narrative of Macbeth if you"
+  },
+  {
+   "t": 443.22,
+   "d": 1.68,
+   "text": "want to know the story of Macbeth this"
+  },
+  {
+   "t": 444.9,
+   "d": 1.86,
+   "text": "is the worst possible way to learn it"
+  },
+  {
+   "t": 446.76,
+   "d": 2.57,
+   "text": "you will have no idea what is happening"
+  },
+  {
+   "t": 449.33,
+   "d": 2.95,
+   "text": "but it is really about like what what is"
+  },
+  {
+   "t": 452.28,
+   "d": 1.41,
+   "text": "your experience in the space and sort of"
+  },
+  {
+   "t": 453.69,
+   "d": 1.74,
+   "text": "an unofficial like one of the most"
+  },
+  {
+   "t": 455.43,
+   "d": 1.29,
+   "text": "important parts of seeing is a few go"
+  },
+  {
+   "t": 456.72,
+   "d": 1.77,
+   "text": "with friends like after the show you'll"
+  },
+  {
+   "t": 458.49,
+   "d": 1.26,
+   "text": "gather at a bar oh whatever and talk"
+  },
+  {
+   "t": 459.75,
+   "d": 2.55,
+   "text": "about what you saw and everyone's gonna"
+  },
+  {
+   "t": 462.3,
+   "d": 1.44,
+   "text": "have seen different things you all have"
+  },
+  {
+   "t": 463.74,
+   "d": 2.33,
+   "text": "different interesting individual stories"
+  },
+  {
+   "t": 466.07,
+   "d": 1.84,
+   "text": "and what's interesting there is that's"
+  },
+  {
+   "t": 467.91,
+   "d": 2.07,
+   "text": "not emerging out of these building"
+  },
+  {
+   "t": 469.98,
+   "d": 2.82,
+   "text": "blocks of complex dynamic computer code"
+  },
+  {
+   "t": 472.8,
+   "d": 1.44,
+   "text": "simulating real-world things"
+  },
+  {
+   "t": 474.24,
+   "d": 2.85,
+   "text": "this is a very highly plotted out"
+  },
+  {
+   "t": 477.09,
+   "d": 2.19,
+   "text": "clockwork piece of theater where I would"
+  },
+  {
+   "t": 479.28,
+   "d": 1.95,
+   "text": "love to see the stage managers binder"
+  },
+  {
+   "t": 481.23,
+   "d": 2.55,
+   "text": "where they probably know where any given"
+  },
+  {
+   "t": 483.78,
+   "d": 1.86,
+   "text": "actor is at any given moment of time in"
+  },
+  {
+   "t": 485.64,
+   "d": 3.42,
+   "text": "the show and so like this it feels like"
+  },
+  {
+   "t": 489.06,
+   "d": 1.5,
+   "text": "you wouldn't expect emergent behavior"
+  },
+  {
+   "t": 490.56,
+   "d": 3.51,
+   "text": "because this is so deterministic but the"
+  },
+  {
+   "t": 494.07,
+   "d": 1.68,
+   "text": "possibility space is so large that any"
+  },
+  {
+   "t": 495.75,
+   "d": 1.47,
+   "text": "individual player wandering through the"
+  },
+  {
+   "t": 497.22,
+   "d": 1.38,
+   "text": "space is going to find interesting"
+  },
+  {
+   "t": 498.6,
+   "d": 2.31,
+   "text": "moments of synchrony I want to give an"
+  },
+  {
+   "t": 500.91,
+   "d": 2.43,
+   "text": "example this is a minor spoiler so if"
+  },
+  {
+   "t": 503.34,
+   "d": 1.47,
+   "text": "you care about going and totally"
+  },
+  {
+   "t": 504.81,
+   "d": 2.4,
+   "text": "pristine plug your ears it's gonna be"
+  },
+  {
+   "t": 507.21,
+   "d": 1.2,
+   "text": "really short the next slide will tell"
+  },
+  {
+   "t": 508.41,
+   "d": 0.98,
+   "text": "you when I'm done"
+  },
+  {
+   "t": 509.39,
+   "d": 3.16,
+   "text": "so when you first show up you get led"
+  },
+  {
+   "t": 512.55,
+   "d": 2.88,
+   "text": "into a bar this sort of smokey jazz bar"
+  },
+  {
+   "t": 515.43,
+   "d": 1.98,
+   "text": "with live music and absent shots and"
+  },
+  {
+   "t": 517.41,
+   "d": 2.13,
+   "text": "like a perfectly calculated amount of"
+  },
+  {
+   "t": 519.54,
+   "d": 3.03,
+   "text": "fake smoke and somewhere in the third or"
+  },
+  {
+   "t": 522.57,
+   "d": 2.64,
+   "text": "fourth floor I early on found an exact"
+  },
+  {
+   "t": 525.21,
+   "d": 2.07,
+   "text": "replica of that set except it was"
+  },
+  {
+   "t": 527.28,
+   "d": 1.88,
+   "text": "completely abandoned covered in cobwebs"
+  },
+  {
+   "t": 529.16,
+   "d": 2.26,
+   "text": "looked like it hadn't been touched in 50"
+  },
+  {
+   "t": 531.42,
+   "d": 1.15,
+   "text": "years and"
+  },
+  {
+   "t": 532.57,
+   "d": 1.74,
+   "text": "came in there everywhere else I went was"
+  },
+  {
+   "t": 534.31,
+   "d": 1.77,
+   "text": "totally swaps with other players or"
+  },
+  {
+   "t": 536.08,
+   "d": 1.35,
+   "text": "audience members wearing masks and"
+  },
+  {
+   "t": 537.43,
+   "d": 1.65,
+   "text": "running around and this was totally"
+  },
+  {
+   "t": 539.08,
+   "d": 2.31,
+   "text": "deserted and it totally shifted my"
+  },
+  {
+   "t": 541.39,
+   "d": 2.43,
+   "text": "perception of like what is what story is"
+  },
+  {
+   "t": 543.82,
+   "d": 1.68,
+   "text": "this telling what is going on with my"
+  },
+  {
+   "t": 545.5,
+   "d": 1.77,
+   "text": "perception of time like what is this"
+  },
+  {
+   "t": 547.27,
+   "d": 2.07,
+   "text": "mean for this world and then I left I"
+  },
+  {
+   "t": 549.34,
+   "d": 1.92,
+   "text": "went off into some other things and came"
+  },
+  {
+   "t": 551.26,
+   "d": 2.16,
+   "text": "back and it was just a normal set it"
+  },
+  {
+   "t": 553.42,
+   "d": 1.86,
+   "text": "looked like the bar there were tons of"
+  },
+  {
+   "t": 555.28,
+   "d": 1.65,
+   "text": "people there actors and audience members"
+  },
+  {
+   "t": 556.93,
+   "d": 1.77,
+   "text": "and it was one of the busiest stats in"
+  },
+  {
+   "t": 558.7,
+   "d": 2.7,
+   "text": "the entire piece and those two moments"
+  },
+  {
+   "t": 561.4,
+   "d": 1.56,
+   "text": "were sort of the two moments I took away"
+  },
+  {
+   "t": 562.96,
+   "d": 3.15,
+   "text": "from that night viewing of it and no one"
+  },
+  {
+   "t": 566.11,
+   "d": 1.08,
+   "text": "I've ever talked to at that same"
+  },
+  {
+   "t": 567.19,
+   "d": 3.95,
+   "text": "experience and like you can imagine how"
+  },
+  {
+   "t": 571.14,
+   "d": 2.71,
+   "text": "fake other people could experience this"
+  },
+  {
+   "t": 573.85,
+   "d": 1.71,
+   "text": "like this was probably written at some"
+  },
+  {
+   "t": 575.56,
+   "d": 2.64,
+   "text": "level so that it would happen but this"
+  },
+  {
+   "t": 578.2,
+   "d": 1.65,
+   "text": "was still a story that felt like it was"
+  },
+  {
+   "t": 579.85,
+   "d": 1.53,
+   "text": "just for me and that other people didn't"
+  },
+  {
+   "t": 581.38,
+   "d": 2.43,
+   "text": "get to experience this and it's"
+  },
+  {
+   "t": 583.81,
+   "d": 0.9,
+   "text": "interesting thinking about this"
+  },
+  {
+   "t": 584.71,
+   "d": 3.39,
+   "text": "emergence then as you you can find"
+  },
+  {
+   "t": 588.1,
+   "d": 3.12,
+   "text": "interesting personalized meaning in this"
+  },
+  {
+   "t": 591.22,
+   "d": 2.04,
+   "text": "thing that is relatively set in stone"
+  },
+  {
+   "t": 593.26,
+   "d": 3.02,
+   "text": "for some definition of set in stone so"
+  },
+  {
+   "t": 596.28,
+   "d": 1.93,
+   "text": "I'm gonna talk about something that's a"
+  },
+  {
+   "t": 598.21,
+   "d": 2.52,
+   "text": "little even more fixed this is a piece"
+  },
+  {
+   "t": 600.73,
+   "d": 1.29,
+   "text": "that I think even less of you will be"
+  },
+  {
+   "t": 602.02,
+   "d": 1.53,
+   "text": "familiar with this is a audio walk"
+  },
+  {
+   "t": 603.55,
+   "d": 1.08,
+   "text": "called her long black hair"
+  },
+  {
+   "t": 604.63,
+   "d": 3.51,
+   "text": "Janet Cardiff is a sound artist 10 to 15"
+  },
+  {
+   "t": 608.14,
+   "d": 1.23,
+   "text": "years ago she made a whole bunch of"
+  },
+  {
+   "t": 609.37,
+   "d": 1.92,
+   "text": "these audio box I talked about her"
+  },
+  {
+   "t": 611.29,
+   "d": 1.14,
+   "text": "Central Park walk because it's still"
+  },
+  {
+   "t": 612.43,
+   "d": 1.74,
+   "text": "available this guy named Dan Pfeiffer"
+  },
+  {
+   "t": 614.17,
+   "d": 2.43,
+   "text": "Dan Pfeiffer got our permission to put"
+  },
+  {
+   "t": 616.6,
+   "d": 1.44,
+   "text": "them online so instead of renting a"
+  },
+  {
+   "t": 618.04,
+   "d": 2.01,
+   "text": "discman from her you can actually just"
+  },
+  {
+   "t": 620.05,
+   "d": 2.28,
+   "text": "download it as a podcast which I highly"
+  },
+  {
+   "t": 622.33,
+   "d": 1.11,
+   "text": "recommend if you're ever in New York"
+  },
+  {
+   "t": 623.44,
+   "d": 1.56,
+   "text": "part of me talking about it is because I"
+  },
+  {
+   "t": 625.0,
+   "d": 3.06,
+   "text": "want more people to do this so it is a"
+  },
+  {
+   "t": 628.06,
+   "d": 2.09,
+   "text": "25 minute walk through Central Park"
+  },
+  {
+   "t": 630.15,
+   "d": 3.19,
+   "text": "where like she very explicitly walks you"
+  },
+  {
+   "t": 633.34,
+   "d": 1.74,
+   "text": "through the set path it is a piece of"
+  },
+  {
+   "t": 635.08,
+   "d": 1.71,
+   "text": "pre-recorded audio that has not changed"
+  },
+  {
+   "t": 636.79,
+   "d": 4.02,
+   "text": "in 15 years and yet it still creates"
+  },
+  {
+   "t": 640.81,
+   "d": 1.62,
+   "text": "that same sense of this is a story that"
+  },
+  {
+   "t": 642.43,
+   "d": 1.62,
+   "text": "is just for you and you're experiencing"
+  },
+  {
+   "t": 644.05,
+   "d": 1.8,
+   "text": "things that no one else's which is"
+  },
+  {
+   "t": 645.85,
+   "d": 2.61,
+   "text": "really interesting and so there is there"
+  },
+  {
+   "t": 648.46,
+   "d": 1.35,
+   "text": "is the sort of formal there's a framing"
+  },
+  {
+   "t": 649.81,
+   "d": 1.71,
+   "text": "narrative of why she's taking you on"
+  },
+  {
+   "t": 651.52,
+   "d": 1.86,
+   "text": "this journey she is telling you little"
+  },
+  {
+   "t": 653.38,
+   "d": 2.25,
+   "text": "stories about the world but it's really"
+  },
+  {
+   "t": 655.63,
+   "d": 1.86,
+   "text": "about the binaural audio soundscape"
+  },
+  {
+   "t": 657.49,
+   "d": 1.17,
+   "text": "she's creating and the things you're"
+  },
+  {
+   "t": 658.66,
+   "d": 1.47,
+   "text": "overhearing in the park"
+  },
+  {
+   "t": 660.13,
+   "d": 3.36,
+   "text": "and she does a lot of very clever things"
+  },
+  {
+   "t": 663.49,
+   "d": 1.32,
+   "text": "with the interaction with the actual"
+  },
+  {
+   "t": 664.81,
+   "d": 1.81,
+   "text": "real physical space that our birthday"
+  },
+  {
+   "t": 666.62,
+   "d": 1.89,
+   "text": "- because this isn't like sleep no more"
+  },
+  {
+   "t": 668.51,
+   "d": 1.86,
+   "text": "this is this is not a space that"
+  },
+  {
+   "t": 670.37,
+   "d": 1.32,
+   "text": "punch-drunk has complete control over"
+  },
+  {
+   "t": 671.69,
+   "d": 2.07,
+   "text": "the way the game developer has full"
+  },
+  {
+   "t": 673.76,
+   "d": 2.28,
+   "text": "control over you know the full world of"
+  },
+  {
+   "t": 676.04,
+   "d": 2.85,
+   "text": "their digital roguelike their elements"
+  },
+  {
+   "t": 678.89,
+   "d": 1.47,
+   "text": "of the park that are the park like there"
+  },
+  {
+   "t": 680.36,
+   "d": 1.59,
+   "text": "are things that will never change that"
+  },
+  {
+   "t": 681.95,
+   "d": 2.55,
+   "text": "she plays really well off of like early"
+  },
+  {
+   "t": 684.5,
+   "d": 3.15,
+   "text": "on you're walking north and then behind"
+  },
+  {
+   "t": 687.65,
+   "d": 1.59,
+   "text": "you on 59th Street you hear a police"
+  },
+  {
+   "t": 689.24,
+   "d": 2.01,
+   "text": "siren using really good binaural"
+  },
+  {
+   "t": 691.25,
+   "d": 1.44,
+   "text": "positional audio so it sounds like it's"
+  },
+  {
+   "t": 692.69,
+   "d": 1.44,
+   "text": "coming from behind you"
+  },
+  {
+   "t": 694.13,
+   "d": 1.8,
+   "text": "it's baked in because it's an audio"
+  },
+  {
+   "t": 695.93,
+   "d": 1.53,
+   "text": "recording so if you turn your head it"
+  },
+  {
+   "t": 697.46,
+   "d": 1.41,
+   "text": "turns with you and totally breaks the"
+  },
+  {
+   "t": 698.87,
+   "d": 1.86,
+   "text": "illusion I could give a whole other talk"
+  },
+  {
+   "t": 700.73,
+   "d": 2.4,
+   "text": "about how like the amazing psychological"
+  },
+  {
+   "t": 703.13,
+   "d": 1.44,
+   "text": "tricks uses to make sure that you don't"
+  },
+  {
+   "t": 704.57,
+   "d": 1.5,
+   "text": "actually turn your head but that's a"
+  },
+  {
+   "t": 706.07,
+   "d": 3.09,
+   "text": "totally different discussion this is a"
+  },
+  {
+   "t": 709.16,
+   "d": 2.43,
+   "text": "thing where it works because you don't"
+  },
+  {
+   "t": 711.59,
+   "d": 1.59,
+   "text": "know if it's real or not and that works"
+  },
+  {
+   "t": 713.18,
+   "d": 1.86,
+   "text": "because as long as there are cars in"
+  },
+  {
+   "t": 715.04,
+   "d": 1.41,
+   "text": "Manhattan you're gonna hear police"
+  },
+  {
+   "t": 716.45,
+   "d": 1.5,
+   "text": "sirens on 59th Street"
+  },
+  {
+   "t": 717.95,
+   "d": 2.13,
+   "text": "so already even though this is a moment"
+  },
+  {
+   "t": 720.08,
+   "d": 1.8,
+   "text": "that everyone experiences because you"
+  },
+  {
+   "t": 721.88,
+   "d": 1.26,
+   "text": "were there physically and having it this"
+  },
+  {
+   "t": 723.14,
+   "d": 1.77,
+   "text": "feels like a special part of your story"
+  },
+  {
+   "t": 724.91,
+   "d": 3.21,
+   "text": "that no one else is hearing relatedly"
+  },
+  {
+   "t": 728.12,
+   "d": 1.89,
+   "text": "there are things that are in a set in"
+  },
+  {
+   "t": 730.01,
+   "d": 0.54,
+   "text": "stone"
+  },
+  {
+   "t": 730.55,
+   "d": 2.1,
+   "text": "but they're equally meaningful whether"
+  },
+  {
+   "t": 732.65,
+   "d": 1.83,
+   "text": "they have changed or haven't like there"
+  },
+  {
+   "t": 734.48,
+   "d": 1.2,
+   "text": "is at one point she walks you through"
+  },
+  {
+   "t": 735.68,
+   "d": 2.46,
+   "text": "the Central Park Zoo and she talks about"
+  },
+  {
+   "t": 738.14,
+   "d": 2.43,
+   "text": "a polar bear and if the actual polar"
+  },
+  {
+   "t": 740.57,
+   "d": 1.32,
+   "text": "bear was there that would be really cool"
+  },
+  {
+   "t": 741.89,
+   "d": 1.14,
+   "text": "and you'd say oh you know she knows"
+  },
+  {
+   "t": 743.03,
+   "d": 1.52,
+   "text": "where I am that's really amazing"
+  },
+  {
+   "t": 744.55,
+   "d": 2.29,
+   "text": "but also if the polar bear is not there"
+  },
+  {
+   "t": 746.84,
+   "d": 1.5,
+   "text": "like thematically the piece is all about"
+  },
+  {
+   "t": 748.34,
+   "d": 1.77,
+   "text": "the passage of time and accepting the"
+  },
+  {
+   "t": 750.11,
+   "d": 2.34,
+   "text": "past and things that change and hearing"
+  },
+  {
+   "t": 752.45,
+   "d": 1.23,
+   "text": "or talk about this polar bear that's"
+  },
+  {
+   "t": 753.68,
+   "d": 2.25,
+   "text": "probably been dead for ten years that is"
+  },
+  {
+   "t": 755.93,
+   "d": 2.49,
+   "text": "also a really interesting story and"
+  },
+  {
+   "t": 758.42,
+   "d": 2.19,
+   "text": "again this is like that first class of"
+  },
+  {
+   "t": 760.61,
+   "d": 2.1,
+   "text": "things where these are moments that"
+  },
+  {
+   "t": 762.71,
+   "d": 2.04,
+   "text": "everyone has but being in a physical"
+  },
+  {
+   "t": 764.75,
+   "d": 2.55,
+   "text": "space in a park by yourself makes this"
+  },
+  {
+   "t": 767.3,
+   "d": 2.22,
+   "text": "feel like your story in a way that you"
+  },
+  {
+   "t": 769.52,
+   "d": 1.83,
+   "text": "know playing a scripted sequence and I"
+  },
+  {
+   "t": 771.35,
+   "d": 2.04,
+   "text": "call a duty game or triple a video game"
+  },
+  {
+   "t": 773.39,
+   "d": 3.21,
+   "text": "doesn't feel like yours the more"
+  },
+  {
+   "t": 776.6,
+   "d": 1.11,
+   "text": "interesting thing though are the things"
+  },
+  {
+   "t": 777.71,
+   "d": 1.53,
+   "text": "you can't know about you are walking"
+  },
+  {
+   "t": 779.24,
+   "d": 2.43,
+   "text": "through a public park at the most"
+  },
+  {
+   "t": 781.67,
+   "d": 1.35,
+   "text": "extreme level one of the times I did"
+  },
+  {
+   "t": 783.02,
+   "d": 3.21,
+   "text": "this piece there was a movie shoot going"
+  },
+  {
+   "t": 786.23,
+   "d": 1.98,
+   "text": "on and we couldn't walk through where"
+  },
+  {
+   "t": 788.21,
+   "d": 1.44,
+   "text": "she wanted us to walk because Keanu"
+  },
+  {
+   "t": 789.65,
+   "d": 2.91,
+   "text": "Reeves was acting and that was really"
+  },
+  {
+   "t": 792.56,
+   "d": 2.48,
+   "text": "interesting but even at a subtle level"
+  },
+  {
+   "t": 795.04,
+   "d": 3.31,
+   "text": "like the weather might change when you"
+  },
+  {
+   "t": 798.35,
+   "d": 1.2,
+   "text": "are doing it who are you're doing it"
+  },
+  {
+   "t": 799.55,
+   "d": 0.66,
+   "text": "with"
+  },
+  {
+   "t": 800.21,
+   "d": 1.59,
+   "text": "what strangers will be doing in the park"
+  },
+  {
+   "t": 801.8,
+   "d": 1.23,
+   "text": "because it is Central Park there are"
+  },
+  {
+   "t": 803.03,
+   "d": 3.15,
+   "text": "always people there that that shapes"
+  },
+  {
+   "t": 806.18,
+   "d": 2.7,
+   "text": "your experience in a way like if if"
+  },
+  {
+   "t": 808.88,
+   "d": 1.44,
+   "text": "rogue lakes are the intersection of"
+  },
+  {
+   "t": 810.32,
+   "d": 1.44,
+   "text": "these digital systems if Sleep No More"
+  },
+  {
+   "t": 811.76,
+   "d": 2.07,
+   "text": "is the intersection of your path through"
+  },
+  {
+   "t": 813.83,
+   "d": 2.43,
+   "text": "this sort of brute forced gigantic wall"
+  },
+  {
+   "t": 816.26,
+   "d": 2.88,
+   "text": "of content this is a small piece of"
+  },
+  {
+   "t": 819.14,
+   "d": 1.77,
+   "text": "authored content mixed with the"
+  },
+  {
+   "t": 820.91,
+   "d": 2.82,
+   "text": "uncertainty of the real world which is"
+  },
+  {
+   "t": 823.73,
+   "d": 1.86,
+   "text": "less powerful as a means of creating"
+  },
+  {
+   "t": 825.59,
+   "d": 2.16,
+   "text": "interesting stories that are unlike"
+  },
+  {
+   "t": 827.75,
+   "d": 1.86,
+   "text": "anyone elses but it's still pretty"
+  },
+  {
+   "t": 829.61,
+   "d": 2.85,
+   "text": "effective and so that brings us to"
+  },
+  {
+   "t": 832.46,
+   "d": 1.89,
+   "text": "computational Flint which is my attempt"
+  },
+  {
+   "t": 834.35,
+   "d": 1.53,
+   "text": "to sort of how do you how do you take"
+  },
+  {
+   "t": 835.88,
+   "d": 1.74,
+   "text": "that Janet Cardiff approach which is"
+  },
+  {
+   "t": 837.62,
+   "d": 1.5,
+   "text": "great because it's cheap it's"
+  },
+  {
+   "t": 839.12,
+   "d": 1.8,
+   "text": "reproducible anyone can download this"
+  },
+  {
+   "t": 840.92,
+   "d": 2.64,
+   "text": "podcast how do you how do you bring in"
+  },
+  {
+   "t": 843.56,
+   "d": 1.47,
+   "text": "the things that are more beautiful about"
+  },
+  {
+   "t": 845.03,
+   "d": 1.35,
+   "text": "experiences like Sleep No More a"
+  },
+  {
+   "t": 846.38,
+   "d": 3.39,
+   "text": "traditional procedural generation and so"
+  },
+  {
+   "t": 849.77,
+   "d": 1.89,
+   "text": "it a nuts-and-bolts level like this as"
+  },
+  {
+   "t": 851.66,
+   "d": 1.17,
+   "text": "you walk through the park there's sort"
+  },
+  {
+   "t": 852.83,
+   "d": 2.04,
+   "text": "of an input system that's gathering all"
+  },
+  {
+   "t": 854.87,
+   "d": 1.35,
+   "text": "sorts of sensor data from the phone in"
+  },
+  {
+   "t": 856.22,
+   "d": 2.01,
+   "text": "your pocket it's passing that off to a"
+  },
+  {
+   "t": 858.23,
+   "d": 1.47,
+   "text": "procedural generation system I have a"
+  },
+  {
+   "t": 859.7,
+   "d": 1.95,
+   "text": "neural network trained on a large corpus"
+  },
+  {
+   "t": 861.65,
+   "d": 3.09,
+   "text": "of mid twentieth century poetry so you"
+  },
+  {
+   "t": 864.74,
+   "d": 1.38,
+   "text": "give it some inputs it figures out what"
+  },
+  {
+   "t": 866.12,
+   "d": 1.35,
+   "text": "it wants to generate it spits out some"
+  },
+  {
+   "t": 867.47,
+   "d": 2.61,
+   "text": "poems Texas speech synthesiser reads it"
+  },
+  {
+   "t": 870.08,
+   "d": 2.34,
+   "text": "out to you leaves you out maybe two"
+  },
+  {
+   "t": 872.42,
+   "d": 1.26,
+   "text": "lines of poems at a time and then while"
+  },
+  {
+   "t": 873.68,
+   "d": 1.11,
+   "text": "it's reading it out to you it'll"
+  },
+  {
+   "t": 874.79,
+   "d": 2.22,
+   "text": "generate the next snippet and I'm using"
+  },
+  {
+   "t": 877.01,
+   "d": 2.25,
+   "text": "an Irish text-to-speech choice partly"
+  },
+  {
+   "t": 879.26,
+   "d": 1.32,
+   "text": "because it seems D Matic but it also"
+  },
+  {
+   "t": 880.58,
+   "d": 3.0,
+   "text": "masks how horrible bad text of speeches"
+  },
+  {
+   "t": 883.58,
+   "d": 2.66,
+   "text": "like you find for free on an iPhone I"
+  },
+  {
+   "t": 886.24,
+   "d": 2.95,
+   "text": "think sort of the the overall goal of it"
+  },
+  {
+   "t": 889.19,
+   "d": 3.6,
+   "text": "like rather the what it shoots for now"
+  },
+  {
+   "t": 892.79,
+   "d": 1.35,
+   "text": "and we'll talk about how I got there was"
+  },
+  {
+   "t": 894.14,
+   "d": 3.93,
+   "text": "it's not supposed to be interesting like"
+  },
+  {
+   "t": 898.07,
+   "d": 2.22,
+   "text": "the poems are supposed to be interesting"
+  },
+  {
+   "t": 900.29,
+   "d": 1.92,
+   "text": "enough to pull you outside of your"
+  },
+  {
+   "t": 902.21,
+   "d": 1.14,
+   "text": "thoughts as you're walking through the"
+  },
+  {
+   "t": 903.35,
+   "d": 1.53,
+   "text": "park but not so interesting to grab your"
+  },
+  {
+   "t": 904.88,
+   "d": 1.53,
+   "text": "attention so it's supposed to be sort of"
+  },
+  {
+   "t": 906.41,
+   "d": 3.27,
+   "text": "a machine for creating awareness of the"
+  },
+  {
+   "t": 909.68,
+   "d": 3.54,
+   "text": "space around you and how can I sort of"
+  },
+  {
+   "t": 913.22,
+   "d": 1.83,
+   "text": "the opposite of sleep no more or a"
+  },
+  {
+   "t": 915.05,
+   "d": 2.46,
+   "text": "videogame or anything this is this is an"
+  },
+  {
+   "t": 917.51,
+   "d": 1.95,
+   "text": "experience that is supposed to get out"
+  },
+  {
+   "t": 919.46,
+   "d": 1.5,
+   "text": "of your way and augment your enjoyment"
+  },
+  {
+   "t": 920.96,
+   "d": 2.46,
+   "text": "of the real world rather than provide my"
+  },
+  {
+   "t": 923.42,
+   "d": 2.91,
+   "text": "own world for you to live in do how I"
+  },
+  {
+   "t": 926.33,
+   "d": 1.49,
+   "text": "got there was not obvious so the first"
+  },
+  {
+   "t": 927.82,
+   "d": 3.27,
+   "text": "my first thing that I failed at was"
+  },
+  {
+   "t": 931.09,
+   "d": 2.32,
+   "text": "thinking like okay sleep no mores two to"
+  },
+  {
+   "t": 933.41,
+   "d": 0.63,
+   "text": "three hours"
+  },
+  {
+   "t": 934.04,
+   "d": 1.41,
+   "text": "and it culminates in this great ending"
+  },
+  {
+   "t": 935.45,
+   "d": 1.74,
+   "text": "and you're done roguelikes you die and"
+  },
+  {
+   "t": 937.19,
+   "d": 1.35,
+   "text": "you start over and eventually you're"
+  },
+  {
+   "t": 938.54,
+   "d": 1.14,
+   "text": "done with that feedbacks like Colin's"
+  },
+  {
+   "t": 939.68,
+   "d": 1.89,
+   "text": "not playing for a bit Janek Cardiff's"
+  },
+  {
+   "t": 941.57,
+   "d": 1.59,
+   "text": "walk is literally 25 minutes and then"
+  },
+  {
+   "t": 943.16,
+   "d": 1.11,
+   "text": "you're done"
+  },
+  {
+   "t": 944.27,
+   "d": 2.19,
+   "text": "sort of one touchstone I was interested"
+  },
+  {
+   "t": 946.46,
+   "d": 1.38,
+   "text": "in with this game dear Esther which many"
+  },
+  {
+   "t": 947.84,
+   "d": 2.01,
+   "text": "of you may have played you are walking"
+  },
+  {
+   "t": 949.85,
+   "d": 1.83,
+   "text": "around this craggy Irish rock and"
+  },
+  {
+   "t": 951.68,
+   "d": 2.4,
+   "text": "hearing sort of prose more so than"
+  },
+  {
+   "t": 954.08,
+   "d": 1.95,
+   "text": "poetry and it's not really randomized"
+  },
+  {
+   "t": 956.03,
+   "d": 1.32,
+   "text": "it's sort of hand authored but"
+  },
+  {
+   "t": 957.35,
+   "d": 1.98,
+   "text": "randomized order but it is much more"
+  },
+  {
+   "t": 959.33,
+   "d": 1.8,
+   "text": "about this experience of wandering the"
+  },
+  {
+   "t": 961.13,
+   "d": 2.46,
+   "text": "space than it is about hearing and"
+  },
+  {
+   "t": 963.59,
+   "d": 3.03,
+   "text": "actually the actual like embedded"
+  },
+  {
+   "t": 966.62,
+   "d": 2.43,
+   "text": "narrative that it's telling you and so"
+  },
+  {
+   "t": 969.05,
+   "d": 2.25,
+   "text": "making a physical version of dear Esther"
+  },
+  {
+   "t": 971.3,
+   "d": 1.53,
+   "text": "made sense but when you're dealing with"
+  },
+  {
+   "t": 972.83,
+   "d": 2.19,
+   "text": "this level of procedural generation it's"
+  },
+  {
+   "t": 975.02,
+   "d": 1.56,
+   "text": "really hard to make that coherent"
+  },
+  {
+   "t": 976.58,
+   "d": 1.53,
+   "text": "especially because what I cared a lot"
+  },
+  {
+   "t": 978.11,
+   "d": 1.44,
+   "text": "about was this Twitter bot like"
+  },
+  {
+   "t": 979.55,
+   "d": 2.25,
+   "text": "aesthetic of you can start anywhere on"
+  },
+  {
+   "t": 981.8,
+   "d": 1.29,
+   "text": "the park you can walk for five minutes"
+  },
+  {
+   "t": 983.09,
+   "d": 1.76,
+   "text": "or five hours and I'll make it work"
+  },
+  {
+   "t": 984.85,
+   "d": 3.25,
+   "text": "trying to use music to shape the players"
+  },
+  {
+   "t": 988.1,
+   "d": 1.88,
+   "text": "emotional state didn't turn out so well"
+  },
+  {
+   "t": 989.98,
+   "d": 3.43,
+   "text": "I thought very briefly about how can you"
+  },
+  {
+   "t": 993.41,
+   "d": 2.91,
+   "text": "how can you use like inputs how can I"
+  },
+  {
+   "t": 996.32,
+   "d": 1.29,
+   "text": "figure out if the players attention is"
+  },
+  {
+   "t": 997.61,
+   "d": 1.26,
+   "text": "waning and sort of bring things to a"
+  },
+  {
+   "t": 998.87,
+   "d": 2.34,
+   "text": "close that was way more trouble than it"
+  },
+  {
+   "t": 1001.21,
+   "d": 2.82,
+   "text": "was worth so that the reigning metaphor"
+  },
+  {
+   "t": 1004.03,
+   "d": 1.11,
+   "text": "became how do you make this like a"
+  },
+  {
+   "t": 1005.14,
+   "d": 1.83,
+   "text": "Twitter bot I think a lot of what I'm"
+  },
+  {
+   "t": 1006.97,
+   "d": 1.5,
+   "text": "gonna talk about now is sort of what it"
+  },
+  {
+   "t": 1008.47,
+   "d": 1.32,
+   "text": "means to make a Twitter bot in the real"
+  },
+  {
+   "t": 1009.79,
+   "d": 1.55,
+   "text": "world if that's essentially what this is"
+  },
+  {
+   "t": 1011.34,
+   "d": 2.89,
+   "text": "and a big problem is that black box"
+  },
+  {
+   "t": 1014.23,
+   "d": 1.67,
+   "text": "emulation is indistinct from randomness"
+  },
+  {
+   "t": 1015.9,
+   "d": 2.62,
+   "text": "I'm I couldn't find a quote I think"
+  },
+  {
+   "t": 1018.52,
+   "d": 1.41,
+   "text": "Emily short talks about this a lot in"
+  },
+  {
+   "t": 1019.93,
+   "d": 3.24,
+   "text": "context of reverse versu engine if you"
+  },
+  {
+   "t": 1023.17,
+   "d": 1.74,
+   "text": "have all of these complex inputs that"
+  },
+  {
+   "t": 1024.91,
+   "d": 2.34,
+   "text": "are coming up with a world state if the"
+  },
+  {
+   "t": 1027.25,
+   "d": 1.23,
+   "text": "players don't understand that it's"
+  },
+  {
+   "t": 1028.48,
+   "d": 2.85,
+   "text": "nonsense so in a roguelike it makes"
+  },
+  {
+   "t": 1031.33,
+   "d": 1.47,
+   "text": "perfect sense that okay this is the way"
+  },
+  {
+   "t": 1032.8,
+   "d": 2.13,
+   "text": "that this is the way that water works on"
+  },
+  {
+   "t": 1034.93,
+   "d": 1.68,
+   "text": "slippery surfaces I understand that it's"
+  },
+  {
+   "t": 1036.61,
+   "d": 1.88,
+   "text": "an it's a metaphor for the real world"
+  },
+  {
+   "t": 1038.49,
+   "d": 2.65,
+   "text": "originally I had a lot of sensors coming"
+  },
+  {
+   "t": 1041.14,
+   "d": 1.41,
+   "text": "into play like you're going to get a"
+  },
+  {
+   "t": 1042.55,
+   "d": 1.11,
+   "text": "different experience if it's raining"
+  },
+  {
+   "t": 1043.66,
+   "d": 1.5,
+   "text": "different poems based on how quickly"
+  },
+  {
+   "t": 1045.16,
+   "d": 1.68,
+   "text": "you're moving what time of day is it"
+  },
+  {
+   "t": 1046.84,
+   "d": 1.8,
+   "text": "maybe how many other people in the park"
+  },
+  {
+   "t": 1048.64,
+   "d": 2.01,
+   "text": "using your microphone or if other people"
+  },
+  {
+   "t": 1050.65,
+   "d": 2.58,
+   "text": "are doing the experience people don't"
+  },
+  {
+   "t": 1053.23,
+   "d": 3.33,
+   "text": "really have a good mental model for your"
+  },
+  {
+   "t": 1056.56,
+   "d": 1.56,
+   "text": "friend who is making up poems and"
+  },
+  {
+   "t": 1058.12,
+   "d": 1.56,
+   "text": "reading them to you as you walk around"
+  },
+  {
+   "t": 1059.68,
+   "d": 1.71,
+   "text": "is changing the poem based on how"
+  },
+  {
+   "t": 1061.39,
+   "d": 4.08,
+   "text": "quickly you're walking like who knew so"
+  },
+  {
+   "t": 1065.47,
+   "d": 2.02,
+   "text": "concretely if the end result was very"
+  },
+  {
+   "t": 1067.49,
+   "d": 2.55,
+   "text": "simple gps-based I built this tool that"
+  },
+  {
+   "t": 1070.04,
+   "d": 1.29,
+   "text": "I call geofence or they let me wander"
+  },
+  {
+   "t": 1071.33,
+   "d": 2.7,
+   "text": "around the space itself and define the"
+  },
+  {
+   "t": 1074.03,
+   "d": 2.91,
+   "text": "geographical regions doing it in person"
+  },
+  {
+   "t": 1076.94,
+   "d": 0.96,
+   "text": "is super important if you're doing"
+  },
+  {
+   "t": 1077.9,
+   "d": 1.5,
+   "text": "anything location-based you really need"
+  },
+  {
+   "t": 1079.4,
+   "d": 2.25,
+   "text": "to be on site so I wandered through Fort"
+  },
+  {
+   "t": 1081.65,
+   "d": 1.38,
+   "text": "Mason and tagged these different regions"
+  },
+  {
+   "t": 1083.03,
+   "d": 1.26,
+   "text": "with all right this is the water area"
+  },
+  {
+   "t": 1084.29,
+   "d": 2.46,
+   "text": "here are here are some some words that"
+  },
+  {
+   "t": 1086.75,
+   "d": 2.31,
+   "text": "are going to be used to seed the seed"
+  },
+  {
+   "t": 1089.06,
+   "d": 2.27,
+   "text": "the poetry generator when you're there"
+  },
+  {
+   "t": 1091.33,
+   "d": 2.83,
+   "text": "ended up not doing anything with sort of"
+  },
+  {
+   "t": 1094.16,
+   "d": 1.77,
+   "text": "probability field you're waiting at"
+  },
+  {
+   "t": 1095.93,
+   "d": 1.2,
+   "text": "based off of where you are just if"
+  },
+  {
+   "t": 1097.13,
+   "d": 1.95,
+   "text": "you're by the water you're gonna hear"
+  },
+  {
+   "t": 1099.08,
+   "d": 1.35,
+   "text": "poems about water because that was about"
+  },
+  {
+   "t": 1100.43,
+   "d": 2.49,
+   "text": "the level of legibility of people"
+  },
+  {
+   "t": 1102.92,
+   "d": 1.23,
+   "text": "connecting what they're hearing to what"
+  },
+  {
+   "t": 1104.15,
+   "d": 1.2,
+   "text": "they're singing which I think caused a"
+  },
+  {
+   "t": 1105.35,
+   "d": 1.11,
+   "text": "lot into it theory so saying yesterday"
+  },
+  {
+   "t": 1106.46,
+   "d": 2.58,
+   "text": "about being dumb can be a very good"
+  },
+  {
+   "t": 1109.04,
+   "d": 12.03,
+   "text": "thing so so it is interesting about this"
+  },
+  {
+   "t": 1121.07,
+   "d": 3.12,
+   "text": "but that that model then becomes like as"
+  },
+  {
+   "t": 1124.19,
+   "d": 1.8,
+   "text": "you're walking through the park you know"
+  },
+  {
+   "t": 1125.99,
+   "d": 1.5,
+   "text": "every so often you're gonna keep hearing"
+  },
+  {
+   "t": 1127.49,
+   "d": 1.5,
+   "text": "the stream of consciousness of poetry a"
+  },
+  {
+   "t": 1128.99,
+   "d": 1.35,
+   "text": "lot of it's not going to be interesting"
+  },
+  {
+   "t": 1130.34,
+   "d": 1.95,
+   "text": "every so often you will hear something"
+  },
+  {
+   "t": 1132.29,
+   "d": 1.65,
+   "text": "interesting that connects you to the"
+  },
+  {
+   "t": 1133.94,
+   "d": 2.61,
+   "text": "space and as I said this this feels a"
+  },
+  {
+   "t": 1136.55,
+   "d": 1.77,
+   "text": "lot like Twitter BOTS in a sense okay"
+  },
+  {
+   "t": 1138.32,
+   "d": 1.74,
+   "text": "I'm metaphor that I haven't heard used"
+  },
+  {
+   "t": 1140.06,
+   "d": 1.59,
+   "text": "before but I think seems really apt is"
+  },
+  {
+   "t": 1141.65,
+   "d": 1.35,
+   "text": "that a lot of comedy Twitter BOTS or"
+  },
+  {
+   "t": 1143.0,
+   "d": 3.39,
+   "text": "basically Skinner boxes that if you're"
+  },
+  {
+   "t": 1146.39,
+   "d": 3.69,
+   "text": "looking at this Twitter feed like a lot"
+  },
+  {
+   "t": 1150.08,
+   "d": 1.14,
+   "text": "of the contents not going to be great"
+  },
+  {
+   "t": 1151.22,
+   "d": 1.38,
+   "text": "it's gonna be the oatmeal soup problem"
+  },
+  {
+   "t": 1152.6,
+   "d": 2.31,
+   "text": "and then once every so often you're"
+  },
+  {
+   "t": 1154.91,
+   "d": 1.14,
+   "text": "going to get a bowl of oatmeal that has"
+  },
+  {
+   "t": 1156.05,
+   "d": 2.55,
+   "text": "some really nice reasons and if you look"
+  },
+  {
+   "t": 1158.6,
+   "d": 3.24,
+   "text": "at something like two headlines two"
+  },
+  {
+   "t": 1161.84,
+   "d": 4.23,
+   "text": "headlines grabs a headline and tries it"
+  },
+  {
+   "t": 1166.07,
+   "d": 1.62,
+   "text": "tries to grab some really rough you're a"
+  },
+  {
+   "t": 1167.69,
+   "d": 3.27,
+   "text": "six to figure out like what what now and"
+  },
+  {
+   "t": 1170.96,
+   "d": 1.44,
+   "text": "can I replace with what other noun from"
+  },
+  {
+   "t": 1172.4,
+   "d": 1.2,
+   "text": "the news to make this interesting to a"
+  },
+  {
+   "t": 1173.6,
+   "d": 2.19,
+   "text": "human and it fires sometimes but also"
+  },
+  {
+   "t": 1175.79,
+   "d": 1.92,
+   "text": "robots aren't that great at what's know"
+  },
+  {
+   "t": 1177.71,
+   "d": 2.22,
+   "text": "knowing what's interesting to humans and"
+  },
+  {
+   "t": 1179.93,
+   "d": 1.44,
+   "text": "some Twitter BOTS there's sort of an"
+  },
+  {
+   "t": 1181.37,
+   "d": 1.56,
+   "text": "interesting aesthetic discussion of the"
+  },
+  {
+   "t": 1182.93,
+   "d": 1.23,
+   "text": "form of Twitter BOTS like should you"
+  },
+  {
+   "t": 1184.16,
+   "d": 2.01,
+   "text": "curate it and just have a Twitter"
+  },
+  {
+   "t": 1186.17,
+   "d": 1.23,
+   "text": "account that only posts the best stuff"
+  },
+  {
+   "t": 1187.4,
+   "d": 2.94,
+   "text": "or should you just post everything in my"
+  },
+  {
+   "t": 1190.34,
+   "d": 1.86,
+   "text": "case because computational footer is"
+  },
+  {
+   "t": 1192.2,
+   "d": 2.19,
+   "text": "real-time based on the players input I"
+  },
+  {
+   "t": 1194.39,
+   "d": 2.97,
+   "text": "can't curate it all I can do is a"
+  },
+  {
+   "t": 1197.36,
+   "d": 1.32,
+   "text": "similar thing where I'm taking your"
+  },
+  {
+   "t": 1198.68,
+   "d": 2.55,
+   "text": "location I'm trying to figure out what"
+  },
+  {
+   "t": 1201.23,
+   "d": 1.53,
+   "text": "sorts of poems might the robot think is"
+  },
+  {
+   "t": 1202.76,
+   "d": 1.86,
+   "text": "interesting for you but because it's"
+  },
+  {
+   "t": 1204.62,
+   "d": 2.25,
+   "text": "sensory input the world is so limited it"
+  },
+  {
+   "t": 1206.87,
+   "d": 3.3,
+   "text": "doesn't always fire though it does work"
+  },
+  {
+   "t": 1210.17,
+   "d": 1.98,
+   "text": "very well then is because because this"
+  },
+  {
+   "t": 1212.15,
+   "d": 2.28,
+   "text": "is happening based on your actual input"
+  },
+  {
+   "t": 1214.43,
+   "d": 2.34,
+   "text": "it feels much more like your story than"
+  },
+  {
+   "t": 1216.77,
+   "d": 1.77,
+   "text": "it does when it to win a Twitter bot"
+  },
+  {
+   "t": 1218.54,
+   "d": 1.44,
+   "text": "tweet something funny your Twitter about"
+  },
+  {
+   "t": 1219.98,
+   "d": 1.26,
+   "text": "tweet something funny you laugh a little"
+  },
+  {
+   "t": 1221.24,
+   "d": 2.52,
+   "text": "bit when a nice moment of synchrony"
+  },
+  {
+   "t": 1223.76,
+   "d": 2.13,
+   "text": "happens here this feels like it is yours"
+  },
+  {
+   "t": 1225.89,
+   "d": 1.38,
+   "text": "even though you didn't really do"
+  },
+  {
+   "t": 1227.27,
+   "d": 1.74,
+   "text": "anything other than stand in some GPS"
+  },
+  {
+   "t": 1229.01,
+   "d": 1.98,
+   "text": "coordinates and because this is"
+  },
+  {
+   "t": 1230.99,
+   "d": 1.62,
+   "text": "happening in the real world rather than"
+  },
+  {
+   "t": 1232.61,
+   "d": 2.16,
+   "text": "on a computer screen it feels so much"
+  },
+  {
+   "t": 1234.77,
+   "d": 2.22,
+   "text": "more like this is this is you and the"
+  },
+  {
+   "t": 1236.99,
+   "d": 2.37,
+   "text": "space around you and even like if you go"
+  },
+  {
+   "t": 1239.36,
+   "d": 2.1,
+   "text": "back to that space even without doing"
+  },
+  {
+   "t": 1241.46,
+   "d": 1.65,
+   "text": "the experience again it shapes your"
+  },
+  {
+   "t": 1243.11,
+   "d": 1.32,
+   "text": "relationship with that space in a"
+  },
+  {
+   "t": 1244.43,
+   "d": 1.56,
+   "text": "meaningful way that is really"
+  },
+  {
+   "t": 1245.99,
+   "d": 3.51,
+   "text": "interesting I think that's about all"
+  },
+  {
+   "t": 1249.5,
+   "d": 0.96,
+   "text": "I've got"
+  },
+  {
+   "t": 1250.46,
+   "d": 1.86,
+   "text": "have you take questions also I have lots"
+  },
+  {
+   "t": 1252.32,
+   "d": 1.53,
+   "text": "of thoughts about how this sort of stuff"
+  },
+  {
+   "t": 1253.85,
+   "d": 2.28,
+   "text": "applies to more narrative work but I've"
+  },
+  {
+   "t": 1256.13,
+   "d": 1.96,
+   "text": "taught for half"
+  },
+  {
+   "t": 1258.09,
+   "d": 3.76,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1264.81,
+   "d": 9.49,
+   "text": "questions hey so I think Richard"
+  },
+  {
+   "t": 1274.3,
+   "d": 3.09,
+   "text": "Garriott once described in Ultima that"
+  },
+  {
+   "t": 1277.39,
+   "d": 2.66,
+   "text": "he would put the like flock of sheep"
+  },
+  {
+   "t": 1280.05,
+   "d": 2.86,
+   "text": "next to the town next to the dragon so"
+  },
+  {
+   "t": 1282.91,
+   "d": 1.77,
+   "text": "the player could find like the dragon"
+  },
+  {
+   "t": 1284.68,
+   "d": 1.38,
+   "text": "eating the Sheep and the townspeople"
+  },
+  {
+   "t": 1286.06,
+   "d": 2.61,
+   "text": "being mad so if you kill the dragon then"
+  },
+  {
+   "t": 1288.67,
+   "d": 1.32,
+   "text": "they're not starving anymore cause a"
+  },
+  {
+   "t": 1289.99,
+   "d": 2.07,
+   "text": "sheep but then like players actually"
+  },
+  {
+   "t": 1292.06,
+   "d": 2.67,
+   "text": "just killed all the Sheep and all the"
+  },
+  {
+   "t": 1294.73,
+   "d": 4.05,
+   "text": "townspeople and the dragon do you think"
+  },
+  {
+   "t": 1298.78,
+   "d": 1.92,
+   "text": "do you have any opinions about like how"
+  },
+  {
+   "t": 1300.7,
+   "d": 2.01,
+   "text": "to how to navigate this challenge of"
+  },
+  {
+   "t": 1302.71,
+   "d": 2.76,
+   "text": "when you give players too many tools or"
+  },
+  {
+   "t": 1305.47,
+   "d": 2.7,
+   "text": "maybe specific tools their version of an"
+  },
+  {
+   "t": 1308.17,
+   "d": 2.4,
+   "text": "emergent narrative is playing out this"
+  },
+  {
+   "t": 1310.57,
+   "d": 2.28,
+   "text": "kind of you know very conventional"
+  },
+  {
+   "t": 1312.85,
+   "d": 4.86,
+   "text": "violent game fantasy I mean I think this"
+  },
+  {
+   "t": 1317.71,
+   "d": 1.32,
+   "text": "comes back a lot too"
+  },
+  {
+   "t": 1319.03,
+   "d": 2.4,
+   "text": "Darius's point about context yesterday"
+  },
+  {
+   "t": 1321.43,
+   "d": 3.03,
+   "text": "that if this is in context of a video"
+  },
+  {
+   "t": 1324.46,
+   "d": 2.85,
+   "text": "game where one of the two verbs you have"
+  },
+  {
+   "t": 1327.31,
+   "d": 2.52,
+   "text": "is kill like it seems sensible that"
+  },
+  {
+   "t": 1329.83,
+   "d": 2.91,
+   "text": "that's a thing you're going to do and I"
+  },
+  {
+   "t": 1332.74,
+   "d": 2.76,
+   "text": "think the if you want to avoid that"
+  },
+  {
+   "t": 1335.5,
+   "d": 2.13,
+   "text": "problem you either lean into it and say"
+  },
+  {
+   "t": 1337.63,
+   "d": 2.61,
+   "text": "this is this is fine if creating carnage"
+  },
+  {
+   "t": 1340.24,
+   "d": 2.73,
+   "text": "is it's joyful to the players or you can"
+  },
+  {
+   "t": 1342.97,
+   "d": 1.5,
+   "text": "you can move away from that and sort of"
+  },
+  {
+   "t": 1344.47,
+   "d": 2.58,
+   "text": "find verbs that aren't kill and create"
+  },
+  {
+   "t": 1347.05,
+   "d": 2.13,
+   "text": "experiences where players are going to"
+  },
+  {
+   "t": 1349.18,
+   "d": 1.59,
+   "text": "want to do behaviors that you want them"
+  },
+  {
+   "t": 1350.77,
+   "d": 4.92,
+   "text": "to do another point I was thinking of it"
+  },
+  {
+   "t": 1355.69,
+   "d": 0.87,
+   "text": "has slipped my mind"
+  },
+  {
+   "t": 1356.56,
+   "d": 8.46,
+   "text": "hmm other questions I just wanted to say"
+  },
+  {
+   "t": 1365.02,
+   "d": 3.3,
+   "text": "that you're a computational Flynn or it"
+  },
+  {
+   "t": 1368.32,
+   "d": 1.38,
+   "text": "definitely seems like a roguelike"
+  },
+  {
+   "t": 1369.7,
+   "d": 1.77,
+   "text": "because it has procedural generation and"
+  },
+  {
+   "t": 1371.47,
+   "d": 5.4,
+   "text": "perma death that is very true and a"
+  },
+  {
+   "t": 1376.87,
+   "d": 2.54,
+   "text": "hunger clock"
+  },
+  {
+   "t": 1380.32,
+   "d": 5.86,
+   "text": "other questions I just want to know it's"
+  },
+  {
+   "t": 1386.18,
+   "d": 2.46,
+   "text": "is this available to download er yeah"
+  },
+  {
+   "t": 1388.64,
+   "d": 1.68,
+   "text": "it's available for free on the iOS App"
+  },
+  {
+   "t": 1390.32,
+   "d": 2.97,
+   "text": "Store there's no Android version but it"
+  },
+  {
+   "t": 1393.29,
+   "d": 2.37,
+   "text": "but it should keep running indefinitely"
+  },
+  {
+   "t": 1395.66,
+   "d": 2.85,
+   "text": "in Fort Mason it's also open source if"
+  },
+  {
+   "t": 1398.51,
+   "d": 1.17,
+   "text": "anyone feels like making an Android"
+  },
+  {
+   "t": 1399.68,
+   "d": 1.44,
+   "text": "version but I don't expect that to"
+  },
+  {
+   "t": 1401.12,
+   "d": 2.36,
+   "text": "actually happen"
+  },
+  {
+   "t": 1414.76,
+   "d": 4.08,
+   "text": "thanks Mike great talk oh sorry no this"
+  },
+  {
+   "t": 1418.84,
+   "d": 3.84,
+   "text": "is actually a question any interesting"
+  },
+  {
+   "t": 1422.68,
+   "d": 1.74,
+   "text": "emergent stories or uncomplicated linear"
+  },
+  {
+   "t": 1424.42,
+   "d": 2.22,
+   "text": "like things that surprised you or that"
+  },
+  {
+   "t": 1426.64,
+   "d": 3.66,
+   "text": "surprised the players hmm I like I have"
+  },
+  {
+   "t": 1430.3,
+   "d": 1.56,
+   "text": "had a strange disconnect of like I know"
+  },
+  {
+   "t": 1431.86,
+   "d": 1.29,
+   "text": "how many people are using it but I"
+  },
+  {
+   "t": 1433.15,
+   "d": 1.41,
+   "text": "haven't actually gotten to talk to that"
+  },
+  {
+   "t": 1434.56,
+   "d": 2.48,
+   "text": "many users outside of playtesting I"
+  },
+  {
+   "t": 1437.04,
+   "d": 3.19,
+   "text": "think the I don't have any good"
+  },
+  {
+   "t": 1440.23,
+   "d": 1.8,
+   "text": "particularly amazing stories of the"
+  },
+  {
+   "t": 1442.03,
+   "d": 1.62,
+   "text": "experience itself other than failure"
+  },
+  {
+   "t": 1443.65,
+   "d": 2.28,
+   "text": "States I had a lot of problems with"
+  },
+  {
+   "t": 1445.93,
+   "d": 2.43,
+   "text": "training data where it kept reading out"
+  },
+  {
+   "t": 1448.36,
+   "d": 1.74,
+   "text": "snippets from title pages of poetry"
+  },
+  {
+   "t": 1450.1,
+   "d": 2.13,
+   "text": "books so you'd have this experience of"
+  },
+  {
+   "t": 1452.23,
+   "d": 1.44,
+   "text": "wandering through the park and hearing"
+  },
+  {
+   "t": 1453.67,
+   "d": 3.69,
+   "text": "lists of years which is interesting in"
+  },
+  {
+   "t": 1457.36,
+   "d": 1.5,
+   "text": "its own right but not quite what I was"
+  },
+  {
+   "t": 1458.86,
+   "d": 5.46,
+   "text": "going for let's follow from that"
+  },
+  {
+   "t": 1464.32,
+   "d": 3.03,
+   "text": "question and and just quite curious if"
+  },
+  {
+   "t": 1467.35,
+   "d": 1.95,
+   "text": "you could give some kind of idea of the"
+  },
+  {
+   "t": 1469.3,
+   "d": 1.35,
+   "text": "breakdown of effort in creating"
+  },
+  {
+   "t": 1470.65,
+   "d": 1.47,
+   "text": "something like this so you mentioned"
+  },
+  {
+   "t": 1472.12,
+   "d": 2.97,
+   "text": "curating the GPS coordinates training"
+  },
+  {
+   "t": 1475.09,
+   "d": 5.01,
+   "text": "the neural net coding up the app could"
+  },
+  {
+   "t": 1480.1,
+   "d": 1.77,
+   "text": "you give some idea of what took the bulk"
+  },
+  {
+   "t": 1481.87,
+   "d": 2.28,
+   "text": "of your time yeah I think the bulk of"
+  },
+  {
+   "t": 1484.15,
+   "d": 1.71,
+   "text": "the time was actually play testing and"
+  },
+  {
+   "t": 1485.86,
+   "d": 2.91,
+   "text": "doing things in the space the the"
+  },
+  {
+   "t": 1488.77,
+   "d": 1.56,
+   "text": "training like I was I fortunately had"
+  },
+  {
+   "t": 1490.33,
+   "d": 2.81,
+   "text": "someone else who already pre trained a"
+  },
+  {
+   "t": 1493.14,
+   "d": 2.38,
+   "text": "neural net on poetry which is great so"
+  },
+  {
+   "t": 1495.52,
+   "d": 1.35,
+   "text": "didn't one have to assemble that giant"
+  },
+  {
+   "t": 1496.87,
+   "d": 2.37,
+   "text": "list of poetry but even if I had done"
+  },
+  {
+   "t": 1499.24,
+   "d": 1.56,
+   "text": "that or if I hadn't had any experience"
+  },
+  {
+   "t": 1500.8,
+   "d": 2.01,
+   "text": "with machine learning like for these"
+  },
+  {
+   "t": 1502.81,
+   "d": 1.71,
+   "text": "purposes something like micro Markov"
+  },
+  {
+   "t": 1504.52,
+   "d": 1.83,
+   "text": "chains would have worked just as well"
+  },
+  {
+   "t": 1506.35,
+   "d": 1.83,
+   "text": "like I didn't need the power of neural"
+  },
+  {
+   "t": 1508.18,
+   "d": 4.65,
+   "text": "nets a that also actually honestly the a"
+  },
+  {
+   "t": 1512.83,
+   "d": 2.01,
+   "text": "large part of development time was just"
+  },
+  {
+   "t": 1514.84,
+   "d": 2.01,
+   "text": "duct taping stuff together of this was"
+  },
+  {
+   "t": 1516.85,
+   "d": 1.44,
+   "text": "not a neural net that was meant to run"
+  },
+  {
+   "t": 1518.29,
+   "d": 4.59,
+   "text": "on an iPhone and I ended up having to"
+  },
+  {
+   "t": 1522.88,
+   "d": 1.56,
+   "text": "hack a lot of stuff together to actually"
+  },
+  {
+   "t": 1524.44,
+   "d": 1.53,
+   "text": "get poetry generating on devices running"
+  },
+  {
+   "t": 1525.97,
+   "d": 1.59,
+   "text": "it on servers would be prohibitively"
+  },
+  {
+   "t": 1527.56,
+   "d": 1.44,
+   "text": "expensive even if it wasn't a free"
+  },
+  {
+   "t": 1529.0,
+   "d": 2.85,
+   "text": "experience but separate from the"
+  },
+  {
+   "t": 1531.85,
+   "d": 1.83,
+   "text": "day-to-day like how you build an iPhone"
+  },
+  {
+   "t": 1533.68,
+   "d": 3.03,
+   "text": "app that uses GPS like wandering around"
+  },
+  {
+   "t": 1536.71,
+   "d": 1.83,
+   "text": "the space saying what is what is the"
+  },
+  {
+   "t": 1538.54,
+   "d": 2.01,
+   "text": "feeling for each region what should each"
+  },
+  {
+   "t": 1540.55,
+   "d": 2.34,
+   "text": "region be took a lot of manual time and"
+  },
+  {
+   "t": 1542.89,
+   "d": 2.52,
+   "text": "the feedback cycle of I want to I want"
+  },
+  {
+   "t": 1545.41,
+   "d": 1.23,
+   "text": "to walk around the space make some"
+  },
+  {
+   "t": 1546.64,
+   "d": 1.24,
+   "text": "changes and then"
+  },
+  {
+   "t": 1547.88,
+   "d": 1.71,
+   "text": "get it back in the app there's a bit"
+  },
+  {
+   "t": 1549.59,
+   "d": 1.62,
+   "text": "slower than I would have liked"
+  },
+  {
+   "t": 1551.21,
+   "d": 1.47,
+   "text": "it's also worth calling out that I got"
+  },
+  {
+   "t": 1552.68,
+   "d": 4.53,
+   "text": "insanely lucky you like if you have ever"
+  },
+  {
+   "t": 1557.21,
+   "d": 2.22,
+   "text": "dealt with GPS in an urban space it is"
+  },
+  {
+   "t": 1559.43,
+   "d": 3.24,
+   "text": "often very very bad you've issued which"
+  },
+  {
+   "t": 1562.67,
+   "d": 1.32,
+   "text": "call urban canyons and sort of the"
+  },
+  {
+   "t": 1563.99,
+   "d": 1.74,
+   "text": "problems of how does GPS signal"
+  },
+  {
+   "t": 1565.73,
+   "d": 2.25,
+   "text": "attenuate with giant skyscrapers being"
+  },
+  {
+   "t": 1567.98,
+   "d": 2.79,
+   "text": "in a flat park on the waterfront meant"
+  },
+  {
+   "t": 1570.77,
+   "d": 2.09,
+   "text": "all those problems didn't exist so"
+  },
+  {
+   "t": 1572.86,
+   "d": 2.35,
+   "text": "making similar installations you could"
+  },
+  {
+   "t": 1575.21,
+   "d": 2.25,
+   "text": "run into very very gnarly painful"
+  },
+  {
+   "t": 1577.46,
+   "d": 3.09,
+   "text": "problems that I was able to avoid okay"
+  },
+  {
+   "t": 1580.55,
+   "d": 3.11,
+   "text": "thank you so much man"
+  }
+ ]
+}

@@ -1,0 +1,95 @@
+{
+  "id": "n6mKigS_71Y",
+  "title": "Ray - Remixing the Layer Cake: Facilitating fan reinterpretation through Caves of Qud's modular data",
+  "speaker": "Ray",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=n6mKigS_71Y",
+  "talk_type": "technical",
+  "summary": "Ray, a Caves of Qud modder and wiki contributor, describes how Qud's XML data files, with inheritance, mergeable overlays and attachable parts, make the game broadly inspectable and extensible. They argue this supports 'reinterpretation': players parsing, reusing and transforming the game's data, as in the wiki pipeline that parses blueprints and uploads them to MediaWiki cargo tables. Complications include mismatches between the game's ontology and what a wiki or modder needs, and a tension between the power and comprehensibility of a data system that edges toward being a programming language.",
+  "games": [
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "technique",
+      "claim": "Caves of Qud defines game content in XML data files with an inheritance tree, and modders can merge overlays that rewrite precise parts of the data tree.",
+      "detail": "Objects inherit properties from parents and can mix in others. The key modding feature is overlaying a partial definition onto existing data; for behaviour, data attaches C# 'parts' to objects as escape hatches to scripting.",
+      "t": 159,
+      "quote": "you can merge your part that you define over -- you can sort of overlay it and sort of specifically rewrite precise parts of the data tree",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "example",
+      "claim": "Caves of Qud puts a wide range of content in data: items, creatures, conversations, quests, population tables, factions, books, player presets and even custom genders and pronouns.",
+      "detail": "Population tables are what the game uses to pick random items and the like. Ray lists these to show how much of the game is exposed to inspection and modification.",
+      "t": 205,
+      "quote": "There is a lot that's defined in data files in Caves of Qud including game objects so items and creatures, conversations, quests, population tables",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "reinterpretation",
+      "kind": "principle",
+      "claim": "Ray argues that modular data files give players a strong capacity for reinterpretation, defined as the ability to parse, reuse and transform a game's data.",
+      "detail": "This is the talk's central framing, applied both to the wiki (moving data to a database-like wiki) and to modding.",
+      "t": 255,
+      "quote": "the system provides a strong capacity for reinterpretations which I am defining as the ability for players to parse, reuse and transform a game's data",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "wiki pipeline",
+      "kind": "technique",
+      "claim": "The Caves of Qud wiki parses the game's data files and uploads object blueprints automatically into MediaWiki cargo tables, making it easier to keep content current and enabling database-style search and filtering.",
+      "detail": "A parsing program extracts game objects and a blueprint explorer tool finds which wiki objects need updating. Cargo tables let the wiki relate items dynamically rather than statically.",
+      "t": 277,
+      "quote": "we take the data files, it goes through a program called Hugades, not sure how to pronounce it, but to parse out specifically the game objects",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "game ontology",
+      "kind": "warning",
+      "claim": "What is a convenient ontology for a game, how it divides content into objects, is not necessarily convenient for a wiki or modder, so automated pipelines still need human overrides and prose.",
+      "detail": "Ray's example: three different doors needing different keys are separate objects in Caves of Qud, but should the wiki give each its own page? The wiki team (the 'trash mugs') maintains a sheet of overrides and writes prose that cannot be uploaded automatically.",
+      "t": 373,
+      "quote": "what is convenient for a game ontology, what a game considers each individual item, is not necessarily how it works for",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "principle",
+      "claim": "Data-file modding is more robust to game and interface changes than pure scripting, and small changes take only a few lines.",
+      "detail": "Ray's favourite short mod changes a property of an item (transkinetic cuffs) in three or four lines of XML. Modders can also repurpose existing parts in new combinations.",
+      "t": 478,
+      "quote": "it is significantly more robust towards interface and game changes than a strictly scripting",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "component granularity",
+      "kind": "warning",
+      "claim": "In Caves of Qud, how parts are divided can block modders: rocket boots' jumping and fire trail are one part, so changing only one aspect requires dropping into C#.",
+      "detail": "Reusing parts works only when their conceptual boundaries match the change a modder wants; otherwise data modding gives way to scripting, which is less convenient.",
+      "t": 565,
+      "quote": "the functionality that lets you jump with them and like it leaves a trail of fire behind. That is considered one whole part",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data language design",
+      "kind": "open-question",
+      "claim": "Data-driven modding systems face a tension between power and comprehensibility: the more expressive they get, the more they become a programming language.",
+      "detail": "Ray argues Qud's XML effectively is a programming language, though much simpler than C#. Conditional behaviour based on other mods or game state is harder than it could be.",
+      "t": 586,
+      "quote": "there is tension between power and comprehensibility for this system. How much do you want to make it like a programming language",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,131 @@
+{
+  "id": "4byHHDeVKoA",
+  "title": "Joe Sondow - Twitter and Procedural Generation",
+  "speaker": "Joe Sondow",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=4byHHDeVKoA",
+  "talk_type": "technical",
+  "summary": "Joe Sondow describes building emoji Twitter bots (Emoji Aquarium and Emoji Meadow) that procedurally generate small text-grid scenes, inspired by Tiny Star Fields, Tiny Gardens and Tiny Dungeons. He covers rarity tiers that make surprising elements worth waiting for, the technical problem of emoji grid spacing, and a path-generation algorithm that makes the meadow read as a tiny game. He then explains tools for making bots (Cheap Bots Done Quick with Tracery, Glitch, AWS Lambda) and argues social media can host community-played games via Twitter polls and replies, with a four-option choose-your-own-adventure constraint.",
+  "games": [
+    "Emoji Aquarium",
+    "Emoji Meadow",
+    "Tiny Star Fields",
+    "Tiny Gardens",
+    "Tiny Dungeons",
+    "Tetris",
+    "Minesweeper"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "twitter bots",
+      "kind": "example",
+      "claim": "Tiny Star Fields, a bot that posts random arrangements of dots, gained a large following because it offers a calm, non-demanding moment amid the stress of social media.",
+      "detail": "Sondow cites Katie Rose Pipkin's bot with a hundred thousand followers as the inspiration for his own emoji bots: people enjoy looking at a little procedurally generated sky instead of the news.",
+      "t": 77,
+      "quote": "people love it because Twitter is a nightmare and this is not a nightmare it's something else",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "rarity tiers",
+      "kind": "technique",
+      "claim": "Emoji Aquarium uses rarity tiers (common fish, rare swimmers, rare bottom-dwellers, super-rare junk like dice or controllers) so that surprising elements become a prize players wait for.",
+      "detail": "Every three hours there are fish and plants, but occasionally a squid or crab appears, and the super-rare objects show up every few days. When followers ask for more squid, Sondow refuses: the scarcity is the point.",
+      "t": 234,
+      "quote": "you're not gonna get more squid you're gonna wait for the squid",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "thematic consistency",
+      "kind": "principle",
+      "claim": "Emoji Aquarium picks emoji whose scale and viewpoint fit the scene, so the side view of an aquarium matches how emoji are drawn and big animals like whales are excluded.",
+      "detail": "Sondow chose an aquarium because emoji are drawn from the side and fish naturally hover above each other. He limits rare swimmers to ones whose size matches (dolphin, octopus, shark) and refuses whales because they don't make sense at that scale.",
+      "t": 185,
+      "quote": "an aquarium is it something you look at from the side and fish actually hover above each other",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "emoji grids",
+      "kind": "technique",
+      "claim": "Emoji are monospaced across platforms and can form a grid, but no whitespace character matches emoji width, so a perfectly aligned emoji grid cannot use spaces.",
+      "detail": "Ideographic spaces and other language-specific spaces are slightly wider or narrower depending on platform. Sondow deliberately uses other spaces to add jitter so fish do not line up and look more organic.",
+      "t": 332,
+      "quote": "you cannot use white space if you want a grid of emoji that's perfectly",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "path generation",
+      "kind": "technique",
+      "claim": "Emoji Meadow generates many candidate grass paths through flowers and discards most until one is long enough to fill the space, which was the fastest way to get a big winding path.",
+      "detail": "An animal starts on the right (emoji animals face left) with a non-animal treat as its target. Sondow also fixed the algorithm so paths never touch a corner of an earlier part of the path, removing ambiguous diagonal shortcuts.",
+      "t": 493,
+      "quote": "generates a whole bunch of paths and discards most of them until it finds one that's long enough",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden objects",
+      "kind": "example",
+      "claim": "In Emoji Meadow, followers enjoy camouflaged green animals (turtle, snake) that are hard to spot, turning each tweet into a small puzzle.",
+      "detail": "Sondow says people like taking a minute to 'solve' the tweet, and a hard-to-see bunny in the corner is a good thing.",
+      "t": 361,
+      "quote": "people actually really like when there's a green animal a turtle or a snake because they can't find it",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "social media audience",
+      "kind": "principle",
+      "claim": "Building game-like things on social media reaches an audience that would never download and trust an executable or visit a game's web page.",
+      "detail": "Things retweeted into a timeline get discovered and experienced in place. Sondow also likes that emoji, as text, render differently per platform and respect user settings like dark mode.",
+      "t": 551,
+      "quote": "you get people who don't have the patience to go download something and trust it and run it",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "bot hosting",
+      "kind": "technique",
+      "claim": "Twitter bots can be built with no code using Cheap Bots Done Quick (based on Kate Compton's Tracery grammar), or hosted free on AWS Lambda with DynamoDB for state and scheduled triggers.",
+      "detail": "Sondow points to botwiki.org and the Botmakers Slack, mentions Glitch as an easy platform, and warns that many AWS 'free' services expire after a year; he lists the ones that stay free within limits.",
+      "t": 694,
+      "quote": "Kate Compton's tracery language which is a storytelling procedurally generated storytelling system",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "twitter games",
+      "kind": "technique",
+      "claim": "Community-played Twitter games can use polls, which limit each move to four options, making a roguelike on Twitter a choose-your-own-adventure where the program must pick the four most interesting actions.",
+      "detail": "Tetris fits (left, right, rotate, down), and a roguelike defaults to the four compass moves until an object or wall offers something better. Sondow warns to avoid loops, e.g. ensure players can always move away from a chest.",
+      "t": 1061,
+      "quote": "it's to choose your own adventure with a maximum of four options and you have to programmatically decide what are the best options",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "twitter games",
+      "kind": "technique",
+      "claim": "For reply-driven Twitter games like Minesweeper, letting whoever replies first make the next move avoids an explosion of branching per-player game states and makes it a shared community effort.",
+      "detail": "Sondow first imagined per-player threads that branch on commands like 'dig at a4', which seemed a nightmare. Direct-message games would work but defeat the public, group-shared point of Twitter.",
+      "t": 1002,
+      "quote": "whoever comes first will do the next move",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "participation",
+      "kind": "principle",
+      "claim": "Sondow's goal for interactive bots is inclusion: participants should feel they affect what happens next even as one of a hundred voters, unlike bots that are just generative art output.",
+      "detail": "Asked whether bots playing each other would be interesting, he says that would be a scripted performance; the point for him is participation.",
+      "t": 1109,
+      "quote": "the whole point of it for me is to make people feel included",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

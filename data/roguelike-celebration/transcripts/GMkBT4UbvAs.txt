@@ -1,0 +1,46 @@
+Nicholas Feinberg - ??learndb's silliest corners
+Speaker: Nicholas Feinberg
+https://www.youtube.com/watch?v=GMkBT4UbvAs
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] MODERATOR: All right. Moving right along, we have Nicholas Feinberg. Back after many years, you were here in the first year. >> I got the shirt. MODERATOR: I am wearing my 2016 shirt as well. Wonderful. Talk about learndb. Very excited. >> Today I am going to tell stories about the goofest things mentioned in the Dungeon Crawl Stone Soup learnbd. This is for people new to crawl and meant to be nostalgic to those who know it. That's dudgeon crawl in the middle. Tragically Google Slides doesn't support orb retrieval by web. Here are experts from the Learndb. There are well over 10,000 entries. There is drama, there is vanity entries, procedurally
+
+[0:01:06] generated obscenities. Players have curated a set of thousands of other player suggestions
+
+## Bad Ideas
+
+[0:01:20] for the game all of which they dislike. A few of the more comprehensible suggestions, if the player character doesn't eat fruits often enough they should get scurvy. When vampire characters are in bat form they should have to navigate via Echo location. Allow the player to write a mystical ward on the floor to prevent attacking. Crawl has been around for awhile and it is inevitable a few of those bad ideas would eventually make it into the game. There is a learndb entry for those implemented bad ideas. A Cat race that gets nine lives. That's a very silly idea obviously which is why Crawl added it 10 years ago. A Chester class that starts with a book of party tricks and this one was only included as an April fool's joke but made it into the game. A graphical tile interface so players don't need to read to play Crawl. The game has gone through many hand and changed a lot over time. There is a real history to the
+
+## History
+
+[0:02:29] game and learndb preserves that. You can learn at the learndb for the wraith monster and see how seven years ago it would drain the player's experience. The ankus is described as a weapon existing in crawl in a time before time about 10 years ago. People talk about the game as if it was an artifact from Roman times and it amazes me. Let's zoom in on one particular.
+
+## Arena
+
+[0:03:05] A spell that turns items into flowers was stolen from book's but this is a game about fighting monsters and getting treasures. Why would you want flowers? Learndb users were similarly mystified. It could turn into food for herbivores. What a world where people are doing research in the past of a game about dragons and elves. Over the years, one thing that roguelikedevs run into again and
+
+## Probability
+
+[0:03:47] again is misunderstandings of probability. Improbable events will sometimes happen. Sometimes you will miss five attacks in a row. Sometimes rare and valuable gold dragon armor will show up on the third floor of the dudgeon and show up again in the next game. Players will say this is broken and you will have to say maybe but probably it is isn't. Maim -- here is a great example. My summoned ice beasts are not doing damage any more player says and developers says sorry, pal, stuff happens. It is unlikely the game would be broken in this subtle way. But,
+
+## Bugs
+
+[0:04:30] of course, sometimes unlikely events do happen. Sometimes there is a bug and the game printed damage for elemental attacks why not doing damage. The ice beast freezes except it wasn't. Sometimes the dev takes a full year longer to notice the bug than one particular player did.
+
+## Slimes
+
+[0:05:00] But while on the subject of bugs let's talk about slimes. The royal jelly here. Battling as dangerous but if you win the treasure volts open up. Let's say the player poly morphes the jelly. If that happens that unlocks the treasure vaults too. What if they die, leave and kill their own ghost in a later game? These day learndb reports that Crawl does have code to not open the slime treasure vaults in that case and I wish I had been a fly on the wall for the conversation that made the devs put that code in.
+
+## Plurals
+
+[0:06:04] On the subject of special cases, let's talk about plurals. Traditional Roguelikes are text heavy games. To print the messages correctly, the game needs to know not just how to describe individual monsters but how to talk about groups. One goblin and two goblins. If it ends with s there is a plural and then you have hippogriffes and the plural is hippogrives but it should be hippogriffs. It goes on and on and on. Catoblepae and others. There are hundreds of lines of code.
+
+## Special Cases
+
+[0:07:09] Dozens of special cases just for correctly pluralizing dudgeon crawl monster names. I would like to end this talk on the entry for boris. The first is a slightly dated but accurate description of Boris. The second entry, on the other hand, iron bolt, Crystal sphere. It is enthusiastic and over the top and wrong. Boris doesn't have those spells. The second entry is many years old but not out of date. It has never been right but it is having an absolute blast. If there is anything that the learndb and Crawl in general should be about it is that. Do we have time for questions? MODERATOR: We have a little bit of bonus time so we can probably take one question.
+
+[0:08:12] Let's me what people have added. I don't see a learn db question. Someone quick. Throw a question out. What is your favorite entry in learndb? >> It is the gool guide because it is perfect and everything in it is completely wrong. MODERATOR: Is there learndb or the wiki more accurate? >> That's controversial but I would say generally learndb but I have to because that's the tribe I'm in in the two groups.
+
+[0:09:12] MODERATOR: How do you get into learndb? >> If you say something funny and someone is on IRC we can ad you. Some way we need to add support to discorded learning of learn DB. >> Can you not just store the plural with the creature name? >> You could but there are hundreds of creature names and the same code handles pluralization of item names. There is a lot going on. MODERATOR: I think we will move on so we don't end up with too much extra time. Thank you so much. Fantastic talk.

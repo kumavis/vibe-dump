@@ -1,0 +1,195 @@
+{
+  "id": "0jFzBf0mCRY",
+  "title": "Alexander Birke: Practical procedural world & story generation in Sea Of Rifts, naval roguelike RPG",
+  "speaker": "Alexander Birke",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=0jFzBf0mCRY",
+  "talk_type": "technical",
+  "summary": "Alexander Birke, programmer and creative director of the naval roguelike Sea of Rifts, presents practical procedural generation for a small commercial team. He argues for stateless hash/noise functions over RNGs, deterministic and layered ('layer-caked') generators, and per-cell on-demand generation rather than constraint solvers like wave function collapse. He describes replacing Perlin-noise terrain with a gameplay-driven concentric zone layout, harbor-driven island growth with spline-based signed distance fields, and cheap visual variation tricks. For narrative and characters he reuses existing tools (Tracery, Ink, simple lists) and paper-doll portraits, and stresses debug tools and team workflows that let everyone contribute.",
+  "games": [
+    "Sea of Rifts"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "hash noise",
+      "kind": "technique",
+      "claim": "Sea of Rifts uses stateless hash/noise functions instead of traditional random number generators because they give higher-quality output, are thread-safe and always return the same value for the same input.",
+      "detail": "Birke says noise methods have no state, so the same position always yields the same number, making them thread safe, easy to port to the GPU and easy to extend to multiple dimensions. He says he sees no use case for traditional RNGs.",
+      "t": 160,
+      "quote": "I found that hash and noise uh methods are way better than traditional RS they produce a higher quality of uh output",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "determinism",
+      "kind": "principle",
+      "claim": "Procedural generation in a commercial roguelike must be deterministic so that bugs players hit in generated worlds can be reproduced and tracked down.",
+      "detail": "When generating a whole world, narrative and characters, bugs are bound to happen; if you cannot recreate the player's game state it's impossible to find what went wrong.",
+      "t": 220,
+      "quote": "if you can't recreate the like the same state of the game that your player is in then it's impossible to track down what actually happened",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "layered generators",
+      "kind": "technique",
+      "claim": "Sea of Rifts 'layer-cakes' its generation into one generator per aspect, all seeded from a master world seed, so generators can be tweaked or added without changing existing output.",
+      "detail": "Birke compares this to composition in OOP: each generator has a well-defined responsibility rather than one spaghetti generator. The world generator holds the master seed and seeds sub-generators, both cell generators and abstract ones like names, making it easy to add generators.",
+      "t": 242,
+      "quote": "it's basically that you have a generator for each aspect of the game this means that you can take out a generator and you can like tweak it",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "warning",
+      "claim": "Constraint solvers like wave function collapse don't suit a world where you must jump to any arbitrary point, because they grow outward from an initial state; Sea of Rifts generates each cell on entry instead.",
+      "detail": "Birke wants to teleport to arbitrary points for debugging and gameplay. He also notes past procedural games that took a long time to generate before play; Sea of Rifts' initial world generation is short and most data is generated on entering a cell, which eases iteration.",
+      "t": 336,
+      "quote": "the problem with something like wave function collapse is that you uh need to like start from an initial State",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "color variation",
+      "kind": "technique",
+      "claim": "Sea of Rifts gets visual variety from few assets by hashing stable object properties into shader colour offsets and applying masked HSV shifts to non-procedural assets.",
+      "detail": "Because the streaming world shifts x/z coordinates, a shader uses object rotation and height to derive a static random value for colour variation, giving perceptual difference even if unrealistic. Human-made objects, including asset-store models, use a texture map that applies per-region HSV offsets.",
+      "t": 470,
+      "quote": "this allows us to again like get a lot more visual variation out of a few amount of assets",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "debug tools",
+      "kind": "principle",
+      "claim": "A systemic procedural game needs an easily extensible debug menu and visualizations early, since there's no static scene to inspect when generation goes wrong.",
+      "detail": "Sea of Rifts has a tree-structured debug menu, reuses the in-game map to visualize generation, and a debug console that takes text input; a component can inject commands to rerun the same conditions. Text input also lets team members build their own debug menus on an Elgato Stream Deck via text macros.",
+      "t": 518,
+      "quote": "because it's a procedural game we don't actually have a scene to really inspect so if something goes wrong it's uh quite like quite handy to be able to visualize",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "noise terrain",
+      "kind": "warning",
+      "claim": "Sea of Rifts' initial layered-Perlin-noise world produced recognizable noise artefacts, lakes that trapped players and no way to balance, because noise has no concept of what makes a level good to play.",
+      "detail": "The heightmap worked at world and cell scale but sometimes stranded the player in a lake, ending a run almost as it started, and couldn't be balanced since it was just noise layers.",
+      "t": 673,
+      "quote": "you couldn't really balance the generation very well because it was just based on like layers of noise there wasn't any concept of what actually",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "generation patterns",
+      "kind": "principle",
+      "claim": "To generate well you must understand the pattern of what you're generating — how it should play and look — and where you can cheat rather than simulate reality.",
+      "detail": "Birke calls this the key takeaway: you don't need to generate a real world, just identify the key part of the experience or visuals. He recommends Christopher Alexander's 'The Timeless Way of Building', which he says underlies Jesse Schell's lenses book and software patterns.",
+      "t": 695,
+      "quote": "you need to understand um the pattern of what you're generating like how should it play what should it look like and just as important where can you cheat",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "world structure",
+      "kind": "example",
+      "claim": "Sea of Rifts organizes its world as concentric zones around a central goal, forcing players through rift zones to progress and tying difficulty to distance from the center.",
+      "detail": "The goal is to reach the world's center where it fell apart. Green zones may contain harbor islands, blue zones may contain rifts and red rings always contain a rift. All map parameters, like harbor distance and rift-zone length, are tied to gameplay rather than noise.",
+      "t": 776,
+      "quote": "every time the player wants to progress first further to their like main objective of getting to the center they will have to at some point sail through uh Rift",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "island generation",
+      "kind": "technique",
+      "claim": "Sea of Rifts generates islands outward from harbors, the key gameplay objects, reserving an entrance corridor so every harbor stays reachable, then shapes coastlines with spline-based signed distance fields.",
+      "detail": "Land mostly sells the fiction, so harbors determine where land goes. A random direction from the harbor cell becomes a no-land entrance corridor, land grows outward by harbor size, nearby cells become coastal waters, and Bezier splines continuous across cells define the contour — which he calls the trickiest part.",
+      "t": 872,
+      "quote": "Harbor cells are always connected with at least one Edge to a water cell so they are traversible for the player",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "scenery placement",
+      "kind": "technique",
+      "claim": "Sea of Rifts places scenery with jittered-grid blue noise driven by per-biome lists of rules applied in sequence.",
+      "detail": "A grid with a random offset per cell gives the distribution; what makes it look good is layering, with each biome settings file listing scenery rules, each with its own spawn algorithm and data.",
+      "t": 1001,
+      "quote": "inside each of our biome uh setting files we have a list of scenery rules that are applied in sequence",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "city generation",
+      "kind": "example",
+      "claim": "Sea of Rifts generates harbor cities by simply jittering grid points, because the game's camera means players only need to read it as a city and see each one differ.",
+      "detail": "It lacks the fractal street hierarchy of real cities, but Birke says that detail isn't needed for the camera; being readable as a city and distinct per harbor is good enough — an example of knowing where to cheat.",
+      "t": 1064,
+      "quote": "if the player can read it as a city and also if they can start to see that each Harper city is different then that's that's good enough",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "text generation",
+      "kind": "technique",
+      "claim": "Sea of Rifts generates narrative content cheaply with long lists, adjective+name combinations, Tracery with game-state macros and chopped-up Danish city names for Scandinavian-feeling place names.",
+      "detail": "Crew conversation topics like insults come from long lists, which is enough since they happen rarely; ship names combine an adjective with Royal Navy names from Wikipedia. Tracery has custom macros injecting game state, and name generators concatenate fragments of Danish city names.",
+      "t": 1078,
+      "quote": "this is like the area where we are trying to be very efficient and also you reusing a lot of existing Solutions out there",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "choice-based narrative",
+      "kind": "technique",
+      "claim": "Sea of Rifts layers an in-house Unity data structure next to Ink files so story choices can change game state, be disabled without the right crew, or be resolved randomly or by skill check.",
+      "detail": "They use the open-source Ink for choice-based narrative and added an editor that sits alongside the Ink file to connect choices to game state.",
+      "t": 1184,
+      "quote": "allows us to affect the game State based on the choices the player make but it also allows us to uh turn choices off",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "custom editors",
+      "kind": "technique",
+      "claim": "Custom GUI editors make data entry less error-prone than raw formats like XML because the tool enforces structure and field types.",
+      "detail": "Birke likes Unity custom editors because they are easy to write and the tool itself shows the structure; having the narrative designer enter XML would be much more error-prone.",
+      "t": 1229,
+      "quote": "if it's a goey like there is a structure to it and you can like enforce what kind of uh like input a given field takes",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "merge conflicts",
+      "kind": "technique",
+      "claim": "Sea of Rifts avoids merge conflicts in a single-scene Unity game by giving the lead sole ownership of the canonical scene, having others work on named copies, and splitting assets by discipline.",
+      "detail": "Team members copy the game scene at intervals and get a console warning when theirs is out of date. In Q&A Birke adds that narrative content lives in separate scriptable object files so the narrative designer never touches prefabs.",
+      "t": 1268,
+      "quote": "everyone else in the project takes a copy of the game scene like at regular intervals and like name it after themselves",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "crew generation",
+      "kind": "technique",
+      "claim": "Sea of Rifts builds crew portraits with a data-driven paper-doll system of colour gradients and feature sprites, which also lets crew visibly mutate under the world's strange energies.",
+      "detail": "Despite few sprites, colour variation produced more variety than the team expected. Crew are generated from random traits defining both personality and capabilities, and change as they are exposed to the rifts' energies.",
+      "t": 1345,
+      "quote": "your crew can be affected by all the strange energies uh that are in the world and slowly like change",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "existing tools",
+      "kind": "principle",
+      "claim": "A simple generator with good design and content beats a clever algorithm, and using existing tools helps ship and lets teammates contribute with skills they already have.",
+      "detail": "In his summary Birke says to write generators focused on player experience and use existing tools since a commercial game must ship. In Q&A he notes his narrative designer already knew Tracery and Ink, and the host adds that nobody can be hired who knows a custom solution.",
+      "t": 1386,
+      "quote": "a simple solution with good design and good content is always better than having like some kind of like clever algorithm",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

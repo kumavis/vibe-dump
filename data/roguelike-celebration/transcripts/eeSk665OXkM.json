@@ -1,0 +1,4636 @@
+{
+ "id": "eeSk665OXkM",
+ "url": "https://www.youtube.com/watch?v=eeSk665OXkM",
+ "title": "Erik Osheim and Robert Au - Angband",
+ "speaker": "Erik Osheim and Robert Au",
+ "talk_title": "Angband",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1717,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nAlter Reality: Erik Osheim and Robert Au will talk about the evolution of Angband over the last ten years of development. Starting with the unofficial release of 3.0.7s, this will include the creation of a dev team, the successful effort to relicense Angband, and the sometimes controversial efforts to continue to develop and improve Angband. The talk will focus on Angband’s game mechanics as well as the principles and development practices that keep the project going.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 17,
+   "title": "Angband"
+  },
+  {
+   "start": 308,
+   "title": "Challenges"
+  },
+  {
+   "start": 441,
+   "title": "Roberts departure"
+  },
+  {
+   "start": 527,
+   "title": "Transition announcement"
+  },
+  {
+   "start": 551,
+   "title": "Dev team"
+  },
+  {
+   "start": 915,
+   "title": "Improvements"
+  },
+  {
+   "start": 1136,
+   "title": "Diving"
+  },
+  {
+   "start": 1301,
+   "title": "Force Descent"
+  },
+  {
+   "start": 1376,
+   "title": "RiskFree Strategies"
+  },
+  {
+   "start": 1414,
+   "title": "Global Invulnerability"
+  },
+  {
+   "start": 1469,
+   "title": "Community Reaction"
+  },
+  {
+   "start": 1538,
+   "title": "Pushing Back"
+  },
+  {
+   "start": 1572,
+   "title": "Closing Remarks"
+  },
+  {
+   "start": 1633,
+   "title": "Forced Descent"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5430,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.08,
+   "d": 3.28,
+   "text": "i first uh played angband in 1995"
+  },
+  {
+   "t": 3.36,
+   "d": 2.56,
+   "text": "and have been on the dev team since 2010"
+  },
+  {
+   "t": 5.92,
+   "d": 1.04,
+   "text": "uh"
+  },
+  {
+   "t": 6.96,
+   "d": 1.84,
+   "text": "yeah and i uh i've been on the dev team"
+  },
+  {
+   "t": 8.8,
+   "d": 3.92,
+   "text": "since about 2006 2007 i guess early 2007"
+  },
+  {
+   "t": 12.72,
+   "d": 2.64,
+   "text": "and first played it in the late 90s and"
+  },
+  {
+   "t": 15.36,
+   "d": 2.48,
+   "text": "didn't understand it at all"
+  },
+  {
+   "t": 17.84,
+   "d": 3.04,
+   "text": "so let's get started uh probably most of"
+  },
+  {
+   "t": 20.88,
+   "d": 1.52,
+   "text": "you know what angbend is but just"
+  },
+  {
+   "t": 22.4,
+   "d": 2.56,
+   "text": "a refresher it was a roguelike created"
+  },
+  {
+   "t": 24.96,
+   "d": 3.28,
+   "text": "in 1990 at the university of warwick"
+  },
+  {
+   "t": 28.24,
+   "d": 2.48,
+   "text": "it has the reputation at least"
+  },
+  {
+   "t": 30.72,
+   "d": 1.6,
+   "text": "historically as being one of the more"
+  },
+  {
+   "t": 32.32,
+   "d": 0.8,
+   "text": "punishing"
+  },
+  {
+   "t": 33.12,
+   "d": 3.12,
+   "text": "classic roguelikes uh maybe deserved"
+  },
+  {
+   "t": 36.24,
+   "d": 1.28,
+   "text": "maybe undeserved but i think that's"
+  },
+  {
+   "t": 37.52,
+   "d": 1.68,
+   "text": "largely because of its positioning"
+  },
+  {
+   "t": 39.2,
+   "d": 2.16,
+   "text": "uh we started with rogue as you all know"
+  },
+  {
+   "t": 41.36,
+   "d": 1.12,
+   "text": "in 1980"
+  },
+  {
+   "t": 42.48,
+   "d": 3.76,
+   "text": "and then maurya was rogue but more and"
+  },
+  {
+   "t": 46.24,
+   "d": 2.64,
+   "text": "angband was moria but more so we went"
+  },
+  {
+   "t": 48.88,
+   "d": 2.24,
+   "text": "from 50 levels of morya to 100 levels of"
+  },
+  {
+   "t": 51.12,
+   "d": 1.68,
+   "text": "eng band"
+  },
+  {
+   "t": 52.8,
+   "d": 2.56,
+   "text": "the levels don't persist so there's"
+  },
+  {
+   "t": 55.36,
+   "d": 0.8,
+   "text": "potentially"
+  },
+  {
+   "t": 56.16,
+   "d": 2.4,
+   "text": "an infinite amount of stuff monsters"
+  },
+  {
+   "t": 58.56,
+   "d": 2.4,
+   "text": "items what have you"
+  },
+  {
+   "t": 60.96,
+   "d": 2.16,
+   "text": "unlike some of the other roguelikes it's"
+  },
+  {
+   "t": 63.12,
+   "d": 2.24,
+   "text": "less"
+  },
+  {
+   "t": 65.84,
+   "d": 1.92,
+   "text": "there are fewer tricks that you need to"
+  },
+  {
+   "t": 67.76,
+   "d": 1.52,
+   "text": "learn in the sense of"
+  },
+  {
+   "t": 69.28,
+   "d": 2.48,
+   "text": "oh this particular combination of things"
+  },
+  {
+   "t": 71.76,
+   "d": 1.2,
+   "text": "when put together"
+  },
+  {
+   "t": 72.96,
+   "d": 3.2,
+   "text": "will give you vast power it's more"
+  },
+  {
+   "t": 76.16,
+   "d": 3.12,
+   "text": "you just have to keep slowly making your"
+  },
+  {
+   "t": 79.28,
+   "d": 2.8,
+   "text": "character better much more through"
+  },
+  {
+   "t": 82.08,
+   "d": 0.72,
+   "text": "equipment than"
+  },
+  {
+   "t": 82.8,
+   "d": 3.36,
+   "text": "statistics but some of both so there"
+  },
+  {
+   "t": 86.16,
+   "d": 2.88,
+   "text": "there's a lot of grind um and there's a"
+  },
+  {
+   "t": 89.04,
+   "d": 1.52,
+   "text": "lot of tactics there's less"
+  },
+  {
+   "t": 90.56,
+   "d": 3.2,
+   "text": "strategic uh long-term"
+  },
+  {
+   "t": 93.76,
+   "d": 2.56,
+   "text": "play and a lot more just individual"
+  },
+  {
+   "t": 96.32,
+   "d": 1.92,
+   "text": "battles"
+  },
+  {
+   "t": 98.24,
+   "d": 3.12,
+   "text": "things like that uh one of the main"
+  },
+  {
+   "t": 101.36,
+   "d": 2.56,
+   "text": "things that uh distinguishes engband is"
+  },
+  {
+   "t": 103.92,
+   "d": 0.64,
+   "text": "that"
+  },
+  {
+   "t": 104.56,
+   "d": 2.88,
+   "text": "because of certain design decisions"
+  },
+  {
+   "t": 107.44,
+   "d": 1.12,
+   "text": "early on"
+  },
+  {
+   "t": 108.56,
+   "d": 2.4,
+   "text": "uh very making variants was very easy"
+  },
+  {
+   "t": 110.96,
+   "d": 1.12,
+   "text": "and so we have"
+  },
+  {
+   "t": 112.08,
+   "d": 3.36,
+   "text": "a wide tree of variants that have come"
+  },
+  {
+   "t": 115.44,
+   "d": 3.12,
+   "text": "about from angbend"
+  },
+  {
+   "t": 119.36,
+   "d": 3.2,
+   "text": "so one of our motivations uh in"
+  },
+  {
+   "t": 122.56,
+   "d": 3.28,
+   "text": "talking about this particular topic is"
+  },
+  {
+   "t": 125.84,
+   "d": 2.8,
+   "text": "angband is a little unusual in that very"
+  },
+  {
+   "t": 128.64,
+   "d": 2.4,
+   "text": "early on"
+  },
+  {
+   "t": 131.04,
+   "d": 3.44,
+   "text": "the original developers left not"
+  },
+  {
+   "t": 134.48,
+   "d": 3.44,
+   "text": "by choice but basically they graduated"
+  },
+  {
+   "t": 137.92,
+   "d": 1.6,
+   "text": "so as i mentioned it started in the"
+  },
+  {
+   "t": 139.52,
+   "d": 1.76,
+   "text": "university of oh"
+  },
+  {
+   "t": 141.28,
+   "d": 3.12,
+   "text": "here ah okay"
+  },
+  {
+   "t": 144.4,
+   "d": 3.84,
+   "text": "more all right"
+  },
+  {
+   "t": 148.24,
+   "d": 3.36,
+   "text": "hello streaming world so"
+  },
+  {
+   "t": 151.6,
+   "d": 2.8,
+   "text": "the first creators were at the"
+  },
+  {
+   "t": 154.4,
+   "d": 1.6,
+   "text": "university of warwick in 1990"
+  },
+  {
+   "t": 156.0,
+   "d": 2.64,
+   "text": "but they actually graduated in 1990 so"
+  },
+  {
+   "t": 158.64,
+   "d": 0.4,
+   "text": "they"
+  },
+  {
+   "t": 159.04,
+   "d": 3.52,
+   "text": "left left the game behind to a number of"
+  },
+  {
+   "t": 162.56,
+   "d": 2.24,
+   "text": "other university of warwick students"
+  },
+  {
+   "t": 164.8,
+   "d": 1.6,
+   "text": "the first public release was not until"
+  },
+  {
+   "t": 166.4,
+   "d": 1.92,
+   "text": "1993"
+  },
+  {
+   "t": 168.32,
+   "d": 3.2,
+   "text": "at which point already the"
+  },
+  {
+   "t": 171.52,
+   "d": 1.84,
+   "text": "the university of warwick people had"
+  },
+  {
+   "t": 173.36,
+   "d": 1.28,
+   "text": "also graduated"
+  },
+  {
+   "t": 174.64,
+   "d": 2.4,
+   "text": "so very early on we had maintainers who"
+  },
+  {
+   "t": 177.04,
+   "d": 0.64,
+   "text": "were different"
+  },
+  {
+   "t": 177.68,
+   "d": 2.69,
+   "text": "from the original creators uh"
+  },
+  {
+   "t": 180.37,
+   "d": 1.23,
+   "text": "[Music]"
+  },
+  {
+   "t": 181.6,
+   "d": 3.04,
+   "text": "so what what does a maintainer do really"
+  },
+  {
+   "t": 184.64,
+   "d": 2.0,
+   "text": "well there are a couple things that you"
+  },
+  {
+   "t": 186.64,
+   "d": 1.36,
+   "text": "can do you can fix bugs"
+  },
+  {
+   "t": 188.0,
+   "d": 2.56,
+   "text": "you can advance it to more or spread it"
+  },
+  {
+   "t": 190.56,
+   "d": 2.24,
+   "text": "to more platforms so it started on unix"
+  },
+  {
+   "t": 192.8,
+   "d": 3.44,
+   "text": "but the very first public maintainer was"
+  },
+  {
+   "t": 196.24,
+   "d": 1.44,
+   "text": "charles schweiger who"
+  },
+  {
+   "t": 197.68,
+   "d": 2.72,
+   "text": "did pcnband so it was very early port to"
+  },
+  {
+   "t": 200.4,
+   "d": 0.88,
+   "text": "dos"
+  },
+  {
+   "t": 201.28,
+   "d": 2.08,
+   "text": "um so you can spread to more platforms"
+  },
+  {
+   "t": 203.36,
+   "d": 1.84,
+   "text": "you can change the game"
+  },
+  {
+   "t": 205.2,
+   "d": 4.48,
+   "text": "uh now if you have a very long-lived"
+  },
+  {
+   "t": 209.68,
+   "d": 3.68,
+   "text": "uh roguelike angband is now 26 years old"
+  },
+  {
+   "t": 213.36,
+   "d": 1.92,
+   "text": "then you have people who have played it"
+  },
+  {
+   "t": 215.28,
+   "d": 2.32,
+   "text": "for 26 years and are very attached to"
+  },
+  {
+   "t": 217.6,
+   "d": 0.4,
+   "text": "the way"
+  },
+  {
+   "t": 218.0,
+   "d": 3.28,
+   "text": "it was in 1990 or 1995 or 2000."
+  },
+  {
+   "t": 221.28,
+   "d": 2.24,
+   "text": "if you visit the engband irc channel"
+  },
+  {
+   "t": 223.52,
+   "d": 2.08,
+   "text": "you'll find people who say the last good"
+  },
+  {
+   "t": 225.6,
+   "d": 0.4,
+   "text": "version"
+  },
+  {
+   "t": 226.0,
+   "d": 4.32,
+   "text": "was in 1997 or 2005 or what have you"
+  },
+  {
+   "t": 230.32,
+   "d": 2.72,
+   "text": "so people will really be upset if they"
+  },
+  {
+   "t": 233.04,
+   "d": 0.32,
+   "text": "change"
+  },
+  {
+   "t": 233.36,
+   "d": 3.2,
+   "text": "if you change their favorite feature"
+  },
+  {
+   "t": 236.56,
+   "d": 3.68,
+   "text": "also unlike other games if"
+  },
+  {
+   "t": 240.24,
+   "d": 2.96,
+   "text": "you are the original creator then you"
+  },
+  {
+   "t": 243.2,
+   "d": 1.44,
+   "text": "are given a little bit more leeway by"
+  },
+  {
+   "t": 244.64,
+   "d": 2.0,
+   "text": "the community to make changes"
+  },
+  {
+   "t": 246.64,
+   "d": 2.56,
+   "text": "uh that are drastic because it's your"
+  },
+  {
+   "t": 249.2,
+   "d": 0.72,
+   "text": "vision"
+  },
+  {
+   "t": 249.92,
+   "d": 1.6,
+   "text": "whereas if you are taking over for"
+  },
+  {
+   "t": 251.52,
+   "d": 2.24,
+   "text": "someone else people always have the"
+  },
+  {
+   "t": 253.76,
+   "d": 0.72,
+   "text": "arrow"
+  },
+  {
+   "t": 254.48,
+   "d": 3.04,
+   "text": "at you that oh well that's not what"
+  },
+  {
+   "t": 257.52,
+   "d": 3.6,
+   "text": "the original person would have wanted"
+  },
+  {
+   "t": 261.36,
+   "d": 2.32,
+   "text": "on the flip side of that you do have to"
+  },
+  {
+   "t": 263.68,
+   "d": 0.88,
+   "text": "have find"
+  },
+  {
+   "t": 264.56,
+   "d": 1.92,
+   "text": "people to volunteer to do these things"
+  },
+  {
+   "t": 266.48,
+   "d": 2.08,
+   "text": "this is not a paid position"
+  },
+  {
+   "t": 268.56,
+   "d": 2.56,
+   "text": "this is done for the love of the game in"
+  },
+  {
+   "t": 271.12,
+   "d": 1.04,
+   "text": "large part"
+  },
+  {
+   "t": 272.16,
+   "d": 2.24,
+   "text": "and most people don't want to just"
+  },
+  {
+   "t": 274.4,
+   "d": 1.04,
+   "text": "volunteer to go fix"
+  },
+  {
+   "t": 275.44,
+   "d": 3.28,
+   "text": "bugs all the time they want to do things"
+  },
+  {
+   "t": 278.72,
+   "d": 1.68,
+   "text": "they want to make their own mark on the"
+  },
+  {
+   "t": 280.4,
+   "d": 2.32,
+   "text": "game so"
+  },
+  {
+   "t": 282.72,
+   "d": 1.36,
+   "text": "having an allowance for that is"
+  },
+  {
+   "t": 284.08,
+   "d": 2.0,
+   "text": "important and then there's also external"
+  },
+  {
+   "t": 286.08,
+   "d": 1.12,
+   "text": "drivers of change"
+  },
+  {
+   "t": 287.2,
+   "d": 3.12,
+   "text": "so in 1990 no one had smartphones"
+  },
+  {
+   "t": 290.32,
+   "d": 3.36,
+   "text": "and now angband runs on android so"
+  },
+  {
+   "t": 293.68,
+   "d": 3.12,
+   "text": "there are that's not just a platform"
+  },
+  {
+   "t": 296.8,
+   "d": 1.12,
+   "text": "change there are also"
+  },
+  {
+   "t": 297.92,
+   "d": 1.36,
+   "text": "considerations because you have a really"
+  },
+  {
+   "t": 299.28,
+   "d": 1.76,
+   "text": "small screen so"
+  },
+  {
+   "t": 301.04,
+   "d": 3.12,
+   "text": "uh not everything is going to be"
+  },
+  {
+   "t": 304.16,
+   "d": 2.72,
+   "text": "uh just open for you you have to make"
+  },
+  {
+   "t": 306.88,
+   "d": 4.88,
+   "text": "allowances for that uh"
+  },
+  {
+   "t": 311.76,
+   "d": 2.88,
+   "text": "so anyway so like our talk is really"
+  },
+  {
+   "t": 314.64,
+   "d": 1.44,
+   "text": "about the last 10 years of development"
+  },
+  {
+   "t": 316.08,
+   "d": 1.44,
+   "text": "which is kind of the era that we sort of"
+  },
+  {
+   "t": 317.52,
+   "d": 1.2,
+   "text": "personally experienced"
+  },
+  {
+   "t": 318.72,
+   "d": 1.68,
+   "text": "and so coming in if you can imagine"
+  },
+  {
+   "t": 320.4,
+   "d": 2.0,
+   "text": "yourself in you know 2005"
+  },
+  {
+   "t": 322.4,
+   "d": 2.32,
+   "text": "i guess you know during the second tech"
+  },
+  {
+   "t": 324.72,
+   "d": 1.36,
+   "text": "bubble or something like that"
+  },
+  {
+   "t": 326.08,
+   "d": 2.0,
+   "text": "um you know what are the kind of big"
+  },
+  {
+   "t": 328.08,
+   "d": 1.76,
+   "text": "challenges that that we're facing in"
+  },
+  {
+   "t": 329.84,
+   "d": 1.36,
+   "text": "angband and i would say"
+  },
+  {
+   "t": 331.2,
+   "d": 1.6,
+   "text": "probably the one that's on foremost in"
+  },
+  {
+   "t": 332.8,
+   "d": 1.44,
+   "text": "people's minds is"
+  },
+  {
+   "t": 334.24,
+   "d": 2.08,
+   "text": "this problem of too much junk uh the"
+  },
+  {
+   "t": 336.32,
+   "d": 1.52,
+   "text": "question of how many items should there"
+  },
+  {
+   "t": 337.84,
+   "d": 1.2,
+   "text": "be what should the balance be when"
+  },
+  {
+   "t": 339.04,
+   "d": 1.12,
+   "text": "should they appear"
+  },
+  {
+   "t": 340.16,
+   "d": 2.8,
+   "text": "um late in the game especially because"
+  },
+  {
+   "t": 342.96,
+   "d": 1.36,
+   "text": "the levels regenerate every time you go"
+  },
+  {
+   "t": 344.32,
+   "d": 1.36,
+   "text": "to them you never kind of clear them out"
+  },
+  {
+   "t": 345.68,
+   "d": 1.44,
+   "text": "and they stay cleared out you clear them"
+  },
+  {
+   "t": 347.12,
+   "d": 0.24,
+   "text": "out"
+  },
+  {
+   "t": 347.36,
+   "d": 2.08,
+   "text": "if you come back there's all new stuff"
+  },
+  {
+   "t": 349.44,
+   "d": 1.36,
+   "text": "so what it means is that by dungeon"
+  },
+  {
+   "t": 350.8,
+   "d": 1.28,
+   "text": "level 90 something"
+  },
+  {
+   "t": 352.08,
+   "d": 1.36,
+   "text": "you've got great equipment almost"
+  },
+  {
+   "t": 353.44,
+   "d": 1.68,
+   "text": "everything you find is probably worse"
+  },
+  {
+   "t": 355.12,
+   "d": 1.04,
+   "text": "than what you"
+  },
+  {
+   "t": 356.16,
+   "d": 2.32,
+   "text": "you had and so what do you do i mean"
+  },
+  {
+   "t": 358.48,
+   "d": 1.28,
+   "text": "should the game just stop generating"
+  },
+  {
+   "t": 359.76,
+   "d": 1.52,
+   "text": "that stuff should there be a way to like"
+  },
+  {
+   "t": 361.28,
+   "d": 0.8,
+   "text": "hide it"
+  },
+  {
+   "t": 362.08,
+   "d": 1.92,
+   "text": "should you know there was a lot of"
+  },
+  {
+   "t": 364.0,
+   "d": 1.6,
+   "text": "questions around how that how that"
+  },
+  {
+   "t": 365.6,
+   "d": 0.8,
+   "text": "should work"
+  },
+  {
+   "t": 366.4,
+   "d": 2.8,
+   "text": "um similarly uh once you've played the"
+  },
+  {
+   "t": 369.2,
+   "d": 1.04,
+   "text": "game a bunch and you kind of start"
+  },
+  {
+   "t": 370.24,
+   "d": 1.2,
+   "text": "recognizing some of these important"
+  },
+  {
+   "t": 371.44,
+   "d": 0.96,
+   "text": "artifacts"
+  },
+  {
+   "t": 372.4,
+   "d": 1.12,
+   "text": "uh there's this question for"
+  },
+  {
+   "t": 373.52,
+   "d": 1.28,
+   "text": "replayability maybe we should be"
+  },
+  {
+   "t": 374.8,
+   "d": 1.68,
+   "text": "randomizing them so so items"
+  },
+  {
+   "t": 376.48,
+   "d": 1.44,
+   "text": "were a big thing people were worried"
+  },
+  {
+   "t": 377.92,
+   "d": 1.76,
+   "text": "about um there was a new style of play"
+  },
+  {
+   "t": 379.68,
+   "d": 0.8,
+   "text": "called diving"
+  },
+  {
+   "t": 380.48,
+   "d": 3.84,
+   "text": "that was kind of starting to be known um"
+  },
+  {
+   "t": 384.32,
+   "d": 2.0,
+   "text": "it was very unconventional people were"
+  },
+  {
+   "t": 386.32,
+   "d": 1.28,
+   "text": "very confused by it but"
+  },
+  {
+   "t": 387.6,
+   "d": 2.4,
+   "text": "uh especially the guy eddie grove who"
+  },
+  {
+   "t": 390.0,
+   "d": 1.76,
+   "text": "kind of popularized it was"
+  },
+  {
+   "t": 391.76,
+   "d": 1.84,
+   "text": "really talented posted these like"
+  },
+  {
+   "t": 393.6,
+   "d": 1.92,
+   "text": "incredibly short turn counts for angband"
+  },
+  {
+   "t": 395.52,
+   "d": 0.8,
+   "text": "i mean like"
+  },
+  {
+   "t": 396.32,
+   "d": 1.68,
+   "text": "under a million turns was considered"
+  },
+  {
+   "t": 398.0,
+   "d": 2.4,
+   "text": "like a really pretty fast win at the"
+  },
+  {
+   "t": 400.4,
+   "d": 1.2,
+   "text": "time you know like"
+  },
+  {
+   "t": 401.6,
+   "d": 1.44,
+   "text": "kind of surprisingly fast and people"
+  },
+  {
+   "t": 403.04,
+   "d": 1.28,
+   "text": "just didn't really understand how he"
+  },
+  {
+   "t": 404.32,
+   "d": 0.72,
+   "text": "could do that"
+  },
+  {
+   "t": 405.04,
+   "d": 2.48,
+   "text": "and so there's these these um after"
+  },
+  {
+   "t": 407.52,
+   "d": 1.52,
+   "text": "adventure reports written up to kind of"
+  },
+  {
+   "t": 409.04,
+   "d": 1.44,
+   "text": "explain the strategy"
+  },
+  {
+   "t": 410.48,
+   "d": 1.28,
+   "text": "there's also just generally like"
+  },
+  {
+   "t": 411.76,
+   "d": 1.36,
+   "text": "balanced questions sort of like the last"
+  },
+  {
+   "t": 413.12,
+   "d": 1.04,
+   "text": "talk you know there's always going to be"
+  },
+  {
+   "t": 414.16,
+   "d": 1.28,
+   "text": "these kind of balance issues"
+  },
+  {
+   "t": 415.44,
+   "d": 1.76,
+   "text": "um and there's a bunch of technical debt"
+  },
+  {
+   "t": 417.2,
+   "d": 1.76,
+   "text": "like we had sort of an incomplete"
+  },
+  {
+   "t": 418.96,
+   "d": 2.0,
+   "text": "version of the lua scripting language in"
+  },
+  {
+   "t": 420.96,
+   "d": 2.24,
+   "text": "there it had a non-free license which"
+  },
+  {
+   "t": 423.2,
+   "d": 0.48,
+   "text": "made it"
+  },
+  {
+   "t": 423.68,
+   "d": 1.84,
+   "text": "like hard to distribute with things like"
+  },
+  {
+   "t": 425.52,
+   "d": 1.2,
+   "text": "debian because they didn't want to"
+  },
+  {
+   "t": 426.72,
+   "d": 1.76,
+   "text": "distribute the angband license wasn't"
+  },
+  {
+   "t": 428.48,
+   "d": 2.96,
+   "text": "wasn't uh free enough uh and also that"
+  },
+  {
+   "t": 431.44,
+   "d": 1.68,
+   "text": "we had just been seeing you know up ten"
+  },
+  {
+   "t": 433.12,
+   "d": 1.52,
+   "text": "years of variance doing interesting"
+  },
+  {
+   "t": 434.64,
+   "d": 1.12,
+   "text": "stuff and people were saying well you"
+  },
+  {
+   "t": 435.76,
+   "d": 1.28,
+   "text": "know vanilla should be doing some of"
+  },
+  {
+   "t": 437.04,
+   "d": 1.36,
+   "text": "this you know the variants are where"
+  },
+  {
+   "t": 438.4,
+   "d": 1.28,
+   "text": "a lot there's a lot of exciting stuff"
+  },
+  {
+   "t": 439.68,
+   "d": 2.4,
+   "text": "happening um"
+  },
+  {
+   "t": 442.08,
+   "d": 1.44,
+   "text": "but then right at this period there's"
+  },
+  {
+   "t": 443.52,
+   "d": 1.44,
+   "text": "sort of an interesting problem which is"
+  },
+  {
+   "t": 444.96,
+   "d": 0.4,
+   "text": "that"
+  },
+  {
+   "t": 445.36,
+   "d": 1.76,
+   "text": "the maintainer for five years robert"
+  },
+  {
+   "t": 447.12,
+   "d": 1.44,
+   "text": "roleman"
+  },
+  {
+   "t": 448.56,
+   "d": 1.2,
+   "text": "kind of announced that he was feeling"
+  },
+  {
+   "t": 449.76,
+   "d": 1.44,
+   "text": "burned out i mean as we said there's"
+  },
+  {
+   "t": 451.2,
+   "d": 1.36,
+   "text": "these problems of maintainer motivation"
+  },
+  {
+   "t": 452.56,
+   "d": 1.2,
+   "text": "you have to stay motivated after about"
+  },
+  {
+   "t": 453.76,
+   "d": 1.44,
+   "text": "five years of doing this kind of unpaid"
+  },
+  {
+   "t": 455.2,
+   "d": 0.48,
+   "text": "work"
+  },
+  {
+   "t": 455.68,
+   "d": 1.76,
+   "text": "you know i think he just you know needed"
+  },
+  {
+   "t": 457.44,
+   "d": 2.16,
+   "text": "a break or just wanted to be done so"
+  },
+  {
+   "t": 459.6,
+   "d": 2.8,
+   "text": "he announces he wants to step down and"
+  },
+  {
+   "t": 462.4,
+   "d": 1.36,
+   "text": "traditionally you know"
+  },
+  {
+   "t": 463.76,
+   "d": 1.68,
+   "text": "there's sort of been torch passing where"
+  },
+  {
+   "t": 465.44,
+   "d": 1.6,
+   "text": "one maintainer the sort of next"
+  },
+  {
+   "t": 467.04,
+   "d": 1.44,
+   "text": "maintainer would sort of almost like"
+  },
+  {
+   "t": 468.48,
+   "d": 1.68,
+   "text": "start surreptitiously releasing patches"
+  },
+  {
+   "t": 470.16,
+   "d": 1.84,
+   "text": "or unofficial versions and then the the"
+  },
+  {
+   "t": 472.0,
+   "d": 1.04,
+   "text": "official one would kind of acknowledge"
+  },
+  {
+   "t": 473.04,
+   "d": 1.2,
+   "text": "that and pass the torch"
+  },
+  {
+   "t": 474.24,
+   "d": 1.36,
+   "text": "in this case that hadn't really been"
+  },
+  {
+   "t": 475.6,
+   "d": 1.76,
+   "text": "happening uh by"
+  },
+  {
+   "t": 477.36,
+   "d": 2.48,
+   "text": "by march of 2006 julian leighton is"
+  },
+  {
+   "t": 479.84,
+   "d": 1.6,
+   "text": "announced as his successor but he hasn't"
+  },
+  {
+   "t": 481.44,
+   "d": 1.84,
+   "text": "really done a ton recently"
+  },
+  {
+   "t": 483.28,
+   "d": 1.36,
+   "text": "and as we'll see there's kind of a"
+  },
+  {
+   "t": 484.64,
+   "d": 1.52,
+   "text": "reason for that like it seems like he"
+  },
+  {
+   "t": 486.16,
+   "d": 2.16,
+   "text": "had also maybe been on his way out so"
+  },
+  {
+   "t": 488.32,
+   "d": 2.08,
+   "text": "there's kind of this if you take you"
+  },
+  {
+   "t": 490.4,
+   "d": 1.76,
+   "text": "know from robert's original announcement"
+  },
+  {
+   "t": 492.16,
+   "d": 1.44,
+   "text": "there's sort of almost like a year and a"
+  },
+  {
+   "t": 493.6,
+   "d": 1.52,
+   "text": "half kind of dead zone where nothing's"
+  },
+  {
+   "t": 495.12,
+   "d": 2.16,
+   "text": "really happening and people aren't sure"
+  },
+  {
+   "t": 497.28,
+   "d": 1.52,
+   "text": "who is the maintainer what's going to"
+  },
+  {
+   "t": 498.8,
+   "d": 1.92,
+   "text": "happen um"
+  },
+  {
+   "t": 500.72,
+   "d": 3.2,
+   "text": "uh on the scene someone named andy"
+  },
+  {
+   "t": 503.92,
+   "d": 0.72,
+   "text": "sidwell"
+  },
+  {
+   "t": 504.64,
+   "d": 2.4,
+   "text": "starts releasing new versions on"
+  },
+  {
+   "t": 507.04,
+   "d": 1.68,
+   "text": "official new versions the sort of s"
+  },
+  {
+   "t": 508.72,
+   "d": 0.88,
+   "text": "series"
+  },
+  {
+   "t": 509.6,
+   "d": 3.36,
+   "text": "and uh but while well there's nothing"
+  },
+  {
+   "t": 512.96,
+   "d": 1.36,
+   "text": "from the official maintainer so there's"
+  },
+  {
+   "t": 514.32,
+   "d": 1.36,
+   "text": "kind of this question is this a fork or"
+  },
+  {
+   "t": 515.68,
+   "d": 1.6,
+   "text": "a variant that andy's doing"
+  },
+  {
+   "t": 517.28,
+   "d": 2.72,
+   "text": "um but it turns out that julian kind of"
+  },
+  {
+   "t": 520.0,
+   "d": 0.96,
+   "text": "continues"
+  },
+  {
+   "t": 520.96,
+   "d": 1.76,
+   "text": "sort of says well either i'll release"
+  },
+  {
+   "t": 522.72,
+   "d": 1.36,
+   "text": "something before the new year or i'm"
+  },
+  {
+   "t": 524.08,
+   "d": 0.64,
+   "text": "done"
+  },
+  {
+   "t": 524.72,
+   "d": 3.36,
+   "text": "it doesn't release anything and so then"
+  },
+  {
+   "t": 528.08,
+   "d": 2.32,
+   "text": "this is sort of like the you know the"
+  },
+  {
+   "t": 530.4,
+   "d": 1.84,
+   "text": "official transition announcement was in"
+  },
+  {
+   "t": 532.24,
+   "d": 2.08,
+   "text": "march nick mcconnell basically says"
+  },
+  {
+   "t": 534.32,
+   "d": 1.36,
+   "text": "look andy said well just needs to be the"
+  },
+  {
+   "t": 535.68,
+   "d": 1.36,
+   "text": "maintainer like just seems like julian"
+  },
+  {
+   "t": 537.04,
+   "d": 1.04,
+   "text": "doesn't have time for this"
+  },
+  {
+   "t": 538.08,
+   "d": 2.08,
+   "text": "um and and there was really no"
+  },
+  {
+   "t": 540.16,
+   "d": 1.36,
+   "text": "disagreement by this point it'd been a"
+  },
+  {
+   "t": 541.52,
+   "d": 0.8,
+   "text": "you know about a"
+  },
+  {
+   "t": 542.32,
+   "d": 1.44,
+   "text": "year and a half or two years since"
+  },
+  {
+   "t": 543.76,
+   "d": 1.68,
+   "text": "anyone had really seen"
+  },
+  {
+   "t": 545.44,
+   "d": 3.6,
+   "text": "scene activity so sort of by fiat"
+  },
+  {
+   "t": 549.04,
+   "d": 1.36,
+   "text": "uh indie sidwell becomes the new"
+  },
+  {
+   "t": 550.4,
+   "d": 2.4,
+   "text": "maintainer and so the one of the first"
+  },
+  {
+   "t": 552.8,
+   "d": 1.84,
+   "text": "things they decide to do"
+  },
+  {
+   "t": 554.64,
+   "d": 2.56,
+   "text": "uh is actually create a dev team so"
+  },
+  {
+   "t": 557.2,
+   "d": 1.76,
+   "text": "before this angbin didn't really have a"
+  },
+  {
+   "t": 558.96,
+   "d": 1.12,
+   "text": "depth you may net hack you know"
+  },
+  {
+   "t": 560.08,
+   "d": 2.0,
+   "text": "obviously has a very famous dev team uh"
+  },
+  {
+   "t": 562.08,
+   "d": 1.2,
+   "text": "in agband it had traditionally been kind"
+  },
+  {
+   "t": 563.28,
+   "d": 1.52,
+   "text": "of like a benevolent dictator"
+  },
+  {
+   "t": 564.8,
+   "d": 2.16,
+   "text": "not for life but you know for for a term"
+  },
+  {
+   "t": 566.96,
+   "d": 1.36,
+   "text": "at least who kind of made all the"
+  },
+  {
+   "t": 568.32,
+   "d": 1.68,
+   "text": "decisions and chose which patches to"
+  },
+  {
+   "t": 570.0,
+   "d": 1.12,
+   "text": "apply or not"
+  },
+  {
+   "t": 571.12,
+   "d": 1.92,
+   "text": "um but andy i think coming kind of from"
+  },
+  {
+   "t": 573.04,
+   "d": 1.44,
+   "text": "the open source world"
+  },
+  {
+   "t": 574.48,
+   "d": 2.08,
+   "text": "you know really wanted to have more"
+  },
+  {
+   "t": 576.56,
+   "d": 1.76,
+   "text": "collaborators kind of more"
+  },
+  {
+   "t": 578.32,
+   "d": 2.48,
+   "text": "more people involved and so they did a"
+  },
+  {
+   "t": 580.8,
+   "d": 0.72,
+   "text": "bunch of"
+  },
+  {
+   "t": 581.52,
+   "d": 1.28,
+   "text": "i think really important stuff to kind"
+  },
+  {
+   "t": 582.8,
+   "d": 2.48,
+   "text": "of keep angband alive which was creating"
+  },
+  {
+   "t": 585.28,
+   "d": 1.44,
+   "text": "you know a public issue tracker"
+  },
+  {
+   "t": 586.72,
+   "d": 1.84,
+   "text": "public version control an actual dev"
+  },
+  {
+   "t": 588.56,
+   "d": 1.44,
+   "text": "team to assist them so they didn't have"
+  },
+  {
+   "t": 590.0,
+   "d": 1.28,
+   "text": "to do all the work they could kind of"
+  },
+  {
+   "t": 591.28,
+   "d": 0.8,
+   "text": "delegate"
+  },
+  {
+   "t": 592.08,
+   "d": 2.08,
+   "text": "responsibilities uh there had been a"
+  },
+  {
+   "t": 594.16,
+   "d": 1.44,
+   "text": "relicensing effort that they managed to"
+  },
+  {
+   "t": 595.6,
+   "d": 1.28,
+   "text": "kind of push through to re-license"
+  },
+  {
+   "t": 596.88,
+   "d": 2.08,
+   "text": "angband as gpl v2 which i think required"
+  },
+  {
+   "t": 598.96,
+   "d": 1.68,
+   "text": "contacting like over 100 people so it"
+  },
+  {
+   "t": 600.64,
+   "d": 2.24,
+   "text": "was a pretty big effort"
+  },
+  {
+   "t": 602.88,
+   "d": 1.68,
+   "text": "and this i just think this period is"
+  },
+  {
+   "t": 604.56,
+   "d": 1.52,
+   "text": "basically where we go from kind of a"
+  },
+  {
+   "t": 606.08,
+   "d": 1.36,
+   "text": "singular vision to sort of a"
+  },
+  {
+   "t": 607.44,
+   "d": 1.76,
+   "text": "collaborative vision both in the sense"
+  },
+  {
+   "t": 609.2,
+   "d": 1.52,
+   "text": "that there's this larger dev team"
+  },
+  {
+   "t": 610.72,
+   "d": 1.92,
+   "text": "but also that the community kind of has"
+  },
+  {
+   "t": 612.64,
+   "d": 2.08,
+   "text": "a larger say in what's happening there's"
+  },
+  {
+   "t": 614.72,
+   "d": 2.24,
+   "text": "more discussion on forums and"
+  },
+  {
+   "t": 616.96,
+   "d": 1.68,
+   "text": "my perception anyway is that you know it"
+  },
+  {
+   "t": 618.64,
+   "d": 1.76,
+   "text": "becomes a lot more a lot more open"
+  },
+  {
+   "t": 620.4,
+   "d": 1.12,
+   "text": "there's still kind of this unanswered"
+  },
+  {
+   "t": 621.52,
+   "d": 1.84,
+   "text": "question though which robert i mean"
+  },
+  {
+   "t": 623.36,
+   "d": 1.6,
+   "text": "alluded to earlier which is what"
+  },
+  {
+   "t": 624.96,
+   "d": 1.76,
+   "text": "should vanilla angband be we've got 50"
+  },
+  {
+   "t": 626.72,
+   "d": 2.64,
+   "text": "variants that you know are steampunk or"
+  },
+  {
+   "t": 629.36,
+   "d": 2.32,
+   "text": "you know exist in the cthulhu mythos or"
+  },
+  {
+   "t": 631.68,
+   "d": 1.36,
+   "text": "this or that but what should"
+  },
+  {
+   "t": 633.04,
+   "d": 1.68,
+   "text": "vanilla eggman really be should it kind"
+  },
+  {
+   "t": 634.72,
+   "d": 1.68,
+   "text": "of be a museum piece that just"
+  },
+  {
+   "t": 636.4,
+   "d": 1.92,
+   "text": "stays mostly the same should it"
+  },
+  {
+   "t": 638.32,
+   "d": 1.28,
+   "text": "radically change and and"
+  },
+  {
+   "t": 639.6,
+   "d": 1.36,
+   "text": "there's still kind of no answer to that"
+  },
+  {
+   "t": 640.96,
+   "d": 2.4,
+   "text": "at this point um so now we'll kind of go"
+  },
+  {
+   "t": 643.36,
+   "d": 2.0,
+   "text": "into the the changes over the last 10"
+  },
+  {
+   "t": 645.36,
+   "d": 1.44,
+   "text": "years"
+  },
+  {
+   "t": 646.8,
+   "d": 1.44,
+   "text": "that the sort of dev team was able to do"
+  },
+  {
+   "t": 648.24,
+   "d": 1.2,
+   "text": "and some of the kind of challenges"
+  },
+  {
+   "t": 649.44,
+   "d": 2.48,
+   "text": "around them"
+  },
+  {
+   "t": 652.8,
+   "d": 2.32,
+   "text": "so the the first thing we aren't using"
+  },
+  {
+   "t": 655.12,
+   "d": 1.28,
+   "text": "ergonomics here"
+  },
+  {
+   "t": 656.4,
+   "d": 2.16,
+   "text": "specifically in in the accessibility"
+  },
+  {
+   "t": 658.56,
+   "d": 1.12,
+   "text": "context"
+  },
+  {
+   "t": 659.68,
+   "d": 2.24,
+   "text": "but some of the changes do overlap with"
+  },
+  {
+   "t": 661.92,
+   "d": 0.96,
+   "text": "that idea"
+  },
+  {
+   "t": 662.88,
+   "d": 2.48,
+   "text": "when we say ergonomics it's more the"
+  },
+  {
+   "t": 665.36,
+   "d": 1.76,
+   "text": "comfort of the player"
+  },
+  {
+   "t": 667.12,
+   "d": 3.52,
+   "text": "in playing am i still getting yeah"
+  },
+  {
+   "t": 670.64,
+   "d": 1.44,
+   "text": "the comfort of the player in playing the"
+  },
+  {
+   "t": 672.08,
+   "d": 1.92,
+   "text": "game and also"
+  },
+  {
+   "t": 674.0,
+   "d": 2.48,
+   "text": "approachability how especially new"
+  },
+  {
+   "t": 676.48,
+   "d": 1.44,
+   "text": "people coming to the game"
+  },
+  {
+   "t": 677.92,
+   "d": 3.76,
+   "text": "uh to make it easier for them to"
+  },
+  {
+   "t": 681.68,
+   "d": 2.96,
+   "text": "slowly uh get better at playing the game"
+  },
+  {
+   "t": 684.64,
+   "d": 1.44,
+   "text": "as i said engman has something a"
+  },
+  {
+   "t": 686.08,
+   "d": 2.24,
+   "text": "reputation for being daunting"
+  },
+  {
+   "t": 688.32,
+   "d": 2.4,
+   "text": "and so we want to make that easy without"
+  },
+  {
+   "t": 690.72,
+   "d": 1.44,
+   "text": "actually making the game"
+  },
+  {
+   "t": 692.16,
+   "d": 3.44,
+   "text": "easier so the first"
+  },
+  {
+   "t": 695.6,
+   "d": 2.96,
+   "text": "advent was these monster and item lists"
+  },
+  {
+   "t": 698.56,
+   "d": 0.96,
+   "text": "that"
+  },
+  {
+   "t": 699.52,
+   "d": 1.52,
+   "text": "you can now bring up on the screen to"
+  },
+  {
+   "t": 701.04,
+   "d": 2.32,
+   "text": "see what's visible and what's nearby"
+  },
+  {
+   "t": 703.36,
+   "d": 3.12,
+   "text": "what you already know about before the"
+  },
+  {
+   "t": 706.48,
+   "d": 1.57,
+   "text": "interface was actually fairly"
+  },
+  {
+   "t": 708.05,
+   "d": 1.71,
+   "text": "[Music]"
+  },
+  {
+   "t": 709.76,
+   "d": 2.64,
+   "text": "sparse as to what it would give you so"
+  },
+  {
+   "t": 712.4,
+   "d": 1.92,
+   "text": "you have the letters on the screen but"
+  },
+  {
+   "t": 714.32,
+   "d": 2.0,
+   "text": "you can't necessarily go look at that"
+  },
+  {
+   "t": 716.32,
+   "d": 1.68,
+   "text": "red d uh"
+  },
+  {
+   "t": 718.0,
+   "d": 1.68,
+   "text": "you know five tiles away from you and"
+  },
+  {
+   "t": 719.68,
+   "d": 2.4,
+   "text": "figure out what it is"
+  },
+  {
+   "t": 722.08,
+   "d": 1.76,
+   "text": "you can look especially if it's not in"
+  },
+  {
+   "t": 723.84,
+   "d": 2.08,
+   "text": "the room you may know about it because"
+  },
+  {
+   "t": 725.92,
+   "d": 1.2,
+   "text": "you detected it but"
+  },
+  {
+   "t": 727.12,
+   "d": 3.04,
+   "text": "you don't necessarily know whether it's"
+  },
+  {
+   "t": 730.16,
+   "d": 1.92,
+   "text": "a small dragon or a big dragon"
+  },
+  {
+   "t": 732.08,
+   "d": 3.36,
+   "text": "and that can be very important the item"
+  },
+  {
+   "t": 735.44,
+   "d": 0.48,
+   "text": "lists"
+  },
+  {
+   "t": 735.92,
+   "d": 4.0,
+   "text": "also especially help you with"
+  },
+  {
+   "t": 739.92,
+   "d": 2.24,
+   "text": "like goal setting basically so you have"
+  },
+  {
+   "t": 742.16,
+   "d": 1.84,
+   "text": "that once you've detected objects then"
+  },
+  {
+   "t": 744.0,
+   "d": 1.52,
+   "text": "you have you can figure out where you"
+  },
+  {
+   "t": 745.52,
+   "d": 1.84,
+   "text": "need to go"
+  },
+  {
+   "t": 747.36,
+   "d": 2.48,
+   "text": "there is a lot more movement towards"
+  },
+  {
+   "t": 749.84,
+   "d": 0.8,
+   "text": "making the"
+  },
+  {
+   "t": 750.64,
+   "d": 2.56,
+   "text": "mechanics of the game more transparent"
+  },
+  {
+   "t": 753.2,
+   "d": 0.8,
+   "text": "from"
+  },
+  {
+   "t": 754.0,
+   "d": 2.0,
+   "text": "displaying exactly how much damage you"
+  },
+  {
+   "t": 756.0,
+   "d": 1.6,
+   "text": "do to a monster"
+  },
+  {
+   "t": 757.6,
+   "d": 2.0,
+   "text": "to telling you what your failure rate is"
+  },
+  {
+   "t": 759.6,
+   "d": 2.24,
+   "text": "going to be if you try to zap a wand"
+  },
+  {
+   "t": 761.84,
+   "d": 3.84,
+   "text": "to uh telling you what the monster's"
+  },
+  {
+   "t": 765.68,
+   "d": 3.36,
+   "text": "uh potential spells are so you still"
+  },
+  {
+   "t": 769.04,
+   "d": 2.0,
+   "text": "don't know exactly what a monster spells"
+  },
+  {
+   "t": 771.04,
+   "d": 1.76,
+   "text": "are going to be when you first meet"
+  },
+  {
+   "t": 772.8,
+   "d": 0.8,
+   "text": "something"
+  },
+  {
+   "t": 773.6,
+   "d": 3.52,
+   "text": "but once you have encountered a monster"
+  },
+  {
+   "t": 777.12,
+   "d": 3.44,
+   "text": "then it as you grow as you encounter it"
+  },
+  {
+   "t": 780.56,
+   "d": 1.36,
+   "text": "more often you know"
+  },
+  {
+   "t": 781.92,
+   "d": 2.48,
+   "text": "oh this this monster casts fireball this"
+  },
+  {
+   "t": 784.4,
+   "d": 1.12,
+   "text": "monster will breathe"
+  },
+  {
+   "t": 785.52,
+   "d": 2.88,
+   "text": "chaos at you and the when you look at"
+  },
+  {
+   "t": 788.4,
+   "d": 0.88,
+   "text": "the monster"
+  },
+  {
+   "t": 789.28,
+   "d": 1.84,
+   "text": "the game will actually give you"
+  },
+  {
+   "t": 791.12,
+   "d": 2.16,
+   "text": "information about the frequency"
+  },
+  {
+   "t": 793.28,
+   "d": 3.52,
+   "text": "the potential damage and so forth um"
+  },
+  {
+   "t": 796.8,
+   "d": 1.68,
+   "text": "another thing that came up in the"
+  },
+  {
+   "t": 798.48,
+   "d": 1.28,
+   "text": "accessibility talk was the missile"
+  },
+  {
+   "t": 799.76,
+   "d": 1.44,
+   "text": "attack convenience commands"
+  },
+  {
+   "t": 801.2,
+   "d": 2.8,
+   "text": "so being able to fire not just in"
+  },
+  {
+   "t": 804.0,
+   "d": 1.68,
+   "text": "cardinal directions but actually at the"
+  },
+  {
+   "t": 805.68,
+   "d": 2.16,
+   "text": "nearest monster"
+  },
+  {
+   "t": 807.84,
+   "d": 2.72,
+   "text": "with one keystroke is very important it"
+  },
+  {
+   "t": 810.56,
+   "d": 2.0,
+   "text": "makes missile attacks"
+  },
+  {
+   "t": 812.56,
+   "d": 2.32,
+   "text": "roughly as easy to do as melee attacks"
+  },
+  {
+   "t": 814.88,
+   "d": 1.6,
+   "text": "which are just bumping into people"
+  },
+  {
+   "t": 816.48,
+   "d": 3.2,
+   "text": "whereas in instead before you had"
+  },
+  {
+   "t": 819.68,
+   "d": 2.96,
+   "text": "press star to target and then manipulate"
+  },
+  {
+   "t": 822.64,
+   "d": 0.88,
+   "text": "the cursor to"
+  },
+  {
+   "t": 823.52,
+   "d": 3.04,
+   "text": "where the monster is and then press t or"
+  },
+  {
+   "t": 826.56,
+   "d": 2.8,
+   "text": "whatever your key is to fire so that"
+  },
+  {
+   "t": 829.36,
+   "d": 1.36,
+   "text": "makes it a lot"
+  },
+  {
+   "t": 830.72,
+   "d": 3.2,
+   "text": "less cumbersome or less rsi inducing to"
+  },
+  {
+   "t": 833.92,
+   "d": 3.52,
+   "text": "play a missile heavy character"
+  },
+  {
+   "t": 837.44,
+   "d": 4.08,
+   "text": "and then there are a few just beginner"
+  },
+  {
+   "t": 841.52,
+   "d": 1.92,
+   "text": "player improvements things like the"
+  },
+  {
+   "t": 843.44,
+   "d": 1.68,
+   "text": "burst screen which"
+  },
+  {
+   "t": 845.12,
+   "d": 1.92,
+   "text": "when when you're choosing your race in"
+  },
+  {
+   "t": 847.04,
+   "d": 1.28,
+   "text": "your class uh"
+  },
+  {
+   "t": 848.32,
+   "d": 2.32,
+   "text": "at the beginning of the game it actually"
+  },
+  {
+   "t": 850.64,
+   "d": 2.08,
+   "text": "tells you exactly what your bonuses are"
+  },
+  {
+   "t": 852.72,
+   "d": 1.36,
+   "text": "or analysis"
+  },
+  {
+   "t": 854.08,
+   "d": 3.2,
+   "text": "for each of the stats uh when you"
+  },
+  {
+   "t": 857.28,
+   "d": 2.4,
+   "text": "when you begin the game uh there's the"
+  },
+  {
+   "t": 859.68,
+   "d": 1.2,
+   "text": "option instead of"
+  },
+  {
+   "t": 860.88,
+   "d": 2.4,
+   "text": "starting with a pile of money and no"
+  },
+  {
+   "t": 863.28,
+   "d": 0.88,
+   "text": "equipment"
+  },
+  {
+   "t": 864.16,
+   "d": 2.16,
+   "text": "then the game gives you some sensible"
+  },
+  {
+   "t": 866.32,
+   "d": 1.36,
+   "text": "starting equipment"
+  },
+  {
+   "t": 867.68,
+   "d": 3.2,
+   "text": "and the knowledge menu uh"
+  },
+  {
+   "t": 870.88,
+   "d": 1.6,
+   "text": "i don't exactly remember when that came"
+  },
+  {
+   "t": 872.48,
+   "d": 1.52,
+   "text": "in but it's basically"
+  },
+  {
+   "t": 874.0,
+   "d": 2.64,
+   "text": "it lets you see at any given point uh"
+  },
+  {
+   "t": 876.64,
+   "d": 0.4,
+   "text": "what"
+  },
+  {
+   "t": 877.04,
+   "d": 1.52,
+   "text": "what was in your home even if you're in"
+  },
+  {
+   "t": 878.56,
+   "d": 1.68,
+   "text": "the dungeon what was in the stores"
+  },
+  {
+   "t": 880.24,
+   "d": 1.92,
+   "text": "even in your even if you're in the"
+  },
+  {
+   "t": 882.16,
+   "d": 1.84,
+   "text": "dungeon what are the different"
+  },
+  {
+   "t": 884.0,
+   "d": 2.08,
+   "text": "flavors of things that you've discovered"
+  },
+  {
+   "t": 886.08,
+   "d": 2.24,
+   "text": "so because it's a roguelike"
+  },
+  {
+   "t": 888.32,
+   "d": 1.92,
+   "text": "all of the potions and scrolls and so"
+  },
+  {
+   "t": 890.24,
+   "d": 1.68,
+   "text": "forth have random names"
+  },
+  {
+   "t": 891.92,
+   "d": 2.8,
+   "text": "uh and the names don't correspond to the"
+  },
+  {
+   "t": 894.72,
+   "d": 0.48,
+   "text": "same"
+  },
+  {
+   "t": 895.2,
+   "d": 1.84,
+   "text": "actual kinds of things like cure light"
+  },
+  {
+   "t": 897.04,
+   "d": 2.4,
+   "text": "wounds or destruction or what have you"
+  },
+  {
+   "t": 899.44,
+   "d": 2.48,
+   "text": "each game so you have to one of the many"
+  },
+  {
+   "t": 901.92,
+   "d": 1.68,
+   "text": "games of angband is id"
+  },
+  {
+   "t": 903.6,
+   "d": 3.04,
+   "text": "and learning what the flavors correspond"
+  },
+  {
+   "t": 906.64,
+   "d": 0.64,
+   "text": "to what"
+  },
+  {
+   "t": 907.28,
+   "d": 1.92,
+   "text": "types of items there are and the"
+  },
+  {
+   "t": 909.2,
+   "d": 1.68,
+   "text": "knowledge menu is a very good way of"
+  },
+  {
+   "t": 910.88,
+   "d": 1.12,
+   "text": "figuring out exactly what"
+  },
+  {
+   "t": 912.0,
+   "d": 1.76,
+   "text": "you've where you've been in that"
+  },
+  {
+   "t": 913.76,
+   "d": 2.56,
+   "text": "mini-game"
+  },
+  {
+   "t": 916.64,
+   "d": 2.16,
+   "text": "we also have some things that are very"
+  },
+  {
+   "t": 918.8,
+   "d": 1.36,
+   "text": "helpful for development but also"
+  },
+  {
+   "t": 920.16,
+   "d": 2.08,
+   "text": "hopefully helpful for the player"
+  },
+  {
+   "t": 922.24,
+   "d": 2.32,
+   "text": "experience basically making the game"
+  },
+  {
+   "t": 924.56,
+   "d": 1.12,
+   "text": "streamlined"
+  },
+  {
+   "t": 925.68,
+   "d": 3.04,
+   "text": "without hopefully changing the gameplay"
+  },
+  {
+   "t": 928.72,
+   "d": 0.88,
+   "text": "experience"
+  },
+  {
+   "t": 929.6,
+   "d": 3.28,
+   "text": "so a lot of options that"
+  },
+  {
+   "t": 932.88,
+   "d": 2.64,
+   "text": "hopefully weren't used uh got thrown"
+  },
+  {
+   "t": 935.52,
+   "d": 1.44,
+   "text": "away"
+  },
+  {
+   "t": 936.96,
+   "d": 1.6,
+   "text": "this is somewhat controversial because"
+  },
+  {
+   "t": 938.56,
+   "d": 1.92,
+   "text": "some people some small number of people"
+  },
+  {
+   "t": 940.48,
+   "d": 1.28,
+   "text": "still did use them"
+  },
+  {
+   "t": 941.76,
+   "d": 3.2,
+   "text": "but at the end of the day"
+  },
+  {
+   "t": 944.96,
+   "d": 3.12,
+   "text": "there's only so many things you can test"
+  },
+  {
+   "t": 948.08,
+   "d": 1.76,
+   "text": "especially if people most people aren't"
+  },
+  {
+   "t": 949.84,
+   "d": 1.68,
+   "text": "using them so you're not necessarily"
+  },
+  {
+   "t": 951.52,
+   "d": 2.24,
+   "text": "going to get bug reports if they break"
+  },
+  {
+   "t": 953.76,
+   "d": 3.52,
+   "text": "similarly for old ports angban used to"
+  },
+  {
+   "t": 957.28,
+   "d": 0.48,
+   "text": "run"
+  },
+  {
+   "t": 957.76,
+   "d": 2.56,
+   "text": "on all sorts of different platforms it"
+  },
+  {
+   "t": 960.32,
+   "d": 1.44,
+   "text": "still runs on a wide variety of"
+  },
+  {
+   "t": 961.76,
+   "d": 0.96,
+   "text": "platforms"
+  },
+  {
+   "t": 962.72,
+   "d": 1.76,
+   "text": "but there really aren't that many risk"
+  },
+  {
+   "t": 964.48,
+   "d": 1.68,
+   "text": "cost users anymore"
+  },
+  {
+   "t": 966.16,
+   "d": 2.48,
+   "text": "and we can't maintain it if we can't"
+  },
+  {
+   "t": 968.64,
+   "d": 1.04,
+   "text": "test on it"
+  },
+  {
+   "t": 969.68,
+   "d": 1.92,
+   "text": "so a lot of those kinds of things went"
+  },
+  {
+   "t": 971.6,
+   "d": 2.32,
+   "text": "away"
+  },
+  {
+   "t": 974.8,
+   "d": 1.6,
+   "text": "there were many items that were"
+  },
+  {
+   "t": 976.4,
+   "d": 1.52,
+   "text": "scattered around the dungeon"
+  },
+  {
+   "t": 977.92,
+   "d": 3.44,
+   "text": "like just piles of bones that"
+  },
+  {
+   "t": 981.36,
+   "d": 2.48,
+   "text": "added flavor but didn't really do much"
+  },
+  {
+   "t": 983.84,
+   "d": 1.2,
+   "text": "for gameplay"
+  },
+  {
+   "t": 985.04,
+   "d": 4.88,
+   "text": "and so those also disappeared over time"
+  },
+  {
+   "t": 989.92,
+   "d": 3.2,
+   "text": "much more substantial is that"
+  },
+  {
+   "t": 993.12,
+   "d": 2.08,
+   "text": "we got rid of haggling in the stores and"
+  },
+  {
+   "t": 995.2,
+   "d": 1.28,
+   "text": "also charisma"
+  },
+  {
+   "t": 996.48,
+   "d": 1.68,
+   "text": "so this is somewhat of a departure from"
+  },
+  {
+   "t": 998.16,
+   "d": 1.36,
+   "text": "the dnd tradition"
+  },
+  {
+   "t": 999.52,
+   "d": 3.04,
+   "text": "but uh we looked at it and charisma was"
+  },
+  {
+   "t": 1002.56,
+   "d": 1.2,
+   "text": "really not"
+  },
+  {
+   "t": 1003.76,
+   "d": 2.96,
+   "text": "having any sort of meaningful gameplay"
+  },
+  {
+   "t": 1006.72,
+   "d": 0.72,
+   "text": "impact"
+  },
+  {
+   "t": 1007.44,
+   "d": 3.44,
+   "text": "and it was just a stat that was there"
+  },
+  {
+   "t": 1010.88,
+   "d": 1.76,
+   "text": "that would sometimes get affected if you"
+  },
+  {
+   "t": 1012.64,
+   "d": 2.08,
+   "text": "had a lose stat potion"
+  },
+  {
+   "t": 1014.72,
+   "d": 3.04,
+   "text": "so we got rid of charisma and also"
+  },
+  {
+   "t": 1017.76,
+   "d": 2.72,
+   "text": "prices in the stores were you know a"
+  },
+  {
+   "t": 1020.48,
+   "d": 1.92,
+   "text": "little bit affected by the removal of"
+  },
+  {
+   "t": 1022.4,
+   "d": 1.84,
+   "text": "haggling but really it didn't matter all"
+  },
+  {
+   "t": 1024.24,
+   "d": 1.84,
+   "text": "that much"
+  },
+  {
+   "t": 1026.08,
+   "d": 3.12,
+   "text": "and then the game just looks better"
+  },
+  {
+   "t": 1029.2,
+   "d": 3.52,
+   "text": "now so there's uh people"
+  },
+  {
+   "t": 1032.72,
+   "d": 2.64,
+   "text": "okay that may be a up to your opinion"
+  },
+  {
+   "t": 1035.36,
+   "d": 0.64,
+   "text": "but"
+  },
+  {
+   "t": 1036.0,
+   "d": 1.28,
+   "text": "we had some people in the community"
+  },
+  {
+   "t": 1037.28,
+   "d": 2.0,
+   "text": "contribute some fabulous tile sets that"
+  },
+  {
+   "t": 1039.28,
+   "d": 0.48,
+   "text": "are"
+  },
+  {
+   "t": 1039.76,
+   "d": 3.12,
+   "text": "much uh more detailed and well"
+  },
+  {
+   "t": 1042.88,
+   "d": 2.56,
+   "text": "you go from eight by eight to 64 by 64"
+  },
+  {
+   "t": 1045.44,
+   "d": 2.4,
+   "text": "things get better"
+  },
+  {
+   "t": 1047.84,
+   "d": 2.8,
+   "text": "and also utf-8 for all of the text is"
+  },
+  {
+   "t": 1050.64,
+   "d": 1.04,
+   "text": "now in place"
+  },
+  {
+   "t": 1051.68,
+   "d": 3.12,
+   "text": "so you can have accented uh things that"
+  },
+  {
+   "t": 1054.8,
+   "d": 2.16,
+   "text": "look like the actual token text"
+  },
+  {
+   "t": 1056.96,
+   "d": 2.24,
+   "text": "uh be it accented or i don't think we're"
+  },
+  {
+   "t": 1059.2,
+   "d": 1.44,
+   "text": "taking advantage of runes yet but that's"
+  },
+  {
+   "t": 1060.64,
+   "d": 2.16,
+   "text": "a possibility"
+  },
+  {
+   "t": 1062.8,
+   "d": 2.24,
+   "text": "and also the i mentioned the game runs"
+  },
+  {
+   "t": 1065.04,
+   "d": 0.8,
+   "text": "on"
+  },
+  {
+   "t": 1065.84,
+   "d": 3.04,
+   "text": "android right now there was a port that"
+  },
+  {
+   "t": 1068.88,
+   "d": 2.16,
+   "text": "contribute got contributed"
+  },
+  {
+   "t": 1071.04,
+   "d": 4.16,
+   "text": "uh six five six years ago for coco"
+  },
+  {
+   "t": 1075.2,
+   "d": 3.2,
+   "text": "before that really the mac uh"
+  },
+  {
+   "t": 1078.4,
+   "d": 2.08,
+   "text": "state of the game was really not that"
+  },
+  {
+   "t": 1080.48,
+   "d": 1.44,
+   "text": "comfortable"
+  },
+  {
+   "t": 1081.92,
+   "d": 2.16,
+   "text": "and the cocoa port is just miles ahead"
+  },
+  {
+   "t": 1084.08,
+   "d": 1.52,
+   "text": "of where we were before"
+  },
+  {
+   "t": 1085.6,
+   "d": 5.04,
+   "text": "so in that way lots of lots of"
+  },
+  {
+   "t": 1090.64,
+   "d": 3.76,
+   "text": "new new users can experience a"
+  },
+  {
+   "t": 1094.4,
+   "d": 3.28,
+   "text": "much better version of the game"
+  },
+  {
+   "t": 1097.68,
+   "d": 2.16,
+   "text": "so oh and there is one other thing that"
+  },
+  {
+   "t": 1099.84,
+   "d": 1.6,
+   "text": "i should mention that"
+  },
+  {
+   "t": 1101.44,
+   "d": 2.64,
+   "text": "uh didn't get really improved and that's"
+  },
+  {
+   "t": 1104.08,
+   "d": 1.44,
+   "text": "documentation and testing because of"
+  },
+  {
+   "t": 1105.52,
+   "d": 1.52,
+   "text": "course no one likes to do documentation"
+  },
+  {
+   "t": 1107.04,
+   "d": 2.64,
+   "text": "and testing the"
+  },
+  {
+   "t": 1109.68,
+   "d": 2.72,
+   "text": "even now you still get if people who are"
+  },
+  {
+   "t": 1112.4,
+   "d": 0.8,
+   "text": "new to the game"
+  },
+  {
+   "t": 1113.2,
+   "d": 2.32,
+   "text": "look around for sort of strategy guides"
+  },
+  {
+   "t": 1115.52,
+   "d": 1.52,
+   "text": "something called the angband newbie"
+  },
+  {
+   "t": 1117.04,
+   "d": 0.88,
+   "text": "guide"
+  },
+  {
+   "t": 1117.92,
+   "d": 3.52,
+   "text": "pops up and that's from 1996."
+  },
+  {
+   "t": 1121.44,
+   "d": 3.12,
+   "text": "uh it still has very strict"
+  },
+  {
+   "t": 1124.56,
+   "d": 2.8,
+   "text": "uh sort of checkpoints as to okay you"
+  },
+  {
+   "t": 1127.36,
+   "d": 1.04,
+   "text": "need free"
+  },
+  {
+   "t": 1128.4,
+   "d": 1.76,
+   "text": "free action by ten thousand feet or one"
+  },
+  {
+   "t": 1130.16,
+   "d": 2.0,
+   "text": "thousand feet you need to have"
+  },
+  {
+   "t": 1132.16,
+   "d": 1.92,
+   "text": "uh finished stat gain by seventeen"
+  },
+  {
+   "t": 1134.08,
+   "d": 2.88,
+   "text": "hundred feet and so forth"
+  },
+  {
+   "t": 1136.96,
+   "d": 2.4,
+   "text": "so um just just as a precursor you might"
+  },
+  {
+   "t": 1139.36,
+   "d": 1.28,
+   "text": "have assumed that all the previous work"
+  },
+  {
+   "t": 1140.64,
+   "d": 1.2,
+   "text": "was pretty uncontroversial right i mean"
+  },
+  {
+   "t": 1141.84,
+   "d": 1.12,
+   "text": "it seems like bet you know"
+  },
+  {
+   "t": 1142.96,
+   "d": 1.92,
+   "text": "improving the graphics better stuff you"
+  },
+  {
+   "t": 1144.88,
+   "d": 1.36,
+   "text": "know removing haggling some of these"
+  },
+  {
+   "t": 1146.24,
+   "d": 1.36,
+   "text": "features no one's going to care but in"
+  },
+  {
+   "t": 1147.6,
+   "d": 0.72,
+   "text": "fact people"
+  },
+  {
+   "t": 1148.32,
+   "d": 1.28,
+   "text": "did care even about that stuff and so"
+  },
+  {
+   "t": 1149.6,
+   "d": 1.92,
+   "text": "the stuff we're getting to now is is"
+  },
+  {
+   "t": 1151.52,
+   "d": 0.72,
+   "text": "very"
+  },
+  {
+   "t": 1152.24,
+   "d": 1.36,
+   "text": "sort of interesting and controversial"
+  },
+  {
+   "t": 1153.6,
+   "d": 1.92,
+   "text": "there's a lot of cool stuff so i"
+  },
+  {
+   "t": 1155.52,
+   "d": 1.44,
+   "text": "alluded earlier to diving and this is"
+  },
+  {
+   "t": 1156.96,
+   "d": 1.68,
+   "text": "kind of the um the slide that kind of"
+  },
+  {
+   "t": 1158.64,
+   "d": 2.08,
+   "text": "describes it more detail so"
+  },
+  {
+   "t": 1160.72,
+   "d": 1.6,
+   "text": "traditional angband gameplay is that you"
+  },
+  {
+   "t": 1162.32,
+   "d": 1.68,
+   "text": "go very slowly and very safely like"
+  },
+  {
+   "t": 1164.0,
+   "d": 1.44,
+   "text": "you know you're spending potentially"
+  },
+  {
+   "t": 1165.44,
+   "d": 1.6,
+   "text": "millions of game turns there's 100"
+  },
+  {
+   "t": 1167.04,
+   "d": 1.76,
+   "text": "levels any one little mistake you know"
+  },
+  {
+   "t": 1168.8,
+   "d": 1.04,
+   "text": "and you're literally going to start over"
+  },
+  {
+   "t": 1169.84,
+   "d": 1.36,
+   "text": "from the beginning right so"
+  },
+  {
+   "t": 1171.2,
+   "d": 2.08,
+   "text": "the traditional the the prevailing"
+  },
+  {
+   "t": 1173.28,
+   "d": 1.2,
+   "text": "philosophy had been"
+  },
+  {
+   "t": 1174.48,
+   "d": 2.08,
+   "text": "you know take zero risks go very very"
+  },
+  {
+   "t": 1176.56,
+   "d": 1.52,
+   "text": "slowly be very safe"
+  },
+  {
+   "t": 1178.08,
+   "d": 1.36,
+   "text": "try and get all the resistance as soon"
+  },
+  {
+   "t": 1179.44,
+   "d": 1.92,
+   "text": "as you can you know just do everything"
+  },
+  {
+   "t": 1181.36,
+   "d": 1.44,
+   "text": "you can to minimize danger"
+  },
+  {
+   "t": 1182.8,
+   "d": 1.68,
+   "text": "and and possibly do some of the really"
+  },
+  {
+   "t": 1184.48,
+   "d": 1.28,
+   "text": "boring repetitive strategies that we"
+  },
+  {
+   "t": 1185.76,
+   "d": 1.92,
+   "text": "heard about in the dcss talk right about"
+  },
+  {
+   "t": 1187.68,
+   "d": 0.88,
+   "text": "like scumming"
+  },
+  {
+   "t": 1188.56,
+   "d": 1.2,
+   "text": "going up and down repeatedly to"
+  },
+  {
+   "t": 1189.76,
+   "d": 1.68,
+   "text": "regenerate new levels at a shallow depth"
+  },
+  {
+   "t": 1191.44,
+   "d": 1.68,
+   "text": "to wait until you randomly get like a"
+  },
+  {
+   "t": 1193.12,
+   "d": 1.36,
+   "text": "good artifact or something"
+  },
+  {
+   "t": 1194.48,
+   "d": 1.76,
+   "text": "um and these are obviously terrible like"
+  },
+  {
+   "t": 1196.24,
+   "d": 1.28,
+   "text": "they make the game really boring for"
+  },
+  {
+   "t": 1197.52,
+   "d": 0.64,
+   "text": "people and"
+  },
+  {
+   "t": 1198.16,
+   "d": 1.04,
+   "text": "the interesting thing that angman is"
+  },
+  {
+   "t": 1199.2,
+   "d": 1.2,
+   "text": "they actually we determined that they"
+  },
+  {
+   "t": 1200.4,
+   "d": 1.28,
+   "text": "actually make the game harder in the"
+  },
+  {
+   "t": 1201.68,
+   "d": 0.88,
+   "text": "sense that"
+  },
+  {
+   "t": 1202.56,
+   "d": 1.92,
+   "text": "you kind of learn bad behaviors that"
+  },
+  {
+   "t": 1204.48,
+   "d": 1.76,
+   "text": "later on when you're at dungeon level 89"
+  },
+  {
+   "t": 1206.24,
+   "d": 1.28,
+   "text": "like none of those behaviors work"
+  },
+  {
+   "t": 1207.52,
+   "d": 1.92,
+   "text": "because it's too dangerous like you"
+  },
+  {
+   "t": 1209.44,
+   "d": 1.44,
+   "text": "you know the point in the previous talk"
+  },
+  {
+   "t": 1210.88,
+   "d": 1.68,
+   "text": "was made that you have essentially"
+  },
+  {
+   "t": 1212.56,
+   "d": 1.6,
+   "text": "infinite free turns and on shallow"
+  },
+  {
+   "t": 1214.16,
+   "d": 1.68,
+   "text": "dungeon levels at angband that's true"
+  },
+  {
+   "t": 1215.84,
+   "d": 1.68,
+   "text": "but at the deep levels they're so"
+  },
+  {
+   "t": 1217.52,
+   "d": 1.68,
+   "text": "dangerous that you basically anytime you"
+  },
+  {
+   "t": 1219.2,
+   "d": 1.52,
+   "text": "rest you could just get you know killed"
+  },
+  {
+   "t": 1220.72,
+   "d": 1.68,
+   "text": "in one turn basically so"
+  },
+  {
+   "t": 1222.4,
+   "d": 1.28,
+   "text": "the strategies you learned at dungeon"
+  },
+  {
+   "t": 1223.68,
+   "d": 2.0,
+   "text": "level 32 you know or maybe i should say"
+  },
+  {
+   "t": 1225.68,
+   "d": 1.76,
+   "text": "2000 you know 2000 feet or whatever"
+  },
+  {
+   "t": 1227.44,
+   "d": 1.84,
+   "text": "don't work so well you know closer to"
+  },
+  {
+   "t": 1229.28,
+   "d": 1.6,
+   "text": "the bottom so anyway eddie grove"
+  },
+  {
+   "t": 1230.88,
+   "d": 0.8,
+   "text": "describes this"
+  },
+  {
+   "t": 1231.68,
+   "d": 1.28,
+   "text": "diving strategy which is completely"
+  },
+  {
+   "t": 1232.96,
+   "d": 1.2,
+   "text": "opposite to this and basically it"
+  },
+  {
+   "t": 1234.16,
+   "d": 1.2,
+   "text": "embraces the danger"
+  },
+  {
+   "t": 1235.36,
+   "d": 1.36,
+   "text": "and says you should just descend as fast"
+  },
+  {
+   "t": 1236.72,
+   "d": 1.52,
+   "text": "as possible because items are so"
+  },
+  {
+   "t": 1238.24,
+   "d": 1.2,
+   "text": "important to the game and you get better"
+  },
+  {
+   "t": 1239.44,
+   "d": 1.52,
+   "text": "items as you go deeper"
+  },
+  {
+   "t": 1240.96,
+   "d": 1.6,
+   "text": "the the strategy there is to go as deep"
+  },
+  {
+   "t": 1242.56,
+   "d": 1.44,
+   "text": "as possible as fast as possible"
+  },
+  {
+   "t": 1244.0,
+   "d": 1.6,
+   "text": "you know run away from any monster you"
+  },
+  {
+   "t": 1245.6,
+   "d": 1.52,
+   "text": "aren't sure you can kill"
+  },
+  {
+   "t": 1247.12,
+   "d": 1.52,
+   "text": "just try and stay alive and if you do"
+  },
+  {
+   "t": 1248.64,
+   "d": 1.44,
+   "text": "that long enough you'll you'll actually"
+  },
+  {
+   "t": 1250.08,
+   "d": 0.32,
+   "text": "get"
+  },
+  {
+   "t": 1250.4,
+   "d": 1.12,
+   "text": "great equipment and now you're going to"
+  },
+  {
+   "t": 1251.52,
+   "d": 1.2,
+   "text": "be in a much better position than you"
+  },
+  {
+   "t": 1252.72,
+   "d": 0.72,
+   "text": "would have been"
+  },
+  {
+   "t": 1253.44,
+   "d": 1.28,
+   "text": "kind of using the slow and steady so"
+  },
+  {
+   "t": 1254.72,
+   "d": 1.2,
+   "text": "this is a case where the rabbit actually"
+  },
+  {
+   "t": 1255.92,
+   "d": 1.36,
+   "text": "does beat the hair"
+  },
+  {
+   "t": 1257.28,
+   "d": 3.28,
+   "text": "in the um the tortoise beats it does not"
+  },
+  {
+   "t": 1260.56,
+   "d": 3.44,
+   "text": "yeah anyway uh what's going on here"
+  },
+  {
+   "t": 1264.0,
+   "d": 2.48,
+   "text": "later all right so anyway embrace the"
+  },
+  {
+   "t": 1266.48,
+   "d": 0.96,
+   "text": "danger and then there's a much more"
+  },
+  {
+   "t": 1267.44,
+   "d": 1.28,
+   "text": "emphasis on stealth and avoidance so the"
+  },
+  {
+   "t": 1268.72,
+   "d": 1.44,
+   "text": "cell stat"
+  },
+  {
+   "t": 1270.16,
+   "d": 1.2,
+   "text": "which you know people may be kind of"
+  },
+  {
+   "t": 1271.36,
+   "d": 1.6,
+   "text": "appreciated but it becomes hugely"
+  },
+  {
+   "t": 1272.96,
+   "d": 1.6,
+   "text": "important to the diving strategy like"
+  },
+  {
+   "t": 1274.56,
+   "d": 1.6,
+   "text": "really really important um"
+  },
+  {
+   "t": 1276.16,
+   "d": 1.04,
+   "text": "and one thing that's cool about this"
+  },
+  {
+   "t": 1277.2,
+   "d": 2.24,
+   "text": "play style is that you because you don't"
+  },
+  {
+   "t": 1279.44,
+   "d": 1.36,
+   "text": "get bored you don't tend to make dumb"
+  },
+  {
+   "t": 1280.8,
+   "d": 1.36,
+   "text": "mistakes if you're always on edge you"
+  },
+  {
+   "t": 1282.16,
+   "d": 0.24,
+   "text": "know"
+  },
+  {
+   "t": 1282.4,
+   "d": 1.68,
+   "text": "at any moment you could die you tend to"
+  },
+  {
+   "t": 1284.08,
+   "d": 1.52,
+   "text": "play smarter and you develop these like"
+  },
+  {
+   "t": 1285.6,
+   "d": 1.6,
+   "text": "better play habits which means that"
+  },
+  {
+   "t": 1287.2,
+   "d": 1.12,
+   "text": "when you are in those dangerous"
+  },
+  {
+   "t": 1288.32,
+   "d": 1.84,
+   "text": "dangerous situations at dungeon level 90"
+  },
+  {
+   "t": 1290.16,
+   "d": 0.64,
+   "text": "something"
+  },
+  {
+   "t": 1290.8,
+   "d": 1.36,
+   "text": "you've kind of learned the right way to"
+  },
+  {
+   "t": 1292.16,
+   "d": 1.92,
+   "text": "play the game so it's kind of a"
+  },
+  {
+   "t": 1294.08,
+   "d": 1.6,
+   "text": "high-risk high reward strategy but"
+  },
+  {
+   "t": 1295.68,
+   "d": 3.44,
+   "text": "um it actually seems like most people"
+  },
+  {
+   "t": 1299.12,
+   "d": 0.88,
+   "text": "who tried it"
+  },
+  {
+   "t": 1300.0,
+   "d": 3.28,
+   "text": "really liked it and so we the dev team"
+  },
+  {
+   "t": 1303.28,
+   "d": 1.44,
+   "text": "didn't really want to like"
+  },
+  {
+   "t": 1304.72,
+   "d": 1.6,
+   "text": "fully embrace and say you have to play"
+  },
+  {
+   "t": 1306.32,
+   "d": 1.2,
+   "text": "this way but we kind of wanted to"
+  },
+  {
+   "t": 1307.52,
+   "d": 1.2,
+   "text": "encourage people to play this way it"
+  },
+  {
+   "t": 1308.72,
+   "d": 1.2,
+   "text": "seems like people were having a better"
+  },
+  {
+   "t": 1309.92,
+   "d": 0.72,
+   "text": "time"
+  },
+  {
+   "t": 1310.64,
+   "d": 1.76,
+   "text": "people who were not had now had played"
+  },
+  {
+   "t": 1312.4,
+   "d": 1.2,
+   "text": "the game for like a decade and never"
+  },
+  {
+   "t": 1313.6,
+   "d": 0.72,
+   "text": "done very well"
+  },
+  {
+   "t": 1314.32,
+   "d": 1.68,
+   "text": "we're suddenly getting a lot further or"
+  },
+  {
+   "t": 1316.0,
+   "d": 1.52,
+   "text": "were able to win which was pretty"
+  },
+  {
+   "t": 1317.52,
+   "d": 1.36,
+   "text": "awesome so"
+  },
+  {
+   "t": 1318.88,
+   "d": 1.6,
+   "text": "we introduced some changes that kind of"
+  },
+  {
+   "t": 1320.48,
+   "d": 1.52,
+   "text": "encourage you in this direction so one"
+  },
+  {
+   "t": 1322.0,
+   "d": 1.44,
+   "text": "example is force descent where every"
+  },
+  {
+   "t": 1323.44,
+   "d": 1.44,
+   "text": "time you go back to the dungeon"
+  },
+  {
+   "t": 1324.88,
+   "d": 1.36,
+   "text": "you go to a deeper level than you were"
+  },
+  {
+   "t": 1326.24,
+   "d": 1.68,
+   "text": "on there's really no way to"
+  },
+  {
+   "t": 1327.92,
+   "d": 2.48,
+   "text": "decrease your your danger threshold"
+  },
+  {
+   "t": 1330.4,
+   "d": 1.04,
+   "text": "basically and that"
+  },
+  {
+   "t": 1331.44,
+   "d": 1.68,
+   "text": "kind of acts as a timer so another"
+  },
+  {
+   "t": 1333.12,
+   "d": 1.52,
+   "text": "strategy angling people did for a long"
+  },
+  {
+   "t": 1334.64,
+   "d": 0.96,
+   "text": "time was go to"
+  },
+  {
+   "t": 1335.6,
+   "d": 1.76,
+   "text": "you know slowly go down to dungeon level"
+  },
+  {
+   "t": 1337.36,
+   "d": 1.92,
+   "text": "98 and then just stay there"
+  },
+  {
+   "t": 1339.28,
+   "d": 1.52,
+   "text": "until you get you know the most amazing"
+  },
+  {
+   "t": 1340.8,
+   "d": 1.36,
+   "text": "equipment and then only when you have a"
+  },
+  {
+   "t": 1342.16,
+   "d": 1.84,
+   "text": "completely risk-free final battle do you"
+  },
+  {
+   "t": 1344.0,
+   "d": 2.16,
+   "text": "go and kill morgoth and win um"
+  },
+  {
+   "t": 1346.16,
+   "d": 1.36,
+   "text": "forced descent doesn't really let you do"
+  },
+  {
+   "t": 1347.52,
+   "d": 2.4,
+   "text": "that once you get to division level 97"
+  },
+  {
+   "t": 1349.92,
+   "d": 1.6,
+   "text": "you only have two more levels to go to"
+  },
+  {
+   "t": 1351.52,
+   "d": 1.6,
+   "text": "equipment before you fight sauron and"
+  },
+  {
+   "t": 1353.12,
+   "d": 0.72,
+   "text": "then one more"
+  },
+  {
+   "t": 1353.84,
+   "d": 1.68,
+   "text": "before you fight more guys and that's it"
+  },
+  {
+   "t": 1355.52,
+   "d": 2.24,
+   "text": "so it it"
+  },
+  {
+   "t": 1357.76,
+   "d": 2.64,
+   "text": "it kind of does encourage you to sort of"
+  },
+  {
+   "t": 1360.4,
+   "d": 1.36,
+   "text": "to"
+  },
+  {
+   "t": 1361.76,
+   "d": 1.44,
+   "text": "take more advantage of what's going on"
+  },
+  {
+   "t": 1363.2,
+   "d": 1.6,
+   "text": "and not just do this boring play"
+  },
+  {
+   "t": 1364.8,
+   "d": 3.28,
+   "text": "similarly angban's a lot about"
+  },
+  {
+   "t": 1368.08,
+   "d": 2.16,
+   "text": "inventory management so we we sort of"
+  },
+  {
+   "t": 1370.24,
+   "d": 1.28,
+   "text": "have these these different features"
+  },
+  {
+   "t": 1371.52,
+   "d": 0.88,
+   "text": "around like"
+  },
+  {
+   "t": 1372.4,
+   "d": 1.12,
+   "text": "ensuring that you're kind of using"
+  },
+  {
+   "t": 1373.52,
+   "d": 1.84,
+   "text": "meaningful equipment i'm just going to"
+  },
+  {
+   "t": 1375.36,
+   "d": 1.6,
+   "text": "jump ahead here"
+  },
+  {
+   "t": 1376.96,
+   "d": 1.2,
+   "text": "there's just a whole bunch of other"
+  },
+  {
+   "t": 1378.16,
+   "d": 2.08,
+   "text": "changes we tried to do so the big"
+  },
+  {
+   "t": 1380.24,
+   "d": 1.36,
+   "text": "problem in admin is you have these"
+  },
+  {
+   "t": 1381.6,
+   "d": 1.44,
+   "text": "risk-free strategies that are really"
+  },
+  {
+   "t": 1383.04,
+   "d": 1.84,
+   "text": "boring and maybe hard to discover and we"
+  },
+  {
+   "t": 1384.88,
+   "d": 1.36,
+   "text": "tried to make some of those a little bit"
+  },
+  {
+   "t": 1386.24,
+   "d": 2.48,
+   "text": "less risk-free so making it harder to"
+  },
+  {
+   "t": 1388.72,
+   "d": 1.36,
+   "text": "find good objects making object"
+  },
+  {
+   "t": 1390.08,
+   "d": 1.52,
+   "text": "detection fuzzy ends up making meaning"
+  },
+  {
+   "t": 1391.6,
+   "d": 1.52,
+   "text": "you have to explore the level more"
+  },
+  {
+   "t": 1393.12,
+   "d": 2.56,
+   "text": "um similarly once you're able to"
+  },
+  {
+   "t": 1395.68,
+   "d": 1.28,
+   "text": "teleport enemies away"
+  },
+  {
+   "t": 1396.96,
+   "d": 1.6,
+   "text": "you a really common strategy to teleport"
+  },
+  {
+   "t": 1398.56,
+   "d": 1.52,
+   "text": "everything away all the time find the"
+  },
+  {
+   "t": 1400.08,
+   "d": 1.52,
+   "text": "items and just keep going down and so we"
+  },
+  {
+   "t": 1401.6,
+   "d": 2.16,
+   "text": "made that a little bit harder to do"
+  },
+  {
+   "t": 1403.76,
+   "d": 2.48,
+   "text": "stuff like that and we used to have a"
+  },
+  {
+   "t": 1406.24,
+   "d": 1.92,
+   "text": "spell called global invulnerability that"
+  },
+  {
+   "t": 1408.16,
+   "d": 1.52,
+   "text": "basically completely broke the game and"
+  },
+  {
+   "t": 1409.68,
+   "d": 1.36,
+   "text": "that actually was out even before this"
+  },
+  {
+   "t": 1411.04,
+   "d": 1.2,
+   "text": "time period but that's kind of another"
+  },
+  {
+   "t": 1412.24,
+   "d": 0.8,
+   "text": "example of a"
+  },
+  {
+   "t": 1413.04,
+   "d": 3.12,
+   "text": "strategy that's just sort of too easy"
+  },
+  {
+   "t": 1416.16,
+   "d": 2.16,
+   "text": "um it seems like we're a little bit"
+  },
+  {
+   "t": 1418.32,
+   "d": 1.04,
+   "text": "behind on site so i'll just kind of"
+  },
+  {
+   "t": 1419.36,
+   "d": 1.6,
+   "text": "adjust this but basically"
+  },
+  {
+   "t": 1420.96,
+   "d": 1.52,
+   "text": "this is the sort of stuff that people"
+  },
+  {
+   "t": 1422.48,
+   "d": 1.2,
+   "text": "really didn't like these sorts of"
+  },
+  {
+   "t": 1423.68,
+   "d": 1.52,
+   "text": "changes in some cases but i think that"
+  },
+  {
+   "t": 1425.2,
+   "d": 1.52,
+   "text": "overall they did make the game more"
+  },
+  {
+   "t": 1426.72,
+   "d": 1.44,
+   "text": "interesting so we're trying to kind of"
+  },
+  {
+   "t": 1428.16,
+   "d": 0.48,
+   "text": "like"
+  },
+  {
+   "t": 1428.64,
+   "d": 1.44,
+   "text": "ensure that all the classes have an"
+  },
+  {
+   "t": 1430.08,
+   "d": 1.36,
+   "text": "interesting way to play and that like"
+  },
+  {
+   "t": 1431.44,
+   "d": 1.52,
+   "text": "say the ranger class isn't too powerful"
+  },
+  {
+   "t": 1432.96,
+   "d": 2.08,
+   "text": "for a while ranger was super easy"
+  },
+  {
+   "t": 1435.04,
+   "d": 1.92,
+   "text": "um missile weapons are less dangerous"
+  },
+  {
+   "t": 1436.96,
+   "d": 1.2,
+   "text": "because the things the enemy's not"
+  },
+  {
+   "t": 1438.16,
+   "d": 0.64,
+   "text": "hitting you"
+  },
+  {
+   "t": 1438.8,
+   "d": 2.16,
+   "text": "is as much so that becomes like a super"
+  },
+  {
+   "t": 1440.96,
+   "d": 2.16,
+   "text": "powerful strategy we had to kind of like"
+  },
+  {
+   "t": 1443.12,
+   "d": 1.44,
+   "text": "reduce the effectiveness there a little"
+  },
+  {
+   "t": 1444.56,
+   "d": 1.76,
+   "text": "bit make melee attacks a little bit more"
+  },
+  {
+   "t": 1446.32,
+   "d": 1.12,
+   "text": "powerful to make up for the fact that"
+  },
+  {
+   "t": 1447.44,
+   "d": 1.2,
+   "text": "it's more dangerous"
+  },
+  {
+   "t": 1448.64,
+   "d": 2.96,
+   "text": "just sort of stuff like this um and then"
+  },
+  {
+   "t": 1451.6,
+   "d": 1.12,
+   "text": "there was a bunch of stuff to make the"
+  },
+  {
+   "t": 1452.72,
+   "d": 1.04,
+   "text": "levels more interesting so when you have"
+  },
+  {
+   "t": 1453.76,
+   "d": 1.84,
+   "text": "100 dungeon levels it's like a lot i"
+  },
+  {
+   "t": 1455.6,
+   "d": 1.12,
+   "text": "mean it's probably too much"
+  },
+  {
+   "t": 1456.72,
+   "d": 1.92,
+   "text": "but especially if those levels are all"
+  },
+  {
+   "t": 1458.64,
+   "d": 1.84,
+   "text": "the same it's like really"
+  },
+  {
+   "t": 1460.48,
+   "d": 1.2,
+   "text": "boring by the time you get in like the"
+  },
+  {
+   "t": 1461.68,
+   "d": 2.56,
+   "text": "60s or 70s so here we"
+  },
+  {
+   "t": 1464.24,
+   "d": 1.28,
+   "text": "um we tried to make them more"
+  },
+  {
+   "t": 1465.52,
+   "d": 2.0,
+   "text": "interesting with and with sort of mixed"
+  },
+  {
+   "t": 1467.52,
+   "d": 2.4,
+   "text": "results"
+  },
+  {
+   "t": 1470.08,
+   "d": 3.2,
+   "text": "oh we can probably oh i have a mic"
+  },
+  {
+   "t": 1473.28,
+   "d": 2.56,
+   "text": "uh so i i don't want to spend too much"
+  },
+  {
+   "t": 1475.84,
+   "d": 1.44,
+   "text": "time on this but basically"
+  },
+  {
+   "t": 1477.28,
+   "d": 1.12,
+   "text": "the things that we've already talked"
+  },
+  {
+   "t": 1478.4,
+   "d": 2.24,
+   "text": "about uh the the community is very"
+  },
+  {
+   "t": 1480.64,
+   "d": 0.96,
+   "text": "attached to"
+  },
+  {
+   "t": 1481.6,
+   "d": 3.04,
+   "text": "uh its history so we did get some"
+  },
+  {
+   "t": 1484.64,
+   "d": 0.88,
+   "text": "reaction to"
+  },
+  {
+   "t": 1485.52,
+   "d": 2.32,
+   "text": "a lot of these changes uh there are"
+  },
+  {
+   "t": 1487.84,
+   "d": 0.72,
+   "text": "people who"
+  },
+  {
+   "t": 1488.56,
+   "d": 2.16,
+   "text": "just want it to be wanted the game to be"
+  },
+  {
+   "t": 1490.72,
+   "d": 0.96,
+   "text": "like it was"
+  },
+  {
+   "t": 1491.68,
+   "d": 2.64,
+   "text": "uh 10 years ago or 10 years before that"
+  },
+  {
+   "t": 1494.32,
+   "d": 0.56,
+   "text": "time"
+  },
+  {
+   "t": 1494.88,
+   "d": 2.32,
+   "text": "there are people who didn't necessarily"
+  },
+  {
+   "t": 1497.2,
+   "d": 1.28,
+   "text": "who realized that these"
+  },
+  {
+   "t": 1498.48,
+   "d": 1.68,
+   "text": "things that challenges we've identified"
+  },
+  {
+   "t": 1500.16,
+   "d": 1.92,
+   "text": "were problems but disagreed on how to"
+  },
+  {
+   "t": 1502.08,
+   "d": 0.56,
+   "text": "implement"
+  },
+  {
+   "t": 1502.64,
+   "d": 2.88,
+   "text": "uh the solutions to these problems uh"
+  },
+  {
+   "t": 1505.52,
+   "d": 1.2,
+   "text": "some of them"
+  },
+  {
+   "t": 1506.72,
+   "d": 1.28,
+   "text": "just went off and wrote their own"
+  },
+  {
+   "t": 1508.0,
+   "d": 1.68,
+   "text": "variants some already had written their"
+  },
+  {
+   "t": 1509.68,
+   "d": 1.76,
+   "text": "own variants but"
+  },
+  {
+   "t": 1511.44,
+   "d": 2.0,
+   "text": "there was definitely some pushback there"
+  },
+  {
+   "t": 1513.44,
+   "d": 1.44,
+   "text": "and then there there were"
+  },
+  {
+   "t": 1514.88,
+   "d": 1.92,
+   "text": "also people who just said that the game"
+  },
+  {
+   "t": 1516.8,
+   "d": 1.2,
+   "text": "was getting too easy"
+  },
+  {
+   "t": 1518.0,
+   "d": 2.8,
+   "text": "uh these changes that we've made gave"
+  },
+  {
+   "t": 1520.8,
+   "d": 1.36,
+   "text": "the player too many items"
+  },
+  {
+   "t": 1522.16,
+   "d": 2.16,
+   "text": "uh the monsters were too easy to dodge"
+  },
+  {
+   "t": 1524.32,
+   "d": 1.04,
+   "text": "and so forth"
+  },
+  {
+   "t": 1525.36,
+   "d": 2.24,
+   "text": "uh some of this we looked at with"
+  },
+  {
+   "t": 1527.6,
+   "d": 2.4,
+   "text": "simulations to actually figure out and"
+  },
+  {
+   "t": 1530.0,
+   "d": 1.44,
+   "text": "there was a time where there was"
+  },
+  {
+   "t": 1531.44,
+   "d": 2.64,
+   "text": "actually a lot more"
+  },
+  {
+   "t": 1534.08,
+   "d": 1.84,
+   "text": "item distribution to the player than we"
+  },
+  {
+   "t": 1535.92,
+   "d": 1.68,
+   "text": "had before so we did try to adjust that"
+  },
+  {
+   "t": 1537.6,
+   "d": 1.52,
+   "text": "to some extent"
+  },
+  {
+   "t": 1539.12,
+   "d": 1.76,
+   "text": "on the other hand on the other hand it"
+  },
+  {
+   "t": 1540.88,
+   "d": 2.32,
+   "text": "seems like mostly people are enjoying it"
+  },
+  {
+   "t": 1543.2,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1544.0,
+   "d": 2.08,
+   "text": "it's hard to get data about this uh"
+  },
+  {
+   "t": 1546.08,
+   "d": 1.52,
+   "text": "because we don't have like a"
+  },
+  {
+   "t": 1547.6,
+   "d": 1.84,
+   "text": "you know a poll we can do across all the"
+  },
+  {
+   "t": 1549.44,
+   "d": 1.28,
+   "text": "yangon players i mean maybe"
+  },
+  {
+   "t": 1550.72,
+   "d": 1.04,
+   "text": "we could build the end of the game but"
+  },
+  {
+   "t": 1551.76,
+   "d": 2.16,
+   "text": "we haven't and so often you hear from"
+  },
+  {
+   "t": 1553.92,
+   "d": 1.44,
+   "text": "the most vocal people who maybe don't"
+  },
+  {
+   "t": 1555.36,
+   "d": 0.72,
+   "text": "like a particular"
+  },
+  {
+   "t": 1556.08,
+   "d": 2.0,
+   "text": "thing but actually uh they they"
+  },
+  {
+   "t": 1558.08,
+   "d": 1.52,
+   "text": "sometimes change their minds so some of"
+  },
+  {
+   "t": 1559.6,
+   "d": 1.12,
+   "text": "the veterans have kind of come around"
+  },
+  {
+   "t": 1560.72,
+   "d": 1.2,
+   "text": "and also there's just lots of people you"
+  },
+  {
+   "t": 1561.92,
+   "d": 2.24,
+   "text": "don't hear from who who like it so"
+  },
+  {
+   "t": 1564.16,
+   "d": 1.6,
+   "text": "you know i think even though you often"
+  },
+  {
+   "t": 1565.76,
+   "d": 0.96,
+   "text": "get a little bit pushed back in this"
+  },
+  {
+   "t": 1566.72,
+   "d": 1.76,
+   "text": "kind of maintainer situation it's worth"
+  },
+  {
+   "t": 1568.48,
+   "d": 1.68,
+   "text": "remembering that there's lots of people"
+  },
+  {
+   "t": 1570.16,
+   "d": 1.84,
+   "text": "who are are enjoying it and having a"
+  },
+  {
+   "t": 1572.0,
+   "d": 1.44,
+   "text": "good time"
+  },
+  {
+   "t": 1573.44,
+   "d": 3.12,
+   "text": "um so closing remarks"
+  },
+  {
+   "t": 1576.56,
+   "d": 2.48,
+   "text": "uh what can we take away from this well"
+  },
+  {
+   "t": 1579.04,
+   "d": 1.52,
+   "text": "working on a game like angband where"
+  },
+  {
+   "t": 1580.56,
+   "d": 1.2,
+   "text": "you're kind of a maintainer rather than"
+  },
+  {
+   "t": 1581.76,
+   "d": 1.76,
+   "text": "like an original author is like kind of"
+  },
+  {
+   "t": 1583.52,
+   "d": 1.6,
+   "text": "difficult but also rewarding um you"
+  },
+  {
+   "t": 1585.12,
+   "d": 1.36,
+   "text": "really do have to balance these things"
+  },
+  {
+   "t": 1586.48,
+   "d": 0.8,
+   "text": "you can't just"
+  },
+  {
+   "t": 1587.28,
+   "d": 2.32,
+   "text": "have a crazy idea and necessarily do it"
+  },
+  {
+   "t": 1589.6,
+   "d": 1.28,
+   "text": "but it's fun and the other thing that's"
+  },
+  {
+   "t": 1590.88,
+   "d": 0.72,
+   "text": "fun is that"
+  },
+  {
+   "t": 1591.6,
+   "d": 1.36,
+   "text": "england has a lot of weird stuff and"
+  },
+  {
+   "t": 1592.96,
+   "d": 1.28,
+   "text": "some of it's really incidental but then"
+  },
+  {
+   "t": 1594.24,
+   "d": 1.44,
+   "text": "some of it becomes intrinsic to the game"
+  },
+  {
+   "t": 1595.68,
+   "d": 1.52,
+   "text": "and it's hard i know the original author"
+  },
+  {
+   "t": 1597.2,
+   "d": 1.52,
+   "text": "even probably couldn't predict which of"
+  },
+  {
+   "t": 1598.72,
+   "d": 1.12,
+   "text": "their features were they're going to be"
+  },
+  {
+   "t": 1599.84,
+   "d": 1.04,
+   "text": "the important ones that made the game"
+  },
+  {
+   "t": 1600.88,
+   "d": 1.84,
+   "text": "really successful so it's fun to like"
+  },
+  {
+   "t": 1602.72,
+   "d": 2.08,
+   "text": "kind of tease that apart like was the"
+  },
+  {
+   "t": 1604.8,
+   "d": 1.68,
+   "text": "non-persistent level thing just like a"
+  },
+  {
+   "t": 1606.48,
+   "d": 1.44,
+   "text": "hack or does that actually become like"
+  },
+  {
+   "t": 1607.92,
+   "d": 2.0,
+   "text": "really core to ankman's identity and i"
+  },
+  {
+   "t": 1609.92,
+   "d": 0.32,
+   "text": "think"
+  },
+  {
+   "t": 1610.24,
+   "d": 2.08,
+   "text": "in that case it's the latter uh it is it"
+  },
+  {
+   "t": 1612.32,
+   "d": 1.84,
+   "text": "is just creates a unique play style"
+  },
+  {
+   "t": 1614.16,
+   "d": 1.92,
+   "text": "um but this sort of work is fun and it's"
+  },
+  {
+   "t": 1616.08,
+   "d": 1.84,
+   "text": "also fun to work with passionate vocal"
+  },
+  {
+   "t": 1617.92,
+   "d": 0.88,
+   "text": "players who have"
+  },
+  {
+   "t": 1618.8,
+   "d": 2.56,
+   "text": "you know uh a lot of insight into how"
+  },
+  {
+   "t": 1621.36,
+   "d": 0.96,
+   "text": "the game's been"
+  },
+  {
+   "t": 1622.32,
+   "d": 1.28,
+   "text": "how it is now and where kind of where it"
+  },
+  {
+   "t": 1623.6,
+   "d": 3.76,
+   "text": "should go so overall it's very exciting"
+  },
+  {
+   "t": 1627.36,
+   "d": 1.44,
+   "text": "and uh sometimes you get to see"
+  },
+  {
+   "t": 1628.8,
+   "d": 1.28,
+   "text": "something like this this came on the"
+  },
+  {
+   "t": 1630.08,
+   "d": 0.72,
+   "text": "forums"
+  },
+  {
+   "t": 1630.8,
+   "d": 4.48,
+   "text": "uh last week i think four days ago"
+  },
+  {
+   "t": 1636.88,
+   "d": 1.36,
+   "text": "so yeah this is someone who's been"
+  },
+  {
+   "t": 1638.24,
+   "d": 1.84,
+   "text": "playing for over 20 years and finally"
+  },
+  {
+   "t": 1640.08,
+   "d": 3.6,
+   "text": "won uh like last week and posted on the"
+  },
+  {
+   "t": 1643.68,
+   "d": 1.36,
+   "text": "form about it and"
+  },
+  {
+   "t": 1645.04,
+   "d": 2.4,
+   "text": "uh so y'all i guess i'll let you kind of"
+  },
+  {
+   "t": 1647.44,
+   "d": 1.76,
+   "text": "read that for a minute but then"
+  },
+  {
+   "t": 1649.2,
+   "d": 1.28,
+   "text": "there's another page which is really fun"
+  },
+  {
+   "t": 1650.48,
+   "d": 1.92,
+   "text": "which is so the forced descent feature i"
+  },
+  {
+   "t": 1652.4,
+   "d": 0.88,
+   "text": "talked about they"
+  },
+  {
+   "t": 1653.28,
+   "d": 1.44,
+   "text": "the this player specifically called that"
+  },
+  {
+   "t": 1654.72,
+   "d": 1.44,
+   "text": "out as making the game more fun for them"
+  },
+  {
+   "t": 1656.16,
+   "d": 1.2,
+   "text": "that they said that previously they"
+  },
+  {
+   "t": 1657.36,
+   "d": 0.88,
+   "text": "would have just like"
+  },
+  {
+   "t": 1658.24,
+   "d": 1.68,
+   "text": "agonized forever before doing the final"
+  },
+  {
+   "t": 1659.92,
+   "d": 2.0,
+   "text": "battle but forced to kind of force"
+  },
+  {
+   "t": 1661.92,
+   "d": 1.36,
+   "text": "they meant that they had a timer they"
+  },
+  {
+   "t": 1663.28,
+   "d": 1.44,
+   "text": "had to go do it and then they turned out"
+  },
+  {
+   "t": 1664.72,
+   "d": 0.88,
+   "text": "to win so"
+  },
+  {
+   "t": 1665.6,
+   "d": 1.12,
+   "text": "that's a situation where i think the"
+  },
+  {
+   "t": 1666.72,
+   "d": 1.36,
+   "text": "feature was was really successful and"
+  },
+  {
+   "t": 1668.08,
+   "d": 2.0,
+   "text": "kind of worked as intended"
+  },
+  {
+   "t": 1670.08,
+   "d": 13.52,
+   "text": "anyway that's it thank you"
+  },
+  {
+   "t": 1683.6,
+   "d": 2.08,
+   "text": "lunch break until 2 p.m so the talks"
+  },
+  {
+   "t": 1685.68,
+   "d": 1.28,
+   "text": "will start again"
+  },
+  {
+   "t": 1686.96,
+   "d": 1.2,
+   "text": "you guys are welcome to stay and take"
+  },
+  {
+   "t": 1688.16,
+   "d": 2.24,
+   "text": "questions"
+  },
+  {
+   "t": 1691.68,
+   "d": 6.16,
+   "text": "thank you"
+  },
+  {
+   "t": 1716.72,
+   "d": 2.08,
+   "text": "you"
+  }
+ ]
+}

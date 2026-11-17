@@ -1,0 +1,116 @@
+{
+  "chapter": 1,
+  "title": "What is a roguelike?",
+  "thesis": "Nobody owns the word 'roguelike': the talks treat definitions as tools for finding, describing and designing games rather than as rules to obey, and the useful definitions are the ones that name what a design is trying to do. Underneath the feature lists (permadeath, procedural generation, turn-based play) the speakers converge on a tightly linked package that produces an experience of uncertainty, rediscovery and mastery, and that package has proved portable to almost any genre and even to things that are not games. A designer should leave knowing which parts of the package their game keeps, why, and how to tell players about it.",
+  "sections": [
+    {
+      "part": 1,
+      "heading": "No one owns the word: what definitions are for",
+      "brief": "Open with Santiago Zapata's point that there is no governing authority for 'roguelike', so every definition is personal and contested, then show how the word's meaning has shifted: the 1990s Usenet definition stressed presentation and free distribution and never mentioned permadeath, turns or procgen, the umbrella term itself was triggered by Angband splitting from the Moria newsgroup, and the 2000s boom followed the loosening. Set the case against strict definitions (Zapata's warning that the Berlin Interpretation and 'games like Rogue' block innovation or collapse into arbitrariness; Josh Ge and Matt Ritchie converging on 'don't treat it as gospel, be internally consistent'; Nick Cummings arguing for an expansive definition; the Rise of the Roguelite panel floating 'poetic form' and rejecting a 'Berlin Interpretation 2.0') against the one practical reason Zapata gives for keeping a definition: discoverability. Then turn to labels in the marketplace: 'roguelite' versus 'action roguelike' (Zapata), Noita choosing 'roguelite' out of respect for the ASCII tradition, Nauticrawl dropping the tag entirely, Scott Burger's Steam data showing how little the tag tells a buyer and how the tags have converged, and Zapata's suggestion to state your meta-progression model. End with guidance: pick the label for the player you want to reach, and say plainly whether you are turn-based and how death and carry-over work.",
+      "keys": [
+        "wwc7pZqs9UA#1",
+        "wwc7pZqs9UA#5",
+        "wwc7pZqs9UA#6",
+        "y6WCq0jYbHo#7",
+        "wwc7pZqs9UA#8",
+        "wwc7pZqs9UA#7",
+        "wwc7pZqs9UA#2",
+        "jviNpRGuCIU#16",
+        "KKwgKTbiEY0#7",
+        "R8DSq8qSJ44@2704#6",
+        "ujKlmvfpNMo#1",
+        "wwc7pZqs9UA#0",
+        "wwc7pZqs9UA#10",
+        "huMHQGr8PgM#16",
+        "IliQZm5Itng#5",
+        "IliQZm5Itng#8",
+        "wwc7pZqs9UA#13",
+        "wxmio1S3iN0#0"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "The core package: permadeath, procedural generation and turns",
+      "brief": "Argue that the many feature-list definitions converge on a small core, and that its parts depend on each other. Start with Zapata tracing the four traditional features (permanent consequences, character-centric play, turns, procedural content) to Dungeons & Dragons and reducing his own definition to three; set beside it Martin Pichlmair's canonical traits (and his point that permadeath implies no meta-progression), Chris McCormick's minimal roguelike, and bhauth's strongest argument, that the features form a package around permadeath (replaying the start needs procgen, procgen's uneven difficulty needs consumables, consumables need turns to use). Then present the essence-level readings: Nick Montfort's claim that Rogue's unique contribution was endlessly generated, explorable architecture that makes you think about rules; Zapata's Rogue as an automated private Dungeon Master; Tyriq Plummer's four graded dimensions (contrast Downwell with Catacomb Kids); Lee Tusman's one-dimensional dungeons as a way to see the core. Close with boundary cases that show where the package breaks: McCormick's X-and-O chase game is too minimal, Dan Norder's Chase is 'too random' and lacks inventory and stats, and Beneath Apple Manor lacks meaningful permadeath; plus Michael Brough's advice to play Rogue and read its sources so you know what you are inheriting. Guidance: treat the features as a system, and if you remove one, decide what replaces its job.",
+      "keys": [
+        "ZMdxP7fO6wE#0",
+        "wwc7pZqs9UA#11",
+        "tg-CjNodlmY#6",
+        "dJbUmDsyJRw#0",
+        "blXH5pO8GA4#8",
+        "ZMdxP7fO6wE#2",
+        "OVSi3NzA0KM#1",
+        "-e4gF_SKWPk#0",
+        "EMb6B2cIJps#0",
+        "OVSi3NzA0KM#2",
+        "JpX2wWwhKdE#4",
+        "dJbUmDsyJRw#2",
+        "ohH6LBM2EiU#0",
+        "R8DSq8qSJ44@24276#0"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Defining by experience: uncertainty, mastery and worlds",
+      "brief": "Lead with Lisa Brown's warning that describing roguelikes by mechanics (hard, permadeath, procedural dungeons) repels players who would love them, and her point that disliking an acclaimed roguelike is about player motivation, not bad design. Then gather the experiential definitions that converge on uncertainty and surprise: Nick Cummings (systems that keep surprising you, not structure), Younès Rabii (uncertainty and rediscovery in Pokemon Glitch), and Darren Grey's 'feel like a rogue' (weak, surrounded by unknowns, kept moving by the hunger clock). Next stage the axis that divides the genre: George Moromisato's NetHack-versus-AAA contrasts (interactive vs graphical immersion, variety vs quality, mastery vs one-time experience) and his note that these are sliders; Zeno Rogue's mastery-versus-simulation split; Max Kreminski's roguelikes as worlds that do not bend to the player, with his contests/stories/worlds taxonomy; Tarn Adams on replayability meaning different things to each flavour. Support with Nicholas Feinberg on when optimal play matters (clear goals, not IVAN or DF adventure mode), Kawa on win and loss conditions turning toys into games, and Tabea Iseli's list of what keeps the formula compelling. End with guidance: decide which experience you are delivering and describe the game to players in those terms.",
+      "keys": [
+        "BjqZdMW8U9Q#0",
+        "BjqZdMW8U9Q#15",
+        "QBZkvtGucBU#0",
+        "R8DSq8qSJ44@2704#2",
+        "Ove6z8zDsjE#10",
+        "tmrYfnMrifw#0",
+        "C2sm-z7Ag4U#2",
+        "QBZkvtGucBU#14",
+        "wOlSws-OI2o#5",
+        "TvlZinAvpwg#1",
+        "TvlZinAvpwg#2",
+        "4-7TtPX5uhg#2",
+        "b8uoQHedFV0#5",
+        "KLHJsJuJfYg#9",
+        "-MX1imoSxTg#0"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "A framework you can carry into any genre",
+      "brief": "Argue that by the 2020s the talks treat 'roguelike' less as a genre than as a layer. Start with Shawn Main's framework definition (a core loop that uses procedurality to escalate challenge as the player grows) and his three components, illustrated by why Super Mario Bros. is not roguelike, Spelunky is, and CCGs miss mutually exclusive choices. Show the convergence: Against the Storm's designers treat 'roguelite' like 'RPG elements', Marc Dolgin calls it a subgenre you can put any genre on top of, and droqen keeps the 'low-value' Berlin factors while dropping procgen and permadeath. Explain why the layer pulls a design in, using Max Kreminski's (and Kate Compton's) genre as an attractor of mutually supportive patterns. Use Dead Cells (three pillars, everything subordinate to combat) and Spelunky reviving unpopular features as cases, and close with Tyler Coleman's 80/20 rule as the practical guidance: keep roughly 80% familiar and make the 20% count, avoiding both the clone and the 'game maker's game'.",
+      "keys": [
+        "WLBJJTc6LWI#0",
+        "WLBJJTc6LWI#1",
+        "C6jR41fZjqM#3",
+        "6Whz8bvjAKo#0",
+        "WLBJJTc6LWI#4",
+        "tWFIQaeSs6M#1",
+        "ujKlmvfpNMo#0",
+        "TvlZinAvpwg#3",
+        "BDcZSWHu8RQ#15",
+        "C6jR41fZjqM#4",
+        "QbTnKvRrNYY#2",
+        "ntVjLNl2_ro#8"
+      ]
+    },
+    {
+      "part": 1,
+      "heading": "Frontiers: beyond combat, beyond solo play, beyond games",
+      "brief": "Make the case that the genre is far from exhausted. Inside games: Ludipe defines pacifist roguelikes strictly (no violence of any kind, Invisible, Inc. as grey area) and argues for more of them, converging with Tabea Iseli's claim that cozy audiences will embrace roguelikes made for them; Tyriq Plummer calls party-based multiplayer under-explored despite Rogue's tabletop roots, while Leif Bloomquist's C64 game shows how real-time shared persistence pushes a design toward a MUD; Sherveen Uduwana rejects 'overdone' because narrative ground is unbroken; Leonard Richardson built robotfindskitten from early roguelike misfeatures. Outside games, show the roguelike lens finding its features elsewhere: randomizers as procedurally generated routes with run-level permadeath (Stella Mazeika), Neutrinowatch's once-only daily episodes, baseball against the Berlin checklist (Nick Cummings), La Horde du Contrevent's in-world meta-progression debate, Nic Junius's story volumes linking Caves of Qud and Macbeth, and Jamie Brew's karaoke parody failing the 'can be practised' test. Draw out what the outside cases teach about the core (practice across runs, one-time permanence, varied routes through familiar structure) and end with guidance: look for an under-served audience or a neglected feature, and test your idea against what makes runs worth repeating.",
+      "keys": [
+        "pYtlU9wGopo#0",
+        "neuJCYmbAG8#0",
+        "ntVjLNl2_ro#1",
+        "pYtlU9wGopo#1",
+        "-MX1imoSxTg#7",
+        "_w4yJsRzXBk#8",
+        "Y0K-e83wYnQ#0",
+        "cDxL6JoxYQc#4",
+        "C7laugXEc9s#6",
+        "C7laugXEc9s#7",
+        "1sZlIfCcz_c#10",
+        "R8DSq8qSJ44@2704#1",
+        "6ik6jB2YhZg#3",
+        "685wpSUVw9s#1"
+      ]
+    }
+  ],
+  "omitted": []
+}

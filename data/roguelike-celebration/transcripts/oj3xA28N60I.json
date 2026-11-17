@@ -1,0 +1,1326 @@
+{
+ "id": "oj3xA28N60I",
+ "url": "https://www.youtube.com/watch?v=oj3xA28N60I",
+ "title": "Greg L - Bitwise Black Magic: How to Computer, Better Faster Stronger",
+ "speaker": "Greg L",
+ "talk_title": "Bitwise Black Magic: How to Computer, Better Faster Stronger",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-10-04",
+ "duration_s": 1847,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "There's a famous wtf moment in Quake 3 Arena's source code, involving the use of \"evil floating point bit level hacking\"... but what is that? Hidden inside computer math are a secret set of tools that can help your game run much faster, if you learn the magic behind all of those magic numbers. This talk will be a theme park ride through some of the most impressive optimization techniques I've found or created myself, so math enthusiasts at any level can learn something new. Whether it's using only 1 bit of save data per collectible in huge, randomly generated maps, or using x&-x to instantly find pixel gaps for things like fluid simulations, the hidden math of computers lets you accomplish much more than you probably think!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to bitwise math"
+  },
+  {
+   "start": 88,
+   "title": "The myth of computer numbers"
+  },
+  {
+   "start": 234,
+   "title": "Basic bitwise operations"
+  },
+  {
+   "start": 391,
+   "title": "Practical bitfield applications"
+  },
+  {
+   "start": 568,
+   "title": "Number systems and representation"
+  },
+  {
+   "start": 976,
+   "title": "Efficient floodfill algorithms"
+  },
+  {
+   "start": 1192,
+   "title": "Screen anti-aliasing techniques"
+  },
+  {
+   "start": 1370,
+   "title": "Live font data manipulation"
+  },
+  {
+   "start": 1417,
+   "title": "Cellular automata optimization"
+  },
+  {
+   "start": 1560,
+   "title": "Fast inverse square root & wrap-up"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4805,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 9.68,
+   "d": 6.56,
+   "text": "﻿Next up, Greg, a lifelong game designer and programmer since age 11. He has published a"
+  },
+  {
+   "t": 16.24,
+   "d": 7.44,
+   "text": "few million games and puzzles and board games and written music and poetry and generally impossible"
+  },
+  {
+   "t": 23.68,
+   "d": 28.08,
+   "text": "to pin down. But roguelike are -- Welcome, Greg. GREG: Hi. I am Greg. This is my talk. Today I want"
+  },
+  {
+   "t": 51.76,
+   "d": 6.96,
+   "text": "to explore low level computer math that lets you do fancy visual effects like this and other things"
+  },
+  {
+   "t": 58.72,
+   "d": 7.2,
+   "text": "in platforms that were specifically designed not to have these features. This is peco-8. It"
+  },
+  {
+   "t": 65.92,
+   "d": 13.52,
+   "text": "is my partner in crime today. This is a bloom effect. Screen space and this is what it looks"
+  },
+  {
+   "t": 79.44,
+   "d": 7.68,
+   "text": "like without that so not great. But when you have this effective line I think it looks better. Let's"
+  },
+  {
+   "t": 87.12,
+   "d": 6.48,
+   "text": "get started. At the beginning I want to go all of the way back to the '90s and focus on a specific"
+  },
+  {
+   "t": 93.6,
+   "d": 7.28,
+   "text": "function some of you may know about. There was a function for fast inverse swear words written"
+  },
+  {
+   "t": 100.88,
+   "d": 6.56,
+   "text": "in quick 3 arena source code. It is famous online with its own Wikipedia page. It is"
+  },
+  {
+   "t": 107.44,
+   "d": 6.88,
+   "text": "useful for calculating distances because when you are trying to normalize vectors for lighting you"
+  },
+  {
+   "t": 114.32,
+   "d": 7.6,
+   "text": "need to divide by that distance which is one over the square root of something. Now in the '90s they"
+  },
+  {
+   "t": 121.92,
+   "d": 5.76,
+   "text": "had to do special things to make this work because they didn't really have graphic cards yet. So if"
+  },
+  {
+   "t": 127.68,
+   "d": 6.0,
+   "text": "they wanted 3D graphics like this they had to do something that was not the normal way that"
+  },
+  {
+   "t": 133.68,
+   "d": 6.4,
+   "text": "you program. And in this case, they wrote this function. Now, understanding this isn't really"
+  },
+  {
+   "t": 140.08,
+   "d": 7.2,
+   "text": "important. What is important is that you look at lines 9 and 10 and see the comments that are"
+  },
+  {
+   "t": 147.28,
+   "d": 7.92,
+   "text": "attached to it. Evil floating point, bit luck hacking, wtf. So I think people have seen this"
+  },
+  {
+   "t": 155.2,
+   "d": 7.04,
+   "text": "a lot and they just laugh it off as the typical game dev experience. Where you do whatever you"
+  },
+  {
+   "t": 162.24,
+   "d": 7.2,
+   "text": "need to to make something work. You don't really ask why this function works because for one thing,"
+  },
+  {
+   "t": 169.44,
+   "d": 5.6,
+   "text": "nobody is as good at programming as John Carmack and even he didn't know what was going on here."
+  },
+  {
+   "t": 176.08,
+   "d": 6.16,
+   "text": "So its definitely a lower level of computing but I think most people don't really touch it. And what"
+  },
+  {
+   "t": 182.24,
+   "d": 6.8,
+   "text": "I want to explore today is some of this magic and how these things actually work. So, we are going"
+  },
+  {
+   "t": 189.04,
+   "d": 4.08,
+   "text": "to start a little bit simpler but I want to start with probably my most controversial statement in"
+  },
+  {
+   "t": 193.12,
+   "d": 5.2,
+   "text": "the whole talk which is I think everything you know about numbers on the computer is a lie"
+  },
+  {
+   "t": 198.32,
+   "d": 7.12,
+   "text": "because when you look at a simple function, like X equals 5, on the computer, X isn't a number, 5"
+  },
+  {
+   "t": 205.44,
+   "d": 5.76,
+   "text": "is not a number, and that equal sign doesn't mean equality. No part of this is telling you the truth"
+  },
+  {
+   "t": 211.2,
+   "d": 10.16,
+   "text": "which is why you can do X equals X plus five. On computer this is totally fine. You have to"
+  },
+  {
+   "t": 221.36,
+   "d": 5.36,
+   "text": "start thinking about numbers on a computer as a series of light switches and actions that you can"
+  },
+  {
+   "t": 226.72,
+   "d": 5.2,
+   "text": "perform on them. These are switches that are up or down. And there is just a lot of them. A lot"
+  },
+  {
+   "t": 231.92,
+   "d": 6.32,
+   "text": "of ones and zeros on your computer. Let's start with the basics so people have a background."
+  },
+  {
+   "t": 240.72,
+   "d": 5.44,
+   "text": "Computers stores ones and zeros called bits. Here is eight of them. They are at named location like"
+  },
+  {
+   "t": 246.16,
+   "d": 5.84,
+   "text": "X. A variable like X is just saying in this giant field of ones and zeros we have on my"
+  },
+  {
+   "t": 252.0,
+   "d": 5.52,
+   "text": "computer we are looking at this location of them and using the name X so that it is"
+  },
+  {
+   "t": 257.52,
+   "d": 6.96,
+   "text": "easier to talk about that. You can assign values to that, you can say X has these ones and zeros,"
+  },
+  {
+   "t": 264.48,
+   "d": 5.52,
+   "text": "so that equal sign just means put something there. It doesn't mean that they are equal. You can shift"
+  },
+  {
+   "t": 270.0,
+   "d": 6.64,
+   "text": "bits left so we can take all the columns and move them over by four to the left. You can shift bits"
+  },
+  {
+   "t": 276.64,
+   "d": 4.32,
+   "text": "to the right. Do the same thing the other way. You might notice we are losing ones in the process"
+  },
+  {
+   "t": 280.96,
+   "d": 6.56,
+   "text": "because we are shifting in zeros. That will be important later. You can also compare all bits."
+  },
+  {
+   "t": 287.52,
+   "d": 6.16,
+   "text": "So you have another location Y, does every column match up? Then they are equal. Otherwise they are"
+  },
+  {
+   "t": 293.68,
+   "d": 7.36,
+   "text": "not equal. And you can also do the basic bit wise operations that I think most people know. And"
+  },
+  {
+   "t": 301.04,
+   "d": 7.28,
+   "text": "means X and Y had a 1 in that column. If that's true they have a 1 in the and. Or means either"
+  },
+  {
+   "t": 308.32,
+   "d": 9.92,
+   "text": "one of them have a one. And X or which in Lua is this symbol here. It means there was exactly one"
+  },
+  {
+   "t": 318.24,
+   "d": 6.88,
+   "text": "one. They were different in the input. There is also not which is different from X or and"
+  },
+  {
+   "t": 325.12,
+   "d": 4.4,
+   "text": "all that does is flip the bits. You are flipping all the light switches. If they were off they are"
+  },
+  {
+   "t": 329.52,
+   "d": 5.92,
+   "text": "on and if they are on they are off. Hopefully you can see the difference between X or and not"
+  },
+  {
+   "t": 335.44,
+   "d": 12.24,
+   "text": "X. In peco8 we have the ability of cycle bits. We usually have many more ones and zeros and in"
+  },
+  {
+   "t": 347.68,
+   "d": 8.16,
+   "text": "this case we could move them all the to the left with 16 and to the right with 8 wrap around. The"
+  },
+  {
+   "t": 355.84,
+   "d": 4.96,
+   "text": "ones are coming back over from the other side I want to point out. And when we have stuff like"
+  },
+  {
+   "t": 360.8,
+   "d": 4.8,
+   "text": "this we can do cool things like set a number and then just do a loop, cycle through it,"
+  },
+  {
+   "t": 365.6,
+   "d": 5.92,
+   "text": "now we can look at every single column and see what's in there if we want to. But the important"
+  },
+  {
+   "t": 371.52,
+   "d": 6.4,
+   "text": "take away with all of this is that none of this is really actually math. It is all just light"
+  },
+  {
+   "t": 377.92,
+   "d": 5.16,
+   "text": "switches and manipulations you can do to them. There is no numbers. Just ones and zeros. There"
+  },
+  {
+   "t": 383.08,
+   "d": 9.32,
+   "text": "is no real concept of counting. It is just very low level actions you can do to memory. So let's"
+  },
+  {
+   "t": 392.4,
+   "d": 5.44,
+   "text": "look at a couple real-world examples. I know that was a lot. How can you use this stuff? Let's say"
+  },
+  {
+   "t": 397.84,
+   "d": 7.76,
+   "text": "we have some visited data. This tells us what areas in the map we visited. This is from the"
+  },
+  {
+   "t": 405.6,
+   "d": 6.0,
+   "text": "source code of control the body by gate who made Darryl star who some may know. Excellent game."
+  },
+  {
+   "t": 411.6,
+   "d": 10.8,
+   "text": "This one is also good. We are going to try to draw these blue boxes using the visited data. We"
+  },
+  {
+   "t": 422.4,
+   "d": 6.48,
+   "text": "have a loop where we go through but we and that with visited data and check if it is not zero."
+  },
+  {
+   "t": 429.52,
+   "d": 8.24,
+   "text": "If the visited data anded with that 1-1 produces a value that's thought zero then we know we visited"
+  },
+  {
+   "t": 437.76,
+   "d": 5.12,
+   "text": "that location and then we can draw it in the color one which is dark blue. If we haven't visited we"
+  },
+  {
+   "t": 442.88,
+   "d": 6.24,
+   "text": "draw in black. If it is the current one it is purple but don't worry about that. Visited is not"
+  },
+  {
+   "t": 449.12,
+   "d": 5.68,
+   "text": "a number. It is 32 separate yes/no questions. You may be familiar with this with something called a"
+  },
+  {
+   "t": 454.8,
+   "d": 6.61,
+   "text": "bit field. It is in things like controller input. If you have three buttons on the controller you"
+  },
+  {
+   "t": 461.41,
+   "d": 4.27,
+   "text": "are pressing at the same time or collision layers if you want to know what is colliding."
+  },
+  {
+   "t": 467.04,
+   "d": 9.04,
+   "text": "It is asking questions and combining them into one number so we can do it more efficiently. Next"
+  },
+  {
+   "t": 476.08,
+   "d": 7.44,
+   "text": "example. And I will try to go quick. This one is a simple concept. You have a world with stone and"
+  },
+  {
+   "t": 483.52,
+   "d": 6.08,
+   "text": "trees that are randomly generated. When you reload it saves which ones you have dugout. I was shocked"
+  },
+  {
+   "t": 489.6,
+   "d": 6.48,
+   "text": "it could do this. The way it works is very simple. Basically, we just -- when we create the map, when"
+  },
+  {
+   "t": 496.08,
+   "d": 7.88,
+   "text": "we generate this procedural world, we store every object that could be destroyed and later when we"
+  },
+  {
+   "t": 503.96,
+   "d": 4.84,
+   "text": "are saving the file, we will check, was it stored, if it was, that is yes or no question, so we can"
+  },
+  {
+   "t": 508.8,
+   "d": 7.36,
+   "text": "store it in that tiny single one or zero and the rest of the function pacts it together with stores"
+  },
+  {
+   "t": 516.16,
+   "d": 13.04,
+   "text": "it as tightly as possible. And you can store the whole map in one bit of data. Peak and poke are"
+  },
+  {
+   "t": 529.2,
+   "d": 5.6,
+   "text": "functions that lets you access bytes of memory directly. You don't need to use X to refer to"
+  },
+  {
+   "t": 534.8,
+   "d": 6.32,
+   "text": "a location. You can refer to a specific location. If you are iterating and want to go through all of"
+  },
+  {
+   "t": 541.12,
+   "d": 7.44,
+   "text": "them that's a better way to do it. It is kind of like a race. But anyway, I found this very clever"
+  },
+  {
+   "t": 548.56,
+   "d": 6.88,
+   "text": "because you can make a map, and only need to save one bit per thing that can be dugout, and we all"
+  },
+  {
+   "t": 555.44,
+   "d": 6.0,
+   "text": "know how to regenerate maps. That's great if you have a web service game or have saved data online"
+  },
+  {
+   "t": 561.44,
+   "d": 6.4,
+   "text": "or if you just have giant maps and don't have huge save files. This a great way to reduce that data."
+  },
+  {
+   "t": 569.28,
+   "d": 6.08,
+   "text": "Let's move into numbers now. We have done pretty much all we can with the yes/no questions. We"
+  },
+  {
+   "t": 575.36,
+   "d": 3.68,
+   "text": "are going to look at one bit and figure out how many numbers we can fit in there while there is"
+  },
+  {
+   "t": 579.04,
+   "d": 4.24,
+   "text": "only two. There is a zero and one and we will call them that because that's where everything starts"
+  },
+  {
+   "t": 583.28,
+   "d": 9.36,
+   "text": "from. Two bits, we have four options. Three bits, eight options, 0-7. Every time we add a bit we"
+  },
+  {
+   "t": 592.64,
+   "d": 7.84,
+   "text": "get double as many numbers. You can start to think of the numbers in their columns as the individual"
+  },
+  {
+   "t": 600.48,
+   "d": 13.2,
+   "text": "power of two. This is 2 to the 0, 2 to the 1, and so on and so forth. It doubles every time. Now if"
+  },
+  {
+   "t": 613.68,
+   "d": 4.96,
+   "text": "you are trying to convert from these ones and zeros back into the numbers that we understand"
+  },
+  {
+   "t": 618.64,
+   "d": 5.44,
+   "text": "there is an easy way to do it. If there is a one add that value, if there is a zero don't add that"
+  },
+  {
+   "t": 624.08,
+   "d": 8.16,
+   "text": "value. In this case this number is 4 plus 2 plus 1 is 7. The next number is 8, had first"
+  },
+  {
+   "t": 632.24,
+   "d": 6.72,
+   "text": "that requires 4 bits, if there is a single one in your number that is going to be a power of 2."
+  },
+  {
+   "t": 641.36,
+   "d": 4.72,
+   "text": "The number that is one less than that is all the ones to the right side because we are trying to"
+  },
+  {
+   "t": 646.08,
+   "d": 10.56,
+   "text": "pack them as tightly as possible so it is always one less. This may be familiar to some of you who"
+  },
+  {
+   "t": 656.64,
+   "d": 10.88,
+   "text": "remember the eight bit error. Games like Legend of Zelda had 255. That's the maximum number you could"
+  },
+  {
+   "t": 667.52,
+   "d": 9.44,
+   "text": "store. 256 would be the next bit but we don't have it. That's why those numbers were like that."
+  },
+  {
+   "t": 678.0,
+   "d": 4.48,
+   "text": "Next thing we should talk about is negative numbers. We usually need negative numbers"
+  },
+  {
+   "t": 682.48,
+   "d": 7.52,
+   "text": "too. We reserve the top bit as the sign of the number. If it is 0, it is positive,"
+  },
+  {
+   "t": 690.0,
+   "d": 8.96,
+   "text": "1 negative. This means half our numbers are positive, half are negative roughly. And that's"
+  },
+  {
+   "t": 698.96,
+   "d": 6.32,
+   "text": "good because we usually want to multiply by minus 1 and stuff like that. Anyway, on top of this,"
+  },
+  {
+   "t": 705.28,
+   "d": 4.8,
+   "text": "we want a format that makes sure our negative number, added to our positive number is always"
+  },
+  {
+   "t": 710.08,
+   "d": 6.0,
+   "text": "zero. Then we don't have to deal with positive and negative zero being different bit data which"
+  },
+  {
+   "t": 716.08,
+   "d": 11.6,
+   "text": "is complicated and annoying. This format is called two's complement. What we do is flip all the bits,"
+  },
+  {
+   "t": 727.68,
+   "d": 6.16,
+   "text": "zeros become ones and vice versa and then we add one to them. Let's look at zero in the top. Flip"
+  },
+  {
+   "t": 733.84,
+   "d": 6.8,
+   "text": "all the bits, add one, and it will carry all of the way up and past the end, and that one just"
+  },
+  {
+   "t": 740.64,
+   "d": 5.68,
+   "text": "disappears so we are back to zero. Now this is an important point about numbers on a computer. They"
+  },
+  {
+   "t": 746.32,
+   "d": 5.28,
+   "text": "have a functional range which means that that largest number, 255, when you add one to it,"
+  },
+  {
+   "t": 751.6,
+   "d": 4.88,
+   "text": "it goes back to 0, that works for our purposes because we want negative 0 to be the same as"
+  },
+  {
+   "t": 756.48,
+   "d": 6.56,
+   "text": "0. Let's look at another one. If we want to know what negative 1 is. This is 1, flip all the bits,"
+  },
+  {
+   "t": 763.04,
+   "d": 8.0,
+   "text": "add 1. All bits being 1 is negative 1 and that's usually the case in the number systems that we are"
+  },
+  {
+   "t": 771.04,
+   "d": 5.12,
+   "text": "going to talk about. Here is another example. We know it is a negative number. Flip it. Add"
+  },
+  {
+   "t": 776.16,
+   "d": 6.4,
+   "text": "one. This is 8. When it was all these, that was negative 8. And you might notice the only place"
+  },
+  {
+   "t": 782.56,
+   "d": 6.0,
+   "text": "where they both share a one is at the bottom here. And that's going to be important later too. OK."
+  },
+  {
+   "t": 789.36,
+   "d": 7.84,
+   "text": "Oh the range is about the same. We have got from minus 128 to 127 in one byte. And it is just"
+  },
+  {
+   "t": 797.2,
+   "d": 5.12,
+   "text": "important to know that it goes up and immediately flips to the largest negative number and then goes"
+  },
+  {
+   "t": 802.32,
+   "d": 13.44,
+   "text": "all of the way up to minus 1. If you add 1 to 127 you will get negative 128. Now we can get our math"
+  },
+  {
+   "t": 815.76,
+   "d": 8.72,
+   "text": "functions. We had equals and not equals and now we can do greater than or less than, check if two"
+  },
+  {
+   "t": 824.48,
+   "d": 7.12,
+   "text": "things are true or something is not true. We will deal with numbers that are much larger because"
+  },
+  {
+   "t": 831.6,
+   "d": 7.92,
+   "text": "usually you want to deal with numbers larger than 200. We create integers that are are 32 bit or"
+  },
+  {
+   "t": 839.52,
+   "d": 7.2,
+   "text": "larger. The 32 bit range is about minus to plus 1 billion. That's good enough for most purposes."
+  },
+  {
+   "t": 850.0,
+   "d": 5.6,
+   "text": "Because we have these giant numbers, we don't want to write ones and zeros. We can write them"
+  },
+  {
+   "t": 855.6,
+   "d": 8.64,
+   "text": "the normal way we are used to. We can write them in binary with zero B prefix or hex decimal with"
+  },
+  {
+   "t": 864.24,
+   "d": 8.64,
+   "text": "this zero X frequency. Hexadecimal is powers of 16 which is very link today the binary because"
+  },
+  {
+   "t": 872.88,
+   "d": 6.72,
+   "text": "every block of 4 is the next power of 16. We compare them to these values. We don't"
+  },
+  {
+   "t": 879.6,
+   "d": 7.2,
+   "text": "have enough numbers and use A-F as well. You can see these four, and this is F, and those"
+  },
+  {
+   "t": 886.8,
+   "d": 4.08,
+   "text": "three mean it is 7, and work your way down and figure out what this number is. That's a lot"
+  },
+  {
+   "t": 890.88,
+   "d": 4.16,
+   "text": "easier than writing the ones and zeros. One last thing we need to talk about is"
+  },
+  {
+   "t": 895.04,
+   "d": 7.6,
+   "text": "fractions. We want to have, you know, not just whole numbers. So one easy way to do that is to"
+  },
+  {
+   "t": 902.64,
+   "d": 6.88,
+   "text": "say it starts at a specific location. So in peco8 which is 16.16 format meaning these are the whole"
+  },
+  {
+   "t": 909.52,
+   "d": 5.68,
+   "text": "numbers and these are the fractions. That changes our powers of two to look like this. We have our"
+  },
+  {
+   "t": 915.2,
+   "d": 5.52,
+   "text": "normal ones here and on the other side we have one half, one quarter, one eighth, which is 2 to"
+  },
+  {
+   "t": 920.72,
+   "d": 10.0,
+   "text": "the minus 3 and so on. It is still a window into powers of two but it has just been shifted over."
+  },
+  {
+   "t": 930.72,
+   "d": 4.16,
+   "text": "Other than that it is similar to instrument math. There is a couple adjustments we make so when you"
+  },
+  {
+   "t": 934.88,
+   "d": 10.88,
+   "text": "multiply 1 by 1 it shifts down. The other action is floating points which work like scientific"
+  },
+  {
+   "t": 945.76,
+   "d": 4.96,
+   "text": "notation where you have a window of precision and you can shift it up and down. It is still"
+  },
+  {
+   "t": 950.72,
+   "d": 6.08,
+   "text": "in that power of 2 grid. But we are looking at this data that is the most important data. And"
+  },
+  {
+   "t": 956.8,
+   "d": 5.92,
+   "text": "the way that works is we have three numbers stored in one number. There is the sign bit at the top."
+  },
+  {
+   "t": 962.72,
+   "d": 9.36,
+   "text": "There is the X which is that power of 2 to adjust the floating point. And then the mantissa which is"
+  },
+  {
+   "t": 972.08,
+   "d": 6.8,
+   "text": "all that fractured data so that's the precision point. All right. All right. Let's start doing"
+  },
+  {
+   "t": 978.88,
+   "d": 8.48,
+   "text": "some simple puzzles with this. Solve with algorithms that are fairly straightforward. So"
+  },
+  {
+   "t": 987.36,
+   "d": 5.28,
+   "text": "flood fill is a simple thing. It is on every paint program. Everybody knows the paint bucket."
+  },
+  {
+   "t": 992.64,
+   "d": 7.04,
+   "text": "That's what we are doing. We will do a simplified version where we add 0 and 1. 0 it is unfilled. 1"
+  },
+  {
+   "t": 999.68,
+   "d": 8.24,
+   "text": "it is filled. The algorithm is simple. You start at the point you click. If it is not solid,"
+  },
+  {
+   "t": 1007.92,
+   "d": 4.4,
+   "text": "make it solid, and repeat for all its neighbors and eventually it runs out of empty neighbors,"
+  },
+  {
+   "t": 1012.32,
+   "d": 17.84,
+   "text": "it has 1600 pixels it has to do this with. It is too slow to do that manually. We can't do"
+  },
+  {
+   "t": 1030.16,
+   "d": 7.6,
+   "text": "something 16,000 tiles. But we had all these ones and zeros so could we do them all at the same"
+  },
+  {
+   "t": 1037.76,
+   "d": 11.28,
+   "text": "time? The is answer is yes. This function finds areas in the data where it is a 1 and then a 0."
+  },
+  {
+   "t": 1049.04,
+   "d": 6.32,
+   "text": "I am not going to have time to explain that. But you can look over it if you want. This will get"
+  },
+  {
+   "t": 1055.36,
+   "d": 5.92,
+   "text": "us our two regions that we need to fill. We have a bunch of zeros here and there and now we have a 1"
+  },
+  {
+   "t": 1061.28,
+   "d": 8.08,
+   "text": "and 1 to find the left edges. This one is fairly straightforward. If we take a number minus 1,"
+  },
+  {
+   "t": 1069.36,
+   "d": 5.6,
+   "text": "it is going to keep borrowing until it gets to the first 1. So it is kind of like if you did 10,000"
+  },
+  {
+   "t": 1074.96,
+   "d": 7.28,
+   "text": "minus 1 you would have to have a bunch of 9s but in binary they will all just be a bunch of ones."
+  },
+  {
+   "t": 1082.24,
+   "d": 7.04,
+   "text": "If we do the thing where we X order it, we will see only these ones were changed and only these"
+  },
+  {
+   "t": 1089.28,
+   "d": 6.32,
+   "text": "are ones. It drops all the other ones in our number. So now, we have a map of just that"
+  },
+  {
+   "t": 1095.6,
+   "d": 6.32,
+   "text": "region's data. If we end with input and say we were filling one of these regions is this"
+  },
+  {
+   "t": 1101.92,
+   "d": 7.6,
+   "text": "an area that needs to be filled? In does, replace it with one of these ones and go to had neighbors"
+  },
+  {
+   "t": 1109.52,
+   "d": 6.96,
+   "text": "the standard recursive way. Here is the code. This is just a look up table. It is an easy way"
+  },
+  {
+   "t": 1116.48,
+   "d": 8.96,
+   "text": "to say if have one F, how many ones is that? It is 5. So that just makes our shifting a little"
+  },
+  {
+   "t": 1125.44,
+   "d": 7.6,
+   "text": "easier. This is for our screen data. We surround it with solid so it doesn't go off into infinity."
+  },
+  {
+   "t": 1134.0,
+   "d": 9.68,
+   "text": "We have a nice flood fill function with X and Y. But the way it works is recursively calling that"
+  },
+  {
+   "t": 1143.68,
+   "d": 5.92,
+   "text": "function and shifting that pixel we will fill in into the right column of our number data."
+  },
+  {
+   "t": 1151.12,
+   "d": 5.12,
+   "text": "So if there is no new fill, we exit early. We will find that right edge after we find that left edge"
+  },
+  {
+   "t": 1156.24,
+   "d": 7.12,
+   "text": "with our trick. And then, we will look back inside had window between those regions and check each"
+  },
+  {
+   "t": 1163.36,
+   "d": 6.0,
+   "text": "region. We have to check the last one just in case there is all zeros because we want to fill that"
+  },
+  {
+   "t": 1169.36,
+   "d": 7.12,
+   "text": "in. And then finally, we just see if anything new is filled in. If so, we will fill the next areas,"
+  },
+  {
+   "t": 1176.48,
+   "d": 4.24,
+   "text": "top and bottom are easy, just get the new fill. Left and right are a little more complicated"
+  },
+  {
+   "t": 1180.72,
+   "d": 6.64,
+   "text": "because we want to check if we were on the left or right edge and fill in with the opposite because"
+  },
+  {
+   "t": 1187.36,
+   "d": 5.84,
+   "text": "we will start from the right side if we had the left pixel. And that's that. Let's move on to"
+  },
+  {
+   "t": 1193.2,
+   "d": 21.2,
+   "text": "the next one. This one is from the original page. You might remember it. We only have 16 pixels. We"
+  },
+  {
+   "t": 1214.4,
+   "d": 10.4,
+   "text": "can look at this and map the screen pallet to any 16 colors from 32. So the number 0 can be 1 of 32"
+  },
+  {
+   "t": 1224.8,
+   "d": 8.88,
+   "text": "colors and so on and so forth. So this does give us the potential to make anti erasing but it would"
+  },
+  {
+   "t": 1233.68,
+   "d": 11.12,
+   "text": "be extremely slow -- antialiasing. We will start with just zero and ones. Anything we want to draw"
+  },
+  {
+   "t": 1244.8,
+   "d": 7.52,
+   "text": "is in one and background is zero. Then we will use a convolution shader kernel. This comes from"
+  },
+  {
+   "t": 1252.32,
+   "d": 6.8,
+   "text": "graphic card shaders but we can do on the CPU actually. What we want do is make sure each"
+  },
+  {
+   "t": 1259.12,
+   "d": 6.4,
+   "text": "pixel is three times itself and one for each neighbor. This is like how you blur things out."
+  },
+  {
+   "t": 1267.36,
+   "d": 4.96,
+   "text": "Because we have the numbers zero to potentially seven if all these were around the pixel"
+  },
+  {
+   "t": 1272.96,
+   "d": 7.52,
+   "text": "we want to ramp that from black to a bright color. Here is the magic. You can multiply by this hex"
+  },
+  {
+   "t": 1280.48,
+   "d": 8.64,
+   "text": "decimal 13.1 and it does this 1, 3, 1 in a single operation because this is actually 16 and this is"
+  },
+  {
+   "t": 1289.12,
+   "d": 8.16,
+   "text": "1-16. So that's shifting us into the next pixels. Let's look at the top. We have ones and zeros."
+  },
+  {
+   "t": 1297.28,
+   "d": 6.72,
+   "text": "I will multiply by 3 and anywhere where there is a color it goes into the neighbors so at the end"
+  },
+  {
+   "t": 1304.0,
+   "d": 7.44,
+   "text": "we would have it go from 0-5 and happens in one operation. Standard algorithm is a row of data"
+  },
+  {
+   "t": 1311.44,
+   "d": 5.52,
+   "text": "from the screen, we are going to poke it back in the exact same place with this calculation,"
+  },
+  {
+   "t": 1316.96,
+   "d": 5.12,
+   "text": "and a couple shifts so that the right-most pixel of the first number is connected to"
+  },
+  {
+   "t": 1322.08,
+   "d": 5.04,
+   "text": "the left-most pixel of the next number and so on and so forth, and finally remap the colors to get"
+  },
+  {
+   "t": 1327.12,
+   "d": 9.04,
+   "text": "a nice gradient. Here is the code. Basic draw. We will take that above row, the current row,"
+  },
+  {
+   "t": 1336.16,
+   "d": 5.76,
+   "text": "and the next row and then we are just going to poke them back in. And this is that calculation."
+  },
+  {
+   "t": 1341.92,
+   "d": 7.44,
+   "text": "After this we have done an entire row of the blur effect on screen. Then we just make that top"
+  },
+  {
+   "t": 1349.36,
+   "d": 7.04,
+   "text": "row the current row and make the current row the next row. And that's it. So this runs fast"
+  },
+  {
+   "t": 1356.4,
+   "d": 8.88,
+   "text": "enough that you can see if I disable it is only a fifth of a frame. That's about 3 milliseconds"
+  },
+  {
+   "t": 1365.28,
+   "d": 7.04,
+   "text": "and plenty of time to make a game on top of it. So I am pretty proud of this. Next one we"
+  },
+  {
+   "t": 1372.32,
+   "d": 5.76,
+   "text": "won't have time to cover. So I will go through it quickly. It is a way to convert from pixel data,"
+  },
+  {
+   "t": 1378.08,
+   "d": 16.88,
+   "text": "4 bits per pixel, to font data which is 1 pixel. The magic is multiplying by this hexadecimal. We"
+  },
+  {
+   "t": 1394.96,
+   "d": 9.68,
+   "text": "have these ones and zeros. Each one is four bits. When we multiply it by this is it smashes the data"
+  },
+  {
+   "t": 1404.64,
+   "d": 14.32,
+   "text": "but they don't overlap. We can poke that into font data and get live updates on the font. This one is"
+  },
+  {
+   "t": 1418.96,
+   "d": 9.44,
+   "text": "fun. I wanted to save some time for it. This is games of life done quick. It is a game of life"
+  },
+  {
+   "t": 1429.76,
+   "d": 10.16,
+   "text": "system that I made which is similar to the screen data but it is having a second layer. So to do"
+  },
+  {
+   "t": 1441.36,
+   "d": 6.8,
+   "text": "this effect where things are moving around the screen, we have two roles. A pixel becomes born"
+  },
+  {
+   "t": 1448.16,
+   "d": 5.92,
+   "text": "if it has three neighbors around it that are also alive. If is alive, it survives if it has 2-3"
+  },
+  {
+   "t": 1454.08,
+   "d": 6.32,
+   "text": "living neighbors. That's the only rules that make all this stuff happen. And I will slow it down so"
+  },
+  {
+   "t": 1460.4,
+   "d": 6.08,
+   "text": "you can kind of see a little better what's going on. OK. So this is exactly the same why just get"
+  },
+  {
+   "t": 1466.48,
+   "d": 4.88,
+   "text": "a neighborhood by using a different kernel for our convolution shader and at the end of that"
+  },
+  {
+   "t": 1471.36,
+   "d": 6.56,
+   "text": "we will have a sum that's anywhere from 0 to 8 because that's how many neighbors there are. Then"
+  },
+  {
+   "t": 1477.92,
+   "d": 5.68,
+   "text": "we do this horrible nonsense and I will cover it. But this does the entire game of life rule"
+  },
+  {
+   "t": 1483.6,
+   "d": 5.92,
+   "text": "using that neighborhood. So I am going to break it into three parts. We check the rising edge between"
+  },
+  {
+   "t": 1489.52,
+   "d": 7.2,
+   "text": "these two which means it has a zero and a one and that only HP ns if the sum was 2 or 3. And then"
+  },
+  {
+   "t": 1496.72,
+   "d": 6.4,
+   "text": "we shift that into the 1s column. That creates this. Those questions are things we don't know"
+  },
+  {
+   "t": 1503.12,
+   "d": 5.36,
+   "text": "because they are coming from the next pixel over and they could be anything. We can't use that."
+  },
+  {
+   "t": 1508.48,
+   "d": 4.48,
+   "text": "We don't have to worry about that because we don't want to use that. The next thing is check"
+  },
+  {
+   "t": 1512.96,
+   "d": 7.44,
+   "text": "if the cell was alive or this sum is odd. This is a weird combo of things but when you are done"
+  },
+  {
+   "t": 1520.4,
+   "d": 6.24,
+   "text": "with that it creates this and gets rid of the garbage and then we mask with hexadecimal one"
+  },
+  {
+   "t": 1526.64,
+   "d": 8.8,
+   "text": "everywhere so we get rid of all the garbage data. Now we just have the two and the one. The two we"
+  },
+  {
+   "t": 1535.44,
+   "d": 7.12,
+   "text": "don't know if it is a zero or one here because it depends on whether or not the cell was alive."
+  },
+  {
+   "t": 1545.36,
+   "d": 4.96,
+   "text": "This is seven operations. Seven cycles on a computer and it does eight pixels which"
+  },
+  {
+   "t": 1550.32,
+   "d": 6.8,
+   "text": "is how I was able to get to run at 180 frames per second on a Game Boy equivalent console"
+  },
+  {
+   "t": 1558.4,
+   "d": 6.88,
+   "text": "with a little more power. Anyway, so, the last thing we should talk about in this talk is the"
+  },
+  {
+   "t": 1565.28,
+   "d": 6.4,
+   "text": "thing I started it with. This fast inverse square root. This is the most math-y but we will try to"
+  },
+  {
+   "t": 1571.68,
+   "d": 7.92,
+   "text": "get the inverse square root of this number. If we invert it we get 100, square root that"
+  },
+  {
+   "t": 1579.6,
+   "d": 6.16,
+   "text": "we get 10. It is a nice easy one to look at and test. This is the data we want it to look like."
+  },
+  {
+   "t": 1585.76,
+   "d": 3.12,
+   "text": "This is the function we are going to use. We just going to focus on the magic in the middle."
+  },
+  {
+   "t": 1589.84,
+   "d": 5.28,
+   "text": "We are going to look at these bits as if they were an integer instead of floating point nonsense with"
+  },
+  {
+   "t": 1595.12,
+   "d": 7.68,
+   "text": "three values. This is a huge number right now. The thing we really care about is this top part"
+  },
+  {
+   "t": 1602.8,
+   "d": 7.6,
+   "text": "in the green area, the exponent because the rest isn't a main part or precision of the number."
+  },
+  {
+   "t": 1610.96,
+   "d": 2.8,
+   "text": "We always know the sign bit is zero because we are taking the square root."
+  },
+  {
+   "t": 1616.8,
+   "d": 5.52,
+   "text": "What we want to do with this exponent is do a linear operation, divide it by 2,"
+  },
+  {
+   "t": 1622.32,
+   "d": 6.56,
+   "text": "and make it negative, because that will do the inverse is the negative, that's the reciprocal,"
+  },
+  {
+   "t": 1628.88,
+   "d": 6.8,
+   "text": "and then dividing by two is getting a square root in the exponent. Mathematically week shift it down"
+  },
+  {
+   "t": 1635.68,
+   "d": 4.48,
+   "text": "so it is a number in the normal number, subtract the bias of the exponent because"
+  },
+  {
+   "t": 1640.16,
+   "d": 8.24,
+   "text": "it doesn't use zero as zero, divide by two, invert, and add it back. And that's basically"
+  },
+  {
+   "t": 1648.4,
+   "d": 7.28,
+   "text": "the technique here. This bit shift operator is similar to dividing by two because, remember,"
+  },
+  {
+   "t": 1655.68,
+   "d": 7.76,
+   "text": "they are powers of two so that's the window. We need to extract it from something to invert it."
+  },
+  {
+   "t": 1663.44,
+   "d": 12.96,
+   "text": "And the math here this 2 to the 23 is because this floating spot is 23 places over. We distributed it"
+  },
+  {
+   "t": 1676.4,
+   "d": 7.2,
+   "text": "in and get this. This looks similar to this number here. And if you are wondering what this s well,"
+  },
+  {
+   "t": 1683.6,
+   "d": 6.0,
+   "text": "in hexadecimal it is 5 F 400,000 which is where this Came From. It is Really just fixing that"
+  },
+  {
+   "t": 1689.6,
+   "d": 6.64,
+   "text": "exponent bias. You can adjust a little. The original writer of this function was Greg"
+  },
+  {
+   "t": 1696.24,
+   "d": 7.6,
+   "text": "Walsh and he seemed to have guessed around the area to find a good one. That's how this came"
+  },
+  {
+   "t": 1703.84,
+   "d": 6.32,
+   "text": "to be, basically. So let's do our example. We are going to shift over one, we are going to invert,"
+  },
+  {
+   "t": 1710.16,
+   "d": 6.96,
+   "text": "add 1, at this value, and it comes out to this which looks very similar to the answer that we"
+  },
+  {
+   "t": 1717.12,
+   "d": 6.16,
+   "text": "want. This is before we have even done the refinement here. Right now it is only 3% off"
+  },
+  {
+   "t": 1723.28,
+   "d": 5.6,
+   "text": "from the correct answer and all we have done is subtract and shift once. That's crazy how good"
+  },
+  {
+   "t": 1728.88,
+   "d": 7.36,
+   "text": "that is at what it is supposed to do. Anyway, that is my talk. There is a lot of places that you can"
+  },
+  {
+   "t": 1736.24,
+   "d": 8.24,
+   "text": "go from here. I put the links on the obelisk if you want to learn more. Basically the way"
+  },
+  {
+   "t": 1744.48,
+   "d": 4.24,
+   "text": "things are going, this is going to become more relevant. I know we were having fun with peco8"
+  },
+  {
+   "t": 1748.72,
+   "d": 7.44,
+   "text": "but there is a lot of stuff using this bit hacking especially in graphic cards today. And Nvidia's"
+  },
+  {
+   "t": 1756.16,
+   "d": 7.76,
+   "text": "new floating format is a floating point that is just four bits allowing it to be called petaflop"
+  },
+  {
+   "t": 1763.92,
+   "d": 8.08,
+   "text": "computing. Stuff like that is going to become more relevant in the future. I think as it a"
+  },
+  {
+   "t": 1772.0,
+   "d": 4.96,
+   "text": "great topic to look into if you are curious. There is a lot you can do to make sure computer work"
+  },
+  {
+   "t": 1776.96,
+   "d": 6.0,
+   "text": "much better than you think. That's it for me. ALEXEI: Excellent. Wow. Perfect timing. Gold"
+  },
+  {
+   "t": 1782.96,
+   "d": 9.04,
+   "text": "star. Very impressive. Like I was saying in the chat, you condensed"
+  },
+  {
+   "t": 1793.2,
+   "d": 9.36,
+   "text": "many lectures into a 30 minute talk. GREG: I am glad I bookmarked it."
+  },
+  {
+   "t": 1803.76,
+   "d": 10.4,
+   "text": "ALEXEI: We haven't had a definitive bit wise primer. Also, man, your slides, which like,"
+  },
+  {
+   "t": 1814.16,
+   "d": 3.76,
+   "text": "you made it is it called -- GREG: Reveal.js."
+  },
+  {
+   "t": 1818.8,
+   "d": 8.8,
+   "text": "ALEXEI: Super cool. Wait a minute. The peco8 is embedded in the slide. Amazing. Thank you so much,"
+  },
+  {
+   "t": 1827.6,
+   "d": 4.48,
+   "text": "Greg. Wonderful stuff. Thank you for getting it ready in time for the preview event."
+  },
+  {
+   "t": 1833.2,
+   "d": 3.52,
+   "text": "Hopefully, people might be able to ask you follow-up questions after?"
+  },
+  {
+   "t": 1836.72,
+   "d": 2.64,
+   "text": "GREG: I will stick around. ALEXEI: Excellent."
+  },
+  {
+   "t": 1839.36,
+   "d": 7.2,
+   "text": "We will assign you a breakout room after the next talk. Thank you."
+  }
+ ]
+}

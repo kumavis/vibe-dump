@@ -1,0 +1,140 @@
+{
+  "id": "IliQZm5Itng",
+  "title": "Scott Burger- The Data Science of Roguelikes",
+  "speaker": "Scott Burger",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=IliQZm5Itng",
+  "talk_type": "other",
+  "summary": "Data scientist and roguelike podcaster Scott Burger surveys where data about roguelike-style games can be found and analyses a dataset built from the Steam API. Itch.io and mobile stores lack usable APIs, while Steam exposes metadata, tags with vote counts, reviews and playtime. He shows the explosive growth of rogue-tagged releases since 2019, which games drive the genre, a 'rogueness' tag-proportion score, a tag-based similarity metric between games, and playtime statistics showing traditional roguelikes hold players markedly longer. He argues Steam needs a nuanced, proportion-based tag search and encourages players to apply roguelike tags.",
+  "games": [
+    "FTL: Faster Than Light",
+    "The Binding of Isaac",
+    "Don't Starve Together",
+    "Dead Cells",
+    "Slay the Spire",
+    "Caves of Qud",
+    "Vampire Survivors",
+    "Shattered Pixel Dungeon",
+    "Rogue",
+    "Dwarf Fortress",
+    "NetHack",
+    "Cogmind",
+    "Jupiter Hell",
+    "Desktop Dungeons",
+    "Tales of Maj'Eyal",
+    "Dungeons of Dredmor"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "storefront data",
+      "kind": "warning",
+      "claim": "Itch.io and mobile app stores make it difficult or impossible to extract bulk game data, while Steam's API makes large-scale analysis of roguelike games feasible.",
+      "detail": "Itch has about 10,000 roguelike-tagged results but no good API; Google Play is even more locked down and does not even tag games as roguelike. Steam's API returns metadata, tags, reviews and achievements for a list of games.",
+      "t": 450,
+      "quote": "there is not really a good appear application programming interface or API to go in and extract this data into a nice clean data",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "steam tag counts",
+      "kind": "history",
+      "claim": "Burger's Steam dataset counts about 7,870 rogue-style games across six tags, with roguelike and roguelite dominating and roguelike deckbuilder, traditional roguelike and roguevania far smaller.",
+      "detail": "Roughly 6,000 roguelike, 4-5,000 roguelite, 3,700 action roguelike, then a drop to about 400 roguelike deckbuilders, 326 traditional roguelikes and 475 roguevanias. Games can carry several of these tags at once.",
+      "t": 770,
+      "quote": "there is about 7, 870 rogue style games across all these different tagged genres",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "genre growth",
+      "kind": "history",
+      "claim": "Rogue-tagged releases on Steam began appearing around 2010 and have grown at an electric pace since 2019, a trend also visible among traditional roguelikes after a 2017 bump.",
+      "detail": "Burger concludes it is a good time to be a fan or developer of the genre, with many games to play and learn from.",
+      "t": 828,
+      "quote": "Since 2019, there has been an electric pace of game development of rogue games being released in general on Steam over time",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "leading games",
+      "kind": "history",
+      "claim": "Among Steam games with over 10,000 reviews, FTL and The Binding of Isaac led early, Don't Starve Together tops reviews at over 400,000, and traditional roguelikes had early leaders, after which Burger sees less a lack of a major leader than a lot of new development.",
+      "detail": "Traditional roguelike early leaders included Dungeons of Dredmor, ToME and Caves of Qud; more recent ones include Cogmind, Jupiter Hell and Desktop Dungeons. Dot size in his chart showed each game's 'rogueness' score.",
+      "t": 967,
+      "quote": "it is not that there hasn't been a major leader in the category on Steam, there has just been a lot of stuff being developed",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "steam tags",
+      "kind": "technique",
+      "claim": "Steam store tags are ordered by user vote count, available in page source, which Burger uses to compute a 'rogueness' score: the share of a game's tag votes on rogue-related tags.",
+      "detail": "Games have up to about 20 tags, voted on by users and adjustable by developers. Non-traditional rogue games range widely from 0.1% to over 40% rogueness; traditional roguelikes cluster more narrowly and somewhat higher, with a few exceeding 60%.",
+      "t": 1051,
+      "quote": "we see this tagged data is organized by count",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "genre breadth",
+      "kind": "warning",
+      "claim": "The breadth of the roguelike label means a Steam roguelike search returns games as different as real-time Don't Starve Together and turn-based Caves of Qud.",
+      "detail": "A tag-proportion similarity metric rated those two only 18.3% similar, versus 96% for two survivor-likes (Boneraiser Minions and Vampire Survivors) and 80% for Tales of Maj'Eyal and Shattered Pixel Dungeon.",
+      "t": 1226,
+      "quote": "on one hand you might get something as real-time action oriented is don't starve together and on the other hand, you might get something as turn-based",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "game similarity",
+      "kind": "technique",
+      "claim": "Comparing games' tag-vote distributions gives a similarity score that can recommend games, though Burger stresses it is a sterile mathematical metric, not a measure of quality.",
+      "detail": "Applied to the original Rogue on Steam, the most similar game by this method scored 79%, with several others around 60-70%.",
+      "t": 1434,
+      "quote": "This is by no means a quality metric. This is very much a sterile mathematical metric",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "discoverability",
+      "kind": "principle",
+      "claim": "Burger argues Steam needs a nuanced search where players set desired tag proportions with sliders, such as some roguelike, some hacking and lots of robots, to aid discoverability.",
+      "detail": "He wants to find games he does not already know that match such a mix, and suggests Steam Labs experiment with it.",
+      "t": 1495,
+      "quote": "I think what's missing in the Steam ecosystem is a nuanced search",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "tag usage trends",
+      "kind": "history",
+      "claim": "Over time the roguelike tag's dominance on Steam has fallen and converged with roguelite and action roguelike tags, and developers more often pair 'roguelike' with 'deckbuilder' than use the combined tag.",
+      "detail": "For 2023 releases the average proportion of tag votes was about 4% roguelike, 3.9% action roguelike and 3.7% roguelite. Among traditional roguelikes, the roguelike and traditional roguelike tags are tightly correlated.",
+      "t": 1647,
+      "quote": "you can either use a roguelike deckbuilder tag specifically and only or more commonly you can say my game is a roguelike tag and a deckbuilder tag",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player engagement",
+      "kind": "history",
+      "claim": "Steam review playtimes show traditional roguelikes hold players about 40% longer than other rogue-style games, with roughly double the playtime at the 90th percentile.",
+      "detail": "Median playtime at review is about 20 hours for all rogue types versus 31 for traditional roguelikes. Percentiles: 10th about 5 vs 9 hours, 50th about 30 vs 45, 90th about 137 vs 300.",
+      "t": 1753,
+      "quote": "Which is a 40% longer time of engagement for traditional roguelikes than other types of",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "tag voting",
+      "kind": "principle",
+      "claim": "Because commercially successful games drown out searches, Burger encourages players to actively vote roguelike tags on games so the community can find them.",
+      "detail": "He also wishes Itch provided an API and tag counts, and mobile stores any data at all.",
+      "t": 1909,
+      "quote": "we are going to get drowned out by more commercially successful games but voting or actively seeking out these tags is a good benefit",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

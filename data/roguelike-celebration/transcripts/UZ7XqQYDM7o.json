@@ -1,0 +1,2826 @@
+{
+ "id": "UZ7XqQYDM7o",
+ "url": "https://www.youtube.com/watch?v=UZ7XqQYDM7o",
+ "title": "Shawn Main - Randomness in Games",
+ "speaker": "Shawn Main",
+ "talk_title": "Randomness in Games",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1573,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Shawn Main talks about the role of randomness in games, and how your players relate to it.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 57,
+   "title": "Randomness in Games"
+  },
+  {
+   "start": 200,
+   "title": "Creating Variety"
+  },
+  {
+   "start": 273,
+   "title": "Setup vs Results Randomness"
+  },
+  {
+   "start": 423,
+   "title": "Randomness vs Skill"
+  },
+  {
+   "start": 783,
+   "title": "Conclusions"
+  },
+  {
+   "start": 960,
+   "title": "Game Road"
+  },
+  {
+   "start": 982,
+   "title": "Randomness"
+  },
+  {
+   "start": 1081,
+   "title": "Randomness vs Gambling"
+  },
+  {
+   "start": 1452,
+   "title": "Playtest Feedback"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3889,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 4.31,
+   "text": "okay this is gonna be kind of zoomed out"
+  },
+  {
+   "t": 4.31,
+   "d": 2.89,
+   "text": "I'm coming from a background that is not"
+  },
+  {
+   "t": 7.2,
+   "d": 1.83,
+   "text": "roguelike game so most of my examples"
+  },
+  {
+   "t": 9.03,
+   "d": 3.15,
+   "text": "are probably physical games and it's"
+  },
+  {
+   "t": 12.18,
+   "d": 4.11,
+   "text": "kind of um particularly aimed at game"
+  },
+  {
+   "t": 16.29,
+   "d": 1.98,
+   "text": "designers and thinking at a very high"
+  },
+  {
+   "t": 18.27,
+   "d": 2.13,
+   "text": "level about the role that randomness and"
+  },
+  {
+   "t": 20.4,
+   "d": 2.34,
+   "text": "random generation is playing in the"
+  },
+  {
+   "t": 22.74,
+   "d": 2.4,
+   "text": "course of your game so let me start with"
+  },
+  {
+   "t": 25.14,
+   "d": 2.19,
+   "text": "who let me let me talk into the"
+  },
+  {
+   "t": 27.33,
+   "d": 3.06,
+   "text": "microphone uh and start with Who am I"
+  },
+  {
+   "t": 30.39,
+   "d": 2.73,
+   "text": "I've recently joined Riot Games before"
+  },
+  {
+   "t": 33.12,
+   "d": 2.01,
+   "text": "that I was a designer for the last six"
+  },
+  {
+   "t": 35.13,
+   "d": 2.82,
+   "text": "years on Magic the Gathering thank you"
+  },
+  {
+   "t": 37.95,
+   "d": 2.55,
+   "text": "guys for giving the context that magic"
+  },
+  {
+   "t": 40.5,
+   "d": 2.37,
+   "text": "is connected to roguelikes cuz I thought"
+  },
+  {
+   "t": 42.87,
+   "d": 2.54,
+   "text": "I was gonna have to justify being here"
+  },
+  {
+   "t": 45.41,
+   "d": 4.3,
+   "text": "if you are a magic player I did a lot in"
+  },
+  {
+   "t": 49.71,
+   "d": 1.65,
+   "text": "the last six years but particularly"
+  },
+  {
+   "t": 51.36,
+   "d": 2.07,
+   "text": "these are the ones that I led conspiracy"
+  },
+  {
+   "t": 53.43,
+   "d": 4.02,
+   "text": "was kind of my baby thank you"
+  },
+  {
+   "t": 57.45,
+   "d": 3.24,
+   "text": "so the genesis of this was way back I"
+  },
+  {
+   "t": 60.69,
+   "d": 2.76,
+   "text": "was thinking about randomness I was"
+  },
+  {
+   "t": 63.45,
+   "d": 1.44,
+   "text": "reading this really good game design"
+  },
+  {
+   "t": 64.89,
+   "d": 3.42,
+   "text": "book and I don't want to say the"
+  },
+  {
+   "t": 68.31,
+   "d": 1.68,
+   "text": "author's name because I'm about to"
+  },
+  {
+   "t": 69.99,
+   "d": 3.18,
+   "text": "criticize it I got to this chapter that"
+  },
+  {
+   "t": 73.17,
+   "d": 1.35,
+   "text": "was about variants in the role that"
+  },
+  {
+   "t": 74.52,
+   "d": 2.76,
+   "text": "variants plays in games and it kind of"
+  },
+  {
+   "t": 77.28,
+   "d": 3.6,
+   "text": "said players don't like losing to"
+  },
+  {
+   "t": 80.88,
+   "d": 1.68,
+   "text": "randomness and then it moved on and"
+  },
+  {
+   "t": 82.56,
+   "d": 1.95,
+   "text": "here's a bunch of math about that and"
+  },
+  {
+   "t": 84.51,
+   "d": 2.19,
+   "text": "that really kind of broke my heart"
+  },
+  {
+   "t": 86.7,
+   "d": 2.16,
+   "text": "because randomness does all this"
+  },
+  {
+   "t": 88.86,
+   "d": 4.4,
+   "text": "fantastic work in games and I really"
+  },
+  {
+   "t": 93.26,
+   "d": 3.1,
+   "text": "kind of was feeling very Randi and like"
+  },
+  {
+   "t": 96.36,
+   "d": 1.86,
+   "text": "no I want I want to talk about this I"
+  },
+  {
+   "t": 98.22,
+   "d": 1.23,
+   "text": "want to talk about all the wonderful"
+  },
+  {
+   "t": 99.45,
+   "d": 2.9,
+   "text": "things that you know having a lot of"
+  },
+  {
+   "t": 102.35,
+   "d": 2.29,
+   "text": "possible outcomes a lot of randomness"
+  },
+  {
+   "t": 104.64,
+   "d": 2.1,
+   "text": "what that can do for games"
+  },
+  {
+   "t": 106.74,
+   "d": 2.88,
+   "text": "and if I think about like for myself"
+  },
+  {
+   "t": 109.62,
+   "d": 2.49,
+   "text": "where I kind of started thinking about"
+  },
+  {
+   "t": 112.11,
+   "d": 2.94,
+   "text": "that is probably in the 90s I don't know"
+  },
+  {
+   "t": 115.05,
+   "d": 3.3,
+   "text": "if you can read any of this but playing"
+  },
+  {
+   "t": 118.35,
+   "d": 3.93,
+   "text": "a lot of RPGs this is from the Palladium"
+  },
+  {
+   "t": 122.28,
+   "d": 5.73,
+   "text": "game heroes Unlimited and um the I"
+  },
+  {
+   "t": 128.01,
+   "d": 1.71,
+   "text": "played a lot of D&D at games where"
+  },
+  {
+   "t": 129.72,
+   "d": 1.68,
+   "text": "you're you know you often roll a lot of"
+  },
+  {
+   "t": 131.4,
+   "d": 1.63,
+   "text": "dice they're determining your"
+  },
+  {
+   "t": 133.03,
+   "d": 2.67,
+   "text": "based stats this had a very different"
+  },
+  {
+   "t": 135.7,
+   "d": 2.37,
+   "text": "approach to it where this is a"
+  },
+  {
+   "t": 138.07,
+   "d": 3.96,
+   "text": "superheroes game and I rolled that I was"
+  },
+  {
+   "t": 142.03,
+   "d": 0.66,
+   "text": "an alien"
+  },
+  {
+   "t": 142.69,
+   "d": 2.37,
+   "text": "so go turn to the chapter on aliens and"
+  },
+  {
+   "t": 145.06,
+   "d": 1.98,
+   "text": "now what are you"
+  },
+  {
+   "t": 147.04,
+   "d": 3.48,
+   "text": "you're a doglike person from an ice"
+  },
+  {
+   "t": 150.52,
+   "d": 4.26,
+   "text": "planet with electricity powers and this"
+  },
+  {
+   "t": 154.78,
+   "d": 1.53,
+   "text": "is just like a character that I never"
+  },
+  {
+   "t": 156.31,
+   "d": 1.65,
+   "text": "would have come up with on my own and"
+  },
+  {
+   "t": 157.96,
+   "d": 2.85,
+   "text": "that was fascinating to me and it became"
+  },
+  {
+   "t": 160.81,
+   "d": 2.28,
+   "text": "so much more personal to me because it"
+  },
+  {
+   "t": 163.09,
+   "d": 1.92,
+   "text": "was just completely bringing this like"
+  },
+  {
+   "t": 165.01,
+   "d": 2.55,
+   "text": "new experience to me that I never would"
+  },
+  {
+   "t": 167.56,
+   "d": 3.39,
+   "text": "have chosen for myself and it even had"
+  },
+  {
+   "t": 170.95,
+   "d": 1.89,
+   "text": "these charts which also I apologize you"
+  },
+  {
+   "t": 172.84,
+   "d": 2.37,
+   "text": "probably can't read but like that we're"
+  },
+  {
+   "t": 175.21,
+   "d": 2.94,
+   "text": "not very much about like sort of the"
+  },
+  {
+   "t": 178.15,
+   "d": 1.98,
+   "text": "statistics and the the rules of the game"
+  },
+  {
+   "t": 180.13,
+   "d": 2.19,
+   "text": "but kind of more narrative elements like"
+  },
+  {
+   "t": 182.32,
+   "d": 2.76,
+   "text": "why are you here you're the last of your"
+  },
+  {
+   "t": 185.08,
+   "d": 2.52,
+   "text": "people and Earth reminded you of home"
+  },
+  {
+   "t": 187.6,
+   "d": 2.75,
+   "text": "and you definitely can't read it but"
+  },
+  {
+   "t": 190.35,
+   "d": 2.26,
+   "text": "there's weird things like over there"
+  },
+  {
+   "t": 192.61,
+   "d": 3.93,
+   "text": "step 8 roll some dice and do you have no"
+  },
+  {
+   "t": 196.54,
+   "d": 4.31,
+   "text": "disguises or several suits of clothing"
+  },
+  {
+   "t": 201.12,
+   "d": 2.41,
+   "text": "and when you're thinking about like"
+  },
+  {
+   "t": 203.53,
+   "d": 2.61,
+   "text": "building a game this is kind of the"
+  },
+  {
+   "t": 206.14,
+   "d": 1.53,
+   "text": "biggest point that I think I want to"
+  },
+  {
+   "t": 207.67,
+   "d": 2.16,
+   "text": "make is just randomness is creating"
+  },
+  {
+   "t": 209.83,
+   "d": 2.82,
+   "text": "variety and variety is leading to sort"
+  },
+  {
+   "t": 212.65,
+   "d": 3.03,
+   "text": "of engagement with the game and that's"
+  },
+  {
+   "t": 215.68,
+   "d": 3.47,
+   "text": "something to really be considering is"
+  },
+  {
+   "t": 219.15,
+   "d": 2.71,
+   "text": "the more possible experiences that"
+  },
+  {
+   "t": 221.86,
+   "d": 1.17,
+   "text": "you're giving a player that's just a"
+  },
+  {
+   "t": 223.03,
+   "d": 1.62,
+   "text": "multiplier on the amount of time that"
+  },
+  {
+   "t": 224.65,
+   "d": 1.68,
+   "text": "they're going to be spending in your"
+  },
+  {
+   "t": 226.33,
+   "d": 3.66,
+   "text": "game overall there's another really"
+  },
+  {
+   "t": 229.99,
+   "d": 2.07,
+   "text": "interesting thing about RPGs and and"
+  },
+  {
+   "t": 232.06,
+   "d": 2.91,
+   "text": "roguelikes often really share this that"
+  },
+  {
+   "t": 234.97,
+   "d": 4.8,
+   "text": "moment where you sort of the randomness"
+  },
+  {
+   "t": 239.77,
+   "d": 2.01,
+   "text": "is creating drama you you roll the die"
+  },
+  {
+   "t": 241.78,
+   "d": 2.88,
+   "text": "you lean in is it a critical failure is"
+  },
+  {
+   "t": 244.66,
+   "d": 2.19,
+   "text": "a critical success and it kind of spins"
+  },
+  {
+   "t": 246.85,
+   "d": 1.68,
+   "text": "the story in a different direction as a"
+  },
+  {
+   "t": 248.53,
+   "d": 3.78,
+   "text": "result of this and I'm using like these"
+  },
+  {
+   "t": 252.31,
+   "d": 1.77,
+   "text": "kind of more narrative experiences so"
+  },
+  {
+   "t": 254.08,
+   "d": 2.64,
+   "text": "far but this is also true in more"
+  },
+  {
+   "t": 256.72,
+   "d": 1.83,
+   "text": "competitive games there's definitely"
+  },
+  {
+   "t": 258.55,
+   "d": 1.92,
+   "text": "that experience some of the the real"
+  },
+  {
+   "t": 260.47,
+   "d": 2.52,
+   "text": "appeal of a game like poker is kind of"
+  },
+  {
+   "t": 262.99,
+   "d": 1.83,
+   "text": "this"
+  },
+  {
+   "t": 264.82,
+   "d": 2.37,
+   "text": "real jerk these real dramatic emotional"
+  },
+  {
+   "t": 267.19,
+   "d": 3.03,
+   "text": "moments that result from making a big"
+  },
+  {
+   "t": 270.22,
+   "d": 2.81,
+   "text": "bet and having it pay off or not pay off"
+  },
+  {
+   "t": 273.03,
+   "d": 2.5,
+   "text": "so before I get too much further I want"
+  },
+  {
+   "t": 275.53,
+   "d": 2.28,
+   "text": "to I want to kind of present this"
+  },
+  {
+   "t": 277.81,
+   "d": 2.58,
+   "text": "concept pre-decision randomness versus"
+  },
+  {
+   "t": 280.39,
+   "d": 3.24,
+   "text": "post decision randomness those terms are"
+  },
+  {
+   "t": 283.63,
+   "d": 1.29,
+   "text": "a mouthful there's a bunch of different"
+  },
+  {
+   "t": 284.92,
+   "d": 2.82,
+   "text": "variations on it I'm gonna call it setup"
+  },
+  {
+   "t": 287.74,
+   "d": 2.13,
+   "text": "randomness versus results randomness and"
+  },
+  {
+   "t": 289.87,
+   "d": 4.05,
+   "text": "this is kind of the concept to go back"
+  },
+  {
+   "t": 293.92,
+   "d": 2.1,
+   "text": "to spelunky for a moment or or I mean"
+  },
+  {
+   "t": 296.02,
+   "d": 2.6,
+   "text": "this is certainly familiar to roguelikes"
+  },
+  {
+   "t": 298.62,
+   "d": 2.68,
+   "text": "setup randomness is that idea that you"
+  },
+  {
+   "t": 301.3,
+   "d": 3.09,
+   "text": "are generating something about your game"
+  },
+  {
+   "t": 304.39,
+   "d": 2.37,
+   "text": "the starting position the map starting"
+  },
+  {
+   "t": 306.76,
+   "d": 3.03,
+   "text": "characters and then players from there"
+  },
+  {
+   "t": 309.79,
+   "d": 2.01,
+   "text": "are adapting to those circumstances and"
+  },
+  {
+   "t": 311.8,
+   "d": 1.77,
+   "text": "now you're giving them choices now"
+  },
+  {
+   "t": 313.57,
+   "d": 1.29,
+   "text": "you're giving them agency to run around"
+  },
+  {
+   "t": 314.86,
+   "d": 5.15,
+   "text": "the map and this particularly sort of"
+  },
+  {
+   "t": 320.01,
+   "d": 2.59,
+   "text": "the more variety will offer sort of more"
+  },
+  {
+   "t": 322.6,
+   "d": 1.98,
+   "text": "novelty to the player in terms of what"
+  },
+  {
+   "t": 324.58,
+   "d": 3.36,
+   "text": "they're experiencing contrast that with"
+  },
+  {
+   "t": 327.94,
+   "d": 2.37,
+   "text": "the other kind that like roll the dice"
+  },
+  {
+   "t": 330.31,
+   "d": 3.87,
+   "text": "in D&D kind of moment where players lean"
+  },
+  {
+   "t": 334.18,
+   "d": 2.7,
+   "text": "in and this is results randomness the"
+  },
+  {
+   "t": 336.88,
+   "d": 2.34,
+   "text": "player makes some kind of choice some"
+  },
+  {
+   "t": 339.22,
+   "d": 2.55,
+   "text": "kind of has some kind of agency and then"
+  },
+  {
+   "t": 341.77,
+   "d": 2.25,
+   "text": "there's a randomness associated with the"
+  },
+  {
+   "t": 344.02,
+   "d": 2.19,
+   "text": "outcome of that decision and this is"
+  },
+  {
+   "t": 346.21,
+   "d": 1.47,
+   "text": "where you get more into that high"
+  },
+  {
+   "t": 347.68,
+   "d": 3.54,
+   "text": "emotion high emotion as well as some of"
+  },
+  {
+   "t": 351.22,
+   "d": 2.04,
+   "text": "those this is more likely where you're"
+  },
+  {
+   "t": 353.26,
+   "d": 3.33,
+   "text": "gonna run into damn it I lost due to a"
+  },
+  {
+   "t": 356.59,
+   "d": 2.4,
+   "text": "roll of the dice or whatever variation"
+  },
+  {
+   "t": 358.99,
+   "d": 4.26,
+   "text": "of that and I'm presenting these as kind"
+  },
+  {
+   "t": 363.25,
+   "d": 2.07,
+   "text": "of being a binary but I should"
+  },
+  {
+   "t": 365.32,
+   "d": 1.41,
+   "text": "acknowledge that it's really it's really"
+  },
+  {
+   "t": 366.73,
+   "d": 2.19,
+   "text": "more of a spectrum and card games are a"
+  },
+  {
+   "t": 368.92,
+   "d": 2.94,
+   "text": "good example of this take magic do you"
+  },
+  {
+   "t": 371.86,
+   "d": 2.25,
+   "text": "randomize your starting position you"
+  },
+  {
+   "t": 374.11,
+   "d": 1.56,
+   "text": "draw seven cards at the beginning of the"
+  },
+  {
+   "t": 375.67,
+   "d": 3.63,
+   "text": "game then players make choices but every"
+  },
+  {
+   "t": 379.3,
+   "d": 2.33,
+   "text": "turn you then draw another card and now"
+  },
+  {
+   "t": 381.63,
+   "d": 2.74,
+   "text": "there's a little bit more agency that"
+  },
+  {
+   "t": 384.37,
+   "d": 5.94,
+   "text": "you have but once if you've played magic"
+  },
+  {
+   "t": 390.31,
+   "d": 1.65,
+   "text": "you definitely know that you can be"
+  },
+  {
+   "t": 391.96,
+   "d": 2.04,
+   "text": "prone to having that moment where you're"
+  },
+  {
+   "t": 394.0,
+   "d": 2.43,
+   "text": "on the ropes and you need to draw a"
+  },
+  {
+   "t": 396.43,
+   "d": 1.4,
+   "text": "certain card in"
+  },
+  {
+   "t": 397.83,
+   "d": 2.55,
+   "text": "to win and that really gets back to that"
+  },
+  {
+   "t": 400.38,
+   "d": 2.07,
+   "text": "kind of results randomness that post"
+  },
+  {
+   "t": 402.45,
+   "d": 4.35,
+   "text": "decision randomness where that's very"
+  },
+  {
+   "t": 406.8,
+   "d": 2.73,
+   "text": "emotional and people are gonna swear at"
+  },
+  {
+   "t": 409.53,
+   "d": 2.19,
+   "text": "you and not enjoy your game or love it"
+  },
+  {
+   "t": 411.72,
+   "d": 2.46,
+   "text": "or whatever emotional experience they"
+  },
+  {
+   "t": 414.18,
+   "d": 4.41,
+   "text": "have oh I had a slide of this that's we"
+  },
+  {
+   "t": 418.59,
+   "d": 3.06,
+   "text": "here's Randi Bueller yelling about oh my"
+  },
+  {
+   "t": 421.65,
+   "d": 3.62,
+   "text": "god Lightning helix um"
+  },
+  {
+   "t": 425.27,
+   "d": 1.81,
+   "text": "jumping back to that original question"
+  },
+  {
+   "t": 427.08,
+   "d": 3.57,
+   "text": "kind of the role of randomness versus"
+  },
+  {
+   "t": 430.65,
+   "d": 3.39,
+   "text": "skill and whether or not they are"
+  },
+  {
+   "t": 434.04,
+   "d": 4.23,
+   "text": "necessarily at odds I'll start talking"
+  },
+  {
+   "t": 438.27,
+   "d": 1.56,
+   "text": "about chess chess is a very high skill"
+  },
+  {
+   "t": 439.83,
+   "d": 3.12,
+   "text": "game and we'll talk about Richard"
+  },
+  {
+   "t": 442.95,
+   "d": 2.94,
+   "text": "Garfield for a moment seeing that image"
+  },
+  {
+   "t": 445.89,
+   "d": 3.06,
+   "text": "again um so he's the original designer"
+  },
+  {
+   "t": 448.95,
+   "d": 1.86,
+   "text": "for Magic this is not actually about his"
+  },
+  {
+   "t": 450.81,
+   "d": 2.04,
+   "text": "rolling magic but he has kind of this"
+  },
+  {
+   "t": 452.85,
+   "d": 4.02,
+   "text": "toy example imagine you play chess and"
+  },
+  {
+   "t": 456.87,
+   "d": 1.89,
+   "text": "when you put the other person in"
+  },
+  {
+   "t": 458.76,
+   "d": 2.55,
+   "text": "checkmate now you roll the die and on I"
+  },
+  {
+   "t": 461.31,
+   "d": 6.06,
+   "text": "won you are the loser it's not a good"
+  },
+  {
+   "t": 467.37,
+   "d": 4.71,
+   "text": "game I don't recommend this but the the"
+  },
+  {
+   "t": 472.08,
+   "d": 1.95,
+   "text": "point is kind of the skill all of the"
+  },
+  {
+   "t": 474.03,
+   "d": 1.92,
+   "text": "skill that goes into chess is absolutely"
+  },
+  {
+   "t": 475.95,
+   "d": 2.67,
+   "text": "still there all of the decisions that"
+  },
+  {
+   "t": 478.62,
+   "d": 1.92,
+   "text": "you are making none of that has been"
+  },
+  {
+   "t": 480.54,
+   "d": 2.79,
+   "text": "diminished just you've added this point"
+  },
+  {
+   "t": 483.33,
+   "d": 4.08,
+   "text": "at the end where randomness is creating"
+  },
+  {
+   "t": 487.41,
+   "d": 3.3,
+   "text": "a little bit of uncertainty into the"
+  },
+  {
+   "t": 490.71,
+   "d": 0.56,
+   "text": "system"
+  },
+  {
+   "t": 491.27,
+   "d": 4.6,
+   "text": "contrast that with Fischer random chess"
+  },
+  {
+   "t": 495.87,
+   "d": 5.16,
+   "text": "this is a Bobby Fischer he was"
+  },
+  {
+   "t": 501.03,
+   "d": 3.24,
+   "text": "frustrated that so much of the skill and"
+  },
+  {
+   "t": 504.27,
+   "d": 1.52,
+   "text": "chess was this kind of rote memorization"
+  },
+  {
+   "t": 505.79,
+   "d": 5.95,
+   "text": "that you memorize certain positions"
+  },
+  {
+   "t": 511.74,
+   "d": 3.63,
+   "text": "especially starting positions and it is"
+  },
+  {
+   "t": 515.37,
+   "d": 2.88,
+   "text": "a you are often testing a player's"
+  },
+  {
+   "t": 518.25,
+   "d": 1.29,
+   "text": "memory of these different scenarios"
+  },
+  {
+   "t": 519.54,
+   "d": 2.49,
+   "text": "rather than kind of their ability to"
+  },
+  {
+   "t": 522.03,
+   "d": 1.62,
+   "text": "improvise or kind of adapt to"
+  },
+  {
+   "t": 523.65,
+   "d": 3.21,
+   "text": "circumstances so his proposal it's also"
+  },
+  {
+   "t": 526.86,
+   "d": 1.45,
+   "text": "known as a chess"
+  },
+  {
+   "t": 528.31,
+   "d": 3.96,
+   "text": "960 I believe is you take the pieces in"
+  },
+  {
+   "t": 532.27,
+   "d": 2.49,
+   "text": "the back row and you shuffle them and"
+  },
+  {
+   "t": 534.76,
+   "d": 2.43,
+   "text": "you give each player you dole them out"
+  },
+  {
+   "t": 537.19,
+   "d": 2.22,
+   "text": "kind of evenly with each other but now"
+  },
+  {
+   "t": 539.41,
+   "d": 2.19,
+   "text": "the player has a novel circumstance and"
+  },
+  {
+   "t": 541.6,
+   "d": 2.19,
+   "text": "using that kind of setup randomness"
+  },
+  {
+   "t": 543.79,
+   "d": 2.64,
+   "text": "actually increases certain kinds of"
+  },
+  {
+   "t": 546.43,
+   "d": 1.29,
+   "text": "skills that you are testing in the"
+  },
+  {
+   "t": 547.72,
+   "d": 2.51,
+   "text": "course of the game and so therefore"
+  },
+  {
+   "t": 550.23,
+   "d": 3.88,
+   "text": "chess you know by using more randomness"
+  },
+  {
+   "t": 554.11,
+   "d": 1.89,
+   "text": "can be more skill testing in certain"
+  },
+  {
+   "t": 556.0,
+   "d": 2.1,
+   "text": "ways I'm probably saying a lot of things"
+  },
+  {
+   "t": 558.1,
+   "d": 2.28,
+   "text": "that are not going to be shocking to you"
+  },
+  {
+   "t": 560.38,
+   "d": 6.33,
+   "text": "as roguelike players and developers but"
+  },
+  {
+   "t": 566.71,
+   "d": 1.47,
+   "text": "let me jump to another loaded example"
+  },
+  {
+   "t": 568.18,
+   "d": 2.49,
+   "text": "here poker is another very high skill"
+  },
+  {
+   "t": 570.67,
+   "d": 3.06,
+   "text": "game it involves extremely high over at"
+  },
+  {
+   "t": 573.73,
+   "d": 3.6,
+   "text": "randomness and actually the skill being"
+  },
+  {
+   "t": 577.33,
+   "d": 1.95,
+   "text": "tested by players is that kind of"
+  },
+  {
+   "t": 579.28,
+   "d": 1.68,
+   "text": "mitigation and understanding the risk"
+  },
+  {
+   "t": 580.96,
+   "d": 1.2,
+   "text": "that they're taking on at any given"
+  },
+  {
+   "t": 582.16,
+   "d": 5.97,
+   "text": "moment and that's challenging not only"
+  },
+  {
+   "t": 588.13,
+   "d": 1.8,
+   "text": "because that's a difficult skill to"
+  },
+  {
+   "t": 589.93,
+   "d": 6.87,
+   "text": "understand but a you can as a person who"
+  },
+  {
+   "t": 596.8,
+   "d": 2.88,
+   "text": "is perhaps not familiar with poker make"
+  },
+  {
+   "t": 599.68,
+   "d": 2.16,
+   "text": "a decision and be rewarded for it and"
+  },
+  {
+   "t": 601.84,
+   "d": 1.65,
+   "text": "think it's therefore the correct"
+  },
+  {
+   "t": 603.49,
+   "d": 3.84,
+   "text": "decision or vice versa so you can make"
+  },
+  {
+   "t": 607.33,
+   "d": 1.59,
+   "text": "absolutely the correct decision get"
+  },
+  {
+   "t": 608.92,
+   "d": 1.74,
+   "text": "punished for it and now next game like"
+  },
+  {
+   "t": 610.66,
+   "d": 3.93,
+   "text": "oh I'd better not you know that high on"
+  },
+  {
+   "t": 614.59,
+   "d": 4.26,
+   "text": "aces because I got screwed last time so"
+  },
+  {
+   "t": 618.85,
+   "d": 2.25,
+   "text": "kind of the the presence of this"
+  },
+  {
+   "t": 621.1,
+   "d": 2.25,
+   "text": "randomness can actually obfuscate a lot"
+  },
+  {
+   "t": 623.35,
+   "d": 3.42,
+   "text": "of the skill involved and that has some"
+  },
+  {
+   "t": 626.77,
+   "d": 1.98,
+   "text": "interesting qualities that are both good"
+  },
+  {
+   "t": 628.75,
+   "d": 2.18,
+   "text": "and bad"
+  },
+  {
+   "t": 633.35,
+   "d": 2.92,
+   "text": "but I don't wanna ignore I don't want to"
+  },
+  {
+   "t": 636.27,
+   "d": 1.98,
+   "text": "totally ignore that player frustration"
+  },
+  {
+   "t": 638.25,
+   "d": 1.29,
+   "text": "over losing to randomness I actually"
+  },
+  {
+   "t": 639.54,
+   "d": 2.16,
+   "text": "want to dig into it a little bit because"
+  },
+  {
+   "t": 641.7,
+   "d": 1.74,
+   "text": "I think there's kind of two factors that"
+  },
+  {
+   "t": 643.44,
+   "d": 3.63,
+   "text": "are at play here one is the feeling of"
+  },
+  {
+   "t": 647.07,
+   "d": 3.27,
+   "text": "powerlessness that you can experience as"
+  },
+  {
+   "t": 650.34,
+   "d": 1.95,
+   "text": "a player when you don't feel like you"
+  },
+  {
+   "t": 652.29,
+   "d": 2.73,
+   "text": "had any agency to affect your"
+  },
+  {
+   "t": 655.02,
+   "d": 5.28,
+   "text": "circumstances so you know if you get to"
+  },
+  {
+   "t": 660.3,
+   "d": 2.46,
+   "text": "the end of the game and you look back at"
+  },
+  {
+   "t": 662.76,
+   "d": 1.41,
+   "text": "what you could have done differently and"
+  },
+  {
+   "t": 664.17,
+   "d": 2.79,
+   "text": "like no I did everything right or it was"
+  },
+  {
+   "t": 666.96,
+   "d": 1.8,
+   "text": "the roll of the dice or something that's"
+  },
+  {
+   "t": 668.76,
+   "d": 4.08,
+   "text": "that's a really frustrating feeling that"
+  },
+  {
+   "t": 672.84,
+   "d": 2.61,
+   "text": "said there's kind of a minus and a plus"
+  },
+  {
+   "t": 675.45,
+   "d": 2.22,
+   "text": "to them that moment in that experience"
+  },
+  {
+   "t": 677.67,
+   "d": 2.61,
+   "text": "which is gives players something to"
+  },
+  {
+   "t": 680.28,
+   "d": 3.39,
+   "text": "blame for their losses which is a real"
+  },
+  {
+   "t": 683.67,
+   "d": 2.18,
+   "text": "way of protecting your ego in some cases"
+  },
+  {
+   "t": 685.85,
+   "d": 3.1,
+   "text": "coming from magic you know there is lots"
+  },
+  {
+   "t": 688.95,
+   "d": 2.27,
+   "text": "of complaints associated with those"
+  },
+  {
+   "t": 691.22,
+   "d": 2.32,
+   "text": "top-deck moments and getting mana"
+  },
+  {
+   "t": 693.54,
+   "d": 4.04,
+   "text": "screwed some of which are not actually"
+  },
+  {
+   "t": 697.58,
+   "d": 3.34,
+   "text": "why the person wanted lost some of which"
+  },
+  {
+   "t": 700.92,
+   "d": 3.09,
+   "text": "are them attributing something to a real"
+  },
+  {
+   "t": 704.01,
+   "d": 2.55,
+   "text": "convenient scapegoat and honestly that"
+  },
+  {
+   "t": 706.56,
+   "d": 2.7,
+   "text": "can be really convenient to have I mean"
+  },
+  {
+   "t": 709.26,
+   "d": 2.37,
+   "text": "on that real emotional protect your ego"
+  },
+  {
+   "t": 711.63,
+   "d": 6.6,
+   "text": "kind of level the other thing is or the"
+  },
+  {
+   "t": 718.23,
+   "d": 4.23,
+   "text": "other kind of challenge around is"
+  },
+  {
+   "t": 722.46,
+   "d": 2.58,
+   "text": "players complaining because they don't"
+  },
+  {
+   "t": 725.04,
+   "d": 1.41,
+   "text": "feel like their skill is being rewarded"
+  },
+  {
+   "t": 726.45,
+   "d": 5.3,
+   "text": "and this especially tends to happen as"
+  },
+  {
+   "t": 731.75,
+   "d": 3.1,
+   "text": "someone gets more spends more time with"
+  },
+  {
+   "t": 734.85,
+   "d": 2.19,
+   "text": "your game and especially happens when a"
+  },
+  {
+   "t": 737.04,
+   "d": 1.59,
+   "text": "community spends more time with your"
+  },
+  {
+   "t": 738.63,
+   "d": 3.03,
+   "text": "game and they start to really understand"
+  },
+  {
+   "t": 741.66,
+   "d": 1.77,
+   "text": "kind of those pain points and those"
+  },
+  {
+   "t": 743.43,
+   "d": 3.15,
+   "text": "points where overt randomness is causing"
+  },
+  {
+   "t": 746.58,
+   "d": 3.24,
+   "text": "wins and losses and they'll usually"
+  },
+  {
+   "t": 749.82,
+   "d": 3.15,
+   "text": "demand more reward for their skill or"
+  },
+  {
+   "t": 752.97,
+   "d": 3.02,
+   "text": "more reward just for their experience"
+  },
+  {
+   "t": 755.99,
+   "d": 4.33,
+   "text": "but again on the other hand more"
+  },
+  {
+   "t": 760.32,
+   "d": 1.8,
+   "text": "randomness often lets players of very"
+  },
+  {
+   "t": 762.12,
+   "d": 2.75,
+   "text": "different skill levels play together I"
+  },
+  {
+   "t": 764.87,
+   "d": 1.59,
+   "text": "can"
+  },
+  {
+   "t": 766.46,
+   "d": 2.04,
+   "text": "I'm not a great magic player I can play"
+  },
+  {
+   "t": 768.5,
+   "d": 1.29,
+   "text": "with someone who is the best in the"
+  },
+  {
+   "t": 769.79,
+   "d": 3.66,
+   "text": "world and have a decent shot even of"
+  },
+  {
+   "t": 773.45,
+   "d": 2.55,
+   "text": "winning I could not do that with a chess"
+  },
+  {
+   "t": 776.0,
+   "d": 2.49,
+   "text": "grandmaster I know that I am walking"
+  },
+  {
+   "t": 778.49,
+   "d": 2.37,
+   "text": "into a miserable experience where they"
+  },
+  {
+   "t": 780.86,
+   "d": 5.52,
+   "text": "walk all over me so here's kind of the"
+  },
+  {
+   "t": 786.38,
+   "d": 2.4,
+   "text": "the conclusions the the major points"
+  },
+  {
+   "t": 788.78,
+   "d": 2.91,
+   "text": "here randomness is going to create"
+  },
+  {
+   "t": 791.69,
+   "d": 1.89,
+   "text": "variety which is just long engagement"
+  },
+  {
+   "t": 793.58,
+   "d": 5.39,
+   "text": "it's it's emotional it's this very often"
+  },
+  {
+   "t": 798.97,
+   "d": 2.56,
+   "text": "visceral experience of seeing something"
+  },
+  {
+   "t": 801.53,
+   "d": 2.19,
+   "text": "play out and have that moment where"
+  },
+  {
+   "t": 803.72,
+   "d": 1.5,
+   "text": "you're praying for the dice to come up"
+  },
+  {
+   "t": 805.22,
+   "d": 3.33,
+   "text": "the way you want them to adapting to"
+  },
+  {
+   "t": 808.55,
+   "d": 2.4,
+   "text": "random circumstances this is a skill and"
+  },
+  {
+   "t": 810.95,
+   "d": 3.0,
+   "text": "is really very satisfying scale in a lot"
+  },
+  {
+   "t": 813.95,
+   "d": 2.97,
+   "text": "of cases it can escape the crutch"
+  },
+  {
+   "t": 816.92,
+   "d": 1.56,
+   "text": "strategy it gives players something to"
+  },
+  {
+   "t": 818.48,
+   "d": 2.07,
+   "text": "blame and allows for that kind of cross"
+  },
+  {
+   "t": 820.55,
+   "d": 3.15,
+   "text": "skill play um I want to conclude with"
+  },
+  {
+   "t": 823.7,
+   "d": 3.3,
+   "text": "kind of one big thought is like do games"
+  },
+  {
+   "t": 827.0,
+   "d": 1.92,
+   "text": "need randomness and this is obviously a"
+  },
+  {
+   "t": 828.92,
+   "d": 3.27,
+   "text": "rhetorical question because obviously"
+  },
+  {
+   "t": 832.19,
+   "d": 5.49,
+   "text": "the answer is no but I I do think they"
+  },
+  {
+   "t": 837.68,
+   "d": 2.07,
+   "text": "need a source of uncertainty there's a"
+  },
+  {
+   "t": 839.75,
+   "d": 1.95,
+   "text": "reason why none of us in this room are"
+  },
+  {
+   "t": 841.7,
+   "d": 1.35,
+   "text": "going to play tic-tac-toe with each"
+  },
+  {
+   "t": 843.05,
+   "d": 2.37,
+   "text": "other but we might play paper rock"
+  },
+  {
+   "t": 845.42,
+   "d": 2.97,
+   "text": "scissors which is a similar kind of you"
+  },
+  {
+   "t": 848.39,
+   "d": 4.05,
+   "text": "know game with no real it's not like"
+  },
+  {
+   "t": 852.44,
+   "d": 2.79,
+   "text": "it's really testing anything but if I"
+  },
+  {
+   "t": 855.23,
+   "d": 2.01,
+   "text": "throw rock you didn't know I was gonna"
+  },
+  {
+   "t": 857.24,
+   "d": 2.55,
+   "text": "throw rock it also kind of speaks to"
+  },
+  {
+   "t": 859.79,
+   "d": 3.12,
+   "text": "like I mean I think portal is one of the"
+  },
+  {
+   "t": 862.91,
+   "d": 3.57,
+   "text": "the best games of the last 20 years I've"
+  },
+  {
+   "t": 866.48,
+   "d": 2.01,
+   "text": "played it once I'm not gonna go and play"
+  },
+  {
+   "t": 868.49,
+   "d": 1.77,
+   "text": "it again because I know all the puzzles"
+  },
+  {
+   "t": 870.26,
+   "d": 1.65,
+   "text": "and I know all the narrative elements"
+  },
+  {
+   "t": 871.91,
+   "d": 2.67,
+   "text": "and for it to be enjoyable I need that"
+  },
+  {
+   "t": 874.58,
+   "d": 3.65,
+   "text": "kind of uncertainty so I want to kind of"
+  },
+  {
+   "t": 878.23,
+   "d": 4.6,
+   "text": "propose a bunch of I hope this actually"
+  },
+  {
+   "t": 882.83,
+   "d": 1.68,
+   "text": "can become kind of a definitive list but"
+  },
+  {
+   "t": 884.51,
+   "d": 3.42,
+   "text": "this is a very like half-formed thought"
+  },
+  {
+   "t": 887.93,
+   "d": 2.43,
+   "text": "right now but I couldn't identifying the"
+  },
+  {
+   "t": 890.36,
+   "d": 1.68,
+   "text": "the different sources of uncertainty for"
+  },
+  {
+   "t": 892.04,
+   "d": 0.51,
+   "text": "games"
+  },
+  {
+   "t": 892.55,
+   "d": 2.28,
+   "text": "one is physical skill the like can I"
+  },
+  {
+   "t": 894.83,
+   "d": 1.98,
+   "text": "actually perform the action especially"
+  },
+  {
+   "t": 896.81,
+   "d": 2.83,
+   "text": "with like twitchy games or sports"
+  },
+  {
+   "t": 899.64,
+   "d": 3.04,
+   "text": "having an opponent someone else an agent"
+  },
+  {
+   "t": 902.68,
+   "d": 2.07,
+   "text": "who is going to act in opposition to"
+  },
+  {
+   "t": 904.75,
+   "d": 3.18,
+   "text": "mean has their own motivations and is"
+  },
+  {
+   "t": 907.93,
+   "d": 1.82,
+   "text": "going to be a source of uncertainty"
+  },
+  {
+   "t": 909.75,
+   "d": 2.95,
+   "text": "hidden information and this can kind of"
+  },
+  {
+   "t": 912.7,
+   "d": 3.66,
+   "text": "be anything from prediction to memory to"
+  },
+  {
+   "t": 916.36,
+   "d": 1.89,
+   "text": "like observations"
+  },
+  {
+   "t": 918.25,
+   "d": 3.42,
+   "text": "it's especially maybe this should be"
+  },
+  {
+   "t": 921.67,
+   "d": 1.71,
+   "text": "broken out into its own category but"
+  },
+  {
+   "t": 923.38,
+   "d": 1.41,
+   "text": "this isn't like in a narrative"
+  },
+  {
+   "t": 924.79,
+   "d": 4.47,
+   "text": "experience that notion that I'm gonna"
+  },
+  {
+   "t": 929.26,
+   "d": 2.76,
+   "text": "make a decision and something is going"
+  },
+  {
+   "t": 932.02,
+   "d": 2.85,
+   "text": "to happen later because of my decision a"
+  },
+  {
+   "t": 934.87,
+   "d": 3.9,
+   "text": "complex system you know where one action"
+  },
+  {
+   "t": 938.77,
+   "d": 1.38,
+   "text": "is gonna kind of have cascading"
+  },
+  {
+   "t": 940.15,
+   "d": 1.83,
+   "text": "consequences you can think of like the"
+  },
+  {
+   "t": 941.98,
+   "d": 3.15,
+   "text": "match 3 game or something where you drop"
+  },
+  {
+   "t": 945.13,
+   "d": 1.8,
+   "text": "something down and a column and all"
+  },
+  {
+   "t": 946.93,
+   "d": 1.68,
+   "text": "these other things happen and I didn't"
+  },
+  {
+   "t": 948.61,
+   "d": 1.74,
+   "text": "know they were gonna happen"
+  },
+  {
+   "t": 950.35,
+   "d": 2.19,
+   "text": "the game road not taken' if you know it"
+  },
+  {
+   "t": 952.54,
+   "d": 2.19,
+   "text": "is a pretty interesting one because it"
+  },
+  {
+   "t": 954.73,
+   "d": 3.06,
+   "text": "has actually procedure allottee to the"
+  },
+  {
+   "t": 957.79,
+   "d": 4.2,
+   "text": "set up but it's a puzzle game or then"
+  },
+  {
+   "t": 961.99,
+   "d": 4.26,
+   "text": "over at randomness and I kind of I don't"
+  },
+  {
+   "t": 966.25,
+   "d": 1.68,
+   "text": "know help help me beat this up if you"
+  },
+  {
+   "t": 967.93,
+   "d": 1.8,
+   "text": "want to chat later cuz I'm really"
+  },
+  {
+   "t": 969.73,
+   "d": 2.58,
+   "text": "interested in this and developing this"
+  },
+  {
+   "t": 972.31,
+   "d": 2.79,
+   "text": "into a more robust idea but I think"
+  },
+  {
+   "t": 975.1,
+   "d": 1.53,
+   "text": "games need this source of uncertainty"
+  },
+  {
+   "t": 976.63,
+   "d": 3.27,
+   "text": "and perhaps this is the list of where"
+  },
+  {
+   "t": 979.9,
+   "d": 3.84,
+   "text": "they can come from anyway that is my"
+  },
+  {
+   "t": 983.74,
+   "d": 2.06,
+   "text": "talk"
+  },
+  {
+   "t": 985.94,
+   "d": 8.85,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1002.88,
+   "d": 6.08,
+   "text": "cool so your time for some questions I'm"
+  },
+  {
+   "t": 1008.96,
+   "d": 2.59,
+   "text": "I'm gonna make a statement okay so"
+  },
+  {
+   "t": 1011.55,
+   "d": 4.92,
+   "text": "please one cool thing in roguelikes with"
+  },
+  {
+   "t": 1016.47,
+   "d": 2.16,
+   "text": "this randomness because the thing that"
+  },
+  {
+   "t": 1018.63,
+   "d": 2.94,
+   "text": "you get out of the the challenging thing"
+  },
+  {
+   "t": 1021.57,
+   "d": 1.41,
+   "text": "about roguelikes is understanding like"
+  },
+  {
+   "t": 1022.98,
+   "d": 2.58,
+   "text": "the system that the game works in the"
+  },
+  {
+   "t": 1025.56,
+   "d": 2.07,
+   "text": "randomness makes it so certain elements"
+  },
+  {
+   "t": 1027.63,
+   "d": 1.74,
+   "text": "of the game don't appear every time and"
+  },
+  {
+   "t": 1029.37,
+   "d": 2.97,
+   "text": "so to understand them you have to"
+  },
+  {
+   "t": 1032.34,
+   "d": 1.62,
+   "text": "interact with them and die to them and"
+  },
+  {
+   "t": 1033.96,
+   "d": 1.65,
+   "text": "the randomness makes it so these things"
+  },
+  {
+   "t": 1035.61,
+   "d": 2.13,
+   "text": "don't exist every time and therefore the"
+  },
+  {
+   "t": 1037.74,
+   "d": 1.95,
+   "text": "game is harder because you can't"
+  },
+  {
+   "t": 1039.69,
+   "d": 2.13,
+   "text": "actually figure out these systems yeah"
+  },
+  {
+   "t": 1041.82,
+   "d": 1.62,
+   "text": "it's interesting you and I have talked"
+  },
+  {
+   "t": 1043.44,
+   "d": 2.16,
+   "text": "about this in the past and it's it's"
+  },
+  {
+   "t": 1045.6,
+   "d": 3.21,
+   "text": "fascinating because personally for me"
+  },
+  {
+   "t": 1048.81,
+   "d": 1.68,
+   "text": "the reason why I'm excited about"
+  },
+  {
+   "t": 1050.49,
+   "d": 1.5,
+   "text": "roguelikes and other games with heavy"
+  },
+  {
+   "t": 1051.99,
+   "d": 2.25,
+   "text": "procedure allottee I think is largely"
+  },
+  {
+   "t": 1054.24,
+   "d": 2.58,
+   "text": "that I have a very personal story and I"
+  },
+  {
+   "t": 1056.82,
+   "d": 2.25,
+   "text": "have a very personal experience and if I"
+  },
+  {
+   "t": 1059.07,
+   "d": 2.34,
+   "text": "am playing games I cut and I die"
+  },
+  {
+   "t": 1061.41,
+   "d": 3.09,
+   "text": "well that experience is erased and the"
+  },
+  {
+   "t": 1064.5,
+   "d": 1.8,
+   "text": "next time I go into it is a little bit"
+  },
+  {
+   "t": 1066.3,
+   "d": 4.89,
+   "text": "different and I'm very intrigued by your"
+  },
+  {
+   "t": 1071.19,
+   "d": 2.55,
+   "text": "notion of like the the experience of the"
+  },
+  {
+   "t": 1073.74,
+   "d": 3.63,
+   "text": "roguelike for you is is it system kind"
+  },
+  {
+   "t": 1077.37,
+   "d": 2.69,
+   "text": "of obscuring all of the like you know"
+  },
+  {
+   "t": 1080.06,
+   "d": 2.32,
+   "text": "the system generated the monster the"
+  },
+  {
+   "t": 1082.38,
+   "d": 1.23,
+   "text": "monster is not the point the point is"
+  },
+  {
+   "t": 1083.61,
+   "d": 2.76,
+   "text": "learning that system I don't know it's"
+  },
+  {
+   "t": 1086.37,
+   "d": 4.56,
+   "text": "very interesting so my question is"
+  },
+  {
+   "t": 1090.93,
+   "d": 1.14,
+   "text": "pretty straightforward"
+  },
+  {
+   "t": 1092.07,
+   "d": 1.56,
+   "text": "how can you tell the difference between"
+  },
+  {
+   "t": 1093.63,
+   "d": 3.27,
+   "text": "a form of randomness that's satisfying"
+  },
+  {
+   "t": 1096.9,
+   "d": 2.01,
+   "text": "because it does a lot of the things that"
+  },
+  {
+   "t": 1098.91,
+   "d": 2.31,
+   "text": "you're talking about versus a form of"
+  },
+  {
+   "t": 1101.22,
+   "d": 1.56,
+   "text": "randomness that's satisfying because"
+  },
+  {
+   "t": 1102.78,
+   "d": 4.83,
+   "text": "it's gambling and to kind of paint the"
+  },
+  {
+   "t": 1107.61,
+   "d": 2.58,
+   "text": "context there if I were say making a"
+  },
+  {
+   "t": 1110.19,
+   "d": 3.6,
+   "text": "card game where I eliminated all of the"
+  },
+  {
+   "t": 1113.79,
+   "d": 2.16,
+   "text": "forms of randomness in that card game"
+  },
+  {
+   "t": 1115.95,
+   "d": 2.31,
+   "text": "maybe I'm just limited to the you know"
+  },
+  {
+   "t": 1118.26,
+   "d": 2.94,
+   "text": "what you wrote on your list wouldn't I"
+  },
+  {
+   "t": 1121.2,
+   "d": 2.52,
+   "text": "be conceding that the most satisfying"
+  },
+  {
+   "t": 1123.72,
+   "d": 1.32,
+   "text": "form of randomness"
+  },
+  {
+   "t": 1125.04,
+   "d": 2.07,
+   "text": "is the unpacking of the card packs"
+  },
+  {
+   "t": 1127.11,
+   "d": 2.22,
+   "text": "because that's sort of the gambling of"
+  },
+  {
+   "t": 1129.33,
+   "d": 4.17,
+   "text": "it that's that's very possible it's"
+  },
+  {
+   "t": 1133.5,
+   "d": 6.11,
+   "text": "really interesting I yeah the the"
+  },
+  {
+   "t": 1139.61,
+   "d": 5.1,
+   "text": "gambling as in as a like you are taking"
+  },
+  {
+   "t": 1144.71,
+   "d": 3.04,
+   "text": "actions that are going to be variant and"
+  },
+  {
+   "t": 1147.75,
+   "d": 2.57,
+   "text": "have emotional highs and emotional lows"
+  },
+  {
+   "t": 1150.32,
+   "d": 5.8,
+   "text": "is really powerful I think the the key"
+  },
+  {
+   "t": 1156.12,
+   "d": 2.51,
+   "text": "that I would I would say is probably"
+  },
+  {
+   "t": 1158.63,
+   "d": 3.79,
+   "text": "does the player feel like they have any"
+  },
+  {
+   "t": 1162.42,
+   "d": 2.91,
+   "text": "agency and does the player feel like"
+  },
+  {
+   "t": 1165.33,
+   "d": 1.83,
+   "text": "they're still emotionally invested if"
+  },
+  {
+   "t": 1167.16,
+   "d": 3.51,
+   "text": "you take out those kind of that that"
+  },
+  {
+   "t": 1170.67,
+   "d": 2.61,
+   "text": "gambling element there's a there's a lot"
+  },
+  {
+   "t": 1173.28,
+   "d": 3.6,
+   "text": "of games that have really tried to"
+  },
+  {
+   "t": 1176.88,
+   "d": 2.79,
+   "text": "smooth out some of the that uncertainty"
+  },
+  {
+   "t": 1179.67,
+   "d": 2.16,
+   "text": "in that ability to have those like big"
+  },
+  {
+   "t": 1181.83,
+   "d": 2.67,
+   "text": "wins and the big losses and often like"
+  },
+  {
+   "t": 1184.5,
+   "d": 3.2,
+   "text": "it now becomes this very minut"
+  },
+  {
+   "t": 1187.7,
+   "d": 3.55,
+   "text": "optimization problem and that has a"
+  },
+  {
+   "t": 1191.25,
+   "d": 3.45,
+   "text": "certain appeal but it often like it'll"
+  },
+  {
+   "t": 1194.7,
+   "d": 2.88,
+   "text": "feel very flat as an experience and so I"
+  },
+  {
+   "t": 1197.58,
+   "d": 3.26,
+   "text": "think highs and lows are really powerful"
+  },
+  {
+   "t": 1200.84,
+   "d": 3.67,
+   "text": "you just you want to make sure the"
+  },
+  {
+   "t": 1204.51,
+   "d": 1.8,
+   "text": "player still has agency so it doesn't"
+  },
+  {
+   "t": 1206.31,
+   "d": 1.98,
+   "text": "feel like the game is playing them I"
+  },
+  {
+   "t": 1208.29,
+   "d": 1.8,
+   "text": "don't know if that really is satisfied"
+  },
+  {
+   "t": 1210.09,
+   "d": 5.25,
+   "text": "but that's roughly how I think of it so"
+  },
+  {
+   "t": 1215.34,
+   "d": 1.89,
+   "text": "it's more of a statement I just thought"
+  },
+  {
+   "t": 1217.23,
+   "d": 1.2,
+   "text": "it was really interesting"
+  },
+  {
+   "t": 1218.43,
+   "d": 2.97,
+   "text": "taking the roguelike design and removing"
+  },
+  {
+   "t": 1221.4,
+   "d": 1.56,
+   "text": "one of the elements of randomness say"
+  },
+  {
+   "t": 1222.96,
+   "d": 2.25,
+   "text": "the setup right you come up with"
+  },
+  {
+   "t": 1225.21,
+   "d": 1.74,
+   "text": "something very similar to a puzzle game"
+  },
+  {
+   "t": 1226.95,
+   "d": 2.82,
+   "text": "and if you do the opposite if you take"
+  },
+  {
+   "t": 1229.77,
+   "d": 2.46,
+   "text": "out if you have random setup but you"
+  },
+  {
+   "t": 1232.23,
+   "d": 4.35,
+   "text": "have a like a static sort of like I'll"
+  },
+  {
+   "t": 1236.58,
+   "d": 2.04,
+   "text": "do five damage you know to this monster"
+  },
+  {
+   "t": 1238.62,
+   "d": 1.86,
+   "text": "it also creates a puzzle game and I just"
+  },
+  {
+   "t": 1240.48,
+   "d": 0.93,
+   "text": "thought that was a really interesting"
+  },
+  {
+   "t": 1241.41,
+   "d": 2.76,
+   "text": "sort of thought process that's that's"
+  },
+  {
+   "t": 1244.17,
+   "d": 1.14,
+   "text": "very interesting I hadn't really thought"
+  },
+  {
+   "t": 1245.31,
+   "d": 3.59,
+   "text": "about it that way but yeah yeah"
+  },
+  {
+   "t": 1256.14,
+   "d": 3.79,
+   "text": "so of course I'm a dungeon master and I"
+  },
+  {
+   "t": 1259.93,
+   "d": 2.1,
+   "text": "tell my players that we're all telling a"
+  },
+  {
+   "t": 1262.03,
+   "d": 4.77,
+   "text": "story the four of us me the players the"
+  },
+  {
+   "t": 1266.8,
+   "d": 5.55,
+   "text": "rules and the dice and your pre versus"
+  },
+  {
+   "t": 1272.35,
+   "d": 3.56,
+   "text": "post randomness"
+  },
+  {
+   "t": 1278.61,
+   "d": 2.89,
+   "text": "we've lost your Mikey I can kind of hear"
+  },
+  {
+   "t": 1281.5,
+   "d": 2.18,
+   "text": "you"
+  },
+  {
+   "t": 1291.51,
+   "d": 4.31,
+   "text": "I can I can hear you okay yeah oh"
+  },
+  {
+   "t": 1328.79,
+   "d": 5.89,
+   "text": "definitely I I mean definitely so his"
+  },
+  {
+   "t": 1334.68,
+   "d": 2.88,
+   "text": "question was um I'm probably summarizing"
+  },
+  {
+   "t": 1337.56,
+   "d": 2.96,
+   "text": "a little bit but how can you kind of"
+  },
+  {
+   "t": 1340.52,
+   "d": 2.64,
+   "text": "reconcile or bring together that notion"
+  },
+  {
+   "t": 1343.16,
+   "d": 4.3,
+   "text": "that in a RPG the dice are kind of"
+  },
+  {
+   "t": 1347.46,
+   "d": 2.37,
+   "text": "serving that post randomness post"
+  },
+  {
+   "t": 1349.83,
+   "d": 4.26,
+   "text": "randomness role with the fact that they"
+  },
+  {
+   "t": 1354.09,
+   "d": 1.86,
+   "text": "also should kind of be in service of the"
+  },
+  {
+   "t": 1355.95,
+   "d": 2.79,
+   "text": "narrative and they should be influencing"
+  },
+  {
+   "t": 1358.74,
+   "d": 2.19,
+   "text": "the narrative and I actually think there"
+  },
+  {
+   "t": 1360.93,
+   "d": 4.11,
+   "text": "that's a great opportunity that when you"
+  },
+  {
+   "t": 1365.04,
+   "d": 2.07,
+   "text": "have those moments like from for me I"
+  },
+  {
+   "t": 1367.11,
+   "d": 3.72,
+   "text": "can think of a lot of times where a game"
+  },
+  {
+   "t": 1370.83,
+   "d": 3.18,
+   "text": "was about an RPG game a D&D game was"
+  },
+  {
+   "t": 1374.01,
+   "d": 1.95,
+   "text": "about the moment where someone rolled a"
+  },
+  {
+   "t": 1375.96,
+   "d": 4.2,
+   "text": "one and we had rules for critical"
+  },
+  {
+   "t": 1380.16,
+   "d": 1.8,
+   "text": "failures and the whole course of the"
+  },
+  {
+   "t": 1381.96,
+   "d": 2.85,
+   "text": "narrative was set off because of that"
+  },
+  {
+   "t": 1384.81,
+   "d": 3.57,
+   "text": "moment and I definitely see what you're"
+  },
+  {
+   "t": 1388.38,
+   "d": 3.77,
+   "text": "saying with in that case it kind of that"
+  },
+  {
+   "t": 1392.15,
+   "d": 4.15,
+   "text": "post decision randomness becomes kind of"
+  },
+  {
+   "t": 1396.3,
+   "d": 2.46,
+   "text": "the the setup randomness to the next"
+  },
+  {
+   "t": 1398.76,
+   "d": 1.5,
+   "text": "stage in the story in a certain sense"
+  },
+  {
+   "t": 1400.26,
+   "d": 2.55,
+   "text": "but I mean I think the critical thing is"
+  },
+  {
+   "t": 1402.81,
+   "d": 3.54,
+   "text": "it had really meaningful impact that you"
+  },
+  {
+   "t": 1406.35,
+   "d": 2.7,
+   "text": "rolled a certain thing and I know for me"
+  },
+  {
+   "t": 1409.05,
+   "d": 3.27,
+   "text": "in in thinking about like RPG systems"
+  },
+  {
+   "t": 1412.32,
+   "d": 2.13,
+   "text": "I want critical failures and I want"
+  },
+  {
+   "t": 1414.45,
+   "d": 1.68,
+   "text": "critical success almost more than"
+  },
+  {
+   "t": 1416.13,
+   "d": 1.65,
+   "text": "anything else that if you're gonna"
+  },
+  {
+   "t": 1417.78,
+   "d": 1.53,
+   "text": "flatten the experience and just like"
+  },
+  {
+   "t": 1419.31,
+   "d": 2.7,
+   "text": "okay I'm playing I'm rolling dice for"
+  },
+  {
+   "t": 1422.01,
+   "d": 1.67,
+   "text": "two hours in this combat and"
+  },
+  {
+   "t": 1423.68,
+   "d": 2.79,
+   "text": "everything like okay I slightly over"
+  },
+  {
+   "t": 1426.47,
+   "d": 1.77,
+   "text": "performed and I slightly underperformed"
+  },
+  {
+   "t": 1428.24,
+   "d": 2.16,
+   "text": "like that does not engage me as a player"
+  },
+  {
+   "t": 1430.4,
+   "d": 4.28,
+   "text": "or DM I really want those moments where"
+  },
+  {
+   "t": 1434.68,
+   "d": 3.04,
+   "text": "because of the randomness the story has"
+  },
+  {
+   "t": 1437.72,
+   "d": 1.5,
+   "text": "been taken in its own direction"
+  },
+  {
+   "t": 1439.22,
+   "d": 3.15,
+   "text": "and I really see that as being like the"
+  },
+  {
+   "t": 1442.37,
+   "d": 6.63,
+   "text": "the prime opportunity one more question"
+  },
+  {
+   "t": 1449.0,
+   "d": 2.25,
+   "text": "I'm happy to chat later about these"
+  },
+  {
+   "t": 1451.25,
+   "d": 3.21,
+   "text": "things howdy so I'm a board game"
+  },
+  {
+   "t": 1454.46,
+   "d": 2.49,
+   "text": "designer that's uh building games built"
+  },
+  {
+   "t": 1456.95,
+   "d": 3.45,
+   "text": "around randomness quite often and I keep"
+  },
+  {
+   "t": 1460.4,
+   "d": 2.67,
+   "text": "running into play tests where based on"
+  },
+  {
+   "t": 1463.07,
+   "d": 2.25,
+   "text": "the very first experience a player has"
+  },
+  {
+   "t": 1465.32,
+   "d": 2.04,
+   "text": "that seems to shape their idea of how"
+  },
+  {
+   "t": 1467.36,
+   "d": 1.62,
+   "text": "difficult the game is rather than"
+  },
+  {
+   "t": 1468.98,
+   "d": 1.74,
+   "text": "playing it three times or four times and"
+  },
+  {
+   "t": 1470.72,
+   "d": 1.83,
+   "text": "being like oh it is pretty balanced when"
+  },
+  {
+   "t": 1472.55,
+   "d": 2.46,
+   "text": "when do you listen to a player who says"
+  },
+  {
+   "t": 1475.01,
+   "d": 2.76,
+   "text": "oh I stepped on a snake too moves in"
+  },
+  {
+   "t": 1477.77,
+   "d": 2.34,
+   "text": "this game's too hard and when do you let"
+  },
+  {
+   "t": 1480.11,
+   "d": 1.74,
+   "text": "go you're not my audience or whatever"
+  },
+  {
+   "t": 1481.85,
+   "d": 1.77,
+   "text": "how do you pick your battles with that"
+  },
+  {
+   "t": 1483.62,
+   "d": 2.67,
+   "text": "oh I feel like this is almost a question"
+  },
+  {
+   "t": 1486.29,
+   "d": 5.58,
+   "text": "of like play test feedback and how do"
+  },
+  {
+   "t": 1491.87,
+   "d": 5.43,
+   "text": "you kind of get good information because"
+  },
+  {
+   "t": 1497.3,
+   "d": 2.52,
+   "text": "play testers so often will just be"
+  },
+  {
+   "t": 1499.82,
+   "d": 1.74,
+   "text": "focused on whether they won or lost and"
+  },
+  {
+   "t": 1501.56,
+   "d": 1.95,
+   "text": "whether they think something is strong"
+  },
+  {
+   "t": 1503.51,
+   "d": 7.17,
+   "text": "or weak and not satisfying I don't have"
+  },
+  {
+   "t": 1510.68,
+   "d": 2.82,
+   "text": "a great answer for you off-the-cuff I"
+  },
+  {
+   "t": 1513.5,
+   "d": 2.36,
+   "text": "think it's a really interesting problem"
+  },
+  {
+   "t": 1515.86,
+   "d": 2.86,
+   "text": "especially because in a digital setting"
+  },
+  {
+   "t": 1518.72,
+   "d": 2.07,
+   "text": "obviously you can curate that first"
+  },
+  {
+   "t": 1520.79,
+   "d": 3.81,
+   "text": "experience a little bit more I perhaps"
+  },
+  {
+   "t": 1524.6,
+   "d": 2.91,
+   "text": "would suggest thinking of like early"
+  },
+  {
+   "t": 1527.51,
+   "d": 4.01,
+   "text": "game content and how you can make sure"
+  },
+  {
+   "t": 1531.52,
+   "d": 3.1,
+   "text": "that you are not walking someone into a"
+  },
+  {
+   "t": 1534.62,
+   "d": 2.28,
+   "text": "really unsatisfying or really saddest"
+  },
+  {
+   "t": 1536.9,
+   "d": 3.69,
+   "text": "you know walk it making sure you don't"
+  },
+  {
+   "t": 1540.59,
+   "d": 3.6,
+   "text": "have like that point where you take your"
+  },
+  {
+   "t": 1544.19,
+   "d": 1.8,
+   "text": "first action and it feels like it"
+  },
+  {
+   "t": 1545.99,
+   "d": 2.55,
+   "text": "screwed you over or they understand the"
+  },
+  {
+   "t": 1548.54,
+   "d": 1.41,
+   "text": "full shape of the experience so if"
+  },
+  {
+   "t": 1549.95,
+   "d": 1.86,
+   "text": "you're thinking of like a betrayal a"
+  },
+  {
+   "t": 1551.81,
+   "d": 1.56,
+   "text": "house on the hill and someone slides"
+  },
+  {
+   "t": 1553.37,
+   "d": 2.31,
+   "text": "right into the basement and oh my god it"
+  },
+  {
+   "t": 1555.68,
+   "d": 1.57,
+   "text": "feels terrible"
+  },
+  {
+   "t": 1557.25,
+   "d": 1.92,
+   "text": "they understand that the game is going"
+  },
+  {
+   "t": 1559.17,
+   "d": 1.2,
+   "text": "to proceed from there and there's all"
+  },
+  {
+   "t": 1560.37,
+   "d": 2.46,
+   "text": "these other hooks that are gonna hang"
+  },
+  {
+   "t": 1562.83,
+   "d": 1.65,
+   "text": "off of that I don't know it's a really"
+  },
+  {
+   "t": 1564.48,
+   "d": 4.26,
+   "text": "interesting problem to have cool thank"
+  },
+  {
+   "t": 1568.74,
+   "d": 2.34,
+   "text": "you so much song"
+  },
+  {
+   "t": 1571.08,
+   "d": 3.26,
+   "text": "[Applause]"
+  }
+ ]
+}

@@ -1,0 +1,4600 @@
+{
+ "id": "nOGNdrjm8ek",
+ "url": "https://www.youtube.com/watch?v=nOGNdrjm8ek",
+ "title": "Mike Cook - The City, The Street, The Lens: Building and Appreciating Generative Systems",
+ "speaker": "Mike Cook",
+ "talk_title": "The City, The Street, The Lens: Building and Appreciating Generative Systems",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 1764,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "Cities are beautiful, complex systems that have been built over hundreds, often thousands, of years. Many hands go into shaping a city's character and heartbeat, and most of the work is done completely unconsciously. Street photography is the art of walking into this temporal soup and finding moments of beauty, sadness, surprise and chance, and figuring out how to capture them to share them with others. In this talk we'll take a brief walk through street photography, and talk a little bit about why I love it (and what other, better street photographers have said about it). We'll take some of these ideas and think of cities as procedural generators - and then procedural generators as cities - and talk about how that can help us think about generative and emergent systems in our games in different ways. It'll give you some new language and structure to talk about procedural generators, perhaps give you a different angle to view your own work from, and - I hope - give you the motivation to pick up a camera and head off into your nearest city, to sample its procedural delights.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6672,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 3.2,
+   "text": "Um, keeping it going. Next up, we have"
+  },
+  {
+   "t": 6.8,
+   "d": 2.64,
+   "text": "Mike Cook, who I I think is a very"
+  },
+  {
+   "t": 9.44,
+   "d": 2.08,
+   "text": "longtime friend of the conference and is"
+  },
+  {
+   "t": 11.52,
+   "d": 2.0,
+   "text": "a game designer, writer, and AI"
+  },
+  {
+   "t": 13.52,
+   "d": 2.32,
+   "text": "researcher based in London, UK. They"
+  },
+  {
+   "t": 15.84,
+   "d": 1.68,
+   "text": "work as a senior lecturer at King's"
+  },
+  {
+   "t": 17.52,
+   "d": 1.92,
+   "text": "College in London, where they research"
+  },
+  {
+   "t": 19.44,
+   "d": 2.0,
+   "text": "how technology shapes our creativity for"
+  },
+  {
+   "t": 21.44,
+   "d": 2.88,
+   "text": "better and worse. And beyond that, uh,"
+  },
+  {
+   "t": 24.32,
+   "d": 1.84,
+   "text": "makes weird games, digital art,"
+  },
+  {
+   "t": 26.16,
+   "d": 2.32,
+   "text": "performing as a live coder, founder of"
+  },
+  {
+   "t": 28.48,
+   "d": 1.6,
+   "text": "Procjam,"
+  },
+  {
+   "t": 30.08,
+   "d": 2.0,
+   "text": "um, all kinds of amazing things, and"
+  },
+  {
+   "t": 32.08,
+   "d": 2.96,
+   "text": "recently new book out. Um, next level,"
+  },
+  {
+   "t": 35.04,
+   "d": 2.32,
+   "text": "making games that make themselves. So,"
+  },
+  {
+   "t": 37.36,
+   "d": 2.16,
+   "text": "uh, yeah. Oh, and I do have to include"
+  },
+  {
+   "t": 39.52,
+   "d": 1.52,
+   "text": "that you're struggling to regain your"
+  },
+  {
+   "t": 41.04,
+   "d": 1.76,
+   "text": "position as a top 10 speedrunner in"
+  },
+  {
+   "t": 42.8,
+   "d": 2.96,
+   "text": "games about flipping coins. [laughter]"
+  },
+  {
+   "t": 45.76,
+   "d": 1.36,
+   "text": ">> Yeah, that's another talk, I guess."
+  },
+  {
+   "t": 47.12,
+   "d": 3.28,
+   "text": "Thanks so much, Alexa."
+  },
+  {
+   "t": 50.4,
+   "d": 2.24,
+   "text": ">> Thank you. Hello, everyone. Uh, thank"
+  },
+  {
+   "t": 52.64,
+   "d": 1.68,
+   "text": "you so much. It's so lovely to be back"
+  },
+  {
+   "t": 54.32,
+   "d": 2.08,
+   "text": "here. Um, I love the robotike"
+  },
+  {
+   "t": 56.4,
+   "d": 1.68,
+   "text": "celebration and I've I've got what I"
+  },
+  {
+   "t": 58.08,
+   "d": 2.0,
+   "text": "hope is a nice talk for you today. Uh,"
+  },
+  {
+   "t": 60.08,
+   "d": 1.92,
+   "text": "my name is Mike. I had a nice intro just"
+  },
+  {
+   "t": 62.0,
+   "d": 0.88,
+   "text": "then, but you know, there's going to be"
+  },
+  {
+   "t": 62.88,
+   "d": 1.92,
+   "text": "an intro slide coming up now. Uh, but"
+  },
+  {
+   "t": 64.8,
+   "d": 1.36,
+   "text": "I'm here to talk to you about the city,"
+  },
+  {
+   "t": 66.16,
+   "d": 1.44,
+   "text": "the street, and the lens. We're going to"
+  },
+  {
+   "t": 67.6,
+   "d": 1.68,
+   "text": "talk about procedural generation and"
+  },
+  {
+   "t": 69.28,
+   "d": 2.96,
+   "text": "cities. Um, so, as I mentioned in the"
+  },
+  {
+   "t": 72.24,
+   "d": 1.6,
+   "text": "bio that I keep forgetting people read"
+  },
+  {
+   "t": 73.84,
+   "d": 2.72,
+   "text": "out, um, I am an AI researcher, not that"
+  },
+  {
+   "t": 76.56,
+   "d": 2.16,
+   "text": "kind of AI. Um, and I'm interested in,"
+  },
+  {
+   "t": 78.72,
+   "d": 3.2,
+   "text": "uh, creativity in games. Um, and one of"
+  },
+  {
+   "t": 81.92,
+   "d": 2.64,
+   "text": "my specialisms is procedural generation."
+  },
+  {
+   "t": 84.56,
+   "d": 1.84,
+   "text": "I'm really interested in how we make it,"
+  },
+  {
+   "t": 86.4,
+   "d": 1.6,
+   "text": "how we talk about it, how we understand"
+  },
+  {
+   "t": 88.0,
+   "d": 1.92,
+   "text": "it. Um, and I like exploring that"
+  },
+  {
+   "t": 89.92,
+   "d": 1.6,
+   "text": "through through making stuff as well."
+  },
+  {
+   "t": 91.52,
+   "d": 1.28,
+   "text": "But when I'm not doing all of that"
+  },
+  {
+   "t": 92.8,
+   "d": 2.0,
+   "text": "stuff, um, I also like going and taking"
+  },
+  {
+   "t": 94.8,
+   "d": 2.24,
+   "text": "photos of cities at night. Um, and"
+  },
+  {
+   "t": 97.04,
+   "d": 1.2,
+   "text": "you're going to see some of those photos"
+  },
+  {
+   "t": 98.24,
+   "d": 1.68,
+   "text": "in this talk. I've also marked the ones"
+  },
+  {
+   "t": 99.92,
+   "d": 1.68,
+   "text": "that are not taken by me. Uh, just"
+  },
+  {
+   "t": 101.6,
+   "d": 2.48,
+   "text": "hopefully makes it clearer. Um, but"
+  },
+  {
+   "t": 104.08,
+   "d": 2.72,
+   "text": "yeah, so just to skip back a bit,"
+  },
+  {
+   "t": 106.8,
+   "d": 1.6,
+   "text": "procedural generation has been part of"
+  },
+  {
+   "t": 108.4,
+   "d": 1.68,
+   "text": "game development for a very long time."
+  },
+  {
+   "t": 110.08,
+   "d": 1.28,
+   "text": "It's been influencing the way we make"
+  },
+  {
+   "t": 111.36,
+   "d": 2.48,
+   "text": "games for at least 50 years. Um, and you"
+  },
+  {
+   "t": 113.84,
+   "d": 2.24,
+   "text": "know, arguably even further beyond that."
+  },
+  {
+   "t": 116.08,
+   "d": 2.24,
+   "text": "Um, but, uh, in a lot of ways, our"
+  },
+  {
+   "t": 118.32,
+   "d": 1.6,
+   "text": "thinking hasn't really changed that much"
+  },
+  {
+   "t": 119.92,
+   "d": 1.68,
+   "text": "about it, I feel like. Um, I feel like"
+  },
+  {
+   "t": 121.6,
+   "d": 1.52,
+   "text": "the way we talk about it, the way we use"
+  },
+  {
+   "t": 123.12,
+   "d": 1.6,
+   "text": "it, um, I think if we pulled someone"
+  },
+  {
+   "t": 124.72,
+   "d": 2.24,
+   "text": "from the early 80s into today and showed"
+  },
+  {
+   "t": 126.96,
+   "d": 1.04,
+   "text": "them what we're doing with it now,"
+  },
+  {
+   "t": 128.0,
+   "d": 1.36,
+   "text": "they'd be like, \"Yeah, okay, this pretty"
+  },
+  {
+   "t": 129.36,
+   "d": 2.0,
+   "text": "much makes sense.\" Um, and there's"
+  },
+  {
+   "t": 131.36,
+   "d": 2.24,
+   "text": "nothing wrong with that. Um, but, uh,"
+  },
+  {
+   "t": 133.6,
+   "d": 1.76,
+   "text": "you know, when I think about like how we"
+  },
+  {
+   "t": 135.36,
+   "d": 1.6,
+   "text": "how we talk about procedural generation,"
+  },
+  {
+   "t": 136.96,
+   "d": 1.52,
+   "text": "I think about these kinds of things. I"
+  },
+  {
+   "t": 138.48,
+   "d": 2.16,
+   "text": "think about like a little sampler from a"
+  },
+  {
+   "t": 140.64,
+   "d": 1.92,
+   "text": "generator that I made or here's here's a"
+  },
+  {
+   "t": 142.56,
+   "d": 1.68,
+   "text": "bunch of stuff that it can make. Um,"
+  },
+  {
+   "t": 144.24,
+   "d": 2.32,
+   "text": "which I love. I'm a sucker for um I love"
+  },
+  {
+   "t": 146.56,
+   "d": 2.08,
+   "text": "seeing outputs from your generator on"
+  },
+  {
+   "t": 148.64,
+   "d": 2.0,
+   "text": "social media and stuff. Or maybe if we"
+  },
+  {
+   "t": 150.64,
+   "d": 1.44,
+   "text": "wanted to get a little bit deeper, we"
+  },
+  {
+   "t": 152.08,
+   "d": 1.92,
+   "text": "might do things like analysis, right? So"
+  },
+  {
+   "t": 154.0,
+   "d": 2.72,
+   "text": "we might grab some statistics or do some"
+  },
+  {
+   "t": 156.72,
+   "d": 2.08,
+   "text": "sampling. Um, you know, that's if you're"
+  },
+  {
+   "t": 158.8,
+   "d": 1.52,
+   "text": "lucky, you might get this famous"
+  },
+  {
+   "t": 160.32,
+   "d": 2.72,
+   "text": "expressive range histogram out again."
+  },
+  {
+   "t": 163.04,
+   "d": 1.84,
+   "text": "Um, and this is all good stuff. This is"
+  },
+  {
+   "t": 164.88,
+   "d": 2.56,
+   "text": "all really, really good. But um I'm"
+  },
+  {
+   "t": 167.44,
+   "d": 1.2,
+   "text": "wondering you know are there other ways"
+  },
+  {
+   "t": 168.64,
+   "d": 1.6,
+   "text": "of thinking about this stuff? So in the"
+  },
+  {
+   "t": 170.24,
+   "d": 3.04,
+   "text": "grand tradition of slightly tortured or"
+  },
+  {
+   "t": 173.28,
+   "d": 2.24,
+   "text": "extended metaphors or comparisons or"
+  },
+  {
+   "t": 175.52,
+   "d": 2.88,
+   "text": "analogies at the roglike celebration. Um"
+  },
+  {
+   "t": 178.4,
+   "d": 2.72,
+   "text": "I humbly present to you all today uh a"
+  },
+  {
+   "t": 181.12,
+   "d": 2.96,
+   "text": "new one probably the the biggest stretch"
+  },
+  {
+   "t": 184.08,
+   "d": 2.88,
+   "text": "of them all but bear with me um which is"
+  },
+  {
+   "t": 186.96,
+   "d": 1.6,
+   "text": "uh street photography. So, I want to"
+  },
+  {
+   "t": 188.56,
+   "d": 1.68,
+   "text": "talk to you today about street"
+  },
+  {
+   "t": 190.24,
+   "d": 1.6,
+   "text": "photography, about what it means to be a"
+  },
+  {
+   "t": 191.84,
+   "d": 1.28,
+   "text": "street photographer, and then I"
+  },
+  {
+   "t": 193.12,
+   "d": 1.36,
+   "text": "hopefully want to tie that back to"
+  },
+  {
+   "t": 194.48,
+   "d": 2.64,
+   "text": "procedural generation. Um, and you know,"
+  },
+  {
+   "t": 197.12,
+   "d": 2.0,
+   "text": "this isn't a talk with with takeaways"
+  },
+  {
+   "t": 199.12,
+   "d": 2.48,
+   "text": "exactly. Um, but I have tried to leave"
+  },
+  {
+   "t": 201.6,
+   "d": 1.84,
+   "text": "you with three sort of three things you"
+  },
+  {
+   "t": 203.44,
+   "d": 1.2,
+   "text": "can think about and maybe three"
+  },
+  {
+   "t": 204.64,
+   "d": 2.24,
+   "text": "practical things you can do um to"
+  },
+  {
+   "t": 206.88,
+   "d": 1.84,
+   "text": "explore procedural generators in your"
+  },
+  {
+   "t": 208.72,
+   "d": 2.0,
+   "text": "games and in other people's games. So,"
+  },
+  {
+   "t": 210.72,
+   "d": 1.44,
+   "text": "um we'll see we'll see how we get on,"
+  },
+  {
+   "t": 212.16,
+   "d": 2.32,
+   "text": "right? But let's start with uh this"
+  },
+  {
+   "t": 214.48,
+   "d": 1.36,
+   "text": "question. How do you take a photograph"
+  },
+  {
+   "t": 215.84,
+   "d": 3.44,
+   "text": "of a city? So, uh, if you live in London"
+  },
+  {
+   "t": 219.28,
+   "d": 1.44,
+   "text": "like I do, where I'm giving this talk"
+  },
+  {
+   "t": 220.72,
+   "d": 2.0,
+   "text": "from right now, do you take a photograph"
+  },
+  {
+   "t": 222.72,
+   "d": 2.08,
+   "text": "of London, uh, like this? This is from"
+  },
+  {
+   "t": 224.8,
+   "d": 2.64,
+   "text": "National Geographic. Um, or do you take"
+  },
+  {
+   "t": 227.44,
+   "d": 2.8,
+   "text": "a photo like this? This is by Liam Wong,"
+  },
+  {
+   "t": 230.24,
+   "d": 1.6,
+   "text": "who is a street photographer, um, and"
+  },
+  {
+   "t": 231.84,
+   "d": 2.32,
+   "text": "also a game developer. Um, we'll be"
+  },
+  {
+   "t": 234.16,
+   "d": 2.24,
+   "text": "seeing more of Liam in a bit. If you"
+  },
+  {
+   "t": 236.4,
+   "d": 1.44,
+   "text": "wanted to take a photo of New York, do"
+  },
+  {
+   "t": 237.84,
+   "d": 1.92,
+   "text": "you take a photo that looks like this?"
+  },
+  {
+   "t": 239.76,
+   "d": 1.92,
+   "text": "This is another street, another stock"
+  },
+  {
+   "t": 241.68,
+   "d": 2.32,
+   "text": "photograph. Or do you take a photo that"
+  },
+  {
+   "t": 244.0,
+   "d": 2.16,
+   "text": "looks like this? This is by Saul Lighter"
+  },
+  {
+   "t": 246.16,
+   "d": 3.6,
+   "text": "uh in the late in the later 1950s."
+  },
+  {
+   "t": 249.76,
+   "d": 1.68,
+   "text": "If you want to take a photo of Tokyo, do"
+  },
+  {
+   "t": 251.44,
+   "d": 2.32,
+   "text": "you take a photo that looks like this?"
+  },
+  {
+   "t": 253.76,
+   "d": 1.92,
+   "text": "This is the Shibuya Scramble, I think,"
+  },
+  {
+   "t": 255.68,
+   "d": 2.72,
+   "text": "uh via Wikipedia. Or do you take a photo"
+  },
+  {
+   "t": 258.4,
+   "d": 2.56,
+   "text": "that looks like this? This is by"
+  },
+  {
+   "t": 260.96,
+   "d": 1.44,
+   "text": "Japanese street photographer Daido"
+  },
+  {
+   "t": 262.4,
+   "d": 1.84,
+   "text": "Moryama. And I like this photo because"
+  },
+  {
+   "t": 264.24,
+   "d": 1.76,
+   "text": "it's not what I think about when I think"
+  },
+  {
+   "t": 266.0,
+   "d": 1.44,
+   "text": "about Tokyo. It's a very different kind"
+  },
+  {
+   "t": 267.44,
+   "d": 1.92,
+   "text": "of Tokyo, right?"
+  },
+  {
+   "t": 269.36,
+   "d": 1.28,
+   "text": "So, I've been really interested in"
+  },
+  {
+   "t": 270.64,
+   "d": 2.0,
+   "text": "street photography since I was sort of"
+  },
+  {
+   "t": 272.64,
+   "d": 3.2,
+   "text": "17 or 18, so about 20 years ago now. Um,"
+  },
+  {
+   "t": 275.84,
+   "d": 2.24,
+   "text": "and I took photos of the seaside town I"
+  },
+  {
+   "t": 278.08,
+   "d": 2.64,
+   "text": "grew up in and I moved to London and it"
+  },
+  {
+   "t": 280.72,
+   "d": 1.36,
+   "text": "was still a big part of my life. Then"
+  },
+  {
+   "t": 282.08,
+   "d": 1.84,
+   "text": "there was like this 10-year gap where we"
+  },
+  {
+   "t": 283.92,
+   "d": 1.6,
+   "text": "don't talk about the gap. Um, and then a"
+  },
+  {
+   "t": 285.52,
+   "d": 1.36,
+   "text": "few years later I rediscovered my love"
+  },
+  {
+   "t": 286.88,
+   "d": 2.16,
+   "text": "of it again. Um, and it really is a very"
+  },
+  {
+   "t": 289.04,
+   "d": 1.68,
+   "text": "special part of like how I relate to"
+  },
+  {
+   "t": 290.72,
+   "d": 2.24,
+   "text": "cities and to people. Um, and it's made"
+  },
+  {
+   "t": 292.96,
+   "d": 1.44,
+   "text": "me fall in love with London again, which"
+  },
+  {
+   "t": 294.4,
+   "d": 2.64,
+   "text": "has been really lovely. So, how do you"
+  },
+  {
+   "t": 297.04,
+   "d": 2.08,
+   "text": "take a photograph of a city? Well, we've"
+  },
+  {
+   "t": 299.12,
+   "d": 1.28,
+   "text": "already looked at different ways. And"
+  },
+  {
+   "t": 300.4,
+   "d": 1.36,
+   "text": "and it's not that one was right and one"
+  },
+  {
+   "t": 301.76,
+   "d": 1.44,
+   "text": "was wrong. They're actually both great"
+  },
+  {
+   "t": 303.2,
+   "d": 2.16,
+   "text": "ways to take photographs of cities. Um,"
+  },
+  {
+   "t": 305.36,
+   "d": 1.36,
+   "text": "but the obvious answer to this question"
+  },
+  {
+   "t": 306.72,
+   "d": 1.68,
+   "text": "is that you can't you can't take a photo"
+  },
+  {
+   "t": 308.4,
+   "d": 2.4,
+   "text": "of a city. This is a a zoomed out map of"
+  },
+  {
+   "t": 310.8,
+   "d": 2.88,
+   "text": "London. Um, and this yellow dotted"
+  },
+  {
+   "t": 313.68,
+   "d": 1.6,
+   "text": "orange box in the middle, if you can see"
+  },
+  {
+   "t": 315.28,
+   "d": 2.4,
+   "text": "it, um, is uh, every almost every photo"
+  },
+  {
+   "t": 317.68,
+   "d": 1.52,
+   "text": "I've taken of London has been taken"
+  },
+  {
+   "t": 319.2,
+   "d": 2.8,
+   "text": "inside that box. Um, and you can see"
+  },
+  {
+   "t": 322.0,
+   "d": 1.92,
+   "text": "this is this is not anywhere near all of"
+  },
+  {
+   "t": 323.92,
+   "d": 1.68,
+   "text": "London. I've never even been to Barnett"
+  },
+  {
+   "t": 325.6,
+   "d": 2.32,
+   "text": "or Having um a lot of the places on this"
+  },
+  {
+   "t": 327.92,
+   "d": 1.92,
+   "text": "map. And even if I had been there, it's"
+  },
+  {
+   "t": 329.84,
+   "d": 1.44,
+   "text": "not possible to include the whole of"
+  },
+  {
+   "t": 331.28,
+   "d": 2.0,
+   "text": "London in a single photo, right? Cities"
+  },
+  {
+   "t": 333.28,
+   "d": 2.72,
+   "text": "are big. But what we can do is walk"
+  },
+  {
+   "t": 336.0,
+   "d": 2.08,
+   "text": "around a city and kind of reflect on how"
+  },
+  {
+   "t": 338.08,
+   "d": 1.84,
+   "text": "it makes us feel and maybe reflect on"
+  },
+  {
+   "t": 339.92,
+   "d": 1.76,
+   "text": "how different parts of the city makes us"
+  },
+  {
+   "t": 341.68,
+   "d": 1.44,
+   "text": "feel, what our relationship with the"
+  },
+  {
+   "t": 343.12,
+   "d": 2.24,
+   "text": "city is. Um and that's what I think"
+  },
+  {
+   "t": 345.36,
+   "d": 1.52,
+   "text": "anyone that lives in a city does"
+  },
+  {
+   "t": 346.88,
+   "d": 1.76,
+   "text": "naturally. Um but it's especially what"
+  },
+  {
+   "t": 348.64,
+   "d": 1.04,
+   "text": "you do when you're trying to take a"
+  },
+  {
+   "t": 349.68,
+   "d": 2.72,
+   "text": "photo of that city. Um, and then when"
+  },
+  {
+   "t": 352.4,
+   "d": 1.68,
+   "text": "we're walking around with our camera in"
+  },
+  {
+   "t": 354.08,
+   "d": 2.56,
+   "text": "our hands, we're trying to find a way to"
+  },
+  {
+   "t": 356.64,
+   "d": 1.6,
+   "text": "express those feelings that we have"
+  },
+  {
+   "t": 358.24,
+   "d": 2.88,
+   "text": "about the city in a snapshot. This is uh"
+  },
+  {
+   "t": 361.12,
+   "d": 2.32,
+   "text": "Liam Wong's kind of first big street"
+  },
+  {
+   "t": 363.44,
+   "d": 2.72,
+   "text": "photography uh photo that he took. Um,"
+  },
+  {
+   "t": 366.16,
+   "d": 1.52,
+   "text": "and the thing about this photo is that"
+  },
+  {
+   "t": 367.68,
+   "d": 1.36,
+   "text": "it doesn't just tell us something about"
+  },
+  {
+   "t": 369.04,
+   "d": 1.76,
+   "text": "Tokyo or about how Liam feels about"
+  },
+  {
+   "t": 370.8,
+   "d": 1.84,
+   "text": "Tokyo, but it also tells us something"
+  },
+  {
+   "t": 372.64,
+   "d": 1.84,
+   "text": "about cities in general um, and people"
+  },
+  {
+   "t": 374.48,
+   "d": 1.52,
+   "text": "in general. So, it doesn't even have to"
+  },
+  {
+   "t": 376.0,
+   "d": 1.6,
+   "text": "be specific to the one place that we're"
+  },
+  {
+   "t": 377.6,
+   "d": 2.08,
+   "text": "in. it speaks to something broader and"
+  },
+  {
+   "t": 379.68,
+   "d": 2.56,
+   "text": "bigger, right? And in some ways, I I"
+  },
+  {
+   "t": 382.24,
+   "d": 1.44,
+   "text": "think when I was writing this talk, I"
+  },
+  {
+   "t": 383.68,
+   "d": 1.44,
+   "text": "was thinking about, oh, this kind of"
+  },
+  {
+   "t": 385.12,
+   "d": 2.4,
+   "text": "makes me think about like kind of from"
+  },
+  {
+   "t": 387.52,
+   "d": 1.76,
+   "text": "software style storytelling. Obviously,"
+  },
+  {
+   "t": 389.28,
+   "d": 1.6,
+   "text": "they did not invent this, but you know,"
+  },
+  {
+   "t": 390.88,
+   "d": 1.84,
+   "text": "bear with me. This idea that you have"
+  },
+  {
+   "t": 392.72,
+   "d": 2.0,
+   "text": "this partial description of an item or"
+  },
+  {
+   "t": 394.72,
+   "d": 2.64,
+   "text": "or an object or a place or a person, and"
+  },
+  {
+   "t": 397.36,
+   "d": 1.68,
+   "text": "there's all of these trails that come"
+  },
+  {
+   "t": 399.04,
+   "d": 1.28,
+   "text": "off it. There's all of these things that"
+  },
+  {
+   "t": 400.32,
+   "d": 1.76,
+   "text": "are that are not being said, but it's"
+  },
+  {
+   "t": 402.08,
+   "d": 2.0,
+   "text": "telling you something about the city or"
+  },
+  {
+   "t": 404.08,
+   "d": 2.4,
+   "text": "the society or the world as a whole. And"
+  },
+  {
+   "t": 406.48,
+   "d": 1.44,
+   "text": "just like there are things cropped off"
+  },
+  {
+   "t": 407.92,
+   "d": 2.32,
+   "text": "at the edge of this photo, um there are"
+  },
+  {
+   "t": 410.24,
+   "d": 1.52,
+   "text": "things that we can see exist through"
+  },
+  {
+   "t": 411.76,
+   "d": 1.44,
+   "text": "this description, but that are cropped"
+  },
+  {
+   "t": 413.2,
+   "d": 1.52,
+   "text": "off from us seeing the whole of it."
+  },
+  {
+   "t": 414.72,
+   "d": 2.96,
+   "text": "Right? Um and you know, maybe that's a a"
+  },
+  {
+   "t": 417.68,
+   "d": 1.84,
+   "text": "bit of a stretch, but um that's"
+  },
+  {
+   "t": 419.52,
+   "d": 1.28,
+   "text": "something that I think is really"
+  },
+  {
+   "t": 420.8,
+   "d": 1.2,
+   "text": "interesting about a good street"
+  },
+  {
+   "t": 422.0,
+   "d": 2.48,
+   "text": "photograph now. Obviously to take a"
+  },
+  {
+   "t": 424.48,
+   "d": 1.2,
+   "text": "street photograph, we need to be"
+  },
+  {
+   "t": 425.68,
+   "d": 1.76,
+   "text": "physically present in the city. We need"
+  },
+  {
+   "t": 427.44,
+   "d": 2.4,
+   "text": "to be on the streets on our feet with a"
+  },
+  {
+   "t": 429.84,
+   "d": 2.16,
+   "text": "camera pointing it in a direction at a"
+  },
+  {
+   "t": 432.0,
+   "d": 1.6,
+   "text": "particular time, pressing the shutter"
+  },
+  {
+   "t": 433.6,
+   "d": 2.8,
+   "text": "release. Um, this photo here, um, I took"
+  },
+  {
+   "t": 436.4,
+   "d": 1.84,
+   "text": "from the other side of a four-lane road"
+  },
+  {
+   "t": 438.24,
+   "d": 1.92,
+   "text": "in London. And so, there really weren't"
+  },
+  {
+   "t": 440.16,
+   "d": 1.76,
+   "text": "many places I could take the photo from"
+  },
+  {
+   "t": 441.92,
+   "d": 1.52,
+   "text": "without being stood in the middle of the"
+  },
+  {
+   "t": 443.44,
+   "d": 1.92,
+   "text": "road, which I have done for some photos,"
+  },
+  {
+   "t": 445.36,
+   "d": 2.0,
+   "text": "but I didn't want to do here. And so,"
+  },
+  {
+   "t": 447.36,
+   "d": 1.68,
+   "text": "we're constantly being affected by the"
+  },
+  {
+   "t": 449.04,
+   "d": 1.76,
+   "text": "physicality of the city around us. It"
+  },
+  {
+   "t": 450.8,
+   "d": 2.24,
+   "text": "restricts us and directs us, and that's"
+  },
+  {
+   "t": 453.04,
+   "d": 1.92,
+   "text": "another interesting part of of fighting"
+  },
+  {
+   "t": 454.96,
+   "d": 3.12,
+   "text": "it. But photography isn't just about the"
+  },
+  {
+   "t": 458.08,
+   "d": 2.48,
+   "text": "physical aspects of it and the the kind"
+  },
+  {
+   "t": 460.56,
+   "d": 2.24,
+   "text": "of raw clicking and technology and stuff"
+  },
+  {
+   "t": 462.8,
+   "d": 1.92,
+   "text": "like that. Um, there's a lot more going"
+  },
+  {
+   "t": 464.72,
+   "d": 2.48,
+   "text": "on as well and lots of different people"
+  },
+  {
+   "t": 467.2,
+   "d": 1.6,
+   "text": "have tried to express what what street"
+  },
+  {
+   "t": 468.8,
+   "d": 1.84,
+   "text": "photography means to them. I like this"
+  },
+  {
+   "t": 470.64,
+   "d": 1.76,
+   "text": "quote from Daido Moryama who says that"
+  },
+  {
+   "t": 472.4,
+   "d": 1.6,
+   "text": "he's trying to photograph what people"
+  },
+  {
+   "t": 474.0,
+   "d": 2.72,
+   "text": "see but don't notice. And I think that's"
+  },
+  {
+   "t": 476.72,
+   "d": 2.08,
+   "text": "very very true for me or of anyone I"
+  },
+  {
+   "t": 478.8,
+   "d": 1.6,
+   "text": "think who has been in a city, not even"
+  },
+  {
+   "t": 480.4,
+   "d": 2.32,
+   "text": "lived in one. Um, this might sound wild"
+  },
+  {
+   "t": 482.72,
+   "d": 1.76,
+   "text": "to people that don't live in London, but"
+  },
+  {
+   "t": 484.48,
+   "d": 2.08,
+   "text": "every day I go to work, I walk past the"
+  },
+  {
+   "t": 486.56,
+   "d": 2.08,
+   "text": "Houses of Parliament and Big Ben and the"
+  },
+  {
+   "t": 488.64,
+   "d": 1.92,
+   "text": "London Eye, and I honestly don't even"
+  },
+  {
+   "t": 490.56,
+   "d": 2.4,
+   "text": "look up anymore. But it's not just about"
+  },
+  {
+   "t": 492.96,
+   "d": 1.84,
+   "text": "like architecture and and things that"
+  },
+  {
+   "t": 494.8,
+   "d": 1.6,
+   "text": "are permanent. Um, it's also about"
+  },
+  {
+   "t": 496.4,
+   "d": 1.36,
+   "text": "things that might just be happening for"
+  },
+  {
+   "t": 497.76,
+   "d": 1.52,
+   "text": "a fraction of a second that we don't"
+  },
+  {
+   "t": 499.28,
+   "d": 2.0,
+   "text": "really register either. And I think this"
+  },
+  {
+   "t": 501.28,
+   "d": 1.6,
+   "text": "is a great way of of thinking about"
+  },
+  {
+   "t": 502.88,
+   "d": 2.24,
+   "text": "street photography. But when I was"
+  },
+  {
+   "t": 505.12,
+   "d": 1.12,
+   "text": "giving this when I was writing this"
+  },
+  {
+   "t": 506.24,
+   "d": 2.4,
+   "text": "talk, I I wanted to kind of give you uh"
+  },
+  {
+   "t": 508.64,
+   "d": 2.64,
+   "text": "what what a rule that I use or a way I"
+  },
+  {
+   "t": 511.28,
+   "d": 1.6,
+   "text": "think about street photography, which is"
+  },
+  {
+   "t": 512.88,
+   "d": 1.68,
+   "text": "that I think every photograph needs to"
+  },
+  {
+   "t": 514.56,
+   "d": 2.4,
+   "text": "have at least two reasons to be taken."
+  },
+  {
+   "t": 516.96,
+   "d": 2.0,
+   "text": "So, this is a photograph that has um"
+  },
+  {
+   "t": 518.96,
+   "d": 1.76,
+   "text": "some kind of crunchy urban architecture"
+  },
+  {
+   "t": 520.72,
+   "d": 2.0,
+   "text": "in the foreground, but what makes it a"
+  },
+  {
+   "t": 522.72,
+   "d": 1.68,
+   "text": "street photograph for me is that there's"
+  },
+  {
+   "t": 524.4,
+   "d": 2.08,
+   "text": "this shadowy figure in the background"
+  },
+  {
+   "t": 526.48,
+   "d": 1.68,
+   "text": "that's drawing your attention, that's"
+  },
+  {
+   "t": 528.16,
+   "d": 2.16,
+   "text": "kind of setting off the entire image."
+  },
+  {
+   "t": 530.32,
+   "d": 2.96,
+   "text": "There's two things going on here, right?"
+  },
+  {
+   "t": 533.28,
+   "d": 1.28,
+   "text": "There's more than one reason for this"
+  },
+  {
+   "t": 534.56,
+   "d": 1.84,
+   "text": "photo. This is another photo I took,"
+  },
+  {
+   "t": 536.4,
+   "d": 1.92,
+   "text": "which is a nice urban landscape photo. I"
+  },
+  {
+   "t": 538.32,
+   "d": 2.72,
+   "text": "took this on film. Um, but it's just got"
+  },
+  {
+   "t": 541.04,
+   "d": 1.84,
+   "text": "one reason to be taken. So, I don't hate"
+  },
+  {
+   "t": 542.88,
+   "d": 1.84,
+   "text": "it as a photo, but it's not a street"
+  },
+  {
+   "t": 544.72,
+   "d": 1.6,
+   "text": "photograph to me. doesn't speak to me in"
+  },
+  {
+   "t": 546.32,
+   "d": 1.6,
+   "text": "the same way that these other photos do."
+  },
+  {
+   "t": 547.92,
+   "d": 2.48,
+   "text": "Right? So, for this talk, I wanted to"
+  },
+  {
+   "t": 550.4,
+   "d": 1.68,
+   "text": "try and deconstruct this process for"
+  },
+  {
+   "t": 552.08,
+   "d": 1.76,
+   "text": "you. So, I went out and tried to take a"
+  },
+  {
+   "t": 553.84,
+   "d": 1.84,
+   "text": "photo in reverse. I tried to like break"
+  },
+  {
+   "t": 555.68,
+   "d": 1.84,
+   "text": "a photo. So, this is a photo that just"
+  },
+  {
+   "t": 557.52,
+   "d": 1.92,
+   "text": "has one reason to be taken. Uh, this is"
+  },
+  {
+   "t": 559.44,
+   "d": 1.76,
+   "text": "the London South Bank and someone has"
+  },
+  {
+   "t": 561.2,
+   "d": 2.4,
+   "text": "put this like location pin floating huge"
+  },
+  {
+   "t": 563.6,
+   "d": 2.24,
+   "text": "and inflatable. I still never found out"
+  },
+  {
+   "t": 565.84,
+   "d": 2.16,
+   "text": "like why they did this, by the way. Um,"
+  },
+  {
+   "t": 568.0,
+   "d": 1.6,
+   "text": "but this is a photo that has one reason"
+  },
+  {
+   "t": 569.6,
+   "d": 1.68,
+   "text": "to be taken. The reason is that I found"
+  },
+  {
+   "t": 571.28,
+   "d": 1.52,
+   "text": "this weird thing that's floating in the"
+  },
+  {
+   "t": 572.8,
+   "d": 2.16,
+   "text": "air and shouldn't be there, right? But"
+  },
+  {
+   "t": 574.96,
+   "d": 2.0,
+   "text": "this photo has two reasons to be taken,"
+  },
+  {
+   "t": 576.96,
+   "d": 1.84,
+   "text": "right? These two tourists came and they"
+  },
+  {
+   "t": 578.8,
+   "d": 1.6,
+   "text": "looked at this map and they were trying"
+  },
+  {
+   "t": 580.4,
+   "d": 1.28,
+   "text": "to figure out where they were and what"
+  },
+  {
+   "t": 581.68,
+   "d": 1.44,
+   "text": "they could see. And obviously in the"
+  },
+  {
+   "t": 583.12,
+   "d": 1.52,
+   "text": "background there's like a huge location"
+  },
+  {
+   "t": 584.64,
+   "d": 2.16,
+   "text": "pin. So suddenly I've introduced these"
+  },
+  {
+   "t": 586.8,
+   "d": 2.24,
+   "text": "the second thing into the photo and we"
+  },
+  {
+   "t": 589.04,
+   "d": 1.6,
+   "text": "can now see how they're talking to each"
+  },
+  {
+   "t": 590.64,
+   "d": 1.6,
+   "text": "other or how they're bumping into each"
+  },
+  {
+   "t": 592.24,
+   "d": 1.84,
+   "text": "other and doing something in the frame."
+  },
+  {
+   "t": 594.08,
+   "d": 2.24,
+   "text": "Right? Um it was very funny to try and"
+  },
+  {
+   "t": 596.32,
+   "d": 2.16,
+   "text": "like untake a photo in this way and then"
+  },
+  {
+   "t": 598.48,
+   "d": 3.44,
+   "text": "and then take the real one. Um, so what"
+  },
+  {
+   "t": 601.92,
+   "d": 1.76,
+   "text": "I'm trying to say here is that street"
+  },
+  {
+   "t": 603.68,
+   "d": 1.76,
+   "text": "photography is primarily about"
+  },
+  {
+   "t": 605.44,
+   "d": 2.72,
+   "text": "collisions between things. Um, it is"
+  },
+  {
+   "t": 608.16,
+   "d": 1.52,
+   "text": "about witnessing these collisions,"
+  },
+  {
+   "t": 609.68,
+   "d": 1.52,
+   "text": "noticing them, figuring out a way to"
+  },
+  {
+   "t": 611.2,
+   "d": 3.12,
+   "text": "frame them and capture them. And what"
+  },
+  {
+   "t": 614.32,
+   "d": 1.44,
+   "text": "kinds of things are colliding? Well, in"
+  },
+  {
+   "t": 615.76,
+   "d": 2.16,
+   "text": "a city, it is just full of collisions."
+  },
+  {
+   "t": 617.92,
+   "d": 2.32,
+   "text": "Um, all the time there are systems and"
+  },
+  {
+   "t": 620.24,
+   "d": 2.16,
+   "text": "things being thrown into the city,"
+  },
+  {
+   "t": 622.4,
+   "d": 2.24,
+   "text": "finding their way through. Um, and we"
+  },
+  {
+   "t": 624.64,
+   "d": 1.92,
+   "text": "are constantly swimming in them. So"
+  },
+  {
+   "t": 626.56,
+   "d": 1.6,
+   "text": "that's people, the people that work in"
+  },
+  {
+   "t": 628.16,
+   "d": 1.44,
+   "text": "the city, that live in the city, that"
+  },
+  {
+   "t": 629.6,
+   "d": 2.32,
+   "text": "are visiting the city. It's traffic like"
+  },
+  {
+   "t": 631.92,
+   "d": 2.0,
+   "text": "cars, but it's also lorries and bikes"
+  },
+  {
+   "t": 633.92,
+   "d": 2.48,
+   "text": "and trains and trucks. It's buildings"
+  },
+  {
+   "t": 636.4,
+   "d": 1.76,
+   "text": "that are going up and being torn down"
+  },
+  {
+   "t": 638.16,
+   "d": 1.68,
+   "text": "again. It's nature that's growing and"
+  },
+  {
+   "t": 639.84,
+   "d": 1.92,
+   "text": "changing with the seasons. It's the"
+  },
+  {
+   "t": 641.76,
+   "d": 2.32,
+   "text": "weather. It's the laws that affect the"
+  },
+  {
+   "t": 644.08,
+   "d": 1.52,
+   "text": "shape of the city and what people do in"
+  },
+  {
+   "t": 645.6,
+   "d": 2.16,
+   "text": "it. Um, it's everything and it is always"
+  },
+  {
+   "t": 647.76,
+   "d": 3.44,
+   "text": "happening in front of you all the time."
+  },
+  {
+   "t": 651.2,
+   "d": 2.16,
+   "text": "So, I'm not going to tell you about this"
+  },
+  {
+   "t": 653.36,
+   "d": 1.44,
+   "text": "photo. This is a photo I took. I'm just"
+  },
+  {
+   "t": 654.8,
+   "d": 1.28,
+   "text": "going to talk for a few seconds while"
+  },
+  {
+   "t": 656.08,
+   "d": 2.32,
+   "text": "while you look at it. Um, but as street"
+  },
+  {
+   "t": 658.4,
+   "d": 1.44,
+   "text": "photographers, we're constantly"
+  },
+  {
+   "t": 659.84,
+   "d": 1.6,
+   "text": "immersed. I mean, anyone who's been in a"
+  },
+  {
+   "t": 661.44,
+   "d": 1.68,
+   "text": "city is constantly immersed in all of"
+  },
+  {
+   "t": 663.12,
+   "d": 1.6,
+   "text": "this stuff, all of these systems and"
+  },
+  {
+   "t": 664.72,
+   "d": 1.36,
+   "text": "things that are constantly being thrown"
+  },
+  {
+   "t": 666.08,
+   "d": 2.08,
+   "text": "at each other. And we're trying to pick"
+  },
+  {
+   "t": 668.16,
+   "d": 2.24,
+   "text": "something out of that mess and show it"
+  },
+  {
+   "t": 670.4,
+   "d": 1.92,
+   "text": "to someone. And I have this nice quote"
+  },
+  {
+   "t": 672.32,
+   "d": 2.0,
+   "text": "from Moryama again, which is that if an"
+  },
+  {
+   "t": 674.32,
+   "d": 2.0,
+   "text": "image is good, it's brought back to life"
+  },
+  {
+   "t": 676.32,
+   "d": 1.92,
+   "text": "by the feelings of the viewers. Now,"
+  },
+  {
+   "t": 678.24,
+   "d": 1.36,
+   "text": "Moryama didn't think that you could"
+  },
+  {
+   "t": 679.6,
+   "d": 1.6,
+   "text": "specifically intend to communicate"
+  },
+  {
+   "t": 681.2,
+   "d": 1.76,
+   "text": "something through a photograph. So, if I"
+  },
+  {
+   "t": 682.96,
+   "d": 1.44,
+   "text": "explained this photo to you, he would"
+  },
+  {
+   "t": 684.4,
+   "d": 1.28,
+   "text": "say it doesn't matter because other"
+  },
+  {
+   "t": 685.68,
+   "d": 0.96,
+   "text": "people are going to take different"
+  },
+  {
+   "t": 686.64,
+   "d": 1.84,
+   "text": "things from it. But the point is that"
+  },
+  {
+   "t": 688.48,
+   "d": 1.76,
+   "text": "we're pulling something out that that we"
+  },
+  {
+   "t": 690.24,
+   "d": 1.28,
+   "text": "feel there's something going on there"
+  },
+  {
+   "t": 691.52,
+   "d": 1.68,
+   "text": "and we're showing it to someone else and"
+  },
+  {
+   "t": 693.2,
+   "d": 3.2,
+   "text": "it to see if it resonates with them. So,"
+  },
+  {
+   "t": 696.4,
+   "d": 2.56,
+   "text": "what is it like to experience a city in"
+  },
+  {
+   "t": 698.96,
+   "d": 2.96,
+   "text": "this way? Well, to do this, I wanted to"
+  },
+  {
+   "t": 701.92,
+   "d": 1.36,
+   "text": "sort of talk you through this photo by"
+  },
+  {
+   "t": 703.28,
+   "d": 1.84,
+   "text": "Liam Wong. Uh, he took this in Tokyo."
+  },
+  {
+   "t": 705.12,
+   "d": 2.24,
+   "text": "It's called Night City. And I wanted to"
+  },
+  {
+   "t": 707.36,
+   "d": 1.28,
+   "text": "think about all the different components"
+  },
+  {
+   "t": 708.64,
+   "d": 1.76,
+   "text": "that are going on in this photo. There's"
+  },
+  {
+   "t": 710.4,
+   "d": 1.84,
+   "text": "the location. I think this was taken in"
+  },
+  {
+   "t": 712.24,
+   "d": 2.32,
+   "text": "Akihabara. I'm not sure. Um, which has"
+  },
+  {
+   "t": 714.56,
+   "d": 1.92,
+   "text": "its own history both in the context of"
+  },
+  {
+   "t": 716.48,
+   "d": 2.4,
+   "text": "Tokyo and the wider world. At this exact"
+  },
+  {
+   "t": 718.88,
+   "d": 1.68,
+   "text": "moment in time, it's changing a lot as"
+  },
+  {
+   "t": 720.56,
+   "d": 1.92,
+   "text": "history changes. There's the weather."
+  },
+  {
+   "t": 722.48,
+   "d": 1.52,
+   "text": "It's raining, but it's not raining too"
+  },
+  {
+   "t": 724.0,
+   "d": 1.6,
+   "text": "hard. It's clearly been raining for long"
+  },
+  {
+   "t": 725.6,
+   "d": 1.2,
+   "text": "enough that people have got their"
+  },
+  {
+   "t": 726.8,
+   "d": 2.4,
+   "text": "umbrellas out and the floor is wet. The"
+  },
+  {
+   "t": 729.2,
+   "d": 1.6,
+   "text": "advertising frames in the background are"
+  },
+  {
+   "t": 730.8,
+   "d": 2.0,
+   "text": "changing every few seconds. The crowd is"
+  },
+  {
+   "t": 732.8,
+   "d": 1.36,
+   "text": "constantly changing in shape and"
+  },
+  {
+   "t": 734.16,
+   "d": 1.92,
+   "text": "composition. The subject was probably"
+  },
+  {
+   "t": 736.08,
+   "d": 1.92,
+   "text": "there just for a few seconds. Obviously,"
+  },
+  {
+   "t": 738.0,
+   "d": 1.12,
+   "text": "other people would have walked through,"
+  },
+  {
+   "t": 739.12,
+   "d": 2.16,
+   "text": "but this person wouldn't. and some"
+  },
+  {
+   "t": 741.28,
+   "d": 1.28,
+   "text": "things that made this photo happened"
+  },
+  {
+   "t": 742.56,
+   "d": 1.76,
+   "text": "after it was taken, like the crop. This"
+  },
+  {
+   "t": 744.32,
+   "d": 2.24,
+   "text": "was actually a landscape photo. So,"
+  },
+  {
+   "t": 746.56,
+   "d": 1.44,
+   "text": "there's so many different things we"
+  },
+  {
+   "t": 748.0,
+   "d": 1.68,
+   "text": "could identify that came together to"
+  },
+  {
+   "t": 749.68,
+   "d": 1.92,
+   "text": "make this one photo possible. This one"
+  },
+  {
+   "t": 751.6,
+   "d": 1.6,
+   "text": "photo that will never ever be able to be"
+  },
+  {
+   "t": 753.2,
+   "d": 2.48,
+   "text": "taken again. And what's really exciting"
+  },
+  {
+   "t": 755.68,
+   "d": 2.0,
+   "text": "is if you look at the book that Liam"
+  },
+  {
+   "t": 757.68,
+   "d": 1.68,
+   "text": "published this in, uh there's a"
+  },
+  {
+   "t": 759.36,
+   "d": 1.36,
+   "text": "particular page at the back that I'm"
+  },
+  {
+   "t": 760.72,
+   "d": 1.2,
+   "text": "going to show you next. And if you've"
+  },
+  {
+   "t": 761.92,
+   "d": 2.24,
+   "text": "ever worked on a procedural generator,"
+  },
+  {
+   "t": 764.16,
+   "d": 2.24,
+   "text": "you're going to get a neuron activation"
+  },
+  {
+   "t": 766.4,
+   "d": 2.24,
+   "text": "because this is how Liam shows you the"
+  },
+  {
+   "t": 768.64,
+   "d": 1.84,
+   "text": "progress of this photo and how it was"
+  },
+  {
+   "t": 770.48,
+   "d": 2.08,
+   "text": "made. And what I see when I looked at"
+  },
+  {
+   "t": 772.56,
+   "d": 2.16,
+   "text": "this page was, oh my god, he was"
+  },
+  {
+   "t": 774.72,
+   "d": 2.48,
+   "text": "sampling a procedural generator because"
+  },
+  {
+   "t": 777.2,
+   "d": 1.76,
+   "text": "he sat there at this intersection in"
+  },
+  {
+   "t": 778.96,
+   "d": 2.0,
+   "text": "Tokyo one night and he kept taking"
+  },
+  {
+   "t": 780.96,
+   "d": 1.84,
+   "text": "photos and all of different parts of"
+  },
+  {
+   "t": 782.8,
+   "d": 1.44,
+   "text": "Tokyo were changing at a different"
+  },
+  {
+   "t": 784.24,
+   "d": 2.16,
+   "text": "speed. The rain and the advertising"
+  },
+  {
+   "t": 786.4,
+   "d": 1.84,
+   "text": "boards were changing very quickly. The"
+  },
+  {
+   "t": 788.24,
+   "d": 2.08,
+   "text": "crowds were changing slower. Tokyo"
+  },
+  {
+   "t": 790.32,
+   "d": 1.92,
+   "text": "itself is changing on the the scale of"
+  },
+  {
+   "t": 792.24,
+   "d": 2.8,
+   "text": "of years and decades. Um, and then after"
+  },
+  {
+   "t": 795.04,
+   "d": 1.84,
+   "text": "he got this sampling home, he then did"
+  },
+  {
+   "t": 796.88,
+   "d": 1.6,
+   "text": "more sampling and curation to figure out"
+  },
+  {
+   "t": 798.48,
+   "d": 1.6,
+   "text": "what photo he wanted to present to"
+  },
+  {
+   "t": 800.08,
+   "d": 1.76,
+   "text": "people from it. And I think that's"
+  },
+  {
+   "t": 801.84,
+   "d": 1.84,
+   "text": "really exciting."
+  },
+  {
+   "t": 803.68,
+   "d": 2.0,
+   "text": "So, let me round up that first part of"
+  },
+  {
+   "t": 805.68,
+   "d": 2.64,
+   "text": "the talk. Cities are too big to take"
+  },
+  {
+   "t": 808.32,
+   "d": 2.32,
+   "text": "photos of. They're too big to capture in"
+  },
+  {
+   "t": 810.64,
+   "d": 2.88,
+   "text": "one thing. But what we can do is stand"
+  },
+  {
+   "t": 813.52,
+   "d": 2.56,
+   "text": "in this torrent of people and things"
+  },
+  {
+   "t": 816.08,
+   "d": 2.08,
+   "text": "happening. all of this stuff that makes"
+  },
+  {
+   "t": 818.16,
+   "d": 2.56,
+   "text": "up a city and we can point our camera at"
+  },
+  {
+   "t": 820.72,
+   "d": 2.96,
+   "text": "some part of it and grab a bit of it out"
+  },
+  {
+   "t": 823.68,
+   "d": 2.0,
+   "text": "and try and use that to speak for what"
+  },
+  {
+   "t": 825.68,
+   "d": 3.12,
+   "text": "we see in the city as a whole."
+  },
+  {
+   "t": 828.8,
+   "d": 1.84,
+   "text": "Okay,"
+  },
+  {
+   "t": 830.64,
+   "d": 2.64,
+   "text": "let me talk to you about my this is kind"
+  },
+  {
+   "t": 833.28,
+   "d": 1.6,
+   "text": "of my mindset of street photography and"
+  },
+  {
+   "t": 834.88,
+   "d": 1.36,
+   "text": "how it's led me to this point. And over"
+  },
+  {
+   "t": 836.24,
+   "d": 1.6,
+   "text": "the last year, I realized I was thinking"
+  },
+  {
+   "t": 837.84,
+   "d": 1.52,
+   "text": "about street photography the same way I"
+  },
+  {
+   "t": 839.36,
+   "d": 1.52,
+   "text": "think about procedural generation. Or"
+  },
+  {
+   "t": 840.88,
+   "d": 1.6,
+   "text": "rather, I was thinking of cities as"
+  },
+  {
+   "t": 842.48,
+   "d": 2.24,
+   "text": "procedural generators. And so now what I"
+  },
+  {
+   "t": 844.72,
+   "d": 1.2,
+   "text": "want to do is kind of flip this into"
+  },
+  {
+   "t": 845.92,
+   "d": 1.36,
+   "text": "reverse. And I want to give you kind of"
+  },
+  {
+   "t": 847.28,
+   "d": 2.56,
+   "text": "three different scales or mindsets or"
+  },
+  {
+   "t": 849.84,
+   "d": 1.84,
+   "text": "ways of thinking about a game and its"
+  },
+  {
+   "t": 851.68,
+   "d": 2.08,
+   "text": "generators that hopefully might give you"
+  },
+  {
+   "t": 853.76,
+   "d": 1.84,
+   "text": "a different way of approaching this"
+  },
+  {
+   "t": 855.6,
+   "d": 2.8,
+   "text": "task. So the first is the city. So the"
+  },
+  {
+   "t": 858.4,
+   "d": 1.92,
+   "text": "city is the game as a whole. It's"
+  },
+  {
+   "t": 860.32,
+   "d": 1.52,
+   "text": "everything. It's all the generators, but"
+  },
+  {
+   "t": 861.84,
+   "d": 2.56,
+   "text": "it's also everything else. So just like"
+  },
+  {
+   "t": 864.4,
+   "d": 2.0,
+   "text": "cities, games are composed of lots of"
+  },
+  {
+   "t": 866.4,
+   "d": 1.76,
+   "text": "dynamic things, but really even things"
+  },
+  {
+   "t": 868.16,
+   "d": 1.44,
+   "text": "that we think are static are actually"
+  },
+  {
+   "t": 869.6,
+   "d": 2.08,
+   "text": "very dynamic. you know, code that we"
+  },
+  {
+   "t": 871.68,
+   "d": 1.76,
+   "text": "that we ship as static is still"
+  },
+  {
+   "t": 873.44,
+   "d": 1.44,
+   "text": "changing, you know, over the course of"
+  },
+  {
+   "t": 874.88,
+   "d": 1.44,
+   "text": "the whole game's development. So really,"
+  },
+  {
+   "t": 876.32,
+   "d": 1.84,
+   "text": "our game is constantly changing all the"
+  },
+  {
+   "t": 878.16,
+   "d": 2.32,
+   "text": "time. And the thing with cities, as with"
+  },
+  {
+   "t": 880.48,
+   "d": 1.68,
+   "text": "games, is that they're very hard to"
+  },
+  {
+   "t": 882.16,
+   "d": 1.76,
+   "text": "describe to someone. It's hard for me to"
+  },
+  {
+   "t": 883.92,
+   "d": 1.76,
+   "text": "tell you everything about London. I end"
+  },
+  {
+   "t": 885.68,
+   "d": 2.24,
+   "text": "up talking in cliches or summaries or"
+  },
+  {
+   "t": 887.92,
+   "d": 1.84,
+   "text": "concise descriptions. And it's"
+  },
+  {
+   "t": 889.76,
+   "d": 1.76,
+   "text": "particularly hard to talk about how"
+  },
+  {
+   "t": 891.52,
+   "d": 2.4,
+   "text": "procedural generators contribute to that"
+  },
+  {
+   "t": 893.92,
+   "d": 2.4,
+   "text": "overall idea of what a game is. And I"
+  },
+  {
+   "t": 896.32,
+   "d": 1.6,
+   "text": "went online looking for an example for"
+  },
+  {
+   "t": 897.92,
+   "d": 1.68,
+   "text": "this talk. And wouldn't you know it,"
+  },
+  {
+   "t": 899.6,
+   "d": 2.56,
+   "text": "this the top of Dwarf Fortress's store"
+  },
+  {
+   "t": 902.16,
+   "d": 1.52,
+   "text": "page literally just says it. It just"
+  },
+  {
+   "t": 903.68,
+   "d": 1.36,
+   "text": "says, \"It's really difficult to explain"
+  },
+  {
+   "t": 905.04,
+   "d": 1.68,
+   "text": "to you how good the generation is in"
+  },
+  {
+   "t": 906.72,
+   "d": 1.68,
+   "text": "this game.\" I couldn't believe it when I"
+  },
+  {
+   "t": 908.4,
+   "d": 2.48,
+   "text": "found this quote. Um, so it is really"
+  },
+  {
+   "t": 910.88,
+   "d": 2.56,
+   "text": "hard to talk about a big system as a"
+  },
+  {
+   "t": 913.44,
+   "d": 1.92,
+   "text": "whole or a big collection of systems."
+  },
+  {
+   "t": 915.36,
+   "d": 1.44,
+   "text": "And I thought it would be fun here to"
+  },
+  {
+   "t": 916.8,
+   "d": 2.08,
+   "text": "look at how people describe cities. So I"
+  },
+  {
+   "t": 918.88,
+   "d": 1.76,
+   "text": "went onto the New York tourist board and"
+  },
+  {
+   "t": 920.64,
+   "d": 1.52,
+   "text": "the way they describe the bur of New"
+  },
+  {
+   "t": 922.16,
+   "d": 2.8,
+   "text": "York is fine, but it's very generic. You"
+  },
+  {
+   "t": 924.96,
+   "d": 1.36,
+   "text": "know, every burough kind of sounds the"
+  },
+  {
+   "t": 926.32,
+   "d": 1.68,
+   "text": "same. It has restaurants and also these"
+  },
+  {
+   "t": 928.0,
+   "d": 2.16,
+   "text": "other things and a couple of landmarks."
+  },
+  {
+   "t": 930.16,
+   "d": 1.6,
+   "text": "Um, but if you look at how someone"
+  },
+  {
+   "t": 931.76,
+   "d": 2.4,
+   "text": "poetically describes a city, uh, this is"
+  },
+  {
+   "t": 934.16,
+   "d": 1.76,
+   "text": "from, I believe, You've Got Mail. Don't"
+  },
+  {
+   "t": 935.92,
+   "d": 1.76,
+   "text": "you love New York in the fall? It makes"
+  },
+  {
+   "t": 937.68,
+   "d": 2.48,
+   "text": "me want to buy school supplies. Now, I"
+  },
+  {
+   "t": 940.16,
+   "d": 1.76,
+   "text": "don't think this is a unique expression"
+  },
+  {
+   "t": 941.92,
+   "d": 1.6,
+   "text": "that could only be true of New York, but"
+  },
+  {
+   "t": 943.52,
+   "d": 1.84,
+   "text": "I think it's a really nice phrase and I"
+  },
+  {
+   "t": 945.36,
+   "d": 1.84,
+   "text": "think it tells you a lot about New York"
+  },
+  {
+   "t": 947.2,
+   "d": 2.08,
+   "text": "and also how this person feels about New"
+  },
+  {
+   "t": 949.28,
+   "d": 2.72,
+   "text": "York. It's a lot better than the tourist"
+  },
+  {
+   "t": 952.0,
+   "d": 2.64,
+   "text": "board description, right? these poetic"
+  },
+  {
+   "t": 954.64,
+   "d": 2.8,
+   "text": "ideas about what a city or a game is. So"
+  },
+  {
+   "t": 957.44,
+   "d": 1.92,
+   "text": "the city is about a concept. It's a"
+  },
+  {
+   "t": 959.36,
+   "d": 2.4,
+   "text": "dream of a game that that might exist"
+  },
+  {
+   "t": 961.76,
+   "d": 1.44,
+   "text": "that you might have made that you hope"
+  },
+  {
+   "t": 963.2,
+   "d": 1.92,
+   "text": "you've made. And it's also about"
+  },
+  {
+   "t": 965.12,
+   "d": 1.52,
+   "text": "thinking about how the generators"
+  },
+  {
+   "t": 966.64,
+   "d": 2.16,
+   "text": "contribute to that dream or that concept"
+  },
+  {
+   "t": 968.8,
+   "d": 1.92,
+   "text": "or that goal. Right? We can't describe"
+  },
+  {
+   "t": 970.72,
+   "d": 1.92,
+   "text": "the whole of Dwarf Fortress. But what I"
+  },
+  {
+   "t": 972.64,
+   "d": 1.68,
+   "text": "can do is think about what is it about"
+  },
+  {
+   "t": 974.32,
+   "d": 1.6,
+   "text": "the generators in that game that"
+  },
+  {
+   "t": 975.92,
+   "d": 2.4,
+   "text": "contribute towards the dream of it. And"
+  },
+  {
+   "t": 978.32,
+   "d": 1.28,
+   "text": "the little exercise I've got for you"
+  },
+  {
+   "t": 979.6,
+   "d": 1.2,
+   "text": "later that might be fun to do in the"
+  },
+  {
+   "t": 980.8,
+   "d": 1.36,
+   "text": "breakout room or even in chat while"
+  },
+  {
+   "t": 982.16,
+   "d": 1.92,
+   "text": "you're watching is if Dwarf Fortress and"
+  },
+  {
+   "t": 984.08,
+   "d": 1.6,
+   "text": "Caves of Cut are two cities, right? They"
+  },
+  {
+   "t": 985.68,
+   "d": 3.2,
+   "text": "are London and Paris, right? What is"
+  },
+  {
+   "t": 988.88,
+   "d": 2.32,
+   "text": "different and what is similar about how"
+  },
+  {
+   "t": 991.2,
+   "d": 1.84,
+   "text": "they deal with history? How they"
+  },
+  {
+   "t": 993.04,
+   "d": 2.16,
+   "text": "generate history, right? What do we say"
+  },
+  {
+   "t": 995.2,
+   "d": 1.44,
+   "text": "like characterizes the difference"
+  },
+  {
+   "t": 996.64,
+   "d": 2.24,
+   "text": "between these two places? Because London"
+  },
+  {
+   "t": 998.88,
+   "d": 1.44,
+   "text": "and Paris have more in common than"
+  },
+  {
+   "t": 1000.32,
+   "d": 1.68,
+   "text": "London and the town I grew up in because"
+  },
+  {
+   "t": 1002.0,
+   "d": 1.68,
+   "text": "they're both cities. But when we talk"
+  },
+  {
+   "t": 1003.68,
+   "d": 2.0,
+   "text": "about the two cities, we talk about them"
+  },
+  {
+   "t": 1005.68,
+   "d": 1.36,
+   "text": "in terms of what is different about"
+  },
+  {
+   "t": 1007.04,
+   "d": 1.52,
+   "text": "them. different about their character,"
+  },
+  {
+   "t": 1008.56,
+   "d": 2.24,
+   "text": "their soul, their culture. So when I"
+  },
+  {
+   "t": 1010.8,
+   "d": 1.44,
+   "text": "think about a generator of something"
+  },
+  {
+   "t": 1012.24,
+   "d": 2.0,
+   "text": "like history for example, what is"
+  },
+  {
+   "t": 1014.24,
+   "d": 1.6,
+   "text": "different about the the dream of how"
+  },
+  {
+   "t": 1015.84,
+   "d": 1.84,
+   "text": "these two games deal with that concept,"
+  },
+  {
+   "t": 1017.68,
+   "d": 2.56,
+   "text": "right? So thinking about it, thinking"
+  },
+  {
+   "t": 1020.24,
+   "d": 1.68,
+   "text": "about generators on the scale of a city"
+  },
+  {
+   "t": 1021.92,
+   "d": 1.6,
+   "text": "is thinking about how they contribute to"
+  },
+  {
+   "t": 1023.52,
+   "d": 1.44,
+   "text": "this bigger dream. How do they"
+  },
+  {
+   "t": 1024.96,
+   "d": 1.68,
+   "text": "contribute to the feeling of a game that"
+  },
+  {
+   "t": 1026.64,
+   "d": 3.2,
+   "text": "you want to convey or achieve?"
+  },
+  {
+   "t": 1029.84,
+   "d": 2.72,
+   "text": "Okay, so this is one scale. This is a"
+  },
+  {
+   "t": 1032.56,
+   "d": 1.68,
+   "text": "big big scale idea, but if we're street"
+  },
+  {
+   "t": 1034.24,
+   "d": 2.32,
+   "text": "photographers, we can't work at that"
+  },
+  {
+   "t": 1036.56,
+   "d": 1.44,
+   "text": "scale very often. We take it with us"
+  },
+  {
+   "t": 1038.0,
+   "d": 1.84,
+   "text": "when we walk it when we walk around, but"
+  },
+  {
+   "t": 1039.84,
+   "d": 1.68,
+   "text": "we we don't really think about London as"
+  },
+  {
+   "t": 1041.52,
+   "d": 1.6,
+   "text": "a whole when we're walking. We think"
+  },
+  {
+   "t": 1043.12,
+   "d": 2.08,
+   "text": "about the street that we're on, right?"
+  },
+  {
+   "t": 1045.2,
+   "d": 1.84,
+   "text": "So, the street represents like a moment"
+  },
+  {
+   "t": 1047.04,
+   "d": 2.32,
+   "text": "or a place in your game. Uh it could be"
+  },
+  {
+   "t": 1049.36,
+   "d": 2.08,
+   "text": "a level or a location, but it could be"
+  },
+  {
+   "t": 1051.44,
+   "d": 1.52,
+   "text": "fuzzier than that. I think you only you"
+  },
+  {
+   "t": 1052.96,
+   "d": 1.44,
+   "text": "know what what makes a street and where"
+  },
+  {
+   "t": 1054.4,
+   "d": 1.76,
+   "text": "a street ends in your game. I've chosen"
+  },
+  {
+   "t": 1056.16,
+   "d": 1.76,
+   "text": "like Joper here as a nice screenshot for"
+  },
+  {
+   "t": 1057.92,
+   "d": 1.92,
+   "text": "this which is a very classic I think"
+  },
+  {
+   "t": 1059.84,
+   "d": 2.88,
+   "text": "street in the city of Caves of Cud. Um"
+  },
+  {
+   "t": 1062.72,
+   "d": 2.32,
+   "text": "but the idea with a street is that you"
+  },
+  {
+   "t": 1065.04,
+   "d": 2.64,
+   "text": "are thinking about the unique set of"
+  },
+  {
+   "t": 1067.68,
+   "d": 1.92,
+   "text": "stuff that is here. So rather than"
+  },
+  {
+   "t": 1069.6,
+   "d": 1.44,
+   "text": "thinking about the feature list of your"
+  },
+  {
+   "t": 1071.04,
+   "d": 1.36,
+   "text": "whole game, what you're thinking about"
+  },
+  {
+   "t": 1072.4,
+   "d": 1.68,
+   "text": "is what can I see from where I am"
+  },
+  {
+   "t": 1074.08,
+   "d": 1.52,
+   "text": "standing right now. What is it about"
+  },
+  {
+   "t": 1075.6,
+   "d": 2.48,
+   "text": "this particular place in my game that is"
+  },
+  {
+   "t": 1078.08,
+   "d": 2.48,
+   "text": "unique? Um and that's going to be a"
+  },
+  {
+   "t": 1080.56,
+   "d": 1.36,
+   "text": "little bit different for every game and"
+  },
+  {
+   "t": 1081.92,
+   "d": 3.04,
+   "text": "for every location in that game. And the"
+  },
+  {
+   "t": 1084.96,
+   "d": 1.28,
+   "text": "way that I think about this is it's a"
+  },
+  {
+   "t": 1086.24,
+   "d": 0.96,
+   "text": "little bit like I don't know if any of"
+  },
+  {
+   "t": 1087.2,
+   "d": 1.28,
+   "text": "you did this when you were in school,"
+  },
+  {
+   "t": 1088.48,
+   "d": 1.6,
+   "text": "but like you know you're going out into"
+  },
+  {
+   "t": 1090.08,
+   "d": 1.68,
+   "text": "a field and you're dropping a little"
+  },
+  {
+   "t": 1091.76,
+   "d": 1.6,
+   "text": "square on the grass and you are"
+  },
+  {
+   "t": 1093.36,
+   "d": 1.44,
+   "text": "recording everything that's in that"
+  },
+  {
+   "t": 1094.8,
+   "d": 1.92,
+   "text": "square. So you're not sampling a"
+  },
+  {
+   "t": 1096.72,
+   "d": 1.76,
+   "text": "generator. You're sampling all of your"
+  },
+  {
+   "t": 1098.48,
+   "d": 1.68,
+   "text": "game. Like what can you see right now?"
+  },
+  {
+   "t": 1100.16,
+   "d": 1.36,
+   "text": "What are all of the systems that are"
+  },
+  {
+   "t": 1101.52,
+   "d": 1.44,
+   "text": "talking to each other? How much"
+  },
+  {
+   "t": 1102.96,
+   "d": 1.68,
+   "text": "generated content is here and where is"
+  },
+  {
+   "t": 1104.64,
+   "d": 1.92,
+   "text": "it coming from? And what you want to"
+  },
+  {
+   "t": 1106.56,
+   "d": 2.96,
+   "text": "know is about this particular location."
+  },
+  {
+   "t": 1109.52,
+   "d": 1.28,
+   "text": "And the reason why I think this is"
+  },
+  {
+   "t": 1110.8,
+   "d": 1.52,
+   "text": "important and I've got Spelunky on the"
+  },
+  {
+   "t": 1112.32,
+   "d": 2.08,
+   "text": "screen now as an example is that"
+  },
+  {
+   "t": 1114.4,
+   "d": 1.44,
+   "text": "different streets will give you"
+  },
+  {
+   "t": 1115.84,
+   "d": 1.36,
+   "text": "different perspectives on the same"
+  },
+  {
+   "t": 1117.2,
+   "d": 2.56,
+   "text": "thing. So I've been to and written a lot"
+  },
+  {
+   "t": 1119.76,
+   "d": 1.52,
+   "text": "of talks about Spelunky's level"
+  },
+  {
+   "t": 1121.28,
+   "d": 2.24,
+   "text": "generator and every single one of them"
+  },
+  {
+   "t": 1123.52,
+   "d": 2.48,
+   "text": "talks about it in the abstract. But"
+  },
+  {
+   "t": 1126.0,
+   "d": 2.0,
+   "text": "Spelunky's level generator on world one"
+  },
+  {
+   "t": 1128.0,
+   "d": 2.16,
+   "text": "level one is very different from world"
+  },
+  {
+   "t": 1130.16,
+   "d": 2.08,
+   "text": "four level one. And it's very different"
+  },
+  {
+   "t": 1132.24,
+   "d": 2.32,
+   "text": "even from world one level three or four"
+  },
+  {
+   "t": 1134.56,
+   "d": 2.32,
+   "text": "because new enemies get added, new room"
+  },
+  {
+   "t": 1136.88,
+   "d": 1.6,
+   "text": "templates and that means that the same"
+  },
+  {
+   "t": 1138.48,
+   "d": 1.92,
+   "text": "level generator is responding to"
+  },
+  {
+   "t": 1140.4,
+   "d": 1.6,
+   "text": "different things that are happening. It"
+  },
+  {
+   "t": 1142.0,
+   "d": 1.36,
+   "text": "means that different combinations are"
+  },
+  {
+   "t": 1143.36,
+   "d": 1.84,
+   "text": "possible. The algorithm is likely to"
+  },
+  {
+   "t": 1145.2,
+   "d": 2.4,
+   "text": "express itself in different ways. So"
+  },
+  {
+   "t": 1147.6,
+   "d": 1.52,
+   "text": "walking from street to street in"
+  },
+  {
+   "t": 1149.12,
+   "d": 1.84,
+   "text": "Spelunky means that we're appreciating"
+  },
+  {
+   "t": 1150.96,
+   "d": 2.08,
+   "text": "this level generator generator that"
+  },
+  {
+   "t": 1153.04,
+   "d": 1.84,
+   "text": "we've written in a lot of different ways"
+  },
+  {
+   "t": 1154.88,
+   "d": 1.68,
+   "text": "and we're seeing all of the different"
+  },
+  {
+   "t": 1156.56,
+   "d": 2.56,
+   "text": "ways in which the rest of the game"
+  },
+  {
+   "t": 1159.12,
+   "d": 1.76,
+   "text": "systems can collide with and make"
+  },
+  {
+   "t": 1160.88,
+   "d": 2.4,
+   "text": "unexpected things happen in it. So we"
+  },
+  {
+   "t": 1163.28,
+   "d": 1.44,
+   "text": "don't want to think about things in this"
+  },
+  {
+   "t": 1164.72,
+   "d": 1.76,
+   "text": "magical abstract version. We want to"
+  },
+  {
+   "t": 1166.48,
+   "d": 1.52,
+   "text": "think about it how it really is. We"
+  },
+  {
+   "t": 1168.0,
+   "d": 2.0,
+   "text": "don't want to think about London as this"
+  },
+  {
+   "t": 1170.0,
+   "d": 1.76,
+   "text": "perfect street that has all of the"
+  },
+  {
+   "t": 1171.76,
+   "d": 1.6,
+   "text": "cliches on it. We want to think about"
+  },
+  {
+   "t": 1173.36,
+   "d": 1.84,
+   "text": "what is this alleyway and why is it"
+  },
+  {
+   "t": 1175.2,
+   "d": 1.76,
+   "text": "different to main to the main shopping"
+  },
+  {
+   "t": 1176.96,
+   "d": 3.36,
+   "text": "street that it connects to. And the"
+  },
+  {
+   "t": 1180.32,
+   "d": 1.44,
+   "text": "practical element of this that I want to"
+  },
+  {
+   "t": 1181.76,
+   "d": 1.28,
+   "text": "leave with you that I think is a really"
+  },
+  {
+   "t": 1183.04,
+   "d": 1.6,
+   "text": "good way of getting at this is lately"
+  },
+  {
+   "t": 1184.64,
+   "d": 1.6,
+   "text": "I've been playing bleed map which is a"
+  },
+  {
+   "t": 1186.24,
+   "d": 2.16,
+   "text": "keepsake game by Florence Smith Nichols"
+  },
+  {
+   "t": 1188.4,
+   "d": 1.92,
+   "text": "where while you are playing a video game"
+  },
+  {
+   "t": 1190.32,
+   "d": 1.52,
+   "text": "you are also drawing a map of what"
+  },
+  {
+   "t": 1191.84,
+   "d": 1.68,
+   "text": "you're doing and annotating it based on"
+  },
+  {
+   "t": 1193.52,
+   "d": 2.24,
+   "text": "a few prompts. And what I found is that"
+  },
+  {
+   "t": 1195.76,
+   "d": 1.92,
+   "text": "this is an extremely good way both to be"
+  },
+  {
+   "t": 1197.68,
+   "d": 2.24,
+   "text": "mindful about my own play, but also to"
+  },
+  {
+   "t": 1199.92,
+   "d": 1.84,
+   "text": "notice what things I'm mapping and what"
+  },
+  {
+   "t": 1201.76,
+   "d": 1.52,
+   "text": "things I'm not. What like what things am"
+  },
+  {
+   "t": 1203.28,
+   "d": 1.6,
+   "text": "I paying attention to and what things do"
+  },
+  {
+   "t": 1204.88,
+   "d": 2.72,
+   "text": "I think are worth noting down? And I've"
+  },
+  {
+   "t": 1207.6,
+   "d": 1.44,
+   "text": "not done it on a game that I've made"
+  },
+  {
+   "t": 1209.04,
+   "d": 1.44,
+   "text": "yet, but I think that is a really"
+  },
+  {
+   "t": 1210.48,
+   "d": 1.92,
+   "text": "interesting idea of as you're playing"
+  },
+  {
+   "t": 1212.4,
+   "d": 1.52,
+   "text": "your game, mapping out what you're"
+  },
+  {
+   "t": 1213.92,
+   "d": 1.68,
+   "text": "seeing and what are you noticing, right?"
+  },
+  {
+   "t": 1215.6,
+   "d": 1.36,
+   "text": "Going back to that Morama quote, what"
+  },
+  {
+   "t": 1216.96,
+   "d": 1.36,
+   "text": "are you actually recording and taking"
+  },
+  {
+   "t": 1218.32,
+   "d": 2.32,
+   "text": "with you? Um, so that's kind of my my"
+  },
+  {
+   "t": 1220.64,
+   "d": 2.4,
+   "text": "practical recommendation for the street."
+  },
+  {
+   "t": 1223.04,
+   "d": 1.76,
+   "text": "So when we want to understand our"
+  },
+  {
+   "t": 1224.8,
+   "d": 2.72,
+   "text": "generators in context and when we want"
+  },
+  {
+   "t": 1227.52,
+   "d": 1.92,
+   "text": "to explore what's possible for them to"
+  },
+  {
+   "t": 1229.44,
+   "d": 2.0,
+   "text": "do in different situations, we're"
+  },
+  {
+   "t": 1231.44,
+   "d": 1.52,
+   "text": "thinking on the street level. We're"
+  },
+  {
+   "t": 1232.96,
+   "d": 2.32,
+   "text": "walking around and appreciating it on"
+  },
+  {
+   "t": 1235.28,
+   "d": 3.12,
+   "text": "the street. Okay, the lens. This is the"
+  },
+  {
+   "t": 1238.4,
+   "d": 3.68,
+   "text": "final phase. So the lens is our zoomedin"
+  },
+  {
+   "t": 1242.08,
+   "d": 2.24,
+   "text": "perspective on on one particular moment."
+  },
+  {
+   "t": 1244.32,
+   "d": 1.44,
+   "text": "And I say moment here, what I mean is"
+  },
+  {
+   "t": 1245.76,
+   "d": 1.68,
+   "text": "like it could be an object or a"
+  },
+  {
+   "t": 1247.44,
+   "d": 2.32,
+   "text": "character or maybe just a screenshot."
+  },
+  {
+   "t": 1249.76,
+   "d": 1.84,
+   "text": "Um, but the idea is that we're selecting"
+  },
+  {
+   "t": 1251.6,
+   "d": 1.44,
+   "text": "something much smaller than just a"
+  },
+  {
+   "t": 1253.04,
+   "d": 1.36,
+   "text": "street. We're actually selecting and"
+  },
+  {
+   "t": 1254.4,
+   "d": 2.72,
+   "text": "deciding to focus on something and the"
+  },
+  {
+   "t": 1257.12,
+   "d": 2.72,
+   "text": "lens has a focus and it also has a crop."
+  },
+  {
+   "t": 1259.84,
+   "d": 1.68,
+   "text": "So remember earlier we talked about from"
+  },
+  {
+   "t": 1261.52,
+   "d": 2.0,
+   "text": "software item descriptions. There are"
+  },
+  {
+   "t": 1263.52,
+   "d": 1.52,
+   "text": "things that are cut off the edge of the"
+  },
+  {
+   "t": 1265.04,
+   "d": 2.8,
+   "text": "frame and that's okay. So here we've got"
+  },
+  {
+   "t": 1267.84,
+   "d": 1.6,
+   "text": "um a description of a dwarf from dwarf"
+  },
+  {
+   "t": 1269.44,
+   "d": 2.56,
+   "text": "fortress. Um we can't see like the"
+  },
+  {
+   "t": 1272.0,
+   "d": 2.0,
+   "text": "fortress that this dwarf is in. We don't"
+  },
+  {
+   "t": 1274.0,
+   "d": 1.6,
+   "text": "know how well it's going or what year it"
+  },
+  {
+   "t": 1275.6,
+   "d": 1.84,
+   "text": "is, but we can intuitit some things from"
+  },
+  {
+   "t": 1277.44,
+   "d": 1.76,
+   "text": "the description. We can see how certain"
+  },
+  {
+   "t": 1279.2,
+   "d": 2.08,
+   "text": "generators have influenced the way that"
+  },
+  {
+   "t": 1281.28,
+   "d": 1.6,
+   "text": "this dwarf is currently being presented"
+  },
+  {
+   "t": 1282.88,
+   "d": 3.12,
+   "text": "to us. And so it allows us to cut out a"
+  },
+  {
+   "t": 1286.0,
+   "d": 1.76,
+   "text": "lot of stuff from our context and"
+  },
+  {
+   "t": 1287.76,
+   "d": 1.76,
+   "text": "instead look at just one object and"
+  },
+  {
+   "t": 1289.52,
+   "d": 1.76,
+   "text": "think about all of the ways different"
+  },
+  {
+   "t": 1291.28,
+   "d": 1.76,
+   "text": "generators have influenced this"
+  },
+  {
+   "t": 1293.04,
+   "d": 2.96,
+   "text": "particular thing to be how it is. And"
+  },
+  {
+   "t": 1296.0,
+   "d": 1.6,
+   "text": "one of the reasons why this is useful is"
+  },
+  {
+   "t": 1297.6,
+   "d": 2.08,
+   "text": "that it's a very human level view of"
+  },
+  {
+   "t": 1299.68,
+   "d": 1.68,
+   "text": "your procedural content generator"
+  },
+  {
+   "t": 1301.36,
+   "d": 2.08,
+   "text": "because this is what people tend to"
+  },
+  {
+   "t": 1303.44,
+   "d": 1.2,
+   "text": "share, right? They tend to share"
+  },
+  {
+   "t": 1304.64,
+   "d": 1.6,
+   "text": "screenshots. They tend to share short"
+  },
+  {
+   "t": 1306.24,
+   "d": 2.56,
+   "text": "clips. They tend to share a thing. So"
+  },
+  {
+   "t": 1308.8,
+   "d": 2.0,
+   "text": "when people share Minecraft seeds, a"
+  },
+  {
+   "t": 1310.8,
+   "d": 2.48,
+   "text": "seed in Minecraft describes a a world"
+  },
+  {
+   "t": 1313.28,
+   "d": 1.76,
+   "text": "that is larger than the surface area of"
+  },
+  {
+   "t": 1315.04,
+   "d": 2.16,
+   "text": "the Earth by a large margin. But the"
+  },
+  {
+   "t": 1317.2,
+   "d": 1.28,
+   "text": "reason they share the seed is that there"
+  },
+  {
+   "t": 1318.48,
+   "d": 1.28,
+   "text": "is normally a thing they want you to"
+  },
+  {
+   "t": 1319.76,
+   "d": 2.32,
+   "text": "see, and it's normally near spawn. So"
+  },
+  {
+   "t": 1322.08,
+   "d": 1.6,
+   "text": "they're sharing the seed, but the real"
+  },
+  {
+   "t": 1323.68,
+   "d": 1.2,
+   "text": "reason that they're sharing it is"
+  },
+  {
+   "t": 1324.88,
+   "d": 1.2,
+   "text": "because there's a very specific thing"
+  },
+  {
+   "t": 1326.08,
+   "d": 2.16,
+   "text": "they want you to see. So the lens is"
+  },
+  {
+   "t": 1328.24,
+   "d": 2.72,
+   "text": "about thinking like what is um like"
+  },
+  {
+   "t": 1330.96,
+   "d": 1.52,
+   "text": "thinking about things on a smaller scale"
+  },
+  {
+   "t": 1332.48,
+   "d": 1.84,
+   "text": "both in terms of how generators affect"
+  },
+  {
+   "t": 1334.32,
+   "d": 1.76,
+   "text": "them and what do people take away from"
+  },
+  {
+   "t": 1336.08,
+   "d": 3.12,
+   "text": "them. Um and you know the the reason why"
+  },
+  {
+   "t": 1339.2,
+   "d": 2.16,
+   "text": "I'm using this analogy is that yeah like"
+  },
+  {
+   "t": 1341.36,
+   "d": 1.36,
+   "text": "this is the scale that people share"
+  },
+  {
+   "t": 1342.72,
+   "d": 1.44,
+   "text": "things with others. It's the scale on"
+  },
+  {
+   "t": 1344.16,
+   "d": 1.84,
+   "text": "which people tell stories. The"
+  },
+  {
+   "t": 1346.0,
+   "d": 1.76,
+   "text": "generators in Dwarf Fortress create very"
+  },
+  {
+   "t": 1347.76,
+   "d": 2.08,
+   "text": "complex stories but when people come to"
+  },
+  {
+   "t": 1349.84,
+   "d": 1.68,
+   "text": "tell them they often tell them through a"
+  },
+  {
+   "t": 1351.52,
+   "d": 3.04,
+   "text": "very specific cropped out thing. uh even"
+  },
+  {
+   "t": 1354.56,
+   "d": 1.6,
+   "text": "if maybe the story grows from there,"
+  },
+  {
+   "t": 1356.16,
+   "d": 1.84,
+   "text": "there's always a starting point, right?"
+  },
+  {
+   "t": 1358.0,
+   "d": 1.84,
+   "text": "And I think this comes back to um this"
+  },
+  {
+   "t": 1359.84,
+   "d": 2.72,
+   "text": "Moryama idea of if an image is good, it"
+  },
+  {
+   "t": 1362.56,
+   "d": 1.6,
+   "text": "is brought back to life by the feelings"
+  },
+  {
+   "t": 1364.16,
+   "d": 2.72,
+   "text": "of the viewer. Um maybe if an image if a"
+  },
+  {
+   "t": 1366.88,
+   "d": 1.92,
+   "text": "screenshot is good, does it work? I"
+  },
+  {
+   "t": 1368.8,
+   "d": 2.08,
+   "text": "don't know. Um but I like this idea of"
+  },
+  {
+   "t": 1370.88,
+   "d": 2.0,
+   "text": "of cropping something out of your game"
+  },
+  {
+   "t": 1372.88,
+   "d": 2.08,
+   "text": "and asking yourself, what evidence can I"
+  },
+  {
+   "t": 1374.96,
+   "d": 1.68,
+   "text": "see of all of my generative systems"
+  },
+  {
+   "t": 1376.64,
+   "d": 1.92,
+   "text": "here? And what stories are they leading"
+  },
+  {
+   "t": 1378.56,
+   "d": 2.72,
+   "text": "to for the player from this thing?"
+  },
+  {
+   "t": 1381.28,
+   "d": 1.76,
+   "text": "And what I'm getting at here is that a"
+  },
+  {
+   "t": 1383.04,
+   "d": 2.32,
+   "text": "generator is best understood not through"
+  },
+  {
+   "t": 1385.36,
+   "d": 2.24,
+   "text": "what it generates, but through the way"
+  },
+  {
+   "t": 1387.6,
+   "d": 1.6,
+   "text": "what it generates collides with"
+  },
+  {
+   "t": 1389.2,
+   "d": 2.64,
+   "text": "everything else around it. Um, so we"
+  },
+  {
+   "t": 1391.84,
+   "d": 2.0,
+   "text": "want to understand what it's doing to"
+  },
+  {
+   "t": 1393.84,
+   "d": 1.52,
+   "text": "the stuff that we can see in the game."
+  },
+  {
+   "t": 1395.36,
+   "d": 1.44,
+   "text": "We don't necessarily just want to know"
+  },
+  {
+   "t": 1396.8,
+   "d": 2.72,
+   "text": "what it can create in isolation, right?"
+  },
+  {
+   "t": 1399.52,
+   "d": 1.44,
+   "text": "So when we want to record something,"
+  },
+  {
+   "t": 1400.96,
+   "d": 1.84,
+   "text": "when we want to analyze something maybe,"
+  },
+  {
+   "t": 1402.8,
+   "d": 1.76,
+   "text": "or when we want to strip away some of"
+  },
+  {
+   "t": 1404.56,
+   "d": 1.84,
+   "text": "the context of the city, we look down"
+  },
+  {
+   "t": 1406.4,
+   "d": 3.28,
+   "text": "our lens and we take a photo. Okay,"
+  },
+  {
+   "t": 1409.68,
+   "d": 2.4,
+   "text": "we're in the wrap-up. Um, so I started"
+  },
+  {
+   "t": 1412.08,
+   "d": 1.52,
+   "text": "by talking about the ways that we've"
+  },
+  {
+   "t": 1413.6,
+   "d": 1.76,
+   "text": "been using procedural generators. What"
+  },
+  {
+   "t": 1415.36,
+   "d": 2.0,
+   "text": "can this make? How is it distributed?"
+  },
+  {
+   "t": 1417.36,
+   "d": 1.52,
+   "text": "This is useful stuff. I'm not saying"
+  },
+  {
+   "t": 1418.88,
+   "d": 1.6,
+   "text": "this is this is not I use this every"
+  },
+  {
+   "t": 1420.48,
+   "d": 1.92,
+   "text": "day. Um, but what I also want to think"
+  },
+  {
+   "t": 1422.4,
+   "d": 1.52,
+   "text": "about is like what is the dream of this"
+  },
+  {
+   "t": 1423.92,
+   "d": 1.68,
+   "text": "game and how does the generator support"
+  },
+  {
+   "t": 1425.6,
+   "d": 2.32,
+   "text": "it? Uh, how does the context of my"
+  },
+  {
+   "t": 1427.92,
+   "d": 1.76,
+   "text": "generator change as I walk through the"
+  },
+  {
+   "t": 1429.68,
+   "d": 2.24,
+   "text": "streets of my game? And when I pull"
+  },
+  {
+   "t": 1431.92,
+   "d": 2.0,
+   "text": "something out of my game, like what"
+  },
+  {
+   "t": 1433.92,
+   "d": 1.68,
+   "text": "stories can I tell with it? And how have"
+  },
+  {
+   "t": 1435.6,
+   "d": 1.6,
+   "text": "all of these generators touched and"
+  },
+  {
+   "t": 1437.2,
+   "d": 1.84,
+   "text": "affected that?"
+  },
+  {
+   "t": 1439.04,
+   "d": 1.6,
+   "text": "And I wanted to to mention here that"
+  },
+  {
+   "t": 1440.64,
+   "d": 1.68,
+   "text": "after I'd written this talk, I I"
+  },
+  {
+   "t": 1442.32,
+   "d": 1.44,
+   "text": "intended to just tell a talk about"
+  },
+  {
+   "t": 1443.76,
+   "d": 1.44,
+   "text": "photography, but I realized that it'd"
+  },
+  {
+   "t": 1445.2,
+   "d": 1.84,
+   "text": "been quite influenced by uh Florence"
+  },
+  {
+   "t": 1447.04,
+   "d": 1.6,
+   "text": "Nichols work on archaeological game"
+  },
+  {
+   "t": 1448.64,
+   "d": 1.52,
+   "text": "design. So if you're interested,"
+  },
+  {
+   "t": 1450.16,
+   "d": 1.52,
+   "text": "especially on the lens stuff of looking"
+  },
+  {
+   "t": 1451.68,
+   "d": 2.0,
+   "text": "at an object and figuring out what its"
+  },
+  {
+   "t": 1453.68,
+   "d": 1.84,
+   "text": "context is and what it's been influenced"
+  },
+  {
+   "t": 1455.52,
+   "d": 2.24,
+   "text": "by or connected to, um I do recommend"
+  },
+  {
+   "t": 1457.76,
+   "d": 3.6,
+   "text": "looking up that stuff as well."
+  },
+  {
+   "t": 1461.36,
+   "d": 1.76,
+   "text": "So it's really tempting to analyze"
+  },
+  {
+   "t": 1463.12,
+   "d": 1.84,
+   "text": "generative systems in isolation. We want"
+  },
+  {
+   "t": 1464.96,
+   "d": 1.6,
+   "text": "to kind of pull some content out and put"
+  },
+  {
+   "t": 1466.56,
+   "d": 2.4,
+   "text": "it in a portrait studio and take a photo"
+  },
+  {
+   "t": 1468.96,
+   "d": 1.92,
+   "text": "of it against a nice background posed"
+  },
+  {
+   "t": 1470.88,
+   "d": 2.32,
+   "text": "perfectly. [snorts] But that's not how"
+  },
+  {
+   "t": 1473.2,
+   "d": 2.48,
+   "text": "games work. Games are tangled webs of"
+  },
+  {
+   "t": 1475.68,
+   "d": 1.68,
+   "text": "systems. Some of them are procedural"
+  },
+  {
+   "t": 1477.36,
+   "d": 1.44,
+   "text": "generators, but even the ones that"
+  },
+  {
+   "t": 1478.8,
+   "d": 1.52,
+   "text": "aren't behave like procedural"
+  },
+  {
+   "t": 1480.32,
+   "d": 1.68,
+   "text": "generators. They are unpredictable and"
+  },
+  {
+   "t": 1482.0,
+   "d": 2.24,
+   "text": "chaotic. And we have to get in there to"
+  },
+  {
+   "t": 1484.24,
+   "d": 2.0,
+   "text": "figure out what's really going on. We"
+  },
+  {
+   "t": 1486.24,
+   "d": 2.32,
+   "text": "have to find ways to engage with the"
+  },
+  {
+   "t": 1488.56,
+   "d": 2.32,
+   "text": "context around the content that's being"
+  },
+  {
+   "t": 1490.88,
+   "d": 1.44,
+   "text": "generated and the way that it connects"
+  },
+  {
+   "t": 1492.32,
+   "d": 1.68,
+   "text": "to all of the different uh ways that"
+  },
+  {
+   "t": 1494.0,
+   "d": 3.28,
+   "text": "that is used by players and by us."
+  },
+  {
+   "t": 1497.28,
+   "d": 1.2,
+   "text": "And I wanted to end with this quote from"
+  },
+  {
+   "t": 1498.48,
+   "d": 2.24,
+   "text": "Daido Moryama. Uh the outside world is"
+  },
+  {
+   "t": 1500.72,
+   "d": 1.68,
+   "text": "extremely fluid and mixed up. And that"
+  },
+  {
+   "t": 1502.4,
+   "d": 1.68,
+   "text": "mix in its totality cannot be"
+  },
+  {
+   "t": 1504.08,
+   "d": 2.56,
+   "text": "photographed within a thin sliver of"
+  },
+  {
+   "t": 1506.64,
+   "d": 1.36,
+   "text": "this world. Only the thinnest of"
+  },
+  {
+   "t": 1508.0,
+   "d": 1.44,
+   "text": "segments can be recorded with the"
+  },
+  {
+   "t": 1509.44,
+   "d": 2.56,
+   "text": "photograph. But I keep photographing."
+  },
+  {
+   "t": 1512.0,
+   "d": 3.04,
+   "text": "There is nothing else. And I hope after"
+  },
+  {
+   "t": 1515.04,
+   "d": 1.68,
+   "text": "this talk, maybe after the celebration,"
+  },
+  {
+   "t": 1516.72,
+   "d": 2.16,
+   "text": "you'll go home and uh fire up your"
+  },
+  {
+   "t": 1518.88,
+   "d": 1.2,
+   "text": "favorite game or the game that you're"
+  },
+  {
+   "t": 1520.08,
+   "d": 1.92,
+   "text": "making and pull out some slivers for"
+  },
+  {
+   "t": 1522.0,
+   "d": 1.84,
+   "text": "yourself and think about what that tells"
+  },
+  {
+   "t": 1523.84,
+   "d": 2.88,
+   "text": "you about the city as a whole. Thanks so"
+  },
+  {
+   "t": 1526.72,
+   "d": 1.6,
+   "text": "much for listening. Uh a couple of notes"
+  },
+  {
+   "t": 1528.32,
+   "d": 1.68,
+   "text": "before I pass over to questions. If you"
+  },
+  {
+   "t": 1530.0,
+   "d": 1.44,
+   "text": "want to see some photos that I take of"
+  },
+  {
+   "t": 1531.44,
+   "d": 1.76,
+   "text": "cities, uh I don't this is the last"
+  },
+  {
+   "t": 1533.2,
+   "d": 1.28,
+   "text": "thing I plug normally at the end of a"
+  },
+  {
+   "t": 1534.48,
+   "d": 1.28,
+   "text": "talk, but for this talk it makes sense."
+  },
+  {
+   "t": 1535.76,
+   "d": 2.4,
+   "text": "I'm on Instagram. Mike Cook took this."
+  },
+  {
+   "t": 1538.16,
+   "d": 1.92,
+   "text": "I'm looking for a better uh place to put"
+  },
+  {
+   "t": 1540.08,
+   "d": 1.92,
+   "text": "photos, but um at the moment is"
+  },
+  {
+   "t": 1542.0,
+   "d": 1.84,
+   "text": "Instagram. And I also wrote a book. I"
+  },
+  {
+   "t": 1543.84,
+   "d": 1.2,
+   "text": "wrote a book about procedural"
+  },
+  {
+   "t": 1545.04,
+   "d": 1.6,
+   "text": "generation, about the people that have"
+  },
+  {
+   "t": 1546.64,
+   "d": 1.52,
+   "text": "used it and made it, the communities"
+  },
+  {
+   "t": 1548.16,
+   "d": 2.32,
+   "text": "that made it what it is. Um, it it means"
+  },
+  {
+   "t": 1550.48,
+   "d": 1.6,
+   "text": "a lot to me to have written it. Um, I"
+  },
+  {
+   "t": 1552.08,
+   "d": 1.28,
+   "text": "didn't promote it as much as I should"
+  },
+  {
+   "t": 1553.36,
+   "d": 2.08,
+   "text": "have done, but you can get a copy of it"
+  },
+  {
+   "t": 1555.44,
+   "d": 1.36,
+   "text": "today at your local bookshop. It's"
+  },
+  {
+   "t": 1556.8,
+   "d": 1.52,
+   "text": "called Next Level: Making Games That"
+  },
+  {
+   "t": 1558.32,
+   "d": 1.76,
+   "text": "Make Themselves. Uh, as always, thank"
+  },
+  {
+   "t": 1560.08,
+   "d": 1.6,
+   "text": "you so much for having me here. And if"
+  },
+  {
+   "t": 1561.68,
+   "d": 1.6,
+   "text": "there's time for questions, um, I'd love"
+  },
+  {
+   "t": 1563.28,
+   "d": 2.08,
+   "text": "to answer some."
+  },
+  {
+   "t": 1565.36,
+   "d": 1.84,
+   "text": ">> Excellent. Thank you. Yes, we do have"
+  },
+  {
+   "t": 1567.2,
+   "d": 1.44,
+   "text": "some time for questions, which is"
+  },
+  {
+   "t": 1568.64,
+   "d": 1.68,
+   "text": "awesome. Yeah, I said in the chat, I I"
+  },
+  {
+   "t": 1570.32,
+   "d": 1.44,
+   "text": "was so lulled. I was like, \"This is so"
+  },
+  {
+   "t": 1571.76,
+   "d": 1.2,
+   "text": "cool learning about street photography."
+  },
+  {
+   "t": 1572.96,
+   "d": 1.36,
+   "text": "I forgot it was even going to go into"
+  },
+  {
+   "t": 1574.32,
+   "d": 2.08,
+   "text": "procedure and I was like, [laughter]"
+  },
+  {
+   "t": 1576.4,
+   "d": 2.16,
+   "text": ">> it could easily not have done. I had to"
+  },
+  {
+   "t": 1578.56,
+   "d": 1.6,
+   "text": "restrain myself.\""
+  },
+  {
+   "t": 1580.16,
+   "d": 2.24,
+   "text": ">> Um, one question I find interesting from"
+  },
+  {
+   "t": 1582.4,
+   "d": 1.76,
+   "text": "Hyper Gardens actually in that kind of"
+  },
+  {
+   "t": 1584.16,
+   "d": 2.08,
+   "text": "relation back to rogue likes and procgen"
+  },
+  {
+   "t": 1586.24,
+   "d": 3.84,
+   "text": "is um peradeth versus non-perade mode"
+  },
+  {
+   "t": 1590.08,
+   "d": 2.24,
+   "text": "and how that feels as an observer and if"
+  },
+  {
+   "t": 1592.32,
+   "d": 2.72,
+   "text": "that kind of changes the observation. I"
+  },
+  {
+   "t": 1595.04,
+   "d": 1.36,
+   "text": "think CUD is especially interesting"
+  },
+  {
+   "t": 1596.4,
+   "d": 2.24,
+   "text": "given that CUD now has a variety of"
+  },
+  {
+   "t": 1598.64,
+   "d": 1.28,
+   "text": "things will kill you and things won't"
+  },
+  {
+   "t": 1599.92,
+   "d": 1.6,
+   "text": "kill you. perma death, not perma death"
+  },
+  {
+   "t": 1601.52,
+   "d": 2.16,
+   "text": "mode. Do you have any thoughts on that?"
+  },
+  {
+   "t": 1603.68,
+   "d": 2.48,
+   "text": ">> Yeah, I do. I I think at some point I"
+  },
+  {
+   "t": 1606.16,
+   "d": 1.92,
+   "text": "was trying to argue that like all all"
+  },
+  {
+   "t": 1608.08,
+   "d": 1.76,
+   "text": "games are perma death on some kind of"
+  },
+  {
+   "t": 1609.84,
+   "d": 1.92,
+   "text": "scale. Like Mario is kind of perma"
+  },
+  {
+   "t": 1611.76,
+   "d": 2.0,
+   "text": "death. Um and you know eventually you'll"
+  },
+  {
+   "t": 1613.76,
+   "d": 1.68,
+   "text": "put away that case of Cud save file and"
+  },
+  {
+   "t": 1615.44,
+   "d": 1.12,
+   "text": "never go back to it. I don't know if"
+  },
+  {
+   "t": 1616.56,
+   "d": 2.16,
+   "text": "that's quite the same thing. But I think"
+  },
+  {
+   "t": 1618.72,
+   "d": 3.12,
+   "text": "um what is interesting there is that"
+  },
+  {
+   "t": 1621.84,
+   "d": 3.04,
+   "text": "it reminds me how um some photos I take"
+  },
+  {
+   "t": 1624.88,
+   "d": 1.6,
+   "text": "could only be taken for a fraction of a"
+  },
+  {
+   "t": 1626.48,
+   "d": 1.6,
+   "text": "second. Like they're gone forever. Um,"
+  },
+  {
+   "t": 1628.08,
+   "d": 1.36,
+   "text": "but there are other places where I keep"
+  },
+  {
+   "t": 1629.44,
+   "d": 1.44,
+   "text": "going back to them because I know they"
+  },
+  {
+   "t": 1630.88,
+   "d": 2.16,
+   "text": "always set up a good a good shot. They"
+  },
+  {
+   "t": 1633.04,
+   "d": 1.6,
+   "text": "kind of have one and a half reasons in"
+  },
+  {
+   "t": 1634.64,
+   "d": 1.12,
+   "text": "them already and then I'm kind of"
+  },
+  {
+   "t": 1635.76,
+   "d": 1.92,
+   "text": "waiting for the other half a reason."
+  },
+  {
+   "t": 1637.68,
+   "d": 1.68,
+   "text": ">> And I think when you have non-per death,"
+  },
+  {
+   "t": 1639.36,
+   "d": 1.6,
+   "text": "you have a chance to actually really get"
+  },
+  {
+   "t": 1640.96,
+   "d": 2.8,
+   "text": "to know a location or or or a particular"
+  },
+  {
+   "t": 1643.76,
+   "d": 2.88,
+   "text": "setup for a procedural like world. Um,"
+  },
+  {
+   "t": 1646.64,
+   "d": 1.84,
+   "text": "and that can be nice because as you"
+  },
+  {
+   "t": 1648.48,
+   "d": 2.8,
+   "text": "return to a place, you're like fewer"
+  },
+  {
+   "t": 1651.28,
+   "d": 1.28,
+   "text": "things are changing and so maybe the"
+  },
+  {
+   "t": 1652.56,
+   "d": 1.12,
+   "text": "things that are changing you're paying"
+  },
+  {
+   "t": 1653.68,
+   "d": 1.92,
+   "text": "more attention to. Um, but it's an"
+  },
+  {
+   "t": 1655.6,
+   "d": 1.12,
+   "text": "interesting I mean, I hadn't thought"
+  },
+  {
+   "t": 1656.72,
+   "d": 1.44,
+   "text": "about it before that question. I like"
+  },
+  {
+   "t": 1658.16,
+   "d": 0.8,
+   "text": "that."
+  },
+  {
+   "t": 1658.96,
+   "d": 1.6,
+   "text": ">> Yeah. No, I I think that that's really"
+  },
+  {
+   "t": 1660.56,
+   "d": 1.92,
+   "text": "interesting. Um, and there's another"
+  },
+  {
+   "t": 1662.48,
+   "d": 2.08,
+   "text": "good question from Hyper Gardens about"
+  },
+  {
+   "t": 1664.56,
+   "d": 1.36,
+   "text": "um if you feel like there's such a thing"
+  },
+  {
+   "t": 1665.92,
+   "d": 2.32,
+   "text": "as overrecording or oversharing the"
+  },
+  {
+   "t": 1668.24,
+   "d": 1.6,
+   "text": "experience of a game. Like, can"
+  },
+  {
+   "t": 1669.84,
+   "d": 2.64,
+   "text": "excessive journalism kill the immersion"
+  },
+  {
+   "t": 1672.48,
+   "d": 2.64,
+   "text": "and the sense of being in it?"
+  },
+  {
+   "t": 1675.12,
+   "d": 1.44,
+   "text": ">> I think that's a really great question."
+  },
+  {
+   "t": 1676.56,
+   "d": 2.32,
+   "text": "So, I am old enough to remember when"
+  },
+  {
+   "t": 1678.88,
+   "d": 2.24,
+   "text": "let's plays were screenshots and text."
+  },
+  {
+   "t": 1681.12,
+   "d": 1.6,
+   "text": "And that was interesting because the"
+  },
+  {
+   "t": 1682.72,
+   "d": 1.28,
+   "text": "screenshots had to be chosen very"
+  },
+  {
+   "t": 1684.0,
+   "d": 1.92,
+   "text": "carefully and even the text only told a"
+  },
+  {
+   "t": 1685.92,
+   "d": 2.4,
+   "text": "partial story whereas now I'm currently"
+  },
+  {
+   "t": 1688.32,
+   "d": 1.28,
+   "text": "watching like when I'm when I'm trying"
+  },
+  {
+   "t": 1689.6,
+   "d": 1.6,
+   "text": "to get to sleep I'm putting on a full"
+  },
+  {
+   "t": 1691.2,
+   "d": 2.56,
+   "text": "playthrough um of uh a streamer's first"
+  },
+  {
+   "t": 1693.76,
+   "d": 1.92,
+   "text": "experience of Hollow Night Silk Song and"
+  },
+  {
+   "t": 1695.68,
+   "d": 1.36,
+   "text": "you see just everything you see them"
+  },
+  {
+   "t": 1697.04,
+   "d": 1.92,
+   "text": "like flailing around and getting lost"
+  },
+  {
+   "t": 1698.96,
+   "d": 2.0,
+   "text": "and stuff and I think it does change the"
+  },
+  {
+   "t": 1700.96,
+   "d": 1.68,
+   "text": "tenor of the experience a lot and I"
+  },
+  {
+   "t": 1702.64,
+   "d": 2.56,
+   "text": "think it's also changed the art of let's"
+  },
+  {
+   "t": 1705.2,
+   "d": 2.24,
+   "text": "plays for example um and it's probably"
+  },
+  {
+   "t": 1707.44,
+   "d": 1.52,
+   "text": "something to consider if you are a"
+  },
+  {
+   "t": 1708.96,
+   "d": 1.36,
+   "text": "designer or a developer and you want to"
+  },
+  {
+   "t": 1710.32,
+   "d": 2.64,
+   "text": "do this yourself, right? Is actually, I"
+  },
+  {
+   "t": 1712.96,
+   "d": 1.2,
+   "text": "don't want to go over time. One of the"
+  },
+  {
+   "t": 1714.16,
+   "d": 1.44,
+   "text": "nice things about using film photography"
+  },
+  {
+   "t": 1715.6,
+   "d": 1.68,
+   "text": "is that it's so expensive. I didn't want"
+  },
+  {
+   "t": 1717.28,
+   "d": 1.6,
+   "text": "to take too many photos. And so, I was"
+  },
+  {
+   "t": 1718.88,
+   "d": 1.52,
+   "text": "really thinking about when I took a"
+  },
+  {
+   "t": 1720.4,
+   "d": 0.56,
+   "text": "photo."
+  },
+  {
+   "t": 1720.96,
+   "d": 1.68,
+   "text": ">> So, if you go into your game with a roll"
+  },
+  {
+   "t": 1722.64,
+   "d": 1.92,
+   "text": "of 30 photos, right, and you don't allow"
+  },
+  {
+   "t": 1724.56,
+   "d": 1.68,
+   "text": "yourself to take any more, you probably"
+  },
+  {
+   "t": 1726.24,
+   "d": 1.76,
+   "text": "would take different screenshots, right?"
+  },
+  {
+   "t": 1728.0,
+   "d": 1.28,
+   "text": "Maybe that's something to consider if"
+  },
+  {
+   "t": 1729.28,
+   "d": 1.12,
+   "text": "you're if you're trying to do some of"
+  },
+  {
+   "t": 1730.4,
+   "d": 0.72,
+   "text": "this stuff."
+  },
+  {
+   "t": 1731.12,
+   "d": 1.44,
+   "text": ">> That's a great point. I really like that"
+  },
+  {
+   "t": 1732.56,
+   "d": 1.36,
+   "text": "a lot because I've definitely had that"
+  },
+  {
+   "t": 1733.92,
+   "d": 1.68,
+   "text": "problem of just like smashing like"
+  },
+  {
+   "t": 1735.6,
+   "d": 2.32,
+   "text": "curating both my photos and my"
+  },
+  {
+   "t": 1737.92,
+   "d": 2.56,
+   "text": "screenshots is so much more work and"
+  },
+  {
+   "t": 1740.48,
+   "d": 1.68,
+   "text": "then I just don't curate them until I"
+  },
+  {
+   "t": 1742.16,
+   "d": 1.6,
+   "text": "get the notice I'm out of memory and"
+  },
+  {
+   "t": 1743.76,
+   "d": 2.48,
+   "text": "then I don't know I move away and delete"
+  },
+  {
+   "t": 1746.24,
+   "d": 2.24,
+   "text": "my accounts or whatever. But excellent."
+  },
+  {
+   "t": 1748.48,
+   "d": 1.76,
+   "text": "Okay, that took us very nicely to time."
+  },
+  {
+   "t": 1750.24,
+   "d": 1.92,
+   "text": "So, thank you so much Mike. Um and yes,"
+  },
+  {
+   "t": 1752.16,
+   "d": 2.16,
+   "text": "people should check out your book and uh"
+  },
+  {
+   "t": 1754.32,
+   "d": 1.44,
+   "text": "yeah, it's wonderful to have you as"
+  },
+  {
+   "t": 1755.76,
+   "d": 2.4,
+   "text": "always and um hopefully people can"
+  },
+  {
+   "t": 1758.16,
+   "d": 2.96,
+   "text": "discuss this more in the press box uh"
+  },
+  {
+   "t": 1761.12,
+   "d": 0.96,
+   "text": "during the breakout rooms."
+  },
+  {
+   "t": 1762.08,
+   "d": 3.52,
+   "text": ">> Wonderful. Thank you so much everyone."
+  }
+ ]
+}

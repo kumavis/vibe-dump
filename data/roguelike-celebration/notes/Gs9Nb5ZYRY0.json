@@ -1,0 +1,146 @@
+{
+  "id": "Gs9Nb5ZYRY0",
+  "title": "David Craddock - Dungeon Hacks",
+  "speaker": "David Craddock",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=Gs9Nb5ZYRY0",
+  "talk_type": "history",
+  "summary": "David Craddock, author of the book Dungeon Hacks, shares seven observations from interviewing the creators of classic roguelikes such as Beneath Apple Manor, Rogue, Sword of Fargoal, Hack, NetHack, Moria, Angband and ADOM. He describes college origins, shared love of Dungeons & Dragons, and early computer access, and how hardware limits shaped designs in ways that produced emergent player behaviour. He covers roguelikes as learning tools, the internet's role in spreading Rogue and enabling collaborative development and variants, and the genre's fluid definition as seen in ADOM, Diablo's fight over permadeath, Dark Souls and 7DRL entries.",
+  "games": [
+    "Beneath Apple Manor",
+    "Rogue",
+    "Sword of Fargoal",
+    "Hack",
+    "NetHack",
+    "Moria",
+    "Angband",
+    "ADOM",
+    "Diablo",
+    "Diablo II",
+    "Diablo III",
+    "Dark Souls"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "origins",
+      "kind": "history",
+      "claim": "Early roguelike creators shared an all-consuming passion for Dungeons & Dragons and rare early access to computers, and wanted a computerized D&D that offloaded dice rolling and calculation.",
+      "detail": "Craddock names Michael Toy, Glenn Wichman, Ken Arnold and Don Worth. Most were college students, and writing and playing roguelikes quickly conflicted with their GPAs.",
+      "t": 229,
+      "quote": "wouldn't it be cool if there were a computerized version of this so i could kind of offload all of the dice rolling and calculations onto the computer",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "perceived behaviour",
+      "kind": "history",
+      "claim": "Rogue's monsters had minimal AI due to memory limits, yet immersed players ascribed behaviours that did not exist and learned to exploit the few that did, like the zigzagging bat.",
+      "detail": "Most monsters simply had more hit points and damage deeper down. Michael Toy said playtesters swore to nonexistent behaviours. Glenn Wichman described the bat's zigzag flight; players learned to lure bats into narrow corridors to shoot them.",
+      "t": 305,
+      "quote": "players would get so immersed in the game their play testers in the labs that they would start ascribing behaviors that didn't exist at all",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "return journey",
+      "kind": "history",
+      "claim": "Sword of Fargoal's timed return trip through brand-new levels arose from a memory limit: the Commodore PET couldn't keep the seed, so the dungeon was explained as magically rearranging itself.",
+      "detail": "Jeff McCord wanted players to retrace explored floors with new monsters. Instead, carrying the sword with a timer ticking, tougher enemies and unexplored maps added a layer of tension.",
+      "t": 378,
+      "quote": "it didn't really have enough memory to hold on to the random number seed so he said well it's a magical dungeon",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "treasure placement",
+      "kind": "history",
+      "claim": "Beneath Apple Manor's one-treasure-per-floor limit led some players to race through floors grabbing treasure without fighting, arriving at level five heavily equipped.",
+      "detail": "Don Worth imposed the limit because of Apple II constraints. Some friends inched through levels and died; others sprinted to treasure rooms and then fought with more swagger. Craddock presents this as emergent behaviour with players deciding how to play.",
+      "t": 410,
+      "quote": "he limited his treasures to one treasure per dungeon floor",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "learning to program",
+      "kind": "history",
+      "claim": "Roguelikes served as programming learning tools: Glenn Wichman learned C watching Michael Toy write Rogue, and Jay Fenlason wrote Hack to play Rogue without having its code.",
+      "detail": "Fenlason was a student of Brian Harvey, who gave Lincoln-Sudbury High School students free run of the computer lab. Fenlason played Rogue on a field trip to UC Berkeley and wrote Hack afterward, adding monsters and behaviours.",
+      "t": 585,
+      "quote": "he didn't have the code with him so he wrote hack as a way of being able to play rogue without having access to rogue",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "item interactions",
+      "kind": "example",
+      "claim": "NetHack's cockatrice corpse, wielded with gloves as a petrifying weapon but deadly if you fall while holding it, shows how text-based games can support interactions graphics-heavy games can't afford.",
+      "detail": "Craddock contrasts this with blockbusters like Uncharted 4, where an interaction can't happen unless a programmer and animator explicitly build it. Roguelikes look rudimentary but 'the sky was the limit' because they are just text.",
+      "t": 675,
+      "quote": "if i kill this and then put on gloves i can pick it up and swing it around like the the proverbial rubber chicken",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "distribution",
+      "kind": "history",
+      "claim": "Rogue, not Beneath Apple Manor, gave the genre its name largely because of distribution: Rogue spread over networks while the Apple II game was rarely taken online.",
+      "detail": "Craddock opened the book with Beneath Apple Manor because many people had the same ideas; circumstances determined which games circulated widely. Glenn Wichman had remarked that it was lucky the genre came to be called roguelike.",
+      "t": 770,
+      "quote": "bam didn't really spread whereas rogue just kind of started appearing everywhere",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "variants",
+      "kind": "history",
+      "claim": "Hack's permissive license led to NetHack's distributed DevTeam, while Angband's code spread into many variants, some players never having played vanilla.",
+      "detail": "Fenlason's copyright notice allowed modification as long as it was kept intact. The NetHack DevTeam collaborated worldwide but keeps the game 'under lock and key', whereas Angband split into flavors maintained by players.",
+      "t": 844,
+      "quote": "angband's code is spread into different flavors and variants so you have a lot of angband players out there who might have never played vanilla angband",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "authored and procedural",
+      "kind": "example",
+      "claim": "ADOM balances static authored elements with procedural ones so each adventure is new but players feel part of a larger story.",
+      "detail": "Thomas Biskup told Craddock he enjoyed Hack and NetHack but missed taking part in a story, since NetHack felt like a puzzle about optimizing your way to the Amulet.",
+      "t": 898,
+      "quote": "he started putting together this this finely tuned balance of of static elements and procedural elements so that the the adventure is new every time you play",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "history",
+      "claim": "David Brevik wanted Diablo to be a turn-based permadeath roguelike, lost those battles, and won an unlockable hardcore mode in Diablo II; over 300,000 of about seven million Diablo III players played exclusively hardcore.",
+      "detail": "Brevik described the thrill of an all-night session where one keypress decided survival. Craddock relays the Diablo III figure from a lead developer's Reddit AMA and attributes the appeal to living with consequences in an era of hand-holding games.",
+      "t": 988,
+      "quote": "over 300 000 of them preferred to play exclusively in hardcore mode because the risk of cause and effect and knowing that you had to live with your consequences",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "death penalty",
+      "kind": "example",
+      "claim": "Dark Souls offers a twist on permadeath: on death your souls stay in a bloodstain you get one chance to reclaim, and dying again loses them forever without restarting the game.",
+      "detail": "Craddock notes Dark Souls' levels, enemies and items are static, so it doesn't look like a roguelike, but the bloodstain gives a second chance with permanent loss of hours of farmed souls if you fail.",
+      "t": 1019,
+      "quote": "you leave a blood stain that holds all of your souls which function as experience points and you have one chance to get back to it",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "7drl",
+      "kind": "history",
+      "claim": "Craddock's daily check-ins with 7DRL participants revealed a wide spectrum of designs, such as an overworld crawl with three arranged archetypes and Darren Grey's music-oriented Mosaic.",
+      "detail": "This became his companion book One Week Dungeons. He uses it to show participants share a passion even when their definitions of roguelike differ.",
+      "t": 1094,
+      "quote": "you had a configuration of three character archetypes and the arrangement dictated who dealt damage uh and who took damage",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

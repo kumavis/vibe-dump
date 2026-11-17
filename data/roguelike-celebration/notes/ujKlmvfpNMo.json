@@ -1,0 +1,173 @@
+{
+  "id": "ujKlmvfpNMo",
+  "title": "James Cartlidge, Marc Dolgin, Christine Tomlinson - The Rise of the Roguelite",
+  "speaker": "James Cartlidge, Marc Dolgin, Christine Tomlinson",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=ujKlmvfpNMo",
+  "talk_type": "panel",
+  "summary": "A panel, hosted by Alexei, with three contributors to the edited academic collection 'The Rise of the Roguelite'. James Cartlidge (editor) discusses Vampire Survivors and Foucault's idea of synergizing power, and permadeath as an authentic confrontation with mortality; Christine Tomlinson discusses Boyfriend Dungeon as a genre mash-up that opens roguelites to players scared of permadeath; Marc Dolgin discusses roguelikes as a sub-genre layered onto other genres and the trend toward justifying restarts in the fiction. The conversation touches on tone (comedic vs serious), player motivations, and lineage mechanics.",
+  "games": [
+    "Vampire Survivors",
+    "Boyfriend Dungeon",
+    "Hades",
+    "Darkest Dungeon",
+    "Dead Cells",
+    "Cobalt Core",
+    "The Curious Expedition",
+    "Dwarf Fortress",
+    "Civilization"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelite as subgenre",
+      "kind": "principle",
+      "claim": "Roguelike structure works as a sub-genre that can be layered on top of almost any other genre, producing pinball, Peggle-style and other roguelike hybrids.",
+      "detail": "Marc Dolgin says the roguelike being 'pretty much a subgenre' let developers place any other genre on top of it, allowing endless possibilities. He cites pinball and Peggle roguelikes as examples and says this is why distinguishing what makes a roguelike interesting matters.",
+      "t": 737,
+      "quote": "gave the opportunity for developers to create games by adding the sub-genre and just placing any other genre on top of it",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelike as form",
+      "kind": "open-question",
+      "claim": "Roguelikes may be better thought of as a poetic form than a genre, since many genres get placed into a roguelike framing while keeping their own genre identity.",
+      "detail": "Host Alexei relays a discussion seen on Twitter about treating roguelikes as a poetic form. She says Roguelike Celebration is not interested in a 'Berlin interpretation 2.0' but in non-gatekeeping discussion of the essence of what people like about roguelikes.",
+      "t": 822,
+      "quote": "is it better to think of roguelikes as a poetic form versus a genre in to itself",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "genre mash-up",
+      "kind": "example",
+      "claim": "Boyfriend Dungeon ties its dating sim and roguelite dungeon crawl together because the dateable characters are also the player's weapons, so combat raises relationships and relationships improve combat.",
+      "detail": "Christine Tomlinson describes procedural dungeon crawling paired with a dating sim where both sides are integrally related: leveling one levels the other. She notes it can feel like playing two separate games at once, a disparate design approach she found worth attention.",
+      "t": 928,
+      "quote": "you use them as weapons when you are dungeon crawling which is a strange element of this game which means combat",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "accessibility of permadeath",
+      "kind": "principle",
+      "claim": "Softening permadeath and mashing roguelite combat with a cozier genre, as Boyfriend Dungeon does, opens roguelites to players who find permadeath too scary or challenging.",
+      "detail": "Tomlinson argues Boyfriend Dungeon lacks the near-permadeath punishment of other games and so reaches a broad audience who would otherwise think roguelites are 'not for me'. Exposure can lead them to seek out more games like it.",
+      "t": 974,
+      "quote": "particularly people that might be scared of something like permadeath who is that and look at roguelikes and roguelites and think not for me",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "onboarding tiers",
+      "kind": "example",
+      "claim": "Roguelites form tiers of entry difficulty: Boyfriend Dungeon is a gentle entry for players with little combat experience, while Hades is a stepping stone for more experienced players.",
+      "detail": "Asked whether Hades' narrative and characters drew new players in, Tomlinson says Hades had a huge impact but sits above Boyfriend Dungeon in challenge and adherence to core roguelike mechanics. Boyfriend Dungeon lets inexperienced players challenge themselves in less intimidating ways.",
+      "t": 1105,
+      "quote": "I think Boyfriend Dungeon is a good entry to this kind of games and things with combat and to challenging ones self in ways that are less intimidating",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "synergy",
+      "kind": "principle",
+      "claim": "One of the best feelings in roguelites like Vampire Survivors is discovering a powerful synergy whose combined effect exceeds the sum of its parts, making the player feel they have broken the game.",
+      "detail": "James Cartlidge says experimenting with whether a combination will work, then having it destroy everything, is central to such games' excitement. He links this to Foucault's idea that relations of power can combine into something greater than their parts working separately, conveyed through procedural rhetoric.",
+      "t": 1177,
+      "quote": "One of the best feelings in a roguelike is when you hit on a powerful synergy and think is this thing going to work if I put this here",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "procedural rhetoric",
+      "kind": "principle",
+      "claim": "Games convey ideas through their mechanics (procedural rhetoric) even when the designers did not intend them, so mechanics can be read for meaning as films are.",
+      "detail": "Cartlidge argues games are a powerful art form whose interactivity conveys ideas in unexpected and unintended ways. He likens reading games for meaning to watching a film for subliminal messages regardless of authorial intention.",
+      "t": 1357,
+      "quote": "lots of possibilities for actually conveying ideas in ways we don't necessarily expect and in ways that aren't intended",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "alternative 4x themes",
+      "kind": "example",
+      "claim": "A history-strategy game framed as two students writing a book report lets players play history through empathy and winning hearts and minds rather than conquest.",
+      "detail": "Cartlidge cites this game (transcribed as 'syphilization') as an example of pushing ethical thinking in games beyond the violence question, contrasting with the relentless expansion of 4X games that Alexei raised.",
+      "t": 1576,
+      "quote": "It gives you different ways to play out that history where you can focus on empathy rather than conquest",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Permadeath brings games closer to an authentic confrontation with mortality, because the threat of death shapes every moment-to-moment decision rather than just ending play.",
+      "detail": "Cartlidge contrasts this with most Triple-A games where death means nothing because you restart at a checkpoint. Drawing on existentialist philosophy, he says death structures being all the time rather than just completing it, and roguelikes reflect that deeply.",
+      "t": 1685,
+      "quote": "The mechanic of permadeath brings games closer to an authentic confrontation with human morality",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "justifying restarts",
+      "kind": "history",
+      "claim": "Early roguelikes gave no in-world reason for restarting, but newer games such as Hades and Cobalt Core build the restart into the lore and story.",
+      "detail": "Marc Dolgin says restarting was originally just how the mechanics worked; increasingly, especially in response to Hades, developers give reasons for the restart, which raises the importance of lore and immersion in roguelites.",
+      "t": 1854,
+      "quote": "We are seeing more roguelikes and roguelites trying to put more focus on reasons behind the death and whether you look at cobalt core or Hades",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "starting over as theme",
+      "kind": "example",
+      "claim": "The Void Rains Upon Her Heart uses the roguelike loop of starting over win or lose to reflect real-life struggles with anxiety and depression.",
+      "detail": "Dolgin says developers are pushing the idea that starting over is OK. In this game the story is built around always starting over, which might seem desperate but is framed as part of life: people move on and get better.",
+      "t": 1952,
+      "quote": "The whole story is linked behind the fact that even if you win a run, or you lose, you have to start over",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "technical constraints",
+      "kind": "history",
+      "claim": "Permadeath and level randomness in early roguelikes came largely from technical constraints rather than design intent, yet later games feel they must justify them in-world.",
+      "detail": "Moderator Alexei Pepers recalls that early roguelike developers did not intend permadeath to become defining, and randomness came from being unable to store levels. Now designers invent fictions like a mad mage moving the dungeon or a restructuring mist to explain why the dungeon differs each time.",
+      "t": 1988,
+      "quote": "they didn't intend permadeath to become the defining thing. It was a lot of technical constraints that have been embedded",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "tone",
+      "kind": "principle",
+      "claim": "Comedic roguelikes need not explain why the player starts over, while serious roguelikes create an expectation of immersion that demands in-world reasons.",
+      "detail": "Dolgin sees two distinct styles, comedic and serious. With humour, players don't worry about lore; once a game is more serious, players want to be immersed and ask why they are starting over. He notes more serious roguelikes are appearing as developers realise the subgenre can carry a strong story.",
+      "t": 2114,
+      "quote": "the moment you make the game a little more serious than people want to get immersed and have reasons and explain why am I starting over",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player motivations",
+      "kind": "principle",
+      "claim": "Genre mash-ups proliferate because players want different things: some want challenge and to prove they can beat the developer, others want to relax and explore characters and stories.",
+      "detail": "Christine Tomlinson says people love stories and becoming part of one, but desires are individual. Some players don't care about story and want to increase skill; others want fun, characters and agency in expanding the world.",
+      "t": 2260,
+      "quote": "some people do want the challenge and some people don't really care about the story and they just want to increase their skills",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "character lineage",
+      "kind": "technique",
+      "claim": "Treating successive permadead characters as generations, as Darkest Dungeon does with recruitment, adds narrative structure to run-based permadeath.",
+      "detail": "Alexei suggests making recruitment of new characters into a mechanic rather than treating the player as an anonymous @ to forget. This lets players examine many perspectives and think in lineages rather than as one protagonist.",
+      "t": 2395,
+      "quote": "One of the ways to add narrative structure to the run-base permadeath is to say these are going to be like generations of people",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

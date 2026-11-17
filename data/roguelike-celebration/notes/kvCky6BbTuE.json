@@ -1,0 +1,215 @@
+{
+  "id": "kvCky6BbTuE",
+  "title": "Jason Grinblat- Before you Fix a Leak, Ask if it's a Fountain",
+  "speaker": "Jason Grinblat",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=kvCky6BbTuE",
+  "talk_type": "design",
+  "summary": "Jason Grinblat of Freehold Games (Caves of Qud) asks whether bugs born from colliding game systems should always be fixed, or whether some are 'fountains' worth keeping. After a tour of beloved emergent bugs (Dwarf Fortress's drunk cats, Skyrim's treasure foxes) and speedrunning's embrace of glitches, he builds a theoretical frame from Goffman's frame analysis and Gary Alan Fine's study of tabletop RPGs: players constantly key between the real world, the game rules and the story world, but in video games mechanics are non-negotiable 'ontological operations', so when keying fails players must simply deal with it. He applies this to three Caves of Qud cases: starting overburdened and unable to move, a psychic body-swap crash bug turned into a deliberately understated feature, and the procedurally caused 'Joppa chainsaw massacre'. He argues that in emergent, systems-driven games, visible rough edges can serve the aesthetic that the world is bigger than its designers.",
+  "games": [
+    "Caves of Qud",
+    "Dwarf Fortress",
+    "The Elder Scrolls V: Skyrim",
+    "SimCity",
+    "Valheim",
+    "Crusader Kings II",
+    "World of Warcraft",
+    "Super Mario Bros.",
+    "VVVVVV",
+    "Diablo II",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent bugs",
+      "kind": "example",
+      "claim": "Dwarf Fortress's dead-cat bug came from interlocking systems: dwarves spill drinks leaving the tavern, cats drawn to dwarves walk through the spill, clean their paws and ingest a full mug's worth of alcohol, getting fatally drunk.",
+      "detail": "Grinblat recounts Tarn and Zach Adams' explanation from the first Roguelike Celebration. The flaw was a single ingestion amount, a full mug of beer, overwhelming the cats' body mass. He uses it to show how such bugs reveal the 'untamed' nature of digital processes.",
+      "t": 106,
+      "quote": "unfortunately there was just a single ingestion amount a full mug of beer which was overwhelming to the cat's body mass",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "emergent bugs",
+      "kind": "example",
+      "claim": "Skyrim's 'treasure foxes' emerged because fleeing foxes maximised distance in navmesh triangles rather than true distance, and geometrically complex camps and treasure sites have more triangles, so foxes ran toward treasure.",
+      "detail": "Players believed following a fox led to treasure, but no designer had added that; Skyrim developer Joel Burgess tells how the team sleuthed it out. Grinblat also relays Tom Nelpiner's dogs that, not excluded from their own master list, attached to each other and ran off, and SimCity's mountain waterfall trick for unlimited clean hydropower.",
+      "t": 212,
+      "quote": "as far away from you as possible wasn't a strict distance metric but instead a number of triangles in the path finding navmesh",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "bug triage",
+      "kind": "open-question",
+      "claim": "Bug methodologies assume bugs are interruptions of an intended experience to be triaged and fixed, raising the question of whether designers can make explicit space for enchanting bugs instead of only admiring them after the fact.",
+      "detail": "Grinblat calls himself a 'maker of buggy games' and wants to understand his intuitions for good and bad bugs. He limits scope to games that are scaffolds for explorable worlds and to bugs from collisions of game systems, not graphics bugs.",
+      "t": 247,
+      "quote": "the methodologies we use to evaluate and classify and act on them are all premised on the notion that they're bad",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "speedrunning",
+      "kind": "example",
+      "claim": "Speedrunning treats bugs as first-class gameplay, and developers sometimes cooperate: VVVVVV's Terry Cavanagh re-enabled glitches needed for popular speedrun strategies by isolating them in an if statement.",
+      "detail": "Grinblat cites the Super Mario Bros. flagpole glitch that uses subpixel positions to save 0.7 seconds. He finds this symbiosis fascinating but notes it keeps bugs on a parallel track of play, whereas he wants bugs understood as part of the intended experience.",
+      "t": 344,
+      "quote": "speed running uplifts all the material quirks of the underlying hardware and software to first place class gameplay entities",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "frame analysis",
+      "kind": "principle",
+      "claim": "Players never fully lose themselves in a game world; they always know they are a person at a computer, and threshold elements like Diablo II's 'I am overburdened' are naturalised conventions for communicating between the two worlds.",
+      "detail": "Drawing on Kristine Jørgensen's book Gameworld Interfaces, Grinblat argues such messages aren't read as fourth-wall-breaking as they would be in a novel. Players adopt an 'illusory attitude', accepting arbitrary rules as if real while still feeling the texture of the digital medium.",
+      "t": 496,
+      "quote": "you're always aware that you're a person at a computer or video game console that you've chosen to inhabit a fictional world nested inside the real world",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "mechanics vs rules",
+      "kind": "principle",
+      "claim": "Video game mechanics are not rules in the social-contract sense but involuntary 'ontological operations' players cannot step outside of, unlike tabletop rules which players agree to.",
+      "detail": "Grinblat relays this argument from Stephanie Boluk and Patrick LeMieux, who also describe a broader class of metagames (attitude, achievement, status, community) that rupture the formal logic of the game.",
+      "t": 578,
+      "quote": "rules are voluntary constraints in social contracts they are packs between players not to peak or move outside individual invisible boundaries mechanics on the other hand are ontological operations",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "frame analysis",
+      "kind": "technique",
+      "claim": "Goffman's frame analysis offers a lens for bugs: 'keying' transposes meaning between frames (up-keying away from the primary real-world frame, down-keying toward it), so a leak in one frame may be meaningful in another.",
+      "detail": "Grinblat summarises Erving Goffman's 1974 Frame Analysis: frames are guidelines that direct interpretation and can be nested or intersecting. Reading something serious as a joke is up-keying; failing to read a joke as a joke is down-keying.",
+      "t": 712,
+      "quote": "our leak is only being framed as a leak and could possibly be understood simultaneously as something else something more aesthetically cohesive",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "tabletop rpg",
+      "kind": "principle",
+      "claim": "Tabletop RPG players slip rapidly among three frames (the real world, the game rules and the story world), and because humans negotiate these transpositions, failures are graceful; video games have no such negotiation, so failed keying simply has to be dealt with.",
+      "detail": "Grinblat draws on Gary Alan Fine's 1983 study Shared Fantasy, which notes that engrossment is not permanent and frames succeed each other rapidly. At the table people up-key dice rolls into fiction, down-key fiction into rules, and adjust rules when players aren't having fun.",
+      "t": 845,
+      "quote": "these transpositions are negotiated by human people and so they're robust failures are graceful you can always smudge the lines and reach some sort of",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "edge cases",
+      "kind": "example",
+      "claim": "In Caves of Qud a character can start too overburdened to move by dumping strength and taking heavy starting gear; the team keeps this edge case though it is a leak in both story and gameplay terms.",
+      "detail": "Grinblat lists easy fixes (limiting gear by carry capacity, a strength floor). He notes a tabletop GM might up-key it into the fiction as a character exhaustedly dragging wares to town; video game mechanics can't absorb that interpretation, but players can still do it in their heads.",
+      "t": 876,
+      "quote": "it is entirely possible to create a character with enough starting gear and a low enough carry capacity due to dumping strength",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "reparative play",
+      "kind": "principle",
+      "claim": "Some games are structured so players repair an emergent narrative from pre-narrative parts that arrive in disrepair, ornamenting their run with details the game never represents.",
+      "detail": "Grinblat cites AI researcher Max Kreminski's term 'extrapolative narrativization' and a forthcoming paper by Kreminski, narrative designer Kate Manning and himself extending it to 'reparative play'.",
+      "t": 969,
+      "quote": "certain games are structured to encourage their players to repair the emerging narrative by providing only pre-narrative parts",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergence aesthetic",
+      "kind": "principle",
+      "claim": "In systems-driven emergent games, visible rough edges signal that the possibility space is too big to have been fully filed down, inviting players to explore a messy world together; Grinblat's philosophy is 'the dev team does not think of everything'.",
+      "detail": "He calls this the aesthetic of the 'meta frame', aware that players are people at hardware and constantly keying between frames. The slogan riffs on NetHack's 'the dev team thinks of everything'; for him the magic is a world more abundant than he can know.",
+      "t": 1019,
+      "quote": "the possibility space is too big too rich for us to have gone in and filed off all the rough edges instead we're saying here's a big messy space",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "bug to feature",
+      "kind": "example",
+      "claim": "Caves of Qud turned a crash-prone exploit, where destroying your original body in one hit while mind-controlling a creature stranded you in the host permanently, into a supported feature, because its transgression matched the tone of psychic powers.",
+      "detail": "The exploit was popular because it let players play as creatures otherwise unavailable. Grinblat says the bug keyed beautifully between psychic powers' theme of transgressing boundaries and the act of unravelling the mechanics; only the crash was too costly, so they filed off that edge.",
+      "t": 1102,
+      "quote": "we filed off this one edge and turned it into a feature but we wanted to preserve the air of transgression around the swap",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "messaging",
+      "kind": "technique",
+      "claim": "To preserve the sense that the Caves of Qud body swap is a transgression, the game gives it no journal chronology entry and no achievement, just a terse neutral message, 'your mind is stranded here'.",
+      "detail": "Grinblat says this leaves players unsure whether the game expressly recognised what happened. In a game full of baroque language, shifting to terse console-readout simplicity carried authorial weight at a boundary in the software. 'Instead of fixing the leak we built a nice little pool around the leak.'",
+      "t": 1139,
+      "quote": "in a game filled with baroque language we found there was a lot of authorial weight in moving back to terse almost console readout style simplicity",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural backstory",
+      "kind": "example",
+      "claim": "In 1-2% of Caves of Qud games a fight breaks out in Joppa because procedural backstory made the farmer Mehmet disliked by the Fellowship of Wardens, so Warden Ualraig kills him and sometimes the whole village erupts.",
+      "detail": "Main characters generate with backstories that make them admired or disliked by random factions among about 70; only this specific faction triggers the fight. Grinblat notes it is awkward in the story world (why only when you arrive?) and a big gameplay leak since it locks players out of the starting side quest. Yet he finds it interesting in the meta frame, calls the calculus very close and 'even money' whether they fix it before 1.0, and loves the idea.",
+      "t": 1187,
+      "quote": "the main characters generate with procedural backstory that causes them to be admired or disliked by randomly rolled factions in the game",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "wiki and community",
+      "kind": "open-question",
+      "claim": "Bugs like Caves of Qud's Joppa massacre teach players about important systems by pushing them to wikis and community discussion, which Grinblat defends despite modern design norms, though he calls whether to fix it 'even money'.",
+      "detail": "He says the fix already exists commented out in the object blueprint data. He loves that the hidden processes are complex enough to rupture the story they tell, and quotes Brian Eno that a new medium's weird, ugly failures become its cherished signature.",
+      "t": 1243,
+      "quote": "i know that pushing players out to a wiki is anathema to modern design ethos i personally think it can be good",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "bug to feature",
+      "kind": "principle",
+      "claim": "Grinblat's closing exhortation to designers is to consider whether an apparent bug is actually valuable before fixing it: 'before you fix a leak, ask if it's a fountain'.",
+      "detail": "He follows the Brian Eno quote that the sound of failure, of a medium pushed past its limits, becomes what is cherished about it.",
+      "t": 1347,
+      "quote": "with that i add i implore you before you fix a leak ask if it's a fountain",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "bug triage",
+      "kind": "example",
+      "claim": "Some fun Caves of Qud bugs were removed anyway: heat propagation was originally aggressive enough to burn down whole mountains and set fires on the world map, and players could power-skate on the world map.",
+      "detail": "In Q&A Grinblat recalls these after a prompt from chat; now a message says you cannot power skate on the world map.",
+      "t": 1492,
+      "quote": "the way our like heat propagation worked was a lot more aggressive originally so it was very easy to like burn down entire mountains",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "bug triage",
+      "kind": "principle",
+      "claim": "Turning a bug into a polished feature takes labour, so a team can only do it for some bugs; for the rest it must either accept what is on screen or remove it if it is truly bad.",
+      "detail": "Grinblat says this is part of why bugs 'have momentum'. Asked about suppressing the Joppa fight for first-time players, he personally dislikes design that branches on where the player is in their lifespan with a game, while accepting it could work for others.",
+      "t": 1603,
+      "quote": "you could obviously always come back and turn a bug into the interesting feature version of the bug but you can only do that for so many of your bugs",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "bugs as premise",
+      "kind": "open-question",
+      "claim": "Evocative simulation bugs, like characters in Jeremiah Reid's time-travel roguelike marrying the deceased, suggest designing whole games that take a bug seriously as their premise.",
+      "detail": "Grinblat recalls Reid's IRDC 2016 talk where marriage had not been disabled on death, flooding the logs with marriages. He also mentions Qud's weekly bug triage meeting, opened to Discord helpers, where bug reports often read poetically, and the Dwarf Fortress fix log as an archive of beautiful bugs.",
+      "t": 1857,
+      "quote": "i'm always thinking like what is the what is the game that like spins off off that and like takes that",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

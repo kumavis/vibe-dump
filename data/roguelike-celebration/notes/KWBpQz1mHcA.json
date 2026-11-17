@@ -1,0 +1,185 @@
+{
+  "id": "KWBpQz1mHcA",
+  "title": "Emily Halina: New Levels from a Single Example via Tree-based Reconstructive Partitioning (TRP)",
+  "speaker": "Emily Halina",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=KWBpQz1mHcA",
+  "talk_type": "technical",
+  "summary": "Emily Halina presents Tree-based Reconstructive Partitioning (TRP), a machine-learning-flavoured level generator that produces new levels from a single human-authored example. An MCTS agent plays the source level; its search-tree paths become a binary 'cavernous' sketch of the new level, details are filled by copying edit-distance-matched segments of the original via binary space partitioning, and threats are placed in proportion to how many simulated deaths they caused. Compared against Sturgeon/WFC, Markov chains, an autoencoder and TOAD-GAN on Super Mario Bros and GVG-AI Zelda, TRP produces more coherent and playable levels and respects global constraints like key-then-door. She closes with TRP's accessibility problems (implementing MCTS, forward models, reward functions) and a work-in-progress Godot tool meant to make it usable by indie developers.",
+  "games": [
+    "Super Mario Bros.",
+    "GVG-AI Zelda",
+    "Townscaper",
+    "Caves of Qud",
+    "Bad North",
+    "Sokoban",
+    "Enter the Gungeon",
+    "Hades",
+    "The Binding of Isaac",
+    "Slay the Spire",
+    "Boyfriend Dungeon"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "constructive generation",
+      "kind": "warning",
+      "claim": "Constructive PCG (hand-authored pieces stuck together by an authored generator) is expressive but costly, because designers must author every piece, the generator, and often constraint metadata.",
+      "detail": "Halina describes constructive PCG as designers making 'Lego pieces' that a human-authored generator assembles, as in Enter the Gungeon, Hades, Isaac and Slay the Spire. The cost is authoring all the pieces plus the generator, and adding constraints such as a room only going in a corner or requiring a companion room, which gets complicated fast.",
+      "t": 165,
+      "quote": "somebody has to go and author all of these different Lego pieces and that can be really intensive furthermore somebody has to author the generator",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "pcg via machine learning",
+      "kind": "warning",
+      "claim": "PCG via machine learning is rare in games mainly because games have very little training data, and data-hungry models like autoencoders produce useless levels from one or two examples.",
+      "detail": "Halina argues the small models she means are not the 'evil' kind: they use consensual data (one or two levels from a designer) and no scraping. The real obstacle is lack of data; an autoencoder trained on only two Mario levels outputs mostly sky on top and ground on the bottom, the most common chunk it has seen.",
+      "t": 270,
+      "quote": "a major problem that we've run into is a lack of data within the domain of games um most machine learning",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "warning",
+      "claim": "Single-example methods like wave function collapse and Markov chains only respect local patterns, so in a key-and-door dungeon they can produce levels with no door or with unreachable chambers.",
+      "detail": "Using GVG-AI Zelda, where the player must get a key then reach a door, Halina shows a WFC output with keys but no door and spiders sealed in their own chambers. Because WFC only cares about local constraints present in the example image, no matter where you flood fill, the level cannot be completed; Markov chains likewise ignore global constraints.",
+      "t": 1346,
+      "quote": "that's because wave function collapse has no respect for Global constraints um so what that means is since it only cares about local constraints",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "tree-based reconstructive partitioning",
+      "kind": "technique",
+      "claim": "TRP generates new levels by having an MCTS agent play a human-made source level and using its search-tree data as the skeleton for a new level.",
+      "detail": "The four steps are: play the source level with Monte Carlo tree search, build a binary reconstruction from the search tree, fill in details by copying matched segments of the original, and probabilistically place threats. The point is coherent output without asking designers to author constraints; they only tweak a few parameters.",
+      "t": 345,
+      "quote": "we're going to use playthrough data of an AI agent it's going to play through a level that's been authored by a human",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "tree-based reconstructive partitioning",
+      "kind": "technique",
+      "claim": "TRP's binary reconstruction marks every tile the simulated player visited as empty and everything else as solid, producing a cavernous outline of a traversable path.",
+      "detail": "MCTS records the path taken and where the player died or the game became uncompletable (falling in a pit, hitting a Goomba). The designer must specify which tiles count as empty and full. The resulting outline sketches the path the later partitioning step fills in.",
+      "t": 675,
+      "quote": "where the player has been is going to be empty and where the player hasn't been is going to be full",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "binary space partitioning",
+      "kind": "technique",
+      "claim": "TRP fills in level detail by splitting the sketch into randomly sized segments and pasting in the section of the original level whose solid/empty layout is closest by edit distance.",
+      "detail": "For each unfilled segment, the algorithm scans the original level for the best match by edit distance on solid versus empty tiles, picking randomly among ties, and copies it in. Halina's example matches a two-pipe structure to a path where Mario jumped off one pipe onto another.",
+      "t": 736,
+      "quote": "we're going to do a scan of the original level like this until we find uh the most appropriate thing to match this with this is based on edit distance",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "enemy placement",
+      "kind": "technique",
+      "claim": "TRP places threats in proportion to how many simulated deaths each caused, adding the most impactful threat first until a designer-set threshold is reached.",
+      "detail": "If one Goomba caused 75% of MCTS deaths and another 25%, the first is more likely to be placed and placed first. Halina ties this to the game design idea of placing the most impactful threats while using as few threats as possible. A 'threat' is anything that can end a playthrough, e.g. a box pushed into an unrecoverable spot in Sokoban.",
+      "t": 809,
+      "quote": "we add the most impactful threat and here what I mean by impact is the amount of deaths that a threat has caused",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator parameters",
+      "kind": "technique",
+      "claim": "In TRP, using more MCTS playthroughs yields less restricted levels, because the stochastic search takes different paths each time, which suits games with branching routes.",
+      "detail": "With one playthrough the binary representation is a narrow path; with five it opens up. Since MCTS is random it explores different routes each run, which helps when a game has multiple branching paths to account for.",
+      "t": 873,
+      "quote": "generally if we have more playthroughs it's going to lead to a less restricted level",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator parameters",
+      "kind": "principle",
+      "claim": "Segment size in example-based generators trades plagiarism against chaos, and some plagiarism is desirable when a genre convention like Mario's end staircase should be preserved.",
+      "detail": "Bigger segments copy more of the original; Halina notes plagiarism is bad in academia but not necessarily in level design, since a Mario level without its final staircase would feel wrong. Small segments give chaotic but sometimes interesting output, e.g. floating structures useful for games with more vertical movement.",
+      "t": 909,
+      "quote": "if we're taking bigger segments it's going to result in more plagiarism now plagiarism is a bad thing in Academia but it might not be the worst thing",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator parameters",
+      "kind": "principle",
+      "claim": "A generator that runs instantly makes parameter tuning a matter of guess-and-check, letting designers generate hundreds of levels to find good settings.",
+      "detail": "TRP's generation step is near-instant, so its parameters can be explored by just trying values. In Q&A Halina says segment size is somewhat sensitive per domain (smaller worked for Zelda, column-sized for Mario) but quick to tune via something like a binary search.",
+      "t": 980,
+      "quote": "it's really easy to just guess and check and mess around with trp because the generation process",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "evaluating generators",
+      "kind": "technique",
+      "claim": "Fair generator comparisons should sample outputs randomly from a large population rather than cherry-picking, and disable advantages the compared method lacks.",
+      "detail": "Halina's comparison levels were chosen randomly from 100 generated per approach. Sturgeon's playability constraint was turned off because TRP has no playability guarantee; even so, Sturgeon output looked noisy and un-Mario-like compared to TRP's definite structures like staircases and complete pipes.",
+      "t": 1156,
+      "quote": "these levels were chosen randomly from a population of 100 generated levels of all the approaches so we aren't just cherry-picking examples",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "tree-based reconstructive partitioning",
+      "kind": "principle",
+      "claim": "Deriving a level's skeleton from an agent's successful playthrough encodes global constraints like 'get the key then reach the door' that local-pattern generators miss.",
+      "detail": "On GVG-AI Zelda the TRP level resembled the original with moved walls and enemies but stayed completable, while WFC and Markov outputs were mostly unplayable. Halina's takeaway is that TRP balances playability with difference from the original and gives more logical consistency where the domain requires it.",
+      "t": 1398,
+      "quote": "trp balances playability and allows for differences from the original level while still allowing for the level to actually be playable",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "tree-based reconstructive partitioning",
+      "kind": "open-question",
+      "claim": "TRP may fail on logic-heavy puzzle domains like Sokoban, because its partitioning step only reasons about local sections and ignores global solvability.",
+      "detail": "MCTS works fine for Sokoban, but Halina expects binary space partitioning to produce levels that are unsolvable or, worse, uninteresting. She considers 3D feasible via other space-division algorithms or tokenizing a 3D level into a discrete grid.",
+      "t": 1473,
+      "quote": "binary space partition uh in the end only cares about those local sections of level so it doesn't care about the global solvability constraint",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "monte carlo tree search",
+      "kind": "warning",
+      "claim": "Agent-driven generators like TRP are hard to adopt because MCTS needs a hand-designed reward function and a forward model (simulator) of the game.",
+      "detail": "Defining which states are good takes expert knowledge and trial and error; MCTS must simulate the future, which is hard if the game was not designed to be simulated; running and optimizing MCTS takes time; and designers must encode info like what is an enemy and what the goal state is.",
+      "t": 1573,
+      "quote": "implementing MCTS for a new game is very difficult you have to define a reward function to guide the tree search",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "designer tools",
+      "kind": "technique",
+      "claim": "A work-in-progress Godot TRP tool aims to make the method usable by indie developers by running MCTS from a list of inputs and a default reward function, generating levels during development.",
+      "detail": "Built with collaborator Fas, the tool generated variants of a small Godot platformer with pits, flat stretches and staircases. Halina admits the small example yields similar-looking levels but says it is enough for ideation.",
+      "t": 1647,
+      "quote": "implements MCTS to play any game uh given uh the list of inputs as well as a reward function",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "tree-based reconstructive partitioning",
+      "kind": "technique",
+      "claim": "TRP can use human playthroughs, A* or other search instead of MCTS, and can blend multiple source levels, though a single human path captures fewer alternative routes than a search tree.",
+      "detail": "In Q&A Halina says any player works if playthroughs are recorded the same way, but one human taking one of two paths would underrepresent the other. Multiple source levels can feed the partitioning or the playthrough data, e.g. blending 1-1 and 1-2, which she found produced cool results.",
+      "t": 1956,
+      "quote": "you could use playthroughs from multiple different levels for the same game so if you want to blend one one and one two",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,1780 @@
+{
+ "id": "rPhXTcVVJmo",
+ "url": "https://www.youtube.com/watch?v=rPhXTcVVJmo",
+ "title": "Ray - A Mythopoetic Interface Reading of Caves of Qud",
+ "speaker": "Ray",
+ "talk_title": "A Mythopoetic Interface Reading of Caves of Qud",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-01-29",
+ "duration_s": 858,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Caves of Qud renders a world where artifacts of the distant past present elaborate legends from the events of historic characters' lives. In the same way, the game's interface elaborates on the player character's abstracted interactions and experiences to present their own legend. This talk proposes a reading of Qud's interface as mythopoetic—representing the player's story as mythologized and metaphorical rather than directly literal. This interpretation of Caves of Qud's narrative and themes offers the play experience as one more myth-made layer to dig through.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and setup"
+  },
+  {
+   "start": 122,
+   "title": "Defining mythopoetic reading"
+  },
+  {
+   "start": 263,
+   "title": "Text and procedural devices"
+  },
+  {
+   "start": 460,
+   "title": "Folk mechanics and obscurity"
+  },
+  {
+   "start": 556,
+   "title": "History and thematic resonance"
+  },
+  {
+   "start": 685,
+   "title": "Conclusion and Q&A"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2028,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 8.12,
+   "d": 2.04,
+   "text": "Without further ado, let me introduce"
+  },
+  {
+   "t": 10.16,
+   "d": 2.56,
+   "text": "our next speaker."
+  },
+  {
+   "t": 12.72,
+   "d": 3.56,
+   "text": "Uh we're going to have Ray um give a"
+  },
+  {
+   "t": 16.28,
+   "d": 2.36,
+   "text": "talk about the mythopoeic interface"
+  },
+  {
+   "t": 18.64,
+   "d": 2.8,
+   "text": "reading of [snorts] Caves of Qud. Ray is"
+  },
+  {
+   "t": 21.44,
+   "d": 2.84,
+   "text": "a software developer who um"
+  },
+  {
+   "t": 24.28,
+   "d": 1.6,
+   "text": "when not dreaming about Caves of Qud can"
+  },
+  {
+   "t": 25.88,
+   "d": 2.4,
+   "text": "be found playing it instead. Uh so take"
+  },
+  {
+   "t": 28.28,
+   "d": 2.24,
+   "text": "it away, Ray."
+  },
+  {
+   "t": 30.52,
+   "d": 3.04,
+   "text": ">> Um On the 7th of Shwut Oaks, you arrive"
+  },
+  {
+   "t": 33.56,
+   "d": 2.16,
+   "text": "at the oasis hamlet of Joppa along the"
+  },
+  {
+   "t": 35.72,
+   "d": 2.08,
+   "text": "far rim of Moghra'yi, the Great Salt"
+  },
+  {
+   "t": 37.8,
+   "d": 2.52,
+   "text": "Desert. All around you, moisture farmers"
+  },
+  {
+   "t": 40.32,
+   "d": 2.36,
+   "text": "tend to groves of iridium water vine."
+  },
+  {
+   "t": 42.68,
+   "d": 2.32,
+   "text": "Their huts wrought from rock salt and"
+  },
+  {
+   "t": 45.0,
+   "d": 1.4,
+   "text": "brine stock."
+  },
+  {
+   "t": 46.4,
+   "d": 1.84,
+   "text": "On [snorts] the horizon, Qud's jungles"
+  },
+  {
+   "t": 48.24,
+   "d": 1.8,
+   "text": "strangle chrome steeples and rusted"
+  },
+  {
+   "t": 50.04,
+   "d": 1.92,
+   "text": "archways to the earth. Further and"
+  },
+  {
+   "t": 51.96,
+   "d": 2.12,
+   "text": "beyond, the fabled spindle rises above"
+  },
+  {
+   "t": 54.08,
+   "d": 1.72,
+   "text": "the fray and pierces the cloud-ribboned"
+  },
+  {
+   "t": 55.8,
+   "d": 2.52,
+   "text": "sky."
+  },
+  {
+   "t": 88.4,
+   "d": 3.76,
+   "text": ">> Ray, you muted yourself."
+  },
+  {
+   "t": 92.36,
+   "d": 1.36,
+   "text": ">> Oh my goodness, that's very"
+  },
+  {
+   "t": 93.72,
+   "d": 3.28,
+   "text": "embarrassing. Um let me start over then."
+  },
+  {
+   "t": 97.0,
+   "d": 2.64,
+   "text": "Um"
+  },
+  {
+   "t": 100.48,
+   "d": 1.76,
+   "text": "On the 7th of Shwut Oaks, you arrive at"
+  },
+  {
+   "t": 102.24,
+   "d": 1.84,
+   "text": "the oasis hamlet of Joppa along the far"
+  },
+  {
+   "t": 104.08,
+   "d": 2.08,
+   "text": "rim of Moghra'yi, the Great Salt Desert."
+  },
+  {
+   "t": 106.16,
+   "d": 1.64,
+   "text": "All around you, moisture farmers tend to"
+  },
+  {
+   "t": 107.8,
+   "d": 2.36,
+   "text": "groves of iridium water vine. Their huts"
+  },
+  {
+   "t": 110.16,
+   "d": 1.68,
+   "text": "wrought from salt rock salt and brine"
+  },
+  {
+   "t": 111.84,
+   "d": 2.32,
+   "text": "stock. On the horizon, Qud's jungles"
+  },
+  {
+   "t": 114.16,
+   "d": 1.88,
+   "text": "strangle chrome steeples and rusted"
+  },
+  {
+   "t": 116.04,
+   "d": 1.64,
+   "text": "archways to the earth. Further and"
+  },
+  {
+   "t": 117.68,
+   "d": 1.92,
+   "text": "beyond, the fabled spindle rises above"
+  },
+  {
+   "t": 119.6,
+   "d": 1.56,
+   "text": "the fray and pierces the cloud-ribboned"
+  },
+  {
+   "t": 121.16,
+   "d": 0.96,
+   "text": "sky."
+  },
+  {
+   "t": 122.12,
+   "d": 1.12,
+   "text": "Um"
+  },
+  {
+   "t": 123.24,
+   "d": 1.4,
+   "text": "Hi everybody, and thank you for your"
+  },
+  {
+   "t": 124.64,
+   "d": 2.52,
+   "text": "patience. Um thank you for"
+  },
+  {
+   "t": 127.16,
+   "d": 2.28,
+   "text": "My talk is a mythopoeic interface"
+  },
+  {
+   "t": 129.44,
+   "d": 1.6,
+   "text": "reading of Caves of Cud."
+  },
+  {
+   "t": 131.04,
+   "d": 1.56,
+   "text": "If you don't know what Caves of Cud is,"
+  },
+  {
+   "t": 132.6,
+   "d": 2.52,
+   "text": "it is an award-winning science fantasy"
+  },
+  {
+   "t": 135.12,
+   "d": 1.96,
+   "text": "roguelike RPG that was released last"
+  },
+  {
+   "t": 137.08,
+   "d": 2.08,
+   "text": "year. It's been a long time um"
+  },
+  {
+   "t": 139.16,
+   "d": 2.64,
+   "text": "fascination of mine, which has sort of"
+  },
+  {
+   "t": 141.8,
+   "d": 3.32,
+   "text": "um developed into this idea that I'm"
+  },
+  {
+   "t": 145.12,
+   "d": 2.24,
+   "text": "presenting today. Um before I sort of"
+  },
+  {
+   "t": 147.36,
+   "d": 1.96,
+   "text": "talk about that, I'm going to talk about"
+  },
+  {
+   "t": 149.32,
+   "d": 2.48,
+   "text": "abstraction roguelikes in general. Um I"
+  },
+  {
+   "t": 151.8,
+   "d": 1.64,
+   "text": "would say"
+  },
+  {
+   "t": 153.44,
+   "d": 1.4,
+   "text": "in the most uh"
+  },
+  {
+   "t": 154.84,
+   "d": 1.72,
+   "text": "general sense, abstraction is sort of"
+  },
+  {
+   "t": 156.56,
+   "d": 2.6,
+   "text": "the process of simplification. And I um"
+  },
+  {
+   "t": 159.16,
+   "d": 1.88,
+   "text": "all games use abstractions of varying"
+  },
+  {
+   "t": 161.04,
+   "d": 2.32,
+   "text": "levels in sort of the the mechanics,"
+  },
+  {
+   "t": 163.36,
+   "d": 2.24,
+   "text": "simulations, and interfaces of them. Um"
+  },
+  {
+   "t": 165.6,
+   "d": 1.44,
+   "text": "they're they're they're chosen for a"
+  },
+  {
+   "t": 167.04,
+   "d": 3.12,
+   "text": "variety of reasons. So, like um economic"
+  },
+  {
+   "t": 170.16,
+   "d": 2.44,
+   "text": "reasons, stylistic or artistic reasons,"
+  },
+  {
+   "t": 172.6,
+   "d": 2.04,
+   "text": "and narrativistic reasons. Like or they"
+  },
+  {
+   "t": 174.64,
+   "d": 2.16,
+   "text": "sort of cause these effects based on"
+  },
+  {
+   "t": 176.8,
+   "d": 2.16,
+   "text": "their decisions. Um common roguelike"
+  },
+  {
+   "t": 178.96,
+   "d": 1.96,
+   "text": "examples include sort of like grid-based"
+  },
+  {
+   "t": 180.92,
+   "d": 3.12,
+   "text": "worlds, console or tile visuals, or like"
+  },
+  {
+   "t": 184.04,
+   "d": 2.32,
+   "text": "TTRPG-like mechanics."
+  },
+  {
+   "t": 186.36,
+   "d": 1.68,
+   "text": "Um so"
+  },
+  {
+   "t": 188.04,
+   "d": 2.44,
+   "text": "Caves of Cud uses all of those, but my"
+  },
+  {
+   "t": 190.48,
+   "d": 3.0,
+   "text": "argument today uh is a mythopoeic"
+  },
+  {
+   "t": 193.48,
+   "d": 2.64,
+   "text": "interface reading is sort of my way of"
+  },
+  {
+   "t": 196.12,
+   "d": 3.68,
+   "text": "stay understanding the game as sort of"
+  },
+  {
+   "t": 199.8,
+   "d": 2.6,
+   "text": "presenting to you a non-literal story."
+  },
+  {
+   "t": 202.4,
+   "d": 3.24,
+   "text": "Um more of a uh mythologized"
+  },
+  {
+   "t": 205.64,
+   "d": 3.32,
+   "text": "tale of your um player character."
+  },
+  {
+   "t": 208.96,
+   "d": 2.8,
+   "text": "Um in this in in this sort of the way"
+  },
+  {
+   "t": 211.76,
+   "d": 3.04,
+   "text": "that I'm interpreting the game, um Cud's"
+  },
+  {
+   "t": 214.8,
+   "d": 2.96,
+   "text": "abstraction sort of end up being used as"
+  },
+  {
+   "t": 217.76,
+   "d": 2.32,
+   "text": "narrative devices indicating sort of"
+  },
+  {
+   "t": 220.08,
+   "d": 3.04,
+   "text": "like a a bardic unreliability. So, like"
+  },
+  {
+   "t": 223.12,
+   "d": 2.76,
+   "text": "the the heightened um"
+  },
+  {
+   "t": 225.88,
+   "d": 3.2,
+   "text": "tall-taleness of mythology rather than"
+  },
+  {
+   "t": 229.08,
+   "d": 2.4,
+   "text": "something more literal. Um sort of the"
+  },
+  {
+   "t": 231.48,
+   "d": 1.6,
+   "text": "the specific things that I'm going to be"
+  },
+  {
+   "t": 233.08,
+   "d": 3.8,
+   "text": "looking at today include sort of using"
+  },
+  {
+   "t": 236.88,
+   "d": 1.8,
+   "text": "like using these mechanics as sort of"
+  },
+  {
+   "t": 238.68,
+   "d": 2.24,
+   "text": "the narrative devices"
+  },
+  {
+   "t": 240.92,
+   "d": 2.32,
+   "text": "including sort of cuts"
+  },
+  {
+   "t": 243.24,
+   "d": 3.2,
+   "text": "tendency towards obscure obscuring its"
+  },
+  {
+   "t": 246.44,
+   "d": 1.84,
+   "text": "mechanics"
+  },
+  {
+   "t": 248.28,
+   "d": 1.88,
+   "text": "resulting in sort of folk"
+  },
+  {
+   "t": 250.16,
+   "d": 3.24,
+   "text": "interpretations of the game and then"
+  },
+  {
+   "t": 253.4,
+   "d": 1.6,
+   "text": "I'm also going to be talking about like"
+  },
+  {
+   "t": 255.0,
+   "d": 4.08,
+   "text": "how these the the players story"
+  },
+  {
+   "t": 259.08,
+   "d": 2.12,
+   "text": "parallels the the way that these"
+  },
+  {
+   "t": 261.2,
+   "d": 3.4,
+   "text": "mechanics get used."
+  },
+  {
+   "t": 265.04,
+   "d": 2.2,
+   "text": "Unsurprisingly games mechanics"
+  },
+  {
+   "t": 267.24,
+   "d": 2.32,
+   "text": "influences the way that the players"
+  },
+  {
+   "t": 269.56,
+   "d": 4.64,
+   "text": "interpret the game story. Um,"
+  },
+  {
+   "t": 276.12,
+   "d": 3.6,
+   "text": "Um, and and specifically cuts use of"
+  },
+  {
+   "t": 279.72,
+   "d": 2.52,
+   "text": "handwritten and procedural text"
+  },
+  {
+   "t": 282.24,
+   "d": 1.88,
+   "text": "creates sort of a detachment from"
+  },
+  {
+   "t": 284.12,
+   "d": 3.92,
+   "text": "literality in favor of a mythic feeling."
+  },
+  {
+   "t": 288.04,
+   "d": 1.64,
+   "text": "I would say that this"
+  },
+  {
+   "t": 289.68,
+   "d": 1.4,
+   "text": "I'm sort of reinterpreting the"
+  },
+  {
+   "t": 291.08,
+   "d": 2.24,
+   "text": "simulations sharper edges as playing in"
+  },
+  {
+   "t": 293.32,
+   "d": 3.12,
+   "text": "a mythopoetic space rather than"
+  },
+  {
+   "t": 296.44,
+   "d": 2.44,
+   "text": "something more like doing sort of a"
+  },
+  {
+   "t": 298.88,
+   "d": 2.76,
+   "text": "limitation of the abstraction. So for"
+  },
+  {
+   "t": 301.64,
+   "d": 2.4,
+   "text": "example in the game"
+  },
+  {
+   "t": 304.04,
+   "d": 0.76,
+   "text": "um,"
+  },
+  {
+   "t": 304.8,
+   "d": 3.36,
+   "text": "cut has a lot of a books"
+  },
+  {
+   "t": 308.16,
+   "d": 2.08,
+   "text": "the yellow titled ones are like"
+  },
+  {
+   "t": 310.24,
+   "d": 2.16,
+   "text": "handwritten but they have a lot of white"
+  },
+  {
+   "t": 312.4,
+   "d": 1.84,
+   "text": "titled books as well."
+  },
+  {
+   "t": 314.24,
+   "d": 2.92,
+   "text": "These mostly just include excerpts of"
+  },
+  {
+   "t": 317.16,
+   "d": 1.8,
+   "text": "Markov text"
+  },
+  {
+   "t": 318.96,
+   "d": 2.52,
+   "text": "so randomly generated sort of English"
+  },
+  {
+   "t": 321.48,
+   "d": 1.68,
+   "text": "like like intelligible English like"
+  },
+  {
+   "t": 323.16,
+   "d": 1.92,
+   "text": "approximations"
+  },
+  {
+   "t": 325.08,
+   "d": 0.88,
+   "text": "um,"
+  },
+  {
+   "t": 325.96,
+   "d": 3.96,
+   "text": "which I sort of interpret as like like"
+  },
+  {
+   "t": 329.92,
+   "d": 2.64,
+   "text": "these books are like one way to read"
+  },
+  {
+   "t": 332.56,
+   "d": 1.16,
+   "text": "this"
+  },
+  {
+   "t": 333.72,
+   "d": 2.12,
+   "text": "rather than it being sort of like a"
+  },
+  {
+   "t": 335.84,
+   "d": 2.64,
+   "text": "stylistic limitation due to"
+  },
+  {
+   "t": 338.48,
+   "d": 3.56,
+   "text": "not having the the work to to produce"
+  },
+  {
+   "t": 342.04,
+   "d": 2.52,
+   "text": "like so like a ton of handwritten"
+  },
+  {
+   "t": 344.56,
+   "d": 3.88,
+   "text": "content is that this um,"
+  },
+  {
+   "t": 348.44,
+   "d": 2.64,
+   "text": "is sort of like like sort of uh uh uh"
+  },
+  {
+   "t": 351.08,
+   "d": 0.72,
+   "text": ">> [clears throat]"
+  },
+  {
+   "t": 351.8,
+   "d": 1.96,
+   "text": ">> separating the player's experience of"
+  },
+  {
+   "t": 353.76,
+   "d": 2.4,
+   "text": "like these books are not"
+  },
+  {
+   "t": 356.16,
+   "d": 2.08,
+   "text": "like relevant to the player to the to"
+  },
+  {
+   "t": 358.24,
+   "d": 1.8,
+   "text": "the the the tale of the player"
+  },
+  {
+   "t": 360.04,
+   "d": 1.28,
+   "text": "character."
+  },
+  {
+   "t": 361.32,
+   "d": 2.68,
+   "text": "Um another place where procedural text"
+  },
+  {
+   "t": 364.0,
+   "d": 2.8,
+   "text": "gets used is um"
+  },
+  {
+   "t": 366.8,
+   "d": 3.4,
+   "text": "in when you whip up a meal. So, Cat has"
+  },
+  {
+   "t": 370.2,
+   "d": 2.32,
+   "text": "a a way of sort of"
+  },
+  {
+   "t": 372.52,
+   "d": 4.04,
+   "text": "refilling your hunger clock without um"
+  },
+  {
+   "t": 376.56,
+   "d": 2.36,
+   "text": "uh sort of like the special effects of"
+  },
+  {
+   "t": 378.92,
+   "d": 3.12,
+   "text": "cooking. And what happens is is it picks"
+  },
+  {
+   "t": 382.04,
+   "d": 3.24,
+   "text": "a bunch of random I like bits of like a"
+  },
+  {
+   "t": 385.28,
+   "d": 2.16,
+   "text": "bunch of items and puts them in a pot."
+  },
+  {
+   "t": 387.44,
+   "d": 1.28,
+   "text": "And"
+  },
+  {
+   "t": 388.72,
+   "d": 3.36,
+   "text": "uh most of these are very weird items."
+  },
+  {
+   "t": 392.08,
+   "d": 2.56,
+   "text": "Like I don't know if I'd want to eat uh"
+  },
+  {
+   "t": 394.64,
+   "d": 2.92,
+   "text": "stamped bones. Um"
+  },
+  {
+   "t": 397.56,
+   "d": 2.2,
+   "text": "so I think it sort of this sort of plays"
+  },
+  {
+   "t": 399.76,
+   "d": 3.12,
+   "text": "into the sense of sort of like a a a a"
+  },
+  {
+   "t": 402.88,
+   "d": 3.32,
+   "text": "storyteller sort of I I hyper like"
+  },
+  {
+   "t": 406.2,
+   "d": 2.24,
+   "text": "creating hyperbole of of what is"
+  },
+  {
+   "t": 408.44,
+   "d": 2.12,
+   "text": "actually going on in the game."
+  },
+  {
+   "t": 410.56,
+   "d": 1.2,
+   "text": "Um"
+  },
+  {
+   "t": 411.76,
+   "d": 2.84,
+   "text": "one thing that gets used"
+  },
+  {
+   "t": 414.6,
+   "d": 1.48,
+   "text": "uh"
+  },
+  {
+   "t": 416.08,
+   "d": 3.88,
+   "text": "that is handwritten um are these uh"
+  },
+  {
+   "t": 419.96,
+   "d": 1.96,
+   "text": "a thing called a recall story."
+  },
+  {
+   "t": 421.92,
+   "d": 2.56,
+   "text": "Basically, um a bunch of storied"
+  },
+  {
+   "t": 424.48,
+   "d": 2.44,
+   "text": "artifacts are are literally have stories"
+  },
+  {
+   "t": 426.92,
+   "d": 2.84,
+   "text": "attached to them. So,"
+  },
+  {
+   "t": 429.76,
+   "d": 3.16,
+   "text": "basically these like like um but but"
+  },
+  {
+   "t": 432.92,
+   "d": 1.44,
+   "text": "there's no like explanation of where"
+  },
+  {
+   "t": 434.36,
+   "d": 2.44,
+   "text": "this comes from or who's telling you"
+  },
+  {
+   "t": 436.8,
+   "d": 2.96,
+   "text": "this. Um and and in in this sort of way"
+  },
+  {
+   "t": 439.76,
+   "d": 3.44,
+   "text": "I take it as sort of like um"
+  },
+  {
+   "t": 443.2,
+   "d": 1.92,
+   "text": "a storyteller like going into like a"
+  },
+  {
+   "t": 445.12,
+   "d": 1.84,
+   "text": "digression to talk about a historical"
+  },
+  {
+   "t": 446.96,
+   "d": 2.72,
+   "text": "artifact and its providence or some"
+  },
+  {
+   "t": 449.68,
+   "d": 3.84,
+   "text": "other like tangent rather than"
+  },
+  {
+   "t": 453.52,
+   "d": 2.96,
+   "text": "um like the the player character sort of"
+  },
+  {
+   "t": 456.48,
+   "d": 2.44,
+   "text": "or like like sort of communing with the"
+  },
+  {
+   "t": 458.92,
+   "d": 1.16,
+   "text": "item."
+  },
+  {
+   "t": 460.08,
+   "d": 2.56,
+   "text": "Um"
+  },
+  {
+   "t": 463.0,
+   "d": 2.36,
+   "text": "uh another thing at the like as I"
+  },
+  {
+   "t": 465.36,
+   "d": 2.08,
+   "text": "mentioned previously, Caves of Qud is"
+  },
+  {
+   "t": 467.44,
+   "d": 2.68,
+   "text": "very vague about much of the specifics"
+  },
+  {
+   "t": 470.12,
+   "d": 1.24,
+   "text": "of the game."
+  },
+  {
+   "t": 471.36,
+   "d": 3.48,
+   "text": "Um often times this sort of leads to the"
+  },
+  {
+   "t": 474.84,
+   "d": 2.4,
+   "text": "player the players of the community"
+  },
+  {
+   "t": 477.24,
+   "d": 2.24,
+   "text": "coming up with ideas as how the game"
+  },
+  {
+   "t": 479.48,
+   "d": 2.96,
+   "text": "works that are not necessarily aligned"
+  },
+  {
+   "t": 482.44,
+   "d": 1.6,
+   "text": "like like"
+  },
+  {
+   "t": 484.04,
+   "d": 1.6,
+   "text": "sort of interpreting the your"
+  },
+  {
+   "t": 485.64,
+   "d": 2.96,
+   "text": "experiences and creating um things that"
+  },
+  {
+   "t": 488.6,
+   "d": 3.04,
+   "text": "are not necessarily aligned with how it"
+  },
+  {
+   "t": 491.64,
+   "d": 1.92,
+   "text": "the game actually works."
+  },
+  {
+   "t": 493.56,
+   "d": 1.68,
+   "text": "Um"
+  },
+  {
+   "t": 495.24,
+   "d": 2.0,
+   "text": "So, like"
+  },
+  {
+   "t": 497.24,
+   "d": 2.04,
+   "text": "for example, I have this thing called a"
+  },
+  {
+   "t": 499.28,
+   "d": 3.2,
+   "text": "Jopa Recoiler in my inventory. Um if I"
+  },
+  {
+   "t": 502.48,
+   "d": 2.32,
+   "text": "look at the description, it says nothing"
+  },
+  {
+   "t": 504.8,
+   "d": 1.72,
+   "text": "about what it does. It does have a"
+  },
+  {
+   "t": 506.52,
+   "d": 1.76,
+   "text": "button that I can press."
+  },
+  {
+   "t": 508.28,
+   "d": 2.84,
+   "text": "Um what it does is it teleports me, but"
+  },
+  {
+   "t": 511.12,
+   "d": 2.2,
+   "text": "it does not explain in clear language"
+  },
+  {
+   "t": 513.32,
+   "d": 2.04,
+   "text": "what that does. And I think that sort of"
+  },
+  {
+   "t": 515.36,
+   "d": 3.32,
+   "text": "feeds into the idea of um"
+  },
+  {
+   "t": 518.68,
+   "d": 2.84,
+   "text": "it being sort of a heightened reality"
+  },
+  {
+   "t": 521.52,
+   "d": 4.12,
+   "text": "rather than more of a literal um"
+  },
+  {
+   "t": 525.64,
+   "d": 3.28,
+   "text": "situation. Um"
+  },
+  {
+   "t": 528.92,
+   "d": 3.16,
+   "text": "The game also like if if you've played"
+  },
+  {
+   "t": 532.08,
+   "d": 1.96,
+   "text": "for a for even just a little bit, you"
+  },
+  {
+   "t": 534.04,
+   "d": 3.16,
+   "text": "may have come across um these things"
+  },
+  {
+   "t": 537.2,
+   "d": 2.76,
+   "text": "called like shrines to the the Sultans."
+  },
+  {
+   "t": 539.96,
+   "d": 2.36,
+   "text": "So, these are uh"
+  },
+  {
+   "t": 542.32,
+   "d": 2.8,
+   "text": "related to historical entities"
+  },
+  {
+   "t": 545.12,
+   "d": 0.76,
+   "text": "um"
+  },
+  {
+   "t": 545.88,
+   "d": 2.88,
+   "text": "in the world like that existed thousands"
+  },
+  {
+   "t": 548.76,
+   "d": 4.52,
+   "text": "of years ago. Um Resheph is um is"
+  },
+  {
+   "t": 553.28,
+   "d": 1.32,
+   "text": "uh"
+  },
+  {
+   "t": 554.6,
+   "d": 2.44,
+   "text": "this character is not procedurally"
+  },
+  {
+   "t": 557.04,
+   "d": 2.08,
+   "text": "generated, but a bunch of the other ones"
+  },
+  {
+   "t": 559.12,
+   "d": 2.84,
+   "text": "are. So, for instance, if I go up north"
+  },
+  {
+   "t": 561.96,
+   "d": 2.08,
+   "text": "into the graveyard out of in the"
+  },
+  {
+   "t": 564.04,
+   "d": 2.88,
+   "text": "outskirts of Jopa, I come across a"
+  },
+  {
+   "t": 566.92,
+   "d": 1.16,
+   "text": "shrine to"
+  },
+  {
+   "t": 568.08,
+   "d": 2.84,
+   "text": "the second wife to Bipper. Um what"
+  },
+  {
+   "t": 570.92,
+   "d": 3.72,
+   "text": "happens is is like like these depict uh"
+  },
+  {
+   "t": 574.64,
+   "d": 1.76,
+   "text": "this one specifically depicts like an"
+  },
+  {
+   "t": 576.4,
+   "d": 3.92,
+   "text": "item, a location, a historical event, um"
+  },
+  {
+   "t": 580.32,
+   "d": 3.08,
+   "text": "that is sort of uh about this historical"
+  },
+  {
+   "t": 583.4,
+   "d": 2.56,
+   "text": "like like that sort of indicates bits"
+  },
+  {
+   "t": 585.96,
+   "d": 2.52,
+   "text": "about the the the Sultan, but doesn't"
+  },
+  {
+   "t": 588.48,
+   "d": 2.92,
+   "text": "really um"
+  },
+  {
+   "t": 591.4,
+   "d": 2.0,
+   "text": "but like it it it is so removed from"
+  },
+  {
+   "t": 593.4,
+   "d": 2.44,
+   "text": "history like from from the present day"
+  },
+  {
+   "t": 595.84,
+   "d": 2.08,
+   "text": "that one wonders like"
+  },
+  {
+   "t": 597.92,
+   "d": 3.24,
+   "text": "how real this is. Um"
+  },
+  {
+   "t": 601.16,
+   "d": 2.48,
+   "text": "but you can you can find the locations"
+  },
+  {
+   "t": 603.64,
+   "d": 5.36,
+   "text": "and you can find the items, but uh"
+  },
+  {
+   "t": 609.0,
+   "d": 2.96,
+   "text": "um one thing that like sort of brings it"
+  },
+  {
+   "t": 611.96,
+   "d": 1.76,
+   "text": "like so throughout the entire game you"
+  },
+  {
+   "t": 613.72,
+   "d": 1.48,
+   "text": "might come across these and be like,"
+  },
+  {
+   "t": 615.2,
+   "d": 2.68,
+   "text": "\"Okay, that's the real history.\" But in"
+  },
+  {
+   "t": 617.88,
+   "d": 1.04,
+   "text": "the"
+  },
+  {
+   "t": 618.92,
+   "d": 1.8,
+   "text": "uh the Tomb of the Eaters, what you can"
+  },
+  {
+   "t": 620.72,
+   "d": 2.24,
+   "text": "come across are these"
+  },
+  {
+   "t": 622.96,
+   "d": 2.88,
+   "text": "um these murals that depict these same"
+  },
+  {
+   "t": 625.84,
+   "d": 3.0,
+   "text": "occurrences, but are sort of closer in"
+  },
+  {
+   "t": 628.84,
+   "d": 2.36,
+   "text": "time to when the event actually happened"
+  },
+  {
+   "t": 631.2,
+   "d": 2.04,
+   "text": "and they have they depict some very"
+  },
+  {
+   "t": 633.24,
+   "d": 3.0,
+   "text": "different um"
+  },
+  {
+   "t": 636.24,
+   "d": 1.8,
+   "text": "events or like they sort of are"
+  },
+  {
+   "t": 638.04,
+   "d": 2.88,
+   "text": "reinterpreted in ways um that sort of"
+  },
+  {
+   "t": 640.92,
+   "d": 2.8,
+   "text": "like are closer to the source, so uh"
+  },
+  {
+   "t": 643.72,
+   "d": 2.4,
+   "text": "present a different type of unreality."
+  },
+  {
+   "t": 646.12,
+   "d": 1.8,
+   "text": "Um and the player character also"
+  },
+  {
+   "t": 647.92,
+   "d": 1.84,
+   "text": "experiences this"
+  },
+  {
+   "t": 649.76,
+   "d": 2.32,
+   "text": "uh disconnect from reality"
+  },
+  {
+   "t": 652.08,
+   "d": 3.44,
+   "text": "um by going to the tomb and having their"
+  },
+  {
+   "t": 655.52,
+   "d": 1.48,
+   "text": "history"
+  },
+  {
+   "t": 657.0,
+   "d": 0.6,
+   "text": "uh"
+  },
+  {
+   "t": 657.6,
+   "d": 1.64,
+   "text": "sort of"
+  },
+  {
+   "t": 659.24,
+   "d": 1.6,
+   "text": "uh"
+  },
+  {
+   "t": 660.84,
+   "d": 1.68,
+   "text": "reinterpreted."
+  },
+  {
+   "t": 662.52,
+   "d": 2.24,
+   "text": "Um and this sort of like mechanical"
+  },
+  {
+   "t": 664.76,
+   "d": 2.92,
+   "text": "parallel sort of uh I think is sort of"
+  },
+  {
+   "t": 667.68,
+   "d": 2.4,
+   "text": "some like sort of a a critical part of"
+  },
+  {
+   "t": 670.08,
+   "d": 2.4,
+   "text": "this interpretation is that like it sort"
+  },
+  {
+   "t": 672.48,
+   "d": 3.76,
+   "text": "of loops back into how this the story"
+  },
+  {
+   "t": 676.24,
+   "d": 2.6,
+   "text": "itself works and sort of the themes of"
+  },
+  {
+   "t": 678.84,
+   "d": 3.0,
+   "text": "the game including like the the the the"
+  },
+  {
+   "t": 681.84,
+   "d": 0.76,
+   "text": "the"
+  },
+  {
+   "t": 682.6,
+   "d": 2.76,
+   "text": "the distortions of the deep past um and"
+  },
+  {
+   "t": 685.36,
+   "d": 1.84,
+   "text": "sort of like the character like the"
+  },
+  {
+   "t": 687.2,
+   "d": 2.08,
+   "text": "player character's sort of echoing of"
+  },
+  {
+   "t": 689.28,
+   "d": 2.0,
+   "text": "the historical Sultans."
+  },
+  {
+   "t": 691.28,
+   "d": 2.4,
+   "text": "Um"
+  },
+  {
+   "t": 693.68,
+   "d": 1.76,
+   "text": "I I would say that like this"
+  },
+  {
+   "t": 695.44,
+   "d": 3.36,
+   "text": "interpretation um has for me uh offers"
+  },
+  {
+   "t": 698.8,
+   "d": 2.44,
+   "text": "uh the the play experience is sort of"
+  },
+  {
+   "t": 701.24,
+   "d": 1.28,
+   "text": "uh"
+  },
+  {
+   "t": 702.52,
+   "d": 2.44,
+   "text": "one more way of like sort of digging"
+  },
+  {
+   "t": 704.96,
+   "d": 2.0,
+   "text": "into the same ideas that made me fall in"
+  },
+  {
+   "t": 706.96,
+   "d": 1.4,
+   "text": "love with the game."
+  },
+  {
+   "t": 708.36,
+   "d": 3.64,
+   "text": "Um and I hope that next time you play uh"
+  },
+  {
+   "t": 712.0,
+   "d": 1.44,
+   "text": "you um"
+  },
+  {
+   "t": 713.44,
+   "d": 2.68,
+   "text": "are willing to sort of"
+  },
+  {
+   "t": 716.12,
+   "d": 2.92,
+   "text": "con- uh try this out as as well um and"
+  },
+  {
+   "t": 719.04,
+   "d": 2.6,
+   "text": "sort of see where where this takes you."
+  },
+  {
+   "t": 721.64,
+   "d": 1.8,
+   "text": "Um"
+  },
+  {
+   "t": 723.44,
+   "d": 2.4,
+   "text": "Um I I I didn't get to upload my slides"
+  },
+  {
+   "t": 725.84,
+   "d": 3.0,
+   "text": "yet. Um that will be done shortly. But"
+  },
+  {
+   "t": 728.84,
+   "d": 1.28,
+   "text": "these are eventually some of the things"
+  },
+  {
+   "t": 730.12,
+   "d": 2.72,
+   "text": "that I've been thinking about. Um"
+  },
+  {
+   "t": 732.84,
+   "d": 2.36,
+   "text": "A lot of them have been prior Roguelike"
+  },
+  {
+   "t": 735.2,
+   "d": 1.68,
+   "text": "Celebration talks."
+  },
+  {
+   "t": 736.88,
+   "d": 1.36,
+   "text": "Um"
+  },
+  {
+   "t": 738.24,
+   "d": 2.96,
+   "text": "And yeah, thank you."
+  },
+  {
+   "t": 741.76,
+   "d": 2.4,
+   "text": ">> Awesome. Thank you so much, Ray. Uh that"
+  },
+  {
+   "t": 744.16,
+   "d": 2.52,
+   "text": "was wonderful. It makes me kind of want"
+  },
+  {
+   "t": 746.68,
+   "d": 1.76,
+   "text": "to see someone make like a Three"
+  },
+  {
+   "t": 748.44,
+   "d": 2.92,
+   "text": "Kingdoms Roguelike now. It's like I feel"
+  },
+  {
+   "t": 751.36,
+   "d": 2.48,
+   "text": "like it shares kind of the mythopoeic"
+  },
+  {
+   "t": 753.84,
+   "d": 3.12,
+   "text": "scale or maybe mood. And I'm not sure"
+  },
+  {
+   "t": 756.96,
+   "d": 2.0,
+   "text": "what uh word linguists would use for"
+  },
+  {
+   "t": 758.96,
+   "d": 2.0,
+   "text": "that, but um"
+  },
+  {
+   "t": 760.96,
+   "d": 2.8,
+   "text": "it was awesome. One question I had was"
+  },
+  {
+   "t": 763.76,
+   "d": 1.96,
+   "text": "like"
+  },
+  {
+   "t": 765.72,
+   "d": 2.24,
+   "text": "So, I saw people in the oath talk"
+  },
+  {
+   "t": 767.96,
+   "d": 3.28,
+   "text": "talking about like if I will mention has"
+  },
+  {
+   "t": 771.24,
+   "d": 3.56,
+   "text": "anyone made a like mod where"
+  },
+  {
+   "t": 774.8,
+   "d": 2.32,
+   "text": "uh"
+  },
+  {
+   "t": 777.12,
+   "d": 1.84,
+   "text": "like historical figures can be based on"
+  },
+  {
+   "t": 778.96,
+   "d": 3.6,
+   "text": "the player character. Um how"
+  },
+  {
+   "t": 782.56,
+   "d": 3.28,
+   "text": "would you say that the"
+  },
+  {
+   "t": 785.88,
+   "d": 2.92,
+   "text": "game like"
+  },
+  {
+   "t": 789.04,
+   "d": 2.08,
+   "text": "is there any like parallels that you"
+  },
+  {
+   "t": 791.12,
+   "d": 2.36,
+   "text": "find between the Sultans and the player"
+  },
+  {
+   "t": 793.48,
+   "d": 2.0,
+   "text": "character and the way that the game"
+  },
+  {
+   "t": 795.48,
+   "d": 2.16,
+   "text": "positions those Sultans um to the"
+  },
+  {
+   "t": 797.64,
+   "d": 1.12,
+   "text": "character?"
+  },
+  {
+   "t": 798.76,
+   "d": 3.76,
+   "text": ">> Yes, I do find parallels. Um being more"
+  },
+  {
+   "t": 802.52,
+   "d": 2.6,
+   "text": "precise would involve spoiling the"
+  },
+  {
+   "t": 805.12,
+   "d": 2.28,
+   "text": "ending of the game. But I feel like"
+  },
+  {
+   "t": 807.4,
+   "d": 1.76,
+   "text": "saying that also spoils the end of the"
+  },
+  {
+   "t": 809.16,
+   "d": 1.88,
+   "text": "game in some sense, but"
+  },
+  {
+   "t": 811.04,
+   "d": 0.52,
+   "text": ">> Interesting."
+  },
+  {
+   "t": 811.56,
+   "d": 2.16,
+   "text": ">> I I would say if if you if you really"
+  },
+  {
+   "t": 813.72,
+   "d": 2.32,
+   "text": "want to see that, I would encourage you"
+  },
+  {
+   "t": 816.04,
+   "d": 1.36,
+   "text": "to"
+  },
+  {
+   "t": 817.4,
+   "d": 0.76,
+   "text": "um"
+  },
+  {
+   "t": 818.16,
+   "d": 1.76,
+   "text": "try to complete the game and see where"
+  },
+  {
+   "t": 819.92,
+   "d": 1.24,
+   "text": "that takes you."
+  },
+  {
+   "t": 821.16,
+   "d": 2.0,
+   "text": ">> Got you. Okay. I have not reached the"
+  },
+  {
+   "t": 823.16,
+   "d": 1.32,
+   "text": "end of Caves of Qud and now I am"
+  },
+  {
+   "t": 824.48,
+   "d": 2.84,
+   "text": "fascinated. Um we do have an ask from"
+  },
+  {
+   "t": 827.32,
+   "d": 2.4,
+   "text": "Evan to please briefly eulogize our"
+  },
+  {
+   "t": 829.72,
+   "d": 2.6,
+   "text": "fallen empire as if inscribing its tomb."
+  },
+  {
+   "t": 832.32,
+   "d": 1.68,
+   "text": "So, if you could improvise some poetry"
+  },
+  {
+   "t": 834.0,
+   "d": 1.48,
+   "text": "for us. Uh"
+  },
+  {
+   "t": 835.48,
+   "d": 1.04,
+   "text": ">> Ah, that is"
+  },
+  {
+   "t": 836.52,
+   "d": 1.16,
+   "text": ">> on the spot."
+  },
+  {
+   "t": 837.68,
+   "d": 1.08,
+   "text": ">> That is"
+  },
+  {
+   "t": 838.76,
+   "d": 1.88,
+   "text": "That is unfortunately"
+  },
+  {
+   "t": 840.64,
+   "d": 2.8,
+   "text": "kind of far out of my traditional skill"
+  },
+  {
+   "t": 843.44,
+   "d": 4.56,
+   "text": "set. So, much as I would love to um"
+  },
+  {
+   "t": 848.0,
+   "d": 1.92,
+   "text": "I don't feel up to the task right now,"
+  },
+  {
+   "t": 849.92,
+   "d": 3.12,
+   "text": "but I I am I'm glad that somebody"
+  },
+  {
+   "t": 853.04,
+   "d": 1.6,
+   "text": "thought I could."
+  },
+  {
+   "t": 854.64,
+   "d": 1.0,
+   "text": ">> Okay."
+  },
+  {
+   "t": 855.64,
+   "d": 1.8,
+   "text": "Fair enough. Well, thank you so much,"
+  },
+  {
+   "t": 857.44,
+   "d": 2.44,
+   "text": "Ray."
+  }
+ ]
+}

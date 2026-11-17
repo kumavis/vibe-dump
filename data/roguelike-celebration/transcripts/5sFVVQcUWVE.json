@@ -1,0 +1,1406 @@
+{
+ "id": "5sFVVQcUWVE",
+ "url": "https://www.youtube.com/watch?v=5sFVVQcUWVE",
+ "title": "Gabriel Santos - ASCII Art Techniques & Animation",
+ "speaker": "Gabriel Santos",
+ "talk_title": "ASCII Art Techniques & Animation",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1192,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nGabriel is a life-long developer who loves games, ASCII-art and dogs, and respects the Sun more than usual.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 11,
+   "title": "Half Mate"
+  },
+  {
+   "start": 64,
+   "title": "Decomposition"
+  },
+  {
+   "start": 70,
+   "title": "Animation"
+  },
+  {
+   "start": 110,
+   "title": "ASCII Particle Emitter"
+  },
+  {
+   "start": 198,
+   "title": "ASCII Walk Cycle"
+  },
+  {
+   "start": 228,
+   "title": "Unicode"
+  },
+  {
+   "start": 245,
+   "title": "Block"
+  },
+  {
+   "start": 312,
+   "title": "Fonts"
+  },
+  {
+   "start": 412,
+   "title": "Basic Characters"
+  },
+  {
+   "start": 465,
+   "title": "A Miracle Effect"
+  },
+  {
+   "start": 523,
+   "title": "Line Art"
+  },
+  {
+   "start": 591,
+   "title": "AntiAliasing"
+  },
+  {
+   "start": 667,
+   "title": "Quick Example"
+  },
+  {
+   "start": 833,
+   "title": "Negative Space"
+  },
+  {
+   "start": 904,
+   "title": "Pixel Art"
+  },
+  {
+   "start": 919,
+   "title": "Shadow Art"
+  },
+  {
+   "start": 947,
+   "title": "Animation Process"
+  },
+  {
+   "start": 1009,
+   "title": "Subtractive Animation"
+  },
+  {
+   "start": 1155,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2927,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 2.16,
+   "d": 2.73,
+   "text": "Gabriel: I'm glad to be here. The talks so far have been great."
+  },
+  {
+   "t": 4.9,
+   "d": 4.7,
+   "text": "I wanted to make my presentation all in ASCII."
+  },
+  {
+   "t": 12.31,
+   "d": 4.79,
+   "text": "And I wanted to open up by showing one of the animations"
+  },
+  {
+   "t": 17.25,
+   "d": 4.09,
+   "text": "that I have made. And this one really is"
+  },
+  {
+   "t": 21.34,
+   "d": 4.92,
+   "text": "the culmination of all the techniques that I've developed in the past six years"
+  },
+  {
+   "t": 26.26,
+   "d": 2.27,
+   "text": "that I've been studying ASCII art."
+  },
+  {
+   "t": 29.59,
+   "d": 4.03,
+   "text": "The audio in this shot is pretty good, too, but I wanted to show - to focus"
+  },
+  {
+   "t": 33.62,
+   "d": 2.22,
+   "text": "on the art here."
+  },
+  {
+   "t": 35.84,
+   "d": 4.73,
+   "text": "You can see a lot of the things that I'm gonna talk about right now,"
+  },
+  {
+   "t": 40.58,
+   "d": 6.0,
+   "text": "in the coming slides. For example, the shadows and the use of"
+  },
+  {
+   "t": 46.58,
+   "d": 5.35,
+   "text": "negative space here, to give depth."
+  },
+  {
+   "t": 52.26,
+   "d": 1.33,
+   "text": "Et cetera."
+  },
+  {
+   "t": 56.56,
+   "d": 2.77,
+   "text": "But it is a short talk, so I'm just gonna scroll through"
+  },
+  {
+   "t": 59.33,
+   "d": 3.28,
+   "text": "the topics real quick, and then you guys can ask me about"
+  },
+  {
+   "t": 62.61,
+   "d": 2.65,
+   "text": "which ones you want to know more about."
+  },
+  {
+   "t": 65.26,
+   "d": 3.75,
+   "text": "I want to show how this scene is decomposed. So there's a"
+  },
+  {
+   "t": 69.01,
+   "d": 4.93,
+   "text": "background layer, and here's the animation for the cultist."
+  },
+  {
+   "t": 73.94,
+   "d": 4.8,
+   "text": "And then the other cultist, on the bottom, the victim here,"
+  },
+  {
+   "t": 78.74,
+   "d": 3.77,
+   "text": "and even little details on the chain animating."
+  },
+  {
+   "t": 85.32,
+   "d": 4.15,
+   "text": "If you guys want to see the details of this presentation, there's a link"
+  },
+  {
+   "t": 89.47,
+   "d": 2.77,
+   "text": "at the end. You can download the text file."
+  },
+  {
+   "t": 92.24,
+   "d": 9.87,
+   "text": "The candle on the wall, right here, has a nice little detail on the glyphs."
+  },
+  {
+   "t": 104.07,
+   "d": 2.66,
+   "text": "It works really nicely. I was very proud of that one,"
+  },
+  {
+   "t": 106.72,
+   "d": 6.18,
+   "text": "because it's just one symbol for the candle. That's always good."
+  },
+  {
+   "t": 114.06,
+   "d": 3.65,
+   "text": "This is the nagaraja, the supreme serpent coming up."
+  },
+  {
+   "t": 117.7,
+   "d": 4.65,
+   "text": "The tongue is omitted for simplicity, because there's a lot of frames"
+  },
+  {
+   "t": 122.35,
+   "d": 5.07,
+   "text": "for the tongue, so I kept that one out. But here, I wanted to stop to show"
+  },
+  {
+   "t": 127.42,
+   "d": 4.95,
+   "text": "the special metadata here, that is where the particles get emitted."
+  },
+  {
+   "t": 132.37,
+   "d": 4.6,
+   "text": "So I wrote a very simple ASCII particle emitter."
+  },
+  {
+   "t": 140.38,
+   "d": 5.3,
+   "text": "When I say simple, it doesn't do things that other particle systems do,"
+  },
+  {
+   "t": 145.68,
+   "d": 2.78,
+   "text": "where smoke interacts, the particles interact with each other."
+  },
+  {
+   "t": 148.46,
+   "d": 3.02,
+   "text": "It doesn't do any of that. It just has velocity and"
+  },
+  {
+   "t": 153.86,
+   "d": 4.5,
+   "text": "it shows the ASCII symbols. It's able to fit two particles"
+  },
+  {
+   "t": 158.36,
+   "d": 3.96,
+   "text": "within the same cell, so it does some smart things, but it's"
+  },
+  {
+   "t": 162.32,
+   "d": 2.63,
+   "text": "very simple and it gets the job done."
+  },
+  {
+   "t": 164.96,
+   "d": 3.76,
+   "text": "I think that's how projects should be."
+  },
+  {
+   "t": 171.16,
+   "d": 2.47,
+   "text": "Some of the frames, let me move on."
+  },
+  {
+   "t": 174.81,
+   "d": 3.17,
+   "text": "The drool is something that worked really well, so I used"
+  },
+  {
+   "t": 177.97,
+   "d": 3.65,
+   "text": "it in lots of characters. It's just really simple."
+  },
+  {
+   "t": 181.62,
+   "d": 5.87,
+   "text": "You start with one symbol and then you just grow it, and keep going."
+  },
+  {
+   "t": 189.45,
+   "d": 3.6,
+   "text": "And then you take that line and you break it up,"
+  },
+  {
+   "t": 194.82,
+   "d": 3.13,
+   "text": "and it works really nicely when it plays."
+  },
+  {
+   "t": 199.22,
+   "d": 6.15,
+   "text": "Poison Adept, let's look at this guy. So this is another"
+  },
+  {
+   "t": 205.37,
+   "d": 6.9,
+   "text": "animation, that is much simpler. So I think it's easier to get"
+  },
+  {
+   "t": 212.27,
+   "d": 5.25,
+   "text": "a grasp for the animation technique that's being used here."
+  },
+  {
+   "t": 217.52,
+   "d": 2.85,
+   "text": "It's just a walk cycle."
+  },
+  {
+   "t": 220.37,
+   "d": 4.43,
+   "text": "And here are some of the frames for that, so it's easy to wrap"
+  },
+  {
+   "t": 224.8,
+   "d": 3.45,
+   "text": "your head around this one. I wanted to include that as well."
+  },
+  {
+   "t": 229.68,
+   "d": 4.06,
+   "text": "You will see that this is not a traditional ASCII. There is some"
+  },
+  {
+   "t": 233.75,
+   "d": 4.65,
+   "text": "Unicode thrown in there, and I feel like, in modern computers, you"
+  },
+  {
+   "t": 238.4,
+   "d": 2.35,
+   "text": "should leverage that."
+  },
+  {
+   "t": 240.75,
+   "d": 4.13,
+   "text": "But I wanted to stick to the style, so I used Unicode symbols that"
+  },
+  {
+   "t": 244.88,
+   "d": 3.17,
+   "text": "retained the style."
+  },
+  {
+   "t": 249.78,
+   "d": 3.85,
+   "text": "But allow me to expand what's possible."
+  },
+  {
+   "t": 254.45,
+   "d": 3.46,
+   "text": "Here are some of the different styles that you'll see in text art,"
+  },
+  {
+   "t": 257.91,
+   "d": 2.93,
+   "text": "and I named them to make it easy to talk about."
+  },
+  {
+   "t": 260.85,
+   "d": 4.15,
+   "text": "Block art, there's this filled style that pretty much just uses negative"
+  },
+  {
+   "t": 265.0,
+   "d": 4.5,
+   "text": "space. You'll see this a lot in procedurally-generated,"
+  },
+  {
+   "t": 269.5,
+   "d": 4.62,
+   "text": "so if you take a video and convert it automatically into ASCII, this is"
+  },
+  {
+   "t": 274.11,
+   "d": 3.4,
+   "text": "generally the style that comes out."
+  },
+  {
+   "t": 277.51,
+   "d": 5.17,
+   "text": "Line art is what I do most of the time, is what I've focused on."
+  },
+  {
+   "t": 282.68,
+   "d": 5.26,
+   "text": "And box drawing is something I use. The difference between line art"
+  },
+  {
+   "t": 287.94,
+   "d": 5.17,
+   "text": "and box drawing is that you get more organic characters and"
+  },
+  {
+   "t": 293.11,
+   "d": 2.68,
+   "text": "organic objects when you do line art, and you get more"
+  },
+  {
+   "t": 295.79,
+   "d": 2.79,
+   "text": "geometric, more mechanical things when you do box drawing."
+  },
+  {
+   "t": 298.57,
+   "d": 1.4,
+   "text": "It's pretty cool. You'll see a lot of that"
+  },
+  {
+   "t": 299.97,
+   "d": 2.92,
+   "text": "in like Cogmind. He does a lot of box drawing, because it's"
+  },
+  {
+   "t": 302.89,
+   "d": 3.1,
+   "text": "a game about robots and that makes a lot of sense."
+  },
+  {
+   "t": 306.62,
+   "d": 3.32,
+   "text": "Also for UI, so if you're doing buttons and scroll windows,"
+  },
+  {
+   "t": 309.94,
+   "d": 2.45,
+   "text": "things like that, box drawing's really good."
+  },
+  {
+   "t": 314.1,
+   "d": 2.28,
+   "text": "I wanted to talk about fonts real quick. So obviously,"
+  },
+  {
+   "t": 316.39,
+   "d": 4.78,
+   "text": "mono-spaced is how you get the job done, but then if you look at"
+  },
+  {
+   "t": 321.17,
+   "d": 9.0,
+   "text": "things like Asian ASCII, that is non-mono-spaced, some really"
+  },
+  {
+   "t": 330.17,
+   "d": 4.03,
+   "text": "incredible art comes out of that, and that's an area that I plan to"
+  },
+  {
+   "t": 334.2,
+   "d": 3.37,
+   "text": "explore in the future, but I haven't gotten there yet."
+  },
+  {
+   "t": 337.57,
+   "d": 5.76,
+   "text": "Aspect ratio of your fonts. So I've come to the conclusion"
+  },
+  {
+   "t": 343.33,
+   "d": 3.72,
+   "text": "that 1:1 is really good for top-down games, but if you're going for"
+  },
+  {
+   "t": 347.05,
+   "d": 7.33,
+   "text": "an isometric perspective or side perspective, like I'm doing, 1:2"
+  },
+  {
+   "t": 354.38,
+   "d": 4.78,
+   "text": "is better, or more exactly, my choice would have been 16:29."
+  },
+  {
+   "t": 359.17,
+   "d": 4.0,
+   "text": "It's a bit awkward, but it took a lot of experimentation to get to this"
+  },
+  {
+   "t": 363.16,
+   "d": 1.65,
+   "text": "aspect ratio."
+  },
+  {
+   "t": 366.43,
+   "d": 5.71,
+   "text": "Some fonts to base yourself around, classical ones here. Mine is"
+  },
+  {
+   "t": 372.15,
+   "d": 7.63,
+   "text": "a spinoff of Courier Sans, and I just created my own."
+  },
+  {
+   "t": 379.78,
+   "d": 5.2,
+   "text": "I ended up making over 20 different font sizes of the same font."
+  },
+  {
+   "t": 384.98,
+   "d": 5.18,
+   "text": "I hired a couple people to help with that work, and the reason I went for"
+  },
+  {
+   "t": 390.16,
+   "d": 3.88,
+   "text": "so many different font sizes is the smallest one is 3x5 pixels,"
+  },
+  {
+   "t": 394.04,
+   "d": 8.27,
+   "text": "so it's pretty tiny. But magically, the game still reads when it goes that small."
+  },
+  {
+   "t": 402.31,
+   "d": 4.02,
+   "text": "It's because I wanted the game to be pixel perfect at any resolution."
+  },
+  {
+   "t": 406.33,
+   "d": 6.55,
+   "text": "You're able to scale the window size and it picks the font dynamically."
+  },
+  {
+   "t": 413.68,
+   "d": 3.75,
+   "text": "Here's some of the alphabet for line art, specifically."
+  },
+  {
+   "t": 418.31,
+   "d": 8.83,
+   "text": "The basic classic characters up here, that you'll see in a lot of old school"
+  },
+  {
+   "t": 427.14,
+   "d": 5.12,
+   "text": "ASCII art, and I have found that these four right here are really,"
+  },
+  {
+   "t": 432.26,
+   "d": 4.77,
+   "text": "really useful. The four Latin accent is the mirror, of course, of that one."
+  },
+  {
+   "t": 437.02,
+   "d": 4.21,
+   "text": "These are Unicode, though, so if you just take this text file,"
+  },
+  {
+   "t": 441.24,
+   "d": 5.8,
+   "text": "this presentation, and open it on your phone or on your browser, it's gonna"
+  },
+  {
+   "t": 447.04,
+   "d": 3.25,
+   "text": "look terrible because of the Unicode. But if you download the file,"
+  },
+  {
+   "t": 450.29,
+   "d": 4.2,
+   "text": "then it'll look fine in a text sharer. The upside-down exclamation,"
+  },
+  {
+   "t": 454.49,
+   "d": 5.42,
+   "text": "when I do anti-aliasing in some of the lines, this one's really useful."
+  },
+  {
+   "t": 459.91,
+   "d": 5.77,
+   "text": "And the center dot, it helps with balancing and negative space."
+  },
+  {
+   "t": 467.14,
+   "d": 6.88,
+   "text": "I wanted to talk about alphanumericals, which if you take a letter like A or"
+  },
+  {
+   "t": 474.02,
+   "d": 3.6,
+   "text": "number 9 or something like that, and you put that in the middle"
+  },
+  {
+   "t": 477.62,
+   "d": 4.78,
+   "text": "of the art, it affects a different part of the brain. And you can do that"
+  },
+  {
+   "t": 482.4,
+   "d": 4.51,
+   "text": "purposefully, but you need to be aware that that's where the eye's gonna be"
+  },
+  {
+   "t": 486.92,
+   "d": 5.4,
+   "text": "drawn to first. So if you want that effect in your art, then fine. But I find that"
+  },
+  {
+   "t": 492.32,
+   "d": 4.0,
+   "text": "it's usually an unwanted distraction. So these are the symbols that I do"
+  },
+  {
+   "t": 496.32,
+   "d": 5.02,
+   "text": "use sometimes. They're useful, and they stick to the line art style."
+  },
+  {
+   "t": 501.33,
+   "d": 7.08,
+   "text": "I try to use them purposefully, because they still have that effect,"
+  },
+  {
+   "t": 508.42,
+   "d": 5.35,
+   "text": "the alphanumerical effect. But you shouldn't use the letter B or"
+  },
+  {
+   "t": 513.76,
+   "d": 5.37,
+   "text": "something like that, that's gonna trigger a different - the reader is"
+  },
+  {
+   "t": 519.13,
+   "d": 3.32,
+   "text": "gonna read it differently, and it's gonna be a distraction most of"
+  },
+  {
+   "t": 522.45,
+   "d": 1.3,
+   "text": "the time."
+  },
+  {
+   "t": 524.61,
+   "d": 2.61,
+   "text": "Here are some of the lines, and it's called line art because you get"
+  },
+  {
+   "t": 527.23,
+   "d": 3.82,
+   "text": "these - basically, you're just doing a bunch of lines at different angles."
+  },
+  {
+   "t": 531.04,
+   "d": 5.97,
+   "text": "And some come very naturally, like the 60 degrees one."
+  },
+  {
+   "t": 537.01,
+   "d": 6.2,
+   "text": "And here are the gradients, all the way to almost horizontal."
+  },
+  {
+   "t": 543.21,
+   "d": 6.42,
+   "text": "But if you take a closer look, this one right here, and that one,"
+  },
+  {
+   "t": 549.62,
+   "d": 4.24,
+   "text": "these two are the same angle. But they're drawn in different ways,"
+  },
+  {
+   "t": 553.87,
+   "d": 4.59,
+   "text": "and you can use this in the language of your greater work, if you're"
+  },
+  {
+   "t": 558.45,
+   "d": 5.61,
+   "text": "consistent with how you use these materials. You can assign them to,"
+  },
+  {
+   "t": 564.07,
+   "d": 6.99,
+   "text": "say, metal or wood or I don't know, rock. Like, this one might be"
+  },
+  {
+   "t": 571.05,
+   "d": 3.87,
+   "text": "rock and that one might be metal, and if you're consistent in that,"
+  },
+  {
+   "t": 574.92,
+   "d": 4.5,
+   "text": "the reader will internalize that, and you can then paint a"
+  },
+  {
+   "t": 579.42,
+   "d": 5.18,
+   "text": "bigger picture, using that language. This bottom one is the same,"
+  },
+  {
+   "t": 584.6,
+   "d": 3.75,
+   "text": "so these bottom two are the same angle, but they're done slightly"
+  },
+  {
+   "t": 588.35,
+   "d": 2.97,
+   "text": "differently in style, so you get different results."
+  },
+  {
+   "t": 592.23,
+   "d": 3.82,
+   "text": "Those are some options. Now, these are all quasi-horizontal"
+  },
+  {
+   "t": 596.05,
+   "d": 4.98,
+   "text": "lines, and there's an interesting aspect of ASCII line art that comes out"
+  },
+  {
+   "t": 601.03,
+   "d": 3.8,
+   "text": "when you try to do vertical lines. You get into trouble, because"
+  },
+  {
+   "t": 604.83,
+   "d": 3.7,
+   "text": "in the horizontal ones, you have a lot of gradation in which"
+  },
+  {
+   "t": 608.53,
+   "d": 9.25,
+   "text": "glyphs you can use inside the space of the cell. But with the vertical"
+  },
+  {
+   "t": 617.78,
+   "d": 3.57,
+   "text": "lines, you don't, because all the glyphs are horizontally aligned."
+  },
+  {
+   "t": 621.35,
+   "d": 5.38,
+   "text": "So you can't really do lines between 90 degrees and 60 degrees."
+  },
+  {
+   "t": 626.73,
+   "d": 4.77,
+   "text": "You will usually see things like this one right here."
+  },
+  {
+   "t": 631.5,
+   "d": 4.93,
+   "text": "And yeah, maybe for a rock surface or a spiderweb or something,"
+  },
+  {
+   "t": 636.43,
+   "d": 2.97,
+   "text": "you can do that. But if you're trying to make it look smooth, it's not"
+  },
+  {
+   "t": 639.39,
+   "d": 4.07,
+   "text": "gonna look smooth, and this is where I've developed a few anti-aliasing"
+  },
+  {
+   "t": 643.46,
+   "d": 5.87,
+   "text": "tricks, such as that, or that. These are all three the same angle,"
+  },
+  {
+   "t": 649.33,
+   "d": 3.96,
+   "text": "but different ways of doing that."
+  },
+  {
+   "t": 653.29,
+   "d": 2.45,
+   "text": "And then for a curved side, you could use the - here are"
+  },
+  {
+   "t": 655.74,
+   "d": 4.98,
+   "text": "two ways with aliasing that you can do it, the same shape."
+  },
+  {
+   "t": 660.73,
+   "d": 3.15,
+   "text": "And then here are some ways you can do it with anti-aliasing, with"
+  },
+  {
+   "t": 663.88,
+   "d": 3.27,
+   "text": "the exclamation mark or the single quote."
+  },
+  {
+   "t": 668.67,
+   "d": 7.63,
+   "text": "So I wanted to draw something real quick, to show that it's not a very"
+  },
+  {
+   "t": 676.31,
+   "d": 3.9,
+   "text": "time-consuming thing. Like, people always ask, \"Oh, this must take"
+  },
+  {
+   "t": 680.2,
+   "d": 4.79,
+   "text": "a ton of time to do.\" Yeah, it does, but once you practice and you"
+  },
+  {
+   "t": 684.99,
+   "d": 5.8,
+   "text": "get used to it, then it's a pretty fast process."
+  },
+  {
+   "t": 690.79,
+   "d": 2.92,
+   "text": "I'm gonna try to make a pumpkin here, but I don't know if I'm gonna"
+  },
+  {
+   "t": 693.7,
+   "d": 4.45,
+   "text": "be able to do it, how good a job I'll do at that. But since it is"
+  },
+  {
+   "t": 698.15,
+   "d": 3.3,
+   "text": "October, I wanted to make a pumpkin of sorts here."
+  },
+  {
+   "t": 704.55,
+   "d": 2.1,
+   "text": "Maybe a Jack-o-lantern or something."
+  },
+  {
+   "t": 708.03,
+   "d": 2.88,
+   "text": "I guess I could have practiced this, to make it faster."
+  },
+  {
+   "t": 710.92,
+   "d": 2.23,
+   "text": "But let's do it live."
+  },
+  {
+   "t": 715.87,
+   "d": 2.93,
+   "text": "And you will see, there are certain combinations of glyphs that"
+  },
+  {
+   "t": 718.8,
+   "d": 3.33,
+   "text": "always come up. So these three right here is something that is"
+  },
+  {
+   "t": 722.13,
+   "d": 3.04,
+   "text": "very common. So once you practice enough and you're like,"
+  },
+  {
+   "t": 725.18,
+   "d": 4.79,
+   "text": "\"Oh, blah,\" you got the symbols memorized and how you place them down, it becomes"
+  },
+  {
+   "t": 729.97,
+   "d": 3.48,
+   "text": "a very fast process."
+  },
+  {
+   "t": 734.98,
+   "d": 4.9,
+   "text": "Alright, so we got the basic shape of the pumpkin. I'll put some sort of"
+  },
+  {
+   "t": 739.88,
+   "d": 6.57,
+   "text": "stem here. I don't know where I'm going with this,"
+  },
+  {
+   "t": 746.45,
+   "d": 6.75,
+   "text": "but whoops. You know, alphanumericals."
+  },
+  {
+   "t": 753.19,
+   "d": 2.72,
+   "text": "Maybe some negative space here."
+  },
+  {
+   "t": 757.39,
+   "d": 2.15,
+   "text": "It's coming out alright."
+  },
+  {
+   "t": 768.88,
+   "d": 1.56,
+   "text": "There we go."
+  },
+  {
+   "t": 771.59,
+   "d": 3.05,
+   "text": "Let's see, how do I do the face?"
+  },
+  {
+   "t": 780.19,
+   "d": 6.98,
+   "text": "And then for the mouth, maybe I'll just do a bunch of -"
+  },
+  {
+   "t": 787.17,
+   "d": 3.95,
+   "text": "I don't know. That's already working, so iteration and"
+  },
+  {
+   "t": 791.12,
+   "d": 4.2,
+   "text": "exploration is really important, and with this example here,"
+  },
+  {
+   "t": 795.32,
+   "d": 4.0,
+   "text": "you can see how efficient it actually can be, and how quickly I swapped"
+  },
+  {
+   "t": 799.32,
+   "d": 4.25,
+   "text": "those two. It's much faster than other art mediums."
+  },
+  {
+   "t": 803.57,
+   "d": 6.2,
+   "text": "And I very quickly made three different ways of doing the mouth,"
+  },
+  {
+   "t": 809.77,
+   "d": 2.7,
+   "text": "and I can now choose which one I want."
+  },
+  {
+   "t": 812.47,
+   "d": 3.37,
+   "text": "So I actually like this one a lot. Let's stop here, and yeah,"
+  },
+  {
+   "t": 815.84,
+   "d": 3.18,
+   "text": "you could keep going. You could polish some of these curves, you"
+  },
+  {
+   "t": 819.02,
+   "d": 4.43,
+   "text": "could maybe add a little detail here and there. Whoops."
+  },
+  {
+   "t": 826.67,
+   "d": 4.1,
+   "text": "Yeah, you can maybe add a little detail here and there, but this is probably"
+  },
+  {
+   "t": 830.77,
+   "d": 3.85,
+   "text": "enough for now and the talk's short, so let's keep going."
+  },
+  {
+   "t": 834.62,
+   "d": 1.93,
+   "text": "I mentioned negative space a few times."
+  },
+  {
+   "t": 836.55,
+   "d": 2.32,
+   "text": "So here, I wanted to get more specific about that."
+  },
+  {
+   "t": 838.87,
+   "d": 4.17,
+   "text": "In this example here, you're doing two circles drawn on"
+  },
+  {
+   "t": 843.03,
+   "d": 3.63,
+   "text": "top of each other, and they have these two connections."
+  },
+  {
+   "t": 846.66,
+   "d": 3.5,
+   "text": "That can be problematic for reading quickly, the scene."
+  },
+  {
+   "t": 850.16,
+   "d": 3.47,
+   "text": "So what you can do is you can swap some of these glyphs and"
+  },
+  {
+   "t": 853.63,
+   "d": 5.67,
+   "text": "just add some empty space, and it gives it more depth and reads faster,"
+  },
+  {
+   "t": 859.3,
+   "d": 2.37,
+   "text": "separates the objects from each other."
+  },
+  {
+   "t": 861.66,
+   "d": 3.38,
+   "text": "And then you can also do color changes, so you can do this one"
+  },
+  {
+   "t": 865.05,
+   "d": 4.77,
+   "text": "a white, and this one a light grey, and you'll get depth that way as well."
+  },
+  {
+   "t": 869.81,
+   "d": 6.95,
+   "text": "And for this robot guardian guy, you can see that used here in the"
+  },
+  {
+   "t": 876.76,
+   "d": 4.12,
+   "text": "shoulder, very effectively, because it is a foreground"
+  },
+  {
+   "t": 880.88,
+   "d": 5.61,
+   "text": "layer in the character. So adding that space here"
+  },
+  {
+   "t": 886.49,
+   "d": 4.72,
+   "text": "makes it look like it's on top. The same here on the belt,"
+  },
+  {
+   "t": 891.21,
+   "d": 2.98,
+   "text": "with the arm. If I connected these, then maybe you wouldn't be able"
+  },
+  {
+   "t": 894.19,
+   "d": 3.33,
+   "text": "to read that this is an arm, but because it's broken up,"
+  },
+  {
+   "t": 897.52,
+   "d": 4.9,
+   "text": "it's easy. Here again, the same trick, this little detail."
+  },
+  {
+   "t": 902.42,
+   "d": 6.23,
+   "text": "So that's negative space, very useful. Dithering is something that I came across."
+  },
+  {
+   "t": 908.66,
+   "d": 4.12,
+   "text": "You do dithering in pixel art, but hey, you can do it in ASCII art too,"
+  },
+  {
+   "t": 912.77,
+   "d": 3.35,
+   "text": "and you can see that here at the bottom. I wanted to try to do"
+  },
+  {
+   "t": 916.12,
+   "d": 2.8,
+   "text": "some lighting, and I think it worked."
+  },
+  {
+   "t": 920.4,
+   "d": 3.2,
+   "text": "Shadows was a big surprise. So I accidentally discovered"
+  },
+  {
+   "t": 923.6,
+   "d": 4.26,
+   "text": "shadows. I was doing this patterned ground in the temple, and I started"
+  },
+  {
+   "t": 927.87,
+   "d": 3.52,
+   "text": "adding the characters on top, and one of them just happened"
+  },
+  {
+   "t": 931.39,
+   "d": 5.05,
+   "text": "to have a lot of blank space on the bottom, and when he was walking"
+  },
+  {
+   "t": 936.44,
+   "d": 3.26,
+   "text": "around, I was like, \"No way. This is a shadow.\" And then I just"
+  },
+  {
+   "t": 939.7,
+   "d": 4.61,
+   "text": "add shadows to everything now. So it works very effectively,"
+  },
+  {
+   "t": 944.32,
+   "d": 2.73,
+   "text": "if you have a pattern or a texture on the ground."
+  },
+  {
+   "t": 948.47,
+   "d": 3.53,
+   "text": "My animation process is here. I don't want to go through it,"
+  },
+  {
+   "t": 952.0,
+   "d": 3.52,
+   "text": "because this can be a talk in itself."
+  },
+  {
+   "t": 955.52,
+   "d": 4.13,
+   "text": "But my point here is that this is the same animation process"
+  },
+  {
+   "t": 959.65,
+   "d": 4.83,
+   "text": "as animation in other mediums. Animation is a very labor-intensive"
+  },
+  {
+   "t": 964.48,
+   "d": 4.7,
+   "text": "task, but the process is the same. You find references, videos on"
+  },
+  {
+   "t": 969.18,
+   "d": 6.83,
+   "text": "YouTube, pictures of the subject matter, you draw concepts."
+  },
+  {
+   "t": 976.01,
+   "d": 5.0,
+   "text": "You try to find a primary idle, key pose for the character,"
+  },
+  {
+   "t": 981.01,
+   "d": 5.87,
+   "text": "and then you need to test that within the context, to make sure"
+  },
+  {
+   "t": 986.88,
+   "d": 3.82,
+   "text": "you have the size correct and the composition correct,"
+  },
+  {
+   "t": 990.7,
+   "d": 3.18,
+   "text": "before you start animating, before you start spending hours of"
+  },
+  {
+   "t": 993.87,
+   "d": 2.57,
+   "text": "animation work. You need to make sure you've got the right size."
+  },
+  {
+   "t": 996.44,
+   "d": 3.63,
+   "text": "Otherwise, you're just gonna have to redo it, or you're gonna be"
+  },
+  {
+   "t": 1000.08,
+   "d": 4.25,
+   "text": "clipping off the top of the character's head, which happened to me a"
+  },
+  {
+   "t": 1004.33,
+   "d": 4.21,
+   "text": "couple times, but nobody really noticed. I got away with it."
+  },
+  {
+   "t": 1011.44,
+   "d": 2.55,
+   "text": "There is this technique that is subtractive."
+  },
+  {
+   "t": 1013.99,
+   "d": 4.0,
+   "text": "So in this case here, I wanted to make a pyramid that was building"
+  },
+  {
+   "t": 1017.99,
+   "d": 4.83,
+   "text": "brick by brick, and the way I achieved that is I first drew the pyramid"
+  },
+  {
+   "t": 1022.82,
+   "d": 4.37,
+   "text": "completely, and then, for each frame, I removed a brick."
+  },
+  {
+   "t": 1027.19,
+   "d": 3.43,
+   "text": "So you do it the other way around. That can be a trick for a lot of"
+  },
+  {
+   "t": 1030.62,
+   "d": 5.42,
+   "text": "animations, where you subtract from the full picture, and then after"
+  },
+  {
+   "t": 1036.04,
+   "d": 4.32,
+   "text": "you have these layers, you can then remove it brick by brick,"
+  },
+  {
+   "t": 1040.35,
+   "d": 2.78,
+   "text": "each layer, and then you just order the frames in the correct order,"
+  },
+  {
+   "t": 1043.14,
+   "d": 3.25,
+   "text": "and it looks like the pyramid's building up instead of being"
+  },
+  {
+   "t": 1046.39,
+   "d": 5.2,
+   "text": "deleted. So the order in which you animate can be reverted as well."
+  },
+  {
+   "t": 1052.92,
+   "d": 3.46,
+   "text": "And iteration is really important. So, like with the pumpkin where"
+  },
+  {
+   "t": 1056.38,
+   "d": 3.73,
+   "text": "we tried different things with the mouth, for this presentation, I wanted"
+  },
+  {
+   "t": 1060.12,
+   "d": 5.18,
+   "text": "to do a logo for the first slide, and this was the first one that"
+  },
+  {
+   "t": 1065.3,
+   "d": 3.85,
+   "text": "I did, and it looks fine. But it doesn't fit the composition."
+  },
+  {
+   "t": 1069.15,
+   "d": 4.93,
+   "text": "It's not big enough. And I wanted to try, at least, to make"
+  },
+  {
+   "t": 1074.08,
+   "d": 3.32,
+   "text": "a bigger one, and if I fail, I can just fall back to this one,"
+  },
+  {
+   "t": 1077.4,
+   "d": 4.87,
+   "text": "which is great. But I persisted, and yeah, this one works."
+  },
+  {
+   "t": 1082.27,
+   "d": 5.7,
+   "text": "It's the right size. But it's a little too 90s, and I wanted to"
+  },
+  {
+   "t": 1087.96,
+   "d": 3.73,
+   "text": "modernize it a little bit. So I kept going and I arrived"
+  },
+  {
+   "t": 1091.7,
+   "d": 2.25,
+   "text": "at something that I thought, \"Oh, this is pretty good,"
+  },
+  {
+   "t": 1093.95,
+   "d": 5.57,
+   "text": "but it's a little too round and I don't know.\" So I swapped the"
+  },
+  {
+   "t": 1099.51,
+   "d": 2.57,
+   "text": "parentheses for the exclamations, and I'm not sure that was the"
+  },
+  {
+   "t": 1102.08,
+   "d": 5.25,
+   "text": "correct choice, but here, I do think this right here is the correct choice."
+  },
+  {
+   "t": 1107.33,
+   "d": 2.75,
+   "text": "It's a very subtle difference, but you can see that it's moved up"
+  },
+  {
+   "t": 1110.08,
+   "d": 4.4,
+   "text": "half a cell, where here it's the underscore. Here, it's actually"
+  },
+  {
+   "t": 1114.48,
+   "d": 3.65,
+   "text": "the box drawing symbol, because if you use the hyphen here,"
+  },
+  {
+   "t": 1118.13,
+   "d": 5.18,
+   "text": "you get these empty spaces in between, and that changes the"
+  },
+  {
+   "t": 1123.31,
+   "d": 5.57,
+   "text": "lighting. If you put the solid at the top, this will most of the time"
+  },
+  {
+   "t": 1128.88,
+   "d": 4.3,
+   "text": "be rendered white on black, so you get brighter at the top,"
+  },
+  {
+   "t": 1133.18,
+   "d": 2.22,
+   "text": "and then darker at the bottom, which is what you want."
+  },
+  {
+   "t": 1137.1,
+   "d": 4.47,
+   "text": "And it also centered it better, vertically. It put it more in the center of the font,"
+  },
+  {
+   "t": 1141.57,
+   "d": 4.2,
+   "text": "so this little detail here is really the main difference between those two."
+  },
+  {
+   "t": 1145.77,
+   "d": 3.42,
+   "text": "And that's where I ended with the logo. I was happy with that."
+  },
+  {
+   "t": 1149.19,
+   "d": 3.21,
+   "text": "I could have kept going, but I called it a day. Sometimes"
+  },
+  {
+   "t": 1152.4,
+   "d": 2.94,
+   "text": "you've just got to stop after an hour."
+  },
+  {
+   "t": 1155.34,
+   "d": 3.79,
+   "text": "Thank you very much. That's my presentation."
+  },
+  {
+   "t": 1164.58,
+   "d": 3.27,
+   "text": "So if you want to look at some of the details of those,"
+  },
+  {
+   "t": 1168.66,
+   "d": 2.22,
+   "text": "you can find those here on this text file. Like I said, it looks"
+  },
+  {
+   "t": 1170.88,
+   "d": 2.72,
+   "text": "better if you download it to your PC and look in a"
+  },
+  {
+   "t": 1173.6,
+   "d": 3.88,
+   "text": "text header and don't look through your browser."
+  },
+  {
+   "t": 1177.48,
+   "d": 4.08,
+   "text": "Let me know if any of those topics you want me to develop more."
+  },
+  {
+   "t": 1185.8,
+   "d": 4.78,
+   "text": "Host: Cool, thank you so much."
+  }
+ ]
+}

@@ -1,0 +1,74 @@
+John Bond: Doors or no Doors: How Roguelike games take you places
+Speaker: John Bond
+https://www.youtube.com/watch?v=bpGRyzWCWwk
+Year: 2024   Kind: talk   Captions: manual (en)
+
+## Introduction
+
+[0:00:07] ALEXIE: Next up we will have John Bond who is based in Seattle and a piano teacher who was a pixel artist and leaned into designing and programming. Also the owner of a wonderful frog hat. You have the headphones over the hat. Amazing. JOHN: I have the complete the entire ensemble. ALEXEI: You like making fun games and obsessing over making action based stories that are accessible to all and are here to talk about doors which we love. JOHN: Thank you. Everyone is so kind to me. I have caused nothing but issues and everyone has been so great. My name is John Bond. Indie game developer. Today you can call me the door master, lord of doors, because I am here to talk
+
+[0:01:16] to you about "Doors or no Doors: How Roguelike games take you places" or whatever is linking randomization together in roguelikes. For this talk, for this fast little thing, I am just going to micro to macro regarding doors. I will define what I am talking about when I say doors, talk about how they work within game design and player feel, and finally talking of a separate genre of door systems across the vastness of roguelikes. So, yeah, what even are doors? Are
+
+## Defining doors in games
+
+[0:01:54] these doors? The answer is already there. No, they are not. It says doors. Don't believe this game. Doors are any sort of object that when interacted with or crossed will bring apart the next randomize area in a notable way to the designer and player. Despite how there may be smaller randomized sections of a map but a player is less likely to realize this. If you have a map generated with a bunch of tile smaller maps within it that's not quite what I mean. To a player the whole map is one big random area not just a series of smaller random ones. What I am really
+
+## The role of pacing and breath
+
+[0:02:37] talking about is what is sort of a large and icon graphic way to separate one feel of a full random area to the player from another full random area. This may be a door you are seeing right here. But aside from a door, it might be a whole, a bunch of staircases, a rope, whatever. The symbolic is a lot for a player because you lose a lot in terms of pacing and design. That's a door. Once upon a time, doors were just sort of a needed because of loading. This isn't animated. For those in the know, this is the resident evil 1 door used hugely to sneakly put in loadding. We don't need loading time now but they worked well back then. Players are not a machine usually so what I am
+
+[0:03:44] talking about is breath. Breathe for a moment. Breath in games looks very different depending on
+
+## Player autonomy and control
+
+[0:03:53] the game. Generally speaking it is a moment that allows a player potentially infinite time to do whatever they want before they have to lock in again. This isn't just for action games. Players need moments where they have complete control as they do in the game and still stopped asking them to perform. The game has stopped asking them. We need the player to stop trying so hard for a bit but the player also needs to have a reason to stop trying so hard for a bit. That sort of shakeup is where doors shine. Pausing doesn't really count as a breath. Pausing is just a necessity. That's not how people play. People won't pause to take a break. Designers have to hand hold people to take a break. The thing I want you to think about or notice is did you ever notice when you as a player
+
+## Iconography and signaling
+
+[0:04:46] find a door that leads to the next area things change in the way you are playing. You have to make a decision to do something other than look for or gain access to the next area. All games treat this differently. Some make sure you go through every nook and cranny looking for things. Some other games, if you see the next door it is a saving light and way to get out of a stressful situation. You want to have a big purpose for this moment. Small exploration is great as breath even if it just collecting loot or finding a shop or fishing. Two you couldn't -- don't want to take control away from the player because it always feels bad. Players can be in here infinitely with no issues and never feel that they are missing out on the game because they have full control of when they continue on. If a game doesn't have this, you feel it. If there is a timer or pulls you into
+
+[0:05:46] a separate way of engaging. When games require constant pressure, sometimes timers are necessary but you find unless you are playing a player competitive game, this is usually avoided. That's the breath side of doors. That's breathing. We are done breathing. No more breathing. It is a symbol of pacing structure. Players often recognize it very early on. The more noticeable thing I want to show about doors just to define what I am talking about is iconography. This is beyond
+
+## Design variables for doors
+
+[0:06:25] an area of breath but it is a type of information. Types of doors are used to give information to the player about what is about to happen. There are icons that signify what going through this door means. This player can absorb information during this breath period and that's important as they are taking in another level of information. Often a level of information of long-term strategy as opposed to short term decisions. Hades gives icons which makes it easy to parse most information in the fastest time but you also get a lot from even the art and size and style of the door that indicate change is coming up. This is still iconography but it is the whole art. Designers don't usually want to surprise players. We want to give tons of information that their decision is
+
+[0:07:26] going to cause something to happen. Even when that decision is completely linear. Like you can only go into this big hellish portal but you are warned that it is going to be big and hellish in there. That's important because it makes the situation where a player is wasting their time until they enter this door but it feels interesting and they still have full warning in knowledge. Now it can be hard to make decisions on the type of door or map system you are going to put in game and that's more than what I need to go into. The game's genre, goals, and features all make a difference. We will take time to talk about all the types of roguelike door systems there are. Here we go. Wait there is variables. There is a few metrics. There is the run length and how
+
+## Linear and classic systems
+
+[0:08:22] long it takes to get through the run. Most games roguelike games it is like, you know, 20-ish minutes, some 40 minutes and some can be in the 20 hours range depending on what you want to define as roguelike. Game pacing is the second one. Their dialogue and how engaged it is. Is it a passive game? How do you avoid speed whiplash? And the next one is major mechanics. Convoluted and a lot of way do is play this game. Does ask you to do mini games and side thing or whatever else. And lastly, is polish, it is kind of the luck variable because it affects everything. The more polish you have the less everything else matters. Players will accept a lot if polish is good. Like I have an example here the persona five menus. This is an awful menu in terms of time it takes to
+
+[0:09:29] get anything done in that game. People don't tend to complain about this because even if they have to wait a lot the polish is incredible on it so you love them. In general people love them. With these in mind, now the genres. Linear, classic roguelike. This is rogue but this is
+
+## Dungeon door styles
+
+[0:09:55] also stuff like dungeon and dread more. I think I put tangled deep also in here. There is a lot of classic roguelikes which is like this is a rogue game. It plays like Rogue. Another one I want to bring up is Balatro. You can only go forward in this game. It gives you a menu asking do you want to go forward or more forward. The doors here are literally just the buttons that say, you know, next, press the -- I don't want to talk about these games but it is just a button, a door, you press it and go forward. The nice thing about a game that is all menus is it fulfills everything about what makes a good door. Clicking on buttons and menus is already how you were playing the game. It is just the button. But that's how you were playing. Linear is basic in many ways but
+
+[0:10:57] works well games with a shorter run length and fewer major mechanics. You don't find Rogue to be as complex as other things I am going to talk about. The next is dungeon doors and the rogue
+
+## Chosen doors and decision-making
+
+[0:11:20] action part of cult of the lamb. They are more exploratory. What is behind the next door is the same as the previous area in terms of how it plays or what treasures lie within. In the game there could be alternate endings and biomes but gameplay doesn't change. Dungeon doors are good for games that focus on constant pressure but allow for an element of exploration. It can not have way too many mechanics. Next one is chosen doors. For a while a lot of roguelikes trended
+
+## Branching map mechanics
+
+[0:11:59] here. You think stuff like dead cell and Hades. You often get choices that can change where you ultimately end up and dramatic change where things play temporarily. This becomes more important for games with more major mechanics because doors separate play styles. Going back to Hades, doors are integral, and you can only go forward. These rooms can be different from the previous room. Changing and pacing in game ploy allow for a longer runtime usually. For those chosen doors to work, game pacing becomes more essential. You can't have a fast pace game go a long time before coming to a stop for a long time with dialogue and major choices. Since there is dozens of doors usually, you will find doors are not just a button or a simple transition. You usually find in
+
+[0:13:04] this system, doors tend to have more polish with animation and iconography because they are so much more important. The next system is the branching map style and this is stuff like Slay the Spire
+
+## Open world door design
+
+[0:13:19] which is important. Stuff like into the breach and to note that the map itself isn't a door. It is the icons that are on the map that are doors. Iconography. This is more important for games with lots of mechanics and gameplay styles because it is hard to get that amount of info across with just door iconography but you don't want tons of menus popping up in the normal gameplay session. Map systems have less exploration despite being a map. This makes for a worse system and action game oftentimes due to the pacing but it still works the between doors is small. There might be tabs or grids. Rogue labyrinth my game uses a rogue map. In all cases, the player is funneled forward with no chance of getting lost. And yeah, it usually last for a little bit longer of game runs. For
+
+[0:14:22] the very last one I want to go over is the open world. This is stuff where more like dead ends
+
+## Conclusion and Q&A
+
+[0:14:29] and ways to get lost and you lack the end goal or point location sometimes. This is less to do with the doors but there are still doors here just like going between biomes. This works for slower and long runs and it be much more overwhelming. Things tend to be in a slow medium pace because you can't have it be turned base. That's a little too slow for the experience. I want to skip ahead to the end. That was pretty much the end but I could talk about this for forever but yeah. Bye. I hope this
+
+## Closing thoughts
+
+[0:15:10] makes sense. People have a few things to think about doors. I thought about doors a whole lot in my own rogue game. Rogue labyrinth. Keep giving control to your player. Put in that polish. Just feel good about the decisions you make. Hello. ALEXEI: Wonderful. Love it. Seems like stairs are doors. JOHN: Stairs are definitely doors as long as it leads to another major location and you have shown it that way to the player. You have the choice to go down. Love it. Makes sense. Thank you to the door master, lord of Doors. People are talking about hot pockets as ravioli. We are off the wall in this debate. A hot pocket is a door. ALEXEI: It is a path to something. Wonderful. If you want to discuss more about what is and isn't
+
+[0:16:14] a door they can do so in the Goblin Singers after the last talk. Thank you, door master.

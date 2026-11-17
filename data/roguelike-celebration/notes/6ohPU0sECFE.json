@@ -1,0 +1,86 @@
+{
+  "id": "6ohPU0sECFE",
+  "title": "Tabitha Sable - Curses! A Story of UNIX Interface Hardware and Software Co-Evolution",
+  "speaker": "Tabitha Sable",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=6ohPU0sECFE",
+  "talk_type": "history",
+  "summary": "A history of how the hardware used to interact with Unix (printing telegraphs, paper teletypes, video display terminals, then bitmapped workstations) co-evolved with the software written for it. Sable traces the line from teletype-era ioctl and stty complexity, through Berkeley's cheap ADM-3A glass terminals, ex/vi visual mode and termcap, to Ken Arnold extracting curses from vi, with Rogue as curses' killer application. She continues through terminfo, X Windows, pcurses/ncurses and the start of modern open source, arguing that old interface decisions stay sticky across generations of software. There is little game design content; its value is as genre-infrastructure history.",
+  "games": [
+    "Rogue",
+    "Colossal Cave Adventure"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "curses",
+      "kind": "history",
+      "claim": "Curses was created when Ken Arnold lifted vi's screen-redraw code into a library that computes the minimum cursor movements needed to update a character-cell display, and Rogue became its canonical killer app.",
+      "detail": "It shipped with 4BSD around 1980. Sable notes Rogue was not the first curses program: Arnold told a panel at the first Roguelike Celebration that he first wrote tools for his own use, but Rogue was certainly the killer app.",
+      "t": 1087,
+      "quote": "Ken Arnold took the code, lifted it out of VI and wrapped it up in a nice library wrapper",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "termcap",
+      "kind": "history",
+      "claim": "Because the many glass terminals of the late 1970s were mutually incompatible, Berkeley's ex/vi introduced termcap, a database of terminal descriptions that let full-screen 'visual mode' work device-independently.",
+      "detail": "Visual mode, showing the file as you edited it instead of line-oriented teletype-style editing, was revolutionary. The termcap library parsing terminal descriptions was very important and popular; it later had performance problems, which Mary Ann Horton's 1982 'new curses and terminfo' addressed with compiled, human-readable descriptions.",
+      "t": 1041,
+      "quote": "The termcap library that can parse the descriptions of terminals and use them to know how to do the things that the visual mode needed",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "hjkl movement keys",
+      "kind": "history",
+      "claim": "The hjkl movement keys used in vi and roguelikes come from the ADM-3A terminal, whose keyboard had no arrow keys but printed arrows on h, j, k and l.",
+      "detail": "The ADM-3A was famous as the first video display terminal under $1,000 and was installed in University of California labs as BSD began. Sable says these are the characters you use to move around to this day.",
+      "t": 823,
+      "quote": "there are no arrow keys on the keyboard but h, j, k, and l have aroh -- arrows printed on them",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "80x24 terminal",
+      "kind": "history",
+      "claim": "The default 80-by-24 character size of terminal emulators today comes from the DEC VT100, the de facto standard terminal of the late 1970s.",
+      "detail": "The VT100 supported upper and lowercase, screen blanking and cursor movement; the VT220 later took over as smaller, cheaper and fancier.",
+      "t": 705,
+      "quote": "This particular terminal is also the one that introduced today's standard of 80 by 24 characters",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "teletype legacy",
+      "kind": "history",
+      "claim": "Unix's tty device names, the 'not a typewriter' error and the term baud rate are all leftovers from teletype hardware.",
+      "detail": "Device nodes were named /dev/tty plus the number of the teletype; ioctl was designed to configure teletype I/O and the first Unix manual noted a heavy predisposition toward Model 37 teletypes. Baud rate comes from the 5-bit code teletypes used.",
+      "t": 510,
+      "quote": "the device nodes were named slash dev tty and a number because it was which number teletype it was",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "ncurses",
+      "kind": "history",
+      "claim": "Pavel Curtis cloned Bell Labs' improved curses in a clean-room way so people outside Bell Labs could use it; that pcurses languished after 1986 and was picked up in 1993 as ncurses.",
+      "detail": "Sable places this within the licensing concerns that led to the free Unix clone projects, 4.3BSD-era removal of AT&T code, Linux in 1991, and Slackware and NetBSD in 1993.",
+      "t": 1343,
+      "quote": "clone the new curses library in a clean room way so that outside of Bell Labs folks could appreciate the improvement to curses",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "legacy conventions",
+      "kind": "principle",
+      "claim": "Interface conventions are sticky: the software people are used to shapes what they want next, so old hardware limits persist for decades.",
+      "detail": "Sable's closing argument: Visual Studio Code is more advanced than Vim yet you can still turn on vi key bindings, influenced by ADM-3As lacking arrow keys, and the Unix shell still talks to a teletype.",
+      "t": 1502,
+      "quote": "the software that we are used to using influences what we want in the",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

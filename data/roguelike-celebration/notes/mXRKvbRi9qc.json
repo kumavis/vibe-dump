@@ -1,0 +1,43 @@
+{
+  "id": "mXRKvbRi9qc",
+  "title": "Dustin Freeman - Live Action Roguelike Performance",
+  "speaker": "Dustin Freeman",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=mXRKvbRi9qc",
+  "talk_type": "performance",
+  "summary": "Dustin Freeman acts as dungeon master while a second performer plays 'the player' in a live-action, chat-driven roguelike staged on a tabletop set with physical props. The audience picks a class (monk, mage or janitor) and actions; the player dies to an unidentified potion and a trapped doorknob, restarting each time while the set is rebuilt as 'real-time procedural generation'. On the third run as a mage, the player hatches and pockets a dragon, crushes puddings with an unknown wand, dissolves the trapped door with a potion, retrieves the amulet and escapes by calling the dragon back. The performance is comedic, with little explicit design commentary, but it enacts roguelike conventions live.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "live performance",
+      "kind": "example",
+      "claim": "Dustin Freeman's live-action roguelike stages a roguelike as improvised theatre, with chat choosing actions, a DM narrating outcomes and props rebuilt between levels as 'real-time procedural generation'.",
+      "detail": "The player chooses among monk, mage or janitor, and level transitions are covered by inventory reviews while the set is rearranged. Freeman jokes that this is what real-time procgen really looks like when the engine forgets to generate some areas.",
+      "t": 1000,
+      "quote": "There is some procedural generation that the engine forgot to do so it is just going to do it kind of live in these areas here",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "example",
+      "claim": "The performance reproduces unidentified-item risk: drinking an unknown pink potion turns the player into a tree, ending the run, while later unknown items (a wand of crushing, a levitation potion, an ice orb) are learned by use.",
+      "detail": "When chat asks how to identify items, Freeman says 'not yet'. Later he notes the red potion may have randomly regenerated between runs, and many items go unused and unidentified.",
+      "t": 288,
+      "quote": "You drink the potion and immediately you turn into a tree",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "chekhov's gun",
+      "kind": "example",
+      "claim": "In Freeman's live roguelike, the earlier rescued dragon pays off as an escape route from a featureless final room, which a performer explicitly calls Chekhov's gun.",
+      "detail": "After getting the amulet the player sees no way out; chat suggests calling the dragon, which flies in and carries the player back to the surface, winning the run.",
+      "t": 1775,
+      "quote": "This is called Chekhov’s gun. This will be really rewarding when it works out",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

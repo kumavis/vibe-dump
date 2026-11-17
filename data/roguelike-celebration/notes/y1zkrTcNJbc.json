@@ -1,0 +1,93 @@
+{
+  "id": "y1zkrTcNJbc",
+  "title": "Albert Ford - Vision Visualized",
+  "speaker": "Albert Ford",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=y1zkrTcNJbc",
+  "talk_type": "technical",
+  "summary": "Albert Ford explains field-of-view algorithms for grid roguelikes, arguing a good FOV is efficient, consistent with targeting/line of sight, and symmetric. He compares raycasting (consistent but wasteful) with shadowcasting (efficient but inconsistent), then fixes shadowcasting by beveling wall corners and revealing tiles only when their centre is visible. He closes with two non-vision uses: combining FOV with jump point search for straight-line pathfinding, and running FOV at every tile to measure organic openness for level generation and population.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "field of view",
+      "kind": "principle",
+      "claim": "A good roguelike field-of-view algorithm should be efficient, consistent with targeting, and symmetric.",
+      "detail": "Ford defines efficiency as speed; consistency as agreeing with ranged combat so you never see something you cannot target or get targeted by something you cannot see; and symmetry as 'if I can see you, you can see me'.",
+      "t": 65,
+      "quote": "our dream in terms of vision is something that's efficient consistent and symmetric",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "field of view",
+      "kind": "warning",
+      "claim": "An FOV that disagrees with ranged targeting creates unfair situations, the worst being an unseen enemy that can target the player.",
+      "detail": "Ford lists the inconsistencies to avoid: seeing something you cannot target, targeting something you cannot see, and worst of all something you cannot see targeting you. He later shows a shadowcasting case where you are effectively shooting in the dark at a target beside a wall.",
+      "t": 84,
+      "quote": "worst of all if it's something that you can't see and it can target you then you're in danger",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "raycasting",
+      "kind": "technique",
+      "claim": "Raycasting FOV is consistent with line of sight but inefficient because rays oversample tiles near the viewer.",
+      "detail": "Casting a ray in every direction and stopping at obstacles is essentially repeated line of sight, so it matches targeting. A heat map shows tiles near the @ are hit many times, which is wasted effort.",
+      "t": 134,
+      "quote": "raycasting isn't a very efficient algorithm but the upside though is we didn't get one out of three raycasting is very consistent",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "shadowcasting",
+      "kind": "technique",
+      "claim": "Shadowcasting scans outward in concentric squares by quadrant or octant, visiting each visible tile about once, but by default it is inconsistent with Euclidean line of sight at wall corners.",
+      "detail": "Ford splits shadowcasting into four quadrants or eight octants; only seams between quadrants are visited twice. Its 45-degree limits mean a target reachable by a line grazing a wall corner is hidden, so you can be shot at by something you cannot see.",
+      "t": 201,
+      "quote": "every tile and vision is only visited once with the exception of on the edges between quadrants",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "shadowcasting",
+      "kind": "technique",
+      "claim": "Treating walls as beveled diamonds makes shadowcasting consistent with raycasting, and revealing a tile only when its centre is visible makes it symmetric.",
+      "detail": "Cutting the corners off wall tiles removes the corner occlusion that broke consistency. Standard shadowcasting reveals a tile if any part is visible, which breaks symmetry; checking tile centres instead (thinking of tiles as dots) yields an efficient, consistent and symmetric FOV. Ford has an interactive version online alongside the code.",
+      "t": 320,
+      "quote": "what you want is to only reveal tiles where you can see the center",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "pathfinding",
+      "kind": "technique",
+      "claim": "Combining field of view with jump point search yields A*-style pathfinding that is faster and produces straight diagonal paths without a string-pulling pass.",
+      "detail": "Plain A* produces paths that zigzag between cardinal and intercardinal steps; string pulling straightens them but costs extra time for a mainly aesthetic effect. Ford, who is working on this, says FOV plus jump point search gives straight lines and the jump point speedup together.",
+      "t": 414,
+      "quote": "if you combine it with field of view you get the straight lines in field of view and you get the speed up",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "openness measure",
+      "kind": "technique",
+      "claim": "Running FOV from every tile and counting visible tiles gives a gradual openness measure for organic caves, usable to decide where to place content.",
+      "detail": "Ford colours a cave map by how many tiles each tile can see. In rooms-and-corridors maps it is obvious whether a space is open (e.g. big rooms get more enemies), but in caves openness changes gradually, so this metric can help a generator decide placement.",
+      "t": 454,
+      "quote": "at each tile i run field of view and then count up how many tiles you can see and turn that into a color",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "sound propagation",
+      "kind": "technique",
+      "claim": "FOV-like algorithms could model hearing, since pathfinding is essentially a directed flood fill and sound similarly attenuates with distance.",
+      "detail": "In Q&A a chat suggestion proposed using the same type of algorithm to detect audible range. Ford agreed, noting these algorithms blend together and hearing works like a flood fill where closer things are heard better.",
+      "t": 551,
+      "quote": "path finding out them is basically like a flood fill but directed and that's very much how hearing works too",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

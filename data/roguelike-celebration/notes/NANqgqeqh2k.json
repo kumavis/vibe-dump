@@ -1,0 +1,135 @@
+{
+  "id": "NANqgqeqh2k",
+  "title": "Caelyn Sandel and Grahu-Rubufo - Teaching the Fun of Losing",
+  "speaker": "Caelyn Sandel (as VTuber Grahu-Rubufo)",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=NANqgqeqh2k",
+  "talk_type": "culture",
+  "summary": "Caves of Qud writer/designer Caelyn Sandel, performing as her snapjaw VTuber avatar Grahu-Rubufo, candidly 'roasts' how hard Caves of Qud is to get into, walking through its dense character creation and text-heavy help. She recounts years of outreach work: a Twine guide game (A Hindren's Guide to Qud), an in-game survival-guide quest, a curated public Discord, watching Twitch streams to find points of confusion, and VTuber teaching streams. She closes with advice on respecting new players' investment, treating recurring questions as accessibility gaps, actively moderating community rather than letting the loudest voices rule, and reaching out to the audiences the game's values suit.",
+  "games": [
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "onboarding",
+      "kind": "example",
+      "claim": "Caves of Qud front-loads complexity: new players face stat allocation and a long mutation list before the game shows its strengths of mood, writing and atmosphere.",
+      "detail": "Sandel walks through the start: only 'create new character' matters to a newcomer, random characters would be a bad experience, there is no build library yet, attribute screens are 'D&D nonsense' to many, and dozens of mutations require reading without knowing which to take. Only after starting does the game show mood, writing and atmosphere.",
+      "t": 289,
+      "quote": "a new player's intended experience fits in just a little corner of the screen",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "help systems",
+      "kind": "warning",
+      "claim": "A text-heavy quick-start help screen that points to other menus asks too much of new players, many of whom will simply give up.",
+      "detail": "Caves of Qud's F1 help offers '10 things you should do when you start to play', but it is still lots of technical reading pointing elsewhere. Sandel stresses that being daunted by this does not mean a player lacks the fortitude to learn Qud's complexities.",
+      "t": 442,
+      "quote": "A lot of players are just going to, you know, give up",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "fan guides",
+      "kind": "example",
+      "claim": "A Hindren's Guide to Qud, a Twine interactive fiction, taught Caves of Qud's early-game tricks through story and led to its author being hired onto the team.",
+      "detail": "Sandel found the early game flat and difficult and settled on one starting build. Her Twine story conveyed the feel of Qud while teaching tricks like healing with witchwood bark, having enough armor before moving on, and which enemies to flee versus fight. It caught lead designer Jason's attention and he hired her.",
+      "t": 732,
+      "quote": "the idea was also to let people know about some of the tricks early on like using witch wood bark to heal yourself",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "tutorial quests",
+      "kind": "technique",
+      "claim": "Caves of Qud's survival guide mod couches survival lessons as a quest delivered by an in-world character.",
+      "detail": "After learning XML and some C#, Sandel made the Qud survival guide, in which the Hindren character waits to instruct the player in staying alive, turning lessons into a quest; it might pave the way for a new starting quest, though that is not guaranteed.",
+      "t": 918,
+      "quote": "This way we could actually couch the lessons as quest",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "streaming",
+      "kind": "technique",
+      "claim": "Watching players stream a roguelike on Twitch reveals common points of confusion and frustration for new players.",
+      "detail": "Sandel used Twitch streams of Caves of Qud to figure out what was giving people problems, which she found very helpful for outreach work.",
+      "t": 949,
+      "quote": "By watching people stream Qud Cae was able to observe problems and common points of confuse and frustration",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "vtuber streaming",
+      "kind": "example",
+      "claim": "Caves of Qud's official VTuber streams, with a snapjaw avatar, became a successful, fun marketing channel and a shield against harassment of the face-cam streamer.",
+      "detail": "As a trans woman, Sandel was mocked on face-cam streams; a moderator's sister made live 2D avatars, so she commissioned a snapjaw named via the in-game name generator. Weekly teaching streams on Mondays and free play on Fridays are backed by the founders as a marketing expense, and the bombastic persona promotes the game in an eye-catching way.",
+      "t": 1084,
+      "quote": "We have the backing and support of the founding devs and this counts effectively as a marketing expense",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player investment",
+      "kind": "principle",
+      "claim": "Up-front complexity asks new players for more investment, so a roguelike must make that investment pay off and make continuing to try fun, not necessarily make the game easier.",
+      "detail": "Sandel says a new player's time and energy are precious and should not be squandered; developers should watch for knots that slow players down and make pushing through worth it.",
+      "t": 1191,
+      "quote": "presenting more complexity up front means asking the player for more investment",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "core vs new players",
+      "kind": "principle",
+      "claim": "Core and new players' needs are not actually at odds, even though core communities often see accessibility options as pandering, and developers must convince them otherwise.",
+      "detail": "Core players don't know what it is like to be new and vice versa. New players need a welcoming intro and core players need to be kept interested; balancing these requires attention and open-mindedness.",
+      "t": 1243,
+      "quote": "Accessibility options and ways to make the game less miserable for people outside the community may be seen as pandering",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "recurring questions",
+      "kind": "technique",
+      "claim": "Questions and confusions that keep recurring among new players signal accessibility gaps in the UI or design that should be shored up.",
+      "detail": "If new players repeatedly have the same issue or fail to figure out the same part of the interface, Sandel says it should be made more apparent: figure out how you are not speaking the new player's language and speak it.",
+      "t": 1271,
+      "quote": "Questions that keep coming up may reflect a gap in accessibility",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "moderation",
+      "kind": "warning",
+      "claim": "Letting a game's community form on its own lets the loudest and meanest voices run it; developers should actively curate a welcoming space.",
+      "detail": "Sandel says hostile elements will take over unless shown the door. Qud's community manager Ivy Melinda and team built a space for people who are different and get pushed out of other gaming spaces, consistent with the game's values of bodily autonomy and anti-authoritarianism.",
+      "t": 1335,
+      "quote": "easy to just let community form itself but what that means is that the loudest and meanest voices are going to be the ones that run things",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "outreach",
+      "kind": "technique",
+      "claim": "Reaching new audiences works through targeted outreach such as giving keys to interested players who can't afford the game, and through multiple varied points of exposure.",
+      "detail": "Sandel gives keys to people who say they wish they could play Qud but are broke, aiming at people likely to enjoy the game's values. In Q&A she says you cannot catch everyone who bounces off quietly, but new materials and perspectives beyond the same trailers let people see the game again later.",
+      "t": 1370,
+      "quote": "Whenever Caelyn sees somebody talking about how they wish they could play Caves of Qud but they are too broke",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "audience",
+      "kind": "open-question",
+      "claim": "Developers should ask what it is like to be their new players, who feels welcomed or alienated, and who is guiding their game's online presence if they are not.",
+      "detail": "Sandel closes with questions: Who is your audience, how do you find and keep them? If you are not guiding your game's online presence, someone else will.",
+      "t": 1437,
+      "quote": "If you are not guiding your games online presence who is because someone will",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

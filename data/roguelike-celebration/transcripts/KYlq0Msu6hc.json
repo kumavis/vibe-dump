@@ -1,0 +1,5200 @@
+{
+ "id": "KYlq0Msu6hc",
+ "url": "https://www.youtube.com/watch?v=KYlq0Msu6hc",
+ "title": "Roguelike Celebration 2022 Preview: Casey Yano - Slay the Spire",
+ "speaker": "Casey Yano",
+ "talk_title": "Slay the Spire",
+ "year": 2022,
+ "kind": "talk",
+ "upload_date": "2022-09-19",
+ "duration_s": 1920,
+ "playlists": [
+  "Roguelike Celebration 2022"
+ ],
+ "description": "A fireside chat style discussion with Casey Yano about his perspectives on Slay the Spire development. Part of the Preview Event for Roguelike Celebration 2022.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to the guest"
+  },
+  {
+   "start": 84,
+   "title": "Game design backgrounds"
+  },
+  {
+   "start": 238,
+   "title": "Innovating the card genre"
+  },
+  {
+   "start": 351,
+   "title": "Roguelike mechanics"
+  },
+  {
+   "start": 516,
+   "title": "Map and systems development"
+  },
+  {
+   "start": 708,
+   "title": "Prototyping and code quality"
+  },
+  {
+   "start": 874,
+   "title": "Playtesting and decision making"
+  },
+  {
+   "start": 1065,
+   "title": "Card balance and favorites"
+  },
+  {
+   "start": 1282,
+   "title": "Content density and chaos"
+  },
+  {
+   "start": 1545,
+   "title": "UX and external inspiration"
+  },
+  {
+   "start": 1708,
+   "title": "Advice for game developers"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6151,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.12,
+   "d": 2.32,
+   "text": "oh hi hello"
+  },
+  {
+   "t": 9.44,
+   "d": 2.48,
+   "text": "uh yeah thanks for coming to"
+  },
+  {
+   "t": 11.92,
+   "d": 3.44,
+   "text": "our little preview event"
+  },
+  {
+   "t": 15.6,
+   "d": 1.28,
+   "text": "how's it going"
+  },
+  {
+   "t": 16.88,
+   "d": 1.6,
+   "text": "it's pretty good it's pretty good it's"
+  },
+  {
+   "t": 18.48,
+   "d": 1.52,
+   "text": "fun we haven't done this format before"
+  },
+  {
+   "t": 20.0,
+   "d": 1.76,
+   "text": "so i think it's going to be a fun time"
+  },
+  {
+   "t": 21.76,
+   "d": 2.24,
+   "text": "um yeah and like i i introduced you know"
+  },
+  {
+   "t": 24.0,
+   "d": 2.0,
+   "text": "co-founder of"
+  },
+  {
+   "t": 26.0,
+   "d": 3.2,
+   "text": "mega quick games co-creator slate aspire"
+  },
+  {
+   "t": 29.2,
+   "d": 2.4,
+   "text": "you do a lot of the ux production and"
+  },
+  {
+   "t": 31.6,
+   "d": 2.4,
+   "text": "creative direction kind of work"
+  },
+  {
+   "t": 34.0,
+   "d": 2.32,
+   "text": "um yeah and i guess just to start out"
+  },
+  {
+   "t": 36.32,
+   "d": 1.44,
+   "text": "like you want to introduce yourself a"
+  },
+  {
+   "t": 37.76,
+   "d": 2.16,
+   "text": "bit talk about maybe your role in slight"
+  },
+  {
+   "t": 39.92,
+   "d": 1.28,
+   "text": "aspire"
+  },
+  {
+   "t": 41.2,
+   "d": 1.84,
+   "text": "um yeah sure"
+  },
+  {
+   "t": 43.04,
+   "d": 3.04,
+   "text": "um hi i'm casey"
+  },
+  {
+   "t": 46.08,
+   "d": 2.4,
+   "text": "yano"
+  },
+  {
+   "t": 48.48,
+   "d": 2.48,
+   "text": "one of the two co-founders of"
+  },
+  {
+   "t": 50.96,
+   "d": 1.68,
+   "text": "medical games um"
+  },
+  {
+   "t": 52.64,
+   "d": 2.08,
+   "text": "i think the first game we published was"
+  },
+  {
+   "t": 54.72,
+   "d": 1.6,
+   "text": "i guess the first and only game we've"
+  },
+  {
+   "t": 56.32,
+   "d": 1.12,
+   "text": "published"
+  },
+  {
+   "t": 57.44,
+   "d": 2.16,
+   "text": "so far is a slight aspire we're working"
+  },
+  {
+   "t": 59.6,
+   "d": 1.84,
+   "text": "on another thing right now"
+  },
+  {
+   "t": 61.44,
+   "d": 2.16,
+   "text": "but um"
+  },
+  {
+   "t": 63.6,
+   "d": 2.16,
+   "text": "uh we do a little bit of everything but"
+  },
+  {
+   "t": 65.76,
+   "d": 1.92,
+   "text": "i do mostly um"
+  },
+  {
+   "t": 67.68,
+   "d": 1.68,
+   "text": "game client programming"
+  },
+  {
+   "t": 69.36,
+   "d": 1.12,
+   "text": "um"
+  },
+  {
+   "t": 70.48,
+   "d": 2.72,
+   "text": "art direction i draw some assets as well"
+  },
+  {
+   "t": 73.2,
+   "d": 1.2,
+   "text": "mainly i draw"
+  },
+  {
+   "t": 74.4,
+   "d": 3.04,
+   "text": "all the ui at least for satisfier"
+  },
+  {
+   "t": 77.44,
+   "d": 2.32,
+   "text": "and then um"
+  },
+  {
+   "t": 79.76,
+   "d": 2.0,
+   "text": "i don't know have a lot of hats i"
+  },
+  {
+   "t": 81.76,
+   "d": 2.24,
+   "text": "remember them all yeah"
+  },
+  {
+   "t": 84.0,
+   "d": 1.12,
+   "text": "right i know"
+  },
+  {
+   "t": 85.12,
+   "d": 1.76,
+   "text": "you said something really interesting"
+  },
+  {
+   "t": 86.88,
+   "d": 1.92,
+   "text": "when we talked earlier which was that"
+  },
+  {
+   "t": 88.8,
+   "d": 2.08,
+   "text": "anthony was kind of the card game guy"
+  },
+  {
+   "t": 90.88,
+   "d": 2.4,
+   "text": "and you were kind of the roguelike guy"
+  },
+  {
+   "t": 93.28,
+   "d": 2.56,
+   "text": "yeah and i would love to expand on what"
+  },
+  {
+   "t": 95.84,
+   "d": 2.4,
+   "text": "you mean and how that breakdown kind of"
+  },
+  {
+   "t": 98.24,
+   "d": 1.36,
+   "text": "worked"
+  },
+  {
+   "t": 99.6,
+   "d": 3.6,
+   "text": "i see um let's see i think when"
+  },
+  {
+   "t": 103.2,
+   "d": 1.84,
+   "text": "initially so anthony and i used to work"
+  },
+  {
+   "t": 105.04,
+   "d": 3.04,
+   "text": "together on games long long time ago"
+  },
+  {
+   "t": 108.08,
+   "d": 2.64,
+   "text": "um during like college and he was always"
+  },
+  {
+   "t": 110.72,
+   "d": 2.32,
+   "text": "into like board games and card games"
+  },
+  {
+   "t": 113.04,
+   "d": 2.24,
+   "text": "he had um"
+  },
+  {
+   "t": 115.28,
+   "d": 0.88,
+   "text": "he"
+  },
+  {
+   "t": 116.16,
+   "d": 2.0,
+   "text": "ran uh"
+  },
+  {
+   "t": 118.16,
+   "d": 2.8,
+   "text": "was like working and managing"
+  },
+  {
+   "t": 120.96,
+   "d": 1.92,
+   "text": "a local game store"
+  },
+  {
+   "t": 122.88,
+   "d": 1.68,
+   "text": "it was like really into board game in"
+  },
+  {
+   "t": 124.56,
+   "d": 1.44,
+   "text": "general just he just always did board"
+  },
+  {
+   "t": 126.0,
+   "d": 2.64,
+   "text": "games um and i did a lot of"
+  },
+  {
+   "t": 128.64,
+   "d": 1.28,
+   "text": "game testing"
+  },
+  {
+   "t": 129.92,
+   "d": 1.92,
+   "text": "growing up that was like my job as well"
+  },
+  {
+   "t": 131.84,
+   "d": 1.76,
+   "text": "so we both had like kind of like game"
+  },
+  {
+   "t": 133.6,
+   "d": 1.44,
+   "text": "adjacent jobs"
+  },
+  {
+   "t": 135.04,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 136.48,
+   "d": 2.0,
+   "text": "but i was always into more action games"
+  },
+  {
+   "t": 138.48,
+   "d": 2.36,
+   "text": "than like board games and card games"
+  },
+  {
+   "t": 140.84,
+   "d": 3.48,
+   "text": "um i just played a lot of like smaller"
+  },
+  {
+   "t": 144.32,
+   "d": 1.52,
+   "text": "indie titles"
+  },
+  {
+   "t": 145.84,
+   "d": 2.16,
+   "text": "uh i was really into geometry wars 2 for"
+  },
+  {
+   "t": 148.0,
+   "d": 0.88,
+   "text": "a bit"
+  },
+  {
+   "t": 148.88,
+   "d": 2.72,
+   "text": "i kind of like the idea of like"
+  },
+  {
+   "t": 151.6,
+   "d": 2.4,
+   "text": "not memorizing a level the first game we"
+  },
+  {
+   "t": 154.0,
+   "d": 1.52,
+   "text": "made together"
+  },
+  {
+   "t": 155.52,
+   "d": 2.0,
+   "text": "which was not magnet technically it was"
+  },
+  {
+   "t": 157.52,
+   "d": 1.44,
+   "text": "a different company we had at the time"
+  },
+  {
+   "t": 158.96,
+   "d": 1.12,
+   "text": "called um"
+  },
+  {
+   "t": 160.08,
+   "d": 1.84,
+   "text": "uh pew pew inc"
+  },
+  {
+   "t": 161.92,
+   "d": 1.76,
+   "text": "and we made a game called god laser"
+  },
+  {
+   "t": 163.68,
+   "d": 2.32,
+   "text": "which was like this ecoruga clone"
+  },
+  {
+   "t": 166.0,
+   "d": 0.8,
+   "text": "and"
+  },
+  {
+   "t": 166.8,
+   "d": 1.76,
+   "text": "the pretty much what i thought would be"
+  },
+  {
+   "t": 168.56,
+   "d": 2.64,
+   "text": "groundbreaking at the time was like"
+  },
+  {
+   "t": 171.2,
+   "d": 1.44,
+   "text": "instead of spawning enemies from like"
+  },
+  {
+   "t": 172.64,
+   "d": 2.16,
+   "text": "predetermined locations we'd be like oh"
+  },
+  {
+   "t": 174.8,
+   "d": 1.84,
+   "text": "maybe it would spawn from like"
+  },
+  {
+   "t": 176.64,
+   "d": 1.84,
+   "text": "here or maybe it'll spawn from there or"
+  },
+  {
+   "t": 178.48,
+   "d": 2.4,
+   "text": "like the bosses would like randomize"
+  },
+  {
+   "t": 180.88,
+   "d": 1.44,
+   "text": "um which order they'll do their like"
+  },
+  {
+   "t": 182.32,
+   "d": 2.24,
+   "text": "bullet patterns and stuff like that"
+  },
+  {
+   "t": 184.56,
+   "d": 1.6,
+   "text": "um so i guess in a way i was always"
+  },
+  {
+   "t": 186.16,
+   "d": 2.72,
+   "text": "interested in just like"
+  },
+  {
+   "t": 188.88,
+   "d": 3.04,
+   "text": "like creating things spontaneously"
+  },
+  {
+   "t": 191.92,
+   "d": 1.68,
+   "text": "yeah so and at the time there wasn't"
+  },
+  {
+   "t": 193.6,
+   "d": 1.28,
+   "text": "like a big"
+  },
+  {
+   "t": 194.88,
+   "d": 1.6,
+   "text": "like word or movement around it this was"
+  },
+  {
+   "t": 196.48,
+   "d": 2.2,
+   "text": "backing um"
+  },
+  {
+   "t": 198.68,
+   "d": 2.28,
+   "text": "2009 or so"
+  },
+  {
+   "t": 200.96,
+   "d": 1.04,
+   "text": "okay"
+  },
+  {
+   "t": 202.0,
+   "d": 2.4,
+   "text": "so maybe pre some of the like bigger"
+  },
+  {
+   "t": 204.4,
+   "d": 2.48,
+   "text": "boom of action heroic likes yeah this is"
+  },
+  {
+   "t": 206.88,
+   "d": 1.92,
+   "text": "around and then like a few years"
+  },
+  {
+   "t": 208.8,
+   "d": 1.84,
+   "text": "i guess around that time with maybe when"
+  },
+  {
+   "t": 210.64,
+   "d": 2.16,
+   "text": "the binding of isaac was released and it"
+  },
+  {
+   "t": 212.8,
+   "d": 1.92,
+   "text": "was kind of like this big"
+  },
+  {
+   "t": 214.72,
+   "d": 2.4,
+   "text": "like rogue light kind of movement kind"
+  },
+  {
+   "t": 217.12,
+   "d": 2.88,
+   "text": "of started i'm also a big fan of splunky"
+  },
+  {
+   "t": 220.0,
+   "d": 1.52,
+   "text": "um"
+  },
+  {
+   "t": 221.52,
+   "d": 1.36,
+   "text": "i would say"
+  },
+  {
+   "t": 222.88,
+   "d": 1.84,
+   "text": "like huge inspiration from like derek"
+  },
+  {
+   "t": 224.72,
+   "d": 2.0,
+   "text": "you in general just because"
+  },
+  {
+   "t": 226.72,
+   "d": 2.08,
+   "text": "one of the very few people"
+  },
+  {
+   "t": 228.8,
+   "d": 0.96,
+   "text": "who"
+  },
+  {
+   "t": 229.76,
+   "d": 1.6,
+   "text": "was like blogging about like independent"
+  },
+  {
+   "t": 231.36,
+   "d": 2.32,
+   "text": "game development you know indies on even"
+  },
+  {
+   "t": 233.68,
+   "d": 1.44,
+   "text": "on steam were like pretty rare at the"
+  },
+  {
+   "t": 235.12,
+   "d": 2.4,
+   "text": "time yeah yeah"
+  },
+  {
+   "t": 237.52,
+   "d": 1.44,
+   "text": "yeah interesting which then it's"
+  },
+  {
+   "t": 238.96,
+   "d": 1.84,
+   "text": "fascinating given all of that but then"
+  },
+  {
+   "t": 240.8,
+   "d": 2.4,
+   "text": "like slay this buyer one of i think the"
+  },
+  {
+   "t": 243.2,
+   "d": 1.6,
+   "text": "really definitive now"
+  },
+  {
+   "t": 244.8,
+   "d": 2.0,
+   "text": "card game based roguelikes that i think"
+  },
+  {
+   "t": 246.8,
+   "d": 3.52,
+   "text": "has even i feel caused a"
+  },
+  {
+   "t": 250.32,
+   "d": 1.84,
+   "text": "renaissance or at least like a boost i"
+  },
+  {
+   "t": 252.16,
+   "d": 1.2,
+   "text": "feel like there's been a lot of card"
+  },
+  {
+   "t": 253.36,
+   "d": 1.52,
+   "text": "game roguelikes coming out especially i"
+  },
+  {
+   "t": 254.88,
+   "d": 2.0,
+   "text": "feel like about the dev flag of like if"
+  },
+  {
+   "t": 256.88,
+   "d": 1.68,
+   "text": "you started making your card based"
+  },
+  {
+   "t": 258.56,
+   "d": 1.68,
+   "text": "roguelike when you played slytherspire"
+  },
+  {
+   "t": 260.24,
+   "d": 1.76,
+   "text": "you've been coming out"
+  },
+  {
+   "t": 262.0,
+   "d": 0.8,
+   "text": "in"
+  },
+  {
+   "t": 262.8,
+   "d": 1.92,
+   "text": "the last little while there are a lot of"
+  },
+  {
+   "t": 264.72,
+   "d": 2.56,
+   "text": "card games now aren't there yeah"
+  },
+  {
+   "t": 267.28,
+   "d": 2.24,
+   "text": "so i saw so i saw anthony saw an"
+  },
+  {
+   "t": 269.52,
+   "d": 2.64,
+   "text": "opportunity for deck building games"
+  },
+  {
+   "t": 272.16,
+   "d": 2.16,
+   "text": "um to be done in like a virtual kind of"
+  },
+  {
+   "t": 274.32,
+   "d": 1.52,
+   "text": "like you know video games"
+  },
+  {
+   "t": 275.84,
+   "d": 1.68,
+   "text": "um and i thought that"
+  },
+  {
+   "t": 277.52,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 278.56,
+   "d": 2.56,
+   "text": "digital card games the ui of digital"
+  },
+  {
+   "t": 281.12,
+   "d": 2.08,
+   "text": "card games was really awful"
+  },
+  {
+   "t": 283.2,
+   "d": 1.92,
+   "text": "um like cards would just be the static"
+  },
+  {
+   "t": 285.12,
+   "d": 1.44,
+   "text": "thing then you click on it and then you"
+  },
+  {
+   "t": 286.56,
+   "d": 2.24,
+   "text": "click on some area to like play it you"
+  },
+  {
+   "t": 288.8,
+   "d": 1.52,
+   "text": "would like have a hard time reading it"
+  },
+  {
+   "t": 290.32,
+   "d": 2.4,
+   "text": "so you'd only be able to play on pc"
+  },
+  {
+   "t": 292.72,
+   "d": 2.0,
+   "text": "um and then but then like hearthstone"
+  },
+  {
+   "t": 294.72,
+   "d": 2.56,
+   "text": "came along and it was like hey like it"
+  },
+  {
+   "t": 297.28,
+   "d": 1.84,
+   "text": "can feel sort of like"
+  },
+  {
+   "t": 299.12,
+   "d": 1.44,
+   "text": "fun to play with cards even if you're"
+  },
+  {
+   "t": 300.56,
+   "d": 1.92,
+   "text": "not like handling them in real life you"
+  },
+  {
+   "t": 302.48,
+   "d": 1.84,
+   "text": "shouldn't feel like"
+  },
+  {
+   "t": 304.32,
+   "d": 1.84,
+   "text": "this like sad"
+  },
+  {
+   "t": 306.16,
+   "d": 2.72,
+   "text": "secondary mode of play where there we go"
+  },
+  {
+   "t": 308.88,
+   "d": 2.08,
+   "text": "it's"
+  },
+  {
+   "t": 313.12,
+   "d": 0.88,
+   "text": "yeah"
+  },
+  {
+   "t": 314.0,
+   "d": 1.6,
+   "text": "you can explain rules dynamically in"
+  },
+  {
+   "t": 315.6,
+   "d": 1.28,
+   "text": "context"
+  },
+  {
+   "t": 316.88,
+   "d": 0.8,
+   "text": "right"
+  },
+  {
+   "t": 317.68,
+   "d": 1.84,
+   "text": "we can shuffle for you we can clarify"
+  },
+  {
+   "t": 319.52,
+   "d": 1.84,
+   "text": "rules by enforcing them through game"
+  },
+  {
+   "t": 321.36,
+   "d": 2.88,
+   "text": "system mechanics by programming them um"
+  },
+  {
+   "t": 324.24,
+   "d": 2.08,
+   "text": "so i really wanted to like push that as"
+  },
+  {
+   "t": 326.32,
+   "d": 1.36,
+   "text": "far as possible"
+  },
+  {
+   "t": 327.68,
+   "d": 1.84,
+   "text": "also making sure that like anthony"
+  },
+  {
+   "t": 329.52,
+   "d": 1.28,
+   "text": "wanted to make a deck building game and"
+  },
+  {
+   "t": 330.8,
+   "d": 1.84,
+   "text": "i was like oh this makes sense i played"
+  },
+  {
+   "t": 332.64,
+   "d": 1.52,
+   "text": "a little bit of um"
+  },
+  {
+   "t": 334.16,
+   "d": 2.0,
+   "text": "i think everyone at the time has played"
+  },
+  {
+   "t": 336.16,
+   "d": 1.12,
+   "text": "a little bit of"
+  },
+  {
+   "t": 337.28,
+   "d": 1.36,
+   "text": "dominion"
+  },
+  {
+   "t": 338.64,
+   "d": 1.44,
+   "text": "and then there was like a spin-off game"
+  },
+  {
+   "t": 340.08,
+   "d": 2.08,
+   "text": "that was pretty popular called"
+  },
+  {
+   "t": 342.16,
+   "d": 1.92,
+   "text": "ascension i think"
+  },
+  {
+   "t": 344.08,
+   "d": 2.32,
+   "text": "and that was like another dominion like"
+  },
+  {
+   "t": 346.4,
+   "d": 1.76,
+   "text": "kind of like drafting deck building"
+  },
+  {
+   "t": 348.16,
+   "d": 0.8,
+   "text": "games"
+  },
+  {
+   "t": 348.96,
+   "d": 2.4,
+   "text": "right both of those as well"
+  },
+  {
+   "t": 351.36,
+   "d": 1.6,
+   "text": "yeah i think that's really interesting"
+  },
+  {
+   "t": 352.96,
+   "d": 2.32,
+   "text": "of the taking advantage of i remember"
+  },
+  {
+   "t": 355.28,
+   "d": 1.44,
+   "text": "what i found really cool about"
+  },
+  {
+   "t": 356.72,
+   "d": 1.76,
+   "text": "hearthstone and then is true and"
+  },
+  {
+   "t": 358.48,
+   "d": 1.68,
+   "text": "slightly aspires yeah all that stuff if"
+  },
+  {
+   "t": 360.16,
+   "d": 0.96,
+   "text": "you can do"
+  },
+  {
+   "t": 361.12,
+   "d": 2.16,
+   "text": "strange things to the deck that would be"
+  },
+  {
+   "t": 363.28,
+   "d": 2.96,
+   "text": "tedious or impossible in a physical"
+  },
+  {
+   "t": 366.24,
+   "d": 2.24,
+   "text": "board game or like the level of token"
+  },
+  {
+   "t": 368.48,
+   "d": 2.72,
+   "text": "management or you know something like um"
+  },
+  {
+   "t": 371.2,
+   "d": 1.68,
+   "text": "you know add damage for every other"
+  },
+  {
+   "t": 372.88,
+   "d": 2.32,
+   "text": "strike card in your deck is a very like"
+  },
+  {
+   "t": 375.2,
+   "d": 3.12,
+   "text": "that would be um quite a difficult thing"
+  },
+  {
+   "t": 378.32,
+   "d": 2.4,
+   "text": "to handle and yeah which i i think that"
+  },
+  {
+   "t": 380.72,
+   "d": 2.8,
+   "text": "the roguelikiness of the"
+  },
+  {
+   "t": 383.52,
+   "d": 3.04,
+   "text": "systemic kind of combinations as well of"
+  },
+  {
+   "t": 386.56,
+   "d": 2.64,
+   "text": "uh how especially the relics come into"
+  },
+  {
+   "t": 389.2,
+   "d": 1.76,
+   "text": "it which i was actually curious like if"
+  },
+  {
+   "t": 390.96,
+   "d": 1.12,
+   "text": "relics"
+  },
+  {
+   "t": 392.08,
+   "d": 1.52,
+   "text": "fell more on"
+  },
+  {
+   "t": 393.6,
+   "d": 2.08,
+   "text": "your side or anthony's side or a mix"
+  },
+  {
+   "t": 395.68,
+   "d": 2.0,
+   "text": "because i feel like they're a very"
+  },
+  {
+   "t": 397.68,
+   "d": 2.4,
+   "text": "roguelikey thing almost more than a card"
+  },
+  {
+   "t": 400.08,
+   "d": 1.44,
+   "text": "gamey thing not that i think"
+  },
+  {
+   "t": 401.52,
+   "d": 1.2,
+   "text": "everything's looking for these two"
+  },
+  {
+   "t": 402.72,
+   "d": 1.36,
+   "text": "categories but"
+  },
+  {
+   "t": 404.08,
+   "d": 1.52,
+   "text": "it's interesting to think about um they"
+  },
+  {
+   "t": 405.6,
+   "d": 1.6,
+   "text": "used to be we used to have more"
+  },
+  {
+   "t": 407.2,
+   "d": 2.0,
+   "text": "traditional rogue"
+  },
+  {
+   "t": 409.2,
+   "d": 1.84,
+   "text": "um like elements actually we used to"
+  },
+  {
+   "t": 411.04,
+   "d": 2.16,
+   "text": "have potions that were unidentified and"
+  },
+  {
+   "t": 413.2,
+   "d": 1.44,
+   "text": "you had to like use them and figure out"
+  },
+  {
+   "t": 414.64,
+   "d": 1.12,
+   "text": "what they were"
+  },
+  {
+   "t": 415.76,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 416.56,
+   "d": 2.4,
+   "text": "you could like combine potions um but"
+  },
+  {
+   "t": 418.96,
+   "d": 2.8,
+   "text": "the potion drops were not very high just"
+  },
+  {
+   "t": 421.76,
+   "d": 1.36,
+   "text": "because it's like"
+  },
+  {
+   "t": 423.12,
+   "d": 2.4,
+   "text": "monsters and there's already a lot of"
+  },
+  {
+   "t": 425.52,
+   "d": 3.04,
+   "text": "um items on screen so we ended up kind"
+  },
+  {
+   "t": 428.56,
+   "d": 2.0,
+   "text": "of like making it simple"
+  },
+  {
+   "t": 430.56,
+   "d": 2.72,
+   "text": "um relics used to have three slots you"
+  },
+  {
+   "t": 433.28,
+   "d": 1.36,
+   "text": "would choose like three powerful ones"
+  },
+  {
+   "t": 434.64,
+   "d": 2.16,
+   "text": "then you can mix and match what you want"
+  },
+  {
+   "t": 436.8,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 437.84,
+   "d": 1.68,
+   "text": "but we kind of have more fun just"
+  },
+  {
+   "t": 439.52,
+   "d": 1.6,
+   "text": "designing too many of them"
+  },
+  {
+   "t": 441.12,
+   "d": 2.16,
+   "text": "and we were like well like"
+  },
+  {
+   "t": 443.28,
+   "d": 1.92,
+   "text": "if you have too many and we have to"
+  },
+  {
+   "t": 445.2,
+   "d": 1.6,
+   "text": "choose between and it feels bad to get"
+  },
+  {
+   "t": 446.8,
+   "d": 0.8,
+   "text": "rid of"
+  },
+  {
+   "t": 447.6,
+   "d": 2.16,
+   "text": "when you have too many excess relics you"
+  },
+  {
+   "t": 449.76,
+   "d": 1.36,
+   "text": "don't want to get rid of them we're like"
+  },
+  {
+   "t": 451.12,
+   "d": 1.12,
+   "text": "why don't we just do"
+  },
+  {
+   "t": 452.24,
+   "d": 1.44,
+   "text": "the binding of icing"
+  },
+  {
+   "t": 453.68,
+   "d": 1.36,
+   "text": "and just like it just kind of like"
+  },
+  {
+   "t": 455.04,
+   "d": 1.76,
+   "text": "descends into chaos and like more and"
+  },
+  {
+   "t": 456.8,
+   "d": 0.88,
+   "text": "more"
+  },
+  {
+   "t": 457.68,
+   "d": 2.72,
+   "text": "um items can trigger off other items and"
+  },
+  {
+   "t": 460.4,
+   "d": 1.44,
+   "text": "it's just kind of these cascading event"
+  },
+  {
+   "t": 461.84,
+   "d": 2.88,
+   "text": "stuff and that that was more of a hit"
+  },
+  {
+   "t": 464.72,
+   "d": 1.44,
+   "text": "internally when we were play testing"
+  },
+  {
+   "t": 466.16,
+   "d": 1.2,
+   "text": "because we had a"
+  },
+  {
+   "t": 467.36,
+   "d": 2.0,
+   "text": "internal play test period of"
+  },
+  {
+   "t": 469.36,
+   "d": 2.24,
+   "text": "more than a year i think"
+  },
+  {
+   "t": 471.6,
+   "d": 1.44,
+   "text": "yeah i remember"
+  },
+  {
+   "t": 473.04,
+   "d": 2.64,
+   "text": "um actually a gdc talk that i went to"
+  },
+  {
+   "t": 475.68,
+   "d": 1.84,
+   "text": "about some of the like data gathering"
+  },
+  {
+   "t": 477.52,
+   "d": 1.28,
+   "text": "and things like that informed"
+  },
+  {
+   "t": 478.8,
+   "d": 1.76,
+   "text": "development which is really cool was the"
+  },
+  {
+   "t": 480.56,
+   "d": 1.68,
+   "text": "potion identifying something that also"
+  },
+  {
+   "t": 482.24,
+   "d": 1.44,
+   "text": "made it out into"
+  },
+  {
+   "t": 483.68,
+   "d": 2.64,
+   "text": "like more closed or beta type play"
+  },
+  {
+   "t": 486.32,
+   "d": 2.56,
+   "text": "testing it didn't last very long"
+  },
+  {
+   "t": 488.88,
+   "d": 1.36,
+   "text": "okay"
+  },
+  {
+   "t": 490.24,
+   "d": 1.36,
+   "text": "that's fascinating i've never heard"
+  },
+  {
+   "t": 491.6,
+   "d": 1.28,
+   "text": "before that there was potion"
+  },
+  {
+   "t": 492.88,
+   "d": 2.08,
+   "text": "identification in slight displier that"
+  },
+  {
+   "t": 494.96,
+   "d": 1.36,
+   "text": "would have really cut through the like"
+  },
+  {
+   "t": 496.32,
+   "d": 1.76,
+   "text": "is it a rogue like"
+  },
+  {
+   "t": 498.08,
+   "d": 2.56,
+   "text": "i'm not really sure why we added"
+  },
+  {
+   "t": 500.64,
+   "d": 1.68,
+   "text": "some of these mechanics or when it's all"
+  },
+  {
+   "t": 502.32,
+   "d": 3.12,
+   "text": "a bit of a blur um yeah we're like hmm"
+  },
+  {
+   "t": 505.44,
+   "d": 1.52,
+   "text": "is there enough complexity like why"
+  },
+  {
+   "t": 506.96,
+   "d": 1.68,
+   "text": "don't we try adding and there was a lot"
+  },
+  {
+   "t": 508.64,
+   "d": 2.0,
+   "text": "of like try adding kind of like"
+  },
+  {
+   "t": 510.64,
+   "d": 1.28,
+   "text": "mechanics"
+  },
+  {
+   "t": 511.92,
+   "d": 2.16,
+   "text": "um and some of them ended up very well"
+  },
+  {
+   "t": 514.08,
+   "d": 1.68,
+   "text": "some of them not as well"
+  },
+  {
+   "t": 515.76,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 516.64,
+   "d": 2.08,
+   "text": "another one would be like uh"
+  },
+  {
+   "t": 518.72,
+   "d": 2.08,
+   "text": "like maps we didn't used to have a map"
+  },
+  {
+   "t": 520.8,
+   "d": 1.84,
+   "text": "it used to just be um you'd just be"
+  },
+  {
+   "t": 522.64,
+   "d": 1.84,
+   "text": "showing three like doors"
+  },
+  {
+   "t": 524.48,
+   "d": 1.04,
+   "text": "and then like how the door was"
+  },
+  {
+   "t": 525.52,
+   "d": 1.76,
+   "text": "ornamented you would know"
+  },
+  {
+   "t": 527.28,
+   "d": 1.6,
+   "text": "kind of like what room you would be in"
+  },
+  {
+   "t": 528.88,
+   "d": 2.08,
+   "text": "next which is oh kind of how many does"
+  },
+  {
+   "t": 530.96,
+   "d": 1.04,
+   "text": "it"
+  },
+  {
+   "t": 532.0,
+   "d": 1.76,
+   "text": "what i think that's how hades does it"
+  },
+  {
+   "t": 533.76,
+   "d": 2.0,
+   "text": "now kind of"
+  },
+  {
+   "t": 535.76,
+   "d": 1.76,
+   "text": "yeah yeah you have like three doors and"
+  },
+  {
+   "t": 537.52,
+   "d": 1.2,
+   "text": "they have a little icon of what's going"
+  },
+  {
+   "t": 538.72,
+   "d": 0.88,
+   "text": "to be in them yeah it's pretty"
+  },
+  {
+   "t": 539.6,
+   "d": 1.92,
+   "text": "interesting that hades ended up kind of"
+  },
+  {
+   "t": 541.52,
+   "d": 1.6,
+   "text": "like using like"
+  },
+  {
+   "t": 543.12,
+   "d": 3.76,
+   "text": "a similar system that we had"
+  },
+  {
+   "t": 547.12,
+   "d": 1.28,
+   "text": "why we got rid of it i don't know i"
+  },
+  {
+   "t": 548.4,
+   "d": 1.36,
+   "text": "think we just wanted to be able to feel"
+  },
+  {
+   "t": 549.76,
+   "d": 1.68,
+   "text": "like you were traversing"
+  },
+  {
+   "t": 551.44,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 552.32,
+   "d": 2.4,
+   "text": "and in a game that's like mainly static"
+  },
+  {
+   "t": 554.72,
+   "d": 1.44,
+   "text": "it's really hard to kind of convey that"
+  },
+  {
+   "t": 556.16,
+   "d": 1.6,
+   "text": "feeling whereas in hades you're"
+  },
+  {
+   "t": 557.76,
+   "d": 1.68,
+   "text": "literally like physically moving around"
+  },
+  {
+   "t": 559.44,
+   "d": 1.76,
+   "text": "so like even if you don't have a map and"
+  },
+  {
+   "t": 561.2,
+   "d": 1.6,
+   "text": "even then i guess"
+  },
+  {
+   "t": 562.8,
+   "d": 2.24,
+   "text": "um super giant's game also has a map"
+  },
+  {
+   "t": 565.04,
+   "d": 1.44,
+   "text": "right when you meet a boss your"
+  },
+  {
+   "t": 566.48,
+   "d": 1.84,
+   "text": "character goes"
+  },
+  {
+   "t": 568.32,
+   "d": 2.08,
+   "text": "oh yeah which actually always kind of"
+  },
+  {
+   "t": 570.4,
+   "d": 3.6,
+   "text": "reminds me of the like between acts like"
+  },
+  {
+   "t": 574.0,
+   "d": 2.16,
+   "text": "ish like some of this like the spire map"
+  },
+  {
+   "t": 576.16,
+   "d": 1.28,
+   "text": "stuff"
+  },
+  {
+   "t": 577.44,
+   "d": 1.92,
+   "text": "there's a good feeling of movement in"
+  },
+  {
+   "t": 579.36,
+   "d": 2.08,
+   "text": "hades for sure uh better than better"
+  },
+  {
+   "t": 581.44,
+   "d": 2.4,
+   "text": "than the spire actually but"
+  },
+  {
+   "t": 583.84,
+   "d": 2.16,
+   "text": "it is interesting because i think like"
+  },
+  {
+   "t": 586.0,
+   "d": 1.2,
+   "text": "like again in terms of like"
+  },
+  {
+   "t": 587.2,
+   "d": 1.52,
+   "text": "roguelikiness like that kind of like"
+  },
+  {
+   "t": 588.72,
+   "d": 2.72,
+   "text": "dungeon dive feel it does make sense"
+  },
+  {
+   "t": 591.44,
+   "d": 1.68,
+   "text": "that that's much harder in a card game"
+  },
+  {
+   "t": 593.12,
+   "d": 2.4,
+   "text": "because yeah like there isn't a movement"
+  },
+  {
+   "t": 595.52,
+   "d": 2.08,
+   "text": "stage which i feel like i've seen some"
+  },
+  {
+   "t": 597.6,
+   "d": 1.44,
+   "text": "games now that are trying to do more of"
+  },
+  {
+   "t": 599.04,
+   "d": 2.4,
+   "text": "a like you run around and also play"
+  },
+  {
+   "t": 601.44,
+   "d": 1.92,
+   "text": "cards which"
+  },
+  {
+   "t": 603.36,
+   "d": 2.24,
+   "text": "a little bit of both yeah"
+  },
+  {
+   "t": 605.6,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 606.8,
+   "d": 1.04,
+   "text": "but that is interesting and it's"
+  },
+  {
+   "t": 607.84,
+   "d": 0.88,
+   "text": "interesting you mentioned the map"
+  },
+  {
+   "t": 608.72,
+   "d": 1.2,
+   "text": "because i feel like"
+  },
+  {
+   "t": 609.92,
+   "d": 2.16,
+   "text": "my observation is that i have now seen"
+  },
+  {
+   "t": 612.08,
+   "d": 2.0,
+   "text": "other games with maps that i feel like"
+  },
+  {
+   "t": 614.08,
+   "d": 2.48,
+   "text": "look very like play the spires map which"
+  },
+  {
+   "t": 616.56,
+   "d": 1.2,
+   "text": "again"
+  },
+  {
+   "t": 617.76,
+   "d": 2.32,
+   "text": "ftl's planet map"
+  },
+  {
+   "t": 620.08,
+   "d": 2.24,
+   "text": "also kind of similar so it's not like no"
+  },
+  {
+   "t": 622.32,
+   "d": 2.24,
+   "text": "one's ever done it but um"
+  },
+  {
+   "t": 624.56,
+   "d": 2.4,
+   "text": "it seems like that's another like little"
+  },
+  {
+   "t": 626.96,
+   "d": 1.68,
+   "text": "lesson that people have taken from it"
+  },
+  {
+   "t": 628.64,
+   "d": 2.72,
+   "text": "and applied yeah i would say the map is"
+  },
+  {
+   "t": 631.36,
+   "d": 1.6,
+   "text": "mostly"
+  },
+  {
+   "t": 632.96,
+   "d": 1.92,
+   "text": "evolutionary like it wasn't created in a"
+  },
+  {
+   "t": 634.88,
+   "d": 2.48,
+   "text": "vacuum um i don't remember exactly which"
+  },
+  {
+   "t": 637.36,
+   "d": 2.32,
+   "text": "games we looked at we actually looked at"
+  },
+  {
+   "t": 639.68,
+   "d": 1.6,
+   "text": "a handful of different games when"
+  },
+  {
+   "t": 641.28,
+   "d": 1.36,
+   "text": "thinking about"
+  },
+  {
+   "t": 642.64,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 643.52,
+   "d": 1.36,
+   "text": "specifically"
+  },
+  {
+   "t": 644.88,
+   "d": 1.6,
+   "text": "events"
+  },
+  {
+   "t": 646.48,
+   "d": 2.0,
+   "text": "the map system"
+  },
+  {
+   "t": 648.48,
+   "d": 3.28,
+   "text": "and the enemies move system"
+  },
+  {
+   "t": 651.76,
+   "d": 2.08,
+   "text": "um so those three we kind of like study"
+  },
+  {
+   "t": 653.84,
+   "d": 1.76,
+   "text": "different games to see what they did"
+  },
+  {
+   "t": 655.6,
+   "d": 1.52,
+   "text": "before we like kind of like landed on"
+  },
+  {
+   "t": 657.12,
+   "d": 1.84,
+   "text": "like exactly what we wanted to do it"
+  },
+  {
+   "t": 658.96,
+   "d": 1.6,
+   "text": "wasn't something"
+  },
+  {
+   "t": 660.56,
+   "d": 1.52,
+   "text": "we wrote in like a"
+  },
+  {
+   "t": 662.08,
+   "d": 2.24,
+   "text": "design document at the very beginning uh"
+  },
+  {
+   "t": 664.32,
+   "d": 1.76,
+   "text": "i think i think the design document was"
+  },
+  {
+   "t": 666.08,
+   "d": 1.28,
+   "text": "like two pages"
+  },
+  {
+   "t": 667.36,
+   "d": 1.36,
+   "text": "very short"
+  },
+  {
+   "t": 668.72,
+   "d": 1.92,
+   "text": "it was like deck building"
+  },
+  {
+   "t": 670.64,
+   "d": 4.0,
+   "text": "classes yeah monsters yeah like that"
+  },
+  {
+   "t": 674.64,
+   "d": 1.92,
+   "text": "we figured out like the pacing"
+  },
+  {
+   "t": 676.56,
+   "d": 1.2,
+   "text": "the maps"
+  },
+  {
+   "t": 677.76,
+   "d": 2.4,
+   "text": "potions relics"
+  },
+  {
+   "t": 680.16,
+   "d": 1.76,
+   "text": "uh the different types of nodes in those"
+  },
+  {
+   "t": 681.92,
+   "d": 2.24,
+   "text": "maps those were all kind of"
+  },
+  {
+   "t": 684.16,
+   "d": 1.76,
+   "text": "created organically while we were"
+  },
+  {
+   "t": 685.92,
+   "d": 1.44,
+   "text": "building it"
+  },
+  {
+   "t": 687.36,
+   "d": 1.28,
+   "text": "which is really interesting like i don't"
+  },
+  {
+   "t": 688.64,
+   "d": 1.44,
+   "text": "know um"
+  },
+  {
+   "t": 690.08,
+   "d": 1.92,
+   "text": "what level of trying to"
+  },
+  {
+   "t": 692.0,
+   "d": 3.04,
+   "text": "rack your brain is useful but like from"
+  },
+  {
+   "t": 695.04,
+   "d": 1.76,
+   "text": "a programming almost like a technical"
+  },
+  {
+   "t": 696.8,
+   "d": 1.04,
+   "text": "standpoint like that's a lot of"
+  },
+  {
+   "t": 697.84,
+   "d": 1.92,
+   "text": "flexibility of like iterating on all"
+  },
+  {
+   "t": 699.76,
+   "d": 2.08,
+   "text": "these different concepts were there any"
+  },
+  {
+   "t": 701.84,
+   "d": 1.84,
+   "text": "particular approaches that helped make"
+  },
+  {
+   "t": 703.68,
+   "d": 2.08,
+   "text": "that possible that you could you know"
+  },
+  {
+   "t": 705.76,
+   "d": 1.68,
+   "text": "add and remove stuff that fast when"
+  },
+  {
+   "t": 707.44,
+   "d": 2.48,
+   "text": "you're prototyping um"
+  },
+  {
+   "t": 709.92,
+   "d": 1.52,
+   "text": "that's a good question"
+  },
+  {
+   "t": 711.44,
+   "d": 1.2,
+   "text": "i"
+  },
+  {
+   "t": 712.64,
+   "d": 2.4,
+   "text": "just kind of write shitty code"
+  },
+  {
+   "t": 715.04,
+   "d": 2.64,
+   "text": "um i just not afraid of like honest"
+  },
+  {
+   "t": 717.68,
+   "d": 2.32,
+   "text": "anything that i write i just write it's"
+  },
+  {
+   "t": 720.0,
+   "d": 1.76,
+   "text": "crap nothing is like reliant on"
+  },
+  {
+   "t": 721.76,
+   "d": 1.68,
+   "text": "something else and if something is i"
+  },
+  {
+   "t": 723.44,
+   "d": 2.08,
+   "text": "just remove it and then i just just fix"
+  },
+  {
+   "t": 725.52,
+   "d": 1.68,
+   "text": "all the books i'm just kind of chaotic"
+  },
+  {
+   "t": 727.2,
+   "d": 1.64,
+   "text": "in terms of programming"
+  },
+  {
+   "t": 728.84,
+   "d": 2.68,
+   "text": "um it's not really recommended for teams"
+  },
+  {
+   "t": 731.52,
+   "d": 2.0,
+   "text": "that are larger than two people i would"
+  },
+  {
+   "t": 733.52,
+   "d": 1.12,
+   "text": "say"
+  },
+  {
+   "t": 734.64,
+   "d": 1.12,
+   "text": "but um"
+  },
+  {
+   "t": 735.76,
+   "d": 2.64,
+   "text": "so work for us i guess"
+  },
+  {
+   "t": 738.4,
+   "d": 2.08,
+   "text": "uh so a lot of the systems like they"
+  },
+  {
+   "t": 740.48,
+   "d": 1.28,
+   "text": "came and went"
+  },
+  {
+   "t": 741.76,
+   "d": 1.6,
+   "text": "in less than a week"
+  },
+  {
+   "t": 743.36,
+   "d": 2.08,
+   "text": "wow we converted the"
+  },
+  {
+   "t": 745.44,
+   "d": 1.44,
+   "text": "we had like a move system where the"
+  },
+  {
+   "t": 746.88,
+   "d": 1.44,
+   "text": "enemies describe what they did and then"
+  },
+  {
+   "t": 748.32,
+   "d": 1.92,
+   "text": "they had a series of actions"
+  },
+  {
+   "t": 750.24,
+   "d": 1.28,
+   "text": "but then we made it so that we got"
+  },
+  {
+   "t": 751.52,
+   "d": 1.92,
+   "text": "little icons above the enemies like that"
+  },
+  {
+   "t": 753.44,
+   "d": 1.6,
+   "text": "took about a week"
+  },
+  {
+   "t": 755.04,
+   "d": 1.6,
+   "text": "which is i guess pretty long that was"
+  },
+  {
+   "t": 756.64,
+   "d": 3.2,
+   "text": "probably the biggest overhaul"
+  },
+  {
+   "t": 759.84,
+   "d": 1.52,
+   "text": "writing a map we just you know we're"
+  },
+  {
+   "t": 761.36,
+   "d": 1.68,
+   "text": "like let's use this algorithm and we"
+  },
+  {
+   "t": 763.04,
+   "d": 1.28,
+   "text": "like put something up there and just"
+  },
+  {
+   "t": 764.32,
+   "d": 3.04,
+   "text": "like an image with a few like kickboxes"
+  },
+  {
+   "t": 767.36,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 768.32,
+   "d": 1.36,
+   "text": "and while it was kind of crappy at the"
+  },
+  {
+   "t": 769.68,
+   "d": 1.6,
+   "text": "start we would still"
+  },
+  {
+   "t": 771.28,
+   "d": 1.52,
+   "text": "iterate over a long period of time it's"
+  },
+  {
+   "t": 772.8,
+   "d": 1.84,
+   "text": "like oh maybe we should have"
+  },
+  {
+   "t": 774.64,
+   "d": 1.76,
+   "text": "five branches at the start or like four"
+  },
+  {
+   "t": 776.4,
+   "d": 1.2,
+   "text": "branches"
+  },
+  {
+   "t": 777.6,
+   "d": 1.92,
+   "text": "uh maybe instead of 17 floors we should"
+  },
+  {
+   "t": 779.52,
+   "d": 1.92,
+   "text": "go down to 16 floors and eventually"
+  },
+  {
+   "t": 781.44,
+   "d": 2.16,
+   "text": "became 13 floors"
+  },
+  {
+   "t": 783.6,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 784.48,
+   "d": 1.28,
+   "text": "just one at a time just shorter and"
+  },
+  {
+   "t": 785.76,
+   "d": 1.36,
+   "text": "shorter we're like"
+  },
+  {
+   "t": 787.12,
+   "d": 1.76,
+   "text": "i'm getting tired of playing act 1 over"
+  },
+  {
+   "t": 788.88,
+   "d": 2.4,
+   "text": "and over again yeah"
+  },
+  {
+   "t": 791.28,
+   "d": 0.88,
+   "text": "yeah"
+  },
+  {
+   "t": 792.16,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 793.52,
+   "d": 1.36,
+   "text": "yeah which is really interesting was"
+  },
+  {
+   "t": 794.88,
+   "d": 2.24,
+   "text": "there like a cadence to like okay we've"
+  },
+  {
+   "t": 797.12,
+   "d": 2.0,
+   "text": "put in a bunch of features we've written"
+  },
+  {
+   "t": 799.12,
+   "d": 1.84,
+   "text": "a bunch of shitty code let's like take a"
+  },
+  {
+   "t": 800.96,
+   "d": 1.52,
+   "text": "little bit to get the code"
+  },
+  {
+   "t": 802.48,
+   "d": 1.68,
+   "text": "less shitty or was it just kind of ad"
+  },
+  {
+   "t": 804.16,
+   "d": 1.36,
+   "text": "hoc like"
+  },
+  {
+   "t": 805.52,
+   "d": 1.68,
+   "text": "always balancing the two or was there a"
+  },
+  {
+   "t": 807.2,
+   "d": 1.36,
+   "text": "moment at the end where you were like oh"
+  },
+  {
+   "t": 808.56,
+   "d": 1.28,
+   "text": "no"
+  },
+  {
+   "t": 809.84,
+   "d": 0.8,
+   "text": "when you"
+  },
+  {
+   "t": 810.64,
+   "d": 2.32,
+   "text": "write a lot of bad code sometimes when"
+  },
+  {
+   "t": 812.96,
+   "d": 1.92,
+   "text": "you're making content in that system"
+  },
+  {
+   "t": 814.88,
+   "d": 1.68,
+   "text": "you're like this isn't going to work i"
+  },
+  {
+   "t": 816.56,
+   "d": 1.28,
+   "text": "guess we'll take a little bit of time to"
+  },
+  {
+   "t": 817.84,
+   "d": 2.88,
+   "text": "actually fix the code so there are like"
+  },
+  {
+   "t": 820.72,
+   "d": 2.32,
+   "text": "kind of fix things as we run into them"
+  },
+  {
+   "t": 823.04,
+   "d": 1.12,
+   "text": "um"
+  },
+  {
+   "t": 824.16,
+   "d": 1.68,
+   "text": "and i think you just want to make sure"
+  },
+  {
+   "t": 825.84,
+   "d": 2.64,
+   "text": "that you have like really well written"
+  },
+  {
+   "t": 828.48,
+   "d": 1.92,
+   "text": "functions and those kind of like methods"
+  },
+  {
+   "t": 830.4,
+   "d": 1.84,
+   "text": "are just like named after"
+  },
+  {
+   "t": 832.24,
+   "d": 2.56,
+   "text": "the actual game things"
+  },
+  {
+   "t": 834.8,
+   "d": 2.96,
+   "text": "so it's like oh this is like an elite an"
+  },
+  {
+   "t": 837.76,
+   "d": 1.44,
+   "text": "elite room you're like oh this is a room"
+  },
+  {
+   "t": 839.2,
+   "d": 1.52,
+   "text": "where elites are"
+  },
+  {
+   "t": 840.72,
+   "d": 2.32,
+   "text": "yeah we try not to um"
+  },
+  {
+   "t": 843.04,
+   "d": 1.84,
+   "text": "name things like you know"
+  },
+  {
+   "t": 844.88,
+   "d": 2.56,
+   "text": "strong monster"
+  },
+  {
+   "t": 847.44,
+   "d": 2.16,
+   "text": "you know you"
+  },
+  {
+   "t": 849.6,
+   "d": 1.92,
+   "text": "attach your bootstrapper and you're like"
+  },
+  {
+   "t": 851.52,
+   "d": 0.96,
+   "text": "okay we don't know what that means"
+  },
+  {
+   "t": 852.48,
+   "d": 2.0,
+   "text": "anymore oh yeah"
+  },
+  {
+   "t": 854.48,
+   "d": 1.28,
+   "text": "that's interesting that's one thing i"
+  },
+  {
+   "t": 855.76,
+   "d": 1.92,
+   "text": "noticed um when i did some stuff in the"
+  },
+  {
+   "t": 857.68,
+   "d": 2.0,
+   "text": "nethack code i was impressed they do the"
+  },
+  {
+   "t": 859.68,
+   "d": 2.0,
+   "text": "terrible thing of the time because of"
+  },
+  {
+   "t": 861.68,
+   "d": 1.76,
+   "text": "screen space that they drop like all the"
+  },
+  {
+   "t": 863.44,
+   "d": 2.96,
+   "text": "vowels from all variable names for space"
+  },
+  {
+   "t": 866.4,
+   "d": 1.84,
+   "text": "but other than that function names and"
+  },
+  {
+   "t": 868.24,
+   "d": 1.44,
+   "text": "stuff tend to be really descriptive of"
+  },
+  {
+   "t": 869.68,
+   "d": 1.44,
+   "text": "what they do in a way that makes the"
+  },
+  {
+   "t": 871.12,
+   "d": 2.64,
+   "text": "code more readable um so that is really"
+  },
+  {
+   "t": 873.76,
+   "d": 2.8,
+   "text": "interesting there's one question from um"
+  },
+  {
+   "t": 876.56,
+   "d": 1.6,
+   "text": "travis of like all these different kind"
+  },
+  {
+   "t": 878.16,
+   "d": 2.0,
+   "text": "of trying it out things like how long"
+  },
+  {
+   "t": 880.16,
+   "d": 2.24,
+   "text": "would you try and iterate on a feature"
+  },
+  {
+   "t": 882.4,
+   "d": 1.68,
+   "text": "and kind of like give it a go before"
+  },
+  {
+   "t": 884.08,
+   "d": 1.76,
+   "text": "deciding either okay we're gonna codify"
+  },
+  {
+   "t": 885.84,
+   "d": 1.44,
+   "text": "this we're going with it or we're"
+  },
+  {
+   "t": 887.28,
+   "d": 1.6,
+   "text": "dropping it"
+  },
+  {
+   "t": 888.88,
+   "d": 1.76,
+   "text": "we would just"
+  },
+  {
+   "t": 890.64,
+   "d": 3.12,
+   "text": "play one run and i think um"
+  },
+  {
+   "t": 893.76,
+   "d": 1.52,
+   "text": "and if it doesn't feel like it's going"
+  },
+  {
+   "t": 895.28,
+   "d": 1.68,
+   "text": "to work we just kind of axe it we don't"
+  },
+  {
+   "t": 896.96,
+   "d": 2.32,
+   "text": "like wow we've been in there for months"
+  },
+  {
+   "t": 899.28,
+   "d": 3.28,
+   "text": "how do you get that decisive"
+  },
+  {
+   "t": 902.56,
+   "d": 1.36,
+   "text": "you know when you like paint something"
+  },
+  {
+   "t": 903.92,
+   "d": 1.52,
+   "text": "and you're like does this look good and"
+  },
+  {
+   "t": 905.44,
+   "d": 1.28,
+   "text": "then the next day you look at you're"
+  },
+  {
+   "t": 906.72,
+   "d": 1.84,
+   "text": "like nah it's kind of like that kind of"
+  },
+  {
+   "t": 908.56,
+   "d": 2.16,
+   "text": "like guttural feeling"
+  },
+  {
+   "t": 910.72,
+   "d": 1.92,
+   "text": "gut feeling excuse me"
+  },
+  {
+   "t": 912.64,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 913.52,
+   "d": 2.24,
+   "text": "and we're like it doesn't work"
+  },
+  {
+   "t": 915.76,
+   "d": 2.16,
+   "text": "um and anthony and i are really harsh"
+  },
+  {
+   "t": 917.92,
+   "d": 1.52,
+   "text": "like editors"
+  },
+  {
+   "t": 919.44,
+   "d": 1.52,
+   "text": "against each other"
+  },
+  {
+   "t": 920.96,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 922.0,
+   "d": 1.52,
+   "text": "you'd be like hey like this system might"
+  },
+  {
+   "t": 923.52,
+   "d": 1.84,
+   "text": "work i'll be like i don't think i think"
+  },
+  {
+   "t": 925.36,
+   "d": 1.44,
+   "text": "it's gonna suck you know like well we"
+  },
+  {
+   "t": 926.8,
+   "d": 1.36,
+   "text": "should just try it and i was like all"
+  },
+  {
+   "t": 928.16,
+   "d": 1.84,
+   "text": "right well i'm gonna ride a shitty and"
+  },
+  {
+   "t": 930.0,
+   "d": 1.04,
+   "text": "then i just"
+  },
+  {
+   "t": 931.04,
+   "d": 1.44,
+   "text": "throw it in there and we have an enemy"
+  },
+  {
+   "t": 932.48,
+   "d": 2.64,
+   "text": "that like eats your cards or like you"
+  },
+  {
+   "t": 935.12,
+   "d": 1.84,
+   "text": "know suddenly your carry grows horns and"
+  },
+  {
+   "t": 936.96,
+   "d": 1.36,
+   "text": "i was like i don't think this is worth"
+  },
+  {
+   "t": 938.32,
+   "d": 1.28,
+   "text": "it"
+  },
+  {
+   "t": 939.6,
+   "d": 2.64,
+   "text": "or like maybe it's awesome and it stays"
+  },
+  {
+   "t": 942.24,
+   "d": 0.8,
+   "text": "yeah"
+  },
+  {
+   "t": 943.04,
+   "d": 1.12,
+   "text": "that's interesting do you think that's"
+  },
+  {
+   "t": 944.16,
+   "d": 1.04,
+   "text": "one where it helps that you've known"
+  },
+  {
+   "t": 945.2,
+   "d": 1.84,
+   "text": "each other for longer that it's not like"
+  },
+  {
+   "t": 947.04,
+   "d": 1.44,
+   "text": "you're not just you didn't just get"
+  },
+  {
+   "t": 948.48,
+   "d": 1.28,
+   "text": "together for the project it's some"
+  },
+  {
+   "t": 949.76,
+   "d": 1.68,
+   "text": "random person telling you i think your"
+  },
+  {
+   "t": 951.44,
+   "d": 0.96,
+   "text": "ideas"
+  },
+  {
+   "t": 952.4,
+   "d": 1.2,
+   "text": "aren't worth it yeah i guess that's"
+  },
+  {
+   "t": 953.6,
+   "d": 2.0,
+   "text": "that's a good point um"
+  },
+  {
+   "t": 955.6,
+   "d": 1.2,
+   "text": "like anthony and i have known each other"
+  },
+  {
+   "t": 956.8,
+   "d": 2.24,
+   "text": "first for quite a long time"
+  },
+  {
+   "t": 959.04,
+   "d": 1.76,
+   "text": "um and we also have just played a lot of"
+  },
+  {
+   "t": 960.8,
+   "d": 1.28,
+   "text": "games together"
+  },
+  {
+   "t": 962.08,
+   "d": 1.6,
+   "text": "and so when we"
+  },
+  {
+   "t": 963.68,
+   "d": 2.16,
+   "text": "kind of like critique games we kind of"
+  },
+  {
+   "t": 965.84,
+   "d": 1.12,
+   "text": "already know what we're going to say"
+  },
+  {
+   "t": 966.96,
+   "d": 1.52,
+   "text": "like when we boot up a game and it's"
+  },
+  {
+   "t": 968.48,
+   "d": 1.92,
+   "text": "loud we're like why isn't the master at"
+  },
+  {
+   "t": 970.4,
+   "d": 3.44,
+   "text": "50 when you launch the game"
+  },
+  {
+   "t": 973.92,
+   "d": 1.92,
+   "text": "like why isn't the master and in the"
+  },
+  {
+   "t": 975.84,
+   "d": 1.92,
+   "text": "background music and sfx at 50. like"
+  },
+  {
+   "t": 977.76,
+   "d": 1.44,
+   "text": "then you can go up or down like why"
+  },
+  {
+   "t": 979.2,
+   "d": 1.68,
+   "text": "would you i would just start at 100 like"
+  },
+  {
+   "t": 980.88,
+   "d": 2.16,
+   "text": "that's ridiculous what ears are gonna"
+  },
+  {
+   "t": 983.04,
+   "d": 1.2,
+   "text": "die"
+  },
+  {
+   "t": 984.24,
+   "d": 1.76,
+   "text": "is that how you relax you just bring up"
+  },
+  {
+   "t": 986.0,
+   "d": 2.08,
+   "text": "other things and"
+  },
+  {
+   "t": 988.08,
+   "d": 1.04,
+   "text": "critique"
+  },
+  {
+   "t": 989.12,
+   "d": 1.2,
+   "text": "it's kind of like a mystery science"
+  },
+  {
+   "t": 990.32,
+   "d": 3.44,
+   "text": "theater 3000 but just like"
+  },
+  {
+   "t": 993.76,
+   "d": 2.24,
+   "text": "on games for fun yeah i mean to this day"
+  },
+  {
+   "t": 996.0,
+   "d": 1.52,
+   "text": "we still we still play games and we're"
+  },
+  {
+   "t": 997.52,
+   "d": 1.92,
+   "text": "like like this isn't going to work we're"
+  },
+  {
+   "t": 999.44,
+   "d": 2.32,
+   "text": "like oh this looks like it borrowed you"
+  },
+  {
+   "t": 1001.76,
+   "d": 2.8,
+   "text": "know idea from this game or yeah maybe"
+  },
+  {
+   "t": 1004.56,
+   "d": 1.68,
+   "text": "this game is still"
+  },
+  {
+   "t": 1006.24,
+   "d": 2.16,
+   "text": "the same in like the series uh what's a"
+  },
+  {
+   "t": 1008.4,
+   "d": 1.2,
+   "text": "good example"
+  },
+  {
+   "t": 1009.6,
+   "d": 0.88,
+   "text": "let's see"
+  },
+  {
+   "t": 1010.48,
+   "d": 2.08,
+   "text": "i think um"
+  },
+  {
+   "t": 1012.56,
+   "d": 2.56,
+   "text": "anthony wanted to try out um"
+  },
+  {
+   "t": 1015.12,
+   "d": 2.08,
+   "text": "tiny tina's wonderland that's like the"
+  },
+  {
+   "t": 1017.2,
+   "d": 2.64,
+   "text": "borderlands"
+  },
+  {
+   "t": 1019.92,
+   "d": 2.72,
+   "text": "spiritual sequel to yeah three or"
+  },
+  {
+   "t": 1022.64,
+   "d": 0.96,
+   "text": "something"
+  },
+  {
+   "t": 1023.6,
+   "d": 1.6,
+   "text": "and it's like and i was like watching"
+  },
+  {
+   "t": 1025.2,
+   "d": 1.6,
+   "text": "the trailer and i was extremely"
+  },
+  {
+   "t": 1026.8,
+   "d": 1.44,
+   "text": "skeptical like this is just this is"
+  },
+  {
+   "t": 1028.24,
+   "d": 1.76,
+   "text": "exactly like borderlands except like"
+  },
+  {
+   "t": 1030.0,
+   "d": 2.32,
+   "text": "different classes"
+  },
+  {
+   "t": 1032.32,
+   "d": 2.08,
+   "text": "and they're like i don't know because"
+  },
+  {
+   "t": 1034.4,
+   "d": 1.2,
+   "text": "you know when it's been a while since"
+  },
+  {
+   "t": 1035.6,
+   "d": 1.84,
+   "text": "you've played a certain type of game"
+  },
+  {
+   "t": 1037.44,
+   "d": 1.28,
+   "text": "you're just like"
+  },
+  {
+   "t": 1038.72,
+   "d": 1.6,
+   "text": "this time it's going to be different he"
+  },
+  {
+   "t": 1040.32,
+   "d": 1.84,
+   "text": "starts playing it and i'm like i knew"
+  },
+  {
+   "t": 1042.16,
+   "d": 1.52,
+   "text": "it's the same game i'm not doing you on"
+  },
+  {
+   "t": 1043.68,
+   "d": 2.56,
+   "text": "this co-op game"
+  },
+  {
+   "t": 1046.24,
+   "d": 1.28,
+   "text": "you're done"
+  },
+  {
+   "t": 1047.52,
+   "d": 1.36,
+   "text": "no it's not working you've never played"
+  },
+  {
+   "t": 1048.88,
+   "d": 1.52,
+   "text": "a borland's game you can start there"
+  },
+  {
+   "t": 1050.4,
+   "d": 2.16,
+   "text": "it's still fun sure yeah"
+  },
+  {
+   "t": 1052.56,
+   "d": 2.4,
+   "text": "they have a billion guns"
+  },
+  {
+   "t": 1054.96,
+   "d": 2.08,
+   "text": "there's a there's a lot of guns the guns"
+  },
+  {
+   "t": 1057.04,
+   "d": 1.12,
+   "text": "are very fun"
+  },
+  {
+   "t": 1058.16,
+   "d": 0.96,
+   "text": "yeah"
+  },
+  {
+   "t": 1059.12,
+   "d": 1.28,
+   "text": "your writing is"
+  },
+  {
+   "t": 1060.4,
+   "d": 1.76,
+   "text": "if that's your style you know that's"
+  },
+  {
+   "t": 1062.16,
+   "d": 0.88,
+   "text": "cool"
+  },
+  {
+   "t": 1063.04,
+   "d": 0.88,
+   "text": "yeah"
+  },
+  {
+   "t": 1063.92,
+   "d": 1.12,
+   "text": "um"
+  },
+  {
+   "t": 1065.04,
+   "d": 2.56,
+   "text": "almost speaking of fun guns not exactly"
+  },
+  {
+   "t": 1067.6,
+   "d": 3.44,
+   "text": "uh i have a card a question from uh one"
+  },
+  {
+   "t": 1071.04,
+   "d": 1.92,
+   "text": "classy dude some people have upvoted do"
+  },
+  {
+   "t": 1072.96,
+   "d": 1.84,
+   "text": "you have a favorite card or or any"
+  },
+  {
+   "t": 1074.8,
+   "d": 2.64,
+   "text": "particular memorable like discoveries in"
+  },
+  {
+   "t": 1077.44,
+   "d": 2.16,
+   "text": "the game from you as a developer are"
+  },
+  {
+   "t": 1079.6,
+   "d": 1.52,
+   "text": "people playing or it's like oh i didn't"
+  },
+  {
+   "t": 1081.12,
+   "d": 2.08,
+   "text": "expect this combo would happen and like"
+  },
+  {
+   "t": 1083.2,
+   "d": 1.44,
+   "text": "can you can you boil it down to a"
+  },
+  {
+   "t": 1084.64,
+   "d": 1.6,
+   "text": "favorite card"
+  },
+  {
+   "t": 1086.24,
+   "d": 3.12,
+   "text": "oh boiling it down to a favorite card"
+  },
+  {
+   "t": 1089.36,
+   "d": 1.52,
+   "text": "um"
+  },
+  {
+   "t": 1090.88,
+   "d": 2.16,
+   "text": "let's see hmm"
+  },
+  {
+   "t": 1093.04,
+   "d": 2.4,
+   "text": "i like wacky cards but i also"
+  },
+  {
+   "t": 1095.44,
+   "d": 2.24,
+   "text": "i'm just like a really big fan of cards"
+  },
+  {
+   "t": 1097.68,
+   "d": 0.96,
+   "text": "that are"
+  },
+  {
+   "t": 1098.64,
+   "d": 1.84,
+   "text": "that have like a specific purpose and"
+  },
+  {
+   "t": 1100.48,
+   "d": 1.68,
+   "text": "are clean my favorite card is bash by"
+  },
+  {
+   "t": 1102.16,
+   "d": 2.88,
+   "text": "the way um okay it's very it's very pure"
+  },
+  {
+   "t": 1105.04,
+   "d": 2.48,
+   "text": "because if you play a bash the next turn"
+  },
+  {
+   "t": 1107.52,
+   "d": 1.92,
+   "text": "you put two strikes and it's worth it"
+  },
+  {
+   "t": 1109.44,
+   "d": 1.6,
+   "text": "it's worth the cost of the back you do a"
+  },
+  {
+   "t": 1111.04,
+   "d": 1.84,
+   "text": "little bit more damage and so it's so"
+  },
+  {
+   "t": 1112.88,
+   "d": 1.2,
+   "text": "elegant"
+  },
+  {
+   "t": 1114.08,
+   "d": 1.68,
+   "text": "um and it's a starter card so like the"
+  },
+  {
+   "t": 1115.76,
+   "d": 2.0,
+   "text": "starter cards have to be like"
+  },
+  {
+   "t": 1117.76,
+   "d": 1.12,
+   "text": "on point"
+  },
+  {
+   "t": 1118.88,
+   "d": 1.52,
+   "text": "right otherwise it's like oh this is the"
+  },
+  {
+   "t": 1120.4,
+   "d": 1.84,
+   "text": "card i'm gonna remove immediately when i"
+  },
+  {
+   "t": 1122.24,
+   "d": 1.28,
+   "text": "start playing"
+  },
+  {
+   "t": 1123.52,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 1124.56,
+   "d": 1.12,
+   "text": "or it's the card i'm always going to"
+  },
+  {
+   "t": 1125.68,
+   "d": 2.48,
+   "text": "upgrade like you have to have it like"
+  },
+  {
+   "t": 1128.16,
+   "d": 2.24,
+   "text": "just right for that one card that is not"
+  },
+  {
+   "t": 1130.4,
+   "d": 2.0,
+   "text": "the strikes in defense"
+  },
+  {
+   "t": 1132.4,
+   "d": 1.76,
+   "text": "and so i would say"
+  },
+  {
+   "t": 1134.16,
+   "d": 1.52,
+   "text": "i feel like this must be key because i"
+  },
+  {
+   "t": 1135.68,
+   "d": 1.6,
+   "text": "play a lot of slay this fire and i've"
+  },
+  {
+   "t": 1137.28,
+   "d": 2.08,
+   "text": "gotten way further in ascension in every"
+  },
+  {
+   "t": 1139.36,
+   "d": 2.16,
+   "text": "class except ironclad and i also almost"
+  },
+  {
+   "t": 1141.52,
+   "d": 2.4,
+   "text": "always like get rid of bash from my deck"
+  },
+  {
+   "t": 1143.92,
+   "d": 1.76,
+   "text": "so"
+  },
+  {
+   "t": 1145.68,
+   "d": 2.32,
+   "text": "i'm learning yeah i'm throwing out"
+  },
+  {
+   "t": 1148.0,
+   "d": 2.56,
+   "text": "quesadillas favorite card every time it"
+  },
+  {
+   "t": 1150.56,
+   "d": 1.36,
+   "text": "doesn't mean that it is the strongest"
+  },
+  {
+   "t": 1151.92,
+   "d": 1.44,
+   "text": "some cards upgrade"
+  },
+  {
+   "t": 1153.36,
+   "d": 3.6,
+   "text": "substantially well um than they should"
+  },
+  {
+   "t": 1156.96,
+   "d": 1.52,
+   "text": "well i don't do great at ironclad"
+  },
+  {
+   "t": 1158.48,
+   "d": 1.36,
+   "text": "comparatively so i think more i have"
+  },
+  {
+   "t": 1159.84,
+   "d": 1.92,
+   "text": "something to learn"
+  },
+  {
+   "t": 1161.76,
+   "d": 1.36,
+   "text": "do you have any favorite cards that got"
+  },
+  {
+   "t": 1163.12,
+   "d": 1.84,
+   "text": "cut or like favorite things from all"
+  },
+  {
+   "t": 1164.96,
+   "d": 3.36,
+   "text": "those like give it a try"
+  },
+  {
+   "t": 1169.52,
+   "d": 1.92,
+   "text": "it's hard for me to know what i have"
+  },
+  {
+   "t": 1171.44,
+   "d": 1.84,
+   "text": "added or haven't added just because i"
+  },
+  {
+   "t": 1173.28,
+   "d": 1.2,
+   "text": "worked on"
+  },
+  {
+   "t": 1174.48,
+   "d": 2.08,
+   "text": "other card games as well so i have to"
+  },
+  {
+   "t": 1176.56,
+   "d": 1.68,
+   "text": "forget which game is which at this point"
+  },
+  {
+   "t": 1178.24,
+   "d": 3.52,
+   "text": "is kind of just like and also we um"
+  },
+  {
+   "t": 1181.76,
+   "d": 1.76,
+   "text": "we cut more than half the cards that we"
+  },
+  {
+   "t": 1183.52,
+   "d": 2.24,
+   "text": "make"
+  },
+  {
+   "t": 1186.0,
+   "d": 1.12,
+   "text": "because cards are just really easy to"
+  },
+  {
+   "t": 1187.12,
+   "d": 1.36,
+   "text": "make you're like it does this and this"
+  },
+  {
+   "t": 1188.48,
+   "d": 1.6,
+   "text": "and this except for the super complex"
+  },
+  {
+   "t": 1190.08,
+   "d": 2.4,
+   "text": "ones um but generally it's like"
+  },
+  {
+   "t": 1192.48,
+   "d": 2.24,
+   "text": "let's just try adding a bunch of like"
+  },
+  {
+   "t": 1194.72,
+   "d": 2.08,
+   "text": "vanilla and french vanilla cards"
+  },
+  {
+   "t": 1196.8,
+   "d": 1.68,
+   "text": "um that's just like things that are very"
+  },
+  {
+   "t": 1198.48,
+   "d": 2.96,
+   "text": "pure and things that are slightly impure"
+  },
+  {
+   "t": 1201.44,
+   "d": 1.28,
+   "text": "then like"
+  },
+  {
+   "t": 1202.72,
+   "d": 1.2,
+   "text": "we want to make sure there's some cards"
+  },
+  {
+   "t": 1203.92,
+   "d": 3.28,
+   "text": "that are like weird yeah but if you have"
+  },
+  {
+   "t": 1207.2,
+   "d": 1.92,
+   "text": "too much weird things then you're like"
+  },
+  {
+   "t": 1209.12,
+   "d": 2.24,
+   "text": "kind of like overthinking every turn"
+  },
+  {
+   "t": 1211.36,
+   "d": 2.08,
+   "text": "and then it's like it's kind of like"
+  },
+  {
+   "t": 1213.44,
+   "d": 2.32,
+   "text": "really thinky to play so you don't get"
+  },
+  {
+   "t": 1215.76,
+   "d": 1.68,
+   "text": "in a good flow state so you kind of have"
+  },
+  {
+   "t": 1217.44,
+   "d": 2.16,
+   "text": "to balance it out i forgot the question"
+  },
+  {
+   "t": 1219.6,
+   "d": 2.16,
+   "text": "kind of went into my own"
+  },
+  {
+   "t": 1221.76,
+   "d": 1.68,
+   "text": "i mean and i also want to note so french"
+  },
+  {
+   "t": 1223.44,
+   "d": 1.76,
+   "text": "vanilla is a term for like it's pretty"
+  },
+  {
+   "t": 1225.2,
+   "d": 2.4,
+   "text": "basic but it's a little bit special"
+  },
+  {
+   "t": 1227.6,
+   "d": 1.76,
+   "text": "that's what anthony tells me"
+  },
+  {
+   "t": 1229.36,
+   "d": 1.52,
+   "text": "he did the magic so he tells me"
+  },
+  {
+   "t": 1230.88,
+   "d": 1.76,
+   "text": "friendship another cards are like hearts"
+  },
+  {
+   "t": 1232.64,
+   "d": 1.68,
+   "text": "are like very basic but a little bit"
+  },
+  {
+   "t": 1234.32,
+   "d": 2.08,
+   "text": "different like fascinating"
+  },
+  {
+   "t": 1236.4,
+   "d": 1.12,
+   "text": "or something i've never heard that"
+  },
+  {
+   "t": 1237.52,
+   "d": 1.44,
+   "text": "before and i want to steal it that's"
+  },
+  {
+   "t": 1238.96,
+   "d": 1.68,
+   "text": "that's news that's fine because i stole"
+  },
+  {
+   "t": 1240.64,
+   "d": 1.2,
+   "text": "it yeah"
+  },
+  {
+   "t": 1241.84,
+   "d": 1.84,
+   "text": "it's just a chain who knows who anthony"
+  },
+  {
+   "t": 1243.68,
+   "d": 2.32,
+   "text": "stole it from who i mean"
+  },
+  {
+   "t": 1246.0,
+   "d": 2.4,
+   "text": "it probably goes back to rome yeah"
+  },
+  {
+   "t": 1248.4,
+   "d": 1.76,
+   "text": "i'm not a card game person i mean i'm a"
+  },
+  {
+   "t": 1250.16,
+   "d": 1.52,
+   "text": "little a little bit of a guardian person"
+  },
+  {
+   "t": 1251.68,
+   "d": 1.52,
+   "text": "now but like"
+  },
+  {
+   "t": 1253.2,
+   "d": 2.56,
+   "text": "i'm pretty anthony you know yeah so this"
+  },
+  {
+   "t": 1255.76,
+   "d": 3.12,
+   "text": "buyer dev not a card game person"
+  },
+  {
+   "t": 1258.88,
+   "d": 1.52,
+   "text": "that's part of my"
+  },
+  {
+   "t": 1260.4,
+   "d": 1.6,
+   "text": "sort of my tagline whenever somebody's"
+  },
+  {
+   "t": 1262.0,
+   "d": 1.52,
+   "text": "like how did you think of this game i'm"
+  },
+  {
+   "t": 1263.52,
+   "d": 2.96,
+   "text": "like i didn't"
+  },
+  {
+   "t": 1268.0,
+   "d": 1.28,
+   "text": "amazing"
+  },
+  {
+   "t": 1269.28,
+   "d": 1.84,
+   "text": "uh i was so glad that yeah like i got"
+  },
+  {
+   "t": 1271.12,
+   "d": 1.76,
+   "text": "that heads up early i was like well all"
+  },
+  {
+   "t": 1272.88,
+   "d": 3.04,
+   "text": "questions about card games delete no no"
+  },
+  {
+   "t": 1275.92,
+   "d": 1.92,
+   "text": "you can ask me but like you know i still"
+  },
+  {
+   "t": 1277.84,
+   "d": 1.68,
+   "text": "make a lot of content i love making"
+  },
+  {
+   "t": 1279.52,
+   "d": 2.24,
+   "text": "content even in card games"
+  },
+  {
+   "t": 1281.76,
+   "d": 2.96,
+   "text": "um i think seeing the foundation of like"
+  },
+  {
+   "t": 1284.72,
+   "d": 1.12,
+   "text": "a game"
+  },
+  {
+   "t": 1285.84,
+   "d": 1.84,
+   "text": "and then making content that fits into"
+  },
+  {
+   "t": 1287.68,
+   "d": 1.44,
+   "text": "it is very"
+  },
+  {
+   "t": 1289.12,
+   "d": 1.84,
+   "text": "it's just a very good design exercise"
+  },
+  {
+   "t": 1290.96,
+   "d": 1.2,
+   "text": "whether you are"
+  },
+  {
+   "t": 1292.16,
+   "d": 2.8,
+   "text": "into that genre or not right yeah"
+  },
+  {
+   "t": 1294.96,
+   "d": 1.52,
+   "text": "like you're playing a game"
+  },
+  {
+   "t": 1296.48,
+   "d": 1.28,
+   "text": "let's play this fire and you're like i"
+  },
+  {
+   "t": 1297.76,
+   "d": 2.16,
+   "text": "wish i could do x y z and then you're"
+  },
+  {
+   "t": 1299.92,
+   "d": 1.68,
+   "text": "like oh how do i work backwards to make"
+  },
+  {
+   "t": 1301.6,
+   "d": 3.84,
+   "text": "sure this unusual strategy will work out"
+  },
+  {
+   "t": 1305.44,
+   "d": 1.52,
+   "text": "something that didn't work out here is"
+  },
+  {
+   "t": 1306.96,
+   "d": 1.6,
+   "text": "like like what if we could have a"
+  },
+  {
+   "t": 1308.56,
+   "d": 3.52,
+   "text": "character who thrives on having low hp"
+  },
+  {
+   "t": 1312.08,
+   "d": 1.44,
+   "text": "so if there's cards that are like oh"
+  },
+  {
+   "t": 1313.52,
+   "d": 2.4,
+   "text": "like if your hp is less than half this"
+  },
+  {
+   "t": 1315.92,
+   "d": 1.6,
+   "text": "card is stronger or something like that"
+  },
+  {
+   "t": 1317.52,
+   "d": 2.0,
+   "text": "it's like a very pure"
+  },
+  {
+   "t": 1319.52,
+   "d": 0.8,
+   "text": "like"
+  },
+  {
+   "t": 1320.32,
+   "d": 2.0,
+   "text": "berserker type build archetype that you"
+  },
+  {
+   "t": 1322.32,
+   "d": 1.84,
+   "text": "would see in all sorts of games um"
+  },
+  {
+   "t": 1324.16,
+   "d": 1.84,
+   "text": "didn't really work for this fire we have"
+  },
+  {
+   "t": 1326.0,
+   "d": 1.04,
+   "text": "some like"
+  },
+  {
+   "t": 1327.04,
+   "d": 1.68,
+   "text": "remnants of that kind of archetype in"
+  },
+  {
+   "t": 1328.72,
+   "d": 1.44,
+   "text": "there a little bit"
+  },
+  {
+   "t": 1330.16,
+   "d": 1.52,
+   "text": "um but"
+  },
+  {
+   "t": 1331.68,
+   "d": 1.6,
+   "text": "yeah you're kind of toying the line a"
+  },
+  {
+   "t": 1333.28,
+   "d": 1.36,
+   "text": "little too much"
+  },
+  {
+   "t": 1334.64,
+   "d": 1.92,
+   "text": "is that kind of and because i feel like"
+  },
+  {
+   "t": 1336.56,
+   "d": 1.68,
+   "text": "this applies to card games but would"
+  },
+  {
+   "t": 1338.24,
+   "d": 1.76,
+   "text": "apply to other games as well in terms of"
+  },
+  {
+   "t": 1340.0,
+   "d": 2.4,
+   "text": "like content versus rules of do you go"
+  },
+  {
+   "t": 1342.4,
+   "d": 1.44,
+   "text": "back and forth do you find one works"
+  },
+  {
+   "t": 1343.84,
+   "d": 1.2,
+   "text": "better than the other in terms of saying"
+  },
+  {
+   "t": 1345.04,
+   "d": 2.08,
+   "text": "like i want to try and have a character"
+  },
+  {
+   "t": 1347.12,
+   "d": 2.32,
+   "text": "build that is thriving on having low"
+  },
+  {
+   "t": 1349.44,
+   "d": 1.12,
+   "text": "health and so i'm going to make content"
+  },
+  {
+   "t": 1350.56,
+   "d": 1.76,
+   "text": "for that versus i've come up with a"
+  },
+  {
+   "t": 1352.32,
+   "d": 2.4,
+   "text": "piece of content of like what if i had"
+  },
+  {
+   "t": 1354.72,
+   "d": 2.56,
+   "text": "this bonus if my health was below half"
+  },
+  {
+   "t": 1357.28,
+   "d": 1.92,
+   "text": "oh cool like now let's try and build"
+  },
+  {
+   "t": 1359.2,
+   "d": 2.72,
+   "text": "this back into a bigger feature"
+  },
+  {
+   "t": 1361.92,
+   "d": 1.52,
+   "text": "like which direction"
+  },
+  {
+   "t": 1363.44,
+   "d": 0.96,
+   "text": "i see"
+  },
+  {
+   "t": 1364.4,
+   "d": 2.24,
+   "text": "yeah i think i sort of start at the goal"
+  },
+  {
+   "t": 1366.64,
+   "d": 2.0,
+   "text": "because then it's a little more clear to"
+  },
+  {
+   "t": 1368.64,
+   "d": 2.08,
+   "text": "like shape and form something"
+  },
+  {
+   "t": 1370.72,
+   "d": 1.6,
+   "text": "i'll have the player kind of funnel into"
+  },
+  {
+   "t": 1372.32,
+   "d": 2.32,
+   "text": "that kind of idea um and then players"
+  },
+  {
+   "t": 1374.64,
+   "d": 1.68,
+   "text": "get kind of an aha moment like oh like"
+  },
+  {
+   "t": 1376.32,
+   "d": 2.24,
+   "text": "this is a possible strategy like oh we"
+  },
+  {
+   "t": 1378.56,
+   "d": 1.68,
+   "text": "have this very unusual relic that you"
+  },
+  {
+   "t": 1380.24,
+   "d": 1.52,
+   "text": "can like play status cards from your"
+  },
+  {
+   "t": 1381.76,
+   "d": 0.88,
+   "text": "hand"
+  },
+  {
+   "t": 1382.64,
+   "d": 1.2,
+   "text": "and then we have another relic that's"
+  },
+  {
+   "t": 1383.84,
+   "d": 2.4,
+   "text": "like if you play five cards it deals"
+  },
+  {
+   "t": 1386.24,
+   "d": 1.36,
+   "text": "three damage to all enemies or something"
+  },
+  {
+   "t": 1387.6,
+   "d": 2.0,
+   "text": "like that it's like oh this is a very"
+  },
+  {
+   "t": 1389.6,
+   "d": 2.56,
+   "text": "strange combination but it can happen in"
+  },
+  {
+   "t": 1392.16,
+   "d": 2.4,
+   "text": "a very very rare case"
+  },
+  {
+   "t": 1394.56,
+   "d": 0.64,
+   "text": "and"
+  },
+  {
+   "t": 1395.2,
+   "d": 1.68,
+   "text": "whenever we make something we make sure"
+  },
+  {
+   "t": 1396.88,
+   "d": 1.44,
+   "text": "that"
+  },
+  {
+   "t": 1398.32,
+   "d": 2.16,
+   "text": "those cases might happen"
+  },
+  {
+   "t": 1400.48,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1401.28,
+   "d": 1.6,
+   "text": "if they have no interesting interaction"
+  },
+  {
+   "t": 1402.88,
+   "d": 1.92,
+   "text": "we're like why are we forcing a player"
+  },
+  {
+   "t": 1404.8,
+   "d": 1.68,
+   "text": "to play in a way that is"
+  },
+  {
+   "t": 1406.48,
+   "d": 2.24,
+   "text": "not very interesting and so no matter"
+  },
+  {
+   "t": 1408.72,
+   "d": 1.52,
+   "text": "how good something is if it's a little"
+  },
+  {
+   "t": 1410.24,
+   "d": 2.0,
+   "text": "boring or doesn't work with anything you"
+  },
+  {
+   "t": 1412.24,
+   "d": 2.24,
+   "text": "want to get rid of it yeah how do you"
+  },
+  {
+   "t": 1414.48,
+   "d": 1.44,
+   "text": "keep track of that you just have like"
+  },
+  {
+   "t": 1415.92,
+   "d": 2.48,
+   "text": "your big rolodex of all cards and relics"
+  },
+  {
+   "t": 1418.4,
+   "d": 1.68,
+   "text": "and everything and you just stare at it"
+  },
+  {
+   "t": 1420.08,
+   "d": 1.92,
+   "text": "all until you're like yes i see this"
+  },
+  {
+   "t": 1422.0,
+   "d": 1.12,
+   "text": "card"
+  },
+  {
+   "t": 1423.12,
+   "d": 2.16,
+   "text": "you know we play we play two or three"
+  },
+  {
+   "t": 1425.28,
+   "d": 0.88,
+   "text": "runs"
+  },
+  {
+   "t": 1426.16,
+   "d": 3.12,
+   "text": "a week we just we just play a lot"
+  },
+  {
+   "t": 1429.28,
+   "d": 2.16,
+   "text": "because if you play a game a lot"
+  },
+  {
+   "t": 1431.44,
+   "d": 1.68,
+   "text": "you kind of start having"
+  },
+  {
+   "t": 1433.12,
+   "d": 1.6,
+   "text": "this like next level conversation of"
+  },
+  {
+   "t": 1434.72,
+   "d": 1.04,
+   "text": "like instead of talking about the"
+  },
+  {
+   "t": 1435.76,
+   "d": 1.92,
+   "text": "mechanics you start talking about the"
+  },
+  {
+   "t": 1437.68,
+   "d": 1.6,
+   "text": "possibility space"
+  },
+  {
+   "t": 1439.28,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 1440.24,
+   "d": 1.36,
+   "text": "and when you talk about the possibility"
+  },
+  {
+   "t": 1441.6,
+   "d": 2.0,
+   "text": "space and you're also the developer of"
+  },
+  {
+   "t": 1443.6,
+   "d": 1.04,
+   "text": "that game"
+  },
+  {
+   "t": 1444.64,
+   "d": 1.44,
+   "text": "then you can make those possibility"
+  },
+  {
+   "t": 1446.08,
+   "d": 2.32,
+   "text": "spaces come true um and i think that's"
+  },
+  {
+   "t": 1448.4,
+   "d": 1.6,
+   "text": "extremely important"
+  },
+  {
+   "t": 1450.0,
+   "d": 1.2,
+   "text": "yeah"
+  },
+  {
+   "t": 1451.2,
+   "d": 0.96,
+   "text": "maybe"
+  },
+  {
+   "t": 1452.16,
+   "d": 1.44,
+   "text": "in a bigger production where someone's"
+  },
+  {
+   "t": 1453.6,
+   "d": 1.44,
+   "text": "like a designer and someone's like the"
+  },
+  {
+   "t": 1455.04,
+   "d": 1.68,
+   "text": "person implementing and someone's person"
+  },
+  {
+   "t": 1456.72,
+   "d": 2.64,
+   "text": "testing it it's like how does it all"
+  },
+  {
+   "t": 1459.36,
+   "d": 1.52,
+   "text": "come full circle so that you can make"
+  },
+  {
+   "t": 1460.88,
+   "d": 2.24,
+   "text": "more and more interesting little like um"
+  },
+  {
+   "t": 1463.12,
+   "d": 2.48,
+   "text": "i like to call them moments of delight"
+  },
+  {
+   "t": 1465.6,
+   "d": 1.6,
+   "text": "we want to have moments of delight"
+  },
+  {
+   "t": 1467.2,
+   "d": 1.92,
+   "text": "happening you know just want to spark"
+  },
+  {
+   "t": 1469.12,
+   "d": 2.0,
+   "text": "joy right yeah"
+  },
+  {
+   "t": 1471.12,
+   "d": 1.52,
+   "text": "the merry condo method of game"
+  },
+  {
+   "t": 1472.64,
+   "d": 1.28,
+   "text": "development"
+  },
+  {
+   "t": 1473.92,
+   "d": 2.08,
+   "text": "it's it kind of it kind of is like that"
+  },
+  {
+   "t": 1476.0,
+   "d": 2.96,
+   "text": "yeah um i think about um"
+  },
+  {
+   "t": 1478.96,
+   "d": 1.92,
+   "text": "super smash brothers a lot"
+  },
+  {
+   "t": 1480.88,
+   "d": 1.84,
+   "text": "because it's like a series of systems"
+  },
+  {
+   "t": 1482.72,
+   "d": 2.24,
+   "text": "where like chaos can happen"
+  },
+  {
+   "t": 1484.96,
+   "d": 1.12,
+   "text": "in the same way that's sort of what"
+  },
+  {
+   "t": 1486.08,
+   "d": 2.08,
+   "text": "roguelikes are about i think is like you"
+  },
+  {
+   "t": 1488.16,
+   "d": 2.32,
+   "text": "have all these levers that are chaotic"
+  },
+  {
+   "t": 1490.48,
+   "d": 1.44,
+   "text": "and then sometimes something very"
+  },
+  {
+   "t": 1491.92,
+   "d": 1.76,
+   "text": "unusual can happen"
+  },
+  {
+   "t": 1493.68,
+   "d": 1.6,
+   "text": "like maybe you're gonna lay an egg and"
+  },
+  {
+   "t": 1495.28,
+   "d": 2.08,
+   "text": "then for some reason you're a robot so"
+  },
+  {
+   "t": 1497.36,
+   "d": 1.76,
+   "text": "like like what happens to the egg what's"
+  },
+  {
+   "t": 1499.12,
+   "d": 1.2,
+   "text": "gonna be born out of the egg you're a"
+  },
+  {
+   "t": 1500.32,
+   "d": 2.72,
+   "text": "robot i don't get it but you know"
+  },
+  {
+   "t": 1503.04,
+   "d": 1.36,
+   "text": "sometimes the developer didn't account"
+  },
+  {
+   "t": 1504.4,
+   "d": 2.0,
+   "text": "for it and you get a robot dragon like"
+  },
+  {
+   "t": 1506.4,
+   "d": 1.44,
+   "text": "who knows whatever"
+  },
+  {
+   "t": 1507.84,
+   "d": 2.0,
+   "text": "just like in super smash brothers just"
+  },
+  {
+   "t": 1509.84,
+   "d": 0.96,
+   "text": "like in"
+  },
+  {
+   "t": 1510.8,
+   "d": 2.04,
+   "text": "super smash brothers where"
+  },
+  {
+   "t": 1512.84,
+   "d": 2.36,
+   "text": "um you know you just throw out a few hit"
+  },
+  {
+   "t": 1515.2,
+   "d": 2.96,
+   "text": "boxes and you take off the wall and"
+  },
+  {
+   "t": 1518.16,
+   "d": 1.52,
+   "text": "who knows maybe you're gonna land in a"
+  },
+  {
+   "t": 1519.68,
+   "d": 2.32,
+   "text": "weird way maybe you're gonna"
+  },
+  {
+   "t": 1522.0,
+   "d": 1.68,
+   "text": "maybe you're gonna win"
+  },
+  {
+   "t": 1523.68,
+   "d": 1.2,
+   "text": "yeah"
+  },
+  {
+   "t": 1524.88,
+   "d": 1.6,
+   "text": "no i think that's really interesting and"
+  },
+  {
+   "t": 1526.48,
+   "d": 1.2,
+   "text": "i like how much you're mentioning"
+  },
+  {
+   "t": 1527.68,
+   "d": 2.48,
+   "text": "because i was curious like what types of"
+  },
+  {
+   "t": 1530.16,
+   "d": 1.28,
+   "text": "um"
+  },
+  {
+   "t": 1531.44,
+   "d": 2.24,
+   "text": "games act as inspiration for you and"
+  },
+  {
+   "t": 1533.68,
+   "d": 2.64,
+   "text": "even like outside of games like"
+  },
+  {
+   "t": 1536.32,
+   "d": 2.16,
+   "text": "sources of inspiration like is it mostly"
+  },
+  {
+   "t": 1538.48,
+   "d": 1.52,
+   "text": "coming from games and game stuff or is"
+  },
+  {
+   "t": 1540.0,
+   "d": 1.28,
+   "text": "there anything outside of games that you"
+  },
+  {
+   "t": 1541.28,
+   "d": 2.08,
+   "text": "feel like you're gonna bring into"
+  },
+  {
+   "t": 1543.36,
+   "d": 2.16,
+   "text": "work"
+  },
+  {
+   "t": 1545.52,
+   "d": 3.2,
+   "text": "outside of games um"
+  },
+  {
+   "t": 1548.72,
+   "d": 2.48,
+   "text": "i mean at the time my main hobbies were"
+  },
+  {
+   "t": 1551.2,
+   "d": 2.48,
+   "text": "always i guess it still is it's just"
+  },
+  {
+   "t": 1553.68,
+   "d": 2.0,
+   "text": "climbing and cooking"
+  },
+  {
+   "t": 1555.68,
+   "d": 2.4,
+   "text": "do a lot of climbing and cooking um i"
+  },
+  {
+   "t": 1558.08,
+   "d": 1.92,
+   "text": "like climbing a lot because you sort of"
+  },
+  {
+   "t": 1560.0,
+   "d": 2.0,
+   "text": "make incremental progress"
+  },
+  {
+   "t": 1562.0,
+   "d": 0.96,
+   "text": "and then"
+  },
+  {
+   "t": 1562.96,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 1564.32,
+   "d": 1.92,
+   "text": "when you climb stuff the routes that are"
+  },
+  {
+   "t": 1566.24,
+   "d": 2.56,
+   "text": "set are changed by setters if you climb"
+  },
+  {
+   "t": 1568.8,
+   "d": 1.44,
+   "text": "outside obviously the rocks aren't"
+  },
+  {
+   "t": 1570.24,
+   "d": 2.48,
+   "text": "changed but indoor climbing there are"
+  },
+  {
+   "t": 1572.72,
+   "d": 1.6,
+   "text": "people who are"
+  },
+  {
+   "t": 1574.32,
+   "d": 1.36,
+   "text": "literally like level designers they're"
+  },
+  {
+   "t": 1575.68,
+   "d": 1.68,
+   "text": "just trying to make"
+  },
+  {
+   "t": 1577.36,
+   "d": 1.92,
+   "text": "all sorts of like weird like"
+  },
+  {
+   "t": 1579.28,
+   "d": 1.68,
+   "text": "combinations of like holds so you can"
+  },
+  {
+   "t": 1580.96,
+   "d": 1.6,
+   "text": "climb in a fun way and they're like"
+  },
+  {
+   "t": 1582.56,
+   "d": 1.28,
+   "text": "color coded they're trying to have good"
+  },
+  {
+   "t": 1583.84,
+   "d": 2.08,
+   "text": "ux so you don't like all into another"
+  },
+  {
+   "t": 1585.92,
+   "d": 1.2,
+   "text": "person"
+  },
+  {
+   "t": 1587.12,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 1588.48,
+   "d": 2.0,
+   "text": "so i would say"
+  },
+  {
+   "t": 1590.48,
+   "d": 2.48,
+   "text": "kind of i'm always thinking about like"
+  },
+  {
+   "t": 1592.96,
+   "d": 2.24,
+   "text": "design and why something is"
+  },
+  {
+   "t": 1595.2,
+   "d": 1.68,
+   "text": "more satisfying or not satisfying"
+  },
+  {
+   "t": 1596.88,
+   "d": 1.2,
+   "text": "because even in like climbing you can"
+  },
+  {
+   "t": 1598.08,
+   "d": 2.16,
+   "text": "just have like one move to like climb"
+  },
+  {
+   "t": 1600.24,
+   "d": 1.68,
+   "text": "something and you're like yeah"
+  },
+  {
+   "t": 1601.92,
+   "d": 1.36,
+   "text": "it's like wait that's not very"
+  },
+  {
+   "t": 1603.28,
+   "d": 2.0,
+   "text": "satisfying that's just like like a luck"
+  },
+  {
+   "t": 1605.28,
+   "d": 3.04,
+   "text": "based weird jump that i have to do"
+  },
+  {
+   "t": 1608.32,
+   "d": 2.24,
+   "text": "or it can be like a really long grueling"
+  },
+  {
+   "t": 1610.56,
+   "d": 1.68,
+   "text": "cardio thing and you're like okay maybe"
+  },
+  {
+   "t": 1612.24,
+   "d": 1.84,
+   "text": "i needed that for my actions"
+  },
+  {
+   "t": 1614.08,
+   "d": 2.32,
+   "text": "yeah it'll have different um"
+  },
+  {
+   "t": 1616.4,
+   "d": 2.64,
+   "text": "goals in mind i think"
+  },
+  {
+   "t": 1619.04,
+   "d": 1.04,
+   "text": "that was"
+  },
+  {
+   "t": 1620.08,
+   "d": 2.0,
+   "text": "really interesting and i love especially"
+  },
+  {
+   "t": 1622.08,
+   "d": 1.6,
+   "text": "seeing it as a ux"
+  },
+  {
+   "t": 1623.68,
+   "d": 1.92,
+   "text": "thing which i have heard as well i have"
+  },
+  {
+   "t": 1625.6,
+   "d": 1.52,
+   "text": "not done a lot of rock climbing but i i"
+  },
+  {
+   "t": 1627.12,
+   "d": 1.12,
+   "text": "think one of the things i've heard"
+  },
+  {
+   "t": 1628.24,
+   "d": 1.6,
+   "text": "multiple people say is that like ux"
+  },
+  {
+   "t": 1629.84,
+   "d": 1.84,
+   "text": "element of there is kind of this"
+  },
+  {
+   "t": 1631.68,
+   "d": 1.84,
+   "text": "readability to it its own language which"
+  },
+  {
+   "t": 1633.52,
+   "d": 1.92,
+   "text": "i think is cool because i think like you"
+  },
+  {
+   "t": 1635.44,
+   "d": 2.16,
+   "text": "know different games get their own"
+  },
+  {
+   "t": 1637.6,
+   "d": 1.52,
+   "text": "languages and different genres but i"
+  },
+  {
+   "t": 1639.12,
+   "d": 1.6,
+   "text": "think that yeah slay the spire has a"
+  },
+  {
+   "t": 1640.72,
+   "d": 1.6,
+   "text": "very like specific and consistent"
+  },
+  {
+   "t": 1642.32,
+   "d": 2.16,
+   "text": "language in terms of how it gets across"
+  },
+  {
+   "t": 1644.48,
+   "d": 1.04,
+   "text": "effects and"
+  },
+  {
+   "t": 1645.52,
+   "d": 1.76,
+   "text": "and yeah like card game wise like i love"
+  },
+  {
+   "t": 1647.28,
+   "d": 2.0,
+   "text": "that about digital card games if i have"
+  },
+  {
+   "t": 1649.28,
+   "d": 2.08,
+   "text": "a mostly a hard time memorizing a whole"
+  },
+  {
+   "t": 1651.36,
+   "d": 1.76,
+   "text": "bunch of different effects and things"
+  },
+  {
+   "t": 1653.12,
+   "d": 1.52,
+   "text": "like that and so the ability to hover"
+  },
+  {
+   "t": 1654.64,
+   "d": 1.52,
+   "text": "over and just like get those reminders"
+  },
+  {
+   "t": 1656.16,
+   "d": 1.6,
+   "text": "whenever you need them is"
+  },
+  {
+   "t": 1657.76,
+   "d": 2.8,
+   "text": "is fantastic"
+  },
+  {
+   "t": 1660.72,
+   "d": 1.12,
+   "text": "thank you"
+  },
+  {
+   "t": 1661.84,
+   "d": 0.8,
+   "text": "yeah"
+  },
+  {
+   "t": 1662.64,
+   "d": 1.76,
+   "text": "it's my that's my proudest thing is just"
+  },
+  {
+   "t": 1664.4,
+   "d": 1.28,
+   "text": "having tips"
+  },
+  {
+   "t": 1665.68,
+   "d": 2.4,
+   "text": "yeah we used to have a timer which made"
+  },
+  {
+   "t": 1668.08,
+   "d": 1.44,
+   "text": "it show up after a second because we"
+  },
+  {
+   "t": 1669.52,
+   "d": 1.76,
+   "text": "thought it might be annoying"
+  },
+  {
+   "t": 1671.28,
+   "d": 1.84,
+   "text": "but then it was more annoying to wait"
+  },
+  {
+   "t": 1673.12,
+   "d": 1.92,
+   "text": "because we have bad memory"
+  },
+  {
+   "t": 1675.04,
+   "d": 1.44,
+   "text": "like what does it do i have to wait a"
+  },
+  {
+   "t": 1676.48,
+   "d": 2.88,
+   "text": "whole second to find out right"
+  },
+  {
+   "t": 1679.36,
+   "d": 1.6,
+   "text": "yeah"
+  },
+  {
+   "t": 1680.96,
+   "d": 1.84,
+   "text": "do you think that there's anything else"
+  },
+  {
+   "t": 1682.8,
+   "d": 1.04,
+   "text": "that"
+  },
+  {
+   "t": 1683.84,
+   "d": 1.2,
+   "text": "other"
+  },
+  {
+   "t": 1685.04,
+   "d": 1.28,
+   "text": "developers and roguelikes and things"
+  },
+  {
+   "t": 1686.32,
+   "d": 1.76,
+   "text": "like that could maybe be"
+  },
+  {
+   "t": 1688.08,
+   "d": 1.92,
+   "text": "learning from inside the spire or be"
+  },
+  {
+   "t": 1690.0,
+   "d": 1.28,
+   "text": "taking kind of things you love like i"
+  },
+  {
+   "t": 1691.28,
+   "d": 1.28,
+   "text": "mentioned you know i think we see a lot"
+  },
+  {
+   "t": 1692.56,
+   "d": 2.08,
+   "text": "of card game stuff i think that the map"
+  },
+  {
+   "t": 1694.64,
+   "d": 1.84,
+   "text": "i see versions that look to me like they"
+  },
+  {
+   "t": 1696.48,
+   "d": 1.76,
+   "text": "were inspired even more but is there"
+  },
+  {
+   "t": 1698.24,
+   "d": 1.12,
+   "text": "anything else that sometimes you're"
+  },
+  {
+   "t": 1699.36,
+   "d": 1.84,
+   "text": "playing other games out there and even"
+  },
+  {
+   "t": 1701.2,
+   "d": 1.92,
+   "text": "games maybe from people who are like we"
+  },
+  {
+   "t": 1703.12,
+   "d": 2.0,
+   "text": "love cytospire you're like oh i wish"
+  },
+  {
+   "t": 1705.12,
+   "d": 1.36,
+   "text": "more people would"
+  },
+  {
+   "t": 1706.48,
+   "d": 1.28,
+   "text": "be learning this thing that we did"
+  },
+  {
+   "t": 1707.76,
+   "d": 1.2,
+   "text": "really well"
+  },
+  {
+   "t": 1708.96,
+   "d": 3.44,
+   "text": "i see hmm i think there just needs to be"
+  },
+  {
+   "t": 1712.4,
+   "d": 1.36,
+   "text": "more"
+  },
+  {
+   "t": 1713.76,
+   "d": 1.36,
+   "text": "stuff"
+  },
+  {
+   "t": 1715.12,
+   "d": 2.16,
+   "text": "that's how i feel um"
+  },
+  {
+   "t": 1717.28,
+   "d": 2.8,
+   "text": "i like content dense games in general um"
+  },
+  {
+   "t": 1720.08,
+   "d": 1.2,
+   "text": "just because"
+  },
+  {
+   "t": 1721.28,
+   "d": 1.68,
+   "text": "all sorts of unusual situations can"
+  },
+  {
+   "t": 1722.96,
+   "d": 2.16,
+   "text": "happen um"
+  },
+  {
+   "t": 1725.12,
+   "d": 2.48,
+   "text": "and i feel like you kind of have to hit"
+  },
+  {
+   "t": 1727.6,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 1728.56,
+   "d": 2.96,
+   "text": "like a tipping point of like content and"
+  },
+  {
+   "t": 1731.52,
+   "d": 1.36,
+   "text": "then the game becomes sort of"
+  },
+  {
+   "t": 1732.88,
+   "d": 2.56,
+   "text": "unpredictable even to the developer and"
+  },
+  {
+   "t": 1735.44,
+   "d": 2.16,
+   "text": "i remember hitting that tipping point"
+  },
+  {
+   "t": 1737.6,
+   "d": 1.44,
+   "text": "and and then"
+  },
+  {
+   "t": 1739.04,
+   "d": 1.28,
+   "text": "anthony and i would be like we're gonna"
+  },
+  {
+   "t": 1740.32,
+   "d": 1.44,
+   "text": "play the game like i wonder what kind of"
+  },
+  {
+   "t": 1741.76,
+   "d": 2.0,
+   "text": "build we're gonna get when that language"
+  },
+  {
+   "t": 1743.76,
+   "d": 2.16,
+   "text": "starts showing up organically i think"
+  },
+  {
+   "t": 1745.92,
+   "d": 2.4,
+   "text": "that's a that's sort of like you just"
+  },
+  {
+   "t": 1748.32,
+   "d": 1.6,
+   "text": "started hitting that tipping point of"
+  },
+  {
+   "t": 1749.92,
+   "d": 2.88,
+   "text": "adding content into your game"
+  },
+  {
+   "t": 1752.8,
+   "d": 1.84,
+   "text": "and i feel like a lot of games that i"
+  },
+  {
+   "t": 1754.64,
+   "d": 1.52,
+   "text": "play right now"
+  },
+  {
+   "t": 1756.16,
+   "d": 2.32,
+   "text": "kind of like especially rogue lights"
+  },
+  {
+   "t": 1758.48,
+   "d": 2.32,
+   "text": "release into early access"
+  },
+  {
+   "t": 1760.8,
+   "d": 3.04,
+   "text": "before hitting that tipping point"
+  },
+  {
+   "t": 1763.84,
+   "d": 1.68,
+   "text": "and you know that because if you play a"
+  },
+  {
+   "t": 1765.52,
+   "d": 1.28,
+   "text": "game and you're like i'm going to do a"
+  },
+  {
+   "t": 1766.8,
+   "d": 1.52,
+   "text": "spear build and if you're going to do a"
+  },
+  {
+   "t": 1768.32,
+   "d": 2.32,
+   "text": "spear build that means the game"
+  },
+  {
+   "t": 1770.64,
+   "d": 1.6,
+   "text": "isn't like"
+  },
+  {
+   "t": 1772.24,
+   "d": 1.84,
+   "text": "isn't chaotic enough to be like hey like"
+  },
+  {
+   "t": 1774.08,
+   "d": 2.56,
+   "text": "maybe maybe we're kind of accidentally"
+  },
+  {
+   "t": 1776.64,
+   "d": 2.4,
+   "text": "guiding you into like a punchy build"
+  },
+  {
+   "t": 1779.04,
+   "d": 1.68,
+   "text": "but it's like if everyone's like oh i'm"
+  },
+  {
+   "t": 1780.72,
+   "d": 2.24,
+   "text": "always gonna go do xyz build"
+  },
+  {
+   "t": 1782.96,
+   "d": 1.44,
+   "text": "that means"
+  },
+  {
+   "t": 1784.4,
+   "d": 1.28,
+   "text": "you know there's probably not enough"
+  },
+  {
+   "t": 1785.68,
+   "d": 2.48,
+   "text": "randomization um"
+  },
+  {
+   "t": 1788.16,
+   "d": 1.76,
+   "text": "that's my"
+  },
+  {
+   "t": 1789.92,
+   "d": 1.12,
+   "text": "i don't know i don't know if it's good"
+  },
+  {
+   "t": 1791.04,
+   "d": 2.24,
+   "text": "advice that's my advice for uh roguelike"
+  },
+  {
+   "t": 1793.28,
+   "d": 1.84,
+   "text": "games right now"
+  },
+  {
+   "t": 1795.12,
+   "d": 1.52,
+   "text": "i think it's interesting and i think i"
+  },
+  {
+   "t": 1796.64,
+   "d": 2.48,
+   "text": "feel like it it combines to me with what"
+  },
+  {
+   "t": 1799.12,
+   "d": 1.52,
+   "text": "we talked about a lot of like the way"
+  },
+  {
+   "t": 1800.64,
+   "d": 2.8,
+   "text": "that you have that um decisiveness and"
+  },
+  {
+   "t": 1803.44,
+   "d": 1.6,
+   "text": "kind of cutting things down because i"
+  },
+  {
+   "t": 1805.04,
+   "d": 2.64,
+   "text": "think that that's the avoiding of like"
+  },
+  {
+   "t": 1807.68,
+   "d": 0.72,
+   "text": "the"
+  },
+  {
+   "t": 1808.4,
+   "d": 2.64,
+   "text": "oatmealy problem of i think you know you"
+  },
+  {
+   "t": 1811.04,
+   "d": 1.52,
+   "text": "can have lots of stuff but it all needs"
+  },
+  {
+   "t": 1812.56,
+   "d": 1.68,
+   "text": "to be at a level of like quality and"
+  },
+  {
+   "t": 1814.24,
+   "d": 1.36,
+   "text": "working if you have lots of stuff but"
+  },
+  {
+   "t": 1815.6,
+   "d": 2.16,
+   "text": "then too much of it is um"
+  },
+  {
+   "t": 1817.76,
+   "d": 1.6,
+   "text": "you know not as interesting but i think"
+  },
+  {
+   "t": 1819.36,
+   "d": 0.88,
+   "text": "that"
+  },
+  {
+   "t": 1820.24,
+   "d": 2.8,
+   "text": "my guess you know from just having this"
+  },
+  {
+   "t": 1823.04,
+   "d": 1.76,
+   "text": "conversation is that i think i see a lot"
+  },
+  {
+   "t": 1824.8,
+   "d": 2.0,
+   "text": "of combination between those ideas of"
+  },
+  {
+   "t": 1826.8,
+   "d": 1.84,
+   "text": "like the way that you cut things down so"
+  },
+  {
+   "t": 1828.64,
+   "d": 2.16,
+   "text": "much but then you can build up like tons"
+  },
+  {
+   "t": 1830.8,
+   "d": 1.68,
+   "text": "of stuff so you get this like high"
+  },
+  {
+   "t": 1832.48,
+   "d": 1.76,
+   "text": "quality bar of everything that's in"
+  },
+  {
+   "t": 1834.24,
+   "d": 1.92,
+   "text": "there is really good and there's lots of"
+  },
+  {
+   "t": 1836.16,
+   "d": 0.72,
+   "text": "it"
+  },
+  {
+   "t": 1836.88,
+   "d": 0.96,
+   "text": "yeah"
+  },
+  {
+   "t": 1837.84,
+   "d": 2.32,
+   "text": "make stuff cut stuff"
+  },
+  {
+   "t": 1840.16,
+   "d": 2.0,
+   "text": "and uh"
+  },
+  {
+   "t": 1842.16,
+   "d": 1.92,
+   "text": "have fun yeah"
+  },
+  {
+   "t": 1844.08,
+   "d": 1.52,
+   "text": "gotta play your game gotta play your"
+  },
+  {
+   "t": 1845.6,
+   "d": 1.36,
+   "text": "games everyone's gotta play their games"
+  },
+  {
+   "t": 1846.96,
+   "d": 2.16,
+   "text": "play games i like what does it make"
+  },
+  {
+   "t": 1849.12,
+   "d": 2.08,
+   "text": "stuff cut stuff"
+  },
+  {
+   "t": 1851.2,
+   "d": 2.4,
+   "text": "what's the last one cut stuff"
+  },
+  {
+   "t": 1853.6,
+   "d": 2.88,
+   "text": "play play stuff play stuff test stuff"
+  },
+  {
+   "t": 1856.48,
+   "d": 3.04,
+   "text": "test stuff enjoy stuff excellent"
+  },
+  {
+   "t": 1859.52,
+   "d": 2.72,
+   "text": "well thank you so much that that uh time"
+  },
+  {
+   "t": 1862.24,
+   "d": 3.28,
+   "text": "went by uh very quickly"
+  },
+  {
+   "t": 1865.52,
+   "d": 1.6,
+   "text": "to me at least hopefully to everyone"
+  },
+  {
+   "t": 1867.12,
+   "d": 1.52,
+   "text": "else great talking"
+  },
+  {
+   "t": 1868.64,
+   "d": 2.64,
+   "text": "yeah um there's any follow-up questions"
+  },
+  {
+   "t": 1871.28,
+   "d": 1.2,
+   "text": "yeah"
+  },
+  {
+   "t": 1872.48,
+   "d": 1.52,
+   "text": "kind of a problem but you know it's the"
+  },
+  {
+   "t": 1874.0,
+   "d": 2.56,
+   "text": "pandemic so yeah yeah"
+  },
+  {
+   "t": 1876.56,
+   "d": 4.64,
+   "text": "and uh if you are in the social space kc"
+  },
+  {
+   "t": 1881.2,
+   "d": 1.68,
+   "text": "we have the"
+  },
+  {
+   "t": 1882.88,
+   "d": 1.6,
+   "text": "uh"
+  },
+  {
+   "t": 1884.48,
+   "d": 1.76,
+   "text": "which is the room assignment"
+  },
+  {
+   "t": 1886.24,
+   "d": 1.68,
+   "text": "kawa you're in the back end what's the"
+  },
+  {
+   "t": 1887.92,
+   "d": 1.6,
+   "text": "room assignment"
+  },
+  {
+   "t": 1889.52,
+   "d": 2.32,
+   "text": "is it in my notes it is in my notes it's"
+  },
+  {
+   "t": 1891.84,
+   "d": 1.2,
+   "text": "mage"
+  },
+  {
+   "t": 1893.04,
+   "d": 2.0,
+   "text": "so if you're around or if other people"
+  },
+  {
+   "t": 1895.04,
+   "d": 2.64,
+   "text": "are around that wanna like after um the"
+  },
+  {
+   "t": 1897.68,
+   "d": 1.68,
+   "text": "subset games talk want to just like hang"
+  },
+  {
+   "t": 1899.36,
+   "d": 1.6,
+   "text": "out and talk slide the spire we have"
+  },
+  {
+   "t": 1900.96,
+   "d": 2.16,
+   "text": "from the theater the mage breakout room"
+  },
+  {
+   "t": 1903.12,
+   "d": 1.76,
+   "text": "that's the kind of like loosely assigned"
+  },
+  {
+   "t": 1904.88,
+   "d": 2.32,
+   "text": "one for this so if you're around casey"
+  },
+  {
+   "t": 1907.2,
+   "d": 2.16,
+   "text": "and want to hang out in ascii space with"
+  },
+  {
+   "t": 1909.36,
+   "d": 0.8,
+   "text": "us"
+  },
+  {
+   "t": 1910.16,
+   "d": 2.0,
+   "text": "then cool i'll try to find it and hang"
+  },
+  {
+   "t": 1912.16,
+   "d": 1.2,
+   "text": "out a little bit"
+  },
+  {
+   "t": 1913.36,
+   "d": 1.76,
+   "text": "okay sounds great"
+  },
+  {
+   "t": 1915.12,
+   "d": 2.16,
+   "text": "awesome well thank you so much"
+  },
+  {
+   "t": 1917.28,
+   "d": 3.24,
+   "text": "thank you"
+  }
+ ]
+}

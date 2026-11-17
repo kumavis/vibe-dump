@@ -1,0 +1,4795 @@
+{
+ "id": "VwZS0MQSpaU",
+ "url": "https://www.youtube.com/watch?v=VwZS0MQSpaU",
+ "title": "Everest Pipkin - Dungeons, Digging, and Wells - the Gamers Yearn for the Mines.",
+ "speaker": "Everest Pipkin",
+ "talk_title": "Dungeons, Digging, and Wells - the Gamers Yearn for the Mines.",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 2145,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "“He looked into the hole, and like any hole it said, Jump.”\n\n— Susan Sontag, The Volcano Lover: A Romance\n\nThis wide-ranging but decidedly subterranean 30 minute talk covers a variety of approaches to digital holes in games, as well as the actions of mining / digging / tunneling that cause them. It considers the undergrounds as caught up in varied histories of extraction, labor, devotion, gambling, travel and desire, as well as looks at video game digging across multiple end goals such as \"finding treasure\", \"changing the landscape\", or \"progressing and moving through the dark\". Finally, it considers the subterranean fantasy of buried and alien worlds, where the rules are different than on the surface of the earth– and what that can and has meant to a long history of games that ask you to delve.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5822,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.1,
+   "d": 2.1,
+   "text": "Okay."
+  },
+  {
+   "t": 5.2,
+   "d": 2.1,
+   "text": "Yes. So then now we have the last talk"
+  },
+  {
+   "t": 7.3,
+   "d": 2.0,
+   "text": "of this block from Everest. Hello,"
+  },
+  {
+   "t": 9.3,
+   "d": 1.3,
+   "text": "Everest."
+  },
+  {
+   "t": 10.6,
+   "d": 1.0,
+   "text": ">> Hello."
+  },
+  {
+   "t": 11.6,
+   "d": 1.3,
+   "text": ">> I think I do have the right bio this"
+  },
+  {
+   "t": 12.9,
+   "d": 2.3,
+   "text": "time. Writer, game developer, artist,"
+  },
+  {
+   "t": 15.2,
+   "d": 2.5,
+   "text": "educator working in the studio and in"
+  },
+  {
+   "t": 17.7,
+   "d": 2.2,
+   "text": "the garden following themes of ecology,"
+  },
+  {
+   "t": 19.9,
+   "d": 2.1,
+   "text": "tool making and fantasies of collapse"
+  },
+  {
+   "t": 22.0,
+   "d": 2.2,
+   "text": "and isolation as well as the labor,"
+  },
+  {
+   "t": 24.2,
+   "d": 1.5,
+   "text": "maintenance, devotion and collective"
+  },
+  {
+   "t": 25.7,
+   "d": 1.6,
+   "text": "care so often present in those"
+  },
+  {
+   "t": 27.3,
+   "d": 2.8,
+   "text": "fantasies. Um you produce printed"
+  },
+  {
+   "t": 30.1,
+   "d": 2.7,
+   "text": "materials as books and scenes and also"
+  },
+  {
+   "t": 32.8,
+   "d": 1.8,
+   "text": "digital work like browser and game"
+  },
+  {
+   "t": 34.6,
+   "d": 2.1,
+   "text": "engines and you draw things. You do lots"
+  },
+  {
+   "t": 36.7,
+   "d": 1.8,
+   "text": "of things and you're here to talk about"
+  },
+  {
+   "t": 38.5,
+   "d": 0.8,
+   "text": "holes."
+  },
+  {
+   "t": 39.3,
+   "d": 1.4,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 40.7,
+   "d": 1.6,
+   "text": ">> Thank you so much for the introduction."
+  },
+  {
+   "t": 42.3,
+   "d": 2.5,
+   "text": "I am here to talk about holes. Thank you"
+  },
+  {
+   "t": 44.8,
+   "d": 1.5,
+   "text": "for having me."
+  },
+  {
+   "t": 46.3,
+   "d": 2.3,
+   "text": "Um and nice to be back. So I was last"
+  },
+  {
+   "t": 48.6,
+   "d": 2.5,
+   "text": "here at Roblox Celebration I think in"
+  },
+  {
+   "t": 51.1,
+   "d": 1.6,
+   "text": "2023"
+  },
+  {
+   "t": 52.7,
+   "d": 3.2,
+   "text": "and I was giving a talk about islands um"
+  },
+  {
+   "t": 55.9,
+   "d": 1.7,
+   "text": "kind of game islands, boundaries,"
+  },
+  {
+   "t": 57.6,
+   "d": 2.9,
+   "text": "borders, walls. And there's a way in"
+  },
+  {
+   "t": 60.5,
+   "d": 2.5,
+   "text": "which this talk is a sequel to that"
+  },
+  {
+   "t": 63.0,
+   "d": 3.0,
+   "text": "talk. I gave that talk and I I think I"
+  },
+  {
+   "t": 66.0,
+   "d": 1.8,
+   "text": "was sort of situating some of my own"
+  },
+  {
+   "t": 67.8,
+   "d": 3.4,
+   "text": "work inside of the island, right? The"
+  },
+  {
+   "t": 71.2,
+   "d": 2.7,
+   "text": "idea of kind of a bordered space or an"
+  },
+  {
+   "t": 73.9,
+   "d": 2.5,
+   "text": "edged space. My cat is coming to say"
+  },
+  {
+   "t": 76.4,
+   "d": 2.4,
+   "text": "hello. So don't mind the tail that's"
+  },
+  {
+   "t": 78.8,
+   "d": 1.9,
+   "text": "about to go through screen."
+  },
+  {
+   "t": 80.7,
+   "d": 2.0,
+   "text": "Um"
+  },
+  {
+   "t": 82.7,
+   "d": 1.9,
+   "text": "uh yes, that talk was really around"
+  },
+  {
+   "t": 84.6,
+   "d": 2.8,
+   "text": "borders, edges, uh barriers."
+  },
+  {
+   "t": 87.4,
+   "d": 2.9,
+   "text": "And I was trying to situate my own work"
+  },
+  {
+   "t": 90.3,
+   "d": 3.4,
+   "text": "inside of games in that space, you know,"
+  },
+  {
+   "t": 93.7,
+   "d": 2.2,
+   "text": "of kind of being like"
+  },
+  {
+   "t": 95.9,
+   "d": 2.2,
+   "text": "spaces in which there is a particular"
+  },
+  {
+   "t": 98.1,
+   "d": 1.3,
+   "text": "type of play that's happening that's"
+  },
+  {
+   "t": 99.4,
+   "d": 2.2,
+   "text": "bounded from the outside world. And I"
+  },
+  {
+   "t": 101.6,
+   "d": 3.5,
+   "text": "realized that there was in fact a big um"
+  },
+  {
+   "t": 105.1,
+   "d": 1.5,
+   "text": "there was a big thing that I didn't talk"
+  },
+  {
+   "t": 106.6,
+   "d": 2.2,
+   "text": "about with that talk that is also kind"
+  },
+  {
+   "t": 108.8,
+   "d": 2.5,
+   "text": "of boundaried which is the hole."
+  },
+  {
+   "t": 111.3,
+   "d": 2.3,
+   "text": "Uh and so this is maybe part two of that"
+  },
+  {
+   "t": 113.6,
+   "d": 2.0,
+   "text": "talk secretly, but also it's doing its"
+  },
+  {
+   "t": 115.6,
+   "d": 3.1,
+   "text": "own thing because once you introduce uh"
+  },
+  {
+   "t": 118.7,
+   "d": 2.79,
+   "text": "the act of digging a whole of other"
+  },
+  {
+   "t": 121.49,
+   "d": 2.8,
+   "text": "things kind of like show up. So,"
+  },
+  {
+   "t": 124.29,
+   "d": 1.4,
+   "text": "if you"
+  },
+  {
+   "t": 125.69,
+   "d": 1.3,
+   "text": "get to the end of this and you're like I"
+  },
+  {
+   "t": 126.99,
+   "d": 1.7,
+   "text": "want more of that thinking, you can go"
+  },
+  {
+   "t": 128.69,
+   "d": 2.9,
+   "text": "back in time and listen to me talk about"
+  },
+  {
+   "t": 131.59,
+   "d": 3.2,
+   "text": "some of the things that got me here."
+  },
+  {
+   "t": 134.79,
+   "d": 2.3,
+   "text": "So, yeah, welcome to"
+  },
+  {
+   "t": 137.09,
+   "d": 2.0,
+   "text": "Dungeons, Digging and Wells, the gamers"
+  },
+  {
+   "t": 139.09,
+   "d": 1.4,
+   "text": "yearn for the mines. This is a"
+  },
+  {
+   "t": 140.49,
+   "d": 3.1,
+   "text": "retrospective of video game holes."
+  },
+  {
+   "t": 143.59,
+   "d": 1.8,
+   "text": "This is a quote from Susan Sontag's The"
+  },
+  {
+   "t": 145.39,
+   "d": 2.6,
+   "text": "Volcano Lover, A Romance. He looked into"
+  },
+  {
+   "t": 147.99,
+   "d": 1.1,
+   "text": "the hole"
+  },
+  {
+   "t": 149.09,
+   "d": 1.7,
+   "text": "and like any hole"
+  },
+  {
+   "t": 150.79,
+   "d": 2.9,
+   "text": "it said jump."
+  },
+  {
+   "t": 155.49,
+   "d": 1.8,
+   "text": "I once spent half a summer digging"
+  },
+  {
+   "t": 157.29,
+   "d": 3.2,
+   "text": "holes. I was 17. I was volunteering with"
+  },
+  {
+   "t": 160.49,
+   "d": 2.8,
+   "text": "a habitat restoration organization. We"
+  },
+  {
+   "t": 163.29,
+   "d": 2.0,
+   "text": "were reforesting a burned hillside that"
+  },
+  {
+   "t": 165.29,
+   "d": 1.8,
+   "text": "had been completely consumed in a forest"
+  },
+  {
+   "t": 167.09,
+   "d": 3.0,
+   "text": "fire a year earlier and the process went"
+  },
+  {
+   "t": 170.09,
+   "d": 1.7,
+   "text": "something like this."
+  },
+  {
+   "t": 171.79,
+   "d": 2.3,
+   "text": "Using a special triangular shaped and"
+  },
+  {
+   "t": 174.09,
+   "d": 2.2,
+   "text": "saw-toothed very skinny shovel, I would"
+  },
+  {
+   "t": 176.29,
+   "d": 1.9,
+   "text": "make a vertical and very thin hole"
+  },
+  {
+   "t": 178.19,
+   "d": 2.8,
+   "text": "approximately 10 in deep and 3 in wide"
+  },
+  {
+   "t": 180.99,
+   "d": 2.1,
+   "text": "in the still carbonized soil. I would"
+  },
+  {
+   "t": 183.09,
+   "d": 1.6,
+   "text": "mound the earth really neatly next to"
+  },
+  {
+   "t": 184.69,
+   "d": 2.3,
+   "text": "the hole for later use. A different team"
+  },
+  {
+   "t": 186.99,
+   "d": 1.4,
+   "text": "member would come by and place a"
+  },
+  {
+   "t": 188.39,
+   "d": 2.1,
+   "text": "seedling tree in the hole, sometimes"
+  },
+  {
+   "t": 190.49,
+   "d": 1.8,
+   "text": "sandwiching it with a rock in order for"
+  },
+  {
+   "t": 192.29,
+   "d": 1.9,
+   "text": "it to stay upright. And then someone"
+  },
+  {
+   "t": 194.19,
+   "d": 1.6,
+   "text": "else would come by and fill the holes"
+  },
+  {
+   "t": 195.79,
+   "d": 2.2,
+   "text": "back up, compacting the soil slightly"
+  },
+  {
+   "t": 197.99,
+   "d": 2.5,
+   "text": "around the new trees. And then a final"
+  },
+  {
+   "t": 200.49,
+   "d": 2.0,
+   "text": "person would come and water them out of"
+  },
+  {
+   "t": 202.49,
+   "d": 1.4,
+   "text": "a big jug."
+  },
+  {
+   "t": 203.89,
+   "d": 1.7,
+   "text": "I didn't do"
+  },
+  {
+   "t": 205.59,
+   "d": 1.6,
+   "text": "any of the rest of this. All I did was"
+  },
+  {
+   "t": 207.19,
+   "d": 2.3,
+   "text": "dig the holes. By the time the seedlings"
+  },
+  {
+   "t": 209.49,
+   "d": 1.7,
+   "text": "had been placed and the soil refilled"
+  },
+  {
+   "t": 211.19,
+   "d": 1.8,
+   "text": "and watered, I was already hundreds of"
+  },
+  {
+   "t": 212.99,
+   "d": 3.0,
+   "text": "feet and dozens of holes farther along."
+  },
+  {
+   "t": 215.99,
+   "d": 2.0,
+   "text": "I am not going to lie to you and say"
+  },
+  {
+   "t": 217.99,
+   "d": 2.5,
+   "text": "that this was particularly fun work, but"
+  },
+  {
+   "t": 220.49,
+   "d": 3.1,
+   "text": "it was meditative in its own way, kind"
+  },
+  {
+   "t": 223.59,
+   "d": 2.6,
+   "text": "of contemplative. And it was also really"
+  },
+  {
+   "t": 226.19,
+   "d": 3.0,
+   "text": "satisfying, very material."
+  },
+  {
+   "t": 229.19,
+   "d": 2.1,
+   "text": "I liked the process and the immediacy of"
+  },
+  {
+   "t": 231.29,
+   "d": 2.7,
+   "text": "it. I liked the shunk sound of dropping"
+  },
+  {
+   "t": 233.99,
+   "d": 1.5,
+   "text": "a shovel into the earth and the"
+  },
+  {
+   "t": 235.49,
+   "d": 1.8,
+   "text": "sensation of kind of drawing it back out"
+  },
+  {
+   "t": 237.29,
+   "d": 2.0,
+   "text": "again, of pock marking the landscape"
+  },
+  {
+   "t": 239.29,
+   "d": 2.2,
+   "text": "with my action. And I liked that"
+  },
+  {
+   "t": 241.49,
+   "d": 2.1,
+   "text": "dedication of kind of like slowly"
+  },
+  {
+   "t": 243.59,
+   "d": 2.8,
+   "text": "transforming acres of ground. By the"
+  },
+  {
+   "t": 246.39,
+   "d": 1.7,
+   "text": "end, I was really not in it for the"
+  },
+  {
+   "t": 248.09,
+   "d": 2.3,
+   "text": "future trees or for the remembered"
+  },
+  {
+   "t": 250.39,
+   "d": 4.5,
+   "text": "forest. I was in it for the digging."
+  },
+  {
+   "t": 255.69,
+   "d": 3.4,
+   "text": "Part one, playing in a big hole."
+  },
+  {
+   "t": 259.09,
+   "d": 3.2,
+   "text": "I do think it is safe to say that holes"
+  },
+  {
+   "t": 262.29,
+   "d": 1.7,
+   "text": "are having a moment."
+  },
+  {
+   "t": 263.99,
+   "d": 2.2,
+   "text": "So Triple Canopy, the Art Web"
+  },
+  {
+   "t": 266.19,
+   "d": 1.7,
+   "text": "publication and magazine has just"
+  },
+  {
+   "t": 267.89,
+   "d": 2.3,
+   "text": "wrapped a year of holes reporting."
+  },
+  {
+   "t": 270.19,
+   "d": 1.8,
+   "text": "Digger has just had a theatrical"
+  },
+  {
+   "t": 271.99,
+   "d": 3.0,
+   "text": "release. The Hole, an uncanny domestic"
+  },
+  {
+   "t": 274.99,
+   "d": 2.9,
+   "text": "novella by Hiroko Oyamada, was recently"
+  },
+  {
+   "t": 277.89,
+   "d": 1.6,
+   "text": "translated into English to large"
+  },
+  {
+   "t": 279.49,
+   "d": 2.8,
+   "text": "success. And Jacqueline Hartman's 1995"
+  },
+  {
+   "t": 282.29,
+   "d": 2.3,
+   "text": "dystopian hole novel, I Who Have Never"
+  },
+  {
+   "t": 284.59,
+   "d": 1.8,
+   "text": "Known Men, has become a recent"
+  },
+  {
+   "t": 286.39,
+   "d": 2.6,
+   "text": "bestseller through in part a series of"
+  },
+  {
+   "t": 288.99,
+   "d": 2.7,
+   "text": "TikTok reviews. Holes are in the"
+  },
+  {
+   "t": 291.69,
+   "d": 1.4,
+   "text": "zeitgeist."
+  },
+  {
+   "t": 293.09,
+   "d": 1.8,
+   "text": "We're here though, of course, to think"
+  },
+  {
+   "t": 294.89,
+   "d": 2.8,
+   "text": "about video game holes in particular."
+  },
+  {
+   "t": 297.69,
+   "d": 2.0,
+   "text": "Holes in games are somewhat"
+  },
+  {
+   "t": 299.69,
+   "d": 2.3,
+   "text": "wide-ranging, I would say, both in"
+  },
+  {
+   "t": 301.99,
+   "d": 2.9,
+   "text": "mechanical implementation and in their"
+  },
+  {
+   "t": 304.89,
+   "d": 4.1,
+   "text": "thematic direction. So holes can be"
+  },
+  {
+   "t": 308.99,
+   "d": 2.2,
+   "text": "a part of the landscape as caves or as"
+  },
+  {
+   "t": 311.19,
+   "d": 2.6,
+   "text": "tunnels, or they can be used as plot"
+  },
+  {
+   "t": 313.79,
+   "d": 2.5,
+   "text": "points or rhetorical devices, or they"
+  },
+  {
+   "t": 316.29,
+   "d": 2.8,
+   "text": "can be places to hide secrets inside."
+  },
+  {
+   "t": 319.09,
+   "d": 2.6,
+   "text": "They are both edges of the game world,"
+  },
+  {
+   "t": 321.69,
+   "d": 1.5,
+   "text": "you know, like what I was talking about,"
+  },
+  {
+   "t": 323.19,
+   "d": 1.7,
+   "text": "that kind of boundary space, but they're"
+  },
+  {
+   "t": 324.89,
+   "d": 3.0,
+   "text": "also explorable. They are interior and"
+  },
+  {
+   "t": 327.89,
+   "d": 2.7,
+   "text": "exterior both at once."
+  },
+  {
+   "t": 330.59,
+   "d": 1.5,
+   "text": "Still kind of despite all of this"
+  },
+  {
+   "t": 332.09,
+   "d": 2.6,
+   "text": "variance, many holes and games are"
+  },
+  {
+   "t": 334.69,
+   "d": 3.2,
+   "text": "actively and actually dug by the player."
+  },
+  {
+   "t": 337.89,
+   "d": 2.0,
+   "text": "And I think that might be a good place"
+  },
+  {
+   "t": 339.89,
+   "d": 3.5,
+   "text": "to start. We can start there."
+  },
+  {
+   "t": 343.39,
+   "d": 3.3,
+   "text": "I think it's fair to say that digging in"
+  },
+  {
+   "t": 346.69,
+   "d": 2.6,
+   "text": "games follows a general trend of"
+  },
+  {
+   "t": 349.29,
+   "d": 2.6,
+   "text": "gamifying the satisfaction of doing"
+  },
+  {
+   "t": 351.89,
+   "d": 3.2,
+   "text": "labor without the menial"
+  },
+  {
+   "t": 355.09,
+   "d": 2.8,
+   "text": "bodily exhaustion of it."
+  },
+  {
+   "t": 357.89,
+   "d": 2.0,
+   "text": "Digging belongs within the set of sort"
+  },
+  {
+   "t": 359.89,
+   "d": 2.3,
+   "text": "of undesirable jobs made frictionless"
+  },
+  {
+   "t": 362.19,
+   "d": 2.5,
+   "text": "and smooth via a tap or a click-based"
+  },
+  {
+   "t": 364.69,
+   "d": 1.2,
+   "text": "gameplay."
+  },
+  {
+   "t": 365.89,
+   "d": 2.7,
+   "text": "So sort of like foraging without the"
+  },
+  {
+   "t": 368.6,
+   "d": 2.7,
+   "text": "bugs or cooking without having to do the"
+  },
+  {
+   "t": 371.3,
+   "d": 2.2,
+   "text": "dishes or welding without producing"
+  },
+  {
+   "t": 373.5,
+   "d": 1.6,
+   "text": "metal shards."
+  },
+  {
+   "t": 375.1,
+   "d": 2.4,
+   "text": "Um digging without calluses definitely"
+  },
+  {
+   "t": 377.5,
+   "d": 3.0,
+   "text": "belongs to this set."
+  },
+  {
+   "t": 380.5,
+   "d": 2.6,
+   "text": "Even so, I would say that there is a"
+  },
+  {
+   "t": 383.1,
+   "d": 2.8,
+   "text": "relationship both inside and outside"
+  },
+  {
+   "t": 385.89,
+   "d": 3.6,
+   "text": "games between digging and play."
+  },
+  {
+   "t": 389.5,
+   "d": 2.1,
+   "text": "Sand pits are the kingdoms of the"
+  },
+  {
+   "t": 391.6,
+   "d": 1.5,
+   "text": "playground."
+  },
+  {
+   "t": 393.1,
+   "d": 1.6,
+   "text": "And the beach is pretty much God-given"
+  },
+  {
+   "t": 394.69,
+   "d": 1.4,
+   "text": "with all of its possibilities of"
+  },
+  {
+   "t": 396.1,
+   "d": 2.2,
+   "text": "dwellings and castles and moats and"
+  },
+  {
+   "t": 398.3,
+   "d": 1.5,
+   "text": "digging holes to the other side of the"
+  },
+  {
+   "t": 399.8,
+   "d": 1.3,
+   "text": "earth."
+  },
+  {
+   "t": 401.1,
+   "d": 1.9,
+   "text": "I still remember the something like"
+  },
+  {
+   "t": 403.0,
+   "d": 2.9,
+   "text": "rapture I felt when aged eight a"
+  },
+  {
+   "t": 405.89,
+   "d": 1.7,
+   "text": "construction company that was building a"
+  },
+  {
+   "t": 407.6,
+   "d": 2.1,
+   "text": "house next door to my parents brought in"
+  },
+  {
+   "t": 409.69,
+   "d": 2.2,
+   "text": "several dump trucks for the sand and"
+  },
+  {
+   "t": 411.89,
+   "d": 2.0,
+   "text": "then paused construction for"
+  },
+  {
+   "t": 413.89,
+   "d": 1.6,
+   "text": "approximately three months leaving the"
+  },
+  {
+   "t": 415.5,
+   "d": 2.1,
+   "text": "sand piles abandoned off to the side of"
+  },
+  {
+   "t": 417.6,
+   "d": 1.8,
+   "text": "the unpaved driveway."
+  },
+  {
+   "t": 419.39,
+   "d": 2.5,
+   "text": "And my sister and I went to absolute"
+  },
+  {
+   "t": 421.89,
+   "d": 2.5,
+   "text": "town digging. We excavated rooms and"
+  },
+  {
+   "t": 424.39,
+   "d": 2.3,
+   "text": "tunnels and antechambers and stairways."
+  },
+  {
+   "t": 426.69,
+   "d": 1.8,
+   "text": "We had a castle moat. We had a like"
+  },
+  {
+   "t": 428.5,
+   "d": 1.3,
+   "text": "spire."
+  },
+  {
+   "t": 429.8,
+   "d": 2.0,
+   "text": "Um we could be so big, you know, and we"
+  },
+  {
+   "t": 431.8,
+   "d": 1.6,
+   "text": "were so little. We could be inside of"
+  },
+  {
+   "t": 433.39,
+   "d": 1.8,
+   "text": "it. We had this war and like castle"
+  },
+  {
+   "t": 435.19,
+   "d": 2.0,
+   "text": "inside the sand mound until it all"
+  },
+  {
+   "t": 437.19,
+   "d": 1.8,
+   "text": "collapsed in a big summer rain and then"
+  },
+  {
+   "t": 439.0,
+   "d": 4.4,
+   "text": "they re- began construction eventually."
+  },
+  {
+   "t": 443.39,
+   "d": 1.0,
+   "text": "Um"
+  },
+  {
+   "t": 444.39,
+   "d": 1.3,
+   "text": "digging"
+  },
+  {
+   "t": 445.69,
+   "d": 2.7,
+   "text": "in games and the playful impulse that's"
+  },
+  {
+   "t": 448.39,
+   "d": 1.9,
+   "text": "like behind it can be signified through"
+  },
+  {
+   "t": 450.3,
+   "d": 2.8,
+   "text": "a truly wide variety of interfaces and"
+  },
+  {
+   "t": 453.1,
+   "d": 1.5,
+   "text": "actions."
+  },
+  {
+   "t": 454.6,
+   "d": 3.0,
+   "text": "When one digs a digital hole, generally"
+  },
+  {
+   "t": 457.6,
+   "d": 2.3,
+   "text": "there is a surface layer of the world"
+  },
+  {
+   "t": 459.89,
+   "d": 2.6,
+   "text": "that is being excavated, deleted, or"
+  },
+  {
+   "t": 462.5,
+   "d": 2.2,
+   "text": "moved to make the hole. This might be"
+  },
+  {
+   "t": 464.69,
+   "d": 2.8,
+   "text": "the blocks of Minecraft or Terraria or"
+  },
+  {
+   "t": 467.5,
+   "d": 2.6,
+   "text": "other voxel-driven games, but it could"
+  },
+  {
+   "t": 470.1,
+   "d": 2.5,
+   "text": "be a modifiable terrain object in either"
+  },
+  {
+   "t": 472.6,
+   "d": 2.2,
+   "text": "2D or 3D."
+  },
+  {
+   "t": 474.8,
+   "d": 2.2,
+   "text": "Often to dig the player must equip an"
+  },
+  {
+   "t": 477.0,
+   "d": 2.8,
+   "text": "appropriate tool such as a shovel or a"
+  },
+  {
+   "t": 479.8,
+   "d": 1.9,
+   "text": "pickaxe and then they click the place"
+  },
+  {
+   "t": 481.69,
+   "d": 1.9,
+   "text": "they'd like to create a hole."
+  },
+  {
+   "t": 483.6,
+   "d": 2.6,
+   "text": "Other games are more abstract."
+  },
+  {
+   "t": 486.19,
+   "d": 1.9,
+   "text": "Digital spaces can borrow excavation"
+  },
+  {
+   "t": 488.1,
+   "d": 2.5,
+   "text": "terminology more broadly, such as"
+  },
+  {
+   "t": 490.6,
+   "d": 2.1,
+   "text": "Wikipedia sleuthing, asking you to"
+  },
+  {
+   "t": 492.7,
+   "d": 3.3,
+   "text": "rabbit hole or dig around an archive or"
+  },
+  {
+   "t": 496.0,
+   "d": 3.9,
+   "text": "a forum or mine data."
+  },
+  {
+   "t": 499.9,
+   "d": 3.3,
+   "text": "Digging as a game mechanic is visible"
+  },
+  {
+   "t": 503.2,
+   "d": 2.1,
+   "text": "and present enough within the medium"
+  },
+  {
+   "t": 505.3,
+   "d": 3.0,
+   "text": "that it has its own entry on the Game"
+  },
+  {
+   "t": 508.3,
+   "d": 3.0,
+   "text": "Mechanics Wiki, but it's not so standard"
+  },
+  {
+   "t": 511.3,
+   "d": 2.9,
+   "text": "that it is in and of itself a genre. For"
+  },
+  {
+   "t": 514.2,
+   "d": 3.0,
+   "text": "instance, the three picked out examples"
+  },
+  {
+   "t": 517.2,
+   "d": 2.4,
+   "text": "on the digging kind of game mechanics"
+  },
+  {
+   "t": 519.6,
+   "d": 2.7,
+   "text": "wiki are designated as either sandboxes,"
+  },
+  {
+   "t": 522.3,
+   "d": 1.9,
+   "text": "but not just in that way,"
+  },
+  {
+   "t": 524.2,
+   "d": 2.2,
+   "text": "or as adventure games. They center"
+  },
+  {
+   "t": 526.4,
+   "d": 2.3,
+   "text": "digging as an action, but they're not"
+  },
+  {
+   "t": 528.7,
+   "d": 2.3,
+   "text": "digging games."
+  },
+  {
+   "t": 531.0,
+   "d": 1.5,
+   "text": "In fact,"
+  },
+  {
+   "t": 532.5,
+   "d": 2.8,
+   "text": "while digging in digital space is often"
+  },
+  {
+   "t": 535.3,
+   "d": 3.4,
+   "text": "a fairly similar mechanical"
+  },
+  {
+   "t": 538.7,
+   "d": 1.6,
+   "text": "while digging in digital space is often"
+  },
+  {
+   "t": 540.3,
+   "d": 3.6,
+   "text": "a fairly similar mechanical action"
+  },
+  {
+   "t": 543.9,
+   "d": 2.2,
+   "text": "between different games, they often are"
+  },
+  {
+   "t": 546.1,
+   "d": 2.3,
+   "text": "saying, okay, I want to dig in that spot"
+  },
+  {
+   "t": 548.4,
+   "d": 1.7,
+   "text": "and I'm going to click on it to tell it"
+  },
+  {
+   "t": 550.1,
+   "d": 3.0,
+   "text": "to do so. The goals of gameplay digging"
+  },
+  {
+   "t": 553.1,
+   "d": 2.0,
+   "text": "are often very distinct despite being"
+  },
+  {
+   "t": 555.1,
+   "d": 2.5,
+   "text": "skinned under that same tactile physical"
+  },
+  {
+   "t": 557.6,
+   "d": 2.3,
+   "text": "act of digging a hole."
+  },
+  {
+   "t": 559.9,
+   "d": 2.2,
+   "text": "This is because digging, both in games"
+  },
+  {
+   "t": 562.1,
+   "d": 3.2,
+   "text": "and in the world of real soil, is often"
+  },
+  {
+   "t": 565.3,
+   "d": 2.0,
+   "text": "two different ends."
+  },
+  {
+   "t": 567.3,
+   "d": 3.2,
+   "text": "There are many, many ways that this can"
+  },
+  {
+   "t": 570.5,
+   "d": 2.2,
+   "text": "manifest. There are many different kind"
+  },
+  {
+   "t": 572.7,
+   "d": 2.6,
+   "text": "of ends to which you might desire to dig"
+  },
+  {
+   "t": 575.3,
+   "d": 2.1,
+   "text": "a hole, but I'm going to try to kind of"
+  },
+  {
+   "t": 577.4,
+   "d": 2.9,
+   "text": "group creating holes into the following"
+  },
+  {
+   "t": 580.3,
+   "d": 2.5,
+   "text": "categories, starting with"
+  },
+  {
+   "t": 582.8,
+   "d": 2.9,
+   "text": "digging for treasure."
+  },
+  {
+   "t": 586.1,
+   "d": 1.8,
+   "text": "So,"
+  },
+  {
+   "t": 587.9,
+   "d": 2.4,
+   "text": "insofar as games are a place where you"
+  },
+  {
+   "t": 590.3,
+   "d": 2.8,
+   "text": "can hide secrets, in the earth is a"
+  },
+  {
+   "t": 593.1,
+   "d": 1.9,
+   "text": "pretty good place to hide them."
+  },
+  {
+   "t": 595.0,
+   "d": 1.8,
+   "text": "Treasures can live in the soil"
+  },
+  {
+   "t": 596.8,
+   "d": 2.9,
+   "text": "undisturbed and undetected until you go"
+  },
+  {
+   "t": 599.7,
+   "d": 1.0,
+   "text": "looking."
+  },
+  {
+   "t": 600.7,
+   "d": 2.3,
+   "text": "Many games use digging as a mechanic to"
+  },
+  {
+   "t": 603.0,
+   "d": 2.1,
+   "text": "expose hidden objects which might be"
+  },
+  {
+   "t": 605.1,
+   "d": 2.0,
+   "text": "externally sensed through dowsing,"
+  },
+  {
+   "t": 607.1,
+   "d": 1.7,
+   "text": "something like Pokémon,"
+  },
+  {
+   "t": 608.8,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 609.6,
+   "d": 1.8,
+   "text": "getting a dowsing rod and being like I"
+  },
+  {
+   "t": 611.4,
+   "d": 2.3,
+   "text": "think there's an object around here or"
+  },
+  {
+   "t": 613.7,
+   "d": 3.9,
+   "text": "smelling in Yoshi's Island 64 or maybe"
+  },
+  {
+   "t": 617.6,
+   "d": 2.1,
+   "text": "the more standard metal detecting"
+  },
+  {
+   "t": 619.7,
+   "d": 1.8,
+   "text": "solution."
+  },
+  {
+   "t": 621.5,
+   "d": 2.1,
+   "text": "In Sea of Thieves, you may bury treasure"
+  },
+  {
+   "t": 623.6,
+   "d": 1.7,
+   "text": "as well as dig it up and the metal"
+  },
+  {
+   "t": 625.3,
+   "d": 1.7,
+   "text": "detector is replaced with a good"
+  },
+  {
+   "t": 627.0,
+   "d": 1.9,
+   "text": "old-fashioned treasure map which you can"
+  },
+  {
+   "t": 628.9,
+   "d": 2.6,
+   "text": "find scattered around the overworld or"
+  },
+  {
+   "t": 631.5,
+   "d": 3.6,
+   "text": "pick up from other players at outposts."
+  },
+  {
+   "t": 635.1,
+   "d": 2.1,
+   "text": "Other games let you"
+  },
+  {
+   "t": 637.2,
+   "d": 1.9,
+   "text": "turn up patches of soil for a random"
+  },
+  {
+   "t": 639.1,
+   "d": 1.9,
+   "text": "chance and an object from a pool of"
+  },
+  {
+   "t": 641.0,
+   "d": 2.1,
+   "text": "objects that might be buried under"
+  },
+  {
+   "t": 643.1,
+   "d": 2.2,
+   "text": "particular kinds of earth."
+  },
+  {
+   "t": 645.3,
+   "d": 2.0,
+   "text": "These are games like Stardew Valley or"
+  },
+  {
+   "t": 647.3,
+   "d": 3.4,
+   "text": "My Time at Portia or Rune Factory or"
+  },
+  {
+   "t": 650.7,
+   "d": 2.6,
+   "text": "really any other social sim farming type"
+  },
+  {
+   "t": 653.3,
+   "d": 3.2,
+   "text": "game that also has wilds or rugged"
+  },
+  {
+   "t": 656.5,
+   "d": 2.0,
+   "text": "areas, though some of them do let you"
+  },
+  {
+   "t": 658.5,
+   "d": 2.2,
+   "text": "just dig inside of town."
+  },
+  {
+   "t": 660.7,
+   "d": 2.8,
+   "text": "Often times you have limited stamina to"
+  },
+  {
+   "t": 663.5,
+   "d": 3.0,
+   "text": "dig. So how much soil you can turn up"
+  },
+  {
+   "t": 666.5,
+   "d": 2.4,
+   "text": "over in a day is contingent on how far"
+  },
+  {
+   "t": 668.9,
+   "d": 1.5,
+   "text": "along you've progressed in your skill"
+  },
+  {
+   "t": 670.4,
+   "d": 1.2,
+   "text": "trees,"
+  },
+  {
+   "t": 671.6,
+   "d": 1.8,
+   "text": "if you've upgraded your shovel, what"
+  },
+  {
+   "t": 673.4,
+   "d": 2.2,
+   "text": "you've eaten, if you've romanced a"
+  },
+  {
+   "t": 675.6,
+   "d": 2.0,
+   "text": "character who sends you an upgraded hand"
+  },
+  {
+   "t": 677.6,
+   "d": 2.3,
+   "text": "drill, etc. You know, those kinds of"
+  },
+  {
+   "t": 679.9,
+   "d": 2.5,
+   "text": "games."
+  },
+  {
+   "t": 683.3,
+   "d": 1.6,
+   "text": "So"
+  },
+  {
+   "t": 684.9,
+   "d": 2.0,
+   "text": "this is a piece of micro gambling and"
+  },
+  {
+   "t": 686.9,
+   "d": 2.5,
+   "text": "chance-based reward mechanics. Digging"
+  },
+  {
+   "t": 689.4,
+   "d": 3.1,
+   "text": "in soil in games like this where you are"
+  },
+  {
+   "t": 692.5,
+   "d": 2.0,
+   "text": "just going to dig and dig and dig until"
+  },
+  {
+   "t": 694.5,
+   "d": 2.8,
+   "text": "you get a hit on your kind of random"
+  },
+  {
+   "t": 697.3,
+   "d": 1.8,
+   "text": "object dice pool"
+  },
+  {
+   "t": 699.1,
+   "d": 1.8,
+   "text": "feels like the equivalent of scratching"
+  },
+  {
+   "t": 700.9,
+   "d": 1.9,
+   "text": "off a scratch card."
+  },
+  {
+   "t": 702.8,
+   "d": 1.3,
+   "text": "It can be addictive."
+  },
+  {
+   "t": 704.1,
+   "d": 2.0,
+   "text": "There have certainly been entire in-game"
+  },
+  {
+   "t": 706.1,
+   "d": 2.3,
+   "text": "days that I have spent in Stardew Valley"
+  },
+  {
+   "t": 708.4,
+   "d": 1.8,
+   "text": "slowly excavating the entire surface"
+  },
+  {
+   "t": 710.2,
+   "d": 1.9,
+   "text": "layer of the town, looking for minerals,"
+  },
+  {
+   "t": 712.1,
+   "d": 2.0,
+   "text": "periodically eating a complete breakfast"
+  },
+  {
+   "t": 714.1,
+   "d": 2.9,
+   "text": "to restore my energy."
+  },
+  {
+   "t": 717.0,
+   "d": 2.4,
+   "text": "While this kind of design feels"
+  },
+  {
+   "t": 719.4,
+   "d": 2.7,
+   "text": "particularly video games,"
+  },
+  {
+   "t": 722.1,
+   "d": 2.0,
+   "text": "this exact scenario does exist in the"
+  },
+  {
+   "t": 724.1,
+   "d": 1.6,
+   "text": "real world as well."
+  },
+  {
+   "t": 725.7,
+   "d": 2.7,
+   "text": "And this is in particular at places like"
+  },
+  {
+   "t": 728.4,
+   "d": 1.6,
+   "text": "Crater of Diamonds State Park in"
+  },
+  {
+   "t": 730.0,
+   "d": 2.2,
+   "text": "Arkansas where you where you $15 for"
+  },
+  {
+   "t": 732.2,
+   "d": 3.7,
+   "text": "adults or $7 for children age 6 to 12 or"
+  },
+  {
+   "t": 735.9,
+   "d": 2.5,
+   "text": "nothing for kids five and under to pan"
+  },
+  {
+   "t": 738.4,
+   "d": 2.8,
+   "text": "for raw diamonds in plowed fields."
+  },
+  {
+   "t": 741.2,
+   "d": 1.7,
+   "text": "On any given day, there might be a few"
+  },
+  {
+   "t": 742.9,
+   "d": 1.8,
+   "text": "dozen or hundred people out in the"
+  },
+  {
+   "t": 744.7,
+   "d": 2.2,
+   "text": "fields walking, digging, and picking up"
+  },
+  {
+   "t": 746.9,
+   "d": 1.8,
+   "text": "stones."
+  },
+  {
+   "t": 748.7,
+   "d": 2.7,
+   "text": "This is an old diamond mine that is no"
+  },
+  {
+   "t": 751.4,
+   "d": 1.4,
+   "text": "longer productive enough to be"
+  },
+  {
+   "t": 752.8,
+   "d": 2.3,
+   "text": "commercially viable, but is productive"
+  },
+  {
+   "t": 755.1,
+   "d": 3.5,
+   "text": "enough to be a semi-commercially viable"
+  },
+  {
+   "t": 758.6,
+   "d": 1.6,
+   "text": "state park."
+  },
+  {
+   "t": 760.2,
+   "d": 2.6,
+   "text": "I've done this. I have found some agates"
+  },
+  {
+   "t": 762.8,
+   "d": 2.3,
+   "text": "and one piece of amethyst. Diamonds are"
+  },
+  {
+   "t": 765.1,
+   "d": 2.1,
+   "text": "quite rare. Those who find them have"
+  },
+  {
+   "t": 767.2,
+   "d": 2.1,
+   "text": "their picture taken at the wash station"
+  },
+  {
+   "t": 769.3,
+   "d": 5.0,
+   "text": "and posted at the entry fee booth."
+  },
+  {
+   "t": 775.3,
+   "d": 2.3,
+   "text": "Digging like fishing can have a mini"
+  },
+  {
+   "t": 777.6,
+   "d": 2.9,
+   "text": "game quality in this way. So sometimes"
+  },
+  {
+   "t": 780.5,
+   "d": 2.1,
+   "text": "you are real-time limited in what you"
+  },
+  {
+   "t": 782.6,
+   "d": 2.2,
+   "text": "can dig up. An example of this being"
+  },
+  {
+   "t": 784.8,
+   "d": 2.7,
+   "text": "animal crossings, cracked earth markers"
+  },
+  {
+   "t": 787.5,
+   "d": 2.6,
+   "text": "which denote the location of the three"
+  },
+  {
+   "t": 790.1,
+   "d": 1.6,
+   "text": "fossils that are placed randomly"
+  },
+  {
+   "t": 791.7,
+   "d": 2.3,
+   "text": "somewhere within your town's boundaries"
+  },
+  {
+   "t": 794.0,
+   "d": 1.5,
+   "text": "every human day."
+  },
+  {
+   "t": 795.5,
+   "d": 2.6,
+   "text": "A conceit that has reliably carried over"
+  },
+  {
+   "t": 798.1,
+   "d": 2.1,
+   "text": "from game to game. Among your daily"
+  },
+  {
+   "t": 800.2,
+   "d": 2.3,
+   "text": "chores is running around and finding the"
+  },
+  {
+   "t": 802.5,
+   "d": 2.4,
+   "text": "three telltale marks and digging them up"
+  },
+  {
+   "t": 804.9,
+   "d": 2.0,
+   "text": "and praying it contains one of them"
+  },
+  {
+   "t": 806.9,
+   "d": 2.3,
+   "text": "contains the T-Rex skull which you truly"
+  },
+  {
+   "t": 809.2,
+   "d": 3.6,
+   "text": "need to finish your museum displays."
+  },
+  {
+   "t": 812.8,
+   "d": 2.7,
+   "text": "Um but some digging mini games are in a"
+  },
+  {
+   "t": 815.5,
+   "d": 2.1,
+   "text": "different space entirely. One in which"
+  },
+  {
+   "t": 817.6,
+   "d": 2.1,
+   "text": "you are actually allowed both"
+  },
+  {
+   "t": 819.7,
+   "d": 3.8,
+   "text": "narratively and mechanically to dig."
+  },
+  {
+   "t": 823.5,
+   "d": 2.0,
+   "text": "The underground in Pokémon Diamond,"
+  },
+  {
+   "t": 825.5,
+   "d": 2.8,
+   "text": "Pearl, and Platinum is an entirely"
+  },
+  {
+   "t": 828.3,
+   "d": 2.3,
+   "text": "separate gameplay space that uses the"
+  },
+  {
+   "t": 830.6,
+   "d": 2.8,
+   "text": "stylus of the lower DS screen to allow"
+  },
+  {
+   "t": 833.4,
+   "d": 2.6,
+   "text": "you to dig up treasures and spheres"
+  },
+  {
+   "t": 836.0,
+   "d": 2.4,
+   "text": "which is which are the distinct currency"
+  },
+  {
+   "t": 838.4,
+   "d": 2.6,
+   "text": "of the underground separated from kind"
+  },
+  {
+   "t": 841.0,
+   "d": 2.6,
+   "text": "of the sphere from the currency of the"
+  },
+  {
+   "t": 843.6,
+   "d": 1.8,
+   "text": "above world."
+  },
+  {
+   "t": 845.4,
+   "d": 1.9,
+   "text": "The underground is also the only place"
+  },
+  {
+   "t": 847.3,
+   "d": 2.9,
+   "text": "in the game where you can have real-time"
+  },
+  {
+   "t": 850.2,
+   "d": 2.7,
+   "text": "embodied local multiplayer as multiple"
+  },
+  {
+   "t": 852.9,
+   "d": 3.0,
+   "text": "friends on multiple DSs can run around"
+  },
+  {
+   "t": 855.9,
+   "d": 2.8,
+   "text": "and mine together in one shared space."
+  },
+  {
+   "t": 858.7,
+   "d": 2.4,
+   "text": "This mining mini game primarily plays"
+  },
+  {
+   "t": 861.1,
+   "d": 2.8,
+   "text": "like Minesweeper."
+  },
+  {
+   "t": 864.4,
+   "d": 2.3,
+   "text": "Um"
+  },
+  {
+   "t": 866.8,
+   "d": 2.5,
+   "text": "I will say digging games are having a"
+  },
+  {
+   "t": 869.3,
+   "d": 1.4,
+   "text": "moment"
+  },
+  {
+   "t": 870.7,
+   "d": 2.4,
+   "text": "and there are a number of reasons for"
+  },
+  {
+   "t": 873.1,
+   "d": 1.0,
+   "text": "this."
+  },
+  {
+   "t": 874.1,
+   "d": 3.1,
+   "text": "But I will say one of them is that"
+  },
+  {
+   "t": 877.2,
+   "d": 2.3,
+   "text": "when digging becomes extractative, the"
+  },
+  {
+   "t": 879.5,
+   "d": 2.9,
+   "text": "verb digging in game descriptions"
+  },
+  {
+   "t": 882.4,
+   "d": 2.1,
+   "text": "changes to mining."
+  },
+  {
+   "t": 884.5,
+   "d": 2.1,
+   "text": "Much like the Crater of Diamonds State"
+  },
+  {
+   "t": 886.6,
+   "d": 3.2,
+   "text": "Park, being a casual hobbyist fantasy"
+  },
+  {
+   "t": 889.8,
+   "d": 2.8,
+   "text": "miner for a day makes a fun activity out"
+  },
+  {
+   "t": 892.6,
+   "d": 2.8,
+   "text": "of a dangerous and demanding task with"
+  },
+  {
+   "t": 895.4,
+   "d": 2.6,
+   "text": "histories and realities more in line"
+  },
+  {
+   "t": 898.0,
+   "d": 2.6,
+   "text": "with kind of uncompensated labor than"
+  },
+  {
+   "t": 900.6,
+   "d": 1.6,
+   "text": "play."
+  },
+  {
+   "t": 902.2,
+   "d": 2.1,
+   "text": "Unsurprisingly,"
+  },
+  {
+   "t": 904.3,
+   "d": 1.6,
+   "text": "there are thousands and thousands of"
+  },
+  {
+   "t": 905.9,
+   "d": 1.9,
+   "text": "games that take this tack, many with"
+  },
+  {
+   "t": 907.8,
+   "d": 2.5,
+   "text": "little more than Skinner boxes towards"
+  },
+  {
+   "t": 910.3,
+   "d": 1.4,
+   "text": "dopamine rush."
+  },
+  {
+   "t": 911.7,
+   "d": 1.4,
+   "text": "It's pretty common for these kinds of"
+  },
+  {
+   "t": 913.1,
+   "d": 2.4,
+   "text": "games to have an automation track or an"
+  },
+  {
+   "t": 915.5,
+   "d": 2.7,
+   "text": "idle track. Part of the fantasy is being"
+  },
+  {
+   "t": 918.2,
+   "d": 2.7,
+   "text": "the sole owner operator of a mine that"
+  },
+  {
+   "t": 920.9,
+   "d": 2.0,
+   "text": "creates wealth, which then buys upgrade"
+  },
+  {
+   "t": 922.9,
+   "d": 1.5,
+   "text": "trees which allow you to automate the"
+  },
+  {
+   "t": 924.4,
+   "d": 1.9,
+   "text": "labor that creates more wealth. Like you"
+  },
+  {
+   "t": 926.3,
+   "d": 1.4,
+   "text": "know this loop."
+  },
+  {
+   "t": 927.7,
+   "d": 3.0,
+   "text": "Um it's it's quite common right now."
+  },
+  {
+   "t": 930.7,
+   "d": 3.8,
+   "text": "But even inside of the kind of lower key"
+  },
+  {
+   "t": 934.5,
+   "d": 2.8,
+   "text": "farming simulations or crafting games,"
+  },
+  {
+   "t": 937.3,
+   "d": 2.8,
+   "text": "um different tools for"
+  },
+  {
+   "t": 940.1,
+   "d": 2.4,
+   "text": "digging upgradable are pretty standard."
+  },
+  {
+   "t": 942.5,
+   "d": 1.5,
+   "text": "The shovel that doesn't break or that"
+  },
+  {
+   "t": 944.0,
+   "d": 1.9,
+   "text": "digs multiple holes at once is like a"
+  },
+  {
+   "t": 945.9,
+   "d": 2.3,
+   "text": "part of the progression tree that allows"
+  },
+  {
+   "t": 948.2,
+   "d": 1.9,
+   "text": "you to engage with the world ever more"
+  },
+  {
+   "t": 950.1,
+   "d": 2.4,
+   "text": "effortlessly, ever more automatically as"
+  },
+  {
+   "t": 952.5,
+   "d": 2.7,
+   "text": "the action of like pressing A to dig"
+  },
+  {
+   "t": 955.2,
+   "d": 1.7,
+   "text": "becomes dull."
+  },
+  {
+   "t": 956.9,
+   "d": 2.0,
+   "text": "When placed into a game with other"
+  },
+  {
+   "t": 958.9,
+   "d": 3.3,
+   "text": "systems, this kind of treasure seeking"
+  },
+  {
+   "t": 962.2,
+   "d": 3.7,
+   "text": "or mini game style digging often doesn't"
+  },
+  {
+   "t": 965.9,
+   "d": 2.5,
+   "text": "have permanent or meaningful effects."
+  },
+  {
+   "t": 968.4,
+   "d": 2.4,
+   "text": "Soil will re smooth itself, buried"
+  },
+  {
+   "t": 970.8,
+   "d": 2.9,
+   "text": "treasures will regenerate, dig spots"
+  },
+  {
+   "t": 973.7,
+   "d": 1.7,
+   "text": "will move themselves around the map at"
+  },
+  {
+   "t": 975.4,
+   "d": 2.3,
+   "text": "the onset of a new day."
+  },
+  {
+   "t": 977.7,
+   "d": 2.0,
+   "text": "Simulated environmental leach toxins do"
+  },
+  {
+   "t": 979.7,
+   "d": 1.6,
+   "text": "not leak into the downstream water"
+  },
+  {
+   "t": 981.3,
+   "d": 2.4,
+   "text": "supply from a digital mine."
+  },
+  {
+   "t": 983.7,
+   "d": 2.3,
+   "text": "The very mines you descend into might"
+  },
+  {
+   "t": 986.0,
+   "d": 2.1,
+   "text": "reorganize themselves every time you"
+  },
+  {
+   "t": 988.1,
+   "d": 1.0,
+   "text": "enter"
+  },
+  {
+   "t": 989.1,
+   "d": 2.5,
+   "text": "a fresh series of challenges and tunnels"
+  },
+  {
+   "t": 991.6,
+   "d": 3.2,
+   "text": "and surprises at the end every time."
+  },
+  {
+   "t": 994.8,
+   "d": 2.5,
+   "text": "This isn't permanent,"
+  },
+  {
+   "t": 997.3,
+   "d": 2.0,
+   "text": "but some digging is oriented not for"
+  },
+  {
+   "t": 999.3,
+   "d": 3.2,
+   "text": "shifting through temporary soil, but"
+  },
+  {
+   "t": 1002.5,
+   "d": 1.8,
+   "text": "rather for changing the surface of the"
+  },
+  {
+   "t": 1004.3,
+   "d": 1.9,
+   "text": "world."
+  },
+  {
+   "t": 1006.2,
+   "d": 2.8,
+   "text": "Some games like Super Mario Brothers uh"
+  },
+  {
+   "t": 1009.0,
+   "d": 1.7,
+   "text": "two have segments that allow you to"
+  },
+  {
+   "t": 1010.7,
+   "d": 1.6,
+   "text": "manipulate the level surface through"
+  },
+  {
+   "t": 1012.3,
+   "d": 2.2,
+   "text": "digging, trapping enemies, or changing"
+  },
+  {
+   "t": 1014.5,
+   "d": 1.4,
+   "text": "movement."
+  },
+  {
+   "t": 1015.9,
+   "d": 2.1,
+   "text": "While some farming games require you to"
+  },
+  {
+   "t": 1018.0,
+   "d": 2.2,
+   "text": "clear fields and break up stones as"
+  },
+  {
+   "t": 1020.2,
+   "d": 2.4,
+   "text": "their tutorial or introductory sequence,"
+  },
+  {
+   "t": 1022.6,
+   "d": 2.0,
+   "text": "taming, weeding, and finally tilling the"
+  },
+  {
+   "t": 1024.6,
+   "d": 1.8,
+   "text": "earth before you can plant in it, which"
+  },
+  {
+   "t": 1026.4,
+   "d": 1.9,
+   "text": "is in and of itself a complicated"
+  },
+  {
+   "t": 1028.3,
+   "d": 1.5,
+   "text": "thesis."
+  },
+  {
+   "t": 1029.8,
+   "d": 2.6,
+   "text": "Turnip Follows 2023 masterpiece Before"
+  },
+  {
+   "t": 1032.4,
+   "d": 2.2,
+   "text": "the Green Moon places you in the role of"
+  },
+  {
+   "t": 1034.6,
+   "d": 2.2,
+   "text": "a farmer in an ad hoc community at the"
+  },
+  {
+   "t": 1036.8,
+   "d": 2.2,
+   "text": "base of a space elevator, ostensibly"
+  },
+  {
+   "t": 1039.0,
+   "d": 2.0,
+   "text": "trying to raise enough funds to get off"
+  },
+  {
+   "t": 1041.0,
+   "d": 1.2,
+   "text": "earth."
+  },
+  {
+   "t": 1042.2,
+   "d": 2.6,
+   "text": "Digging is less constrained here than in"
+  },
+  {
+   "t": 1044.8,
+   "d": 2.0,
+   "text": "many games in the genre,"
+  },
+  {
+   "t": 1046.8,
+   "d": 2.5,
+   "text": "and your fields and farm often bleed"
+  },
+  {
+   "t": 1049.3,
+   "d": 2.6,
+   "text": "into the weeds, stones, and trash that a"
+  },
+  {
+   "t": 1051.9,
+   "d": 2.6,
+   "text": "user is slowly getting a handle on or"
+  },
+  {
+   "t": 1054.5,
+   "d": 2.1,
+   "text": "choosing to ignore depending on your own"
+  },
+  {
+   "t": 1056.6,
+   "d": 1.4,
+   "text": "path through the community and the"
+  },
+  {
+   "t": 1058.0,
+   "d": 1.9,
+   "text": "story."
+  },
+  {
+   "t": 1059.9,
+   "d": 1.7,
+   "text": "Animal Crossing,"
+  },
+  {
+   "t": 1061.6,
+   "d": 1.9,
+   "text": "New Horizons, and other recent games"
+  },
+  {
+   "t": 1063.5,
+   "d": 2.8,
+   "text": "made in its imprint, Picopier, etc.,"
+  },
+  {
+   "t": 1066.3,
+   "d": 2.4,
+   "text": "are voxel or cube-based. They allow you"
+  },
+  {
+   "t": 1068.7,
+   "d": 1.9,
+   "text": "to sculpt a world piece by piece and"
+  },
+  {
+   "t": 1070.6,
+   "d": 1.8,
+   "text": "then watch residents, creatures,"
+  },
+  {
+   "t": 1072.4,
+   "d": 2.6,
+   "text": "animals, etc., live on the new surface,"
+  },
+  {
+   "t": 1075.0,
+   "d": 1.9,
+   "text": "each letting their own daily patterns"
+  },
+  {
+   "t": 1076.9,
+   "d": 2.8,
+   "text": "and NPC behaviors and systems interact"
+  },
+  {
+   "t": 1079.7,
+   "d": 2.6,
+   "text": "with the world you've built."
+  },
+  {
+   "t": 1082.3,
+   "d": 2.0,
+   "text": "One of the first things I built on my"
+  },
+  {
+   "t": 1084.3,
+   "d": 1.5,
+   "text": "Animal Crossing island was an"
+  },
+  {
+   "t": 1085.8,
+   "d": 2.5,
+   "text": "archaeological dig site, dotted and"
+  },
+  {
+   "t": 1088.3,
+   "d": 2.0,
+   "text": "decorated with fossils and folding"
+  },
+  {
+   "t": 1090.3,
+   "d": 2.5,
+   "text": "barricades and construction lights. I"
+  },
+  {
+   "t": 1092.8,
+   "d": 1.4,
+   "text": "was like, this is great. I'll make it"
+  },
+  {
+   "t": 1094.2,
+   "d": 2.2,
+   "text": "look like I'm digging up fossils. It"
+  },
+  {
+   "t": 1096.4,
+   "d": 2.1,
+   "text": "did, however, look primarily like a"
+  },
+  {
+   "t": 1098.5,
+   "d": 1.2,
+   "text": "strip mine."
+  },
+  {
+   "t": 1099.7,
+   "d": 3.2,
+   "text": "I planted poppies on the upper rim"
+  },
+  {
+   "t": 1102.9,
+   "d": 2.0,
+   "text": "and when researching this talk, later"
+  },
+  {
+   "t": 1104.9,
+   "d": 2.1,
+   "text": "learned that many, many people had had"
+  },
+  {
+   "t": 1107.0,
+   "d": 1.6,
+   "text": "this idea."
+  },
+  {
+   "t": 1108.6,
+   "d": 2.4,
+   "text": "These games are relying on lessons that"
+  },
+  {
+   "t": 1111.0,
+   "d": 1.5,
+   "text": "have been learned from Minecraft,"
+  },
+  {
+   "t": 1112.5,
+   "d": 1.9,
+   "text": "Terraria,"
+  },
+  {
+   "t": 1114.4,
+   "d": 1.5,
+   "text": "and other block-based building and"
+  },
+  {
+   "t": 1115.9,
+   "d": 2.2,
+   "text": "mining games. Also pulling from this"
+  },
+  {
+   "t": 1118.1,
+   "d": 2.1,
+   "text": "mechanical pool are the dozens or"
+  },
+  {
+   "t": 1120.2,
+   "d": 2.1,
+   "text": "hundreds of landscape decoration games"
+  },
+  {
+   "t": 1122.3,
+   "d": 2.6,
+   "text": "that allow you to sculpt an island or a"
+  },
+  {
+   "t": 1124.9,
+   "d": 3.5,
+   "text": "hill or a mountain or a space or a"
+  },
+  {
+   "t": 1128.4,
+   "d": 2.9,
+   "text": "castle or a dungeon etc. as the primary"
+  },
+  {
+   "t": 1131.3,
+   "d": 4.7,
+   "text": "mode of gameplay like Tiny Glade above."
+  },
+  {
+   "t": 1136.0,
+   "d": 2.7,
+   "text": "Perhaps all of these games owe a nod to"
+  },
+  {
+   "t": 1138.7,
+   "d": 5.5,
+   "text": "1991's Sim Ant or 1993's Diggers. These"
+  },
+  {
+   "t": 1144.2,
+   "d": 1.5,
+   "text": "are games"
+  },
+  {
+   "t": 1145.7,
+   "d": 2.1,
+   "text": "that are interested in changing the"
+  },
+  {
+   "t": 1147.8,
+   "d": 1.7,
+   "text": "landscape that moving through it,"
+  },
+  {
+   "t": 1149.5,
+   "d": 2.0,
+   "text": "building tunnels, building systems feel"
+  },
+  {
+   "t": 1151.5,
+   "d": 2.5,
+   "text": "the closest to me as the tunnel out a"
+  },
+  {
+   "t": 1154.0,
+   "d": 2.5,
+   "text": "castle from the sand pile impulse."
+  },
+  {
+   "t": 1156.5,
+   "d": 1.8,
+   "text": "I would argue that they also scratch a"
+  },
+  {
+   "t": 1158.3,
+   "d": 3.3,
+   "text": "similar itch to the gardeners and hobby"
+  },
+  {
+   "t": 1161.6,
+   "d": 2.6,
+   "text": "pond builders and light landscapers"
+  },
+  {
+   "t": 1164.2,
+   "d": 4.1,
+   "text": "among us which is a fairly common hobby"
+  },
+  {
+   "t": 1168.3,
+   "d": 2.4,
+   "text": "and not always oriented towards like"
+  },
+  {
+   "t": 1170.7,
+   "d": 3.3,
+   "text": "getting fresh tomatoes."
+  },
+  {
+   "t": 1175.1,
+   "d": 2.1,
+   "text": "The far extreme"
+  },
+  {
+   "t": 1177.2,
+   "d": 2.7,
+   "text": "of this impulse can be seen amongst the"
+  },
+  {
+   "t": 1179.9,
+   "d": 2.2,
+   "text": "hobbyist tunnelers. Perhaps the most"
+  },
+  {
+   "t": 1182.1,
+   "d": 2.0,
+   "text": "visible right now being the TikTok star"
+  },
+  {
+   "t": 1184.1,
+   "d": 2.6,
+   "text": "Kala or tunnel girl"
+  },
+  {
+   "t": 1186.7,
+   "d": 2.2,
+   "text": "at engineer everything who's been mining"
+  },
+  {
+   "t": 1188.9,
+   "d": 1.9,
+   "text": "a tunnel network under her her suburban"
+  },
+  {
+   "t": 1190.8,
+   "d": 1.8,
+   "text": "Virginia house for the last four years"
+  },
+  {
+   "t": 1192.6,
+   "d": 1.8,
+   "text": "and posting short form video content"
+  },
+  {
+   "t": 1194.4,
+   "d": 2.2,
+   "text": "about it."
+  },
+  {
+   "t": 1196.6,
+   "d": 1.9,
+   "text": "Other internet famous tunnelers include"
+  },
+  {
+   "t": 1198.5,
+   "d": 2.1,
+   "text": "the YouTuber Colin Furze, but the"
+  },
+  {
+   "t": 1200.6,
+   "d": 2.6,
+   "text": "tradition is remarkably consistent"
+  },
+  {
+   "t": 1203.2,
+   "d": 2.8,
+   "text": "and robust throughout recent history."
+  },
+  {
+   "t": 1206.0,
+   "d": 2.1,
+   "text": "There are dozens of documented and"
+  },
+  {
+   "t": 1208.1,
+   "d": 1.8,
+   "text": "decade spanning hobby tunnels in the"
+  },
+  {
+   "t": 1209.9,
+   "d": 2.4,
+   "text": "last 200 or 300 years"
+  },
+  {
+   "t": 1212.3,
+   "d": 1.9,
+   "text": "including things like"
+  },
+  {
+   "t": 1214.2,
+   "d": 2.8,
+   "text": "Levan Arkelian's Divine Underground"
+  },
+  {
+   "t": 1217.0,
+   "d": 2.6,
+   "text": "which is a series of tunnels and holy"
+  },
+  {
+   "t": 1219.6,
+   "d": 2.5,
+   "text": "places under a house in a village in"
+  },
+  {
+   "t": 1222.1,
+   "d": 2.8,
+   "text": "Armenia um that was created over 23"
+  },
+  {
+   "t": 1224.9,
+   "d": 2.8,
+   "text": "years of digging. The project began as a"
+  },
+  {
+   "t": 1227.7,
+   "d": 2.3,
+   "text": "request for a potato cellar,"
+  },
+  {
+   "t": 1230.01,
+   "d": 2.7,
+   "text": "but it carried forward into a 300 square"
+  },
+  {
+   "t": 1232.7,
+   "d": 2.6,
+   "text": "meter labyrinth. Levon has passed away,"
+  },
+  {
+   "t": 1235.31,
+   "d": 1.6,
+   "text": "but the caves are now operated by his"
+  },
+  {
+   "t": 1236.9,
+   "d": 2.2,
+   "text": "wife widow, Tosya, who was the one who"
+  },
+  {
+   "t": 1239.11,
+   "d": 1.8,
+   "text": "had requested the cellar in the first"
+  },
+  {
+   "t": 1240.9,
+   "d": 1.3,
+   "text": "place."
+  },
+  {
+   "t": 1242.2,
+   "d": 1.3,
+   "text": "Or"
+  },
+  {
+   "t": 1243.51,
+   "d": 1.8,
+   "text": "the Washington D.C. tunneling projects"
+  },
+  {
+   "t": 1245.31,
+   "d": 1.9,
+   "text": "of the well-known entomologist Harrison"
+  },
+  {
+   "t": 1247.2,
+   "d": 1.8,
+   "text": "Gray Dyar Jr.,"
+  },
+  {
+   "t": 1249.01,
+   "d": 2.2,
+   "text": "who has an insect growth pattern named"
+  },
+  {
+   "t": 1251.2,
+   "d": 2.5,
+   "text": "after him. His hobby tunnels around the"
+  },
+  {
+   "t": 1253.7,
+   "d": 2.0,
+   "text": "turn of the 19th century caused sink"
+  },
+  {
+   "t": 1255.7,
+   "d": 2.0,
+   "text": "holes and complaints in his somewhat"
+  },
+  {
+   "t": 1257.7,
+   "d": 1.9,
+   "text": "urban neighborhood, but he maintained"
+  },
+  {
+   "t": 1259.61,
+   "d": 1.4,
+   "text": "that the tunneling was a great form of"
+  },
+  {
+   "t": 1261.01,
+   "d": 3.1,
+   "text": "exercise and helped him to think."
+  },
+  {
+   "t": 1264.11,
+   "d": 2.6,
+   "text": "Or the would-be municipal subway system"
+  },
+  {
+   "t": 1266.7,
+   "d": 3.4,
+   "text": "of um Leonid Rojansky, who began digging"
+  },
+  {
+   "t": 1270.11,
+   "d": 2.4,
+   "text": "a metro system for his small town in"
+  },
+  {
+   "t": 1272.51,
+   "d": 3.9,
+   "text": "Russia in 1984. By his passing in 20 uh"
+  },
+  {
+   "t": 1276.4,
+   "d": 2.6,
+   "text": "2011, he had dug almost 1,000 feet of"
+  },
+  {
+   "t": 1279.01,
+   "d": 3.1,
+   "text": "tunnel through rock."
+  },
+  {
+   "t": 1282.9,
+   "d": 1.9,
+   "text": "A few years ago, I visited the"
+  },
+  {
+   "t": 1284.81,
+   "d": 1.9,
+   "text": "Forestiere Underground Gardens in"
+  },
+  {
+   "t": 1286.7,
+   "d": 2.0,
+   "text": "Fresno, California."
+  },
+  {
+   "t": 1288.7,
+   "d": 2.1,
+   "text": "They are remarkable."
+  },
+  {
+   "t": 1290.81,
+   "d": 2.3,
+   "text": "Dug over a period of 40 years by"
+  },
+  {
+   "t": 1293.11,
+   "d": 4.4,
+   "text": "Baldassare Forestiere from 1906 to 1946,"
+  },
+  {
+   "t": 1297.51,
+   "d": 2.0,
+   "text": "the gardens were once 10 acres of"
+  },
+  {
+   "t": 1299.51,
+   "d": 3.1,
+   "text": "underground tunnels and orchards and are"
+  },
+  {
+   "t": 1302.61,
+   "d": 3.1,
+   "text": "now a still surviving 65 rooms. They"
+  },
+  {
+   "t": 1305.7,
+   "d": 2.4,
+   "text": "reach as deep as 23 feet into the earth"
+  },
+  {
+   "t": 1308.11,
+   "d": 2.3,
+   "text": "with skylights to moderate the baking"
+  },
+  {
+   "t": 1310.4,
+   "d": 2.0,
+   "text": "sun and occasional frost of Central"
+  },
+  {
+   "t": 1312.4,
+   "d": 1.5,
+   "text": "California."
+  },
+  {
+   "t": 1313.9,
+   "d": 2.8,
+   "text": "Inside of them, orange trees and other"
+  },
+  {
+   "t": 1316.7,
+   "d": 2.2,
+   "text": "tropical fruits grow."
+  },
+  {
+   "t": 1318.9,
+   "d": 2.2,
+   "text": "During the early 1900s, the gardens were"
+  },
+  {
+   "t": 1321.11,
+   "d": 2.2,
+   "text": "a working commercial orchard."
+  },
+  {
+   "t": 1323.31,
+   "d": 2.0,
+   "text": "Baldassare lived inside"
+  },
+  {
+   "t": 1325.31,
+   "d": 2.4,
+   "text": "in vaulted subterranean rooms complete"
+  },
+  {
+   "t": 1327.7,
+   "d": 2.6,
+   "text": "with kitchen and parlor and bath and"
+  },
+  {
+   "t": 1330.31,
+   "d": 2.5,
+   "text": "winter and summer bedrooms and a pond"
+  },
+  {
+   "t": 1332.81,
+   "d": 2.7,
+   "text": "stocked with fish. The walls are made of"
+  },
+  {
+   "t": 1335.51,
+   "d": 1.9,
+   "text": "the layer of hard pan that generally"
+  },
+  {
+   "t": 1337.4,
+   "d": 2.2,
+   "text": "makes growing fruit trees in Fresno"
+  },
+  {
+   "t": 1339.61,
+   "d": 1.6,
+   "text": "somewhat impossible."
+  },
+  {
+   "t": 1341.2,
+   "d": 1.9,
+   "text": "The excavated earth"
+  },
+  {
+   "t": 1343.11,
+   "d": 3.5,
+   "text": "became planters and useful soil."
+  },
+  {
+   "t": 1346.61,
+   "d": 2.9,
+   "text": "The line between a hobby tunnel"
+  },
+  {
+   "t": 1349.51,
+   "d": 1.8,
+   "text": "and a useful tunnel"
+  },
+  {
+   "t": 1351.31,
+   "d": 1.6,
+   "text": "is not always clear."
+  },
+  {
+   "t": 1352.91,
+   "d": 2.0,
+   "text": "Generally, these projects began as a"
+  },
+  {
+   "t": 1354.91,
+   "d": 2.6,
+   "text": "needful tunnel to construct a storm"
+  },
+  {
+   "t": 1357.51,
+   "d": 2.6,
+   "text": "shelter or a basement or to find water"
+  },
+  {
+   "t": 1360.11,
+   "d": 2.5,
+   "text": "for a well and then their continued well"
+  },
+  {
+   "t": 1362.61,
+   "d": 3.3,
+   "text": "past the point of that stated utility."
+  },
+  {
+   "t": 1365.91,
+   "d": 2.5,
+   "text": "When asked, hobby tunnelers often say"
+  },
+  {
+   "t": 1368.41,
+   "d": 1.9,
+   "text": "things like, I don't know, I just got a"
+  },
+  {
+   "t": 1370.31,
+   "d": 1.3,
+   "text": "taste for it."
+  },
+  {
+   "t": 1371.61,
+   "d": 1.7,
+   "text": "Some of them describe a peaceful,"
+  },
+  {
+   "t": 1373.31,
+   "d": 2.1,
+   "text": "focused feeling while digging. Others"
+  },
+  {
+   "t": 1375.41,
+   "d": 2.5,
+   "text": "have said it feels like praying."
+  },
+  {
+   "t": 1377.91,
+   "d": 1.7,
+   "text": "While there are many kinds of DIY and"
+  },
+  {
+   "t": 1379.61,
+   "d": 2.4,
+   "text": "vernacular architectures, tunneling and"
+  },
+  {
+   "t": 1382.01,
+   "d": 2.1,
+   "text": "digging do have an outsized presence in"
+  },
+  {
+   "t": 1384.11,
+   "d": 1.6,
+   "text": "outside architecture."
+  },
+  {
+   "t": 1385.71,
+   "d": 2.1,
+   "text": "Perhaps the contemplative satisfaction"
+  },
+  {
+   "t": 1387.81,
+   "d": 1.9,
+   "text": "has something to do with this or maybe"
+  },
+  {
+   "t": 1389.71,
+   "d": 2.0,
+   "text": "it's just that tunneling is cheap."
+  },
+  {
+   "t": 1391.71,
+   "d": 1.9,
+   "text": "It requires few resources other than"
+  },
+  {
+   "t": 1393.61,
+   "d": 2.7,
+   "text": "time and labor. Digging tunnels creates"
+  },
+  {
+   "t": 1396.31,
+   "d": 2.1,
+   "text": "the very rock and stone materials needed"
+  },
+  {
+   "t": 1398.41,
+   "d": 2.8,
+   "text": "to shore them up. Digging itself is"
+  },
+  {
+   "t": 1401.21,
+   "d": 2.1,
+   "text": "almost free."
+  },
+  {
+   "t": 1403.31,
+   "d": 1.8,
+   "text": "Tunnels and tunneling have their place"
+  },
+  {
+   "t": 1405.11,
+   "d": 2.1,
+   "text": "within landscape and performance art as"
+  },
+  {
+   "t": 1407.21,
+   "d": 3.2,
+   "text": "well as architecture. Nancy Holt's 1973"
+  },
+  {
+   "t": 1410.41,
+   "d": 3.5,
+   "text": "to 1979 76 Sun Tunnels sit in the Great"
+  },
+  {
+   "t": 1413.91,
+   "d": 2.6,
+   "text": "Basin of Utah, framing mountains and"
+  },
+  {
+   "t": 1416.51,
+   "d": 2.3,
+   "text": "pockmarked by light."
+  },
+  {
+   "t": 1418.81,
+   "d": 2.5,
+   "text": "The Dutch graphic designer"
+  },
+  {
+   "t": 1421.31,
+   "d": 3.4,
+   "text": "um Liane Wijnsma started digging short,"
+  },
+  {
+   "t": 1424.71,
+   "d": 2.9,
+   "text": "discrete tunnels in 2013, documenting"
+  },
+  {
+   "t": 1427.61,
+   "d": 2.4,
+   "text": "the series titled Escape on her Vimeo"
+  },
+  {
+   "t": 1430.01,
+   "d": 1.0,
+   "text": "channel."
+  },
+  {
+   "t": 1431.01,
+   "d": 2.4,
+   "text": "After a day, she fills in the tunnels."
+  },
+  {
+   "t": 1433.41,
+   "d": 2.7,
+   "text": "In an interview with Vice in 2015, she"
+  },
+  {
+   "t": 1436.11,
+   "d": 2.5,
+   "text": "said, some festivals and exhibitions"
+  },
+  {
+   "t": 1438.61,
+   "d": 1.8,
+   "text": "invited me to dig, but that was really"
+  },
+  {
+   "t": 1440.41,
+   "d": 1.1,
+   "text": "difficult because of safety"
+  },
+  {
+   "t": 1441.51,
+   "d": 2.3,
+   "text": "restrictions. That's why I'd really do"
+  },
+  {
+   "t": 1443.81,
+   "d": 1.8,
+   "text": "it for myself. I never asked for"
+  },
+  {
+   "t": 1445.61,
+   "d": 1.2,
+   "text": "permission."
+  },
+  {
+   "t": 1446.81,
+   "d": 1.3,
+   "text": "It's so simple."
+  },
+  {
+   "t": 1448.11,
+   "d": 1.6,
+   "text": "You go into it and the only thing you"
+  },
+  {
+   "t": 1449.71,
+   "d": 2.7,
+   "text": "want is the only thing you need to reach"
+  },
+  {
+   "t": 1452.41,
+   "d": 2.7,
+   "text": "the other side."
+  },
+  {
+   "t": 1456.91,
+   "d": 2.4,
+   "text": "Although games about building, boring"
+  },
+  {
+   "t": 1459.31,
+   "d": 2.6,
+   "text": "through, and changing landscape ask and"
+  },
+  {
+   "t": 1461.91,
+   "d": 3.0,
+   "text": "sometimes require you to dig, sculpt,"
+  },
+  {
+   "t": 1464.91,
+   "d": 2.3,
+   "text": "bore, mine, etc. in order to gain"
+  },
+  {
+   "t": 1467.21,
+   "d": 2.4,
+   "text": "resources or to find satisfaction in"
+  },
+  {
+   "t": 1469.61,
+   "d": 2.3,
+   "text": "your created place. Within them, the"
+  },
+  {
+   "t": 1471.91,
+   "d": 2.1,
+   "text": "digging itself is not the core method by"
+  },
+  {
+   "t": 1474.01,
+   "d": 1.9,
+   "text": "which you move through the world. This"
+  },
+  {
+   "t": 1475.91,
+   "d": 1.4,
+   "text": "is different than the games I want to"
+  },
+  {
+   "t": 1477.31,
+   "d": 1.6,
+   "text": "put in the next bucket which center"
+  },
+  {
+   "t": 1478.91,
+   "d": 2.2,
+   "text": "progression and movement."
+  },
+  {
+   "t": 1481.11,
+   "d": 2.6,
+   "text": "Even if digging is not in and of itself"
+  },
+  {
+   "t": 1483.71,
+   "d": 2.1,
+   "text": "generally considered a genre, there are"
+  },
+  {
+   "t": 1485.81,
+   "d": 2.0,
+   "text": "games for which digging is the primary"
+  },
+  {
+   "t": 1487.81,
+   "d": 1.7,
+   "text": "mechanic through which you engage with"
+  },
+  {
+   "t": 1489.51,
+   "d": 2.2,
+   "text": "the world and move through it."
+  },
+  {
+   "t": 1491.71,
+   "d": 2.0,
+   "text": "These are games in which progression is"
+  },
+  {
+   "t": 1493.71,
+   "d": 1.9,
+   "text": "through in which the progression is"
+  },
+  {
+   "t": 1495.61,
+   "d": 1.8,
+   "text": "through the soil, the barrier, the"
+  },
+  {
+   "t": 1497.41,
+   "d": 2.3,
+   "text": "blockages, the caves, the wells, or"
+  },
+  {
+   "t": 1499.71,
+   "d": 1.9,
+   "text": "other dirt and rock filled spaces in"
+  },
+  {
+   "t": 1501.61,
+   "d": 3.2,
+   "text": "which you must make space to move."
+  },
+  {
+   "t": 1504.81,
+   "d": 1.8,
+   "text": "The subset of digging games has been"
+  },
+  {
+   "t": 1506.61,
+   "d": 1.7,
+   "text": "with us like as long as there have been"
+  },
+  {
+   "t": 1508.31,
+   "d": 1.7,
+   "text": "video games partly just because of the"
+  },
+  {
+   "t": 1510.01,
+   "d": 2.1,
+   "text": "affordances of tile based gameplay"
+  },
+  {
+   "t": 1512.11,
+   "d": 1.8,
+   "text": "schema. If you fill a screen with"
+  },
+  {
+   "t": 1513.91,
+   "d": 2.2,
+   "text": "destroyable tiles, drop a character on"
+  },
+  {
+   "t": 1516.11,
+   "d": 1.5,
+   "text": "the top and let them destroy what they"
+  },
+  {
+   "t": 1517.61,
+   "d": 3.2,
+   "text": "touch, that looks exactly like digging."
+  },
+  {
+   "t": 1520.81,
+   "d": 1.4,
+   "text": "Dig Dug"
+  },
+  {
+   "t": 1522.21,
+   "d": 2.5,
+   "text": "from 1982 has created a whole era of"
+  },
+  {
+   "t": 1524.71,
+   "d": 2.7,
+   "text": "copycat digging games from Zig Zag to"
+  },
+  {
+   "t": 1527.41,
+   "d": 2.5,
+   "text": "Mr. Do as well as the spin off Mr."
+  },
+  {
+   "t": 1529.91,
+   "d": 2.6,
+   "text": "Driller series. The visual schema of"
+  },
+  {
+   "t": 1532.51,
+   "d": 2.7,
+   "text": "moving through this vertical cut of soil"
+  },
+  {
+   "t": 1535.21,
+   "d": 1.9,
+   "text": "is still being implemented on in games"
+  },
+  {
+   "t": 1537.11,
+   "d": 2.1,
+   "text": "like Pepper Grinder or Shovel Knight or"
+  },
+  {
+   "t": 1539.21,
+   "d": 1.7,
+   "text": "Downwell."
+  },
+  {
+   "t": 1540.91,
+   "d": 2.1,
+   "text": "In Lauren Schmidt's Dig, you can hold"
+  },
+  {
+   "t": 1543.01,
+   "d": 2.7,
+   "text": "exactly one block of object at a time,"
+  },
+  {
+   "t": 1545.71,
+   "d": 3.1,
+   "text": "whether soil, clay, ladder, or your gold"
+  },
+  {
+   "t": 1548.81,
+   "d": 1.1,
+   "text": "bell."
+  },
+  {
+   "t": 1549.91,
+   "d": 1.7,
+   "text": "Your destination is to move through the"
+  },
+  {
+   "t": 1551.61,
+   "d": 2.5,
+   "text": "levels and ring the bells."
+  },
+  {
+   "t": 1554.11,
+   "d": 2.5,
+   "text": "An increasingly Byzantine task as the"
+  },
+  {
+   "t": 1556.61,
+   "d": 1.7,
+   "text": "earth you excavate must be moved and"
+  },
+  {
+   "t": 1558.31,
+   "d": 3.0,
+   "text": "placed elsewhere forming walls."
+  },
+  {
+   "t": 1561.31,
+   "d": 2.0,
+   "text": "Not getting stuck in the hole is often a"
+  },
+  {
+   "t": 1563.31,
+   "d": 2.3,
+   "text": "movement goal in these games."
+  },
+  {
+   "t": 1565.61,
+   "d": 2.2,
+   "text": "In a 2014 article, the developers of"
+  },
+  {
+   "t": 1567.81,
+   "d": 3.2,
+   "text": "SteamWorld Dig describe their process."
+  },
+  {
+   "t": 1571.01,
+   "d": 2.0,
+   "text": "From the very beginning, we had the idea"
+  },
+  {
+   "t": 1573.01,
+   "d": 2.0,
+   "text": "of keeping the player in a constant risk"
+  },
+  {
+   "t": 1575.01,
+   "d": 1.5,
+   "text": "of getting stuck as the main source of"
+  },
+  {
+   "t": 1576.51,
+   "d": 2.2,
+   "text": "tension in the game. If you dig too deep"
+  },
+  {
+   "t": 1578.71,
+   "d": 1.3,
+   "text": "without considering your route back to"
+  },
+  {
+   "t": 1580.01,
+   "d": 1.6,
+   "text": "the surface, you would have no way to"
+  },
+  {
+   "t": 1581.61,
+   "d": 1.5,
+   "text": "get out of the mine. And more"
+  },
+  {
+   "t": 1583.11,
+   "d": 2.2,
+   "text": "importantly, you'd be unable to sell all"
+  },
+  {
+   "t": 1585.31,
+   "d": 1.3,
+   "text": "those hard earned minerals you'd"
+  },
+  {
+   "t": 1586.61,
+   "d": 2.3,
+   "text": "collected. The idea was that you needed"
+  },
+  {
+   "t": 1588.91,
+   "d": 1.8,
+   "text": "to consider the process of digging as a"
+  },
+  {
+   "t": 1590.71,
+   "d": 2.1,
+   "text": "puzzle where natural caves, falling"
+  },
+  {
+   "t": 1592.81,
+   "d": 1.9,
+   "text": "rocks, and passable walls, and other"
+  },
+  {
+   "t": 1594.71,
+   "d": 2.0,
+   "text": "natural elements are the main obstacles"
+  },
+  {
+   "t": 1596.71,
+   "d": 2.0,
+   "text": "in your path."
+  },
+  {
+   "t": 1598.71,
+   "d": 2.7,
+   "text": "Descent into the earth, finding a path"
+  },
+  {
+   "t": 1601.41,
+   "d": 1.7,
+   "text": "and digging, drilling, blasting,"
+  },
+  {
+   "t": 1603.11,
+   "d": 2.2,
+   "text": "breaking, etc. through it is so"
+  },
+  {
+   "t": 1605.31,
+   "d": 1.7,
+   "text": "omnipresent as a game convention,"
+  },
+  {
+   "t": 1607.01,
+   "d": 2.2,
+   "text": "especially in the roguelike genre, that"
+  },
+  {
+   "t": 1609.21,
+   "d": 2.2,
+   "text": "it's almost invisible at times."
+  },
+  {
+   "t": 1611.41,
+   "d": 2.2,
+   "text": "It's not surprising. I too love to dig a"
+  },
+  {
+   "t": 1613.61,
+   "d": 1.8,
+   "text": "big hole and get in it, but there's"
+  },
+  {
+   "t": 1615.41,
+   "d": 1.9,
+   "text": "something mechanical happening here, of"
+  },
+  {
+   "t": 1617.31,
+   "d": 3.4,
+   "text": "course, which is that the boarded space"
+  },
+  {
+   "t": 1620.71,
+   "d": 1.7,
+   "text": "of the subterranean world is something"
+  },
+  {
+   "t": 1622.41,
+   "d": 2.3,
+   "text": "very useful for the design of a game."
+  },
+  {
+   "t": 1624.71,
+   "d": 2.5,
+   "text": "Insideness with its edges and boundaries"
+  },
+  {
+   "t": 1627.21,
+   "d": 1.6,
+   "text": "makes progress perhaps fiddly and"
+  },
+  {
+   "t": 1628.81,
+   "d": 2.7,
+   "text": "backtracking, but still directional. You"
+  },
+  {
+   "t": 1631.51,
+   "d": 2.1,
+   "text": "explore a cave, you unlock doors, you"
+  },
+  {
+   "t": 1633.61,
+   "d": 2.1,
+   "text": "make shortcuts and learn the layout and"
+  },
+  {
+   "t": 1635.71,
+   "d": 3.0,
+   "text": "map the space. Each room can be discrete"
+  },
+  {
+   "t": 1638.71,
+   "d": 1.6,
+   "text": "and connect to others."
+  },
+  {
+   "t": 1640.31,
+   "d": 2.0,
+   "text": "You can and people do set room-based"
+  },
+  {
+   "t": 1642.31,
+   "d": 1.9,
+   "text": "games inside of human architecture or"
+  },
+  {
+   "t": 1644.21,
+   "d": 2.6,
+   "text": "abstracted landscapes, but the cave, the"
+  },
+  {
+   "t": 1646.81,
+   "d": 2.5,
+   "text": "well, the tunnel, the burrow does much"
+  },
+  {
+   "t": 1649.31,
+   "d": 1.6,
+   "text": "of this work for you."
+  },
+  {
+   "t": 1650.91,
+   "d": 2.0,
+   "text": "It lets you have an outside space while"
+  },
+  {
+   "t": 1652.91,
+   "d": 2.8,
+   "text": "inside. A hole is an open medium inside"
+  },
+  {
+   "t": 1655.71,
+   "d": 1.5,
+   "text": "of a closed one."
+  },
+  {
+   "t": 1657.21,
+   "d": 2.1,
+   "text": "Even when you expand the hole, you're"
+  },
+  {
+   "t": 1659.31,
+   "d": 2.6,
+   "text": "creating space inside of enclosure. It"
+  },
+  {
+   "t": 1661.91,
+   "d": 2.4,
+   "text": "reshapes the topology of the surface to"
+  },
+  {
+   "t": 1664.31,
+   "d": 2.5,
+   "text": "allow you to stand both inside and"
+  },
+  {
+   "t": 1666.81,
+   "d": 3.0,
+   "text": "outside of it."
+  },
+  {
+   "t": 1670.21,
+   "d": 1.2,
+   "text": "Finally,"
+  },
+  {
+   "t": 1671.41,
+   "d": 2.2,
+   "text": "to descend is often to delve into the"
+  },
+  {
+   "t": 1673.61,
+   "d": 2.1,
+   "text": "fantastic."
+  },
+  {
+   "t": 1675.71,
+   "d": 1.8,
+   "text": "Science fiction and fantasy stories"
+  },
+  {
+   "t": 1677.51,
+   "d": 3.3,
+   "text": "commonly use caves, wells, mines, or"
+  },
+  {
+   "t": 1680.81,
+   "d": 2.4,
+   "text": "other holes in the dirt as portals into"
+  },
+  {
+   "t": 1683.21,
+   "d": 2.4,
+   "text": "the strange or the otherworldly."
+  },
+  {
+   "t": 1685.61,
+   "d": 2.3,
+   "text": "It is the descent itself that allows the"
+  },
+  {
+   "t": 1687.91,
+   "d": 2.5,
+   "text": "alien to creep inside of the world."
+  },
+  {
+   "t": 1690.41,
+   "d": 2.7,
+   "text": "These spaces are often non-human or more"
+  },
+  {
+   "t": 1693.11,
+   "d": 1.2,
+   "text": "than human."
+  },
+  {
+   "t": 1694.31,
+   "d": 2.1,
+   "text": "In the descent of a let, uh"
+  },
+  {
+   "t": 1696.41,
+   "d": 2.0,
+   "text": "the protagonist drifts deeper and deeper"
+  },
+  {
+   "t": 1698.41,
+   "d": 2.3,
+   "text": "into New York subway system, eventually"
+  },
+  {
+   "t": 1700.71,
+   "d": 1.7,
+   "text": "coming into the underworld where she"
+  },
+  {
+   "t": 1702.41,
+   "d": 2.5,
+   "text": "meets animal ancestors. In the Windup"
+  },
+  {
+   "t": 1704.91,
+   "d": 2.7,
+   "text": "Bird Chronicle, the wells, holes, locked"
+  },
+  {
+   "t": 1707.61,
+   "d": 2.2,
+   "text": "rooms, and other subterranean spaces are"
+  },
+  {
+   "t": 1709.81,
+   "d": 2.4,
+   "text": "the ways that the protagonist transits"
+  },
+  {
+   "t": 1712.21,
+   "d": 2.5,
+   "text": "and moves outside of their bodies. Video"
+  },
+  {
+   "t": 1714.71,
+   "d": 2.6,
+   "text": "games often do something similar."
+  },
+  {
+   "t": 1717.31,
+   "d": 1.6,
+   "text": "In Undertale, it is falling through the"
+  },
+  {
+   "t": 1718.91,
+   "d": 1.4,
+   "text": "surface of the world into the"
+  },
+  {
+   "t": 1720.31,
+   "d": 2.2,
+   "text": "underground that places a human child"
+  },
+  {
+   "t": 1722.51,
+   "d": 2.4,
+   "text": "inside of a world of monsters."
+  },
+  {
+   "t": 1724.91,
+   "d": 2.1,
+   "text": "In Kentucky Route Zero, the underground"
+  },
+  {
+   "t": 1727.01,
+   "d": 2.3,
+   "text": "highway and its many edges and exits and"
+  },
+  {
+   "t": 1729.31,
+   "d": 1.9,
+   "text": "cave systems and basements is the heart"
+  },
+  {
+   "t": 1731.21,
+   "d": 1.6,
+   "text": "blood of the story."
+  },
+  {
+   "t": 1732.81,
+   "d": 1.8,
+   "text": "Through diving into the earth, the world"
+  },
+  {
+   "t": 1734.61,
+   "d": 1.9,
+   "text": "is turned on its head. The rules that"
+  },
+  {
+   "t": 1736.51,
+   "d": 2.5,
+   "text": "existed above no longer apply here."
+  },
+  {
+   "t": 1739.01,
+   "d": 3.0,
+   "text": "Different understandings can lead."
+  },
+  {
+   "t": 1742.01,
+   "d": 1.5,
+   "text": "But even games that do not take a"
+  },
+  {
+   "t": 1743.51,
+   "d": 2.0,
+   "text": "particularly fantastic approach to the"
+  },
+  {
+   "t": 1745.51,
+   "d": 3.9,
+   "text": "hole still use this device mechanically."
+  },
+  {
+   "t": 1749.41,
+   "d": 2.2,
+   "text": "Games about descent often have"
+  },
+  {
+   "t": 1751.61,
+   "d": 2.1,
+   "text": "increasing complexity, difficulty, and"
+  },
+  {
+   "t": 1753.71,
+   "d": 2.4,
+   "text": "alienness the deeper you go."
+  },
+  {
+   "t": 1756.11,
+   "d": 2.5,
+   "text": "Dungeon crawlers and their ilk are often"
+  },
+  {
+   "t": 1758.61,
+   "d": 2.4,
+   "text": "arranged into strata-like levels with"
+  },
+  {
+   "t": 1761.01,
+   "d": 2.0,
+   "text": "deepness corresponding not to historical"
+  },
+  {
+   "t": 1763.01,
+   "d": 2.5,
+   "text": "time, but rather to challenge."
+  },
+  {
+   "t": 1765.51,
+   "d": 1.9,
+   "text": "Subterranean games like this include"
+  },
+  {
+   "t": 1767.41,
+   "d": 2.7,
+   "text": "Cave Story, Dwarf Fortress, Noita,"
+  },
+  {
+   "t": 1770.11,
+   "d": 3.2,
+   "text": "Animal Well, Hollow Knight, Spelunky,"
+  },
+  {
+   "t": 1773.31,
+   "d": 2.0,
+   "text": "as well as Rogue."
+  },
+  {
+   "t": 1775.31,
+   "d": 2.1,
+   "text": "The hole entrance is sometimes a cave,"
+  },
+  {
+   "t": 1777.41,
+   "d": 2.9,
+   "text": "but it is as often a well. Wells are"
+  },
+  {
+   "t": 1780.31,
+   "d": 1.5,
+   "text": "wonderful devices. They are little"
+  },
+  {
+   "t": 1781.81,
+   "d": 2.7,
+   "text": "portals to the underworld. In games,"
+  },
+  {
+   "t": 1784.51,
+   "d": 2.5,
+   "text": "wells very rarely hold water. Instead,"
+  },
+  {
+   "t": 1787.01,
+   "d": 2.0,
+   "text": "they're an entrance or hideout or a"
+  },
+  {
+   "t": 1789.01,
+   "d": 3.3,
+   "text": "treasure box or swarming with enemies."
+  },
+  {
+   "t": 1792.31,
+   "d": 2.0,
+   "text": "In Tears of the Kingdom, wells on the"
+  },
+  {
+   "t": 1794.31,
+   "d": 1.7,
+   "text": "surface are reflected under the earth"
+  },
+  {
+   "t": 1796.01,
+   "d": 2.1,
+   "text": "and are so important to the game flow"
+  },
+  {
+   "t": 1798.11,
+   "d": 2.1,
+   "text": "and play that there is a somewhat"
+  },
+  {
+   "t": 1800.21,
+   "d": 2.7,
+   "text": "tedious quest to visit all 58 of them"
+  },
+  {
+   "t": 1802.91,
+   "d": 2.2,
+   "text": "called Where Are the Wells?"
+  },
+  {
+   "t": 1805.11,
+   "d": 2.4,
+   "text": "In older Zelda games,"
+  },
+  {
+   "t": 1807.51,
+   "d": 1.8,
+   "text": "links experiences in wells might include"
+  },
+  {
+   "t": 1809.31,
+   "d": 2.8,
+   "text": "cloud cows to milk, to blow to witness,"
+  },
+  {
+   "t": 1812.11,
+   "d": 1.8,
+   "text": "an easter egg of a photograph of a"
+  },
+  {
+   "t": 1813.91,
+   "d": 2.9,
+   "text": "surprised link falling into a well."
+  },
+  {
+   "t": 1816.81,
+   "d": 2.1,
+   "text": "Dark Souls wells are lore locations,"
+  },
+  {
+   "t": 1818.91,
+   "d": 2.8,
+   "text": "enemy layers, shrines, and shortcuts."
+  },
+  {
+   "t": 1821.71,
+   "d": 2.1,
+   "text": "They're moody and scary and require a"
+  },
+  {
+   "t": 1823.81,
+   "d": 1.6,
+   "text": "leap of faith."
+  },
+  {
+   "t": 1825.41,
+   "d": 2.4,
+   "text": "In Dragon Quest VII, an entire casino is"
+  },
+  {
+   "t": 1827.81,
+   "d": 2.4,
+   "text": "down a well in town."
+  },
+  {
+   "t": 1830.21,
+   "d": 2.8,
+   "text": "Each well, cave, cavern, and hole marks"
+  },
+  {
+   "t": 1833.01,
+   "d": 2.1,
+   "text": "a boundary between the ordinary surface"
+  },
+  {
+   "t": 1835.11,
+   "d": 2.5,
+   "text": "world and a where the roles are simply"
+  },
+  {
+   "t": 1837.61,
+   "d": 1.5,
+   "text": "different."
+  },
+  {
+   "t": 1839.11,
+   "d": 1.6,
+   "text": "Years ago,"
+  },
+  {
+   "t": 1840.71,
+   "d": 1.7,
+   "text": "I prototyped and never finished a mining"
+  },
+  {
+   "t": 1842.41,
+   "d": 1.7,
+   "text": "game where you fall from the heavens"
+  },
+  {
+   "t": 1844.11,
+   "d": 2.1,
+   "text": "into a large pit and are demanded to"
+  },
+  {
+   "t": 1846.21,
+   "d": 1.9,
+   "text": "excavate asset store objects for a"
+  },
+  {
+   "t": 1848.11,
+   "d": 1.6,
+   "text": "demanding god."
+  },
+  {
+   "t": 1849.71,
+   "d": 2.6,
+   "text": "I described it as an asset flip fantasy"
+  },
+  {
+   "t": 1852.31,
+   "d": 2.0,
+   "text": "game, noting that asset flips are also"
+  },
+  {
+   "t": 1854.31,
+   "d": 2.1,
+   "text": "called shovelware."
+  },
+  {
+   "t": 1856.41,
+   "d": 2.0,
+   "text": "Cast from the sky and asked to dig, you"
+  },
+  {
+   "t": 1858.41,
+   "d": 2.4,
+   "text": "play as a first-person angel"
+  },
+  {
+   "t": 1860.81,
+   "d": 2.3,
+   "text": "um excavating asset store objects buried"
+  },
+  {
+   "t": 1863.11,
+   "d": 2.3,
+   "text": "in the earth. Once you expose an object,"
+  },
+  {
+   "t": 1865.41,
+   "d": 1.7,
+   "text": "you can pick it up and move it around"
+  },
+  {
+   "t": 1867.11,
+   "d": 1.4,
+   "text": "and bring it to the altar where it might"
+  },
+  {
+   "t": 1868.51,
+   "d": 2.2,
+   "text": "be deleted from the world. And as you"
+  },
+  {
+   "t": 1870.71,
+   "d": 2.3,
+   "text": "dig, you construct caverns and tunnels,"
+  },
+  {
+   "t": 1873.01,
+   "d": 2.0,
+   "text": "building this ant mound-like warren that"
+  },
+  {
+   "t": 1875.01,
+   "d": 2.1,
+   "text": "you must learn your way through. Slowly,"
+  },
+  {
+   "t": 1877.11,
+   "d": 1.7,
+   "text": "the tunnels become warehouses and"
+  },
+  {
+   "t": 1878.81,
+   "d": 2.0,
+   "text": "holding spaces and the places you have"
+  },
+  {
+   "t": 1880.81,
+   "d": 1.2,
+   "text": "to live in."
+  },
+  {
+   "t": 1882.01,
+   "d": 2.0,
+   "text": "And eventually, the requests stop,"
+  },
+  {
+   "t": 1884.01,
+   "d": 2.1,
+   "text": "leaving you in a burrow of dug tunnels"
+  },
+  {
+   "t": 1886.11,
+   "d": 2.3,
+   "text": "surrounded by things."
+  },
+  {
+   "t": 1888.41,
+   "d": 1.8,
+   "text": "In my initial notes for this project, I"
+  },
+  {
+   "t": 1890.21,
+   "d": 2.5,
+   "text": "wrote, do I want this to be a game about"
+  },
+  {
+   "t": 1892.71,
+   "d": 3.0,
+   "text": "labor or a game about love?"
+  },
+  {
+   "t": 1895.71,
+   "d": 1.9,
+   "text": "And digging is an action that can have"
+  },
+  {
+   "t": 1897.61,
+   "d": 3.1,
+   "text": "both, labor in its repetition, but love"
+  },
+  {
+   "t": 1900.71,
+   "d": 2.3,
+   "text": "in its devotion to the labor, the"
+  },
+  {
+   "t": 1903.01,
+   "d": 2.6,
+   "text": "contemplative calm that comes of doing."
+  },
+  {
+   "t": 1905.61,
+   "d": 1.8,
+   "text": "It's construction of a It's a"
+  },
+  {
+   "t": 1907.41,
+   "d": 1.3,
+   "text": "construction of a world that was"
+  },
+  {
+   "t": 1908.71,
+   "d": 1.4,
+   "text": "different than the one when you picked"
+  },
+  {
+   "t": 1910.11,
+   "d": 2.2,
+   "text": "up the shovel, making holes as a piece"
+  },
+  {
+   "t": 1912.31,
+   "d": 2.2,
+   "text": "of permanence in a landscape and then"
+  },
+  {
+   "t": 1914.51,
+   "d": 2.0,
+   "text": "getting to live in them."
+  },
+  {
+   "t": 1916.51,
+   "d": 2.0,
+   "text": "Because this is at least a part of the"
+  },
+  {
+   "t": 1918.51,
+   "d": 2.4,
+   "text": "fantasy of digging, and that fantasy is"
+  },
+  {
+   "t": 1920.91,
+   "d": 2.6,
+   "text": "replicated inside of games"
+  },
+  {
+   "t": 1923.51,
+   "d": 1.4,
+   "text": "where you can find treasures in the"
+  },
+  {
+   "t": 1924.91,
+   "d": 1.1,
+   "text": "earth,"
+  },
+  {
+   "t": 1926.01,
+   "d": 2.6,
+   "text": "change the landscape slowly but surely"
+  },
+  {
+   "t": 1928.61,
+   "d": 2.1,
+   "text": "through your actions,"
+  },
+  {
+   "t": 1930.71,
+   "d": 1.6,
+   "text": "where you can progress or move through"
+  },
+  {
+   "t": 1932.31,
+   "d": 2.4,
+   "text": "the world in a secret or considered kind"
+  },
+  {
+   "t": 1934.71,
+   "d": 2.6,
+   "text": "of way by building tunnels or boring"
+  },
+  {
+   "t": 1937.31,
+   "d": 1.2,
+   "text": "holes,"
+  },
+  {
+   "t": 1938.51,
+   "d": 1.8,
+   "text": "and where you can find something more"
+  },
+  {
+   "t": 1940.31,
+   "d": 4.6,
+   "text": "than real or extra real inside of them."
+  },
+  {
+   "t": 1944.91,
+   "d": 2.6,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 1947.51,
+   "d": 2.8,
+   "text": ">> Thank you. Wonderful. I always find your"
+  },
+  {
+   "t": 1950.31,
+   "d": 1.8,
+   "text": "talks so relaxing, inspiring and"
+  },
+  {
+   "t": 1952.11,
+   "d": 2.0,
+   "text": "relaxing, so it's wonderful to have you"
+  },
+  {
+   "t": 1954.11,
+   "d": 1.5,
+   "text": "back."
+  },
+  {
+   "t": 1955.61,
+   "d": 1.6,
+   "text": ">> Always great to be here."
+  },
+  {
+   "t": 1957.21,
+   "d": 1.6,
+   "text": ">> yes. So we don't have time for"
+  },
+  {
+   "t": 1958.81,
+   "d": 2.2,
+   "text": "questions, hopefully people can follow"
+  },
+  {
+   "t": 1961.01,
+   "d": 1.6,
+   "text": "up in the breakout room. We've assigned"
+  },
+  {
+   "t": 1962.61,
+   "d": 2.4,
+   "text": "you the dugout cuz that, of course, felt"
+  },
+  {
+   "t": 1965.01,
+   "d": 1.32,
+   "text": "appropriate."
+  },
+  {
+   "t": 1966.33,
+   "d": 0.68,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 1967.01,
+   "d": 1.5,
+   "text": ">> Find me in the dugout. [snorts] I cannot"
+  },
+  {
+   "t": 1968.51,
+   "d": 0.8,
+   "text": "wait."
+  },
+  {
+   "t": 1969.31,
+   "d": 1.7,
+   "text": ">> Yeah. All right, excellent. Thank you so"
+  },
+  {
+   "t": 1971.01,
+   "d": 2.1,
+   "text": "much, Everest."
+  },
+  {
+   "t": 1973.11,
+   "d": 3.8,
+   "text": "Okay. Um so yes, I will remind folks of"
+  },
+  {
+   "t": 1976.91,
+   "d": 1.2,
+   "text": "all of those breakout rooms, and then"
+  },
+  {
+   "t": 1978.11,
+   "d": 2.0,
+   "text": "I'll also do a few just reminders and"
+  },
+  {
+   "t": 1980.11,
+   "d": 3.0,
+   "text": "things as we head into our next social"
+  },
+  {
+   "t": 1983.11,
+   "d": 2.0,
+   "text": "block. This one will be 45 minutes. If"
+  },
+  {
+   "t": 1985.11,
+   "d": 2.5,
+   "text": "you haven't eaten, had water, stretched"
+  },
+  {
+   "t": 1987.61,
+   "d": 2.4,
+   "text": "your legs, this is a good time to do so"
+  },
+  {
+   "t": 1990.01,
+   "d": 2.0,
+   "text": "before we get into the next set of"
+  },
+  {
+   "t": 1992.01,
+   "d": 1.7,
+   "text": "talks. But"
+  },
+  {
+   "t": 1993.71,
+   "d": 1.7,
+   "text": "for those breakout rooms, like I said,"
+  },
+  {
+   "t": 1995.41,
+   "d": 1.7,
+   "text": "you can also see them if you click the"
+  },
+  {
+   "t": 1997.11,
+   "d": 2.6,
+   "text": "happening now button. But that will be"
+  },
+  {
+   "t": 1999.71,
+   "d": 2.7,
+   "text": "the press box for G"
+  },
+  {
+   "t": 2002.41,
+   "d": 2.6,
+   "text": "Bleckenhorst and the metalectic"
+  },
+  {
+   "t": 2005.01,
+   "d": 1.4,
+   "text": "convergences,"
+  },
+  {
+   "t": 2006.41,
+   "d": 3.6,
+   "text": "the VIP seats for mazes, and I think a"
+  },
+  {
+   "t": 2010.01,
+   "d": 3.4,
+   "text": "stadium sometimes is like a maze."
+  },
+  {
+   "t": 2013.41,
+   "d": 2.5,
+   "text": "And then yes, the dugout was of course"
+  },
+  {
+   "t": 2015.91,
+   "d": 2.0,
+   "text": "the most thematically appropriate spot"
+  },
+  {
+   "t": 2017.91,
+   "d": 0.9,
+   "text": "for"
+  },
+  {
+   "t": 2018.81,
+   "d": 2.5,
+   "text": "discussion of holes."
+  },
+  {
+   "t": 2021.31,
+   "d": 2.5,
+   "text": "And yeah, the quick reminders. So feel"
+  },
+  {
+   "t": 2023.81,
+   "d": 2.3,
+   "text": "free also in that social time to explore"
+  },
+  {
+   "t": 2026.11,
+   "d": 1.8,
+   "text": "the space. There's some puzzles. There's"
+  },
+  {
+   "t": 2027.91,
+   "d": 1.4,
+   "text": "some different things you can do to"
+  },
+  {
+   "t": 2029.31,
+   "d": 2.4,
+   "text": "customize your username, have a fun"
+  },
+  {
+   "t": 2031.71,
+   "d": 1.8,
+   "text": "time, chat with people,"
+  },
+  {
+   "t": 2033.51,
+   "d": 2.0,
+   "text": "explore. It's your conference. You can"
+  },
+  {
+   "t": 2035.51,
+   "d": 1.5,
+   "text": "do whatever you want."
+  },
+  {
+   "t": 2037.01,
+   "d": 2.4,
+   "text": "And if you have any things that you"
+  },
+  {
+   "t": 2039.41,
+   "d": 2.1,
+   "text": "think of this often happens during the"
+  },
+  {
+   "t": 2041.51,
+   "d": 1.6,
+   "text": "talks. That's what the obelisk is for."
+  },
+  {
+   "t": 2043.11,
+   "d": 1.4,
+   "text": "You can share links to interesting"
+  },
+  {
+   "t": 2044.51,
+   "d": 2.0,
+   "text": "things and check that out. We save it at"
+  },
+  {
+   "t": 2046.51,
+   "d": 1.6,
+   "text": "the end, so it kind of acts as our"
+  },
+  {
+   "t": 2048.11,
+   "d": 1.9,
+   "text": "communal All right, I should look into"
+  },
+  {
+   "t": 2050.01,
+   "d": 1.7,
+   "text": "that after the conference."
+  },
+  {
+   "t": 2051.71,
+   "d": 2.3,
+   "text": "There's also various note walls around."
+  },
+  {
+   "t": 2054.01,
+   "d": 1.3,
+   "text": "If you're watching this on Twitch or"
+  },
+  {
+   "t": 2055.31,
+   "d": 3.1,
+   "text": "YouTube, you can get a ticket at"
+  },
+  {
+   "t": 2058.41,
+   "d": 2.0,
+   "text": "roguelike.club"
+  },
+  {
+   "t": 2060.41,
+   "d": 2.1,
+   "text": "and join us in that social space where"
+  },
+  {
+   "t": 2062.51,
+   "d": 1.2,
+   "text": "you can hang out and chat with other"
+  },
+  {
+   "t": 2063.71,
+   "d": 1.2,
+   "text": "people."
+  },
+  {
+   "t": 2064.91,
+   "d": 2.6,
+   "text": "This is all made by volunteers. This is"
+  },
+  {
+   "t": 2067.51,
+   "d": 2.1,
+   "text": "not enterprise software, so there might"
+  },
+  {
+   "t": 2069.61,
+   "d": 1.7,
+   "text": "sometimes be some hiccups. It seemed"
+  },
+  {
+   "t": 2071.31,
+   "d": 2.3,
+   "text": "pretty good so far, but if anything goes"
+  },
+  {
+   "t": 2073.61,
+   "d": 2.5,
+   "text": "wrong, give it a refresh and we will do"
+  },
+  {
+   "t": 2076.11,
+   "d": 1.8,
+   "text": "our best. You can also if there are"
+  },
+  {
+   "t": 2077.91,
+   "d": 1.6,
+   "text": "technical problems or any code of"
+  },
+  {
+   "t": 2079.51,
+   "d": 2.8,
+   "text": "conduct issues, reach out to us with"
+  },
+  {
+   "t": 2082.31,
+   "d": 2.1,
+   "text": "or DM any of the people with a hammer in"
+  },
+  {
+   "t": 2084.41,
+   "d": 1.4,
+   "text": "their name."
+  },
+  {
+   "t": 2085.81,
+   "d": 2.2,
+   "text": "And yeah, check out some other stuff. We"
+  },
+  {
+   "t": 2088.01,
+   "d": 2.2,
+   "text": "got merch this year. People are debating"
+  },
+  {
+   "t": 2090.21,
+   "d": 1.5,
+   "text": "whether or not this is like a maze, but"
+  },
+  {
+   "t": 2091.71,
+   "d": 1.2,
+   "text": "you know, check it out. We got cool"
+  },
+  {
+   "t": 2092.91,
+   "d": 3.3,
+   "text": "shirts um as well as many other past"
+  },
+  {
+   "t": 2096.21,
+   "d": 1.4,
+   "text": "things. My favorite thing you can buy in"
+  },
+  {
+   "t": 2097.61,
+   "d": 2.3,
+   "text": "the shop is an Elbereth bath mat, which"
+  },
+  {
+   "t": 2099.91,
+   "d": 4.0,
+   "text": "I do own and I love. And Steam sale,"
+  },
+  {
+   "t": 2103.91,
+   "d": 1.3,
+   "text": "things like that,"
+  },
+  {
+   "t": 2105.21,
+   "d": 2.0,
+   "text": "check it out. But without further ado, I"
+  },
+  {
+   "t": 2107.21,
+   "d": 1.6,
+   "text": "want to let people go chat in the"
+  },
+  {
+   "t": 2108.81,
+   "d": 2.6,
+   "text": "breakout room. So I am actually signing"
+  },
+  {
+   "t": 2111.41,
+   "d": 1.9,
+   "text": "off as your MC for today. I will be back"
+  },
+  {
+   "t": 2113.31,
+   "d": 2.1,
+   "text": "tomorrow with all of you fine folks. It"
+  },
+  {
+   "t": 2115.41,
+   "d": 1.6,
+   "text": "is wonderful as always to be back, but"
+  },
+  {
+   "t": 2117.01,
+   "d": 2.8,
+   "text": "after this uh it will be Rourke on the"
+  },
+  {
+   "t": 2119.81,
+   "d": 2.7,
+   "text": "stage talking about we have a bit of an"
+  },
+  {
+   "t": 2122.51,
+   "d": 2.4,
+   "text": "audio block and then we have generative"
+  },
+  {
+   "t": 2124.91,
+   "d": 2.6,
+   "text": "beats without AI from Paula Hembrey and"
+  },
+  {
+   "t": 2127.51,
+   "d": 2.2,
+   "text": "also Matt Carney talking about"
+  },
+  {
+   "t": 2129.71,
+   "d": 1.7,
+   "text": "procedural narrative but using a"
+  },
+  {
+   "t": 2131.41,
+   "d": 2.2,
+   "text": "connection to the musical composition"
+  },
+  {
+   "t": 2133.61,
+   "d": 3.1,
+   "text": "Riley Terry Riley's in C. So"
+  },
+  {
+   "t": 2136.71,
+   "d": 2.4,
+   "text": "enjoy. Thank you all. Wonderful to see"
+  },
+  {
+   "t": 2139.11,
+   "d": 1.9,
+   "text": "you. I will see you in the space and be"
+  },
+  {
+   "t": 2141.01,
+   "d": 1.8,
+   "text": "hanging out for the rest of the talks."
+  },
+  {
+   "t": 2142.81,
+   "d": 4.0,
+   "text": "We'll be back in 40 minutes."
+  }
+ ]
+}

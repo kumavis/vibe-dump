@@ -1,0 +1,715 @@
+{
+ "id": "WbgdXalXPus",
+ "url": "https://www.youtube.com/watch?v=WbgdXalXPus",
+ "title": "Nifflas - Music algorithm showcase",
+ "speaker": "Nifflas",
+ "talk_title": "Music algorithm showcase",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-07",
+ "duration_s": 1818,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "I'm developing the game Rhythm Doggo. Though it's not a roguelike, its music is entirely algorithmic and composed in my own custom made music software. In this talk, I'd like to show off around 10 different algorithms, how they work and what they sound like, then end the talk with a little live performance of them all together.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Rhythm Doggo"
+  },
+  {
+   "start": 139,
+   "title": "Step sequencer mechanics"
+  },
+  {
+   "start": 230,
+   "title": "Rainbow arpeggiator"
+  },
+  {
+   "start": 336,
+   "title": "The desire device"
+  },
+  {
+   "start": 429,
+   "title": "The reflector device"
+  },
+  {
+   "start": 516,
+   "title": "Railway device algorithm"
+  },
+  {
+   "start": 615,
+   "title": "Democracy and train stop"
+  },
+  {
+   "start": 798,
+   "title": "Tweet randomizer"
+  },
+  {
+   "start": 954,
+   "title": "Monte Hall problem music"
+  },
+  {
+   "start": 1214,
+   "title": "Live performance demo"
+  },
+  {
+   "start": 1566,
+   "title": "Q&A and conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2263,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 38.32,
+   "d": 10.16,
+   "text": "NIFFLAS: Hey, my name is Nifflas and I made my own algorithm music software. And I am making a game"
+  },
+  {
+   "t": 48.48,
+   "d": 9.44,
+   "text": "about my dog. This is hot dog. She is a very good dog. I am making a game about her that looks like"
+  },
+  {
+   "t": 57.92,
+   "d": 15.28,
+   "text": "this. You can hold the dog and the dog can compose music using this drum machine interface like this."
+  },
+  {
+   "t": 73.2,
+   "d": 10.0,
+   "text": "And yeah, you can see the level reacting to the music now. Now I have to compete the channels"
+  },
+  {
+   "t": 83.2,
+   "d": 6.72,
+   "text": "are the music I just composed. I notice all the music changes in intensity as I proceed."
+  },
+  {
+   "t": 134.0,
+   "d": 13.04,
+   "text": "That's kind of how the game starts. I will start with showing the steps of the algorithm and this"
+  },
+  {
+   "t": 147.04,
+   "d": 11.04,
+   "text": "is the most normal one you will see in the software. It plays drums from the top to the"
+  },
+  {
+   "t": 158.08,
+   "d": 15.04,
+   "text": "bottom. It plays like this. But as you can see the cursor that's actually a plane is jumping around a"
+  },
+  {
+   "t": 173.12,
+   "d": 8.4,
+   "text": "little bit randomly. That's because there is an expression saying it will take the cursor"
+  },
+  {
+   "t": 181.52,
+   "d": 12.4,
+   "text": "above or below. Let's drag a node for example. And connect the node to the Step Sequencer and"
+  },
+  {
+   "t": 194.96,
+   "d": 11.04,
+   "text": "just plug the node in here instead. And now I have a node where I can control the chaos. At"
+  },
+  {
+   "t": 206.0,
+   "d": 10.72,
+   "text": "0 no chaos and at 1 full jumping around like crazy. And what is neat about that is that if"
+  },
+  {
+   "t": 216.72,
+   "d": 6.56,
+   "text": "I create a group here and name it something like fish. Now I have the name fish and I can reference"
+  },
+  {
+   "t": 223.28,
+   "d": 16.08,
+   "text": "this in my game itself. Next instrument I want to show is the rainbow/page editor? So what is"
+  },
+  {
+   "t": 239.36,
+   "d": 8.32,
+   "text": "it? It is an on the synthesizer and you play a number of notes at the same time but instead of"
+  },
+  {
+   "t": 247.68,
+   "d": 5.76,
+   "text": "hearing all of the notes at the same time it will alternate -- automatically between the"
+  },
+  {
+   "t": 253.44,
+   "d": 11.76,
+   "text": "notes. A Commodore 64 does that to preserve the sounds it can play at the same time. You can see"
+  },
+  {
+   "t": 265.2,
+   "d": 8.0,
+   "text": "it going up. But what's interesting about the rainbow device is this can do real-time sorting"
+  },
+  {
+   "t": 274.72,
+   "d": 19.76,
+   "text": "one at a time on this array. Soon it will start sorting this in reverse. And starting now."
+  },
+  {
+   "t": 307.2,
+   "d": 13.36,
+   "text": "And now we have a rehearsal. I sometimes use stuff device when I have a melody playing on"
+  },
+  {
+   "t": 320.56,
+   "d": 5.68,
+   "text": "repeat and every time you walk through the door you end up with a slightly changed variation of"
+  },
+  {
+   "t": 326.24,
+   "d": 11.6,
+   "text": "the melody. Things that manipulate the music as you go by doing this weird sorting thing. Next up"
+  },
+  {
+   "t": 337.84,
+   "d": 10.96,
+   "text": "I want to show the desire device. This is a device that plays -- it has five different triggers like"
+  },
+  {
+   "t": 348.8,
+   "d": 8.56,
+   "text": "notes it wants to take. And there is like this bar you are going do is it when I start. This bar"
+  },
+  {
+   "t": 357.36,
+   "d": 6.48,
+   "text": "starts going in this direction. And the bigger one of these bars are the stronger, the desire"
+  },
+  {
+   "t": 363.84,
+   "d": 7.2,
+   "text": "is to trigger that melt, and that's a nice way to control. You get more controlled randomness"
+  },
+  {
+   "t": 371.04,
+   "d": 8.8,
+   "text": "where things that haven't happened for a while are more likely to happen over time. But also another"
+  },
+  {
+   "t": 379.84,
+   "d": 6.64,
+   "text": "aspect is I can control when these desires are active and build up and when they don't."
+  },
+  {
+   "t": 418.8,
+   "d": 6.16,
+   "text": "You have periods where it is playing many notes and period where it isn't playing many at all."
+  },
+  {
+   "t": 424.96,
+   "d": 7.76,
+   "text": "It kind of goes back and forth. I should show the reflector."
+  },
+  {
+   "t": 436.8,
+   "d": 8.56,
+   "text": "What this device does is that it spawns two cursors in here. It is a cursor until"
+  },
+  {
+   "t": 445.36,
+   "d": 6.56,
+   "text": "it collides with something and swaps direction. When it collides with a white square it always"
+  },
+  {
+   "t": 451.92,
+   "d": 7.36,
+   "text": "reflects but when it collides with one in between there is a chance it will collide or"
+  },
+  {
+   "t": 460.48,
+   "d": 28.96,
+   "text": "proceed in the same direction. This pattern I improvised and this one sounds like this."
+  },
+  {
+   "t": 516.0,
+   "d": 2.48,
+   "text": "So that's how the percussion works."
+  },
+  {
+   "t": 520.8,
+   "d": 11.2,
+   "text": "I have some more percussion also in the regular device. I made this when I was going to go on"
+  },
+  {
+   "t": 532.0,
+   "d": 23.76,
+   "text": "train trip. This is based on the Step Sequencer but has different behavior. One second, check"
+  },
+  {
+   "t": 555.76,
+   "d": 17.36,
+   "text": "number one is here. You have this cursor there but for every note it plays there is a chance it will"
+  },
+  {
+   "t": 573.12,
+   "d": 7.44,
+   "text": "jump to the next track. You try this thing where you get more variation by the train just changing"
+  },
+  {
+   "t": 580.56,
+   "d": 18.72,
+   "text": "tracks. This one sounds like this. Now you can see the cursor traveling down and changing tracks."
+  },
+  {
+   "t": 611.44,
+   "d": 23.68,
+   "text": "That's that device. Then I want to show this little drum weird thing I made. The way I made"
+  },
+  {
+   "t": 635.12,
+   "d": 17.6,
+   "text": "this was I asked on Twitter. This was back before Twitter was really terrible. Compose a drum loop"
+  },
+  {
+   "t": 652.72,
+   "d": 8.4,
+   "text": "together. People got to vote for what goes into the different steps of the drum loop. And then"
+  },
+  {
+   "t": 661.12,
+   "d": 8.56,
+   "text": "I -- yeah. Combined all the different weights into these arrays. So those are like all the"
+  },
+  {
+   "t": 669.68,
+   "d": 10.56,
+   "text": "average results from this different pull results. Back in the music soft wear, it sounds like this"
+  },
+  {
+   "t": 680.96,
+   "d": 9.28,
+   "text": "with these specific weights you see over here, this is the drumbeat we get out of it."
+  },
+  {
+   "t": 694.08,
+   "d": 7.2,
+   "text": "There is a second device connected to this instrument inspired by trains which is the train"
+  },
+  {
+   "t": 701.28,
+   "d": 10.24,
+   "text": "stop device which are these two things here. The way they work is that you have a railroad and here"
+  },
+  {
+   "t": 711.52,
+   "d": 14.48,
+   "text": "you have station. And every time the device wants to play a note, it decides which train and the"
+  },
+  {
+   "t": 726.0,
+   "d": 9.76,
+   "text": "train carries the note information. And then when I was stuck in train traffic when I wrote this"
+  },
+  {
+   "t": 735.76,
+   "d": 5.68,
+   "text": "algorithm and I didn't know because I was three hours and nothing was happening. A whole series"
+  },
+  {
+   "t": 741.44,
+   "d": 10.96,
+   "text": "of trains were stuck because of some accident thing. Yeah. None of the trains are allowed to"
+  },
+  {
+   "t": 752.4,
+   "d": 10.24,
+   "text": "reach the station and they start cuing up more and more of them and suddenly the trains are allowed"
+  },
+  {
+   "t": 762.64,
+   "d": 5.68,
+   "text": "to go again. And now the trains have sort of a catching up to do and now they start going back"
+  },
+  {
+   "t": 768.32,
+   "d": 7.36,
+   "text": "super, super fast. That's how I took a real life situation and just turned it into this algorithm."
+  },
+  {
+   "t": 775.68,
+   "d": 26.32,
+   "text": "Actually it is a train stop now. You get these weird feels. And next up, the tweet randomizer."
+  },
+  {
+   "t": 802.0,
+   "d": 24.0,
+   "text": "This is a very chaotic device. One second. I needed random values and the fact is random"
+  },
+  {
+   "t": 826.0,
+   "d": 7.12,
+   "text": "values aren't that random. Even computer generated random values, like look at this."
+  },
+  {
+   "t": 835.84,
+   "d": 7.12,
+   "text": "This is a sequence of random numbers I just got from the internet and got a website to generate."
+  },
+  {
+   "t": 844.64,
+   "d": 6.64,
+   "text": "You can't really go like look at the 61 that's so random. So, the 61 isn't random at all. None"
+  },
+  {
+   "t": 851.28,
+   "d": 6.48,
+   "text": "of this looks random. It is just numbers that are super evenly distributed and it looks like white"
+  },
+  {
+   "t": 857.76,
+   "d": 9.12,
+   "text": "noise. So I wanted to have real random numbers. I tapped into the most random thing which is the"
+  },
+  {
+   "t": 866.88,
+   "d": 8.0,
+   "text": "human mind. I asked on Twitter, again, back when Twitter was not horrible, please give me sequences"
+  },
+  {
+   "t": 874.88,
+   "d": 7.87,
+   "text": "of random numbers that you can come up with in your head. And look at this, here we have 7,"
+  },
+  {
+   "t": 882.75,
+   "d": 14.05,
+   "text": "7, 7, and 4. That is random. 9, 100 -- this absolutely massive number. This sequence has"
+  },
+  {
+   "t": 896.8,
+   "d": 5.12,
+   "text": "a negative number. There is just one I believe in all these different sequences. One negative"
+  },
+  {
+   "t": 901.92,
+   "d": 12.32,
+   "text": "number that is completely random. And I used it to drive this instrument. It sounds like this."
+  },
+  {
+   "t": 919.36,
+   "d": 6.48,
+   "text": "Then I can try somebody else's sequence instead and I get completely different"
+  },
+  {
+   "t": 925.84,
+   "d": 12.64,
+   "text": "result. Now you got something that sticks more to the same notes. And that is because this specific"
+  },
+  {
+   "t": 938.48,
+   "d": 10.88,
+   "text": "note sequence I just played is based on this instead which is 0-1, 0-1 and a bit later some"
+  },
+  {
+   "t": 949.36,
+   "d": 15.6,
+   "text": "other values come up. And then I want to talk about the Monty Hall Problem. The Monty Hall"
+  },
+  {
+   "t": 964.96,
+   "d": 9.6,
+   "text": "Problem is a logic statistics kind of problem. Very classic. In case you haven't heard of it,"
+  },
+  {
+   "t": 974.56,
+   "d": 13.71,
+   "text": "it works like this. There are three doors. One, two, and three. There is here and there"
+  },
+  {
+   "t": 988.27,
+   "d": 9.65,
+   "text": "is a host which is Monty. There are two goats and one car behind the doors but you don't know which"
+  },
+  {
+   "t": 997.92,
+   "d": 9.52,
+   "text": "one has the car. Say you pick door number one and Monty goes and opens door number two and this has"
+  },
+  {
+   "t": 1007.44,
+   "d": 12.08,
+   "text": "a goat. You choose should you stick to door one or change to door three? It sounds like it should"
+  },
+  {
+   "t": 1019.52,
+   "d": 8.8,
+   "text": "be a 50% chance. But you double your chances if you switch to the other door. Or that would be"
+  },
+  {
+   "t": 1028.32,
+   "d": 8.72,
+   "text": "the case under standard assumptions. But why would you make the standard assumptions? There is a few"
+  },
+  {
+   "t": 1037.04,
+   "d": 10.0,
+   "text": "questions here. Is the host evil? Does the host know which door has the car? Does the host think"
+  },
+  {
+   "t": 1047.04,
+   "d": 7.28,
+   "text": "that the player knows the problem? Is the host in a hurry? Does the host have to open another door?"
+  },
+  {
+   "t": 1054.32,
+   "d": 6.0,
+   "text": "And can the host open another door intentionally or can they just -- yeah, can you open the car"
+  },
+  {
+   "t": 1060.32,
+   "d": 11.2,
+   "text": "door intentionally and just show the car and let the player switch. And yeah. For example,"
+  },
+  {
+   "t": 1071.52,
+   "d": 9.6,
+   "text": "under the standard assumptions, we can get this melody. This is based on 14 iterations of this"
+  },
+  {
+   "t": 1081.12,
+   "d": 11.36,
+   "text": "particular configuration. Let's randomly change it around. We get a completely different melody"
+  },
+  {
+   "t": 1092.48,
+   "d": 15.6,
+   "text": "because the outcome becomes completely different. We change it some more. And you might ask why use"
+  },
+  {
+   "t": 1108.08,
+   "d": 6.8,
+   "text": "the Monty Hall Problem to compose algorithmic music and I think it is best if I show you in"
+  },
+  {
+   "t": 1114.88,
+   "d": 9.44,
+   "text": "the game the reason. I am not sure it is a good reason but it is definitely a reason. Let's see."
+  },
+  {
+   "t": 1128.56,
+   "d": 43.04,
+   "text": "Let's teleport over there. So you meet another dog. The picture of the dog is the placeholder."
+  },
+  {
+   "t": 1175.28,
+   "d": 10.48,
+   "text": "It is also good. I will try again. The funny thing is when the car position is randomized,"
+  },
+  {
+   "t": 1185.76,
+   "d": 8.32,
+   "text": "the algorithm you hear playing the music is the Monty Hall Problem itself."
+  },
+  {
+   "t": 1197.2,
+   "d": 14.96,
+   "text": "And why exactly did I do this? The best answer is why not. But let's see here. I think I might"
+  },
+  {
+   "t": 1212.16,
+   "d": 6.0,
+   "text": "have been a little faster than I intended. Now I want to do a performance of music"
+  },
+  {
+   "t": 1219.04,
+   "d": 6.48,
+   "text": "using my adaptive music software. I will just put together the different algorithms I showed"
+  },
+  {
+   "t": 1225.52,
+   "d": 10.16,
+   "text": "and other algorithms too and you can hear what it sounds like. Every control I will press or"
+  },
+  {
+   "t": 1235.68,
+   "d": 321.76,
+   "text": "change is also a control that the game has the possibility to modify. yeah, so that's what"
+  },
+  {
+   "t": 1557.44,
+   "d": 12.72,
+   "text": "my music software can do when you change all the parameters. And I think I should end with -- yeah,"
+  },
+  {
+   "t": 1570.16,
+   "d": 6.8,
+   "text": "I should tell you that for the first time the game now has a Steam page. It would be super nice if"
+  },
+  {
+   "t": 1576.96,
+   "d": 12.08,
+   "text": "you would want to wishlist it. This nice key art is by an artist who I want to credit. 1 neila1."
+  },
+  {
+   "t": 1589.76,
+   "d": 17.68,
+   "text": "HAYLEE: Thank you for giving us a demo at the end. We have a live Roguelike Celebration set."
+  },
+  {
+   "t": 1608.24,
+   "d": 4.48,
+   "text": "Reminds me of people playing modular synths but actually know what they are doing. There is a"
+  },
+  {
+   "t": 1612.72,
+   "d": 4.8,
+   "text": "little more structure there where I know what you are doing and I can parse it."
+  },
+  {
+   "t": 1617.52,
+   "d": 10.56,
+   "text": ">> It is mostly signals but my modular software is for making decisions instead."
+  },
+  {
+   "t": 1628.8,
+   "d": 6.64,
+   "text": "HAYLEE: That's why I feel like it is so much more parsable to especially a lay-person. That"
+  },
+  {
+   "t": 1635.44,
+   "d": 8.16,
+   "text": "was so cool. We had so many great comments the entire video. Definitely going to be checking it"
+  },
+  {
+   "t": 1643.6,
+   "d": 4.88,
+   "text": "out again and sending to a bunch of people that I know will love it. We have a bunch"
+  },
+  {
+   "t": 1648.48,
+   "d": 11.52,
+   "text": "of questions here. I think we have time for one or two. We saw the atwater music symbol but too"
+  },
+  {
+   "t": 1660.0,
+   "d": 7.12,
+   "text": "much abstraction asked do you have any director systems that try to manage tension or intensity"
+  },
+  {
+   "t": 1667.12,
+   "d": 6.88,
+   "text": "over the course of longer time periods? NIFFLAS: That part is built into the level"
+  },
+  {
+   "t": 1674.0,
+   "d": 8.16,
+   "text": "rather than the music software. I place a lot of different songs all over the level"
+  },
+  {
+   "t": 1682.16,
+   "d": 7.36,
+   "text": "in my level editor so as soon as you progress in any way you pretty much enter a new stage"
+  },
+  {
+   "t": 1689.52,
+   "d": 5.52,
+   "text": "of the music. There are even variations just when you can run over a platform,"
+  },
+  {
+   "t": 1695.04,
+   "d": 4.72,
+   "text": "for example, I might increase intensity of the music while you are on top of that platform."
+  },
+  {
+   "t": 1701.6,
+   "d": 8.4,
+   "text": "HAYLEE: It makes sense the dynamic of the editor allows gameplay elements that reflect what is"
+  },
+  {
+   "t": 1710.0,
+   "d": 6.88,
+   "text": "happening in the music as well. Something I am curious and one of the top rated questions here,"
+  },
+  {
+   "t": 1717.44,
+   "d": 5.36,
+   "text": "do you plan to make that tool available after the game is out? Tyriq mentioned it"
+  },
+  {
+   "t": 1722.8,
+   "d": 5.12,
+   "text": "looks like an absolute joy to work with. NIFFLAS: It is incredibly difficult to use."
+  },
+  {
+   "t": 1727.92,
+   "d": 8.56,
+   "text": "I don't have there skill in myself. I want to but I would need funding and I would need"
+  },
+  {
+   "t": 1736.48,
+   "d": 6.88,
+   "text": "to work together with someone who is really good at actually making the software easier"
+  },
+  {
+   "t": 1743.36,
+   "d": 5.2,
+   "text": "to understand for someone who isn't me. HAYLEE: Sure. I feel like we have a lot"
+  },
+  {
+   "t": 1748.56,
+   "d": 5.6,
+   "text": "of tinkers that don't need documentation and will click things until they figure it out."
+  },
+  {
+   "t": 1754.16,
+   "d": 4.64,
+   "text": "But makes sense when you release something you want it to be usable."
+  },
+  {
+   "t": 1759.92,
+   "d": 9.68,
+   "text": "NIFFLAS: It is mostly done through expressions. Most of the writing is writing expressions and"
+  },
+  {
+   "t": 1769.6,
+   "d": 7.28,
+   "text": "they aren't documented. So you don't know what they are unless you know the software inside out."
+  },
+  {
+   "t": 1777.6,
+   "d": 7.36,
+   "text": "At least I would have to document it somehow. HAYLEE: Yeah, I was also reminded of these"
+  },
+  {
+   "t": 1784.96,
+   "d": 6.64,
+   "text": "Instagram videos I have been served recently of this woman who is doing like live coding. It is"
+  },
+  {
+   "t": 1791.6,
+   "d": 5.12,
+   "text": "like literally writing code but it does some autocompletion and has loops built"
+  },
+  {
+   "t": 1796.72,
+   "d": 6.08,
+   "text": "into each block but I think the digital interface and being able to link things"
+  },
+  {
+   "t": 1802.8,
+   "d": 6.4,
+   "text": "like that is powerful. I hope everyone goes out and wishlists Rhythm Doggo."
+  },
+  {
+   "t": 1812.72,
+   "d": 4.08,
+   "text": "Thank you so much for presenting here. NIFFLAS: Thank you for having me."
+  }
+ ]
+}

@@ -1,0 +1,2187 @@
+{
+ "id": "mtSjgxS-QS4",
+ "url": "https://www.youtube.com/watch?v=mtSjgxS-QS4",
+ "title": "Mark Gritter - Sol LeWitt, Combinatorial Enumeration, and Rogue",
+ "speaker": "Mark Gritter",
+ "talk_title": "Sol LeWitt, Combinatorial Enumeration, and Rogue",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-10",
+ "duration_s": 939,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Sol LeWitt wrote that \"the serial artist does not attempt to produce a beautiful or mysterious object but functions merely as a clerk cataloguing the results of his premise.\" This premise could be a set of axioms, a geometric constraint - or a roguelike level generator! From this viewpoint, the enumeration of all outputs from a procedural content system is itself a type of artwork.\n\nI'll explore this connection between 20th century conceptual art and 21st century expressive range analysis. In particular, I'll show how we can enumerate every possible Rogue level to identify \"impossible\" room layouts.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Sol LeWitt"
+  },
+  {
+   "start": 39,
+   "title": "Wall drawings as generative"
+  },
+  {
+   "start": 107,
+   "title": "Defining serial art"
+  },
+  {
+   "start": 178,
+   "title": "Conceptual art influences"
+  },
+  {
+   "start": 243,
+   "title": "Modern serial art projects"
+  },
+  {
+   "start": 367,
+   "title": "Enumerating Rogue levels"
+  },
+  {
+   "start": 495,
+   "title": "Analyzing level generation"
+  },
+  {
+   "start": 668,
+   "title": "Conclusions and reflections"
+  },
+  {
+   "start": 719,
+   "title": "Q&A and discussion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2656,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.52,
+   "d": 2.68,
+   "text": "So, without further ado, our first"
+  },
+  {
+   "t": 10.2,
+   "d": 1.68,
+   "text": "speaker of this block is going to be"
+  },
+  {
+   "t": 11.88,
+   "d": 2.36,
+   "text": "Mark Grider, a startup and math nerd who"
+  },
+  {
+   "t": 14.24,
+   "d": 2.12,
+   "text": "imprinted on NetHack at an early age,"
+  },
+  {
+   "t": 16.36,
+   "d": 1.48,
+   "text": "which I relate to."
+  },
+  {
+   "t": 17.84,
+   "d": 2.32,
+   "text": "Identifies as an artificer, which I am"
+  },
+  {
+   "t": 20.16,
+   "d": 1.84,
+   "text": "flattered by, and [clears throat] is"
+  },
+  {
+   "t": 22.0,
+   "d": 1.44,
+   "text": "interested in how to make tools more"
+  },
+  {
+   "t": 23.44,
+   "d": 2.4,
+   "text": "usable and systems more understandable."
+  },
+  {
+   "t": 25.84,
+   "d": 1.24,
+   "text": "Currently working as a principal"
+  },
+  {
+   "t": 27.08,
+   "d": 2.12,
+   "text": "engineer at Postman. Welcome Mark here"
+  },
+  {
+   "t": 29.2,
+   "d": 2.6,
+   "text": "to talk about Sol LeWitt."
+  },
+  {
+   "t": 31.8,
+   "d": 1.84,
+   "text": "Thanks. I really appreciate having the"
+  },
+  {
+   "t": 33.64,
+   "d": 2.28,
+   "text": "opportunity to talk about the three M's,"
+  },
+  {
+   "t": 35.92,
+   "d": 0.76,
+   "text": "uh"
+  },
+  {
+   "t": 36.68,
+   "d": 1.6,
+   "text": "modern art, mathematics, and map"
+  },
+  {
+   "t": 38.28,
+   "d": 1.6,
+   "text": "generation."
+  },
+  {
+   "t": 39.88,
+   "d": 2.44,
+   "text": "So, uh Sol LeWitt was a conceptual"
+  },
+  {
+   "t": 42.32,
+   "d": 1.64,
+   "text": "artist with a broad output during the"
+  },
+  {
+   "t": 43.96,
+   "d": 2.32,
+   "text": "20th century. He's maybe most famous for"
+  },
+  {
+   "t": 46.28,
+   "d": 2.0,
+   "text": "his wall drawings, and a lot of his work"
+  },
+  {
+   "t": 48.28,
+   "d": 2.36,
+   "text": "is very geometric. The photo shows one"
+  },
+  {
+   "t": 50.64,
+   "d": 2.16,
+   "text": "of my favorite pieces of his, and during"
+  },
+  {
+   "t": 52.8,
+   "d": 1.8,
+   "text": "what some of the in-person roguelike"
+  },
+  {
+   "t": 54.6,
+   "d": 1.32,
+   "text": "celebrations, you could see it up the"
+  },
+  {
+   "t": 55.92,
+   "d": 1.76,
+   "text": "road at the San Francisco Museum of"
+  },
+  {
+   "t": 57.68,
+   "d": 1.4,
+   "text": "Modern Art."
+  },
+  {
+   "t": 59.08,
+   "d": 2.36,
+   "text": "He created models of all the ways to"
+  },
+  {
+   "t": 61.44,
+   "d": 1.72,
+   "text": "edges from a cube and still have it be"
+  },
+  {
+   "t": 63.16,
+   "d": 2.04,
+   "text": "connected and self-supporting."
+  },
+  {
+   "t": 65.2,
+   "d": 1.84,
+   "text": "Or in his words, all the ways of not"
+  },
+  {
+   "t": 67.04,
+   "d": 3.28,
+   "text": "making a cube. The art is all 122 of"
+  },
+  {
+   "t": 70.32,
+   "d": 2.12,
+   "text": "these models."
+  },
+  {
+   "t": 72.44,
+   "d": 2.04,
+   "text": "Sol LeWitt's wall drawing series are"
+  },
+  {
+   "t": 74.48,
+   "d": 2.12,
+   "text": "temporary art drawn directly on the"
+  },
+  {
+   "t": 76.6,
+   "d": 2.12,
+   "text": "walls. Each is given as a set of"
+  },
+  {
+   "t": 78.72,
+   "d": 1.64,
+   "text": "instructions, like the one I showed"
+  },
+  {
+   "t": 80.36,
+   "d": 2.16,
+   "text": "here, and often involve exploring all"
+  },
+  {
+   "t": 82.52,
+   "d": 2.08,
+   "text": "variations of a theme, such as lines in"
+  },
+  {
+   "t": 84.6,
+   "d": 1.92,
+   "text": "all four orthogonal and diagonal"
+  },
+  {
+   "t": 86.52,
+   "d": 1.92,
+   "text": "directions, or highlighting all the"
+  },
+  {
+   "t": 88.44,
+   "d": 1.8,
+   "text": "architectural features of the wall where"
+  },
+  {
+   "t": 90.24,
+   "d": 2.0,
+   "text": "they are installed."
+  },
+  {
+   "t": 92.24,
+   "d": 1.56,
+   "text": "So, I hope the first connection between"
+  },
+  {
+   "t": 93.8,
+   "d": 1.72,
+   "text": "Sol LeWitt and the roguelike celebration"
+  },
+  {
+   "t": 95.52,
+   "d": 1.88,
+   "text": "is clear. Wall drawings are generative"
+  },
+  {
+   "t": 97.4,
+   "d": 2.24,
+   "text": "art. They're given as instructions to"
+  },
+  {
+   "t": 99.64,
+   "d": 2.08,
+   "text": "carry out rather than an image to be"
+  },
+  {
+   "t": 101.72,
+   "d": 2.32,
+   "text": "copied. Because of this procedural"
+  },
+  {
+   "t": 104.04,
+   "d": 1.48,
+   "text": "nature, they can be installed in a"
+  },
+  {
+   "t": 105.52,
+   "d": 2.88,
+   "text": "variety of spaces."
+  },
+  {
+   "t": 108.4,
+   "d": 2.24,
+   "text": "But, many of Sol LeWitt's wall drawings"
+  },
+  {
+   "t": 110.64,
+   "d": 2.68,
+   "text": "are also exercises in serial art, which"
+  },
+  {
+   "t": 113.32,
+   "d": 1.8,
+   "text": "explores all the possibilities or"
+  },
+  {
+   "t": 115.12,
+   "d": 2.68,
+   "text": "consequences of an idea. Here's a more"
+  },
+  {
+   "t": 117.8,
+   "d": 2.04,
+   "text": "direct example in which he takes 28"
+  },
+  {
+   "t": 119.84,
+   "d": 2.4,
+   "text": "photos of the same sphere in almost all"
+  },
+  {
+   "t": 122.24,
+   "d": 2.32,
+   "text": "combinations of lighting from the top or"
+  },
+  {
+   "t": 124.56,
+   "d": 2.32,
+   "text": "four sides."
+  },
+  {
+   "t": 126.88,
+   "d": 1.8,
+   "text": "Here's a book that LeWitt published with"
+  },
+  {
+   "t": 128.68,
+   "d": 2.96,
+   "text": "a similar idea. All combinations of arcs"
+  },
+  {
+   "t": 131.64,
+   "d": 2.28,
+   "text": "from four corners, arcs from four sides,"
+  },
+  {
+   "t": 133.92,
+   "d": 1.96,
+   "text": "straight lines, not straight lines, and"
+  },
+  {
+   "t": 135.88,
+   "d": 2.8,
+   "text": "broken lines."
+  },
+  {
+   "t": 138.68,
+   "d": 1.88,
+   "text": "So, serial art really takes a step"
+  },
+  {
+   "t": 140.56,
+   "d": 2.12,
+   "text": "further back into abstraction, playing"
+  },
+  {
+   "t": 142.68,
+   "d": 2.24,
+   "text": "with the idea of eliminating choice or"
+  },
+  {
+   "t": 144.92,
+   "d": 2.88,
+   "text": "intuition altogether. Serial art starts"
+  },
+  {
+   "t": 147.8,
+   "d": 2.36,
+   "text": "with a law or set of axioms or a"
+  },
+  {
+   "t": 150.16,
+   "d": 2.24,
+   "text": "condition, and produces all the figures"
+  },
+  {
+   "t": 152.4,
+   "d": 2.76,
+   "text": "or artifacts that satisfy that premise."
+  },
+  {
+   "t": 155.16,
+   "d": 1.8,
+   "text": "And typically, these are these"
+  },
+  {
+   "t": 156.96,
+   "d": 2.12,
+   "text": "enumerated combinations are presented"
+  },
+  {
+   "t": 159.08,
+   "d": 4.0,
+   "text": "together as a single finished work."
+  },
+  {
+   "t": 163.08,
+   "d": 1.56,
+   "text": "The artist Mel Bochner tried to"
+  },
+  {
+   "t": 164.64,
+   "d": 2.08,
+   "text": "characterize serial art in a similar"
+  },
+  {
+   "t": 166.72,
+   "d": 3.2,
+   "text": "way, a predetermined process, a focus on"
+  },
+  {
+   "t": 169.92,
+   "d": 1.76,
+   "text": "sequence rather than artistic"
+  },
+  {
+   "t": 171.68,
+   "d": 2.04,
+   "text": "virtuosity, and the work is"
+  },
+  {
+   "t": 173.72,
+   "d": 2.36,
+   "text": "self-exhausting. It is done when no more"
+  },
+  {
+   "t": 176.08,
+   "d": 2.88,
+   "text": "possibilities remain."
+  },
+  {
+   "t": 178.96,
+   "d": 1.64,
+   "text": "Other 20th century examples of"
+  },
+  {
+   "t": 180.6,
+   "d": 1.88,
+   "text": "conceptual arts show some of the same"
+  },
+  {
+   "t": 182.48,
+   "d": 2.32,
+   "text": "themes, but not all put together in a"
+  },
+  {
+   "t": 184.8,
+   "d": 2.0,
+   "text": "way that emphasizes procedurality or"
+  },
+  {
+   "t": 186.8,
+   "d": 2.0,
+   "text": "exhaustion in the same way that LeWitt"
+  },
+  {
+   "t": 188.8,
+   "d": 1.0,
+   "text": "does."
+  },
+  {
+   "t": 189.8,
+   "d": 2.2,
+   "text": "So, Josef Albers' Homage to the Square"
+  },
+  {
+   "t": 192.0,
+   "d": 2.28,
+   "text": "uses a single shape, but a variety of"
+  },
+  {
+   "t": 194.28,
+   "d": 2.0,
+   "text": "colors, many more than are shown here,"
+  },
+  {
+   "t": 196.28,
+   "d": 3.52,
+   "text": "as a way to sort of study color itself."
+  },
+  {
+   "t": 199.8,
+   "d": 2.12,
+   "text": "Another way to think of One way to think"
+  },
+  {
+   "t": 201.92,
+   "d": 2.52,
+   "text": "of Yayoi Kusama's Infinity Rooms is"
+  },
+  {
+   "t": 204.44,
+   "d": 2.28,
+   "text": "using mirrors to physically embody a"
+  },
+  {
+   "t": 206.72,
+   "d": 3.0,
+   "text": "rule that causes repetition, exploring"
+  },
+  {
+   "t": 209.72,
+   "d": 1.96,
+   "text": "that consequence with mirrored images"
+  },
+  {
+   "t": 211.68,
+   "d": 3.68,
+   "text": "stretching off into infinity."
+  },
+  {
+   "t": 215.48,
+   "d": 2.12,
+   "text": "The artist Hanne Darboven often worked"
+  },
+  {
+   "t": 217.6,
+   "d": 1.76,
+   "text": "with large sequences or grids of"
+  },
+  {
+   "t": 219.36,
+   "d": 1.68,
+   "text": "numbers. One example is this"
+  },
+  {
+   "t": 221.04,
+   "d": 2.36,
+   "text": "installation, South Korean Calendar,"
+  },
+  {
+   "t": 223.4,
+   "d": 2.0,
+   "text": "with one panel per day from a Korean"
+  },
+  {
+   "t": 225.4,
+   "d": 2.12,
+   "text": "calendar annotated with a handwritten"
+  },
+  {
+   "t": 227.52,
+   "d": 2.32,
+   "text": "equation and some scribbles."
+  },
+  {
+   "t": 229.84,
+   "d": 1.44,
+   "text": "I don't have time to cover as much as I"
+  },
+  {
+   "t": 231.28,
+   "d": 1.72,
+   "text": "like, but here's a quick look at work"
+  },
+  {
+   "t": 233.0,
+   "d": 2.48,
+   "text": "from Mel Bochner, who I quoted earlier."
+  },
+  {
+   "t": 235.48,
+   "d": 1.12,
+   "text": "And of course, if we're talking about"
+  },
+  {
+   "t": 236.6,
+   "d": 2.36,
+   "text": "sequences, spectrums, uh a fixed"
+  },
+  {
+   "t": 238.96,
+   "d": 2.08,
+   "text": "sequence of colors are are an"
+  },
+  {
+   "t": 241.04,
+   "d": 2.96,
+   "text": "inspiration for a lot of work."
+  },
+  {
+   "t": 244.0,
+   "d": 1.84,
+   "text": "The Sol LeWitt quote I think best"
+  },
+  {
+   "t": 245.84,
+   "d": 1.6,
+   "text": "illustrates the connection between"
+  },
+  {
+   "t": 247.44,
+   "d": 1.68,
+   "text": "serial art and procedural content"
+  },
+  {
+   "t": 249.12,
+   "d": 2.64,
+   "text": "generation is this one. The idea becomes"
+  },
+  {
+   "t": 251.76,
+   "d": 2.92,
+   "text": "a machine that makes the art. The artist"
+  },
+  {
+   "t": 254.68,
+   "d": 1.88,
+   "text": "is not necessarily giving up control,"
+  },
+  {
+   "t": 256.56,
+   "d": 1.96,
+   "text": "but they are committing themselves to"
+  },
+  {
+   "t": 258.52,
+   "d": 2.68,
+   "text": "the all the consequences of a particular"
+  },
+  {
+   "t": 261.2,
+   "d": 1.68,
+   "text": "idea or algorithm."
+  },
+  {
+   "t": 262.88,
+   "d": 2.32,
+   "text": "Plenty of art is minimalist or repeats a"
+  },
+  {
+   "t": 265.2,
+   "d": 2.44,
+   "text": "theme over and over, or procedural, but"
+  },
+  {
+   "t": 267.64,
+   "d": 1.96,
+   "text": "the sweet spot that I really love is the"
+  },
+  {
+   "t": 269.6,
+   "d": 2.08,
+   "text": "intersection of all three. This is"
+  },
+  {
+   "t": 271.68,
+   "d": 2.08,
+   "text": "really what I would define as the core"
+  },
+  {
+   "t": 273.76,
+   "d": 2.76,
+   "text": "of serial art."
+  },
+  {
+   "t": 276.52,
+   "d": 2.36,
+   "text": "We can find some 21st century examples"
+  },
+  {
+   "t": 278.88,
+   "d": 1.48,
+   "text": "of carrying out this process of"
+  },
+  {
+   "t": 280.36,
+   "d": 2.28,
+   "text": "enumerating all possibilities, usually"
+  },
+  {
+   "t": 282.64,
+   "d": 2.48,
+   "text": "using a computer these days. And I think"
+  },
+  {
+   "t": 285.12,
+   "d": 2.8,
+   "text": "these are serial art, too."
+  },
+  {
+   "t": 287.92,
+   "d": 1.72,
+   "text": "The example I've been using in my title"
+  },
+  {
+   "t": 289.64,
+   "d": 2.04,
+   "text": "slides is Tesseralis's Labyrinth of"
+  },
+  {
+   "t": 291.68,
+   "d": 2.96,
+   "text": "Polyominoes, a site showing all possible"
+  },
+  {
+   "t": 294.64,
+   "d": 1.76,
+   "text": "figures created by sticking squares"
+  },
+  {
+   "t": 296.4,
+   "d": 2.92,
+   "text": "together up to eight squares. Here's one"
+  },
+  {
+   "t": 299.32,
+   "d": 2.08,
+   "text": "view from the site showing a family tree"
+  },
+  {
+   "t": 301.4,
+   "d": 2.0,
+   "text": "of polyominoes starting from just a"
+  },
+  {
+   "t": 303.4,
+   "d": 2.6,
+   "text": "single square. I find this incredibly"
+  },
+  {
+   "t": 306.0,
+   "d": 2.6,
+   "text": "pleasing and artistic."
+  },
+  {
+   "t": 308.6,
+   "d": 2.6,
+   "text": "Lawyer Damien Riehl and his collaborator"
+  },
+  {
+   "t": 311.2,
+   "d": 2.48,
+   "text": "Noah Rubin enumerated all possible"
+  },
+  {
+   "t": 313.68,
+   "d": 2.2,
+   "text": "melodies up to 10 notes for the full"
+  },
+  {
+   "t": 315.88,
+   "d": 2.76,
+   "text": "chromatic scale or 12 notes for simpler"
+  },
+  {
+   "t": 318.64,
+   "d": 1.2,
+   "text": "scales."
+  },
+  {
+   "t": 319.84,
+   "d": 1.88,
+   "text": "The idea here is to get a tangible"
+  },
+  {
+   "t": 321.72,
+   "d": 2.08,
+   "text": "artifact of all these melodies and then"
+  },
+  {
+   "t": 323.8,
+   "d": 2.48,
+   "text": "copyright them. So, this is a political"
+  },
+  {
+   "t": 326.28,
+   "d": 2.16,
+   "text": "or legal project and maybe a little bit"
+  },
+  {
+   "t": 328.44,
+   "d": 2.12,
+   "text": "of trolling as as well as I think a"
+  },
+  {
+   "t": 330.56,
+   "d": 2.16,
+   "text": "piece of serial art."
+  },
+  {
+   "t": 332.72,
+   "d": 2.24,
+   "text": "Another online project exhausting the"
+  },
+  {
+   "t": 334.96,
+   "d": 2.76,
+   "text": "possible space of 5 by 5 nonogram"
+  },
+  {
+   "t": 337.72,
+   "d": 1.6,
+   "text": "puzzles, the ones where you're given a"
+  },
+  {
+   "t": 339.32,
+   "d": 1.96,
+   "text": "count of the filled-in squares in each"
+  },
+  {
+   "t": 341.28,
+   "d": 2.28,
+   "text": "row or column of a grid. There are just"
+  },
+  {
+   "t": 343.56,
+   "d": 2.12,
+   "text": "shy of 25 million of them, which makes"
+  },
+  {
+   "t": 345.68,
+   "d": 3.92,
+   "text": "this a a pretty big serial art project."
+  },
+  {
+   "t": 349.6,
+   "d": 2.8,
+   "text": "Dipping back into mathematical objects,"
+  },
+  {
+   "t": 352.4,
+   "d": 2.4,
+   "text": "Ben Spitz put up a website"
+  },
+  {
+   "t": 354.8,
+   "d": 2.48,
+   "text": "that lists every small category as an"
+  },
+  {
+   "t": 357.28,
+   "d": 2.4,
+   "text": "encyclopedia exhaustively enumerating"
+  },
+  {
+   "t": 359.68,
+   "d": 2.08,
+   "text": "each possibility. So, I think these are"
+  },
+  {
+   "t": 361.76,
+   "d": 1.84,
+   "text": "all serial art. I love them. They're"
+  },
+  {
+   "t": 363.6,
+   "d": 2.88,
+   "text": "ideas that become a machine that makes"
+  },
+  {
+   "t": 366.48,
+   "d": 1.6,
+   "text": "the art."
+  },
+  {
+   "t": 368.08,
+   "d": 1.8,
+   "text": "Which brings us back to Rogue, which I"
+  },
+  {
+   "t": 369.88,
+   "d": 2.52,
+   "text": "think can also fit the bill."
+  },
+  {
+   "t": 372.4,
+   "d": 2.32,
+   "text": "So, here's a quick recap of the Rogue"
+  },
+  {
+   "t": 374.72,
+   "d": 2.0,
+   "text": "level generator. We divide the screen"
+  },
+  {
+   "t": 376.72,
+   "d": 2.6,
+   "text": "into nine grid elements. Up to three of"
+  },
+  {
+   "t": 379.32,
+   "d": 2.44,
+   "text": "these rectangles can be left empty."
+  },
+  {
+   "t": 381.76,
+   "d": 1.64,
+   "text": "For each rectangle that has a room in"
+  },
+  {
+   "t": 383.4,
+   "d": 1.84,
+   "text": "it, we use a random number generator to"
+  },
+  {
+   "t": 385.24,
+   "d": 2.2,
+   "text": "pick a room width and a height, and then"
+  },
+  {
+   "t": 387.44,
+   "d": 1.88,
+   "text": "we pick a location for the room so that"
+  },
+  {
+   "t": 389.32,
+   "d": 3.72,
+   "text": "it fits within the grid rectangle."
+  },
+  {
+   "t": 393.96,
+   "d": 2.32,
+   "text": "So, how many level layouts are possible"
+  },
+  {
+   "t": 396.28,
+   "d": 2.6,
+   "text": "given this abstract description?"
+  },
+  {
+   "t": 398.88,
+   "d": 2.68,
+   "text": "We can count it up, and we get about 253"
+  },
+  {
+   "t": 401.56,
+   "d": 2.52,
+   "text": "possibilities for room width and X"
+  },
+  {
+   "t": 404.08,
+   "d": 2.72,
+   "text": "position, and six or 10 possibilities"
+  },
+  {
+   "t": 406.8,
+   "d": 2.24,
+   "text": "for room height and Y position. The"
+  },
+  {
+   "t": 409.04,
+   "d": 2.28,
+   "text": "first row has fewer."
+  },
+  {
+   "t": 411.32,
+   "d": 2.64,
+   "text": "This by itself gives nearly two to the"
+  },
+  {
+   "t": 413.96,
+   "d": 2.88,
+   "text": "100th possibilities in total, about 10"
+  },
+  {
+   "t": 416.84,
+   "d": 2.36,
+   "text": "to the 30th power, just for the rooms"
+  },
+  {
+   "t": 419.2,
+   "d": 1.36,
+   "text": "themselves. We haven't considered"
+  },
+  {
+   "t": 420.56,
+   "d": 4.16,
+   "text": "corridors or gold or monsters."
+  },
+  {
+   "t": 425.28,
+   "d": 3.12,
+   "text": "But, Rogue really only uses a 32-bit"
+  },
+  {
+   "t": 428.4,
+   "d": 1.6,
+   "text": "seed for its pseudo-random number"
+  },
+  {
+   "t": 430.0,
+   "d": 1.68,
+   "text": "generator. If you think back to Eunice's"
+  },
+  {
+   "t": 431.68,
+   "d": 2.76,
+   "text": "talk, N equals two to the 32 here. It's"
+  },
+  {
+   "t": 434.44,
+   "d": 3.04,
+   "text": "only two to the 32 possible outputs we"
+  },
+  {
+   "t": 437.48,
+   "d": 2.0,
+   "text": "can get from the level generator for a"
+  },
+  {
+   "t": 439.48,
+   "d": 1.36,
+   "text": "given"
+  },
+  {
+   "t": 440.84,
+   "d": 3.08,
+   "text": "level of the dungeon, about 4 billion."
+  },
+  {
+   "t": 443.92,
+   "d": 2.28,
+   "text": "So, we could enumerate all of them as a"
+  },
+  {
+   "t": 446.2,
+   "d": 2.28,
+   "text": "serial art project. So, maybe along the"
+  },
+  {
+   "t": 448.48,
+   "d": 1.68,
+   "text": "way we can understand the generator"
+  },
+  {
+   "t": 450.16,
+   "d": 2.0,
+   "text": "better, but mainly I just thought it was"
+  },
+  {
+   "t": 452.16,
+   "d": 2.12,
+   "text": "very cool that virtually every room"
+  },
+  {
+   "t": 454.28,
+   "d": 2.0,
+   "text": "configuration you could write down is"
+  },
+  {
+   "t": 456.28,
+   "d": 2.64,
+   "text": "actually impossible to achieve in Rogue."
+  },
+  {
+   "t": 458.92,
+   "d": 1.76,
+   "text": "You'd have a much better odds of playing"
+  },
+  {
+   "t": 460.68,
+   "d": 2.52,
+   "text": "the lottery than of randomly selecting a"
+  },
+  {
+   "t": 463.2,
+   "d": 3.52,
+   "text": "valid set of Rogue rooms."
+  },
+  {
+   "t": 466.72,
+   "d": 1.44,
+   "text": "I initially thought this would be hard."
+  },
+  {
+   "t": 468.16,
+   "d": 2.48,
+   "text": "4 billion's kind of a big number,"
+  },
+  {
+   "t": 470.64,
+   "d": 1.68,
+   "text": "uh so maybe we'd have to parallelize or"
+  },
+  {
+   "t": 472.32,
+   "d": 2.4,
+   "text": "build GPU implementation and do a lot of"
+  },
+  {
+   "t": 474.72,
+   "d": 2.08,
+   "text": "fancy nerd but I learned that"
+  },
+  {
+   "t": 476.8,
+   "d": 1.72,
+   "text": "basically just compiling the code gives"
+  },
+  {
+   "t": 478.52,
+   "d": 1.6,
+   "text": "a good enough solution. We can blow"
+  },
+  {
+   "t": 480.12,
+   "d": 2.52,
+   "text": "through all the possibilities in about"
+  },
+  {
+   "t": 482.64,
+   "d": 3.84,
+   "text": "11 minutes of CPU time. Uh this produces"
+  },
+  {
+   "t": 486.48,
+   "d": 2.16,
+   "text": "an artifact that I think is a piece of"
+  },
+  {
+   "t": 488.64,
+   "d": 1.96,
+   "text": "serial art, even if no human can"
+  },
+  {
+   "t": 490.6,
+   "d": 2.4,
+   "text": "actually flip through all 4 billion"
+  },
+  {
+   "t": 493.0,
+   "d": 2.8,
+   "text": "possibilities."
+  },
+  {
+   "t": 495.8,
+   "d": 1.8,
+   "text": "But, I would like to visualize the"
+  },
+  {
+   "t": 497.6,
+   "d": 2.88,
+   "text": "results in some way. I don't have 4"
+  },
+  {
+   "t": 500.48,
+   "d": 2.76,
+   "text": "billion pixels on my screen yet, but uh"
+  },
+  {
+   "t": 503.24,
+   "d": 1.92,
+   "text": "one of the things we can do is look at"
+  },
+  {
+   "t": 505.16,
+   "d": 2.32,
+   "text": "at a subset of our samples created by"
+  },
+  {
+   "t": 507.48,
+   "d": 2.92,
+   "text": "fixing some feature. For example, what"
+  },
+  {
+   "t": 510.4,
+   "d": 2.4,
+   "text": "happens if the upper left room is the"
+  },
+  {
+   "t": 512.8,
+   "d": 2.96,
+   "text": "smallest possible size? Does that affect"
+  },
+  {
+   "t": 515.76,
+   "d": 2.08,
+   "text": "the composition of the other rooms? It"
+  },
+  {
+   "t": 517.84,
+   "d": 2.6,
+   "text": "shouldn't, and this visualization of how"
+  },
+  {
+   "t": 520.44,
+   "d": 3.48,
+   "text": "likely a square is to be occupied by a"
+  },
+  {
+   "t": 523.92,
+   "d": 2.0,
+   "text": "room doesn't show any any gross"
+  },
+  {
+   "t": 525.92,
+   "d": 2.76,
+   "text": "anomalies."
+  },
+  {
+   "t": 528.68,
+   "d": 2.76,
+   "text": "Post-selecting on two exact room"
+  },
+  {
+   "t": 531.44,
+   "d": 2.48,
+   "text": "positions and sizes is enough to turn up"
+  },
+  {
+   "t": 533.92,
+   "d": 2.32,
+   "text": "impossible values for all the other"
+  },
+  {
+   "t": 536.24,
+   "d": 1.24,
+   "text": "rooms."
+  },
+  {
+   "t": 537.48,
+   "d": 3.36,
+   "text": "So, here we fixed two 4 by 4 rooms in"
+  },
+  {
+   "t": 540.84,
+   "d": 2.76,
+   "text": "their upper leftmost positions, which"
+  },
+  {
+   "t": 543.6,
+   "d": 3.28,
+   "text": "happens for only 209 of our seed values."
+  },
+  {
+   "t": 546.88,
+   "d": 1.96,
+   "text": "So, that's not enough to cover all the"
+  },
+  {
+   "t": 548.84,
+   "d": 2.88,
+   "text": "other choices for the other rooms. Here,"
+  },
+  {
+   "t": 551.72,
+   "d": 2.32,
+   "text": "red is showing impossible room"
+  },
+  {
+   "t": 554.04,
+   "d": 2.36,
+   "text": "configurations, and blue is possible."
+  },
+  {
+   "t": 556.4,
+   "d": 2.2,
+   "text": "You see the There's blue dots scattered"
+  },
+  {
+   "t": 558.6,
+   "d": 1.44,
+   "text": "here and there."
+  },
+  {
+   "t": 560.04,
+   "d": 1.16,
+   "text": "And this is I think it's kind of"
+  },
+  {
+   "t": 561.2,
+   "d": 1.96,
+   "text": "interesting. It means we can reconstruct"
+  },
+  {
+   "t": 563.16,
+   "d": 2.8,
+   "text": "the seed that was used from as few as"
+  },
+  {
+   "t": 565.96,
+   "d": 3.32,
+   "text": "three room configurations."
+  },
+  {
+   "t": 569.28,
+   "d": 1.44,
+   "text": "Here's a zoomed-in version of the"
+  },
+  {
+   "t": 570.72,
+   "d": 2.04,
+   "text": "visualization on the previous graph"
+  },
+  {
+   "t": 572.76,
+   "d": 2.48,
+   "text": "before post-selection. It shows the"
+  },
+  {
+   "t": 575.24,
+   "d": 2.04,
+   "text": "counts of each of the possible room"
+  },
+  {
+   "t": 577.28,
+   "d": 4.44,
+   "text": "configurations for each of the rooms."
+  },
+  {
+   "t": 581.84,
+   "d": 2.12,
+   "text": "Another way to get a handle on this huge"
+  },
+  {
+   "t": 583.96,
+   "d": 2.04,
+   "text": "collection is to look at extremes. For"
+  },
+  {
+   "t": 586.0,
+   "d": 2.28,
+   "text": "example, the seeds that produce levels"
+  },
+  {
+   "t": 588.28,
+   "d": 2.24,
+   "text": "with the smallest or largest total room"
+  },
+  {
+   "t": 590.52,
+   "d": 1.04,
+   "text": "areas."
+  },
+  {
+   "t": 591.56,
+   "d": 2.48,
+   "text": "And a curiosity here, uh I did some"
+  },
+  {
+   "t": 594.04,
+   "d": 1.84,
+   "text": "probability work."
+  },
+  {
+   "t": 595.88,
+   "d": 3.28,
+   "text": "There seems to be a substantial deficit"
+  },
+  {
+   "t": 599.16,
+   "d": 2.64,
+   "text": "with actual Rogue compared to the"
+  },
+  {
+   "t": 601.8,
+   "d": 2.6,
+   "text": "abstract probabilities of Rogue. There"
+  },
+  {
+   "t": 604.4,
+   "d": 2.68,
+   "text": "are fewer very small levels than"
+  },
+  {
+   "t": 607.08,
+   "d": 2.4,
+   "text": "probability would suggest. And if we"
+  },
+  {
+   "t": 609.48,
+   "d": 1.6,
+   "text": "zoom out"
+  },
+  {
+   "t": 611.08,
+   "d": 1.76,
+   "text": "uh from that same experiment, we see"
+  },
+  {
+   "t": 612.84,
+   "d": 2.64,
+   "text": "that that trend continues. The negative"
+  },
+  {
+   "t": 615.48,
+   "d": 2.32,
+   "text": "deficit in small sizes continues for a"
+  },
+  {
+   "t": 617.8,
+   "d": 2.6,
+   "text": "very long time until we we finally catch"
+  },
+  {
+   "t": 620.4,
+   "d": 1.04,
+   "text": "up at"
+  },
+  {
+   "t": 621.44,
+   "d": 3.0,
+   "text": "100% of the rooms. Is this meaningful or"
+  },
+  {
+   "t": 624.44,
+   "d": 2.04,
+   "text": "just some sort of random walk process? I"
+  },
+  {
+   "t": 626.48,
+   "d": 2.2,
+   "text": "don't know yet, but my bet is just"
+  },
+  {
+   "t": 628.68,
+   "d": 2.24,
+   "text": "random."
+  },
+  {
+   "t": 630.92,
+   "d": 2.24,
+   "text": "So, what I'd like to do is find some"
+  },
+  {
+   "t": 633.16,
+   "d": 2.2,
+   "text": "particular artifact I can point to and"
+  },
+  {
+   "t": 635.36,
+   "d": 2.8,
+   "text": "say, \"This occurs because Rogue uses a"
+  },
+  {
+   "t": 638.16,
+   "d": 2.48,
+   "text": "linear congruential random number"
+  },
+  {
+   "t": 640.64,
+   "d": 2.44,
+   "text": "generator and disappears if we use a"
+  },
+  {
+   "t": 643.08,
+   "d": 2.16,
+   "text": "better random number generator.\""
+  },
+  {
+   "t": 645.24,
+   "d": 2.04,
+   "text": "I'd also like to find better ways to"
+  },
+  {
+   "t": 647.28,
+   "d": 2.2,
+   "text": "plot these 4 billion data points that"
+  },
+  {
+   "t": 649.48,
+   "d": 3.4,
+   "text": "come from this big 36-dimensional space."
+  },
+  {
+   "t": 652.88,
+   "d": 2.32,
+   "text": "My initial attempts at dimensionality"
+  },
+  {
+   "t": 655.2,
+   "d": 2.68,
+   "text": "reduction turn up anything particularly"
+  },
+  {
+   "t": 657.88,
+   "d": 1.8,
+   "text": "interesting. And these two points are"
+  },
+  {
+   "t": 659.68,
+   "d": 1.92,
+   "text": "related. If there is interesting"
+  },
+  {
+   "t": 661.6,
+   "d": 1.84,
+   "text": "structure, it's probably cuz the random"
+  },
+  {
+   "t": 663.44,
+   "d": 2.36,
+   "text": "number generator is not random in some"
+  },
+  {
+   "t": 665.8,
+   "d": 3.12,
+   "text": "way we can express."
+  },
+  {
+   "t": 668.92,
+   "d": 2.36,
+   "text": "So, what's what's my point here?"
+  },
+  {
+   "t": 671.28,
+   "d": 2.52,
+   "text": "I think one is that generators that use"
+  },
+  {
+   "t": 673.8,
+   "d": 2.56,
+   "text": "32-bit seeds can be fully explored. It's"
+  },
+  {
+   "t": 676.36,
+   "d": 2.92,
+   "text": "part science project, part serial art"
+  },
+  {
+   "t": 679.28,
+   "d": 2.16,
+   "text": "project, and maybe if you're writing"
+  },
+  {
+   "t": 681.44,
+   "d": 1.68,
+   "text": "one, you could check that nothing bad"
+  },
+  {
+   "t": 683.12,
+   "d": 2.32,
+   "text": "literally ever happens."
+  },
+  {
+   "t": 685.44,
+   "d": 2.44,
+   "text": "I'm hoping that you'll tell me about"
+  },
+  {
+   "t": 687.88,
+   "d": 2.08,
+   "text": "other connections between serial art and"
+  },
+  {
+   "t": 689.96,
+   "d": 1.8,
+   "text": "other conceptual art and procedural"
+  },
+  {
+   "t": 691.76,
+   "d": 2.2,
+   "text": "generation. I feel like there's a lot"
+  },
+  {
+   "t": 693.96,
+   "d": 1.84,
+   "text": "more that could be said here."
+  },
+  {
+   "t": 695.8,
+   "d": 1.4,
+   "text": "And I'm also interested in whether"
+  },
+  {
+   "t": 697.2,
+   "d": 1.88,
+   "text": "there's some natural middle ground. Are"
+  },
+  {
+   "t": 699.08,
+   "d": 2.28,
+   "text": "there are there natural examples of"
+  },
+  {
+   "t": 701.36,
+   "d": 2.4,
+   "text": "games with hundreds or no no more than"
+  },
+  {
+   "t": 703.76,
+   "d": 2.52,
+   "text": "millions of seeds or layouts? Like the"
+  },
+  {
+   "t": 706.28,
+   "d": 2.36,
+   "text": "nonogram project I showed. So, it'd be"
+  },
+  {
+   "t": 708.64,
+   "d": 3.4,
+   "text": "humanly possible to explore them all."
+  },
+  {
+   "t": 712.04,
+   "d": 2.84,
+   "text": "What other ideas what other ways can we"
+  },
+  {
+   "t": 714.88,
+   "d": 2.8,
+   "text": "make ideas that become machines that"
+  },
+  {
+   "t": 717.68,
+   "d": 2.6,
+   "text": "become art?"
+  },
+  {
+   "t": 720.28,
+   "d": 1.44,
+   "text": "Thanks for attending. I'll be happy to"
+  },
+  {
+   "t": 721.72,
+   "d": 1.92,
+   "text": "interact you with you on socials. I put"
+  },
+  {
+   "t": 723.64,
+   "d": 2.12,
+   "text": "my materials including this talk up on"
+  },
+  {
+   "t": 725.76,
+   "d": 2.56,
+   "text": "GitHub. Uh there's a lot more slides"
+  },
+  {
+   "t": 728.32,
+   "d": 2.08,
+   "text": "that I didn't have time to include, but"
+  },
+  {
+   "t": 730.4,
+   "d": 3.0,
+   "text": "uh happy to answer any questions."
+  },
+  {
+   "t": 733.4,
+   "d": 1.68,
+   "text": "Thank you. We probably have time for a"
+  },
+  {
+   "t": 735.08,
+   "d": 1.32,
+   "text": "question or two if people want to get"
+  },
+  {
+   "t": 736.4,
+   "d": 2.6,
+   "text": "those in quick, but uh yeah. No, this is"
+  },
+  {
+   "t": 739.0,
+   "d": 1.2,
+   "text": "wonderful. Every There's so many talks"
+  },
+  {
+   "t": 740.2,
+   "d": 1.12,
+   "text": "I'm like, \"This is peak Roguelike"
+  },
+  {
+   "t": 741.32,
+   "d": 2.36,
+   "text": "celebration talk.\" But this is also"
+  },
+  {
+   "t": 743.68,
+   "d": 3.32,
+   "text": "peak Roguelike celebration talk."
+  },
+  {
+   "t": 747.0,
+   "d": 1.56,
+   "text": "Uh I guess I'll start with the question"
+  },
+  {
+   "t": 748.56,
+   "d": 1.28,
+   "text": "while we see if anyone else wants to"
+  },
+  {
+   "t": 749.84,
+   "d": 2.68,
+   "text": "throw some in. Um I'm interested like"
+  },
+  {
+   "t": 752.52,
+   "d": 1.68,
+   "text": "did you consider I don't know if this"
+  },
+  {
+   "t": 754.2,
+   "d": 1.84,
+   "text": "would make any sense to do, but like"
+  },
+  {
+   "t": 756.04,
+   "d": 1.88,
+   "text": "other types of artifacts? Like I think"
+  },
+  {
+   "t": 757.92,
+   "d": 1.96,
+   "text": "that the level generation makes a lot of"
+  },
+  {
+   "t": 759.88,
+   "d": 2.28,
+   "text": "sense. It's also spatial, but like"
+  },
+  {
+   "t": 762.16,
+   "d": 2.12,
+   "text": "you could kind of scrape other things"
+  },
+  {
+   "t": 764.28,
+   "d": 1.36,
+   "text": "like"
+  },
+  {
+   "t": 765.64,
+   "d": 1.6,
+   "text": "what are the items that happened to"
+  },
+  {
+   "t": 767.24,
+   "d": 1.68,
+   "text": "spawn? Or like have you considered like"
+  },
+  {
+   "t": 768.92,
+   "d": 1.52,
+   "text": "is there other type of data you could"
+  },
+  {
+   "t": 770.44,
+   "d": 2.32,
+   "text": "pull out of a of a Roguelike or a game"
+  },
+  {
+   "t": 772.76,
+   "d": 2.28,
+   "text": "and kind of use as your"
+  },
+  {
+   "t": 775.04,
+   "d": 3.16,
+   "text": "possibility space to visualize or Uh"
+  },
+  {
+   "t": 778.2,
+   "d": 1.0,
+   "text": "using it makes most sense something"
+  },
+  {
+   "t": 779.2,
+   "d": 1.16,
+   "text": "spatial to start with."
+  },
+  {
+   "t": 780.36,
+   "d": 1.76,
+   "text": ">> Um"
+  },
+  {
+   "t": 782.12,
+   "d": 2.0,
+   "text": "I I think that that actually makes a lot"
+  },
+  {
+   "t": 784.12,
+   "d": 2.08,
+   "text": "of sense. You know, I extracted just a"
+  },
+  {
+   "t": 786.2,
+   "d": 1.76,
+   "text": "few of the dimensions of what it"
+  },
+  {
+   "t": 787.96,
+   "d": 3.04,
+   "text": "produces. What I actually discovered"
+  },
+  {
+   "t": 791.0,
+   "d": 2.4,
+   "text": "doing sort of archaeology on Rogue is"
+  },
+  {
+   "t": 793.4,
+   "d": 1.72,
+   "text": "some of the things are done after the"
+  },
+  {
+   "t": 795.12,
+   "d": 1.8,
+   "text": "rooms are done. So, like corridors are"
+  },
+  {
+   "t": 796.92,
+   "d": 2.56,
+   "text": "done after you've looped over the rooms,"
+  },
+  {
+   "t": 799.48,
+   "d": 1.08,
+   "text": "but"
+  },
+  {
+   "t": 800.56,
+   "d": 1.8,
+   "text": "uh"
+  },
+  {
+   "t": 802.36,
+   "d": 2.84,
+   "text": "the the monsters and the items the"
+  },
+  {
+   "t": 805.2,
+   "d": 2.04,
+   "text": "monsters are covering are both done in"
+  },
+  {
+   "t": 807.24,
+   "d": 2.24,
+   "text": "that initial loop over rooms. So, I I"
+  },
+  {
+   "t": 809.48,
+   "d": 1.8,
+   "text": "actually lied here. I didn't do Rogue. I"
+  },
+  {
+   "t": 811.28,
+   "d": 2.56,
+   "text": "did Rogue Star where those were done"
+  },
+  {
+   "t": 813.84,
+   "d": 1.84,
+   "text": "sort of sensibly after the rooms were"
+  },
+  {
+   "t": 815.68,
+   "d": 1.56,
+   "text": "placed"
+  },
+  {
+   "t": 817.24,
+   "d": 1.32,
+   "text": ">> In in the dark secret."
+  },
+  {
+   "t": 818.56,
+   "d": 2.08,
+   "text": ">> Yeah, in in in reality, they're actually"
+  },
+  {
+   "t": 820.64,
+   "d": 3.16,
+   "text": "done as the rooms are being generated."
+  },
+  {
+   "t": 823.8,
+   "d": 2.04,
+   "text": "Um but but yeah, I think it'd be"
+  },
+  {
+   "t": 825.84,
+   "d": 1.96,
+   "text": "interesting to look at, you know, what"
+  },
+  {
+   "t": 827.8,
+   "d": 1.8,
+   "text": "distributions of items are possible,"
+  },
+  {
+   "t": 829.6,
+   "d": 1.32,
+   "text": "what distribution of monsters are"
+  },
+  {
+   "t": 830.92,
+   "d": 1.8,
+   "text": "actually possible."
+  },
+  {
+   "t": 832.72,
+   "d": 0.88,
+   "text": "Yeah."
+  },
+  {
+   "t": 833.6,
+   "d": 2.2,
+   "text": "Um here's a question from my librarian"
+  },
+  {
+   "t": 835.8,
+   "d": 2.08,
+   "text": "mage. What is your personal favorite Sol"
+  },
+  {
+   "t": 837.88,
+   "d": 2.88,
+   "text": "LeWitt piece?"
+  },
+  {
+   "t": 840.76,
+   "d": 1.0,
+   "text": "Oh [sighs]"
+  },
+  {
+   "t": 841.76,
+   "d": 3.32,
+   "text": "man. Um"
+  },
+  {
+   "t": 845.32,
+   "d": 2.04,
+   "text": "I I think the one with cubes that I"
+  },
+  {
+   "t": 847.36,
+   "d": 4.08,
+   "text": "showed is is really my favorite. Um one"
+  },
+  {
+   "t": 851.44,
+   "d": 2.52,
+   "text": "of the things Sol LeWitt"
+  },
+  {
+   "t": 853.96,
+   "d": 2.2,
+   "text": "said is he started out trying to draw"
+  },
+  {
+   "t": 856.16,
+   "d": 1.68,
+   "text": "these and couldn't figure it out. So,"
+  },
+  {
+   "t": 857.84,
+   "d": 2.08,
+   "text": "making the physical objects that he"
+  },
+  {
+   "t": 859.92,
+   "d": 2.96,
+   "text": "could manipulate was really the only way"
+  },
+  {
+   "t": 862.88,
+   "d": 2.4,
+   "text": "he could get it done. And I think that's"
+  },
+  {
+   "t": 865.28,
+   "d": 1.8,
+   "text": "just neat that the part I love best is"
+  },
+  {
+   "t": 867.08,
+   "d": 1.68,
+   "text": "is actually the physical one, but he was"
+  },
+  {
+   "t": 868.76,
+   "d": 1.68,
+   "text": "actually trying to to draw them to"
+  },
+  {
+   "t": 870.44,
+   "d": 2.24,
+   "text": "start. I I found a paper from a"
+  },
+  {
+   "t": 872.68,
+   "d": 1.88,
+   "text": "mathematician who says he didn't get it"
+  },
+  {
+   "t": 874.56,
+   "d": 2.56,
+   "text": "quite right. I I I forgive him for this,"
+  },
+  {
+   "t": 877.12,
+   "d": 2.56,
+   "text": "but That's right. It's it's it's art,"
+  },
+  {
+   "t": 879.68,
+   "d": 2.8,
+   "text": "you know, but that's very funny. Um"
+  },
+  {
+   "t": 882.48,
+   "d": 1.4,
+   "text": "yeah, and I think since we're about"
+  },
+  {
+   "t": 883.88,
+   "d": 1.8,
+   "text": "time, I'll just also mention there's a a"
+  },
+  {
+   "t": 885.68,
+   "d": 3.12,
+   "text": "comment here from uh Dedanum who also"
+  },
+  {
+   "t": 888.8,
+   "d": 2.52,
+   "text": "identifies as an artificer. Um uh not"
+  },
+  {
+   "t": 891.32,
+   "d": 1.6,
+   "text": "quite a question, but your final"
+  },
+  {
+   "t": 892.92,
+   "d": 1.24,
+   "text": "question made me think that there are"
+  },
+  {
+   "t": 894.16,
+   "d": 2.08,
+   "text": "people who have solved all commercially"
+  },
+  {
+   "t": 896.24,
+   "d": 2.64,
+   "text": "available jigsaw puzzles since there are"
+  },
+  {
+   "t": 898.88,
+   "d": 2.92,
+   "text": "only so many actual die cuts that can be"
+  },
+  {
+   "t": 901.8,
+   "d": 2.96,
+   "text": "physically made to manufacture them."
+  },
+  {
+   "t": 904.76,
+   "d": 1.44,
+   "text": "I think that that's interesting. I don't"
+  },
+  {
+   "t": 906.2,
+   "d": 1.32,
+   "text": "know if you've ever heard of this, but"
+  },
+  {
+   "t": 907.52,
+   "d": 2.36,
+   "text": "that's a fascinating So, there are there"
+  },
+  {
+   "t": 909.88,
+   "d": 2.36,
+   "text": "are who swapped the two sets. They find"
+  },
+  {
+   "t": 912.24,
+   "d": 2.44,
+   "text": "sets that have the same die cut and and"
+  },
+  {
+   "t": 914.68,
+   "d": 1.8,
+   "text": "swap the pieces to make a an art"
+  },
+  {
+   "t": 916.48,
+   "d": 2.16,
+   "text": "picture. I think that's really cool."
+  },
+  {
+   "t": 918.64,
+   "d": 1.88,
+   "text": "That's amazing. I'm glad we"
+  },
+  {
+   "t": 920.52,
+   "d": 1.2,
+   "text": "brought that up. Thank you, Dedanum, for"
+  },
+  {
+   "t": 921.72,
+   "d": 1.08,
+   "text": "bringing that up cuz I think that that's"
+  },
+  {
+   "t": 922.8,
+   "d": 1.36,
+   "text": "very in line with these ideas and it's"
+  },
+  {
+   "t": 924.16,
+   "d": 2.52,
+   "text": "really cool. What if you"
+  },
+  {
+   "t": 926.68,
+   "d": 1.44,
+   "text": "take stuff out of one Roguelike and put"
+  },
+  {
+   "t": 928.12,
+   "d": 1.44,
+   "text": "it in the other? No, we can't do that,"
+  },
+  {
+   "t": 929.56,
+   "d": 0.55,
+   "text": "but"
+  },
+  {
+   "t": 930.11,
+   "d": 0.29,
+   "text": ">> [laughter]"
+  },
+  {
+   "t": 930.4,
+   "d": 2.48,
+   "text": ">> thank you so much, Mark, for a fantastic"
+  },
+  {
+   "t": 932.88,
+   "d": 0.96,
+   "text": "talk"
+  },
+  {
+   "t": 933.84,
+   "d": 2.68,
+   "text": "and for joining the conference this"
+  },
+  {
+   "t": 936.52,
+   "d": 0.96,
+   "text": "year."
+  },
+  {
+   "t": 937.48,
+   "d": 2.48,
+   "text": "Thanks."
+  }
+ ]
+}

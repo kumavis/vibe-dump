@@ -1,0 +1,180 @@
+{
+  "id": "QbTnKvRrNYY",
+  "title": "Sébastien \"deepnight\" Benard - Mixing hand-crafted content with procgen to achieve quality",
+  "speaker": "Sébastien \"deepnight\" Benard",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=QbTnKvRrNYY",
+  "talk_type": "postmortem",
+  "summary": "Sébastien Benard, former director and lead developer of Dead Cells, explains how the game mixes hand-made content with procedural generation, choosing in each area whichever gives the most quality for the least production time. Platform layouts were hand-drawn as ~1,000+ small rooms because a platformer generator gave poor, inconsistent results, while decoration was procedural and level structure came from a node tree filled by brute-force room fitting. Loot is distributed by a 'loot director' inspired by Left 4 Dead that starts from a balanced plan and adds controlled chaos (pity drops, re-placed legendaries, planned golden runs, clumped gold). He frames all of this as a 'hidden game master' that, like a tabletop GM, fakes randomness to protect the perceived experience.",
+  "games": [
+    "Dead Cells",
+    "Left 4 Dead",
+    "Spelunky",
+    "Rogue",
+    "Castlevania",
+    "LDtk"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "cost versus impact",
+      "kind": "principle",
+      "claim": "Benard decides what to proceduralise by weighing a feature's implementation complexity against its impact on the player, spending dev time where it buys the most perceived quality.",
+      "detail": "Working solo after Dead Cells, he optimises production time versus its impact on the game. In the conclusion he contrasts a random platform generator (very complex, low player impact) with well-dispatched randomized loot (easy to build, high impact).",
+      "t": 1990,
+      "quote": "it's really a matter of balancing complexity of implementing something uh versus the impact or the efficiency on that",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "rule-based tiling",
+      "kind": "technique",
+      "claim": "Benard's LDtk level editor uses rule-based auto-painting so the designer marks only semantics (collision, water) and tiles are drawn automatically by rules.",
+      "detail": "LDtk is a 2D, rule-based editor that dynamically paints the level as you draw. Marking collision or water and letting rules place grass and corners saves a lot of manual placement time.",
+      "t": 536,
+      "quote": "you basically just say this is a collision, this is water, and everything else is drawn using rules",
+      "weight": 1
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelite",
+      "kind": "example",
+      "claim": "Dead Cells was deliberately made a roguelite built on three pillars: random levels, loot, and random encounters, with everything subordinate to combat.",
+      "detail": "The pitch was 'Castlevania you can play again and again', and the team decided early that the game is all about combat, which drove many design choices. They chose roguelite over roguelike because their free-to-play background was about making players play again.",
+      "t": 665,
+      "quote": "we really quickly decided that we have to stick to one thing and Dead Cells is all about combat",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "platformer generation",
+      "kind": "warning",
+      "claim": "Procedurally placing platforms in Dead Cells failed because platformer spaces are much harder to generate than top-down dungeons: gravity makes jumps asymmetric.",
+      "detail": "The team spent weeks on fully random platform placement with rules and the results were uninteresting. Unlike top-down dungeons, platforming has gravity and jump distances, and moving up, down and horizontally is not symmetric.",
+      "t": 858,
+      "quote": "if you want to make platformer generation, that's actually way harder because you have something which is different from top down, you have gravity",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator quality bar",
+      "kind": "principle",
+      "claim": "A shipped game's generator must produce good output essentially every time; a generator that is easy to write but yields 50% trash is not acceptable.",
+      "detail": "Benard says a dungeon generator takes five minutes but one producing 100% good, interesting results takes months. The effort also forced them to define what a good result even was, which they did not know when they began.",
+      "t": 904,
+      "quote": "You can make a dungeon generator in 5 minutes, but making a dungeon generator that produces 100% good result like interesting results",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "hand-made rooms",
+      "kind": "technique",
+      "claim": "Dead Cells hand-authors platform rooms because drawing one takes 2–5 minutes, so ~1,000 rooms cost about two weeks and feel designed with purpose, unlike random platforms.",
+      "detail": "A room is just platforms, one-way platforms, walls, ladders and exits, with optional random walls marked plus/minus that can be added or removed. Benard challenges anyone to write a decent platformer generator in the two weeks it took to draw the rooms.",
+      "t": 989,
+      "quote": "It actually felt like it was a space that was designed with purpose",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural decoration",
+      "kind": "technique",
+      "claim": "Dead Cells makes decoration fully procedural: a 'decorator' algorithm paints biome-specific detail over hand-made room geometry.",
+      "detail": "Since the game is about combat rather than examining backgrounds, a decent procedural background was good enough. The decorator follows biome rules to turn a bare room into something much nicer, freeing dev time for such algorithms.",
+      "t": 1048,
+      "quote": "the decoration on on the platforms. And this part is fully procedural",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room reuse",
+      "kind": "technique",
+      "claim": "Separating room geometry from decoration lets Dead Cells reuse the same room across biomes, and players rarely notice the repetition.",
+      "detail": "Because a room is just walls, platforms and ladders, it can be painted with the sewer algorithm or the clock tower algorithm. With around 1,000 rooms, most players did not notice repetition.",
+      "t": 1188,
+      "quote": "we can totally reuse uh a room between different biomes",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "node tree layout",
+      "kind": "technique",
+      "claim": "A Dead Cells level starts as a simple tree of nodes (entrance, exits, shop, treasure) whose gaps are then filled with combat rooms without changing the logic.",
+      "detail": "Benard separates world layout from moment-to-moment platforms. The tree encodes things like an entrance, a secondary exit on a branch, a shop and cursed treasure; combat rooms are inserted between them. The idea came from GMTK's Zelda 'Boss Keys' videos and Spelunky's level generation writing.",
+      "t": 1251,
+      "quote": "a world is really for us just a simple tree of nodes",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "brute force",
+      "kind": "technique",
+      "claim": "Dead Cells turns its node tree into a level by brute force: randomly picking rooms of the needed type, fitting them by matching exits, and backtracking on overlap — often 5,000–10,000 tries per level.",
+      "detail": "The prototype's brute-force fitter was never replaced and still ships; it is what the loading screens are doing. Evil Empire later optimised it by discarding obviously failing cases, but it is still brute force and players don't care.",
+      "t": 1436,
+      "quote": "a single leveling cell takes like five to 10k tries uh sometime bit more for very complex layout",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "controlled randomness",
+      "kind": "principle",
+      "claim": "Benard argues 'randomly generated' should mean random in a controlled way, because full randomness produces chaotic, mostly uninteresting results.",
+      "detail": "He calls the claim of random levels 'a lie' in that designers control the randomness. His loot director in Dead Cells aimed to keep loot fair while still allowing some chaos.",
+      "t": 1603,
+      "quote": "Full random is not interesting most of the time. Uh it just produces chaotic results",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "loot director",
+      "kind": "technique",
+      "claim": "Dead Cells' loot director, inspired by Left 4 Dead's AI director, detects streaks of bad luck and compensates, e.g. giving something good after several trash drops.",
+      "detail": "Left 4 Dead's director created dynamic pacing by alternating overwhelming and calm moments. Benard applied that to loot: if a player gets trash loot four times in a row, the system makes sure the fifth is something nice.",
+      "t": 1641,
+      "quote": "you just get trash loot four times in a row. Um I just try to notice that and to make sure",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "legendary drops",
+      "kind": "example",
+      "claim": "Dead Cells biases legendary drops toward the player's build and re-places a missed legendary in the next level, so getting one is not left to luck.",
+      "detail": "Playing bows raises the chance of a legendary bow. If the player misses, doesn't pick up or doesn't buy the planned legendary, it is put back on their path later in the run; a planned legendary can also be dropped by an enemy instead of the chest it was planned in.",
+      "t": 1700,
+      "quote": "if you didn't, we actually put it again on your on your pass to make sure that you will get another one during this run",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balanced baseline",
+      "kind": "technique",
+      "claim": "Benard starts from a perfectly balanced, non-random allocation of gold and weapons and then adds chaos back in a controlled way, including deliberately scheduled 'golden runs'.",
+      "detail": "The baseline is balanced like a non-randomized game. From time to time Dead Cells decides beforehand that a run will be a lucky 'golden run'; the player has no control, so it still feels random though it is on purpose.",
+      "t": 1739,
+      "quote": "I really like to start with a perfectly balanced situation",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "gold economy",
+      "kind": "technique",
+      "claim": "Dead Cells budgets gold per level top-down — about 80% of the priciest item, adjusted for carried gold and randomized — then spreads it in uneven stacks because big piles feel better.",
+      "detail": "The total is decided first so the player can buy something in that level, then distributed among chests, mobs and walls. It is deliberately clumped: of five enemies, four drop nothing and one drops a big pile, same total but a different feeling.",
+      "t": 1843,
+      "quote": "we don't spread that evenly. We just make stacks of gold",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hidden game master",
+      "kind": "principle",
+      "claim": "Benard's 'hidden game master' principle: like a tabletop GM who fudges dice, game code should observe the run and twist randomness so good things happen, since perceived experience matters more than raw results.",
+      "detail": "Tabletop GMs create the illusion that chaos was intended. The hidden game master, like the Left 4 Dead director, notices when the player lacks money or is behind on the economy and drops something. He says thinking of tools this way helps design them more efficiently: acknowledge a situation and fix it.",
+      "t": 1902,
+      "quote": "the perceived experience is more important than the dash results in in such situation",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

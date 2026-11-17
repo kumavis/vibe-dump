@@ -1,0 +1,306 @@
+{
+  "id": "5CQP8ndTjEY",
+  "title": "Thomas Biskup - Experiences from crowdfunding ADOM",
+  "speaker": "Thomas Biskup",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=5CQP8ndTjEY",
+  "talk_type": "postmortem",
+  "summary": "Thomas Biskup looks back on the 2012 Indiegogo campaign to revive ADOM (Ancient Domains of Mystery), which asked for $48,000, raised more than $90,000, and took 1,960 days to fulfil. He walks through donation statistics showing a strong start, a long 'valley of desperation' that power pledge drives, platform front-page features and limited physical rewards barely moved, and a surge once the funding goal was reached and in the final 24 hours. His lessons: build a community beforehand, invest in a short great video, strong visuals and professionally written text, set the minimum viable goal and use stretch goals, budget for taxes, platform fees, shipping and legal costs, plan all communication in advance, keep pledge levels simple, avoid physical rewards, don't trust the platform, separate haters from critics, and expect development to cost far more than estimated (ADOM consumed over three times what was raised).",
+  "games": [
+    "ADOM (Ancient Domains of Mystery)",
+    "Cogmind"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "crowdfunding",
+      "kind": "technique",
+      "claim": "ADOM's 2012 crowdfunding campaign was used to judge whether enough people still cared to justify restarting development after about ten dormant years.",
+      "detail": "If enough people were seriously interested, the team would restart; if not, maybe time had passed. They used Indiegogo because Kickstarter was not available to Germans at the time, ran the maximum 60 days, asked for $48,000 and raised more than $90,000, which Biskup counts as a big success.",
+      "t": 112,
+      "quote": "So we decided to do the crowdfunding basically to judge interest in continued development on ADOM.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "localization",
+      "kind": "open-question",
+      "claim": "ADOM's English-only release may shape where its money comes from: almost a third of crowdfunding donations came from the US, with English-speaking countries first, and its creator wonders if more languages would change that.",
+      "detail": "Translation is a frequent request but the team decided it is not possible with reasonable effort for ADOM. After English-speaking countries came a strong Eastern European fanbase (Poland, Ukraine, Russia); the second largest group was the 42 other donating countries combined.",
+      "t": 223,
+      "quote": "would this be different if we were offering more languages with ADOM because it's a request we get pretty often",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "crowdfunding visibility",
+      "kind": "principle",
+      "claim": "In ADOM's campaign the single biggest source of donations was the developer himself; if you do not acquire backers through your own visibility and activity, you probably will not get them.",
+      "detail": "Analysing referral sources afterwards, Biskup found the top source was his own outreach, followed by other individuals, with Indiegogo and its front-page feature near the bottom. He says developers easily overestimate platform featuring, which matters only for rare million-dollar campaigns, and for other reasons.",
+      "t": 327,
+      "quote": "if you don't manage to acquire donors through your own visibility and your activities you probably won't get them",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "crowdfunding curve",
+      "kind": "example",
+      "claim": "ADOM's campaign raised over $7,000 in the first 24 hours and 25% of its goal in three days, then fell to around a hundred dollars a day for weeks, which was emotionally very hard.",
+      "detail": "Biskup calls this middle stretch the 'valley of desperation'. At that pace it seemed funding would not arrive before Christmas.",
+      "t": 397,
+      "quote": "more than $7,000 in the first 24 hours. And after three days we already had something like 25% of our goal.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "power pledge drives",
+      "kind": "warning",
+      "claim": "ADOM's 'power pledge drives', which promised predefined extra content if a target sum was donated within a few days, produced only tiny, brief spikes and were not worth the effort.",
+      "detail": "An example drive added +1 corruption content for every $300 donated within five days. Three drives were tried; each gave a small spike, including one just before a drive ended, then donations fell back.",
+      "t": 447,
+      "quote": "donated in a certain amount of time we would add predefined content something like plus one corruption for every 300 dollar donated within five days",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "limited rewards",
+      "kind": "warning",
+      "claim": "Adding limited, never-again-available physical rewards to ADOM's campaign, first expensive boxes and then a cheaper RPG book, also produced only a tiny one-day spike.",
+      "detail": "The idea was that scarcity might draw pledges; donations trickled back into nothing after each announcement.",
+      "t": 517,
+      "quote": "We offered more physical stuff with the idea okay, maybe that could be interesting to pick up things that are limited, never again available.",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "funding goal",
+      "kind": "principle",
+      "claim": "Reaching the funding goal transformed ADOM's campaign: once backers knew the game would happen and stretch levels opened, daily donations stayed far above the preceding 40 days.",
+      "detail": "Funding came only seven or eight days before the end. A spike just before funding was followed by a day almost as big as the first, and every following day exceeded the valley days. Biskup calls not anticipating this a big mistake.",
+      "t": 604,
+      "quote": "after funding there was more excitement because now there were additional patch levels and now you knew you were going to get the game",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "final hours",
+      "kind": "example",
+      "claim": "ADOM's last 24 hours of crowdfunding brought in more than any other seven-day period, helped by backers offering $5,000 if the community hit a target within an hour.",
+      "detail": "Around $22,000-23,000 came in that final day. One backer pledged $5,000 if the total passed $70,000 within an hour (reached in about 30 minutes) and another matched him with $5,000.",
+      "t": 661,
+      "quote": "if the community gets this over 70,000 within the next hour I will ship in five thousand dollars",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "campaign length",
+      "kind": "warning",
+      "claim": "ADOM's creator doubts long crowdfunding campaigns help, since most of the time nothing happens and waiting is bad for the developer's morale; shorter campaigns can work very well.",
+      "detail": "They chose 60 days, the maximum, to maximise donations. In retrospect most of that time was the flat valley, with action at the start, at funding, and at the end.",
+      "t": 703,
+      "quote": "I'm not really sure if a long campaign helps because most of the time nothing is happening and it's not good for your psych",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community first",
+      "kind": "principle",
+      "claim": "Build your community before crowdfunding; communities are not built during a campaign, and without one a campaign is likely just a valley of desperation.",
+      "detail": "Biskup says marketing and visibility are the hardest part, and viral million-dollar campaigns are lottery-like exceptions. ADOM was lucky to retain a community through ten years of hibernation. If you don't know whether you have a community, you probably shouldn't crowdfund.",
+      "t": 764,
+      "quote": "one thing that I think many people underestimate is build your community beforehand",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "campaign video",
+      "kind": "technique",
+      "claim": "A crowdfunding campaign's video matters more than anything; keep it to about 90 seconds and pay a videographer a thousand or two dollars if you cannot make an awesome one yourself.",
+      "detail": "Biskup says no ten-minute videos, since nobody will watch them. Alternatively find community members willing to help out of enthusiasm. A poor video makes people lose interest in the campaign.",
+      "t": 843,
+      "quote": "it's better to take a thousand or two thousand dollars to get a videographer to do a really awesome video than having a shitty video",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "crowdfunding platform",
+      "kind": "principle",
+      "claim": "ADOM's creator recommends Kickstarter over Indiegogo purely for visibility: if only a tiny fraction of visitors are interested, you want the platform with the most visitors.",
+      "detail": "He would not personally use Indiegogo again, also because of the failed $50,000 pledge he describes later.",
+      "t": 883,
+      "quote": "use Kickstarter if you can. Not Indiegogo, simply because of visibility.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "campaign visuals",
+      "kind": "technique",
+      "claim": "After the video, a campaign needs visually appealing images, even for an ASCII roguelike, because backers judge how professional and amazing it looks; video plus visuals is about two-thirds of a win.",
+      "detail": "Biskup acknowledges this is hard for ASCII games but cites Josh Ge's Cogmind as proof ASCII art can be very amazing.",
+      "t": 928,
+      "quote": "try to have a very visually appealing presentation because people first probably will look at the video",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "campaign text",
+      "kind": "technique",
+      "claim": "Have campaign text written or proofread by a skilled writer; ADOM's community rewrote its creator's text completely, which made it read professionally.",
+      "detail": "Biskup, a non-native English speaker, thought his own texts were good. He notes that campaigns with a grammar mistake per sentence fail to win people's trust with money.",
+      "t": 966,
+      "quote": "they basically tore apart my text, threw it away and rewrote it completely and that was the best thing that could have happened to us",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "funding goal",
+      "kind": "warning",
+      "claim": "ADOM's $48,000 goal was a mistake: it tried to fund all ten planned features up front, when a minimal goal for one or two features plus stretch goals would likely have reached funding early.",
+      "detail": "Because funding came so late, about 50 of the 60 days were lost to nothing; reaching the goal on day five or ten could have been a very different story. Biskup advises the minimum viable goal, 'barely enough to succeed', followed by interesting stretch goals.",
+      "t": 1022,
+      "quote": "I think it would have been much smarter to pick one or two of the most interesting things say okay we want to have a minimum amount for that",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "funding goal",
+      "kind": "warning",
+      "claim": "Crowdfunding goals are a precarious balance: ADOM was called greedy for asking $48,000 while cheaper campaigns promised more, but Biskup believes those did not deliver, and you can fail a campaign once but not twice.",
+      "detail": "He warns against over-optimism given the many software crowdfunding projects that never delivered, and says serious work needs money. The goal decision deserves long thought.",
+      "t": 1092,
+      "quote": "I think you can fail once with a crowdfunding campaign, but not a second time.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "taxes",
+      "kind": "warning",
+      "claim": "Crowdfunding income is taxed, possibly at 40-50%, and ADOM's campaign ending near year-end left no time to accrue costs, prompting a large tax demand before any work was done.",
+      "detail": "Some donors were surprised the money would be taxed at all. The tax was recovered later after a tense argument; Biskup stresses that timing matters and repeatedly says to remember taxes.",
+      "t": 1139,
+      "quote": "in some countries you pay 40 to 50% in taxes and if you forget to include that or don't have costs to charge against that",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "hidden costs",
+      "kind": "warning",
+      "claim": "Budget every crowdfunding cost in advance, including a 5-10% platform share, printing, shipping and legal fees, or you will run out of money before doing the work.",
+      "detail": "Biskup notes that in Germany a lawyer typically charges about 1,800 to 2,400 euros per day and a contract rarely takes only one day, so get estimates beforehand. Game programmers dislike this but it is critical.",
+      "t": 1199,
+      "quote": "if you forget to make a complete list of that you very likely will run out of whatever you have gained",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "campaign communication",
+      "kind": "warning",
+      "claim": "Running ADOM's campaign took three to five hours of communication every day for 60 days on top of a full job, which became draining after the 30th or 40th day; plan channels and messages in advance.",
+      "detail": "The work covered social channels, blogs, forums and mailing lists. Biskup says he totally underestimated it despite preparing well.",
+      "t": 1275,
+      "quote": "about three to five hours per day, just working on communication, social channels, blogs, forums, whatever",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "campaign communication",
+      "kind": "principle",
+      "claim": "Getting backers takes relentless repetition: Indiegogo told ADOM's team people usually need seven contacts before donating, and even after 50 daily posts some followers had never seen the campaign.",
+      "detail": "Biskup found the figure about right; people promised to donate 'next weekend' and took a long time. On day 50-55 some who checked his Facebook daily had not noticed the campaign, which he blames on the algorithm. Get the message out again and again on all channels.",
+      "t": 1329,
+      "quote": "you usually need seven contacts per person to get that person to donate",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "campaign planning",
+      "kind": "principle",
+      "claim": "Plan all campaign activities before launch, studying successful campaigns, because mid-campaign you will have neither the time nor the energy to devise new ones.",
+      "detail": "Biskup says preparation really is everything, and warns that desperation during the valley led ADOM's team to let things get out of hand.",
+      "t": 1412,
+      "quote": "If you're doing the campaign suddenly you have to devise new activities or anything, you won't have the time, you won't have the energy",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "crowdfunding rewards",
+      "kind": "warning",
+      "claim": "Physical rewards added in desperation kept ADOM's team from programming for weeks and months; for a computer game, promise virtual in-game rewards instead.",
+      "detail": "The ADOM pen-and-paper RPG had to be written, checked, packaged and shipped, with lingering special cases for places like Korea and Eastern Russia. Biskup mentions board-game campaigns that ended up with truckloads of unsorted T-shirts to distribute, saying this can wreck your life and doesn't help your game.",
+      "t": 1496,
+      "quote": "promise virtual rewards within the game context, but don't start with T-shirts and buckles",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "platform featuring",
+      "kind": "warning",
+      "claim": "Don't expect the crowdfunding platform to help much: Indiegogo accounted for only about 1.5-2% of ADOM's donations despite a front-page feature.",
+      "detail": "The front-page feature showed as only a tiny one-day bump in the daily donation chart.",
+      "t": 1519,
+      "quote": "Indiegogo maybe was responsible for 1.5 to 2% of the donations we got",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "reward fulfilment",
+      "kind": "warning",
+      "claim": "With no automated delivery portals in 2012, ADOM's team built their own and spent hours handling international addresses in unfamiliar scripts; today, check delivery portals beforehand.",
+      "detail": "They had to learn about UTF-8, export characters to label-printing programs, and sometimes hand-write Korean addresses, which cost a lot of time and energy.",
+      "t": 1542,
+      "quote": "we had to write our own delivery portal and do these things and suddenly you get cryptic signs from other countries that are addresses",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "pledge levels",
+      "kind": "warning",
+      "claim": "Keep pledge levels simple: ADOM's one exclusive $40 level, which did not include other rewards, had to be explained hundreds of times during and after the campaign despite capital-letter warnings.",
+      "detail": "Backers repeatedly assumed it included everything on the list. Biskup advises very straightforward pledge levels with 'no special ideas in them', since they cause work.",
+      "t": 1615,
+      "quote": "make your pledge levels very very straightforward very very easy to understand and no special ideas in them",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "platform reliability",
+      "kind": "example",
+      "claim": "ADOM's joke $50,000 pledge level was claimed by Notch within minutes of launch, but Indiegogo's PayPal account could not accept more than $10,000, so the pledge, and its publicity, was lost.",
+      "detail": "The tier (the source code printed in leather-bound books, hand-delivered and explained in person) mocked those who sent death threats over open-sourcing. After four days with Indiegogo support, they asked Notch to verify identity at a bank with a passport and he declined. Biskup says the lost visibility was probably worth millions and is why he would never use Indiegogo again.",
+      "t": 1694,
+      "quote": "find out that in the end, their PayPal account couldn't accept more than $10,000. And then they wanted Notch to go to a bank",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "haters and critics",
+      "kind": "principle",
+      "claim": "Expect hate for crowdfunding and learn to ignore haters, but separate them from blunt critics, whose feedback substantially improved ADOM's campaign.",
+      "detail": "ADOM drew hate for asking for money at all and for asking too much. Some initially nasty commenters were seriously trying to improve the campaign; engaging them gave amazing feedback, and Biskup thinks ignoring them might have meant failure. Valid criticism can arrive as 'all your texts are shit'.",
+      "t": 1785,
+      "quote": "Very important for us was to learn to separate haters from critics because there were some people that in the beginning were quite, let's say, nasty in their comments",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "budget estimation",
+      "kind": "warning",
+      "claim": "ADOM's revival consumed more than three times the $90,000 raised, over a quarter of a million dollars; crowdfunding money ran out in early 2015 and the Steam release saved the project.",
+      "detail": "After that Biskup funded it privately until Steam income allowed a normal pace. Even so, the team could not pay everyone full-time though most worked full-time. He urges careful, realistic estimates.",
+      "t": 1852,
+      "quote": "we probably have consumed more than three times the $90,000 we have received",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "graphics for ascii games",
+      "kind": "warning",
+      "claim": "ADOM's team underestimated the effort of adding a graphical interface to an ASCII game and of drawing images for its many items and monsters, which took three and a half to four of the five years.",
+      "detail": "After ten years away they had forgotten the traps they might hit; they had never done a graphical interface for an ASCII game, and the graphical-interface library they used helped immensely but did not remove the work. People say art can be done in a week; Biskup disagrees.",
+      "t": 1909,
+      "quote": "we kind of underestimated the amount of effort required to draw images for all those many items and monsters",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

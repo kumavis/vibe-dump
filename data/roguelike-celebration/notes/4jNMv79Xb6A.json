@@ -1,0 +1,128 @@
+{
+  "id": "4jNMv79Xb6A",
+  "title": "The Delve Bros - Liveplay of 'Help Me Steal the Mona Lisa'",
+  "speaker": "The Delve Bros (Eli, Willem and Zack Delventhal)",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=4jNMv79Xb6A",
+  "talk_type": "performance",
+  "summary": "A live interactive play session of Stream Heist, a prototype roguelike heist game by three brothers, in which the streamer plays an art thief while the audience act as his tech team, hacking doors, cameras and robots through a web command-line interface. Between heists the developers explain the procedural level generator (a non-self-intersecting drunkard's walk path filled with rooms, largest first) and the run economy. They discuss the open design problem of 'infinite multiplayer' games built for Twitch: scaling a puzzle to hundreds of viewers, keeping each participant's contribution meaningful, and balancing cooperation against trolling.",
+  "games": [
+    "Stream Heist",
+    "Quadrilateral Cowboy",
+    "Duskers",
+    "Among Us"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "audience participation",
+      "kind": "example",
+      "claim": "Stream Heist is built around 'infinite multiplayer': a streamer plays the thief while any number of viewers join through a web command line as the hacking tech team.",
+      "detail": "The Delve Bros framed the concept as asking what it looks like for a streamer to have everybody in the audience actually playing with them. Viewers open a link, list devices the thief has attached a dongle to, and hack, unlock or control doors, cameras and robots.",
+      "t": 149,
+      "quote": "the concept is this infinite multiplayer what does it look like for a streamer to be able to have everybody in their audience actually playing the video game with them",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run economy",
+      "kind": "technique",
+      "claim": "Stream Heist structures its run around money: stealing art earns cash while each day and each capture costs money, and the run ends only when the money runs out.",
+      "detail": "The thief has ongoing expenses (an expensive wine habit, Heist Link licenses) so time pressure is economic. Dying in a heist loses some cash but does not restart the game; it only ends when the player runs out of money.",
+      "t": 495,
+      "quote": "every time we steal art we're going to gain money and every time we uh die by diabetes captured or whatever and every day that passes we're gonna lose money",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "drunkard's walk",
+      "kind": "technique",
+      "claim": "Stream Heist's levels start from a drunkard's-walk path that refuses to connect back to any previous room, producing a single line whose far end holds the goal (the Mona Lisa).",
+      "detail": "Eli explained that the first layer is a single contiguous path that violates the usual drunkard's walk by never reconnecting, so the start and the end are maximally far apart. In the Louvre the end is where the Mona Lisa goes.",
+      "t": 1858,
+      "quote": "this generates one continuous path and then branches off of it at the beginning of the path is where you start and at the end is the mona lisa",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room placement",
+      "kind": "technique",
+      "claim": "After the spine path, Stream Heist places extra rooms off the path that may interconnect, then fills the space with room templates from largest (3x3) to smallest (1x1), like filling a glass with rocks before pebbles and sand.",
+      "detail": "Room shapes include 3x3, 2x2, 1x1, 3x1 and L passageways. The generator finds spaces for the biggest rooms first, so smaller ones fall into the remaining gaps, giving an open, path-like structure.",
+      "t": 2207,
+      "quote": "if you want to fill a glass with sand and pebbles and big rocks you gotta put the big rocks in first then the pebbles will fall in the spaces",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "decoration placement",
+      "kind": "technique",
+      "claim": "Stream Heist decorates each room using hand-built placement locations per room type, choosing among them with heat maps to spread objects evenly and avoid bad spots such as blocking doors.",
+      "detail": "Every room type has manually authored locations where decorations and hardware can go, and there are several layers of placement. Heat maps distribute items evenly so things do not end up, for example, sticking through a wall next to a door.",
+      "t": 2236,
+      "quote": "a bunch of manually built locations for that type of room where decorations hardware etc can be placed there's different layers of placement",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "grid constraints",
+      "kind": "example",
+      "claim": "Stream Heist's fixed 4x4 room-segment size constrained its content: the planned bathroom-stall level entry could not fit, so it became a roof entry.",
+      "detail": "A developer noted the first entry animation originally had the thief peeking over a bathroom stall, but a bathroom could not be fit into a 4x4 segment, the size of every room segment.",
+      "t": 1449,
+      "quote": "i was unable to fit a bathroom in a 4x4 square which is how big each room segment is so that's why it's now roof entry",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "stream latency",
+      "kind": "technique",
+      "claim": "Stream Heist's viewer interface is a simple RESTful web app polled every second, which is only pseudo-synchronous but acceptable because Twitch already has a delay of several seconds.",
+      "detail": "The developers said the game just sends a call every second with no long polling. It pretends to be synchronous, which is not a problem for a Twitch audience watching with an eight-second delay.",
+      "t": 2363,
+      "quote": "it's pretending to be synchronous but it's not exactly synchronous which is not a problem if you're on twitch because you have the eight-second delay",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "audience participation",
+      "kind": "principle",
+      "claim": "An audience-participation game must balance letting viewers cooperate with the streamer against letting them troll the streamer, since trolling is perhaps the most fun part.",
+      "detail": "Responding to chat ideas, the developers said you have to find a balance between working together and trolling. During play, viewers repeatedly sent hacked robots at the thief, which was part of the entertainment.",
+      "t": 2375,
+      "quote": "you have to find that balance between like allowing people to work together and then also allowing people to troll the streamer because obviously that's maybe the most fun",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "audience scale",
+      "kind": "open-question",
+      "claim": "A participation game for both a streamer with a hundred viewers and eight friends playing together faces two very different scales that need different balancing.",
+      "detail": "Zack noted the streamer relationship is asymmetric, the streamer is on a pedestal and trolling must be controlled for, while eight friends is a very different experience. They would like to support both, and said competitive play might fit friends but not a streamer.",
+      "t": 2608,
+      "quote": "can it be both a streamer game and like a party game with friends those are two very different scales",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "audience scale",
+      "kind": "open-question",
+      "claim": "Stream Heist's Mastermind-style hack can be scaled like a hash puzzle so a crowd solves it in predictable time, but then each of a hundred hackers has little chance of being the one who solves it, which may not feel satisfying.",
+      "detail": "Answering how the game scales to hundreds of viewers with only four to eight hackable devices, they compared the puzzle to brute-force Bitcoin mining: more guessers solve it sooner. The problem is that an individual's success is mostly chance.",
+      "t": 2763,
+      "quote": "you have like a one out of a hundred chance of being the one to get it",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "collaborative mechanics",
+      "kind": "technique",
+      "claim": "To make large audiences feel involved, the Stream Heist team planned multiple varied hacking mini-games, collaborative hacks that show each person's progress contribution, and multi-part devices that split effort so people can specialise.",
+      "detail": "Some viewers felt bad at Mastermind and frustrated when others solved it faster in a big group. Proposed fixes: different mini-games instead of the same hack, shared progress crediting contributors, and devices with several parts each with its own mini-game.",
+      "t": 2824,
+      "quote": "collaborative hacking so where rather than having just one person who managed to hack it somehow modified the game so that everybody's sort of hacking together and it shows progress",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

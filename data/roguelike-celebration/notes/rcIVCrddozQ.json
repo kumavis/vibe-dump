@@ -1,0 +1,136 @@
+{
+  "id": "rcIVCrddozQ",
+  "title": "Nat Alison- In Defense of Hand-Crafted Sudoku",
+  "speaker": "Nat Alison",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=rcIVCrddozQ",
+  "talk_type": "design",
+  "summary": "Nat Alison, a variant sudoku constructor, argues that although sudoku is known as the ultimate procedurally generated puzzle, a thriving community (grown around the Cracking the Cryptic YouTube channel during the pandemic) prizes hand-crafted puzzles. Their appeal lies in the variety of variant rules, constructor ingenuity in creating new deductions, and the 'story' a human-designed solve path tells, with a break-in leading to a flow of deductions. Through live demos in the f-puzzles tool, she shows that hand-made puzzles can still feel procedural if tools merely resolve a doodle, while computer-searched puzzles like the Miracle Sudoku can feel hand-crafted when a human curates for a meaningful idea. She concludes handcrafted versus procedural is a spectrum and that people ultimately want to communicate with other humans.",
+  "games": [
+    "Sudoku",
+    "Minecraft"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "sudoku",
+      "kind": "warning",
+      "claim": "Computer-generated sudoku that can all be solved with the same fixed set of algorithmic steps quickly becomes boring.",
+      "detail": "Alison describes newspaper and airport-book sudoku as procedural puzzles where you repeatedly apply the same row/column eliminations; she positions her talk as a counterexample to procedural sudoku generation.",
+      "t": 134,
+      "quote": "For most of these puzzles you have a specific set of instructions and algorithms",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "puzzle community",
+      "kind": "history",
+      "claim": "The hand-crafted variant sudoku community grew rapidly from 2020 via a feedback loop in which Cracking the Cryptic videos inspired viewers to build puzzles, which got featured and inspired more constructors.",
+      "detail": "Alison explains the channel moved from cryptic crosswords to newspaper sudoku to hand-crafted variants; pandemic viewers sent by the algorithm became solvers and constructors, forming Discords and other channels.",
+      "t": 317,
+      "quote": "A sort of feedback loop happened where people look at the puzzle and see the logic and people think this is cool",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "variant rules",
+      "kind": "example",
+      "claim": "Variant sudoku gets its variety from layering rule types such as anti-knight, killer cages, thermometers, whisper lines, irregular regions, chaos construction and even fog of war that reveals clues as correct digits are placed.",
+      "detail": "Alison argues that while a generator can produce sextillions of classic grids, only human ingenuity has invented genuinely new rule combinations; killer cages in newspapers stayed basic for years.",
+      "t": 477,
+      "quote": "they also added fog of war to Sudoku where the digits that you put in if they are correct reveal more fog and reveal more clues",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "deduction design",
+      "kind": "principle",
+      "claim": "Hand-crafted puzzles can contain new kinds of deductions a computer would brute-force but a human can solve logically, and constructors build a shared 'meta game' of theorems on each other's work.",
+      "detail": "Examples include Leapfrog, a pure killer puzzle tracking digits across rows, and Arbitrary Code Execution, which uses coloring of 7-8-9 triples. People continually devise and build upon new theorems.",
+      "t": 616,
+      "quote": "There is a Sudoku meta game. People come up with new theorems all of the time",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "puzzle as story",
+      "kind": "principle",
+      "claim": "Human-designed puzzles have a story: a core 'break-in' deduction that flows through developing logic to a resolution, whereas computer-generated puzzles lack a set path.",
+      "detail": "Alison says every human puzzle has a story the setter wants to tell, e.g. that a seemingly impossible scenario has a solution, demonstrating a new theorem interactively, or trolling friends.",
+      "t": 647,
+      "quote": "Puzzles by humans have a flow to them. There is a sort of break in the core thing that you want people to realize about the puzzle",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community content",
+      "kind": "principle",
+      "claim": "A large community of creators building on each other's work can supply hundreds of hours of fresh play, a role procedural generation usually plays in other spaces.",
+      "detail": "Alison contrasts looking to procedurality for content and play time with the hand-crafted sudoku community, where people make puzzles inspired by others' puzzles.",
+      "t": 723,
+      "quote": "You look toward the procedurality as a way to generate more content and more play time",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "puzzle construction",
+      "kind": "technique",
+      "claim": "Constructing a hand-crafted puzzle starts with an idea, like combining or modifying constraints, then turning the resulting break-in into themed deductions, guided by what the constructor wants to see solved.",
+      "detail": "Alison builds intuition by solving along with videos, then asks questions like what happens if two constraint types combine. Sometimes something breaks and the resulting logic is itself worth showing.",
+      "t": 795,
+      "quote": "What happens if I combine these two types of constraints?",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "design as discovery",
+      "kind": "principle",
+      "claim": "Constructing logic puzzles often feels like discovery rather than creation: the designer sets rules and traverses the space of possible worlds to find an interesting one, like finding a good Minecraft seed.",
+      "detail": "Alison describes this as co-constructing with the universe and ties it back to roguelikes.",
+      "t": 864,
+      "quote": "sometimes is t doesn't feel like you are creating a puzzle but it feels like you are discovering it",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "solver tools",
+      "kind": "warning",
+      "claim": "Using a solver tool merely to resolve a doodled grid produces a 'hand-crafted' puzzle that still feels procedural, with no intended solve path and clues added only for uniqueness.",
+      "detail": "Alison live-built an '@'-shaped whisper-line sudoku in f-puzzles in two minutes, then pointed out its small X clues added nothing meaningful to the logic and it would solve like an airport newspaper puzzle.",
+      "t": 1049,
+      "quote": "It is possible to make hand-crafted puzzles that feel procedural even though I drew everything in the grid",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "solver tools",
+      "kind": "technique",
+      "claim": "Constructors use solver tools well by shortcutting bad paths and testing combinations, then working out the human logic themselves so the solver is steered to a unique, meaningful path.",
+      "detail": "For a chaos construction Alison used the f-puzzles tool to try final region combinations, but wrote the logic herself. In another puzzle, a solver revealed an odd parity pattern; she worked out why, found interesting logic and built the puzzle around it.",
+      "t": 1075,
+      "quote": "One way that I have seen tools use and I have used myself is the shortcutting of bad paths",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "curation",
+      "kind": "example",
+      "claim": "Puzzles like the Miracle Sudoku and some by setter Clypeal are essentially computer-generated yet feel hand-crafted, because the value lies in a human discovering that such a constrained puzzle exists and curating the most beautiful solve path.",
+      "detail": "Alison re-creates the Miracle Sudoku in seconds with a solver, noting there are only one or two solutions up to symmetry, so the idea is that it can exist at all. Clypeal wrote a program to generate combinations and picked the one with the most beautiful solve path.",
+      "t": 1448,
+      "quote": "Ended up with like four different solutions that worked and picked the one that had the most beautiful solve path",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "handcrafted vs procedural",
+      "kind": "principle",
+      "claim": "Hand-crafted versus procedural is a spectrum rather than a binary; what matters is human intent and curation communicating something to other humans.",
+      "detail": "Alison applies this to games: people want to tell and hear stories, whether a cool theorem, a set storyline, or a wild anything-can-happen experience. She notes computer-generated 'chaff' floods the sudoku market while hand-crafted setters rely on Patreon.",
+      "t": 1483,
+      "quote": "hand-crafted verse procedural isn't a binary. It is a spectrum",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

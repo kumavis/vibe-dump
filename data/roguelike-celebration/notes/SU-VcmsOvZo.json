@@ -1,0 +1,142 @@
+{
+  "id": "SU-VcmsOvZo",
+  "title": "Matt Carney - Some Quite Fantastic Shapes: Procedural Narrative & Terry Riley’s In C",
+  "speaker": "Matt Carney",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=SU-VcmsOvZo",
+  "talk_type": "design",
+  "summary": "Video editor, TTRPG editor and musician Matt Carney uses Terry Riley's 1964 minimalist piece In C as a lens on procedural narrative. After surveying aleatoric music (Mozart's dice game), John Cage's chance operations and Pauline Oliveros' text scores, he details In C's structure: 53 fixed melodic patterns played in sequence, with each performer free to choose repetitions, constrained to stay within a few patterns of each other, held together by shared key and Steve Reich's suggested 'pulse', and given a designed ending. He maps this onto three ideas for procedural games: 'key and notes' (setting, theme and genre that make generated content cohere, as in Rogue, Shadows of Doubt, Caves of Qud and Ambergris-style building descriptions), 'pulse' (a clear linear purpose such as descending a dungeon), and 'resonance' (games as objects tuned to resonate, leaving room for player subjectivity rather than aiming at immersion).",
+  "games": [
+    "Rogue",
+    "Shadows of Doubt",
+    "Caves of Qud",
+    "Dwarf Fortress",
+    "Amber Spire",
+    "Thousand Hells",
+    "Fallen London",
+    "Air Light Water Moon Shadow Sky"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "constrained randomness",
+      "kind": "example",
+      "claim": "Terry Riley's In C is a model generative system: 53 fixed melodic patterns played in order, but each performer freely chooses how many times to repeat each pattern before moving on.",
+      "detail": "Any number and kind of instruments can play, there is no rule for repetitions or synchronisation, and performers must listen carefully to one another. Carney highlights this as where intentionality and chance meet.",
+      "t": 617,
+      "quote": "each performer has the freedom to determine how many times they will repeat each pattern before moving on to the next",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constrained randomness",
+      "kind": "technique",
+      "claim": "In C bounds its possibility space with a simple proximity rule: performers should stay within two or three patterns of each other, keeping openness while preventing drift.",
+      "detail": "Carney notes that even though there is a possibility space, there is structure around how far afield one should get. The emergent polyrhythmic combinations are what Riley calls 'some quite fantastic shapes' that arise and disintegrate.",
+      "t": 663,
+      "quote": "As the performance progresses, performers should stay within two or three patterns of each other",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "authored endings",
+      "kind": "technique",
+      "claim": "In C has a designed ending, showing how a generative work can put a thumb on the scale to get a desired outcome: everyone waits on the last pattern, the group swells together, then players drop out at will.",
+      "detail": "When each performer reaches figure 53 they stay until the whole ensemble arrives, then crescendo and diminuendo a few times. Carney stresses that this keeps agency even in the ending, through arriving and leaving with choice.",
+      "t": 708,
+      "quote": "where to put your thumb on the scale a bit and actually get a desired outcome",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "endogenous vs exogenous",
+      "kind": "principle",
+      "claim": "Robert Carl's distinction between 'endogenous' analysis of a score's materials and 'exogenous' analysis of a live performance maps onto procedural games as the generator and grammar versus the player's subjective encounter with its output.",
+      "detail": "Carney draws on Carl's book on In C: endogenous treats the static score and notation as an artifact; exogenous examines the piece as it occurs in real time. He finds the pair useful for talking about roguelike generators separately from play.",
+      "t": 859,
+      "quote": "you have everything in the generator, the grammar, and the possibilities that can produce. And then you have the production",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "in c pulse",
+      "kind": "history",
+      "claim": "In C's 'pulse', a repeated high C keeping time, was added at Steve Reich's suggestion because the piece proved too hard to cohere in rehearsals without a rhythmic element.",
+      "detail": "Riley did not originally intend any rhythmic element. Carney values that the pulse is played by a human (Jeannie Brechan, mis-captioned), not a metronome, so even a repetitive timekeeper is hand-made and intentional.",
+      "t": 919,
+      "quote": "Riley initially did not intend for there to be any sort of rhythmic element going that coheres the piece",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "thematic coherence",
+      "kind": "principle",
+      "claim": "Just as In C's patterns cohere because they share a key, procedurally generated content coheres when it shares a setting, theme or genre, a layer Carney calls 'key and notes'.",
+      "detail": "In Rogue everything is 'of the dungeon', creating a coherence of proximity, though Carney finds Yetis slightly too dissonant. Slight dissonance can be welcome and interesting, as in In C when patterns are slightly off.",
+      "t": 1143,
+      "quote": "how do we get to the sense of coherence and ideas in something where so much can be generated?",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "thematic coherence",
+      "kind": "example",
+      "claim": "Shadows of Doubt recombines many detailed handwritten elements that all fit its noir mystery theme, so theme and genre let them combine coherently.",
+      "detail": "Carney cites Stark Holbrook's essay in The Game Narrative Kaleidoscope on how the Shadows of Doubt team authored detailed elements under the umbrella of noir.",
+      "t": 1218,
+      "quote": "all of that can be recombined because of that layer of theming and genre",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "thematic coherence",
+      "kind": "example",
+      "claim": "Caves of Qud has a very wide possibility space with welcome dissonance, but also narrow, targeted generation such as sultan shrines themed around elements like ice or fire.",
+      "detail": "Carney relays Jason Grinblat and Brian Bucklew's stance of allowing generation unless it feels extremely off. The resulting strangeness invites the question of what this space even is; history-generation in Qud and Dwarf Fortress makes meaning after the fact.",
+      "t": 1227,
+      "quote": "its possibility space is so wide and then, you know, many talks both Jason Grinblat and Brian Bucklow have mentioned",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "descriptive text",
+      "kind": "example",
+      "claim": "Amber Spire, a city builder by Nick Tringali and Dr. Holly Nelson, gives buildings descriptions in varied voices, from first-person quotes to overheard remarks to near-academic text, which combine in interesting ways and convey cultural history.",
+      "detail": "Carney says everything is initially hard to grasp because it is new, but the cultural history in the descriptions coheres. He presents it as another 'key and notes' example.",
+      "t": 1329,
+      "quote": "some are first person quotes about what the building is, some are overheard things, some are much more like not almost academic",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "pulse",
+      "kind": "principle",
+      "claim": "A roguelike's 'pulse' is a clear, linear sense of motion and purpose, such as descending a dungeon or climbing a tower, around which any weird generated content can cohere.",
+      "detail": "Carney says the pulse is usually very descriptive: what are you doing here? Even a set map like Caves of Qud's, or a river journey, yields different linear paths each playthrough, adding a sense of repetition and loop.",
+      "t": 1378,
+      "quote": "a very clear line that anything weird that happens, no matter how far a field it is, can cohere around this sense of motion and purpose",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "resonance",
+      "kind": "principle",
+      "claim": "Carney prefers thinking of games as resonant objects, like a tuned bell that the player brings their own subjectivity to, rather than pursuing immersion, which he finds stifling.",
+      "detail": "An object has its own resonance before anyone arrives and can be tuned to produce it; the player then resonates with it. This respects both player agency and the game as an object with a possibility space. He cites Kristine Jørgensen's Gameworld Interfaces as support.",
+      "t": 1498,
+      "quote": "less something of immersion which feels very like stifling honestly, this sense of like it has to fully be a blanket of experience",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "system suspense",
+      "kind": "principle",
+      "claim": "In C and roguelikes both work through expectation and surprise: repetition lets you learn the rules and anticipate, while leaving room for something new, an idea Carney links to the paper Understanding System Suspense.",
+      "detail": "He cites Cameron Kunzelman's mechanics of speculation (the gap between action and result) and the Polaris paper by Jason Grinblat, Alexei Pepers and others on system suspense. Meaning comes from leaving room, a space like the inside of a bowl to be filled.",
+      "t": 1609,
+      "quote": "there are both expectations of output and then surprise. You think you're learning as it goes because repetition and something new can occur",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

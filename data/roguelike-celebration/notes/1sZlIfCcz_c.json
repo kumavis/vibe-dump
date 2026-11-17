@@ -1,0 +1,133 @@
+{
+  "id": "1sZlIfCcz_c",
+  "title": "Jeff Emtman & Martin Austwick: Neutrinowatch - the podcast that plays itself",
+  "speaker": "Jeff Emtman, Martin Austwick",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=1sZlIfCcz_c",
+  "talk_type": "technical",
+  "summary": "Audio producers Jeff Emtman and Martin Austwick present Neutrinowatch, a procedural podcast whose episodes are regenerated daily by Python programs and swapped into an ordinary RSS feed. They describe the toolset (randomisation, state that carries from day to day, real-world inputs like headlines and planetary positions, text-to-speech and cloned voices, procedural music) and walk through episodes such as 'The Zookeeper, the Bartender and the Seafarer', 'Dear John' and 'The Daily Blast'. They argue that ephemeral, never-repeated episodes give audio a roguelike quality of unique playthroughs of the same work, and that procedural media can deliver a qualitative experience of real data.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "procedural podcast",
+      "kind": "technique",
+      "claim": "Neutrinowatch makes a procedural podcast by regenerating each episode's MP3 daily from code and swapping it into a standard RSS feed, which nothing in the RSS spec forbids.",
+      "detail": "Jeff Emtman explains podcasts are just a human-readable RSS text file linking to a publicly accessible MP3. Instead of editing audio by hand, they write rules that programs follow, and each day's output is a new MP3 file.",
+      "t": 262,
+      "quote": "There is nothing in the RSS spec that prevents you from swapping those MP3 files out as much as you would like",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "persistent state",
+      "kind": "technique",
+      "claim": "Neutrinowatch's generators combine pure randomisation, procedural change over time where each day's output feeds the next, and real-world inputs such as news headlines and planetary movements.",
+      "detail": "Emtman lists these as the knobs available: random outputs, procedural change where yesterday influences today and tomorrow, and pulling in elements of the real world. Martin describes an episode where Wendy gives a live astronomy show for a different city each night based on real astronomy data.",
+      "t": 314,
+      "quote": "having things that change over time where yesterday's output is influencing today's output, is influencing the output tomorrow",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "self-similar variation",
+      "kind": "principle",
+      "claim": "Each Neutrinowatch episode is designed like a song on a touring band's set list: recognisably the same work every day, but with contents that change between performances.",
+      "detail": "Martin Austwick's analogy, relayed by Emtman: the set list stays the same but the performance, venue, crowd and vibe change. Episodes are self-similar enough to recognise from night to night while their contents shift.",
+      "t": 191,
+      "quote": "They are self similar enough to recognize from night to night but the contents within those episodes will change",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural audio",
+      "kind": "technique",
+      "claim": "Procedural audio production requires translating DAW operations such as cutting, layering, fades, echo, filters, pitch shift and shared reverb into code.",
+      "detail": "Martin Austwick describes the paradigm shift from multitrack editing windows to Python. Putting the same reverb on many pieces of audio makes them sound like they happened in the same space, which helps build scenes.",
+      "t": 683,
+      "quote": "The challenge is taking all these tools we know in our regular audio lives and translating them into Python code",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "text-to-speech",
+      "kind": "technique",
+      "claim": "Neutrinowatch switched from chopping up recorded performances to text-to-speech, including voice models of the hosts, because splicing large branching scripts became too complex and lost the feel of live performance.",
+      "detail": "Austwick says manually chopping existing audio gets complicated with a big script and many options, and heavy splicing sounds off. Robot characters use standard Apple voices, while the human characters use voice models of the hosts' own voices.",
+      "t": 771,
+      "quote": "After a certain point when you are dealing with a big script and set of options,",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "evolving text",
+      "kind": "example",
+      "claim": "Neutrinowatch's 'Dear John' episode has an AI character rewriting a letter whose text drifts from plain to abstract and weird as the month goes on.",
+      "detail": "Wendy is writing an important letter to John and keeps rewriting it, so the text changes daily. The episode combines sound effects, room echo, a procedural jazz engine Austwick built and text-to-speech voices.",
+      "t": 868,
+      "quote": "Because this is an important letter she is writing and rewriting it so the text changes",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "fragmented narrative",
+      "kind": "technique",
+      "claim": "In 'The Zookeeper, the Bartender and the Seafarer', music swells over a monologue in waves that shift daily, so each listen reveals only parts of the story and the whole emerges only across multiple days.",
+      "detail": "Austwick built the episode around the parable of the blind wise people and the elephant, reflecting the content in the form. Speech dips as music rises to cover it; because the waves move day to day, different parts of the monologue are audible each day.",
+      "t": 1238,
+      "quote": "That way it is only really by listening to it cross multiple days you will hear the whole thing",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "replay value",
+      "kind": "principle",
+      "claim": "A procedural work need not be infinitely varied, but it should be enjoyable on a single experience and offer something different on a second and further listens.",
+      "detail": "Austwick describes Neutrinowatch's 'softer rules': episodes must change day to day, but one listen should not be boring, two listens should give something a little different, and some episodes are designed to be a unique one-time experience.",
+      "t": 1254,
+      "quote": "it doesn't have to be infinitely procedural but it has to change day to day",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "real-world data",
+      "kind": "example",
+      "claim": "Neutrinowatch's 'Daily Blast' generates a daily episode in which two AI voices read scraped news headlines containing words like blast, slam and eviscerate, plus a good-news and a human-interest headline.",
+      "detail": "Emtman scraped about 50 RSS feeds drawn from a media bias chart. The episode format is a blast-like headline, a good-news headline, a second blast-like headline and a human-interest headline, read by the characters Wendy and Ivan.",
+      "t": 1388,
+      "quote": "The word blast, slam, eviscerate, and criticize all of which are synonyms of criticize if you ask me",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "data as experience",
+      "kind": "principle",
+      "claim": "Procedural media that reflects live real-world data can give a qualitative experience of that data that charts cannot.",
+      "detail": "After analysing 60,000 headlines and finding blast-like language mostly in right-wing outlets, Emtman says listening to the Daily Blast for a week is very different from looking at the pie charts, which shows the potential of procedural podcasting as a living art piece.",
+      "t": 1784,
+      "quote": "can provide a unique qualitative experience of the data. There is a big difference between looking at the two pie charts",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Neutrinowatch episodes share the roguelike quality of permadeath: each day's version exists once and is never heard again, so each listener's experience differs while it is still the same work.",
+      "detail": "Austwick compares this to roguelike playthroughs that differ between players who still played the same game, and to music gigs, saying it is unusual outside audio and under-explored. Emtman notes each day's MP3 is on the feed only for that time and then deleted forever.",
+      "t": 1845,
+      "quote": "Your particular play through is different from other people's but you still played the same game",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "twine pipeline",
+      "kind": "technique",
+      "claim": "Austwick is building a pipeline that exports Twine stories as JSON into Python to render branching, procedurally generated narratives as podcast audio.",
+      "detail": "He notes Twine is common among interactive storytellers; the pipeline would pull Twine exports into Python and produce episodes, though audio still needs creating around the edges. They invite Twine writers interested in audio to contact them.",
+      "t": 1878,
+      "quote": "were exporters that will give you twine exports as JSON and I can pull it into Python and make podcast episodes",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

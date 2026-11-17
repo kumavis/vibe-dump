@@ -1,0 +1,117 @@
+{
+  "id": "6ik6jB2YhZg",
+  "title": "Younès Rabii:  \"La Horde du Contrevent\": A Novel That Didn't Know It Was A Roguelike",
+  "speaker": "Younès Rabii",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=6ik6jB2YhZg",
+  "talk_type": "culture",
+  "summary": "Younès Rabii argues that Alain Damasio's 2004 French novel La Horde du Contrevent reads like a roguelike. In its world, generations of 'hordes' of about 20 specialists travel upstream against a constant wind to find its origin, mostly dying along the way and passing knowledge to the next horde through a scribe's notebook. Rabii identifies roguelike ingredients in its mechanics (permadeath of irreplaceable specialists, runs that build on prior runs, an in-world debate about shortcuts), its interface (characters and winds represented by typographic symbols, page numbers counting down), and its narration (unexplained invented words and incidental poetry like Caves of Qud, role-filtered perspectives like Dwarf Fortress). He concludes the taste of roguelikes can be found and created in other media.",
+  "games": [
+    "Caves of Qud",
+    "Dwarf Fortress",
+    "Life is Strange"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "roguelike in fiction",
+      "kind": "principle",
+      "claim": "The novel La Horde du Contrevent can be read as a roguelike because of its mechanics, its interface and its narration style.",
+      "detail": "Rabii proposes 'borrowing' the term roguelike for a book readers debate as science fiction or literary fantasy. In its world a violent, unpredictable wind blows constantly, and each generation sends a horde upstream to discover its origin; most die in the process.",
+      "t": 244,
+      "quote": "today I would like to highlight three main ingredients that I believe at the core of this comparison",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "example",
+      "claim": "In La Horde du Contrevent each horde member trains a lifetime for a unique role, so a death permanently removes a crucial skill as well as hitting the group emotionally.",
+      "detail": "Roles include the leader, a scribe, a wind expert, harvesters and smiths. Because the territory ahead is uncharted, losing a member reduces the horde's chance of surviving, and since members are friends, lovers and family, a loss is never trivial.",
+      "t": 321,
+      "quote": "when they lose a member they actually lose a very crucial skill for the rest of the travel",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "runs and knowledge",
+      "kind": "example",
+      "claim": "Successive hordes in La Horde du Contrevent behave like roguelike runs, each trying to go further than the last by using knowledge from previous attempts.",
+      "detail": "The scribe's notebook is meant to be passed to the next horde, which must find where the previous one died to recover that experience. Rabii frames this as knowledge carried between runs.",
+      "t": 387,
+      "quote": "They have a run phenomenon where the goal is to make a better run before and use the knowledge acquired in previous runs to go further",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "meta-progression debate",
+      "kind": "example",
+      "claim": "La Horde du Contrevent contains an in-world version of the roguelike community's debate about pure permadeath versus progression shortcuts.",
+      "detail": "Flying ships could carry a horde half the way in two weeks. The horde believes that skipping the first half would leave them without the experience needed to survive the far more dangerous second half, so they start from the bottom every time.",
+      "t": 456,
+      "quote": "They have this debate exist inside the book",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "typographic display",
+      "kind": "example",
+      "claim": "La Horde du Contrevent represents each character with a typographic symbol and lays them out on the page like a console display, showing formation and how tight a situation is.",
+      "detail": "Rabii says this exists partly because moving against the wind requires specific formations, such as a teardrop with the leader at the front. The book also notates winds with punctuation: periods and commas for slowing wind, slashes for big gusts.",
+      "t": 534,
+      "quote": "The book displays like a console mode displays and agents the characters and space in a way that helps you knowing who is next to who",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "countdown tension",
+      "kind": "example",
+      "claim": "La Horde du Contrevent numbers its pages downward from 700, creating a countdown like roguelike depth where getting closer to the end means higher stakes.",
+      "detail": "Rabii says the reversed numbering is intentional, turning the index into a timer before a climax and possibly the end of the world. He compares this to dungeons where deeper means nearer the end but riskier.",
+      "t": 639,
+      "quote": "it is a way to have a countdown before reaching possibly the end of the world",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "invented vocabulary",
+      "kind": "technique",
+      "claim": "Like Caves of Qud, La Horde du Contrevent constantly coins new words without explaining them, evoking a rich world and immersing the reader through vibes and interpretation.",
+      "detail": "Rabii likens this to Caves of Qud names that suggest a whole creature in a single word. He says this use of unexplained words is one of the book's core themes.",
+      "t": 696,
+      "quote": "The book creates new words all of the time without explaining them",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "incidental poetry",
+      "kind": "technique",
+      "claim": "Both La Horde du Contrevent and Caves of Qud use poetic description for trivial things, evoking the world's beauty and danger and a sense of wonder.",
+      "detail": "Rabii says a pile of bones described poetically can make you think about time and life. He notes this sometimes emerges in the reader's perception and sometimes is intentional.",
+      "t": 747,
+      "quote": "this book doesn't shy away from throwing random poetry in trivial moments to describe trivial things",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "role-based perspective",
+      "kind": "technique",
+      "claim": "Like Dwarf Fortress, La Horde du Contrevent pieces its story together from characters whose skills and roles give access to different layers of the story.",
+      "detail": "Each horde member understands the world deeply in one domain only, interpreting phenomena through that lens. Rabii calls access to different stories depending on jobs and skills a powerful storytelling technique that Dwarf Fortress also displays.",
+      "t": 823,
+      "quote": "You have access to different stories depending on the jobs of the characters and their skills",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "cross-media",
+      "kind": "principle",
+      "claim": "The roguelike experience can be created in other media with the tools at hand, even typographic arrangements on a page, without being a game developer.",
+      "detail": "Rabii points to Made in Abyss and the Boatmurdered story as further examples of roguelike-as-game and roguelike-as-story being intertwined. In Q&A he adds that boundaries between genres and media are blurrier and less hierarchical than they seem.",
+      "t": 885,
+      "quote": "sometimes you don't have to be a game dev to create a sort of experience. You can draw on your own skills to scratch that itch",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

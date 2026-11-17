@@ -1,0 +1,116 @@
+Kawa -  Yet Another Conduct Conversation: a history of conducts in roguelikes
+Speaker: Kawa
+https://www.youtube.com/watch?v=KLHJsJuJfYg
+Year: 2019   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] KAWA: Hi, everyone. I am Kawa and this is yet another conduct conversation. To use Alexei's excellent model yesterday on what it means to be a person who cares about procedural generation, my personal identity is I am a ranger of meta-bardness. What does this mean in practice?
+
+## A Ranger of Meta-Bardness
+
+[0:00:21] I understand the wild depths of the world and can help you navigate and make sense of it through the weirdness and creativity that you all create on a regular basis. I have been the host of a podcast called Roguelike Radio about design, about proc gen, about developer interviews, about all sorts of stuff. I used to do Let’s Play and streams about these games, most notably a series called Exploring the ASCII Dungeon about UI choices using ASCII games. All of the past conversations you had this morning, feel free to compare and contrast. As Noah mentioned, in 2016, I had a bunch of us in Brooklyn eating snacks and talking about Dijkstra maps. When I make my own procedural generator, a lovely twitter bot @BotFinds, it is an homage to one of the best weird procedural generations out there, a lovely simulator called Robot
+
+[0:01:26] Finds Kitten. Clearly this is my home, my community, I love you all very much.
+
+## I read lots of guidebooks!
+
+[0:01:34] In light of that, well, what does a ranger have to do? A ranger has to know the world, know what's out there, gather all the information. I have spent lots of time reading through guides other people have made for these games partly, okay, I am also bad at them. You can watch my talk from last year about being so bad I talked about failure, but really I wanted to know more about the structures of these worlds, about how the mechanics all fit together so I would pick up all these different places, and besides the actual tips and tricks and how to create characters and all that useful stuff, I also ran into this
+
+## I'd run into these crazy challenges!
+
+[0:02:20] really interesting sidebars about people who took these really hard games and then made them even harder by adding extra constraints on what they were doing in them. That's what I want to talk about today. Why those happen, show some history of what these have looked like in a couple different places in Roguelike culture, celebrate how creative you all have been developers and players alike, and give food for thought on what this kind of play means for mechanics and for balance. Those are my goals. This is how I plan to do it. I am going to give you a starting definition of generally what I mean when I say conduct play. Four examples from three games for some compare and contrast and history. And a final thought, a little more philosophical on what games are, what toys are, and why
+
+[0:03:21] that matters and a definition to end what conducts are based on those facts. The first thing is a starting definition. Conduct play in general, I am going to talk about as a style of playing a game that deliberately changes the rules of the game from what seems to be initially stated. They are usually harder than the standard game, that’s what they’re generally here for, and some of these are things that players came up with, and some of these are tracked inside the game within the game. Obviously, in our modern world, this is usually known as achievements but there are other ways too and we will get into that and interesting notes I found in that realm.
+
+## XADOM: a long and complicated game!
+
+[0:04:09] Let's start with Ancient Domains of Mystery. The original ADOM is a long and complicated game. It is one of my first loves. I care about it so much. This is a rendition of the original map. There is, like, 20 locations on this thing and some of them have caves inside the caves inside areas. It’s insane. It’s wonderful. So you have to explore through a lot of those places and, you know, some of them are more dangerous than others, some do more than others, but in general you are going to see most of this map over the course of the game. That's a lot of time and energy to be putting into a run, to be putting into beating the game for whatever that means to you. One of those locations is known as the small cave.
+
+## XADOM: the trap of the small cave
+
+[0:04:58] You can access it right away. It is actually not hard to miss. All you get with you start is a scroll that says time is working against you, another scroll with a little piece of information, and that's kind of it. So what this really is, and I am sorry to spoil this slightly, the monsters in this particular setting grow more powerful - let me pull that back. You kill monsters, new monsters appear, those new monsters are much more powerful than the ones you just killed and it grows at a rate that gets really out of control. Now, there’s some useful things in this cave and it’s also a useful shortcut to other places so the usual way to do this is, you know, run in, kill as little as possible, get what you need and get out. That's what you are kind of intended to do to prove to you you don't have to use combat to get what you need, yet some people do this anyway and not only do they do this anyway,
+
+## ADOM: Eternium Man
+
+[0:06:02] they say go to the small cave, see if you can get maximum level and that's it. That's the entire challenge. This challenge is known as Eternium Man, eternium being a precious, rare and difficult to get strong metal within the realm of the game. The fact that the challenge exists and the fact some people have done it implies some really strange things, doesn't it? What does it mean as a player to survive in a space you weren’t meant to try to survive in? And also, at the same time while this is really hard, it is also technically faster than the main game. There’s only one place to go, there’s one goal, none of this running around helping unicorns and killing bandits and whatever. It is all just one little place in one little cave cave the size of a terminal but it tests the limits of a player's combat knowledge.
+
+[0:07:06] This and other challenges were really common in the community.
+
+## A ADOM: Other Metals
+
+[0:07:12] The earliest reference I was able to find was around the year 2000, and there’s a couple from the late ‘90s. I had a lot of trouble searching for why these things got named these ways, where these came from. Please help me find this information out. I want to know who thought these up, where they came from. I found this old Angelfire site that tracked a bunch of those. Yes, Angelfire, true '90s kids remember. I don't know the story. All of the email addresses linked to dead domains. Help me out here. Meanwhile, while that was happening on the Ancient Domains of Mystery side, let's talk
+
+## X Nethack: Trash or treasure?
+
+[0:08:01] about NetHack which was another one of the major Roguelikes of that time period. This table, for those who can't read it is all of the scrolls you can get in NetHack. Really, all you need to know is NetHack is filled to the brim with items. Some are outright harmful. There is a scroll of amnesia where if you read it you will forget the skills you worked so hard to learn. Or they could be incredibly useful. The scroll of genocide which helps get rid of mind flayers forever. Since Nethack’s item generation is so random and so complex, you could easily see a scenario where you want to get rid of your bad items and get some good ones instead.
+
+## X Nethack: Polymorph your trash today!
+
+[0:08:46] Luckily there is an item for that. Polymorph your trash today! One of the wands has a chance to be a wand of polymorph and the wand of polymorph, when zapped on a bunch of items will turn those items into other items and maybe those items will be useful. When you run out of charges on the wand of polymorph, maybe some of those items you got before will help you recharge the wand of polymorph, so you can do this over again. Cool, right? Great. Amazing Here is the thing. How am I going to get lots of items? We can make lots of trash.
+
+## Nethack: Delicious, terrible pudding
+
+[0:09:17] How can we make lots of trash? We can kill lots of monsters. It would be great to have a monster we could kill but also have the choice of killing or making more of that would drop stuff, and make more, and drop some more, and make some more, and drop some more. This is really tedious. This is really terrible, but also like, technically if you did this long enough, if you cared to do this long enough, you could keep doing it over and over again into forever and maybe get an infinite wish engine or something out of it. You could just keep doing this and get everything you need for your ascension kit, and then some, and completely break the game if you’re willing to sit through slashing through all these delicious terrible puddings.
+
+## X Nethack "Polypile-less"
+
+[0:10:15] Let's never do that again. One of NetHack's conducts is called polypile-less, casually. I think the official wording is “Never polymorphed an item”. The thing is, this conduct is relatively easy. Roughly 42% of everyone who has won on one of Nethack’s public servers hasn’t needed to bother with doing this at all. Why is this mechanic in the game? Because NetHack, that’s why we love it. But it has this implication that this horridly broken and tedious thing no one wants to bother with, and pudding itself has actually nerfed quite severely - split puddings no longer drop loot if I remember correctly, as of 2015. By the way, I did just say 2015 and NetHack.
+
+[0:11:15] If someone tells you NetHack is an old game, you can tell them no, it was updated in the last few years, it is a modern game, because it is. But, yeah, so speaking of this tracking, that 42% of all winning accounts on NetHack.org are polypile-less, way back in 1999, the extended command conduct was added to NetHack itself.
+
+## X Nethack: developer tracking
+
+[0:11:47] I would like to note this was in December 1999. This is at least three years before Xbox tracked achievements on Xbox Live. This is well before 2007 Orange Box on Steam when Steam added achievements. Somewhere between Activision patches in the '80s for taking pictures of your screen and the modern achievement system as we know it, NetHack had an in-game way to track specific conducts. This screen is actually not the NetHack screen it’s actually for a related game known as SLASH’EM. Super Lotsa Added Stuff Hack with Extended Magic because NetHack didn't have enough going for it apparently. This is terminal into a SLASH’EM server as of a few weeks ago.
+
+[0:12:49] There’s even more conducts in here than vanilla NetHack which has 10. The thing I wasn't able to find, and again help me find this stuff, the history is important, is why those 10 conducts including polypile-less were considered the conducts to be tracked officially in-game. We know there were other things were going on such as zen that were not officially tracked ingame and there were clearly other conducts that SLASH’EM chose and NetHack didn't. What were the conversations around that, what was going on? I don't know why, I can't search Usenet like a power user. Someone help me out. I would like to also note this hilarious thing from the release notes of NetHack 3.3.0 from December ‘99 when they first released the conduct concept. How about prompting the player before they break a conduct? No, the whole point of conduct is you are avoiding the actions that lead to violations.
+
+[0:13:52] The dev team are jerks sometimes. They think of everything but also they consciously don't think of the things they consciously don't think of. Let's fast forward many years later, Hoplite is a lovely, lovely mobile technical Roguelike.
+
+## Hoplite 0: Search for the Fleece
+
+[0:14:12] It has this really cool concept where you start with three basic skills. A lunge, jump and shield bash. In its standard mode, in each level, you have the chance to go to an altar and you have the chance to get a gift. You chose one of the gifts from the list the God is willing to give you and they increase the capability of the standard skills or give you more health as you can see here. What Hoplite then does is pull that mechanic apart in two very separate ways for two very
+
+## A Hoplite: Compare and Contrast
+
+[0:14:49] separate challenges. On the one hand, it will track in that NetHack style conduct screen way, hey, you didn't actually touch any of those altars. They are technically optional. They don't feel like it because the game is that hard but they are. There are people who have finished the game without touching them. This is actually from a YouTube run that not only did that but never actually got hurt in the game which I don't understand it. I watched this slack-jawed. Incredible. So there’s that. On the other side there is also a daily challenge with three extremely difficult levels, an arbitrary set of skills and says can you survive. It almost does the eternium man style where here’s hard combat, go for it. It does this within a cute iOS Android game. I think there is so much room within any given play space for people to examine their mechanics,
+
+[0:15:55] pull them apart and create challenges from them. I find that really inspiring. This brings me to my bigger point.
+
+## A Games vs toys: the difference
+
+[0:16:04] I promised stuff about games and toys. Toys, objects of play. You can mess around with Lego, you can build stuff, you can knock them down. There is not really a way to win or lose at Lego. Maybe? But also no. And games, well? Oh, good. We won. It would have been so awful if we had lost the game. So here is the thing.
+
+## Using toys to test skills - a game
+
+[0:16:33] Games have win conditions and loss conditions. We turn toys into games by asking can you do this skill with this toy? If you succeed you are closer to winning. If you don't succeed, you are closer to losing. A ball is a toy. Being able to catch a ball? Skill. Being able to catch a ball under certain circumstances and do certain things?
+
+## A Rules get refined over time
+
+[0:17:00] A game. Over time people get good at those basic things then they have to refine those rules and make those rules more challenging and make those rules more interesting and define things more clearly, I guess. This is completely unrelated to procedural generation except for the fact that it isn't. This is Jon Bois, who is your favorite sports writer even if you don’t know it yet writing about what the heck is a catch in American football. It’s much more than it sounds like it is but I will not spoil it for you. Please just check it out. And so we see this all the time in games we call sandboxes.
+
+## X Sandbox "games" are toys!
+
+[0:17:44] A literal sandbox is a literal toy, it is a box with sand in it you can make stuff in it but there’s no win condition in a sandbox. The win condition in Dwarf Fortress is basically, can you make cool things happen and mostly not have the dwarves die, unless you wanna watch the dwarves die I guess. Like this particular one is a player who decided to build a fort out in the middle of the ocean by taking advantage of the ice physics of Dwarf Fortress. I don’t understand how people do it. I love this community, that’s really all I have to say about it. By creating that artificial constraint of can I build on the ice suddenly you have a compelling victory condition and a really compelling game and a really compelling series by Kruggsmash that's worth checking out too.
+
+## What does this mean for conduct play?
+
+[0:18:43] To bring this back to the general idea of conducts. Being good at a game is a skill just as any of those other skills about throwing or catching or building or knocking things. Once this skill is mastered enough, you add new rules to keep the game interesting and exciting. Somehow Roguelike players are dedicated enough to be good at games that throw them randomness all the time so creating conducts for the game is using the mechanics as its own toy for refined and advanced gameplay. The whole idea of, what if I toss out this mechanic? Is it easier or harder? What if I try to do it in this way? Is it easier or harder? Does it make it more interesting? Is it challenging my skills in different ways? Those are the things players are examining when looking at what conducts are.
+
+## X Takeaways
+
+[0:19:38] Some final takeaways. First off, please help me preserve and celebrate Roguelike history. I mentioned the questions I have about Ancient Domains of Mystery and NetHack and SLASH’EM. If any of you in the audience know or have leads, let me know. If you know how to actually search Usenet like a power user instead of fumbling through Google groups and sobbing because you can't get to before 1999 easily, please, tell me. And for developers, what mechanics in your games are easy to ignore or hard to ignore? What do tweaking and changing those mechanics like a high level player imply for your game as a whole? And what skills are you asking for when you ask a player to be good at a game? And as a player who interacts deeply with the mechanics of a game, how can you do that further? What more can you do to keep that game interesting and keep that game's culture alive?
+
+[0:20:42] Thank you. [Applause] >> OK. We have time for some questions if people have any. AUDIENCE: Hi. Good talk. It is kind of like a softball but what's your favorite conduct? Any game? Hard question. KAWA: My favorite conduct is related and unrelated to this general idea. In Dungeon Crawl Stone Soup every six months there is a tournament of players trying the new build. Every time they randomly generate a species background combo, a race-class combo but for Stone Soup, so it’s can you beat the game under these randomized constraints and the first eight players to get it get the trophy, and then they switch to the next one and switch
+
+[0:21:46] to the next one to weird combinations no sane person should be combining but people do it all the time. It’s insane. It’s ridiculous. There are also a handful of people who’ve beaten NetHack with all 10 standard conducts. I know of one person who, for like three months afterwards, was like you should do the thing. Can't. Just do the 10 conduct ascension. Just absolutely masterful. AUDIENCE: Great talk. KAWA: Thank you. AUDIENCE: Can you name some examples of conducts that feel the more perversely and possibly humorously against the spirit of the game design? I am thinking back to Doom's early history where people would do pacifist runs or minimally trying to not harm the demons.
+
+[0:22:48] It is just so clearly counter to the game. I am curious what you have run across. KAWA: Definitely pacifist in most traditional roguelikes is really, really absurd. There is an Ancient Domains of Mystery one where you have the chance of starting a character with a certain kind of breath. You’re a drakeling, so you’re part dragon and have this auxiliary dragon breath and there is one person who has beaten the game using only that. Why? Why would you do that to yourself? And yeah. AUDIENCE: Thanks. Great talk. I want to say my favorite in ADOM which I don't know how it was done is completing the game only being able to carry 100 units worth of inventory. The chaos orbs weigh 100. You cannot have any food, you can't have any armor and can only carry one of them at a
+
+[0:23:52] time. It has been beaten. KAWA: And that means you have to get a whole bunch of things past a particularly evil miniboss without anything at all ever. Or food. Yeah. No. Yes, the 100 stone. Yeah, that's correct. Wow. People are amazing. AUDIENCE: Hi, I was wondering if you find any other driving motivations for conducts other than challenge? Are they primary role-playing motivated? Do those communities cohere around any of those, do you find? KAWA: Definitely the Dwarf Fortress was very much a role-playing one almost. It wanted to tell a specific story about these specific dwarfs during a specific crazed quest and leaned into that. There is a level of mainly removing tedium as I brought up with the polypile.
+
+[0:24:58] It is a mechanic that exists and can help you win but you actually don't need it because God it is awful. Seriously. Just say no to puddings. >> I will ask one as I walk over there. Any evidence for developers changing things about their game in response to conduct? I’m thinking a lot about the Nethack vegetarian and vegan conducts. KAWA: I think there has been some. Certainly the whole removing pudding farming in NetHack was clearly a response to people abusing mechanics in certain ways. And yes, things like food balance for, you know, vegetarian and vegan conducts. In the not-Roguelike community I do see people making games specifically to be speedrun which I think is adjacent to but not exactly this.
+
+[0:25:59] Things like Celeste making things very accessible in certain ways to make sure players can do certain things to play the game faster. I would love more evidence on how conducts influence developer behavior so talk to me after about that. AUDIENCE: You mentioned earlier that one of the things about conducts is that they are almost always intended to make the game harder. Do you have any examples of conduct that makes the game easier? KAWA: The clearest ones I can think of are sort of only sticking to a specific weapon or subset of skills to sort of bring down the decision tree to something very specific or, you know, like just plain ignoring mechanics that give you more choice.
+
+[0:27:00] I think Crawl, Dungeon Crawl Stone Soup, never leaving one God for another. It’s a thing you can do and can be powerful for certain cases but most players aren't going to bother with it because there is a sort of in the moment penalty for trying. Stuff like that, I think. >> OK. Thank you so much. [Applause]

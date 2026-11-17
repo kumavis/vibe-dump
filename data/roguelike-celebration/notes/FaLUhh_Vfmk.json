@@ -1,0 +1,166 @@
+{
+  "id": "FaLUhh_Vfmk",
+  "title": "Loren Schmidt: Inverse Terrain Solver",
+  "speaker": "Loren Schmidt",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=FaLUhh_Vfmk",
+  "talk_type": "technical",
+  "summary": "Loren Schmidt presents an 'inverse' terrain generation technique for their flick-screen roguelike: rather than simulating geology or using noise and hoping the desired shapes emerge, the designer first decides the land/water shapes (including inland lakes) and then solves heights backward by walking uphill from shores and lake edges with noisy wave fronts. The first half frames terrain design around 'reading', the way players parse an environment into possible futures; the second half demos the algorithm, its use of patchwise cellular automata (some 201 curated rules) for regional geology, voting rules for continents, per-terrain wave-front parameters, overpiling and settling for mountains, and frequency distribution as an aesthetic principle.",
+  "games": [
+    "Go",
+    "Angband"
+  ],
+  "insights": [
+    {
+      "topic": "level-generation",
+      "subtopic": "reading terrain",
+      "kind": "principle",
+      "claim": "Players 'read' a game environment the way Go players read a board, mentally branching out possible futures from its structure, so terrain should be designed for the interesting possibilities and ambiguities it suggests.",
+      "detail": "Schmidt borrows 'reading' from board games: even an empty Go board is saturated with possibilities by known rules. In grid games, lines of sight, pillars and corridors speak to the player; a pillared room near the player in Angband-like games reads as a place to hide or retreat to.",
+      "t": 301,
+      "quote": "On looking at a broader view of an environment, we sequentially read out the possible threads of future states",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "interior generation",
+      "kind": "principle",
+      "claim": "Procedural interior and dungeon generation has achieved fine-grained control through piecewise techniques, giving designers great bandwidth over how players read spaces, which landscape generation generally lacks.",
+      "detail": "Schmidt notes designers can tune individual routines for hallways: number of turns, length, frequency of dead ends, width, and choice of labyrinth and room algorithms. They want the same expressive control for terrain.",
+      "t": 465,
+      "quote": "This is an example of a creative realm where we achieved excellent final grain control",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "overworld traversal",
+      "kind": "example",
+      "claim": "In Schmidt's flick-screen roguelike each screen is one world-map pixel; roads and open areas are guaranteed traversable while forests and boulders may not be, so route choice depends on goals.",
+      "detail": "Roads are faster per cell and connect towns, but may not be ideal depending on where you are going or the experience you want. Non-physical structures like migration routes, place names and borders also layer on the map.",
+      "t": 593,
+      "quote": "Now roads and open areas are guaranteed traverseable. You have a reasonable expectation of being able to proceed in one side of any screen",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "water and land",
+      "kind": "principle",
+      "claim": "Terrain shapes must work in both positive and negative, because land is the barrier when traveling by water and water is the barrier when traveling by land.",
+      "detail": "Schmidt says the distances and clustering of islands and the shape of inland water features matter greatly; there is no separation between function and aesthetics, and large features like water, hills, mountains and cliffs provide the largest-scale structure.",
+      "t": 660,
+      "quote": "If you are traveling by land instead the water is the barrier. These shapes must work in negative and positive",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "simulation control",
+      "kind": "warning",
+      "claim": "Physical simulation gives poor direct control over terrain shapes: if you want islands of a specific width and spacing, there is no lever for it, only indirect parameters like volcanic magma rate.",
+      "detail": "Schmidt, a self-described simulationist, says the locus of control in simulation is in physical processes and material parameters, and the structures one cares about aesthetically merely shake out of them.",
+      "t": 798,
+      "quote": "there is no real lever within that process that let's us directly affect the result we want",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "noise",
+      "kind": "warning",
+      "claim": "Noise-based terrain generation struggles with transitions between different terrain types, making it hard to vary naturally between several kinds of geology.",
+      "detail": "Schmidt says this anticipated weakness, along with wanting features like clustered craters, led them to work backwards instead.",
+      "t": 862,
+      "quote": "one problem with noise-based approaches is they aren't terrible at piece transition. It is hard to transition from one piece of terrain to the other",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "inverse terrain solver",
+      "kind": "technique",
+      "claim": "An inverse terrain solver starts from a chosen land/water bitmap and computes heights by walking uphill inward from the shoreline, which is always self-consistent with the map.",
+      "detail": "Schmidt demos a square island: stepping inward from sea-level shores, adding one height step each time, yields a pyramid. The land shape is decided first and the heights are solved to fit it.",
+      "t": 934,
+      "quote": "If we start with the shores next to water which is sea level and work inward and walk up hill each time we take a step",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "lake detection",
+      "kind": "technique",
+      "claim": "Inland lakes can be found by flood-filling and labelling each connected body of water, treating any body below a size threshold as a lake rather than ocean.",
+      "detail": "Schmidt describes it as a topological island tester that labels every pixel and floods outward; checking the size of each label is an easy way to detect all lakes.",
+      "t": 986,
+      "quote": "That's a really easy way you can detect all your lakes",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave fronts",
+      "kind": "technique",
+      "claim": "Running the uphill solver from sea level and lake shores simultaneously creates colliding wave fronts that form crescents and peaks, and lakes are guaranteed never to sit above the surrounding terrain.",
+      "detail": "Schmidt first solves terrain, places each lake at a height, and finds cliffs on the uphill side; reconciling by propagating from ocean and lakes at once yields composite structures where fronts meet.",
+      "t": 1026,
+      "quote": "What we end up with is these wave fronts that meet and that creates interest composite structures like crescents and peeks",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "noisy slopes",
+      "kind": "technique",
+      "claim": "Replacing uniform uphill steps with a random step from a range turns the solver's regular pyramid slopes into organic terrain.",
+      "detail": "Schmidt notes every slope looks the same in cross-section with uniform steps; a random value in a range is a simple fix. The demo then seeds random noise blobs and applies a classic cave-generating cellular automaton before running the water finder.",
+      "t": 1060,
+      "quote": "instead of stepping uniformly each time we walk inward into the terrain we can use a random range and a random value in a range",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "hybrid generation",
+      "kind": "technique",
+      "claim": "Because the solver decouples the land/water map from heightfield generation, the map can come from conventional techniques, hand-made patches, or mixtures, with hand-placed features like a village on a peninsula.",
+      "detail": "Schmidt suggests hand-making large features so players learn them while procedural details surprise each playthrough, or mixing special algorithms and handmade patches. They encourage people to 'get really aggressively weird'.",
+      "t": 1284,
+      "quote": "You can make the whole map or patches of it by hand and then shake out details procedurally",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "cellular automata",
+      "kind": "technique",
+      "claim": "Schmidt's generator seeds regions by propagating random points until they fill space, then applies a different eight-neighbour totalistic cellular automaton rule to each patch in parallel, drawing from about 201 curated rules.",
+      "detail": "The patch edges interact live as they develop. Patchwise CA governs regional variation and local particulars like island clustering and gaps. Schmidt suggests three-state totalistic rules and multiple-neighbourhood rules distinguishing diagonal and orthogonal neighbours for context-specific shaping.",
+      "t": 1365,
+      "quote": "Once I have my patches, I apply a CA rule to each of them. These are eight neighbor totalistic",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "voting rule",
+      "kind": "technique",
+      "claim": "Continents are formed by seeding land and ocean and running a voting rule for cohesive landmasses, then procedurally adding features that would not survive voting, such as inland lakes and island chains.",
+      "detail": "Schmidt then detects terrain types and populates regions within each, giving a sense of intentionality and local geographic flavour.",
+      "t": 1668,
+      "quote": "Then we will procedurally place things that would not survive voting like inland lakes or chains of islands in the ocean",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "terrain parameters",
+      "kind": "technique",
+      "claim": "Each terrain type gets its own wave-front propagation speed and noisiness: clean linear fronts produce fluting for hill and gully systems, while noisy fronts produce fine hills or small mountain ranges.",
+      "detail": "Schmidt also deliberately overpiles one mountain type above its stable angle of repose and then runs a settling process to match the angle specified by the terrain type.",
+      "t": 1751,
+      "quote": "A couple parameters I am playing with for the terrain solver are the speed at which each type of terrain propagates and the noisyness of the wave front",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "frequency distribution",
+      "kind": "principle",
+      "claim": "Generated maps should vary spatial frequency, mixing large gestural forms with finely detailed areas, because uniform frequency everywhere is jarring and gives the eye nowhere to rest.",
+      "detail": "Schmidt calls frequency distribution a motivating design principle: high-frequency hill patches next to slow low areas, and regions shaped mainly by slope settling produce large facets and well-formed cones that catch the eye on a map.",
+      "t": 1858,
+      "quote": "If you are looking at a large undifferentiated image where the frequency is the same everywhere it is often jarring to look at",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

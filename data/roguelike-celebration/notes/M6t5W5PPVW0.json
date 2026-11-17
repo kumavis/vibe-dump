@@ -1,0 +1,46 @@
+{
+  "id": "M6t5W5PPVW0",
+  "title": "Isaac Io Schankler: Orb Pondering Simulator LIVE!",
+  "speaker": "Isaac Io Schankler",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=M6t5W5PPVW0",
+  "talk_type": "performance",
+  "summary": "Composer Isaac Io Schankler stages 'Orb Pondering Simulator', a live, staged-to-go-wrong audiovisual performance framed as a box-breathing exercise with a growing and shrinking orb whose sound swells with it. After a scripted 'lockout', the audience is invited to type debug commands (!spawn, !kill) in chat, which spawn non-orb objects and ERROR entities and eventually lead to two alternate endings ('spawn everybody' and 'kill everybody'). In Q&A Schankler explains the inspirations (live electronic concerts going wrong, an earlier Twitch-controlled modular synth) and the deliberate reduction to a tiny command vocabulary so everyone could participate. There is little roguelike design content; it is mainly an example of audience-participatory procedural audio performance.",
+  "games": [
+    "Orb Pondering Simulator",
+    "Cycles"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "audience participation",
+      "kind": "principle",
+      "claim": "Crowd-controlled interactive performances work better with a very small, simple command set, because intricate commands let only a handful of people participate.",
+      "detail": "Schankler's earlier project, the Public Modular, let people play a modular synth remotely through Twitch chat commands; it was fun but its complicated commands meant only a few people could get a handle on it. For Orb Pondering Simulator they stripped commands down to a simple set like !spawn and !kill.",
+      "t": 895,
+      "quote": "only a handful of people could were like able to like get a handle on it and actually participate in it",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "audiovisual mapping",
+      "kind": "technique",
+      "claim": "Orb Pondering Simulator ties a sound's loudness directly to an orb's size to pace box breathing: breathe in as it grows, hold while it holds, breathe out as it shrinks.",
+      "detail": "Schankler presents it as based on breathing exercises that calm and focus the mind. In Q&A they note that the ERROR entities breathe at a different rate, so following them could make you hyperventilate.",
+      "t": 95,
+      "quote": "there's a sound that gets louder as the orb grows and quieter as the orb shrinks",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "branching endings",
+      "kind": "technique",
+      "claim": "Orb Pondering Simulator hides two alternate endings behind the same small verb set ('spawn everybody' vs 'kill everybody'), so which ending a crowd reaches depends on what it tries first.",
+      "detail": "Schankler says they were curious which command people would reach first and were happy the audience found 'spawn everybody' first; 'kill everybody' was shown afterwards as the bad ending. The host praised how failure states like killing a non-existent orb became their own inputs, spawning errors, like creative inputs in text games.",
+      "t": 919,
+      "quote": "there are as you may have guessed two kind of alternate endings um spawn everybody and kill everybody",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

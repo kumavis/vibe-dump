@@ -1,0 +1,1121 @@
+{
+ "id": "zlJNIJOog9M",
+ "url": "https://www.youtube.com/watch?v=zlJNIJOog9M",
+ "title": "Qristy Overton - Exhibition: Attempting Brogue on a Dancepad",
+ "speaker": "Qristy Overton",
+ "talk_title": "Exhibition: Attempting Brogue on a Dancepad",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 967,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "I'm going to hack together a many-button foot-operated controller with a Makey Makey and take a run at Brogue. I don't expect get very far.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 49,
+   "title": "Setup and mechanics"
+  },
+  {
+   "start": 180,
+   "title": "Gameplay and strategy"
+  },
+  {
+   "start": 384,
+   "title": "Hardware design and iteration"
+  },
+  {
+   "start": 651,
+   "title": "Refining the experience"
+  },
+  {
+   "start": 855,
+   "title": "Final descent and conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1843,
+ "trimmed": {
+  "segments": 39,
+  "words": 363
+ },
+ "segments": [
+  {
+   "t": 5.92,
+   "d": 1.46,
+   "text": "I can't even begin."
+  },
+  {
+   "t": 7.38,
+   "d": 6.58,
+   "text": "Our next speaker is my fellow organizer, Qristy."
+  },
+  {
+   "t": 13.96,
+   "d": 2.86,
+   "text": "She has been the person you have been seeing on Twitter all this time."
+  },
+  {
+   "t": 16.82,
+   "d": 3.86,
+   "text": "She has been our website person this whole time."
+  },
+  {
+   "t": 20.68,
+   "d": 4.97,
+   "text": "If you have not seen her personal website it is the hint for what is about to happen."
+  },
+  {
+   "t": 25.65,
+   "d": 5.34,
+   "text": "As you can see, there is multiple cameras going on here."
+  },
+  {
+   "t": 30.99,
+   "d": 1.49,
+   "text": "What is that thing?"
+  },
+  {
+   "t": 32.48,
+   "d": 2.39,
+   "text": "That is a custom pad made with a Makey Makey."
+  },
+  {
+   "t": 34.87,
+   "d": 6.86,
+   "text": "We are going to play some Brogue for the next 15 minutes and I am going to do the best live"
+  },
+  {
+   "t": 41.73,
+   "d": 5.84,
+   "text": "commentary of Brogue that I can."
+  },
+  {
+   "t": 47.57,
+   "d": 1.67,
+   "text": "Take it away, Qristy."
+  },
+  {
+   "t": 49.24,
+   "d": 1.56,
+   "text": ">> Qristy: All right."
+  },
+  {
+   "t": 50.8,
+   "d": 2.08,
+   "text": "Can you hear me?"
+  },
+  {
+   "t": 52.88,
+   "d": 2.59,
+   "text": ">> EMCEE: Yup, we are good."
+  },
+  {
+   "t": 55.47,
+   "d": 3.12,
+   "text": ">> Qristy: Hi, what's up, Roguelike Celebration?"
+  },
+  {
+   "t": 58.59,
+   "d": 7.0,
+   "text": "I am Qristy AKA next level banana coming to you live from sunny downtown Portland, Oregon."
+  },
+  {
+   "t": 65.59,
+   "d": 8.17,
+   "text": "I am here as we have said to answer the question is it possible to play a traditional Roguelike"
+  },
+  {
+   "t": 73.76,
+   "d": 1.11,
+   "text": "on a dance mat."
+  },
+  {
+   "t": 74.87,
+   "d": 4.96,
+   "text": "I have determined the answer is eh?"
+  },
+  {
+   "t": 79.83,
+   "d": 8.36,
+   "text": "Obviously your normal off the shelf mat not enough buttons but using every input on the"
+  },
+  {
+   "t": 88.19,
+   "d": 5.85,
+   "text": "Makey Makey I have got almost all of the keys I need."
+  },
+  {
+   "t": 94.04,
+   "d": 3.6,
+   "text": "I have got directions over here."
+  },
+  {
+   "t": 97.64,
+   "d": 7.74,
+   "text": "We have got search, no, apply, inventory, throw, space is null, yes, enter."
+  },
+  {
+   "t": 105.38,
+   "d": 6.61,
+   "text": "I can't call anything anything but given the amount of letters I have I think that's fine."
+  },
+  {
+   "t": 111.99,
+   "d": 2.97,
+   "text": "Two quick things."
+  },
+  {
+   "t": 114.96,
+   "d": 5.07,
+   "text": "Ground is an important piece in connecting a circuit."
+  },
+  {
+   "t": 120.03,
+   "d": 3.72,
+   "text": "This is going to be less DDR and more Twister."
+  },
+  {
+   "t": 123.75,
+   "d": 5.75,
+   "text": "One foot on ground and the other foot on whichever button I want to press."
+  },
+  {
+   "t": 129.5,
+   "d": 3.8,
+   "text": "This would be easier if I had longer legs."
+  },
+  {
+   "t": 133.3,
+   "d": 3.93,
+   "text": "EMCEE: It is fine."
+  },
+  {
+   "t": 137.23,
+   "d": 1.89,
+   "text": "We are doing it."
+  },
+  {
+   "t": 139.12,
+   "d": 1.96,
+   "text": ">> Qristy: We are doing it."
+  },
+  {
+   "t": 141.08,
+   "d": 7.72,
+   "text": "I can't see the chat so whatever you are saying has to come through Kawa or you are screaming"
+  },
+  {
+   "t": 148.8,
+   "d": 2.11,
+   "text": "into the void."
+  },
+  {
+   "t": 150.91,
+   "d": 2.69,
+   "text": "EMCEE: People are asking the traditional sound like."
+  },
+  {
+   "t": 153.6,
+   "d": 6.84,
+   "text": "I don't think there would be music."
+  },
+  {
+   "t": 160.44,
+   "d": 1.0,
+   "text": "Have fun with it."
+  },
+  {
+   "t": 161.44,
+   "d": 2.69,
+   "text": "It is a gorgeous, weird, ambient ASCII game."
+  },
+  {
+   "t": 164.13,
+   "d": 1.56,
+   "text": "Am I the void?"
+  },
+  {
+   "t": 165.69,
+   "d": 1.17,
+   "text": "I don't know."
+  },
+  {
+   "t": 166.86,
+   "d": 8.17,
+   "text": "I have this beautiful golden light."
+  },
+  {
+   "t": 175.03,
+   "d": 5.93,
+   "text": "Let's get going."
+  },
+  {
+   "t": 180.96,
+   "d": 5.14,
+   "text": ">> Qristy: I am going to zip through the first level."
+  },
+  {
+   "t": 186.1,
+   "d": 1.0,
+   "text": "It isn't exciting."
+  },
+  {
+   "t": 187.1,
+   "d": 5.33,
+   "text": "KAWA: Traditional Roguelike, moves only happen when she pushes her foot on something."
+  },
+  {
+   "t": 192.43,
+   "d": 6.17,
+   "text": "There is an auto explore feature you are seeing her take very full advantage of."
+  },
+  {
+   "t": 198.6,
+   "d": 6.86,
+   "text": "The big thing about this game is that it is very focused on item-based progression."
+  },
+  {
+   "t": 205.46,
+   "d": 5.81,
+   "text": "Basically your character will kind of always be the same at the start and the only things"
+  },
+  {
+   "t": 211.27,
+   "d": 5.71,
+   "text": "that will change is as you find interesting and cool items that will change your abilities,"
+  },
+  {
+   "t": 216.98,
+   "d": 6.29,
+   "text": "maybe find allies to help you out and all sorts of things along those lines."
+  },
+  {
+   "t": 223.27,
+   "d": 6.68,
+   "text": "There is a -- yeah."
+  },
+  {
+   "t": 229.95,
+   "d": 6.57,
+   "text": "And the other very cool thing this game has is a lot of these really gorgeous visual effects"
+  },
+  {
+   "t": 236.52,
+   "d": 3.24,
+   "text": "in terms of its level generation."
+  },
+  {
+   "t": 239.76,
+   "d": 6.07,
+   "text": "Brian walker, the developer for this, did a level gen talk many years ago for us."
+  },
+  {
+   "t": 245.83,
+   "d": 8.27,
+   "text": "They have these huge open caverns and foliage that can catch on fire and all sorts of ridiculous"
+  },
+  {
+   "t": 254.1,
+   "d": 1.0,
+   "text": "things."
+  },
+  {
+   "t": 255.1,
+   "d": 6.66,
+   "text": "You have insinidary carts -- darts and it is possible you will throw things to catch"
+  },
+  {
+   "t": 261.76,
+   "d": 5.04,
+   "text": "fire to cause other shenanigans down the line."
+  },
+  {
+   "t": 266.8,
+   "d": 5.0,
+   "text": ">> Qristy: I don't know if I have ever found these darts before."
+  },
+  {
+   "t": 271.8,
+   "d": 1.0,
+   "text": "KAWA: Fun."
+  },
+  {
+   "t": 272.8,
+   "d": 5.31,
+   "text": "We are doing it live."
+  },
+  {
+   "t": 278.11,
+   "d": 3.33,
+   "text": "That big dark blue area is deep water."
+  },
+  {
+   "t": 281.44,
+   "d": 4.48,
+   "text": "She technically can go through it but really shouldn't because her items will get away"
+  },
+  {
+   "t": 285.92,
+   "d": 9.94,
+   "text": "from her and eels will attack and eels are very bad."
+  },
+  {
+   "t": 295.86,
+   "d": 3.94,
+   "text": "It scares me personal ray -- personally when I play Brogue and I don't play Brogue on a"
+  },
+  {
+   "t": 299.8,
+   "d": 8.73,
+   "text": "dance mat so who even knows."
+  },
+  {
+   "t": 308.53,
+   "d": 9.89,
+   "text": "The main stat here is strength which makes wielding better weapons and armor possible."
+  },
+  {
+   "t": 318.42,
+   "d": 6.06,
+   "text": "There is -- it has the classic identification game of like we don't know what an aqua marine"
+  },
+  {
+   "t": 324.48,
+   "d": 4.16,
+   "text": "potion is until she tries to use it."
+  },
+  {
+   "t": 328.64,
+   "d": 10.69,
+   "text": "This stuff range thing here on the top left where the larger that number is, the further"
+  },
+  {
+   "t": 339.33,
+   "d": 2.03,
+   "text": "away monsters can be and notice her."
+  },
+  {
+   "t": 341.36,
+   "d": 4.36,
+   "text": "You want that number tiny if I understand this correctly."
+  },
+  {
+   "t": 345.72,
+   "d": 3.21,
+   "text": "Apparently you got your first scroll."
+  },
+  {
+   "t": 348.93,
+   "d": 5.97,
+   "text": "Some scrolls with some -- apologies to Maggie in advance."
+  },
+  {
+   "t": 354.9,
+   "d": 12.44,
+   "text": ">> Quisty: Sorry to the captioner for the names of my scrolls."
+  },
+  {
+   "t": 367.34,
+   "d": 8.68,
+   "text": "But the names of my scrolls are -- protector starting weapon."
+  },
+  {
+   "t": 376.02,
+   "d": 2.68,
+   "text": "We are not playing with good strategy."
+  },
+  {
+   "t": 378.7,
+   "d": 4.73,
+   "text": "We are playing with interesting strategy to demonstrate what pressing the buttons is like."
+  },
+  {
+   "t": 383.43,
+   "d": 2.01,
+   "text": "KAWA: Hell yeah."
+  },
+  {
+   "t": 385.44,
+   "d": 1.0,
+   "text": "Awesome."
+  },
+  {
+   "t": 386.44,
+   "d": 4.94,
+   "text": "There is a pad for each input that Brogue uses."
+  },
+  {
+   "t": 391.38,
+   "d": 6.16,
+   "text": "How long did take you to get this going?"
+  },
+  {
+   "t": 397.54,
+   "d": 4.49,
+   "text": ">> Qristy: You know the Makey Makey is so cool."
+  },
+  {
+   "t": 402.03,
+   "d": 4.12,
+   "text": "I am not an electronics person."
+  },
+  {
+   "t": 406.15,
+   "d": 4.92,
+   "text": "So this was all kind of like wait, how does a circuit work?"
+  },
+  {
+   "t": 411.07,
+   "d": 1.81,
+   "text": "Can I enchant anything?"
+  },
+  {
+   "t": 412.88,
+   "d": 3.26,
+   "text": "I may be stuck here."
+  },
+  {
+   "t": 416.14,
+   "d": 9.95,
+   "text": "KAWA: Oh, do you need to press multiple buttons?"
+  },
+  {
+   "t": 426.09,
+   "d": 6.06,
+   "text": "You might be able to just scroll to the item and enter in a submenu for interacting with"
+  },
+  {
+   "t": 432.15,
+   "d": 1.79,
+   "text": "it might be able to do it."
+  },
+  {
+   "t": 433.94,
+   "d": 3.09,
+   "text": ">> Qristy: Hang on, I am cheating."
+  },
+  {
+   "t": 437.03,
+   "d": 1.06,
+   "text": "KAWA: OK."
+  },
+  {
+   "t": 438.09,
+   "d": 2.65,
+   "text": "We are doing it live."
+  },
+  {
+   "t": 440.74,
+   "d": 1.66,
+   "text": "It is Roguelike development."
+  },
+  {
+   "t": 442.4,
+   "d": 2.54,
+   "text": "It is how this works."
+  },
+  {
+   "t": 444.94,
+   "d": 2.92,
+   "text": "What is the other question people were asking?"
+  },
+  {
+   "t": 447.86,
+   "d": 2.84,
+   "text": "Each of the controls."
+  },
+  {
+   "t": 450.7,
+   "d": 13.73,
+   "text": "So there is auto explore like other traditional Roguelikes bump-to-attack and move as Michael"
+  },
+  {
+   "t": 464.43,
+   "d": 2.62,
+   "text": "talked about at the start of the day."
+  },
+  {
+   "t": 467.05,
+   "d": 8.62,
+   "text": "Everythingential -- everything else you have these items and you can put on weapons of"
+  },
+  {
+   "t": 475.67,
+   "d": 6.05,
+   "text": "armor and they have different effects."
+  },
+  {
+   "t": 481.72,
+   "d": 6.83,
+   "text": "That's why it is something like Brogue and the complicated systems."
+  },
+  {
+   "t": 488.55,
+   "d": 4.72,
+   "text": ">> Qristy: 18 buttons is all you need."
+  },
+  {
+   "t": 493.27,
+   "d": 4.38,
+   "text": "KAWA: Blaseball generators at the same time."
+  },
+  {
+   "t": 497.65,
+   "d": 3.72,
+   "text": "I am not going to put that on."
+  },
+  {
+   "t": 501.37,
+   "d": 4.26,
+   "text": ">> Qristy: Send me those sound tracks later."
+  },
+  {
+   "t": 505.63,
+   "d": 8.29,
+   "text": "KAWA: Brogue's ID game is unique."
+  },
+  {
+   "t": 513.92,
+   "d": 8.86,
+   "text": "KAWA: That was the healing potion."
+  },
+  {
+   "t": 522.78,
+   "d": 5.09,
+   "text": "Scrolls of enchanting can be used on just about anything to make it better."
+  },
+  {
+   "t": 527.87,
+   "d": 2.24,
+   "text": "Nope, don't eat yet."
+  },
+  {
+   "t": 530.11,
+   "d": 3.6,
+   "text": "There is a hunger clock in this game."
+  },
+  {
+   "t": 533.71,
+   "d": 8.62,
+   "text": "But you are doing OK."
+  },
+  {
+   "t": 542.33,
+   "d": 2.58,
+   "text": "You are all right."
+  },
+  {
+   "t": 544.91,
+   "d": 2.12,
+   "text": "You might get a friend."
+  },
+  {
+   "t": 547.03,
+   "d": 3.88,
+   "text": "Are we going to get a friend?"
+  },
+  {
+   "t": 550.91,
+   "d": 4.81,
+   "text": "They missed you."
+  },
+  {
+   "t": 555.72,
+   "d": 4.25,
+   "text": "I wonder."
+  },
+  {
+   "t": 559.97,
+   "d": 7.21,
+   "text": "Can you free the one that is trapped?"
+  },
+  {
+   "t": 567.18,
+   "d": 1.12,
+   "text": "Yes."
+  },
+  {
+   "t": 568.3,
+   "d": 3.36,
+   "text": "Oh, you tried."
+  },
+  {
+   "t": 571.66,
+   "d": 3.31,
+   "text": "It is very cool."
+  },
+  {
+   "t": 574.97,
+   "d": 5.35,
+   "text": "Allies can do really cool things for you and follow you around and help you do stuff which"
+  },
+  {
+   "t": 580.32,
+   "d": 6.1,
+   "text": "in a game with such a small design space does a lot of very cool things."
+  },
+  {
+   "t": 586.42,
+   "d": 1.52,
+   "text": "We are starting again."
+  },
+  {
+   "t": 587.94,
+   "d": 3.61,
+   "text": "We technically only have five minutes but you know, we can talk through."
+  },
+  {
+   "t": 591.55,
+   "d": 2.29,
+   "text": "We have our first treasure room."
+  },
+  {
+   "t": 593.84,
+   "d": 7.63,
+   "text": "If you can get to that key then she can get a vault that has a bunch of cool stuff in"
+  },
+  {
+   "t": 601.47,
+   "d": 1.0,
+   "text": "it."
+  },
+  {
+   "t": 602.47,
+   "d": 2.55,
+   "text": "It is like floating in the middle of the pit."
+  },
+  {
+   "t": 605.02,
+   "d": 8.22,
+   "text": "I don't know how we are meant to be there if we are going to get there."
+  },
+  {
+   "t": 613.24,
+   "d": 8.43,
+   "text": "Rogue is actually a good one because it is small design space and as Dylan talked about"
+  },
+  {
+   "t": 621.67,
+   "d": 8.95,
+   "text": "there isn't a lot of this huge complexity of lots of possibility space."
+  },
+  {
+   "t": 630.62,
+   "d": 6.19,
+   "text": "Sproggiwood also brought up in the chat extremely good."
+  },
+  {
+   "t": 636.81,
+   "d": 2.51,
+   "text": "Golden Krone Hotel also great."
+  },
+  {
+   "t": 639.32,
+   "d": 6.38,
+   "text": "Golden Krone Hotel super for sure and sproggiwood are on sale in the office of steam."
+  },
+  {
+   "t": 645.7,
+   "d": 4.87,
+   "text": "You should head over there and check those out."
+  },
+  {
+   "t": 650.57,
+   "d": 7.91,
+   "text": "Yeah, someone was asking if you had done any iteration on where the pads were located and"
+  },
+  {
+   "t": 658.48,
+   "d": 3.73,
+   "text": "seeing about making them closure together and more ergnomic for you."
+  },
+  {
+   "t": 662.21,
+   "d": 4.06,
+   "text": "I know you have been working hard on this."
+  },
+  {
+   "t": 666.27,
+   "d": 2.67,
+   "text": ">> Qristy: I was joining for maximum comedic value."
+  },
+  {
+   "t": 668.94,
+   "d": 11.22,
+   "text": "I would have definitely put more grounds in if I was doing this again."
+  },
+  {
+   "t": 680.16,
+   "d": 5.76,
+   "text": "Also the foil on the ground button is starting to show its wear."
+  },
+  {
+   "t": 685.92,
+   "d": 4.23,
+   "text": "Didn't think about how I would have to be stepping on that button the entire time."
+  },
+  {
+   "t": 690.15,
+   "d": 6.91,
+   "text": "I wish I had the potion of incineration still."
+  },
+  {
+   "t": 697.06,
+   "d": 2.25,
+   "text": "KAWA: That's unfortunate."
+  },
+  {
+   "t": 699.31,
+   "d": 8.87,
+   "text": "We are here to try it."
+  },
+  {
+   "t": 708.18,
+   "d": 2.17,
+   "text": "We are here to hack around and find out."
+  },
+  {
+   "t": 710.35,
+   "d": 1.68,
+   "text": "That how it works."
+  },
+  {
+   "t": 712.03,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 713.03,
+   "d": 1.0,
+   "text": "Oh, man."
+  },
+  {
+   "t": 714.03,
+   "d": 3.98,
+   "text": ">> Qristy: Look at all that treasure I can't get."
+  },
+  {
+   "t": 718.01,
+   "d": 3.43,
+   "text": "KAWA: There is the rest of the dungeon."
+  },
+  {
+   "t": 721.44,
+   "d": 3.43,
+   "text": "I wonder if you will get another opportunity."
+  },
+  {
+   "t": 724.87,
+   "d": 5.26,
+   "text": "People are admiring your ability to keep balanced in the midst of it all."
+  },
+  {
+   "t": 730.13,
+   "d": 2.62,
+   "text": "You are doing your best."
+  },
+  {
+   "t": 732.75,
+   "d": 1.0,
+   "text": "You are doing great."
+  },
+  {
+   "t": 733.75,
+   "d": 1.08,
+   "text": ">> Qristy: I am doing what I can."
+  },
+  {
+   "t": 734.83,
+   "d": 1.66,
+   "text": "That's all we ask."
+  },
+  {
+   "t": 736.49,
+   "d": 9.06,
+   "text": "Can you hear the -- KAWA: Sam is asking if that is in fact the"
+  },
+  {
+   "t": 745.55,
+   "d": 2.48,
+   "text": "cool S in the corner of your pad?"
+  },
+  {
+   "t": 748.03,
+   "d": 4.26,
+   "text": ">> Qristy: Yes, of course."
+  },
+  {
+   "t": 752.29,
+   "d": 5.74,
+   "text": "Also, I don't know if you can see it this is my earring."
+  },
+  {
+   "t": 758.03,
+   "d": 3.7,
+   "text": "KAWA: Cool Ss all over the place."
+  },
+  {
+   "t": 761.73,
+   "d": 5.48,
+   "text": "Being able to search for hidden areas is an important part of exploring the levels in"
+  },
+  {
+   "t": 767.21,
+   "d": 1.0,
+   "text": "Brogue."
+  },
+  {
+   "t": 768.21,
+   "d": 6.14,
+   "text": ">> Qristy: Yes, which I haven't done yet but I could if I wanted to."
+  },
+  {
+   "t": 774.35,
+   "d": 3.16,
+   "text": ">> Qristy: Pick up some gold."
+  },
+  {
+   "t": 777.51,
+   "d": 1.26,
+   "text": "Let's see."
+  },
+  {
+   "t": 778.77,
+   "d": 5.21,
+   "text": "KAWA: Gold is literally only for the score."
+  },
+  {
+   "t": 783.98,
+   "d": 1.0,
+   "text": "It does nothing."
+  },
+  {
+   "t": 784.98,
+   "d": 1.56,
+   "text": "It is fine."
+  },
+  {
+   "t": 786.54,
+   "d": 1.0,
+   "text": "OOPH."
+  },
+  {
+   "t": 787.54,
+   "d": 1.07,
+   "text": "Big hit."
+  },
+  {
+   "t": 788.61,
+   "d": 3.27,
+   "text": ">> Qristy: Listen, I am almost out of time."
+  },
+  {
+   "t": 791.88,
+   "d": 7.25,
+   "text": "KAWA: You are going to hurl yourself into a death and then we will call it the end?"
+  },
+  {
+   "t": 799.13,
+   "d": 1.84,
+   "text": ">> Qristy: No, I am going to win."
+  },
+  {
+   "t": 800.97,
+   "d": 2.15,
+   "text": "KAWA: This is amazing."
+  },
+  {
+   "t": 803.12,
+   "d": 9.61,
+   "text": "I hope you all are having as much fun as I am."
+  },
+  {
+   "t": 812.73,
+   "d": 6.51,
+   "text": ">> Qristy: I am not looking so hot."
+  },
+  {
+   "t": 819.24,
+   "d": 9.3,
+   "text": "KAWA: Two puzzles that require potion and because you are early you don't know which"
+  },
+  {
+   "t": 828.54,
+   "d": 1.0,
+   "text": "is which."
+  },
+  {
+   "t": 829.54,
+   "d": 7.2,
+   "text": "Yeah, there is always a bit of luck in things like early levels especially in these traditional"
+  },
+  {
+   "t": 836.74,
+   "d": 1.84,
+   "text": "Roguelikes but that's part of what makes it compelling."
+  },
+  {
+   "t": 838.58,
+   "d": 6.2,
+   "text": "Sometimes you get an overpowered run very early and that's fascinating."
+  },
+  {
+   "t": 844.78,
+   "d": 2.54,
+   "text": "Sometimes balance is just for fun."
+  },
+  {
+   "t": 847.32,
+   "d": 1.5,
+   "text": "Sometimes it is not."
+  },
+  {
+   "t": 848.82,
+   "d": 2.17,
+   "text": "Have fun with making games."
+  },
+  {
+   "t": 850.99,
+   "d": 11.94,
+   "text": "That's what it is for."
+  },
+  {
+   "t": 862.93,
+   "d": 6.17,
+   "text": ">> Qristy: We are really going places."
+  },
+  {
+   "t": 869.1,
+   "d": 3.64,
+   "text": "KAWA: It is top of the hour."
+  },
+  {
+   "t": 872.74,
+   "d": 3.21,
+   "text": ">> Qristy: Want to get licked by a toad?"
+  },
+  {
+   "t": 875.95,
+   "d": 4.8,
+   "text": "Yeah, you do."
+  },
+  {
+   "t": 880.75,
+   "d": 9.16,
+   "text": "KAWA: The bars on the top right are total health, total hunger clock and how long any"
+  },
+  {
+   "t": 889.91,
+   "d": 1.0,
+   "text": "effects are happening."
+  },
+  {
+   "t": 890.91,
+   "d": 4.04,
+   "text": "She is going to be hallucinating for quite a while."
+  },
+  {
+   "t": 902.24,
+   "d": 1.0,
+   "text": "You the player don't know what's going on."
+  },
+  {
+   "t": 904.13,
+   "d": 1.0,
+   "text": ">> Qristy: Yeah, I don't know what that enemy is."
+  },
+  {
+   "t": 907.27,
+   "d": 1.0,
+   "text": "Let's fight it."
+  },
+  {
+   "t": 919.82,
+   "d": 1.0,
+   "text": "KAWA: Over balancing gets -- and of course, yes."
+  },
+  {
+   "t": 924.4,
+   "d": 1.0,
+   "text": "The juicyness of Rogue's hallucnation and in Rogue in general and all these wonderful"
+  },
+  {
+   "t": 930.91,
+   "d": 1.0,
+   "text": "ASCII color effects is fantastic for a turn-based ASCII game."
+  },
+  {
+   "t": 934.31,
+   "d": 1.0,
+   "text": "I have had arguments with people about this."
+  },
+  {
+   "t": 935.7,
+   "d": 1.0,
+   "text": "I think it is fabulous."
+  },
+  {
+   "t": 936.99,
+   "d": 1.0,
+   "text": "Other people think it is -- but hey."
+  },
+  {
+   "t": 939.8,
+   "d": 1.0,
+   "text": "Ah."
+  },
+  {
+   "t": 942.6,
+   "d": 1.0,
+   "text": ">> Qristy: Killed by a question mark."
+  },
+  {
+   "t": 949.47,
+   "d": 1.0,
+   "text": "KAWA: That was so much fun."
+  },
+  {
+   "t": 951.15,
+   "d": 1.0,
+   "text": "It was a jackal."
+  },
+  {
+   "t": 952.43,
+   "d": 1.0,
+   "text": "It looked like a unicorn."
+  },
+  {
+   "t": 953.62,
+   "d": 1.0,
+   "text": "We were hallucinating."
+  },
+  {
+   "t": 955.17,
+   "d": 1.0,
+   "text": "It was a unicorn in our hearts."
+  },
+  {
+   "t": 961.71,
+   "d": 1.0,
+   "text": "So, yeah, thank you so much, Qristy."
+  },
+  {
+   "t": 963.39,
+   "d": 1.0,
+   "text": "That was -- >> Qristy: Thanks."
+  },
+  {
+   "t": 966.5,
+   "d": 1.0,
+   "text": "This was a blast."
+  }
+ ],
+ "note": "re-timed 19 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 54 s off the audio)"
+}

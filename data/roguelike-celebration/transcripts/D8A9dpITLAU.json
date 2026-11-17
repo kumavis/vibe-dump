@@ -1,0 +1,726 @@
+{
+ "id": "D8A9dpITLAU",
+ "url": "https://www.youtube.com/watch?v=D8A9dpITLAU",
+ "title": "Jonathan Lessard - A Simulation with a View",
+ "speaker": "Jonathan Lessard",
+ "talk_title": "A Simulation with a View",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 971,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Roguelike systems are often full of rich, intricately generated environmental and historical details. Most of it is lost on players who typically navigate the world through the perspective of a single or small party of adventurers. This makes sense in terms of aligning player and character perspective in their journey. It does, however, limit the information they have access to in terms of discovering interesting or quirky emergent details and stories.\n\nOur current project takes the opposite stance of exposing as much of the simulation as possible to allow players the fun of perusing and discovering the intricacies of its generated histories. This led to a series of novel design problems: how to present this massive quantity of information? And how to give players reasons to engage with it.\n\nIn this quick talk, I will quickly explain our approaches to tackling these issues. First, I will present our Chroniqueur interface which affords players an immediate, accessible Wikipedia-like interface documenting most of the world’s simulated history. Secondly, I will touch on the Divine Affaire gameplay which positions players as higher entities responding to the needs of simulated characters. To devise wise plans of actions, they first need to investigate the simulated lives and understand the given situations. Given the complexity of the simulation, miraculous meddling does not always yield the expected results and much of the fun comes from uncovering the consequences of one’s interventions in the characters’ timelines.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 43,
+   "title": "Welcome"
+  },
+  {
+   "start": 80,
+   "title": "Assumptions"
+  },
+  {
+   "start": 120,
+   "title": "Intentions"
+  },
+  {
+   "start": 150,
+   "title": "How will people know"
+  },
+  {
+   "start": 218,
+   "title": "Inspirations"
+  },
+  {
+   "start": 254,
+   "title": "Chronicles"
+  },
+  {
+   "start": 422,
+   "title": "Why Care"
+  },
+  {
+   "start": 564,
+   "title": "Exploring the Situation"
+  },
+  {
+   "start": 734,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2271,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 12.4,
+   "text": "ALEXEI: Without further ado, we are going to be bringing up a recording of the next talk."
+  },
+  {
+   "t": 12.4,
+   "d": 9.76,
+   "text": "The speaker who is around for chat. This is a \"A Simulation with a View\" from Jonathan Lessard."
+  },
+  {
+   "t": 23.72,
+   "d": 3.24,
+   "text": "Game designer, researcher and professor; long-time independent"
+  },
+  {
+   "t": 26.96,
+   "d": 3.52,
+   "text": "game developer. Now focused on research-creation in the field"
+  },
+  {
+   "t": 30.48,
+   "d": 3.2,
+   "text": "of # simulations and emergent narratives."
+  },
+  {
+   "t": 33.68,
+   "d": 12.28,
+   "text": "Let's go ahead and play that video. JONATHAN: Hi, everyone. Jonathan Lessard."
+  },
+  {
+   "t": 45.96,
+   "d": 6.24,
+   "text": "I should be here live but I recorded this to make sure this would go smoothly and I wouldn't forget"
+  },
+  {
+   "t": 52.2,
+   "d": 8.36,
+   "text": "everything. I wanted to talk about a project I have been working on and it has many names the"
+  },
+  {
+   "t": 60.56,
+   "d": 8.08,
+   "text": "last is design affairs. There are angles to this project that I find are possibly"
+  },
+  {
+   "t": 68.64,
+   "d": 5.72,
+   "text": "interesting for both roguelike players and roguelike developers. Hopefully that will"
+  },
+  {
+   "t": 74.36,
+   "d": 6.24,
+   "text": "be true. The title is \"A Simulation with a View.\" Hopefully it will make sense soon."
+  },
+  {
+   "t": 80.6,
+   "d": 6.52,
+   "text": "We start from this assumption that many roguelikes have an underlying simulation."
+  },
+  {
+   "t": 87.88,
+   "d": 6.32,
+   "text": "To a different extent but some of them have an intense simulation thinking of Dwarf Fortress,"
+  },
+  {
+   "t": 94.2,
+   "d": 11.4,
+   "text": "for example, crusader kings and the Sims. When I began on this project, it was building a complex"
+  },
+  {
+   "t": 105.6,
+   "d": 5.76,
+   "text": "social simulation was one of my starting points. This was my view a few years ago of trying to"
+  },
+  {
+   "t": 111.36,
+   "d": 8.92,
+   "text": "figure out what was happening under the hood. Tons of stuff is happening as simulations do. You"
+  },
+  {
+   "t": 120.28,
+   "d": 6.52,
+   "text": "know, in my case, I also had some intentions in terms of what I wanted to model. I wanted"
+  },
+  {
+   "t": 126.8,
+   "d": 8.28,
+   "text": "to try to model the social conditions that led to the newly thick revolution in the sore story"
+  },
+  {
+   "t": 135.08,
+   "d": 5.8,
+   "text": "of humans and the history of humans and I am not sure I achieved it but at least I informed myself"
+  },
+  {
+   "t": 140.88,
+   "d": 8.88,
+   "text": "as to social and ecological mechanisms and stuff like that. The truth is most of that is unseen."
+  },
+  {
+   "t": 151.32,
+   "d": 6.88,
+   "text": "My first big question is how will people know about all that? I am sure that resonates to some"
+  },
+  {
+   "t": 158.2,
+   "d": 9.84,
+   "text": "of you. You have complex systems but exposing them is a challenge actually. Typical approach"
+  },
+  {
+   "t": 168.04,
+   "d": 9.68,
+   "text": "to roguelikes is you have a game view meaning exposure is through what you are paying attention"
+  },
+  {
+   "t": 177.72,
+   "d": 5.64,
+   "text": "to and the information you get and the actions you are undertaking. That's what you can see."
+  },
+  {
+   "t": 183.36,
+   "d": 6.52,
+   "text": "Obviously you can't know or pay attention to what's outside your game view. Tons of stuff"
+  },
+  {
+   "t": 189.88,
+   "d": 5.88,
+   "text": "is missing from your attention which is not an issue. It is design on purpose because the"
+  },
+  {
+   "t": 195.76,
+   "d": 6.2,
+   "text": "positioning of the player as a limited awareness is definitely part of the game. But we could"
+  },
+  {
+   "t": 201.96,
+   "d": 4.44,
+   "text": "imagine something else. There is also the issue of all this stuff that I missed in the past,"
+  },
+  {
+   "t": 206.4,
+   "d": 6.52,
+   "text": "things all happen in the present. And if I miss something, then it is buried somewhere and I can't"
+  },
+  {
+   "t": 212.92,
+   "d": 5.96,
+   "text": "necessarily access as it. That's all lost. Pay attention to what happened in the simulation."
+  },
+  {
+   "t": 218.88,
+   "d": 5.48,
+   "text": "So my intuition was first what if everything was documented? Training as a historian and"
+  },
+  {
+   "t": 224.36,
+   "d": 6.44,
+   "text": "definitely have a fantasy if the world was all completely objectively documented in some huge"
+  },
+  {
+   "t": 230.8,
+   "d": 6.2,
+   "text": "archive that would be really interesting. I didn't make this up. I have these inspirations"
+  },
+  {
+   "t": 237.0,
+   "d": 6.12,
+   "text": "in mind when I started doing this. So the Dwarf Fortress legend mode is a big one. James Ryan's"
+  },
+  {
+   "t": 243.12,
+   "d": 8.0,
+   "text": "work in general but in particular diety which outputs the whole simulation as a series of"
+  },
+  {
+   "t": 251.12,
+   "d": 6.88,
+   "text": "web pages and to me that's interesting. This is what the game looks like and this"
+  },
+  {
+   "t": 258.0,
+   "d": 9.12,
+   "text": "is like the game view. The new and different thing I want to introduce to you is these ideas"
+  },
+  {
+   "t": 267.12,
+   "d": 5.48,
+   "text": "of chronicles. In this game, at any given moment, you can click on the chronicles down there, and"
+  },
+  {
+   "t": 272.6,
+   "d": 7.84,
+   "text": "you have access to something like as exhaustive as possible Wikipedia of the world. This is live"
+  },
+  {
+   "t": 280.44,
+   "d": 5.64,
+   "text": "meaning if you move forward in the game all of the information is updated. People who are live are"
+  },
+  {
+   "t": 286.08,
+   "d": 7.68,
+   "text": "now dead and you can get graphs, for example, in the world page. I can see the fluctuations"
+  },
+  {
+   "t": 293.76,
+   "d": 4.8,
+   "text": "in the human population should attract my attention to something happened here and maybe"
+  },
+  {
+   "t": 298.56,
+   "d": 11.28,
+   "text": "I should dig deeper and find out. Every person and character in the game has their own Wikipedia page"
+  },
+  {
+   "t": 309.84,
+   "d": 13.04,
+   "text": "with biography, current situation, even their face and information is there. It has multiple"
+  },
+  {
+   "t": 322.88,
+   "d": 7.88,
+   "text": "tabs. You can look at families. This person has a husband right now but two ex-husbands so I could"
+  },
+  {
+   "t": 330.76,
+   "d": 7.84,
+   "text": "be curious as to what happened to them. They died? Died of what? What age were they? I can see there"
+  },
+  {
+   "t": 338.6,
+   "d": 6.2,
+   "text": "are children here and looking at the different last names I see that possibly of different"
+  },
+  {
+   "t": 344.8,
+   "d": 9.76,
+   "text": "marriages so my curiosity can be aroused here. For each character, I have the full timeline of their"
+  },
+  {
+   "t": 354.56,
+   "d": 9.92,
+   "text": "life. All simulated events are reported year by year with hyperlinks so for example on the year,"
+  },
+  {
+   "t": 364.48,
+   "d": 9.24,
+   "text": "151 that character found a new mate. No, that's the person who was introduced to the new mate"
+  },
+  {
+   "t": 373.72,
+   "d": 9.0,
+   "text": "and I can click on the new mate and find out about them. And then a bunch of other things happened"
+  },
+  {
+   "t": 382.72,
+   "d": 8.0,
+   "text": "that year of either sometimes of importance and sometimes trivial in nature but it is there."
+  },
+  {
+   "t": 392.4,
+   "d": 8.2,
+   "text": "This is my view to the simulation. The chronicles give me all this. Most game objects can generate"
+  },
+  {
+   "t": 400.6,
+   "d": 7.4,
+   "text": "graphs. For example, this character had a big uptake in influence, social influence somewhere"
+  },
+  {
+   "t": 408.0,
+   "d": 7.4,
+   "text": "around the year 116-117. Once again, maybe a lead to go figure out this story here of what happened"
+  },
+  {
+   "t": 416.2,
+   "d": 7.08,
+   "text": "and why did they lose influence. I could also cross reference values and stuff like that."
+  },
+  {
+   "t": 423.28,
+   "d": 6.4,
+   "text": "Which leads me to the other issue. There is a lot of information being generated. That information"
+  },
+  {
+   "t": 429.68,
+   "d": 8.72,
+   "text": "is now accessible and to some extent parseable and legible. It is not hard to figure out. But the big"
+  },
+  {
+   "t": 438.4,
+   "d": 7.96,
+   "text": "question now is why would people/players care about all that information? All these fictional"
+  },
+  {
+   "t": 446.36,
+   "d": 5.48,
+   "text": "people living or dead and all the minor details of their lives? A big issue I don't claim to"
+  },
+  {
+   "t": 451.84,
+   "d": 6.68,
+   "text": "have an answer to this. The main approach that games have is to create a game around"
+  },
+  {
+   "t": 458.52,
+   "d": 5.96,
+   "text": "it. When you first made a game where you played one character in there but the lives of the NPCs"
+  },
+  {
+   "t": 464.48,
+   "d": 6.8,
+   "text": "are not all that interesting so we -- I mean, it is unlikely that the one character will be"
+  },
+  {
+   "t": 471.28,
+   "d": 4.48,
+   "text": "interesting. But we thought it is kind of likely if you could look at many characters at once,"
+  },
+  {
+   "t": 475.76,
+   "d": 6.12,
+   "text": "or had reasons to look at many characters, then you could find out possibly interesting emergent"
+  },
+  {
+   "t": 481.88,
+   "d": 7.28,
+   "text": "stories in there, so we were designing design affair as a God game but you play one of the"
+  },
+  {
+   "t": 489.16,
+   "d": 4.96,
+   "text": "numerous gods in the simulation and as everything else in the simulations these Gods are part of the"
+  },
+  {
+   "t": 494.12,
+   "d": 6.48,
+   "text": "simulation. They are created by groups of people, communities, as protector gods, and then they are"
+  },
+  {
+   "t": 500.6,
+   "d": 6.12,
+   "text": "living in a relationship of reciprocal service where believers of these gods endue them with"
+  },
+  {
+   "t": 507.28,
+   "d": 12.2,
+   "text": "energy but in response the gods are expected to fulfill the believer's desires or ambitions. God"
+  },
+  {
+   "t": 519.48,
+   "d": 6.96,
+   "text": "has its own page. It is not super sexy right now. This one big story. They are currently associated"
+  },
+  {
+   "t": 526.44,
+   "d": 9.36,
+   "text": "to chins and the ritual is to celebrate them by decorating a severe song. But the fun thing is"
+  },
+  {
+   "t": 535.8,
+   "d": 12.72,
+   "text": "people communicate through prayers. For example, Jessica is in love with Valerie and says if you"
+  },
+  {
+   "t": 548.52,
+   "d": 10.2,
+   "text": "make this happen she will sacrifice food for you but if you don't she will be disappointed and make"
+  },
+  {
+   "t": 558.72,
+   "d": 7.76,
+   "text": "that disappointment known to her peers. You have to do it or at least she expects you to do it."
+  },
+  {
+   "t": 566.48,
+   "d": 6.56,
+   "text": "You have a reason to explore the situation. I find out these two people are actually pretty far away."
+  },
+  {
+   "t": 573.04,
+   "d": 8.32,
+   "text": "That might be one of the problems. Maybe worse is one of them is definitely attracted to the other"
+  },
+  {
+   "t": 581.36,
+   "d": 8.16,
+   "text": "but the other not really. So that's an issue. But if I look deeper, I see that one of them -- that"
+  },
+  {
+   "t": 589.52,
+   "d": 9.24,
+   "text": "Jessica has been pretty active in trying to seduce Valerie. I mean, it seems to be not working too"
+  },
+  {
+   "t": 598.76,
+   "d": 5.8,
+   "text": "bad. At least progress is happening. Valerie blushes as she listens to the poetry I compose"
+  },
+  {
+   "t": 604.56,
+   "d": 11.16,
+   "text": "in her name so it is going maybe not too bad. Whoops. I skipped one. Maybe what I can do is"
+  },
+  {
+   "t": 615.72,
+   "d": 7.96,
+   "text": "I will move and intervene in the simulation by acting miracles. You have a bunch of possible"
+  },
+  {
+   "t": 623.68,
+   "d": 7.12,
+   "text": "miracles that you can do. The thing here I decide I can do is at least move one of them to the other"
+  },
+  {
+   "t": 630.8,
+   "d": 5.96,
+   "text": "place and see what happens. But of course I am taking responsibility for this because, I mean,"
+  },
+  {
+   "t": 636.76,
+   "d": 7.68,
+   "text": "Valerie especially didn't ask for anything. So who am I to mess with her life? So I decided to move"
+  },
+  {
+   "t": 644.44,
+   "d": 8.68,
+   "text": "Jessica and induce her to travel the world and go at the same place as Valerie but the outcome was"
+  },
+  {
+   "t": 653.12,
+   "d": 5.96,
+   "text": "that she did move there and then I can look at this incentive to look at the aftermath or what"
+  },
+  {
+   "t": 659.08,
+   "d": 6.56,
+   "text": "happened or what are the consequences to my action so I have to play attention to the simulation. She"
+  },
+  {
+   "t": 665.64,
+   "d": 7.8,
+   "text": "did PUFB -- move there and settled in the new place and joined a clan but it was attacked by"
+  },
+  {
+   "t": 673.44,
+   "d": 8.52,
+   "text": "another clan and so she was immediately involved in that battle. She was attacked by a certain"
+  },
+  {
+   "t": 681.96,
+   "d": 7.88,
+   "text": "Julian show body and lost in the battle and died. So because of my action she went to the other"
+  },
+  {
+   "t": 689.84,
+   "d": 6.76,
+   "text": "end of the world and she was immediately killed. Because she was far from her family and home then"
+  },
+  {
+   "t": 696.6,
+   "d": 6.84,
+   "text": "nobody attended her funeral. I think maybe one person. I wonder if that's her love interest. That"
+  },
+  {
+   "t": 703.44,
+   "d": 5.88,
+   "text": "might be an interesting turnout. I am stopping here because you see the point. But the idea is"
+  },
+  {
+   "t": 709.32,
+   "d": 7.84,
+   "text": "that if instead of being a single player or small group of player, having a top-down view in the"
+  },
+  {
+   "t": 717.16,
+   "d": 10.64,
+   "text": "game as a role, then you have this opportunity and incentive to go explore the details of that"
+  },
+  {
+   "t": 727.8,
+   "d": 5.92,
+   "text": "story. All right. I will stop here. Thank you and hopefully there is some questions."
+  },
+  {
+   "t": 733.72,
+   "d": 6.48,
+   "text": "ALEXEI: Excellent. Hello. JONATHAN: Hey."
+  },
+  {
+   "t": 740.2,
+   "d": 3.68,
+   "text": "ALEXEI: As you saw in chat, people were enjoying that. I think we have time for"
+  },
+  {
+   "t": 744.52,
+   "d": 5.8,
+   "text": "one question if anyone wants to submit one right away. People were asking in chat where"
+  },
+  {
+   "t": 750.32,
+   "d": 5.56,
+   "text": "they can get this game when it is ready? JONATHAN: I wish I had something ready for"
+  },
+  {
+   "t": 755.88,
+   "d": 8.56,
+   "text": "this weekend. I will share. I saw there is place where we can share links. I can share -- there"
+  },
+  {
+   "t": 764.44,
+   "d": 5.36,
+   "text": "is my Twitter that you can follow. The Itch page is almost ready and I can put a Discord"
+  },
+  {
+   "t": 769.8,
+   "d": 6.68,
+   "text": "invite or something like that. There is no clear way but it should be around soon-ish."
+  },
+  {
+   "t": 776.48,
+   "d": 6.08,
+   "text": "ALEXEI: We will include that and maybe put it in the description of the upload of this talk"
+  },
+  {
+   "t": 782.56,
+   "d": 7.2,
+   "text": "when it is up. We have some questions right away. We are getting lost of questions. We won't have"
+  },
+  {
+   "t": 789.76,
+   "d": 4.32,
+   "text": "time to get all of them. I will pick the first one I saw show up from Aaron which is how do"
+  },
+  {
+   "t": 794.08,
+   "d": 5.16,
+   "text": "you handle social structures in the game? JONATHAN: Thanks for the question. Pretty"
+  },
+  {
+   "t": 799.24,
+   "d": 7.08,
+   "text": "happy about it. I read this book and put it in the reference, stone age economics because"
+  },
+  {
+   "t": 806.32,
+   "d": 5.8,
+   "text": "right now things happen in the stone age or paleolithic and hoping to move it forward but"
+  },
+  {
+   "t": 812.12,
+   "d": 6.92,
+   "text": "it is mostly structured around GIF economy and the basic -- give economy -- you give something"
+  },
+  {
+   "t": 819.04,
+   "d": 10.28,
+   "text": "to someone and exchange. It is like a fractal thing and when a family does this together it"
+  },
+  {
+   "t": 829.32,
+   "d": 6.76,
+   "text": "has a social distribution mechanism. But when the families do it among themselves you have a"
+  },
+  {
+   "t": 836.08,
+   "d": 7.0,
+   "text": "higher structure that can form something like a clan and when clans do it together they can form"
+  },
+  {
+   "t": 843.08,
+   "d": 7.4,
+   "text": "something higher like a tribe and when tribes do this together it can be like a kingdom. In"
+  },
+  {
+   "t": 850.48,
+   "d": 6.32,
+   "text": "terms of system modeling it is very pleasant because it is a one action that at very levels"
+  },
+  {
+   "t": 856.8,
+   "d": 5.4,
+   "text": "pile up to become a full social structure. It doesn't really show when you play the game but"
+  },
+  {
+   "t": 862.2,
+   "d": 5.68,
+   "text": "to me it works and makes the world very alive and people have relationships from each other from the"
+  },
+  {
+   "t": 867.88,
+   "d": 6.8,
+   "text": "basic pact. There is stuff like that in there. ALEXEI: That's really interesting. I love hearing"
+  },
+  {
+   "t": 874.68,
+   "d": 4.96,
+   "text": "about all these different inspirations people have for this and you get different flavors."
+  },
+  {
+   "t": 879.64,
+   "d": 6.32,
+   "text": "We maybe have time for one more quick question from hypergardens. What kind of decisions do"
+  },
+  {
+   "t": 885.96,
+   "d": 5.67,
+   "text": "you make as a player in the game and how often do you decide the pacing of those decisions?"
+  },
+  {
+   "t": 891.63,
+   "d": 7.45,
+   "text": "JONATHAN: The basic any -- the basic economy as the player is as a divinity you get credit from"
+  },
+  {
+   "t": 899.08,
+   "d": 9.28,
+   "text": "sacrifices from your believers. At the beginning you have maybe 20 people believing in you and have"
+  },
+  {
+   "t": 908.36,
+   "d": 6.36,
+   "text": "limited action and as the society grows and if you do your job well people talk about you and you get"
+  },
+  {
+   "t": 914.72,
+   "d": 7.6,
+   "text": "more well known then you have a little bit more action potential. But then you also -- the world"
+  },
+  {
+   "t": 922.32,
+   "d": 4.76,
+   "text": "lives on without you. That's one thing I like. You can just do nothing and hope for the best."
+  },
+  {
+   "t": 927.08,
+   "d": 6.48,
+   "text": "It will go ahead and move and people will still believe in you. But when you act you are taking"
+  },
+  {
+   "t": 933.56,
+   "d": 4.52,
+   "text": "ethical decisions and positioning yourself to say how much do I want to meddle in these"
+  },
+  {
+   "t": 938.08,
+   "d": 8.64,
+   "text": "people's life and will it pay off? Is someone paying the price for this? It leaves room for"
+  },
+  {
+   "t": 946.72,
+   "d": 12.48,
+   "text": "sandbox experiments as a deity. ALEXEI: Wonderful. There are other"
+  },
+  {
+   "t": 959.2,
+   "d": 4.08,
+   "text": "discussions but we will save them for the breakout room. Thank you, Jonathan."
+  }
+ ]
+}

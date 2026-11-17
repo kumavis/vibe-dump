@@ -1,0 +1,107 @@
+{
+  "id": "Ls9wksddN5c",
+  "title": "Oliver Withington: The Right Variety: Understanding & Visualising Output Diversity of Your Generator",
+  "speaker": "Oliver Withington",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=Ls9wksddN5c",
+  "talk_type": "technical",
+  "summary": "Oliver Withington, a games and AI PhD researcher, gives a lightning talk on evaluating the output diversity of procedural generators. He defines possibility space versus generative space and frames tuning as moving the generative space to overlap desirable content, while noting this is hard because outputs are numerous, slow to evaluate and subjectively judged. He surveys content sampling, expressive range analysis, dimensionality reduction, and using visualizations to pick outliers and cluster representatives for human review. He closes with the point that only the designer knows what diversity their game needs, contrasting Heat Signature's deliberately simple levels with Dwarf Fortress's delightfully broken maps, and advises making generators easy to test.",
+  "games": [
+    "Minecraft",
+    "Heat Signature",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "possibility space",
+      "kind": "principle",
+      "claim": "A generator's 'generative space' (what it actually produces) is a subset of the 'possibility space' (everything representable in its encoding), and tuning means moving the generative space to overlap desirable content.",
+      "detail": "Withington illustrates with Minecraft: its generative space is anything its terrain generator can output; its possibility space is anything expressible in its voxels, including builds the generator never produces; anything needing a nonexistent block lies outside. Tuning tries to localize the generative space over the good levels, narratives or weapons you want.",
+      "t": 229,
+      "quote": "we can think of tuning a generator to produce the best possible content as trying to localize a generative space optimally within the possibility space",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator evaluation",
+      "kind": "warning",
+      "claim": "Evaluating where a generator's output lies relative to good content is hard because generators can produce quintillions of artifacts, each may be slow to evaluate, and quality is subjective.",
+      "detail": "Withington notes it's trivial to make a generator with quintillions of unique artifacts, individual artifacts can take a long time to evaluate given their size or number of goals, and even in his two-person team there was much disagreement on whether a level was good. No universal measure exists, but trying to understand the generative space is still valuable.",
+      "t": 273,
+      "quote": "it's quite trivial to make a generator that has quintilian of unique artifacts within its generative space and we do not have time to look at them all",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "content sampling",
+      "kind": "technique",
+      "claim": "Content sampling (generating some artifacts and looking at them) is the universal first evaluation technique, adequate for tightly constrained generators but misleading for large generative spaces.",
+      "detail": "Seeing one good artifact shows good stuff exists; one broken one shows broken stuff exists. But sampling even many artifacts from a huge generative space can give a myopic view. It may suffice for constrained grammars or cellular automata, whose trillions of maps tend to look perceptually similar.",
+      "t": 390,
+      "quote": "if your generous space is extremely large you can sample a large amount of content from it and you might still be getting a quite sort of myopic view",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "expressive range analysis",
+      "kind": "technique",
+      "claim": "Expressive range analysis generates a large batch of content, computes descriptive metrics for each artifact, and plots them to visualize the shape of the generative space.",
+      "detail": "For Minecraft-like maps, metrics might be tree coverage or average mountain height, plotted in 2D. It's most useful when you know what diversity you want (e.g. bounds on tree coverage), but even without that it reveals what the system can and can't produce. Withington says it is common in research and used in industry under other names.",
+      "t": 461,
+      "quote": "all we need to do is generate a large amount of content for my generator like as much as we have the compute available",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "expressive range analysis",
+      "kind": "technique",
+      "claim": "Expressive range plots can act as pseudo bug-fixing, exposing impossible or broken outputs that sampling would miss.",
+      "detail": "In Withington's toy example, a cluster of maps with 100% water coverage and lots of tree coverage would suggest those maps are broken, a weakness that wouldn't surface even from sampling many maps.",
+      "t": 529,
+      "quote": "it can be used as a form of pseudo bug fixing even you know you might be quite surprised to see you know in the toy example 100% water coverage",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "dimensionality reduction",
+      "kind": "technique",
+      "claim": "Dimensionality reduction can compress encoded generator output into two abstract variables to plot, which is useful for comparing generators or tunings when the desired diversity can't be easily measured.",
+      "detail": "Generated content is effectively a list of values, so like healthcare datasets with correlated variables it can be compressed to a few components that explain much variance. The axes aren't interpretable, but plots show at a glance whether one tuning is more diverse or produces content another generator never would. It works best with small content representations, as these algorithms scale poorly to thousands of variables.",
+      "t": 690,
+      "quote": "it can at a glance tell you whether or not um a different tuning for generator is producing more diverse content",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "guided sampling",
+      "kind": "technique",
+      "claim": "Use a generative-space visualization to choose which artifacts to inspect by hand, focusing on extreme outliers and representatives of clusters.",
+      "detail": "Since no metric tells you whether content is good, Withington suggests combining approaches: plot the space, then inspect its extreme boundaries and cluster representatives rather than random samples. Seeing what the generator does when it does the equivalent of rolling many sixes in a row tells you whether extremes are broken or interesting enough to push toward.",
+      "t": 770,
+      "quote": "we tend to be interested in the extreme outliers in this space or in could representatives of certain clusters",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "target diversity",
+      "kind": "principle",
+      "claim": "Only the designer knows what diversity a generator needs: Heat Signature rightly targeted simple, boring levels, while Dwarf Fortress happily produces maps that instantly kill everyone.",
+      "detail": "Withington relays Tom Francis's earlier Roguelike Celebration talk: Heat Signature's levels ended up simple because enough diversity came from its other systems. At the other extreme, a Reddit thread showed a Dwarf Fortress map that implodes on load, killing all dwarfs, which delights players under its 'losing is fun' ethos. Where a game sits on that scale is a decision no technique can make for you.",
+      "t": 822,
+      "quote": "only you know what your generator needs there is no like one siiz fits-all technique",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "testable generators",
+      "kind": "technique",
+      "claim": "Make generators easier to test by keeping them modular and able to output encoded content in the minimal form needed for evaluation, without set dressing.",
+      "detail": "Among his takeaways, Withington says future you will be very happy if you can generate encoded content without all the dressing, i.e. in the minimum form needed to evaluate it. He also recommends ERA when you know what diversity you want, dimensionality reduction when you don't, and collaboration with game researchers.",
+      "t": 912,
+      "quote": "make your generator easier to test future you'll be very happy if you make things modular",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

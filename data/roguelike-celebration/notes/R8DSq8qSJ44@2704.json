@@ -1,0 +1,91 @@
+{
+  "id": "R8DSq8qSJ44@2704",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 2704,
+    "end": 3515
+  },
+  "title": "Baseball Is a Roguelike (no, really)",
+  "speaker": "Nick Cummings",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=2704s",
+  "talk_type": "culture",
+  "summary": "A lightning talk arguing that baseball is a roguelike. Nick Cummings, who came to baseball through Blaseball, explains the game's rules and its many nested time scales, checks it against the Berlin interpretation, and then argues that structure alone is not what makes a roguelike: the essential experience is being surprised by systems, and baseball's quirks, odd rulings, permanent error stats and strange names make it a story-generation engine. He ends by advocating an expansive definition of roguelike that helps find joy in the edge cases of mundane systems.",
+  "games": [
+    "Blaseball",
+    "Fighting Baseball"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "nested time scales",
+      "kind": "example",
+      "claim": "Baseball runs on many nested time scales (season, game, inning, half-inning, at-bat), and that sheer volume of repeated play, about 2,430 major league games per season, creates huge room for strange outcomes.",
+      "detail": "Cummings walks through 162 games per team per season, nine or more innings each split into halves, and any number of at-bats per half-inning, across 30 teams playing about a dozen games a day. All of this then repeats every year.",
+      "t": 2888,
+      "quote": "baseball operates at many different scales of time on many different orders of magnitude",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "berlin interpretation",
+      "kind": "example",
+      "claim": "Baseball satisfies many Berlin interpretation checkboxes: random environments in the form of different stadiums and weather, and permadeath in that every game starts at nil-nil, every season at an even record, and every player ages, retires and dies.",
+      "detail": "Cummings says rigid definitions lead to frustration, but he was surprised by how much structural overlap there is, adding resource management and a 'hack and slash' in which you are given a bat and hit things.",
+      "t": 2969,
+      "quote": "I was surprised just how thoroughly baseball aligns with what I believe a rogike to be",
+      "weight": 1
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "surprise",
+      "kind": "principle",
+      "claim": "What makes something a roguelike is not structural features but systems that keep surprising players through procedurally arising situations, which baseball shows in its bizarre edge cases.",
+      "detail": "Cummings's examples: a ball that gets wedged in the outfield wall is scored a double, and a ball that leaves the park after bouncing off a fielder's head is a home run, which has happened multiple times in major league games. He says any good roguelike must find ways to surprise us again and again.",
+      "t": 3013,
+      "quote": "structure alone cannot capture the essential experience of the game being played. For that we have to see baseball at its most unique moments",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permanent consequences",
+      "kind": "example",
+      "claim": "Baseball's 'error' statistic, which records every mistake on a player's permanent record, is a very roguelike mechanic because roguelikes are the games best at haunting you with your mistakes.",
+      "detail": "Cummings calls the error stat unnecessarily mean but irresistible, and says it is the official statistic that best captures what makes baseball strange. He mentions baseball's data obsession (Moneyball) but deliberately does not go into it.",
+      "t": 3117,
+      "quote": "After all, what type of game haunts you with your mistakes better than a rogike?",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "names",
+      "kind": "example",
+      "claim": "Baseball's history is full of surreal, almost procedurally generated player names and nicknames, which are themselves an emergent part of its storytelling.",
+      "detail": "Cummings cites the Fighting Baseball roster meme (fictional but spiritually authentic), Jon Bois's Secret Base video 'The Bob Emergency' on players named Bob, and a 1981 Baseball Research Journal analysis finding 'Lefty' the most common nickname over a century of play.",
+      "t": 3125,
+      "quote": "The halls of baseball history are littered with people with interesting names. Uh almost procgen names.",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Baseball is a story-generation engine that depends on its quirks, frictions and imperfections, and that joy in the edge cases where rules bump into each other is the essential roguelike experience.",
+      "detail": "Cummings says the game looked tedious and rigid on the surface but turned out messy and joyfully chaotic, with each game conjuring a possibility space for nicknames to be earned, new outcomes discovered and stories written organically, at every level from children to the major leagues.",
+      "t": 3194,
+      "quote": "Baseball at its core is a story generation engine that's enhanced, indeed only really enabled by its quirks, frictions, and imperfections.",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "expansive definition",
+      "kind": "principle",
+      "claim": "An expansive definition of roguelike is useful because it trains designers to find surprising, imperfect systems in mundane activities that could become roguelikes.",
+      "detail": "Cummings jokes that the farmers market, travelling to a new city, filing a bug ticket and changing health insurers are all roguelikes, and says systems that look predictable reveal 'wobbly, unpredictable' joy when examined closely; maybe someone will make a roguelike about them. In Q&A he adds that baseball stood out for the contrast between its plain surface and its depth of weirdness.",
+      "t": 3249,
+      "quote": "the more I think about it, the more I feel an expansive definition is the best one, at least for me",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

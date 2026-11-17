@@ -1,0 +1,85 @@
+{
+  "id": "HaBp4ETtDKI",
+  "title": "Roguelike Trivia",
+  "speaker": "Conference hosts (questions written by John Harris)",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=HaBp4ETtDKI",
+  "talk_type": "performance",
+  "summary": "A live Jeopardy-style roguelike trivia game played on stage by two teams of attendees, with questions written by John Harris. Contestants could drink 'potions' (fizzy water) to ask the audience for help, some of which were 'cursed' as a running joke. Categories covered Dungeon Crawl Stone Soup, NetHack, roguelites, classics and a grab bag. There is no design argument; the only content is trivia facts about classic roguelikes stated by the questions and answers.",
+  "games": [
+    "Dungeon Crawl Stone Soup",
+    "NetHack",
+    "Rogue",
+    "Hack",
+    "Moria",
+    "Diablo",
+    "The Binding of Isaac",
+    "Spelunky",
+    "Risk of Rain",
+    "Jupiter Hell",
+    "Mystery Dungeon"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue items",
+      "kind": "example",
+      "claim": "In the original Rogue, the scroll of scare monster was the only random magic item you could identify without picking it up, because monsters would not walk on it.",
+      "detail": "Asked as a classics trivia question; a contestant recalled that the scroll was the one monsters would not step onto, and the host confirmed the answer scroll of scare monster.",
+      "t": 540,
+      "quote": "what's the only magic item random magic item in the original Road you can identify without having picked up anything",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "genre lineage",
+      "kind": "history",
+      "claim": "Diablo credits the classic roguelike Moria as its inspiration, according to the trivia answer key.",
+      "detail": "Posed as a 500-point grab bag question; the answer accepted was Moria.",
+      "t": 767,
+      "quote": "500 grab bag which classic roguelike does",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "mystery dungeon",
+      "kind": "history",
+      "claim": "Chunsoft, the Japanese developer behind the Mystery Dungeon roguelikes such as Pokemon Mystery Dungeon and Shiren the Wanderer, also had a hand in creating the Dragon Quest series.",
+      "detail": "Asked as a grab bag question; the answer accepted was Dragon Quest.",
+      "t": 872,
+      "quote": "produced by Japanese developer chunsoft of what famous JRPG series did they also have a hand in the creation Dragon Quest",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "bones levels",
+      "kind": "example",
+      "claim": "In NetHack, if you die on the way out of the dungeon and leave a bones level, the Amulet of Yendor in your inventory is replaced by a fake so the next player cannot simply loot the win.",
+      "detail": "A NetHack trivia question; the contestant answered that it is replaced by a fake and the host confirmed it.",
+      "t": 910,
+      "quote": "leave a bones level what happens to the amulet of yen door in your inventory it's replaced by a fake",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "stair scumming",
+      "kind": "example",
+      "claim": "Roguelike players have a community name, stair scumming, for repeatedly regenerating a random level to farm good items instead of descending to harder levels.",
+      "detail": "Asked as a grab bag question; the contestants answered with stairs-related scumming and the host accepted it. The question frames it as a player exploit of level regeneration.",
+      "t": 967,
+      "quote": "regenerating a random level repeatedly in the hopes of finding good items",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "brogue enchantment",
+      "kind": "history",
+      "claim": "Brogue abandoned experience points and levels, and much of what replaced them centres on a versatile magic item, the scroll of enchantment, that can upgrade many other items.",
+      "detail": "Asked as a classics question (Brogue is captioned 'baroque'); the contestants did not get it and the host's answer was a scroll of enchantment ('roll of enchantments' in the captions).",
+      "t": 335,
+      "quote": "abandoned experience points and levels a lot of what replaced them has to do with a specific versatile kind of magic item",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

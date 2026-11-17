@@ -1,0 +1,1195 @@
+{
+ "id": "1sZlIfCcz_c",
+ "url": "https://www.youtube.com/watch?v=1sZlIfCcz_c",
+ "title": "Jeff Emtman & Martin Austwick: Neutrinowatch - the podcast that plays itself",
+ "speaker": "Jeff Emtman & Martin Austwick",
+ "talk_title": "Neutrinowatch - the podcast that plays itself",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1939,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Neutrinowatch is a podcast where every episode changes every day. Python code in the background overwrites the audio based on procedural generation and real world events and conditions to create a new version of each episode. Examples include: - An astronomy show which uses the current positions of the stars visible from a different location - A song where the lyrics and instruments change - An episode where two “robots” talk about real-world news headlines - A “Dear John” letter that gets rewritten every day - Monologues that fade in and out of focus - Daily pieces of oblique advice for the creatively stuck Every episode is alive, a new version appearing each day - which presents unique challenges and opportunities for making audio. In our talk, we’ll dive into a couple of episodes, sharing the techniques and lessons we’ve learned as we created the show - and the roles audio effects, ambience, music, and text-to-speech models have in the sound design. How can we make an episode that’s interesting to listen to once? Twice? Ten times? How often have we succeeded in making something replayable? Join us, and help us to answer these questions, and more…",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3998,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.51,
+   "text": "HAYLEE: Hello, friends. Welcome back to Roguelike Celebration. I hope you enjoyed your break and"
+  },
+  {
+   "t": 2.51,
+   "d": 4.57,
+   "text": "lots of beeps and boops in the meantime. I will get right into things to present your"
+  },
+  {
+   "t": 7.08,
+   "d": 8.8,
+   "text": "next presenters. We have Martin Austwick and Jeff Emtman who are both audio producers with many"
+  },
+  {
+   "t": 15.88,
+   "d": 9.08,
+   "text": "hats. Martin has a Tom waits podcast song by song and a founder of the answer me this podcast. Jeff"
+  },
+  {
+   "t": 24.96,
+   "d": 5.19,
+   "text": "created the podcast Here Be Monsters. He sound designs for documentary podcast series and teaches"
+  },
+  {
+   "t": 30.15,
+   "d": 0.1,
+   "text": "about his unique approach to audio productions. Jeff and Martin started working on the procedural"
+  },
+  {
+   "t": 30.25,
+   "d": 0.09,
+   "text": "podcast Neutrinowatch in 2020 and launched the show in 2021. Martin Austwick is a composer,"
+  },
+  {
+   "t": 30.34,
+   "d": 0.09,
+   "text": "performer and audio producer and co-created Tom Waits fan podcast Song by Song, as well being"
+  },
+  {
+   "t": 30.44,
+   "d": 1.52,
+   "text": "a founding member of Answer Me This! podcast. His music has featured on dozens of podcasts."
+  },
+  {
+   "t": 31.96,
+   "d": 9.28,
+   "text": "They are here today to talk about a cool, roguelike-y podcast that has been fun to"
+  },
+  {
+   "t": 41.24,
+   "d": 6.8,
+   "text": "listen to over the course of a week, and just, yeah, get a different -- I guess you never enter"
+  },
+  {
+   "t": 48.04,
+   "d": 8.6,
+   "text": "the same river twice with Neutrinowatch. Happy to hear your talk and take it away."
+  },
+  {
+   "t": 56.64,
+   "d": 6.92,
+   "text": "JEFF: Thank you so much. My name is Jeff Emtman and Martin is on the other screen. We are going"
+  },
+  {
+   "t": 63.56,
+   "d": 6.08,
+   "text": "to take you an a whirlwind tour through this strange land we created called Neutrinowatch."
+  },
+  {
+   "t": 69.64,
+   "d": 1.12,
+   "text": "We are calling this talk \"Braided Narratives: Or How I Learned to Stop Worrying and Love"
+  },
+  {
+   "t": 70.76,
+   "d": 20.24,
+   "text": "Linear Stories\" -- \"Neutrinowatch - the podcast that plays itself .\" Neutrinowatch looks like a"
+  },
+  {
+   "t": 91.0,
+   "d": 8.62,
+   "text": "normal podcast from the outside. You can go and subscribe on any app and download and listen. What"
+  },
+  {
+   "t": 100.6,
+   "d": 7.16,
+   "text": "is different is it is a podcast where every single episode is in this stage of flux and changing the"
+  },
+  {
+   "t": 107.76,
+   "d": 9.8,
+   "text": "details around it a little bit every day. What we are trying do with this whole thing is make the"
+  },
+  {
+   "t": 117.56,
+   "d": 5.8,
+   "text": "podcast feel as if it is an alive and breathing and a world that is changing itself. Does this"
+  },
+  {
+   "t": 123.36,
+   "d": 5.2,
+   "text": "make it roguelike? I don't know. I think there is definitely some roguelike elements to what"
+  },
+  {
+   "t": 128.56,
+   "d": 13.04,
+   "text": "we are doing with Neutrinowatch. How does this thing work? What does this actually mean? Well,"
+  },
+  {
+   "t": 141.6,
+   "d": 7.68,
+   "text": "what this means is you can download an episode, any episode, and when you download this episode,"
+  },
+  {
+   "t": 149.92,
+   "d": 5.24,
+   "text": "what's going to happen is you are going to hear an episode that will be similar but different from"
+  },
+  {
+   "t": 155.16,
+   "d": 9.64,
+   "text": "the one you will download and hear tomorrow. Martin uses this analogy of following your"
+  },
+  {
+   "t": 164.8,
+   "d": 9.84,
+   "text": "favorite band on tour and they might have a set list and that set list could be all your favorite"
+  },
+  {
+   "t": 174.64,
+   "d": 9.12,
+   "text": "songs and you will hear the same songs but things change about the performances. The performance,"
+  },
+  {
+   "t": 184.52,
+   "d": 7.32,
+   "text": "the venue, the people you are with, the crowd, the vibe of the show changes. Each of our episodes are"
+  },
+  {
+   "t": 191.84,
+   "d": 6.08,
+   "text": "kind of like a song in that set list where you hear the same episodes. They are self similar"
+  },
+  {
+   "t": 197.92,
+   "d": 11.84,
+   "text": "enough to recognize from night to night but the contents within those episodes will change. Yeah."
+  },
+  {
+   "t": 210.88,
+   "d": 10.28,
+   "text": "Let's hop on to the next slide. Behind the scenes what we are doing is changing out audio every"
+  },
+  {
+   "t": 221.16,
+   "d": 5.84,
+   "text": "day. The way that that is enabled is through a technology called RSS. This is how all podcasts"
+  },
+  {
+   "t": 227.0,
+   "d": 7.72,
+   "text": "exist. They exist as a human readable text file on the internet. This is an old standard and easy"
+  },
+  {
+   "t": 234.72,
+   "d": 7.2,
+   "text": "to manipulate. It is a text file that is computer readable, human readable, and has all the metadata"
+  },
+  {
+   "t": 241.92,
+   "d": 8.28,
+   "text": "associated and there is a hyperlink to an MP3 that can exist on the internet anywhere. It has to be"
+  },
+  {
+   "t": 250.2,
+   "d": 12.52,
+   "text": "publicly accessible and that is the podcast file. What we are doing is we are making episodes that"
+  },
+  {
+   "t": 262.72,
+   "d": 8.08,
+   "text": "have elements that change. There is nothing in the RSS spec that prevents you from swapping those MP3"
+  },
+  {
+   "t": 270.8,
+   "d": 10.68,
+   "text": "files out as much as you would like. What we are doing is we are writing computer programs each"
+  },
+  {
+   "t": 281.48,
+   "d": 10.12,
+   "text": "day. We don't wake up each morning and open up our audio editing software and export it. We are"
+  },
+  {
+   "t": 292.28,
+   "d": 5.76,
+   "text": "writing computer programs. Instead of cutting the audio together, we are creating a set of"
+  },
+  {
+   "t": 298.04,
+   "d": 9.64,
+   "text": "rules these programs can follow, and the output of those programs every day is just a new MP3 file."
+  },
+  {
+   "t": 307.68,
+   "d": 7.2,
+   "text": "So the elements that we have access to are things like randomizing outputs, we also have access"
+  },
+  {
+   "t": 314.88,
+   "d": 7.04,
+   "text": "to changing things procedurally, having things that change over time where yesterday's output"
+  },
+  {
+   "t": 321.92,
+   "d": 7.32,
+   "text": "is influencing today's output, is influencing the output tomorrow. And we also have the option where"
+  },
+  {
+   "t": 329.24,
+   "d": 7.68,
+   "text": "we can turn some knobs by pulling in elements of the real world too. These are things like"
+  },
+  {
+   "t": 336.92,
+   "d": 8.64,
+   "text": "news headlines and the movement of the planets. What we are doing here is -- sorry. I think we"
+  },
+  {
+   "t": 345.56,
+   "d": 12.68,
+   "text": "have a little lag here. Each day's episodes get exported at M P3 and that is available only for"
+  },
+  {
+   "t": 358.24,
+   "d": 15.12,
+   "text": "the time on the feed and then the episodes are depleted forever. I talked about the technical"
+  },
+  {
+   "t": 373.36,
+   "d": 8.96,
+   "text": "stuff going on behind the scenes but haven't spent time on the show itself. John well is played by"
+  },
+  {
+   "t": 382.32,
+   "d": 23.72,
+   "text": "Martin who is an Arctic neutrino researcher. A cosmic event happens and inspired windy to"
+  },
+  {
+   "t": 406.04,
+   "d": 9.6,
+   "text": "make a podcast. These kind of surrealist episodes are the podcast. John is played"
+  },
+  {
+   "t": 415.64,
+   "d": 5.96,
+   "text": "by Martin. I play a character named Gus. We have a couple computerized voices namely"
+  },
+  {
+   "t": 421.6,
+   "d": 9.76,
+   "text": "Wendy and Ivan. Martin is going to go into the creative tools we use the make the show work."
+  },
+  {
+   "t": 431.36,
+   "d": 5.88,
+   "text": "MARTIN: Yeah, what's actually changing in Neutrinowatch and what do the episodes"
+  },
+  {
+   "t": 437.24,
+   "d": 9.36,
+   "text": "actually sound like. Just going turn down the volume a little bit. This is a table of all"
+  },
+  {
+   "t": 446.6,
+   "d": 5.68,
+   "text": "the Neutrinowatch episodes. I will be asking questions at the end. I am going to talk about"
+  },
+  {
+   "t": 452.28,
+   "d": 13.76,
+   "text": "a couple examples but if you are the sort of person who -- can you still hear me?"
+  },
+  {
+   "t": 466.04,
+   "d": 7.44,
+   "text": "JEFF: I think Martin has gone away. Unfortunately, I am not in control of"
+  },
+  {
+   "t": 473.48,
+   "d": 5.96,
+   "text": "Martin's slide so I think we have to wait for him to reenter or I need to share the slides myself."
+  },
+  {
+   "t": 483.04,
+   "d": 9.84,
+   "text": "Maybe we give him 30 seconds to see if he can rejoin. Martin can control the slides but can't"
+  },
+  {
+   "t": 492.88,
+   "d": 9.6,
+   "text": "talk. I am just kind of move through as Martin is rejoined. This is table of the episodes we"
+  },
+  {
+   "t": 502.48,
+   "d": 10.4,
+   "text": "have. This is the first six. We will talk about a handful of these today. We have tried to use"
+  },
+  {
+   "t": 512.88,
+   "d": 8.8,
+   "text": "a wide variety of techniques to modulate the output of our episodes. Namely, there is this"
+  },
+  {
+   "t": 521.68,
+   "d": 5.08,
+   "text": "episode Martin is going to talk about called the zookeeper, the bartender and the sea fairer which"
+  },
+  {
+   "t": 526.76,
+   "d": 7.24,
+   "text": "demonstrate some of the different tools we have at our disposal. I am going to talk later about"
+  },
+  {
+   "t": 534.0,
+   "d": 5.44,
+   "text": "this episode called the daily blast which is where we reach outside the meta fiction of the podcast"
+  },
+  {
+   "t": 540.68,
+   "d": 5.2,
+   "text": "and touch the real world. MARTIN: Am I back? Hi, there."
+  },
+  {
+   "t": 546.8,
+   "d": 3.72,
+   "text": "My Webcam is misbehaving. JEFF: Rescue me, please."
+  },
+  {
+   "t": 551.04,
+   "d": 6.84,
+   "text": "MARTIN: We won't talk about all this because they are quite different but I wanted to give"
+  },
+  {
+   "t": 557.88,
+   "d": 16.08,
+   "text": "an example. Gus Holmes is writing and saying would you feature my new song on your podcast"
+  },
+  {
+   "t": 574.48,
+   "d": 13.32,
+   "text": "and what changes every day is the song and the name changes. And Wendy imagines are podcast in"
+  },
+  {
+   "t": 587.8,
+   "d": 6.0,
+   "text": "which she travel do is a different city every night and does a live astronomy and show tells"
+  },
+  {
+   "t": 593.8,
+   "d": 11.76,
+   "text": "people the planets that are visible from the city that night. That is based on real astronomy data."
+  },
+  {
+   "t": 605.56,
+   "d": 5.72,
+   "text": "Daily blast and zookeeper we will talk about in a bit more detail and go into more deep dive"
+  },
+  {
+   "t": 611.28,
+   "d": 17.68,
+   "text": "so you get a sense of those. Gluteal strategies are slightly statements that help for you stuck"
+  },
+  {
+   "t": 631.0,
+   "d": 8.2,
+   "text": "and we talked about auto generating those because there is so much user input in understanding what"
+  },
+  {
+   "t": 639.2,
+   "d": 10.08,
+   "text": "they are supposed to mean. And I will talk about dear John in a second and play an example from"
+  },
+  {
+   "t": 649.28,
+   "d": 10.64,
+   "text": "that one in a moment. So how is it made in the background? As audio engineer, producer people,"
+  },
+  {
+   "t": 659.92,
+   "d": 6.88,
+   "text": "these are the kind of screens we are used to looking at. These sort of dual Windows where we"
+  },
+  {
+   "t": 666.8,
+   "d": 7.44,
+   "text": "can line up all our audio, put them on separate tracts, do fades, and panes and effects on them"
+  },
+  {
+   "t": 674.24,
+   "d": 9.04,
+   "text": "and manipulate them. We do pre-backed audio but when we do Neutrinowatch the Windows we look at"
+  },
+  {
+   "t": 683.28,
+   "d": 7.24,
+   "text": "are not like these sorts of Windows which is a paradigm shift. The challenge is taking all"
+  },
+  {
+   "t": 690.52,
+   "d": 8.44,
+   "text": "these tools we know in our regular audio lives and translating them into Python code so gluing audio,"
+  },
+  {
+   "t": 698.96,
+   "d": 9.08,
+   "text": "cutting it, layering it, getting fades, putting effects like Echo, frequency, filters,"
+  },
+  {
+   "t": 708.04,
+   "d": 7.72,
+   "text": "pitch shifts, and all stuff that is useful for the business of making audible audio and useful for"
+  },
+  {
+   "t": 715.76,
+   "d": 7.68,
+   "text": "creating scenes and effects. Reverb which is like an Echo, if you put the same Echo on a bunch of"
+  },
+  {
+   "t": 723.44,
+   "d": 8.72,
+   "text": "pieces of audio, it sounds like it happened in the same space. We managed do a lot of that in Python."
+  },
+  {
+   "t": 733.0,
+   "d": 10.32,
+   "text": "I can talk in the breakout about the libraries we used if people are interested. Python afforded"
+  },
+  {
+   "t": 743.32,
+   "d": 8.0,
+   "text": "us n opportunity we didn't have before and that's text-to-speech. That is something which we haven't"
+  },
+  {
+   "t": 751.32,
+   "d": 4.64,
+   "text": "really used in our regular audio lives. It is not super common in podcasting. I think it will"
+  },
+  {
+   "t": 755.96,
+   "d": 10.8,
+   "text": "get more common. But it is translating a piece of text into audio with like an AI engine usually. We"
+  },
+  {
+   "t": 766.76,
+   "d": 4.4,
+   "text": "obviously can perform these characters ourselves and record the audio and chop it up and change"
+  },
+  {
+   "t": 771.16,
+   "d": 5.52,
+   "text": "things around. After a certain point when you are dealing with a big script and set of options,"
+  },
+  {
+   "t": 778.32,
+   "d": 7.04,
+   "text": "it becomes very complicated to code that. You manually chop up existing pieces of audio."
+  },
+  {
+   "t": 785.92,
+   "d": 4.16,
+   "text": "You start to lose the advantage of a live performance because if you chop up and up it"
+  },
+  {
+   "t": 790.08,
+   "d": 7.2,
+   "text": "sounds slightly -- we realized the text-to-speech model is the way we want to go with this. We do"
+  },
+  {
+   "t": 797.28,
+   "d": 6.24,
+   "text": "this with the boilerplate text-to-speech when we want something to sound like a robot like Wendy or"
+  },
+  {
+   "t": 803.52,
+   "d": 19.24,
+   "text": "Ivan we use boilerplate and standard Apple voices. We also deep fake ourselves and in the are process"
+  },
+  {
+   "t": 822.76,
+   "d": 8.96,
+   "text": "of doing so, we made voice models of our own voices. This surprisingly good because obviously"
+  },
+  {
+   "t": 831.72,
+   "d": 6.28,
+   "text": "if those go into the real world people could make us say terrible things even more terrible things"
+  },
+  {
+   "t": 838.0,
+   "d": 10.44,
+   "text": "than we already say. I wanted to play an example of how these elements come together. I mentioned"
+  },
+  {
+   "t": 848.44,
+   "d": 9.76,
+   "text": "an episode dear John where Wendy our AI friend is writing a letter to her friend John saying things"
+  },
+  {
+   "t": 858.2,
+   "d": 10.48,
+   "text": "happened and my life and our relationship is going to be different. I don't know what this means yet"
+  },
+  {
+   "t": 868.68,
+   "d": 3.96,
+   "text": "but I want you to understand this. Because this is an important letter she is writing and rewriting"
+  },
+  {
+   "t": 872.64,
+   "d": 10.92,
+   "text": "it so the text changes. As the month goes on it starts with what you see here to something or"
+  },
+  {
+   "t": 883.56,
+   "d": 8.04,
+   "text": "abstract and weird. This incorporates all the kind of elements I talked about. Sound effects"
+  },
+  {
+   "t": 891.6,
+   "d": 7.76,
+   "text": "to build the seen, Echo of the room, procedural jazz engine I built, all the voice use hear in"
+  },
+  {
+   "t": 899.36,
+   "d": 15.2,
+   "text": "the text-to-speech. The robot is very apparent. I am just going to play a minute of this. This"
+  },
+  {
+   "t": 914.56,
+   "d": 16.68,
+   "text": "is what a Neutrinowatch episode sounds like. >> Dear John, this is long overdue. It still"
+  },
+  {
+   "t": 931.24,
+   "d": 8.44,
+   "text": "feels necessary. Little old me. Writing a mission statement. It is like a letter of"
+  },
+  {
+   "t": 939.68,
+   "d": 9.28,
+   "text": "introduction between two distant members of the aira stackeracy separated by geography but not"
+  },
+  {
+   "t": 948.96,
+   "d": 10.12,
+   "text": "by blood. I have rewritten this particular version so many times. Each time feels a"
+  },
+  {
+   "t": 959.08,
+   "d": 10.6,
+   "text": "bit different. Like repeating the same action in a changing world can yield magic. If not by the"
+  },
+  {
+   "t": 969.68,
+   "d": 11.78,
+   "text": "attrition of repeated effort then by the way that shifts in context can change things completely."
+  },
+  {
+   "t": 981.46,
+   "d": 11.5,
+   "text": "JEFF: I think we lost Martin again, unfortunately, but can you still control the slides? Can you"
+  },
+  {
+   "t": 992.96,
+   "d": 8.28,
+   "text": "let me know in the chat here. With any luck, Martin -- OK. We got Martin back."
+  },
+  {
+   "t": 1002.12,
+   "d": 9.32,
+   "text": "MARTIN: Sorry about this. Thanks, Jeff. We will talk a little bit about a couple examples,"
+  },
+  {
+   "t": 1011.44,
+   "d": 5.64,
+   "text": "hopefully, glitch-free. The first one is the zookeeper, the bartender and the seafarer."
+  },
+  {
+   "t": 1019.16,
+   "d": 6.64,
+   "text": "Understanding the elephant. You have probably heard the story of the old wise people and the"
+  },
+  {
+   "t": 1025.8,
+   "d": 4.96,
+   "text": "elephant. There is various situations but they can't see the elephant and can only touch T."
+  },
+  {
+   "t": 1032.72,
+   "d": 4.4,
+   "text": "One touches the trunk and says an elephant is like a snake. One touches its ear and says the"
+  },
+  {
+   "t": 1037.12,
+   "d": 6.72,
+   "text": "elephant is like a leather jacket. And the other touches the elephant's foot and says the elephant"
+  },
+  {
+   "t": 1043.84,
+   "d": 19.48,
+   "text": "is like a table. I wanted to make a story which reflected that content in the form so you only"
+  },
+  {
+   "t": 1063.32,
+   "d": 5.48,
+   "text": "get part of the story in different places and you to experience different parts of the elephant to"
+  },
+  {
+   "t": 1068.8,
+   "d": 7.64,
+   "text": "build it up. I will play an example and talk about what's happening in the episode. I will"
+  },
+  {
+   "t": 1076.44,
+   "d": 4.64,
+   "text": "give you a cue that what you will hear is a monolog that is shifting and out of focus in"
+  },
+  {
+   "t": 1081.08,
+   "d": 10.96,
+   "text": "case you think the speakers are going weird. >> You probably heard the parable of the three"
+  },
+  {
+   "t": 1092.04,
+   "d": 6.44,
+   "text": "wise sailor and the elephant. None of them had ever seen an elephant. They had spent"
+  },
+  {
+   "t": 1098.48,
+   "d": 7.2,
+   "text": "too long around books. Maybe they couldn't travel. Travel is expensive. It a gift to"
+  },
+  {
+   "t": 1105.68,
+   "d": 6.68,
+   "text": "travel. They didn't want to go to a zoo and felt it was a strange place to experience"
+  },
+  {
+   "t": 1112.36,
+   "d": 13.52,
+   "text": "a wild animal even if the animal had no other place to live. They suspected to see -- people"
+  },
+  {
+   "t": 1125.88,
+   "d": 11.52,
+   "text": "went to the zoo for the wrong reason. They were old friends and served others that were wise."
+  },
+  {
+   "t": 1140.68,
+   "d": 6.2,
+   "text": "And now they are old and sort of actually they said I know it is selfish but my eyesight has"
+  },
+  {
+   "t": 1146.88,
+   "d": 7.0,
+   "text": "all but completely failed and I just want to hangout with an elephant one time. So the wise"
+  },
+  {
+   "t": 1153.88,
+   "d": 6.12,
+   "text": "people had an in with the zookeeper who was a young man who loved teaching people about"
+  },
+  {
+   "t": 1160.0,
+   "d": 11.0,
+   "text": "animals. He didn't know about the zoos and human nature but would have been appalled."
+  },
+  {
+   "t": 1171.0,
+   "d": 8.72,
+   "text": "They ask the zookeeper if they could hangout the elephant at this zoo and the zookeeper said no,"
+  },
+  {
+   "t": 1179.72,
+   "d": 6.08,
+   "text": "it would be dangerous. Elephants are big, heavy, and to be honest the zookeeper didn't trust these"
+  },
+  {
+   "t": 1185.8,
+   "d": 6.8,
+   "text": "so-called wise people to be sensitive. MARTIN: So yeah, what's happening behind"
+  },
+  {
+   "t": 1192.6,
+   "d": 8.6,
+   "text": "the scenes is you can probably guess. You have two pieces of audio. The music and the speech."
+  },
+  {
+   "t": 1201.2,
+   "d": 7.36,
+   "text": "They are coming in and out. It starts off with the speech clear, dips down, goes away and comes back"
+  },
+  {
+   "t": 1208.56,
+   "d": 7.56,
+   "text": "again. As the speech is dipping down, the music rises up to cover it. I wanted to create this idea"
+  },
+  {
+   "t": 1216.12,
+   "d": 5.24,
+   "text": "of waves passing over the episode so that in a particular day you will only hear particular bits"
+  },
+  {
+   "t": 1221.36,
+   "d": 11.48,
+   "text": "of the monologue clearly. You lose the monologue in the quieter sections as it builds up. Because"
+  },
+  {
+   "t": 1232.84,
+   "d": 5.96,
+   "text": "we change it day to day, one day you hear certain parts of the monologue and the other day other"
+  },
+  {
+   "t": 1238.8,
+   "d": 6.04,
+   "text": "parts of the monologue you can't hear. That way it is only really by listening to it cross"
+  },
+  {
+   "t": 1244.84,
+   "d": 9.52,
+   "text": "multiple days you will hear the whole thing. This wasn't a varying episode. It comes around once a"
+  },
+  {
+   "t": 1254.36,
+   "d": 4.92,
+   "text": "month. So we have this sort of softer rules about Neutrinowatch which is it doesn't have"
+  },
+  {
+   "t": 1259.28,
+   "d": 9.0,
+   "text": "to be infinitely procedural but it has to change day to day. If you listen to this episode once,"
+  },
+  {
+   "t": 1268.28,
+   "d": 4.36,
+   "text": "there is something about it that's enjoyable. You can listen once and it shouldn't be boring"
+  },
+  {
+   "t": 1274.88,
+   "d": 3.28,
+   "text": "because why would you listen again. You should be able to listen twice and get something a little"
+  },
+  {
+   "t": 1278.16,
+   "d": 8.6,
+   "text": "different. If you listen multiple times you get something different. Some episodes are designed"
+  },
+  {
+   "t": 1286.76,
+   "d": 9.52,
+   "text": "to be listened to once and have a unique experience. This was only three multiple"
+  },
+  {
+   "t": 1296.28,
+   "d": 8.56,
+   "text": "lessons you could understand the elephant. I want to pass it back over to Jeff. He is going to talk"
+  },
+  {
+   "t": 1304.84,
+   "d": 5.96,
+   "text": "an example he made called the daily blast. JEFF: Martin has done a good job talking about"
+  },
+  {
+   "t": 1310.8,
+   "d": 10.36,
+   "text": "the tools we have at our disposal. I want to talk about this from a slightly different angle using"
+  },
+  {
+   "t": 1321.16,
+   "d": 4.6,
+   "text": "the example of an episode I made called the daily blast. I am going to show pie charts in"
+  },
+  {
+   "t": 1325.76,
+   "d": 5.12,
+   "text": "here. I want to make it clear I work as an art its primarily and I am not a data scientist. It"
+  },
+  {
+   "t": 1330.88,
+   "d": 5.04,
+   "text": "something I am interested in but it isn't my specialty. Please bear that in mind as we go"
+  },
+  {
+   "t": 1335.92,
+   "d": 13.08,
+   "text": "on. During the pandemic, I like a lot of people, was spending more time sitting on my couch reading"
+  },
+  {
+   "t": 1349.0,
+   "d": 8.04,
+   "text": "too much news and doom scrolling Google News a lot. I noticed a trend that made me ask why is"
+  },
+  {
+   "t": 1357.04,
+   "d": 4.64,
+   "text": "there so much blasting happening in the news? We have this example here Melania Trump slams the"
+  },
+  {
+   "t": 1361.68,
+   "d": 16.92,
+   "text": "FBI and pope slams Trump and Harris. It seems like these headlines are coming from rightwing"
+  },
+  {
+   "t": 1378.6,
+   "d": 10.16,
+   "text": "resources more than leftwing. I was like maybe I can make a Neutrinowatch episode about blasting. I"
+  },
+  {
+   "t": 1388.76,
+   "d": 8.2,
+   "text": "decided to take these four words total. The word blast, slam, eviscerate, and criticize all of"
+  },
+  {
+   "t": 1396.96,
+   "d": 7.72,
+   "text": "which are synonyms of criticize if you ask me, and start looking at those in a more methodical way. I"
+  },
+  {
+   "t": 1404.68,
+   "d": 8.04,
+   "text": "took the all sides media bias chart and looked for all these news sources to see if they had"
+  },
+  {
+   "t": 1412.72,
+   "d": 16.24,
+   "text": "a publicly faces RSS feed that I could scrape. I was able to find about 50 feeds. I am going to use"
+  },
+  {
+   "t": 1428.96,
+   "d": 6.54,
+   "text": "colors. Blue is left of center stuff and red is right of center stuff and this is just because I"
+  },
+  {
+   "t": 1435.5,
+   "d": 8.02,
+   "text": "am an American and how I think of things. You can remember I am using red for progressive and right"
+  },
+  {
+   "t": 1443.52,
+   "d": 10.52,
+   "text": "for conservative. The format of this episode is we are going to listen to a days' worth of the daily"
+  },
+  {
+   "t": 1454.04,
+   "d": 10.2,
+   "text": "blast. The format is two AI voices, Wendy and Ivan, are sitting out in cyber space and reading"
+  },
+  {
+   "t": 1464.92,
+   "d": 8.52,
+   "text": "headlines from recent news stories. There will be one blast-like news story, one good news story"
+  },
+  {
+   "t": 1473.44,
+   "d": 8.72,
+   "text": "where they look at words like happiness/joy/good news, and a second blast-like headline, and a"
+  },
+  {
+   "t": 1482.16,
+   "d": 6.8,
+   "text": "human interest head herring essentially. -- red. That's how the episode works. It is very short"
+  },
+  {
+   "t": 1488.96,
+   "d": 8.04,
+   "text": "comes out every day. We will listen to a minute and a half and the transcript is on the left if"
+  },
+  {
+   "t": 1497.0,
+   "d": 2.32,
+   "text": "you want to follow along. >>"
+  },
+  {
+   "t": 1503.16,
+   "d": 2.28,
+   "text": "Wendy? >> Yes, Iven?"
+  },
+  {
+   "t": 1505.44,
+   "d": 4.68,
+   "text": ">> I would like to hear the news. >> I would like to hear the news."
+  },
+  {
+   "t": 1510.12,
+   "d": 8.2,
+   "text": ">> Is there any news today about blasts? >> Yes. Breitbart reports Argentine"
+  },
+  {
+   "t": 1518.32,
+   "d": 8.28,
+   "text": "president blasts socialists leaders of France and Brazil at Madrid forum."
+  },
+  {
+   "t": 1526.6,
+   "d": 2.62,
+   "text": ">> Ivan? >> Yes?"
+  },
+  {
+   "t": 1529.22,
+   "d": 5.94,
+   "text": ">> Is there any good news? >> Yes, the [indiscernible]"
+  },
+  {
+   "t": 1535.16,
+   "d": 8.22,
+   "text": "has an article called good news on the electricity bills in a few days in."
+  },
+  {
+   "t": 1543.38,
+   "d": 12.1,
+   "text": ">> Wendy, is there any news about criticism? >> Yes, reporting the United States doesn't"
+  },
+  {
+   "t": 1555.48,
+   "d": 8.12,
+   "text": "have standing to criticize Mexico's judicial reforms. Ivan,"
+  },
+  {
+   "t": 1563.6,
+   "d": 6.6,
+   "text": "is there any news about horse? >> Yes, the daily mail has an article"
+  },
+  {
+   "t": 1570.2,
+   "d": 6.24,
+   "text": "called Peter Phillips and his girlfriend Harriet sperling horse around as they"
+  },
+  {
+   "t": 1576.44,
+   "d": 8.06,
+   "text": "enjoy the action at burghley trials. >> Thank you for givinging me the news."
+  },
+  {
+   "t": 1584.5,
+   "d": 18.18,
+   "text": ">> Thank you for giving me the news. >> This is what the listen experiences."
+  },
+  {
+   "t": 1602.68,
+   "d": 4.04,
+   "text": "But there is more going on behind the scenes with the daily blast. That's what I want to"
+  },
+  {
+   "t": 1606.72,
+   "d": 7.28,
+   "text": "share with you for this presentation. >> I made a little bit of an extra bit of"
+  },
+  {
+   "t": 1614.0,
+   "d": 5.32,
+   "text": "information for this episode. Instead of just filtering for these keywords I am looking for"
+  },
+  {
+   "t": 1619.32,
+   "d": 7.64,
+   "text": "in the news headlines. I decided for a month long period to just download everything and get 60,000"
+  },
+  {
+   "t": 1626.96,
+   "d": 7.24,
+   "text": "headlines from all these source and do a little more analysis on these things. This is from my"
+  },
+  {
+   "t": 1634.2,
+   "d": 8.28,
+   "text": "capture window. I averaged out news stories by how many were posted a day with conservative being"
+  },
+  {
+   "t": 1642.48,
+   "d": 9.44,
+   "text": "red and blue progress and gray centered stuff. I was surprised to see there is a lot of different"
+  },
+  {
+   "t": 1651.92,
+   "d": 11.68,
+   "text": "in how many stories individual outlets produce a day. I have two outlets of note. One publishes 240"
+  },
+  {
+   "t": 1663.6,
+   "d": 8.8,
+   "text": "times a day being the daily mail in the UK and the other publishing about 160 times a day which is"
+  },
+  {
+   "t": 1672.4,
+   "d": 10.2,
+   "text": "the guardian UK. These between the political means roughly match each other. There is a rough balance"
+  },
+  {
+   "t": 1682.6,
+   "d": 6.04,
+   "text": "between how many stories are being published overall. But that changes pretty dramatically"
+  },
+  {
+   "t": 1688.64,
+   "d": 8.96,
+   "text": "when you filter for blast, slam, eviscerate, and criticize and you can see the pie chart looks"
+  },
+  {
+   "t": 1697.6,
+   "d": 11.4,
+   "text": "different. Who is actually do the blasting is the question? The answer is quite simple. It is the"
+  },
+  {
+   "t": 1709.0,
+   "d": 9.16,
+   "text": "Daily Mail who is publishing about 2.5 followed by competent Breitbart and new work post and fox news"
+  },
+  {
+   "t": 1718.16,
+   "d": 10.76,
+   "text": "politics section and then see the daily beast and \"Washington Post\" and you can read the rest. What"
+  },
+  {
+   "t": 1728.92,
+   "d": 14.96,
+   "text": "did I learn from this? First thing, there are -- I think my intuition was right here or for the"
+  },
+  {
+   "t": 1743.88,
+   "d": 7.72,
+   "text": "area I looked at in my capture window. Despite roughly equal count, the blast-like language is"
+  },
+  {
+   "t": 1751.6,
+   "d": 8.6,
+   "text": "used mostly by rightwing news outlets. The second thing that surprised me is that the Daily Mail"
+  },
+  {
+   "t": 1760.2,
+   "d": 11.88,
+   "text": "and guardian UK constituted a quarter of the headlines and about 15,000. The third thing,"
+  },
+  {
+   "t": 1772.08,
+   "d": 7.08,
+   "text": "and this is what I wanted to talk to you most about, is that I think that procedural podcasting,"
+  },
+  {
+   "t": 1779.16,
+   "d": 5.16,
+   "text": "stuff we are doing with Neutrinowatch where you have this option to create a living art piece"
+  },
+  {
+   "t": 1784.32,
+   "d": 4.44,
+   "text": "that's reflective of something that's happening in the real world, can provide a unique qualitative"
+  },
+  {
+   "t": 1788.76,
+   "d": 5.52,
+   "text": "experience of the data. There is a big difference between looking at the two pie charts and sitting"
+  },
+  {
+   "t": 1794.28,
+   "d": 6.68,
+   "text": "and listening to the daily blast for a week. That's kind of some of the potential I think"
+  },
+  {
+   "t": 1800.96,
+   "d": 5.76,
+   "text": "that this idea has. It delivers the content in a way that's unique for the listener and"
+  },
+  {
+   "t": 1806.72,
+   "d": 4.68,
+   "text": "different for a lot of other outlets. With that in mind, I am going to hand it back to Martin to"
+  },
+  {
+   "t": 1811.4,
+   "d": 7.84,
+   "text": "talk about what we are looking at in the future and how you can help us out with making more"
+  },
+  {
+   "t": 1819.24,
+   "d": 5.8,
+   "text": "work like this. Take it away, Martin. MARTIN: I am aware we are run over time."
+  },
+  {
+   "t": 1825.04,
+   "d": 3.76,
+   "text": "I don't want to go into the next speaker's time so I am going to go through this. What"
+  },
+  {
+   "t": 1828.8,
+   "d": 8.64,
+   "text": "is the point? These episodes have permadeath with going once and never again. STHOE experience you"
+  },
+  {
+   "t": 1837.44,
+   "d": 8.28,
+   "text": "have of a particular episode might be totally different. And that's really common in games."
+  },
+  {
+   "t": 1845.72,
+   "d": 4.88,
+   "text": "It is common in roguelikes. Your particular play through is different from other people's but you"
+  },
+  {
+   "t": 1850.6,
+   "d": 7.32,
+   "text": "still played the same game. That's common in music gigs. That's unusual outside of audio."
+  },
+  {
+   "t": 1859.76,
+   "d": 6.84,
+   "text": "We think that is interesting and exciting and under explored. Before we go I want to mention"
+  },
+  {
+   "t": 1866.6,
+   "d": 5.04,
+   "text": "we have been doing these experiments in twine. I know that's something interactive storytelling"
+  },
+  {
+   "t": 1871.64,
+   "d": 7.04,
+   "text": "units use quite a bit. We haven't created an episode this way but I am working on creating"
+  },
+  {
+   "t": 1878.68,
+   "d": 8.96,
+   "text": "a pipeline that can put twine objects -- that were exporters that will give you twine exports"
+  },
+  {
+   "t": 1887.64,
+   "d": 5.04,
+   "text": "as JSON and I can pull it into Python and make podcast episodes from that which is pretty cool."
+  },
+  {
+   "t": 1892.68,
+   "d": 4.4,
+   "text": "You still have to create audio and do a few other bits around the edges but I think as a"
+  },
+  {
+   "t": 1897.08,
+   "d": 11.52,
+   "text": "way of closing that and writing the branching and procedurally generate and make that into audio. If"
+  },
+  {
+   "t": 1908.6,
+   "d": 4.96,
+   "text": "you are like someone who would love to do stuff in audio, I have been using twine but had no idea how"
+  },
+  {
+   "t": 1913.56,
+   "d": 6.88,
+   "text": "to make it into a podcast episode or audio, come talk to us. It would be cool to hear from you."
+  },
+  {
+   "t": 1922.24,
+   "d": 8.05,
+   "text": "Thank you to everybody. I am going to let you with the slides. Thank you very much for listening and"
+  },
+  {
+   "t": 1930.29,
+   "d": 4.43,
+   "text": "to roguelike celebration. These are our details and we will be in a breakout room afterwards."
+  }
+ ]
+}

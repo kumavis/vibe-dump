@@ -1,0 +1,1356 @@
+{
+ "id": "ST6s_8ekeOg",
+ "url": "https://www.youtube.com/watch?v=ST6s_8ekeOg",
+ "title": "Todd Furmanski- Mysty Roguelikes: 1st Person Point&Click Paradigms with Realtime Graphics/Simulation",
+ "speaker": "Todd Furmanski",
+ "talk_title": "Mysty Roguelikes: 1st Person Point&Click Paradigms with Realtime Graphics/Simulation",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1521,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nTodd Furmanski is a researcher with a focus in interactive digital environments and procedural content generation. Todd has a PhD in Media Arts and Practice, as well as an MFA in Interactive Media, both from the University of Southern California School of Cinematic Arts. His focuses include emergent algorithms as applied to interactivity, as well as the developing history of games and virtual spaces.\n\nIn this talk Todd shows a series of roguelikes he has developed that combine realtime 3D graphics with a turn-based \"Myst\"-like point and click interface. This allows him to have a very in-depth world simulation without really having to worry about framerate.  The games are much more versatile than the old Myst-like games, as instead of being a database of images, they draw upon a dynamic 3D space.  Day/night cycles, large numbers of agents, weather, and world scale all become possibilities, while being much more manageable than a real-time experience.  The projects do give a number of challenges to structuring User Interfaces, but also provide a lot of potential for users to learn from a fairly intuitive \"click where you want on the image to go/interact.\"  Having tried to teach grandmothers how to use game controllers, or break out spreadsheets for in-depth turn-based roguelikes, he hopes to get a different mix of graphical aesthetics and \"pick up and play\" mentality.\n\nFind him on Twitter: https://twitter.com/toddfurmanski\nTodd at Roguelike Celebration 2019 discussing his roguelike for the Atari 2600: https://www.youtube.com/watch?v=l9eE4mT8xqI",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to paradigms"
+  },
+  {
+   "start": 67,
+   "title": "Context of Myst and Rogue"
+  },
+  {
+   "start": 205,
+   "title": "Design philosophy"
+  },
+  {
+   "start": 370,
+   "title": "Demo of Forska"
+  },
+  {
+   "start": 501,
+   "title": "Systems and aesthetics"
+  },
+  {
+   "start": 734,
+   "title": "Unity experimentation"
+  },
+  {
+   "start": 846,
+   "title": "Simulation and pathfinding"
+  },
+  {
+   "start": 1014,
+   "title": "Interface and game tension"
+  },
+  {
+   "start": 1227,
+   "title": "Future project goals"
+  },
+  {
+   "start": 1392,
+   "title": "Q&A and closing"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2723,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.1,
+   "d": 2.84,
+   "text": "EMCEE: That sounds super cool."
+  },
+  {
+   "t": 2.94,
+   "d": 3.99,
+   "text": "I think I may have seen those."
+  },
+  {
+   "t": 6.93,
+   "d": 2.85,
+   "text": "Well, thank you so much."
+  },
+  {
+   "t": 9.78,
+   "d": 6.06,
+   "text": "Hopefully you will stick around the social space and chat with people."
+  },
+  {
+   "t": 15.84,
+   "d": 11.04,
+   "text": "Next up we have Todd who is a researcher with a focus in interactive environments."
+  },
+  {
+   "t": 26.88,
+   "d": 3.21,
+   "text": "Take it away."
+  },
+  {
+   "t": 30.09,
+   "d": 4.28,
+   "text": "TODD FURMANSKI: Thank you."
+  },
+  {
+   "t": 34.37,
+   "d": 1.64,
+   "text": "Can everybody hear me?"
+  },
+  {
+   "t": 36.01,
+   "d": 3.41,
+   "text": "I have no good way of seeing."
+  },
+  {
+   "t": 39.42,
+   "d": 3.49,
+   "text": "EMCEE: We can hear you, yes."
+  },
+  {
+   "t": 42.91,
+   "d": 9.59,
+   "text": "TODD FURMANSKI: I will be talking mainly about my experiments with combining what people"
+  },
+  {
+   "t": 52.5,
+   "d": 3.64,
+   "text": "consider two different paradigms of gameplay."
+  },
+  {
+   "t": 56.14,
+   "d": 7.35,
+   "text": "Both considered archaic but having potential."
+  },
+  {
+   "t": 63.49,
+   "d": 7.49,
+   "text": "Just for some history and context about Myst."
+  },
+  {
+   "t": 70.98,
+   "d": 10.71,
+   "text": "It was originally released in 1993 and helped popularize CD-ROMs."
+  },
+  {
+   "t": 81.69,
+   "d": 10.99,
+   "text": "It was the best selling MAC-PC game of the 1990s"
+  },
+  {
+   "t": 92.68,
+   "d": 6.79,
+   "text": "and unseated by the Sims."
+  },
+  {
+   "t": 99.47,
+   "d": 3.0,
+   "text": "The user navigated by going through a series of still images."
+  },
+  {
+   "t": 102.47,
+   "d": 5.39,
+   "text": "You clicked to see where you wanted to go."
+  },
+  {
+   "t": 107.86,
+   "d": 1.73,
+   "text": "Forward or left or right."
+  },
+  {
+   "t": 109.59,
+   "d": 7.48,
+   "text": "You know, it was not in real-time although eventually a real-time version of it was released"
+  },
+  {
+   "t": 117.07,
+   "d": 4.63,
+   "text": "later."
+  },
+  {
+   "t": 121.7,
+   "d": 5.8,
+   "text": "The fact it was made by two people and was the best selling game of the decade and used"
+  },
+  {
+   "t": 127.5,
+   "d": 8.86,
+   "text": "cutting edge graphics has a little to do on my thoughts on scoping your project properly."
+  },
+  {
+   "t": 136.36,
+   "d": 9.73,
+   "text": "In Myst, encounters were scripted and the graphics were state-of-the-art at the time"
+  },
+  {
+   "t": 146.09,
+   "d": 3.27,
+   "text": "and it was impossible to die and very hard to lose."
+  },
+  {
+   "t": 149.36,
+   "d": 4.46,
+   "text": "At a glance, this doesn't seem to have much in common with Rogue which uses procedural"
+  },
+  {
+   "t": 153.82,
+   "d": 5.48,
+   "text": "graphics, ASCII graphics and helped coin the term permadeath."
+  },
+  {
+   "t": 159.3,
+   "d": 15.95,
+   "text": "Here are other images of like on the island itself you go to different other worlds or"
+  },
+  {
+   "t": 175.25,
+   "d": 2.4,
+   "text": "they call them ages."
+  },
+  {
+   "t": 177.65,
+   "d": 13.99,
+   "text": "There is a cup talk -- couple documentaries about how they created the space and it was"
+  },
+  {
+   "t": 191.64,
+   "d": 11.18,
+   "text": "a relatively new things for people unless you worked in aircraft or worked designing"
+  },
+  {
+   "t": 202.82,
+   "d": 1.67,
+   "text": "automobiles."
+  },
+  {
+   "t": 204.49,
+   "d": 1.67,
+   "text": "Why?"
+  },
+  {
+   "t": 206.16,
+   "d": 6.44,
+   "text": "Well, a common thing I find I discovered about myself is I love looking at old technical"
+  },
+  {
+   "t": 212.6,
+   "d": 4.82,
+   "text": "disciplines that passed and were often defined by technical limitations."
+  },
+  {
+   "t": 217.42,
+   "d": 7.29,
+   "text": "They were enabled by the CD-ROM but also disabled."
+  },
+  {
+   "t": 224.71,
+   "d": 10.14,
+   "text": "They had to figure ways to add images and audio quickly."
+  },
+  {
+   "t": 234.85,
+   "d": 5.83,
+   "text": "You know, real-time graphics were a pipe dream at that point at the fidelity they were rendering"
+  },
+  {
+   "t": 240.68,
+   "d": 1.12,
+   "text": "at."
+  },
+  {
+   "t": 241.8,
+   "d": 6.49,
+   "text": "But now, decades later, what do these often considered obsolete disciplines look like"
+  },
+  {
+   "t": 248.29,
+   "d": 6.06,
+   "text": "when such limitations were nonexistent and anyone who made a Roguelike know what I am"
+  },
+  {
+   "t": 254.35,
+   "d": 2.9,
+   "text": "talking about."
+  },
+  {
+   "t": 257.25,
+   "d": 6.0,
+   "text": "The sky is the limit for simulation."
+  },
+  {
+   "t": 263.25,
+   "d": 4.97,
+   "text": "I worked on a lot of multi-year large scale projects."
+  },
+  {
+   "t": 268.22,
+   "d": 6.27,
+   "text": "I worked with all sorts of games and a lot of them are 3D immersive worlds but for this"
+  },
+  {
+   "t": 274.49,
+   "d": 5.51,
+   "text": "particular project there is a lot of things I am tired of obsessing over."
+  },
+  {
+   "t": 280.0,
+   "d": 4.73,
+   "text": "3D animation I love and real-time animation is hard."
+  },
+  {
+   "t": 284.73,
+   "d": 3.44,
+   "text": "It is like an Achilles racing a tortoise."
+  },
+  {
+   "t": 288.17,
+   "d": 5.27,
+   "text": "You are going to make something that doesn't look goofy."
+  },
+  {
+   "t": 293.44,
+   "d": 5.43,
+   "text": "I don't want to spend three weeks having a character learn to lean over and pick up an"
+  },
+  {
+   "t": 298.87,
+   "d": 8.22,
+   "text": "object and show it to you when you can write in text pick up this object."
+  },
+  {
+   "t": 307.09,
+   "d": 7.29,
+   "text": "Performance was a key obsession."
+  },
+  {
+   "t": 314.38,
+   "d": 4.37,
+   "text": "I want to make it run 60 FPS now."
+  },
+  {
+   "t": 318.75,
+   "d": 9.12,
+   "text": "I didn't want to have performance coming in and budding that always constant priority"
+  },
+  {
+   "t": 327.87,
+   "d": 1.0,
+   "text": "for development."
+  },
+  {
+   "t": 328.87,
+   "d": 6.84,
+   "text": "Also, we are going to try to make games more accessible and teaching people how to use"
+  },
+  {
+   "t": 335.71,
+   "d": 3.25,
+   "text": "a 16-button joy stick controller is harder than it sounds."
+  },
+  {
+   "t": 338.96,
+   "d": 7.29,
+   "text": "What I want to obsess over is procedural content world generation."
+  },
+  {
+   "t": 346.25,
+   "d": 5.03,
+   "text": "I love playing with digitally imagery."
+  },
+  {
+   "t": 351.28,
+   "d": 4.22,
+   "text": "I love playing with how do you have a computer render things in ways people might not have"
+  },
+  {
+   "t": 355.5,
+   "d": 1.86,
+   "text": "thought of before."
+  },
+  {
+   "t": 357.36,
+   "d": 3.69,
+   "text": "And I am really curious about elegant interfaces."
+  },
+  {
+   "t": 361.05,
+   "d": 1.0,
+   "text": "Maybe simple."
+  },
+  {
+   "t": 362.05,
+   "d": 3.97,
+   "text": "Simple doesn't mean easy."
+  },
+  {
+   "t": 366.02,
+   "d": 12.85,
+   "text": "A lot of this started with mentioning Proc Gen but in 2014 I created a work called forska"
+  },
+  {
+   "t": 378.87,
+   "d": 2.87,
+   "text": "which is the Swedish record for research."
+  },
+  {
+   "t": 381.74,
+   "d": 9.79,
+   "text": "It was my own implementations of procedural content generation and experiments in user"
+  },
+  {
+   "t": 391.53,
+   "d": 2.95,
+   "text": "interface and all sorts of things like that."
+  },
+  {
+   "t": 394.48,
+   "d": 6.58,
+   "text": "I will do a little bit of a live demo."
+  },
+  {
+   "t": 401.06,
+   "d": 6.89,
+   "text": "This is Forska and using it image by image."
+  },
+  {
+   "t": 407.95,
+   "d": 1.77,
+   "text": "This is actually a real-time space."
+  },
+  {
+   "t": 409.72,
+   "d": 5.37,
+   "text": "I am just telling it whenever the user clicks to grab an image and load it in and add a"
+  },
+  {
+   "t": 415.09,
+   "d": 3.0,
+   "text": "post-processing filter to it."
+  },
+  {
+   "t": 418.09,
+   "d": 5.98,
+   "text": "I was looking at instead of going image by image and Myst had a sprawling graphic list"
+  },
+  {
+   "t": 424.07,
+   "d": 2.28,
+   "text": "to choose from."
+  },
+  {
+   "t": 426.35,
+   "d": 3.74,
+   "text": "I can just click on the fly."
+  },
+  {
+   "t": 430.09,
+   "d": 5.45,
+   "text": "I can go into the this tree's shadow."
+  },
+  {
+   "t": 435.54,
+   "d": 5.86,
+   "text": "If I am bored and I want to go to this far island I can click on there."
+  },
+  {
+   "t": 441.4,
+   "d": 6.42,
+   "text": "I tag giant glowing magenta portals which lead to other islands which have their own"
+  },
+  {
+   "t": 447.82,
+   "d": 9.76,
+   "text": "different sets of terrain and the like."
+  },
+  {
+   "t": 457.58,
+   "d": 4.7,
+   "text": "One problem with large sprawling open ended world is if you walk at the same rate you"
+  },
+  {
+   "t": 462.28,
+   "d": 5.09,
+   "text": "are always bored if you are walking to a far away place or if you are close it is hard"
+  },
+  {
+   "t": 467.37,
+   "d": 13.92,
+   "text": "to move and pick"
+  },
+  {
+   "t": 481.29,
+   "d": 29.32,
+   "text": "up something close or interact with a desk."
+  },
+  {
+   "t": 510.61,
+   "d": 7.97,
+   "text": "Indeed within forska a lot of things I played with didn't overlap in the actual scene but"
+  },
+  {
+   "t": 518.58,
+   "d": 2.97,
+   "text": "I wanted a way of playing with all three."
+  },
+  {
+   "t": 521.55,
+   "d": 4.6,
+   "text": "I love playing with AI but I didn't have a place for the AI to live."
+  },
+  {
+   "t": 526.15,
+   "d": 6.09,
+   "text": "I wanted to place with post-processing but I needed a space to render so forska gave"
+  },
+  {
+   "t": 532.24,
+   "d": 4.58,
+   "text": "me a wilderness to try those things."
+  },
+  {
+   "t": 536.82,
+   "d": 10.56,
+   "text": "And again, it can generate a static image from real-time"
+  },
+  {
+   "t": 547.38,
+   "d": 1.25,
+   "text": "scene graph."
+  },
+  {
+   "t": 548.63,
+   "d": 3.92,
+   "text": "All of this is working within unity."
+  },
+  {
+   "t": 552.55,
+   "d": 7.5,
+   "text": "And clicking ray cast to a point on the map and place the camera where it hits a valid"
+  },
+  {
+   "t": 560.05,
+   "d": 1.0,
+   "text": "spot."
+  },
+  {
+   "t": 561.05,
+   "d": 6.87,
+   "text": "Instead of having do to everything in a 60th of a second, I have, you know, fractions of"
+  },
+  {
+   "t": 567.92,
+   "d": 8.51,
+   "text": "a second which run any simulation, AI, anything like that."
+  },
+  {
+   "t": 576.43,
+   "d": 5.29,
+   "text": "The brothers who worked on Myst talk about their target was 1-2 second and that is coming"
+  },
+  {
+   "t": 581.72,
+   "d": 7.04,
+   "text": "from IBM saying the user needs to have a second to click on something."
+  },
+  {
+   "t": 588.76,
+   "d": 9.92,
+   "text": "Why not beholden to that and having multiple themes without streaming or multithreading"
+  },
+  {
+   "t": 598.68,
+   "d": 7.75,
+   "text": "is just really, really liberating."
+  },
+  {
+   "t": 606.43,
+   "d": 7.99,
+   "text": "One element is visual aesthetics."
+  },
+  {
+   "t": 614.42,
+   "d": 3.36,
+   "text": "For the longest time everything looked alike because everybody drawing a polygon on the"
+  },
+  {
+   "t": 617.78,
+   "d": 2.73,
+   "text": "screen exhausted everybody."
+  },
+  {
+   "t": 620.51,
+   "d": 4.91,
+   "text": "With all of the computing power we had I felt there was more we could do."
+  },
+  {
+   "t": 625.42,
+   "d": 6.16,
+   "text": "This is an image of Forska and later Roguelikes without any post-processing on."
+  },
+  {
+   "t": 631.58,
+   "d": 4.97,
+   "text": "What if you want to make it look like a Roman mosaic?"
+  },
+  {
+   "t": 636.55,
+   "d": 4.49,
+   "text": "Or like an oil painting?"
+  },
+  {
+   "t": 641.04,
+   "d": 6.91,
+   "text": "Or if you know, you are really old school and want ASCII graphics because it works are"
+  },
+  {
+   "t": 647.95,
+   "d": 1.52,
+   "text": "Rogue?"
+  },
+  {
+   "t": 649.47,
+   "d": 5.8,
+   "text": "This one is one of my ideas that I know the path leads to madness although given some"
+  },
+  {
+   "t": 655.27,
+   "d": 3.35,
+   "text": "of the earlier talks I mob in good company."
+  },
+  {
+   "t": 658.62,
+   "d": 8.03,
+   "text": "Given the 3D space, what if that's all running but all you see is a textual description?"
+  },
+  {
+   "t": 666.65,
+   "d": 8.48,
+   "text": "In this dynamic space you can have an image where then interaction with a simple parser"
+  },
+  {
+   "t": 675.13,
+   "d": 5.04,
+   "text": "to examine the world, a words worth a thousand pictures."
+  },
+  {
+   "t": 680.17,
+   "d": 11.77,
+   "text": "That's something when I look at ways of graphics, text can be one of the best graphics ever."
+  },
+  {
+   "t": 691.94,
+   "d": 8.4,
+   "text": "I can play with other methods and printed out apps I can probably sell at REI or camping"
+  },
+  {
+   "t": 700.34,
+   "d": 3.38,
+   "text": "or wilderness store."
+  },
+  {
+   "t": 703.72,
+   "d": 8.32,
+   "text": "I can have outbound books of various islands which helped me gauge how well procedural"
+  },
+  {
+   "t": 712.04,
+   "d": 1.95,
+   "text": "content generation systems worked."
+  },
+  {
+   "t": 713.99,
+   "d": 7.5,
+   "text": "And, you know, abstracting the space is nothing new for Rogues themselves."
+  },
+  {
+   "t": 721.49,
+   "d": 2.48,
+   "text": "They, you know, that's it."
+  },
+  {
+   "t": 723.97,
+   "d": 5.82,
+   "text": "I have seen people freak out by the letter D knowing it is a dragon."
+  },
+  {
+   "t": 729.79,
+   "d": 4.48,
+   "text": "Don't get me started on ampersands."
+  },
+  {
+   "t": 734.27,
+   "d": 3.87,
+   "text": "Let me go -- I am being bold."
+  },
+  {
+   "t": 738.14,
+   "d": 5.2,
+   "text": "Let me just make sure this is still running."
+  },
+  {
+   "t": 743.34,
+   "d": 6.48,
+   "text": "Let me make sure you can see this."
+  },
+  {
+   "t": 749.82,
+   "d": 4.0,
+   "text": "This is the map running in unity."
+  },
+  {
+   "t": 753.82,
+   "d": 13.93,
+   "text": "Right now I am playing with a Roman mosaic look but if I go into the camera I can swatch"
+  },
+  {
+   "t": 767.75,
+   "d": 6.52,
+   "text": "around and it a rabbit hole but a fun rabbit hole to fall down."
+  },
+  {
+   "t": 774.27,
+   "d": 3.76,
+   "text": "This is what the straight rendered image looks like."
+  },
+  {
+   "t": 778.03,
+   "d": 4.93,
+   "text": "Then I can add in a mosaic effect."
+  },
+  {
+   "t": 782.96,
+   "d": 9.4,
+   "text": "If I want to separate the background from the foreground I will add it at the field."
+  },
+  {
+   "t": 792.36,
+   "d": 15.19,
+   "text": "Let's say if I want to have an overlay and I can blend these."
+  },
+  {
+   "t": 807.55,
+   "d": 8.49,
+   "text": "These are either things I found on the web to implement or writing my own graphics and"
+  },
+  {
+   "t": 816.04,
+   "d": 1.0,
+   "text": "overlaying them."
+  },
+  {
+   "t": 817.04,
+   "d": 4.34,
+   "text": "Unity is just a lot of pretty good about testing the things on the fly."
+  },
+  {
+   "t": 821.38,
+   "d": 18.26,
+   "text": "Again, I can kind of hit the limits of legibility but that's again, another fun half the trace."
+  },
+  {
+   "t": 839.64,
+   "d": 15.33,
+   "text": "I wanted to generate spaces so Forska ended up being a place where I could do that."
+  },
+  {
+   "t": 854.97,
+   "d": 5.31,
+   "text": "This was one way I found to help get around Kate Compton's 10,000 bowls of oat meals is"
+  },
+  {
+   "t": 860.28,
+   "d": 3.26,
+   "text": "to add topics or multiple possibilities."
+  },
+  {
+   "t": 863.54,
+   "d": 7.16,
+   "text": "I was looking at different types of geology."
+  },
+  {
+   "t": 870.7,
+   "d": 17.86,
+   "text": "I can have a glacier one and even that would end up making -- if I had four types of geology"
+  },
+  {
+   "t": 888.56,
+   "d": 7.49,
+   "text": "and four types of general island shape that multiply together and you get more bang for"
+  },
+  {
+   "t": 896.05,
+   "d": 2.04,
+   "text": "your buck."
+  },
+  {
+   "t": 898.09,
+   "d": 7.09,
+   "text": "One of the benefits of not real-time graphics is even though I am rendering static images,"
+  },
+  {
+   "t": 905.18,
+   "d": 5.28,
+   "text": "we would default and update every second it is still dynamic space and it is changing"
+  },
+  {
+   "t": 910.46,
+   "d": 4.66,
+   "text": "lighting and time of day is trivial."
+  },
+  {
+   "t": 915.12,
+   "d": 5.88,
+   "text": "Whether lighting and all that stuff is fun to play with whereas back in the day, you"
+  },
+  {
+   "t": 921.0,
+   "d": 7.86,
+   "text": "would have to render a 3D image and it would take hours and days depending."
+  },
+  {
+   "t": 928.86,
+   "d": 24.29,
+   "text": "Having to call one up in a fraction of a second is a powerful and a lot of fun to play with."
+  },
+  {
+   "t": 953.15,
+   "d": 10.89,
+   "text": "Given the space I am in, I was trying to figure out ways to lead players to points of interests."
+  },
+  {
+   "t": 964.04,
+   "d": 4.11,
+   "text": "You end getting automatic switch backs for free."
+  },
+  {
+   "t": 968.15,
+   "d": 4.92,
+   "text": "This portal leads to various ruins."
+  },
+  {
+   "t": 973.07,
+   "d": 3.82,
+   "text": "You see switch back going up the mountainside."
+  },
+  {
+   "t": 976.89,
+   "d": 3.3,
+   "text": "Adding a little noise makes sure it is not too straight."
+  },
+  {
+   "t": 980.19,
+   "d": 4.15,
+   "text": "When you are on the ground, it adds a nice element of contrast even if it is noon on"
+  },
+  {
+   "t": 984.34,
+   "d": 1.98,
+   "text": "a snowy landscape."
+  },
+  {
+   "t": 986.32,
+   "d": 10.09,
+   "text": "This gives you something to walk on to and follow especially since I like the painter"
+  },
+  {
+   "t": 996.41,
+   "d": 1.15,
+   "text": "effects."
+  },
+  {
+   "t": 997.56,
+   "d": 17.75,
+   "text": "There is another element of contrast along with adding things like line finding."
+  },
+  {
+   "t": 1015.31,
+   "d": 4.32,
+   "text": "User interface and again that's something I am looking at again."
+  },
+  {
+   "t": 1019.63,
+   "d": 3.88,
+   "text": "A lot of it is pick your poison."
+  },
+  {
+   "t": 1023.51,
+   "d": 1.0,
+   "text": "It is hard."
+  },
+  {
+   "t": 1024.51,
+   "d": 1.98,
+   "text": "Everybody is going to tell you it is hard."
+  },
+  {
+   "t": 1026.49,
+   "d": 3.45,
+   "text": "If anybody who says it is easy is lying."
+  },
+  {
+   "t": 1029.94,
+   "d": 1.04,
+   "text": "A lot of it is pick your poison."
+  },
+  {
+   "t": 1030.98,
+   "d": 4.97,
+   "text": "If you want to use a PlayStation or Xbox controller to show someone how to do something as mundane"
+  },
+  {
+   "t": 1035.95,
+   "d": 9.4,
+   "text": "as picking up an object."
+  },
+  {
+   "t": 1045.35,
+   "d": 1.57,
+   "text": "Mobile is its own set of poison."
+  },
+  {
+   "t": 1046.92,
+   "d": 4.57,
+   "text": "It is just a flat piece of lab run sapphire."
+  },
+  {
+   "t": 1051.49,
+   "d": 7.75,
+   "text": "Up to you about how dense or minimal but having no interface is as bad as having no interface"
+  },
+  {
+   "t": 1059.24,
+   "d": 1.56,
+   "text": "sometimes."
+  },
+  {
+   "t": 1060.8,
+   "d": 2.91,
+   "text": "Trying to adapt a lot."
+  },
+  {
+   "t": 1063.71,
+   "d": 6.48,
+   "text": "In Forska I did play with connect and do VR test."
+  },
+  {
+   "t": 1070.19,
+   "d": 7.2,
+   "text": "I don't have too much time and maybe I can talk about that later on."
+  },
+  {
+   "t": 1077.39,
+   "d": 7.26,
+   "text": "Rogue as well -- as going back to one of the first talks about how computers really are"
+  },
+  {
+   "t": 1084.65,
+   "d": 3.5,
+   "text": "just machines that think they are running paper tape through it and Rogue still has"
+  },
+  {
+   "t": 1088.15,
+   "d": 2.56,
+   "text": "a lot of that element to it."
+  },
+  {
+   "t": 1090.71,
+   "d": 5.01,
+   "text": "Again, there are some people who wouldn't use anything else but again you have to make"
+  },
+  {
+   "t": 1095.72,
+   "d": 5.04,
+   "text": "a lot of decisions about how you use your interface so I wanted a space where I could"
+  },
+  {
+   "t": 1100.76,
+   "d": 5.35,
+   "text": "play with a lot of these things."
+  },
+  {
+   "t": 1106.11,
+   "d": 7.2,
+   "text": "This was just a short little beginning of me trying to add a very minimal Roguelike"
+  },
+  {
+   "t": 1113.31,
+   "d": 7.31,
+   "text": "where you have items, text, and adding in agents."
+  },
+  {
+   "t": 1120.62,
+   "d": 11.53,
+   "text": "This stream is slow."
+  },
+  {
+   "t": 1132.15,
+   "d": 2.0,
+   "text": "I can probably end up showing that as well."
+  },
+  {
+   "t": 1134.15,
+   "d": 3.74,
+   "text": "I will share someclipse later on."
+  },
+  {
+   "t": 1137.89,
+   "d": 5.99,
+   "text": "This is just the beginning of adding in 2D models or 3D sprites and hiding seems and"
+  },
+  {
+   "t": 1143.88,
+   "d": 7.9,
+   "text": "making it mesh better with the environment."
+  },
+  {
+   "t": 1151.78,
+   "d": 4.82,
+   "text": "Field of view is something that gets front and center when you are dealing with first-person"
+  },
+  {
+   "t": 1156.6,
+   "d": 22.51,
+   "text": "camera."
+  },
+  {
+   "t": 1179.11,
+   "d": 3.18,
+   "text": "Combining the turn-base system is one thing Myst shares."
+  },
+  {
+   "t": 1182.29,
+   "d": 9.34,
+   "text": "You get weird elements of tension where there"
+  },
+  {
+   "t": 1191.63,
+   "d": 5.26,
+   "text": "is literally dozens of possibility actions you can make."
+  },
+  {
+   "t": 1196.89,
+   "d": 6.57,
+   "text": "You come to point where the next action you will take will mean your life or death."
+  },
+  {
+   "t": 1203.46,
+   "d": 5.52,
+   "text": "But you have as much time as you want to make that decision."
+  },
+  {
+   "t": 1208.98,
+   "d": 3.03,
+   "text": "No pressure."
+  },
+  {
+   "t": 1212.01,
+   "d": 2.09,
+   "text": "Go make a cup of coffee or something."
+  },
+  {
+   "t": 1214.1,
+   "d": 5.83,
+   "text": "Maybe you can find that use for that spare coupon you found or the bottle cap you found"
+  },
+  {
+   "t": 1219.93,
+   "d": 6.54,
+   "text": "in the trash pile maybe that will do something."
+  },
+  {
+   "t": 1226.47,
+   "d": 6.65,
+   "text": "Somebody asked what the game you are going it make with this and that throws for a loop."
+  },
+  {
+   "t": 1233.12,
+   "d": 8.54,
+   "text": "I am trying spall -- smaller experiments to test things."
+  },
+  {
+   "t": 1241.66,
+   "d": 1.77,
+   "text": "I am doing this dungeon crawler."
+  },
+  {
+   "t": 1243.43,
+   "d": 10.48,
+   "text": "As a proof of concept, this is just fewer questions to ask."
+  },
+  {
+   "t": 1253.91,
+   "d": 7.3,
+   "text": "If I want to get the UI right I don't want to be distracted trying it make a very different"
+  },
+  {
+   "t": 1261.21,
+   "d": 1.0,
+   "text": "game."
+  },
+  {
+   "t": 1262.21,
+   "d": 3.61,
+   "text": "I want to make a procedural generated game."
+  },
+  {
+   "t": 1265.82,
+   "d": 7.08,
+   "text": "The monter is procedurally generated so you need to be as informed and stupid as a typical"
+  },
+  {
+   "t": 1272.9,
+   "d": 1.86,
+   "text": "scary movie character."
+  },
+  {
+   "t": 1274.76,
+   "d": 2.52,
+   "text": "Maybe you should go to the basement?"
+  },
+  {
+   "t": 1277.28,
+   "d": 4.5,
+   "text": "Maybe bullets will work on that vampire you can only see in mirrors."
+  },
+  {
+   "t": 1281.78,
+   "d": 10.08,
+   "text": "I still like using walk simulators and experimenting with panaramic renders."
+  },
+  {
+   "t": 1291.86,
+   "d": 8.82,
+   "text": "Imagine rendering a spherical or cube mapped scene in real-time and you only update your"
+  },
+  {
+   "t": 1300.68,
+   "d": 2.39,
+   "text": "position when you click."
+  },
+  {
+   "t": 1303.07,
+   "d": 9.02,
+   "text": "And again, you saw text heavy renders of a 3D space and whether that's going to be a"
+  },
+  {
+   "t": 1312.09,
+   "d": 4.84,
+   "text": "cleaver scene graph or a machine agent describing an image you can't see."
+  },
+  {
+   "t": 1316.93,
+   "d": 5.26,
+   "text": "It is a lot to think about."
+  },
+  {
+   "t": 1322.19,
+   "d": 10.58,
+   "text": "In short, you know, I use post-processing to hide a lot of graphical shortcomings or"
+  },
+  {
+   "t": 1332.77,
+   "d": 6.82,
+   "text": "annoyances not having to deal with animation frees up if I am working on a hobby project."
+  },
+  {
+   "t": 1339.59,
+   "d": 4.15,
+   "text": "It doesn't necessarily make things easier."
+  },
+  {
+   "t": 1343.74,
+   "d": 1.0,
+   "text": "Just possible."
+  },
+  {
+   "t": 1344.74,
+   "d": 7.54,
+   "text": "Think about where you want to work on and strengths and weaknesses."
+  },
+  {
+   "t": 1352.28,
+   "d": 1.23,
+   "text": "Like any good Rogue player, pick your battles."
+  },
+  {
+   "t": 1353.51,
+   "d": 5.29,
+   "text": "I mean there is a lot of inspiration and lessons from the past and when you combine them with"
+  },
+  {
+   "t": 1358.8,
+   "d": 4.05,
+   "text": "modern techniques sometimes it feels like martial art training where you are waring"
+  },
+  {
+   "t": 1362.85,
+   "d": 4.05,
+   "text": "weights and take them off and the possibilities become endless."
+  },
+  {
+   "t": 1366.9,
+   "d": 7.56,
+   "text": "My Cat is trying to sabotage my computer equipment but here is a picture."
+  },
+  {
+   "t": 1374.46,
+   "d": 4.25,
+   "text": "Thank you very much and thank you for letting me talk."
+  },
+  {
+   "t": 1378.71,
+   "d": 1.62,
+   "text": "EMCEE: Thanks so much."
+  },
+  {
+   "t": 1380.33,
+   "d": 1.34,
+   "text": "That was wonderful."
+  },
+  {
+   "t": 1381.67,
+   "d": 1.79,
+   "text": "It is super cool."
+  },
+  {
+   "t": 1383.46,
+   "d": 4.24,
+   "text": "Lots of people in the chat were talking about how good it looks and coming up with ideas"
+  },
+  {
+   "t": 1387.7,
+   "d": 2.47,
+   "text": "for sorts of games you could make with it."
+  },
+  {
+   "t": 1390.17,
+   "d": 1.0,
+   "text": ">> Excellent."
+  },
+  {
+   "t": 1391.17,
+   "d": 15.78,
+   "text": "EMCEE: Let's see if there are questions."
+  },
+  {
+   "t": 1406.95,
+   "d": 7.69,
+   "text": "EMCEE: >> Machine learning I have a love-hate relationship"
+  },
+  {
+   "t": 1414.64,
+   "d": 1.0,
+   "text": "with."
+  },
+  {
+   "t": 1415.64,
+   "d": 10.0,
+   "text": "So much is the interface of the procedure but how you want to work with it."
+  },
+  {
+   "t": 1425.64,
+   "d": 2.41,
+   "text": "I have seen amazing things done with machine learning."
+  },
+  {
+   "t": 1428.05,
+   "d": 6.86,
+   "text": "I have tried a lot of things like the style transfers."
+  },
+  {
+   "t": 1434.91,
+   "d": 7.21,
+   "text": "I often find machine learning is almost like something that 3D prints something in marble"
+  },
+  {
+   "t": 1442.12,
+   "d": 2.82,
+   "text": "but if you want to make a car that car won't drive."
+  },
+  {
+   "t": 1444.94,
+   "d": 2.86,
+   "text": "You have a perfectly looking marble car but it won't be able to drive."
+  },
+  {
+   "t": 1447.8,
+   "d": 5.68,
+   "text": "Working with something afterwards is always tricky to me."
+  },
+  {
+   "t": 1453.48,
+   "d": 3.78,
+   "text": "It is definitely something I am looking at and again, force was built to house."
+  },
+  {
+   "t": 1457.26,
+   "d": 5.2,
+   "text": "If I do do machine learning, I can let lose in the space and let it run free."
+  },
+  {
+   "t": 1462.46,
+   "d": 2.43,
+   "text": "But, yeah, it is definitely on my list."
+  },
+  {
+   "t": 1464.89,
+   "d": 6.86,
+   "text": "I have a series of machine learning links for image generation, agent behavior, and"
+  },
+  {
+   "t": 1471.75,
+   "d": 7.14,
+   "text": "I mean, yeah, there is definitely a lot to look at there."
+  },
+  {
+   "t": 1478.89,
+   "d": 4.29,
+   "text": "EMCEE: Someone else wants to know what your cats names are."
+  },
+  {
+   "t": 1483.18,
+   "d": 2.77,
+   "text": ">> The silver one is -- and the other is Matilda."
+  },
+  {
+   "t": 1485.95,
+   "d": 1.4,
+   "text": "They aren't related."
+  },
+  {
+   "t": 1487.35,
+   "d": 10.41,
+   "text": "EMCEE: There are not any other questions but great talk in the chat."
+  },
+  {
+   "t": 1497.76,
+   "d": 6.34,
+   "text": "I am sure people would love to talk about your fun ideas if you hangout in the social"
+  },
+  {
+   "t": 1504.1,
+   "d": 1.67,
+   "text": "space."
+  },
+  {
+   "t": 1505.77,
+   "d": 3.42,
+   "text": ">> I might go to the procedural library?"
+  },
+  {
+   "t": 1509.19,
+   "d": 1.8,
+   "text": "EMCEE: The Proc Gen library."
+  },
+  {
+   "t": 1510.99,
+   "d": 9.23,
+   "text": ">> The Proc Gen library and take questions."
+  }
+ ]
+}

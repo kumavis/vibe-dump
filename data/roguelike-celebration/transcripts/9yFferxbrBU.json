@@ -1,0 +1,2024 @@
+{
+ "id": "9yFferxbrBU",
+ "url": "https://www.youtube.com/watch?v=9yFferxbrBU",
+ "title": "Elliot Trinidad- Tuning the Blaseball Name Generator",
+ "speaker": "Elliot Trinidad",
+ "talk_title": "Tuning the Blaseball Name Generator",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 1849,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Blaseball (2020-2023) was a massively multiplayer sports fan simulator that asked its online audience to follow a fictional, procedural baseball league's horror story across years -- as well as the hundreds of named digital outfielders who could die or spawn anew at a moment's notice!\n\nJoin Blaseball community manager & designer Elliot Trinidad in this practical retrospective about how a simple \"first name, last name\" character generator was able to illicit everything from obsession to controversy in the hands of a creative community. What do procedural character names say about your game's world? How did we tune our names to better highlight cultural diversity? And just what does it look like when seemingly small decisions get constant live feedback from an invested audience? Tune in to find out!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Blaseball"
+  },
+  {
+   "start": 136,
+   "title": "Game mechanics and culture"
+  },
+  {
+   "start": 461,
+   "title": "Philosophy of name curation"
+  },
+  {
+   "start": 658,
+   "title": "Strategic goals for naming"
+  },
+  {
+   "start": 929,
+   "title": "Expanding cultural diversity"
+  },
+  {
+   "start": 1208,
+   "title": "Design for happy accidents"
+  },
+  {
+   "start": 1493,
+   "title": "Testing, feedback, and wrap-up"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4225,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 5.69,
+   "d": 4.81,
+   "text": "Moving along, next up, hello, we have Elliot Trinidad."
+  },
+  {
+   "t": 10.5,
+   "d": 1.6,
+   "text": "Fellow Blaseball developer."
+  },
+  {
+   "t": 12.1,
+   "d": 7.09,
+   "text": "Elliot Trinidad is a Los Angeles designer, writer, and"
+  },
+  {
+   "t": 19.19,
+   "d": 3.97,
+   "text": "multi-disciplined production guy who loves flavorful systems,"
+  },
+  {
+   "t": 23.16,
+   "d": 3.22,
+   "text": "unpopular anime, and learning about new things."
+  },
+  {
+   "t": 26.38,
+   "d": 2.65,
+   "text": "Most recently a Community Designer on"
+  },
+  {
+   "t": 29.03,
+   "d": 3.01,
+   "text": "Blaseball, he co-managed the live game's highly active &"
+  },
+  {
+   "t": 32.04,
+   "d": 5.19,
+   "text": "highly creative online community from 2020-2023."
+  },
+  {
+   "t": 37.23,
+   "d": 5.19,
+   "text": "Even more recently, Elliot ruined his"
+  },
+  {
+   "t": 42.42,
+   "d": 6.53,
+   "text": "Dwarf Fortress citadel by getting too ambitious with lava."
+  },
+  {
+   "t": 48.95,
+   "d": 1.0,
+   "text": "Elysium Fields don't"
+  },
+  {
+   "t": 49.95,
+   "d": 1.0,
+   "text": "ELLIOT: Don't we all."
+  },
+  {
+   "t": 50.95,
+   "d": 5.7,
+   "text": "Here to talk about \"Touching Grass & Taking Names: Tuning the Blaseball Name Generator.\""
+  },
+  {
+   "t": 56.65,
+   "d": 6.88,
+   "text": "Which is one of the larger projects I took on during Blaseball and let's get into it."
+  },
+  {
+   "t": 63.53,
+   "d": 6.21,
+   "text": "You know, as we have a lot of procgen stuff, it is in this case my talk is turning this"
+  },
+  {
+   "t": 69.74,
+   "d": 7.06,
+   "text": "big spreadsheet, all of the whatever data that you collect, and turning it into this."
+  },
+  {
+   "t": 76.8,
+   "d": 6.82,
+   "text": "Into a reaction, an emotion, and like people enjoying the stuff that you put out and forming"
+  },
+  {
+   "t": 83.62,
+   "d": 7.31,
+   "text": "a connection to them, forming an actual, like, emotional bond that come out and how do you"
+  },
+  {
+   "t": 90.93,
+   "d": 2.15,
+   "text": "get there."
+  },
+  {
+   "t": 93.08,
+   "d": 2.81,
+   "text": "Let's go through it."
+  },
+  {
+   "t": 95.89,
+   "d": 2.51,
+   "text": "Let's generate some names right now, actually."
+  },
+  {
+   "t": 98.4,
+   "d": 6.19,
+   "text": "I hooked this presentation up to one of the spreadsheets that I have a bunch of name generation"
+  },
+  {
+   "t": 104.59,
+   "d": 5.0,
+   "text": "and thought one of the best ways to demonstrate the tone and tenor of the names that come"
+  },
+  {
+   "t": 109.59,
+   "d": 7.35,
+   "text": "out and that people are interacting with in Baseball is to just show you them and show"
+  },
+  {
+   "t": 116.94,
+   "d": 1.7,
+   "text": "you the fruits of that labor."
+  },
+  {
+   "t": 118.64,
+   "d": 1.97,
+   "text": "I haven't seen any of these before."
+  },
+  {
+   "t": 120.61,
+   "d": 1.76,
+   "text": "I generated these right before the talk."
+  },
+  {
+   "t": 122.37,
+   "d": 6.84,
+   "text": "Say hello to drip jaywalk and Midori George."
+  },
+  {
+   "t": 129.21,
+   "d": 7.29,
+   "text": "I think these are cool characters I would like to get to know."
+  },
+  {
+   "t": 136.5,
+   "d": 3.57,
+   "text": "Let's talk about what Blaseball is."
+  },
+  {
+   "t": 140.07,
+   "d": 4.81,
+   "text": "I think a lot of people in this audience probably might have heard of Blaseball and are familiar"
+  },
+  {
+   "t": 144.88,
+   "d": 5.24,
+   "text": "with it but if you are not let's get greater context as to how I generated these names"
+  },
+  {
+   "t": 150.12,
+   "d": 1.29,
+   "text": "and what they are for."
+  },
+  {
+   "t": 151.41,
+   "d": 3.42,
+   "text": "Blaseball was a browser based game started in 2020."
+  },
+  {
+   "t": 154.83,
+   "d": 5.81,
+   "text": "Very much a pandemic project that started when real life sports were not able to be"
+  },
+  {
+   "t": 160.64,
+   "d": 1.38,
+   "text": "in operation."
+  },
+  {
+   "t": 162.02,
+   "d": 7.21,
+   "text": "It can be described as an MMO sports simulator where you are fans watching games."
+  },
+  {
+   "t": 169.23,
+   "d": 5.42,
+   "text": "You can watch live fully simulated sports games in real-time."
+  },
+  {
+   "t": 174.65,
+   "d": 1.38,
+   "text": "Log into a website."
+  },
+  {
+   "t": 176.03,
+   "d": 1.18,
+   "text": "Chat about them."
+  },
+  {
+   "t": 177.21,
+   "d": 1.0,
+   "text": "Have favorite teams."
+  },
+  {
+   "t": 178.21,
+   "d": 4.05,
+   "text": "Chat amongst other people watching the same games."
+  },
+  {
+   "t": 182.26,
+   "d": 6.76,
+   "text": "You are playing the role of a fan who can mechanically change some of the rules of the"
+  },
+  {
+   "t": 189.02,
+   "d": 9.68,
+   "text": "game but a lot of the interaction is having opinions about them in the way a sports fan"
+  },
+  {
+   "t": 198.7,
+   "d": 1.0,
+   "text": "does."
+  },
+  {
+   "t": 199.7,
+   "d": 4.91,
+   "text": "Having favorite league players whose career you follow because they seem interesting or"
+  },
+  {
+   "t": 204.61,
+   "d": 1.71,
+   "text": "keep popping up."
+  },
+  {
+   "t": 206.32,
+   "d": 3.13,
+   "text": "Or having rivalries with other playing the game."
+  },
+  {
+   "t": 209.45,
+   "d": 4.02,
+   "text": "All the outcomes are a matter of chance."
+  },
+  {
+   "t": 213.47,
+   "d": 3.49,
+   "text": "We are constantly surprised by what happens."
+  },
+  {
+   "t": 216.96,
+   "d": 7.93,
+   "text": "None of the winners or outcomes or even event and skill triggers are not really prescripted."
+  },
+  {
+   "t": 224.89,
+   "d": 4.95,
+   "text": "There is a chance outcome that will happen and we don't know when in the season they"
+  },
+  {
+   "t": 229.84,
+   "d": 7.79,
+   "text": "will happen which is always a fun surprise and heightens how people get attached to these"
+  },
+  {
+   "t": 237.63,
+   "d": 5.29,
+   "text": "things because they feel like a miracle."
+  },
+  {
+   "t": 242.92,
+   "d": 11.69,
+   "text": "The league has hundreds of randomly generated blaze players."
+  },
+  {
+   "t": 254.61,
+   "d": 3.62,
+   "text": "Structurally it is about 24 teams competing for a weekly championship."
+  },
+  {
+   "t": 258.23,
+   "d": 4.69,
+   "text": "Importantly it is all text and UI."
+  },
+  {
+   "t": 262.92,
+   "d": 3.07,
+   "text": "There is no graphics."
+  },
+  {
+   "t": 265.99,
+   "d": 2.55,
+   "text": "There is no depictions."
+  },
+  {
+   "t": 268.54,
+   "d": 12.81,
+   "text": "They are just going off the text of their name and"
+  },
+  {
+   "t": 281.35,
+   "d": 11.48,
+   "text": "a new facts like their favorite coffee and what they do in the game them self."
+  },
+  {
+   "t": 292.83,
+   "d": 5.59,
+   "text": "From that, so much creativity has come forth because anyone who is a fan of Blaseball can"
+  },
+  {
+   "t": 298.42,
+   "d": 8.82,
+   "text": "pick a favorite or can watch a fictional character's career blossom into something unexpected and,"
+  },
+  {
+   "t": 307.24,
+   "d": 2.96,
+   "text": "you know, as you can imagine, make tons of art."
+  },
+  {
+   "t": 310.2,
+   "d": 3.78,
+   "text": "Make tons of fan fiction and tons of anything about that."
+  },
+  {
+   "t": 313.98,
+   "d": 5.28,
+   "text": "Importantly, it is in an absurdist horror setting."
+  },
+  {
+   "t": 319.26,
+   "d": 4.32,
+   "text": "So sometimes a hitter will be incinerated to death in the middle of the game which is"
+  },
+  {
+   "t": 323.58,
+   "d": 5.52,
+   "text": "how you get new names generated among other reasons."
+  },
+  {
+   "t": 329.1,
+   "d": 7.13,
+   "text": "So with that context, you know, I will briefly run through what are the characteristics of"
+  },
+  {
+   "t": 336.23,
+   "d": 4.98,
+   "text": "names in Blaseball like at least compared to give you a comparison to other games that"
+  },
+  {
+   "t": 341.21,
+   "d": 1.16,
+   "text": "also generate names."
+  },
+  {
+   "t": 342.37,
+   "d": 2.06,
+   "text": "Everyone has a first and last name."
+  },
+  {
+   "t": 344.43,
+   "d": 4.02,
+   "text": "There are dozens of characters generated in close proximity."
+  },
+  {
+   "t": 348.45,
+   "d": 6.59,
+   "text": "So like compared to an RPG that randomly generates names you might only have a few in the name"
+  },
+  {
+   "t": 355.04,
+   "d": 2.05,
+   "text": "but in Blaseball that's the entire game."
+  },
+  {
+   "t": 357.09,
+   "d": 5.5,
+   "text": "All of these randomly generated characters are interacting with each other."
+  },
+  {
+   "t": 362.59,
+   "d": 2.6,
+   "text": "None are more important than any other during generation."
+  },
+  {
+   "t": 365.19,
+   "d": 5.36,
+   "text": "There is no equivalent of like an elite enemy or boss class."
+  },
+  {
+   "t": 370.55,
+   "d": 6.79,
+   "text": "There is no saving cool sounding names or like high level sounding adjectives for a"
+  },
+  {
+   "t": 377.34,
+   "d": 1.74,
+   "text": "certain tier of generation."
+  },
+  {
+   "t": 379.08,
+   "d": 3.36,
+   "text": "They just all go in the pot."
+  },
+  {
+   "t": 382.44,
+   "d": 3.54,
+   "text": "The tone of the writing of the game is I guess you could describe it as dry humor."
+  },
+  {
+   "t": 385.98,
+   "d": 6.59,
+   "text": "It is funny, comedic but as comedic as pro-sports can be and in real life there is people with"
+  },
+  {
+   "t": 392.57,
+   "d": 7.26,
+   "text": "goofy names and we want to channel that instead of making it seem like the writing in the"
+  },
+  {
+   "t": 399.83,
+   "d": 2.19,
+   "text": "game is -- I don't know."
+  },
+  {
+   "t": 402.02,
+   "d": 4.69,
+   "text": "Try to make you laugh by being not serious about it."
+  },
+  {
+   "t": 406.71,
+   "d": 9.92,
+   "text": "I could go on all day."
+  },
+  {
+   "t": 416.63,
+   "d": 6.63,
+   "text": "This still has slides I meant to hide."
+  },
+  {
+   "t": 423.26,
+   "d": 6.98,
+   "text": "There is more you can learn about Blaseball."
+  },
+  {
+   "t": 430.24,
+   "d": 4.11,
+   "text": "I will talk more about that."
+  },
+  {
+   "t": 434.35,
+   "d": 2.94,
+   "text": "Who are these characters?"
+  },
+  {
+   "t": 437.29,
+   "d": 1.46,
+   "text": "Sadie Kwon."
+  },
+  {
+   "t": 438.75,
+   "d": 1.47,
+   "text": "Wiz zahariya."
+  },
+  {
+   "t": 440.22,
+   "d": 1.47,
+   "text": "Sinem Coldsnap."
+  },
+  {
+   "t": 441.69,
+   "d": 1.58,
+   "text": "Sorry for the delay."
+  },
+  {
+   "t": 443.27,
+   "d": 3.61,
+   "text": "I know I changed some things here."
+  },
+  {
+   "t": 446.88,
+   "d": 1.19,
+   "text": "This might not be reflected."
+  },
+  {
+   "t": 448.07,
+   "d": 1.3,
+   "text": "I think this works out."
+  },
+  {
+   "t": 449.37,
+   "d": 1.0,
+   "text": "That's fine."
+  },
+  {
+   "t": 451.37,
+   "d": 1.87,
+   "text": "We will roll with it."
+  },
+  {
+   "t": 453.24,
+   "d": 1.0,
+   "text": "Millions Francino."
+  },
+  {
+   "t": 454.24,
+   "d": 1.58,
+   "text": "That's a good name."
+  },
+  {
+   "t": 455.82,
+   "d": 5.62,
+   "text": "Sorry for the distraction."
+  },
+  {
+   "t": 461.44,
+   "d": 3.23,
+   "text": "So what is the name generator in Blaseball itself?"
+  },
+  {
+   "t": 464.67,
+   "d": 1.53,
+   "text": "What's it doing?"
+  },
+  {
+   "t": 466.2,
+   "d": 3.39,
+   "text": "Unfortunately, or fortunately, the answer is not really that much."
+  },
+  {
+   "t": 469.59,
+   "d": 1.01,
+   "text": "It is not really that complicated."
+  },
+  {
+   "t": 470.6,
+   "d": 8.14,
+   "text": "It really does pluck a random first name and last name and doesn't check for repeats."
+  },
+  {
+   "t": 478.74,
+   "d": 2.61,
+   "text": "Doesn't wait toward literation to sound better."
+  },
+  {
+   "t": 481.35,
+   "d": 2.97,
+   "text": "There is a number of reasons for this."
+  },
+  {
+   "t": 484.32,
+   "d": 2.54,
+   "text": "Chief among them is that it is easier."
+  },
+  {
+   "t": 486.86,
+   "d": 7.03,
+   "text": "Our programmers were busy with lots of other stuff so it allowed me and the rest of the"
+  },
+  {
+   "t": 493.89,
+   "d": 7.82,
+   "text": "community design team, you know, work on that without having to interact with the coding"
+  },
+  {
+   "t": 501.71,
+   "d": 2.48,
+   "text": "on a pipeline level."
+  },
+  {
+   "t": 504.19,
+   "d": 7.2,
+   "text": "So I guess, you know, this talk is really less about name generation, less about procedural"
+  },
+  {
+   "t": 511.39,
+   "d": 3.22,
+   "text": "generation and more about thoughtful manual curation."
+  },
+  {
+   "t": 514.61,
+   "d": 7.03,
+   "text": "I am going to be talking about curation most of all, right?"
+  },
+  {
+   "t": 521.64,
+   "d": 1.5,
+   "text": "What are we curating towards?"
+  },
+  {
+   "t": 523.14,
+   "d": 3.61,
+   "text": "What are we trying to get across here?"
+  },
+  {
+   "t": 526.75,
+   "d": 8.9,
+   "text": "I will add context about why we had to even overhaul these names and even look at them"
+  },
+  {
+   "t": 535.65,
+   "d": 4.86,
+   "text": "in a big picture."
+  },
+  {
+   "t": 540.51,
+   "d": 6.91,
+   "text": "We were building up to a relaunch in January with a new engine."
+  },
+  {
+   "t": 547.42,
+   "d": 6.16,
+   "text": "The fiction of the game has a soft reboot in which we were encouraging more people to"
+  },
+  {
+   "t": 553.58,
+   "d": 1.9,
+   "text": "join in."
+  },
+  {
+   "t": 555.48,
+   "d": 7.68,
+   "text": "And have less to -- not need to know as much about preexisting characters, right?"
+  },
+  {
+   "t": 563.16,
+   "d": 4.64,
+   "text": "So we would have new characters and some returning characters and not hundreds off the bat."
+  },
+  {
+   "t": 567.8,
+   "d": 7.35,
+   "text": "I also want to give a big shout-out to my codesigner on this project Aleksandria also"
+  },
+  {
+   "t": 575.15,
+   "d": 9.0,
+   "text": "known as keeper Sims."
+  },
+  {
+   "t": 584.15,
+   "d": 4.47,
+   "text": "A lot of names were user submissions at this point."
+  },
+  {
+   "t": 588.62,
+   "d": 2.75,
+   "text": "That was a Patreon perk."
+  },
+  {
+   "t": 591.37,
+   "d": 7.33,
+   "text": "It allowed a lot of audience buy-in and allowed people to submit first and last names to the"
+  },
+  {
+   "t": 598.7,
+   "d": 5.23,
+   "text": "field of eggs where Blaseball players come from."
+  },
+  {
+   "t": 603.93,
+   "d": 5.8,
+   "text": "It served a really good purpose for a long time but this is something that we were looking"
+  },
+  {
+   "t": 609.73,
+   "d": 2.97,
+   "text": "to shift away from at this point."
+  },
+  {
+   "t": 612.7,
+   "d": 5.66,
+   "text": "It was a significant source of moderation labor not just like moderating out, you know,"
+  },
+  {
+   "t": 618.36,
+   "d": 14.5,
+   "text": "bad unsavory fames but things that are bordered line and copyright infringement and it will"
+  },
+  {
+   "t": 632.86,
+   "d": 8.48,
+   "text": "drift the tone of the game because names are going to be how your world presents its fiction"
+  },
+  {
+   "t": 641.34,
+   "d": 2.2,
+   "text": "in so many ways that narrative does."
+  },
+  {
+   "t": 643.54,
+   "d": 7.91,
+   "text": "I will get into that a bit more because we are going to be talking about -- I set out"
+  },
+  {
+   "t": 651.45,
+   "d": 6.77,
+   "text": "to solve, join, this fame generation kind of refresh project."
+  },
+  {
+   "t": 658.22,
+   "d": 3.49,
+   "text": "One is to establish a baseline for the just some guy name."
+  },
+  {
+   "t": 661.71,
+   "d": 2.21,
+   "text": "What does that mean in?"
+  },
+  {
+   "t": 663.92,
+   "d": 3.19,
+   "text": "This was requested by the narrative team."
+  },
+  {
+   "t": 667.11,
+   "d": 4.47,
+   "text": "Blaseball had been running for a couple years."
+  },
+  {
+   "t": 671.58,
+   "d": 6.56,
+   "text": "We would be at season 24 and beyond and on the right side you can see there were a lot"
+  },
+  {
+   "t": 678.14,
+   "d": 5.01,
+   "text": "of names that had come from the kind of bombastic submissions that were user submitted."
+  },
+  {
+   "t": 683.15,
+   "d": 1.87,
+   "text": "They were cool names."
+  },
+  {
+   "t": 685.02,
+   "d": 11.89,
+   "text": "I like pulling up a game and seeing what the names are up to and see what they will do"
+  },
+  {
+   "t": 696.91,
+   "d": 1.77,
+   "text": "today."
+  },
+  {
+   "t": 698.68,
+   "d": 7.09,
+   "text": "It also kind of created a situation where like -- there is a lot of whack names and"
+  },
+  {
+   "t": 705.77,
+   "d": 3.32,
+   "text": "when they're all special none of them are that special."
+  },
+  {
+   "t": 709.09,
+   "d": 8.41,
+   "text": "You kind of need the more plain names in that field to make the other ones shine, to feel"
+  },
+  {
+   "t": 717.5,
+   "d": 7.01,
+   "text": "special, instead of filling the entire team with 20 of them."
+  },
+  {
+   "t": 724.51,
+   "d": 7.18,
+   "text": "In addition to that, in addition to like leveling out this sort of baseline for what an average"
+  },
+  {
+   "t": 731.69,
+   "d": 5.36,
+   "text": "name is in Blaseball should feel like, we also decided to retire names that already"
+  },
+  {
+   "t": 737.05,
+   "d": 2.91,
+   "text": "had some reputation."
+  },
+  {
+   "t": 739.96,
+   "d": 5.13,
+   "text": "If you have followed Blaseball, there is like Parker is a character that people refer to"
+  },
+  {
+   "t": 745.09,
+   "d": 1.9,
+   "text": "on a first-name basis."
+  },
+  {
+   "t": 746.99,
+   "d": 3.85,
+   "text": "If there was another Parker that came up in the same season that would be funny."
+  },
+  {
+   "t": 750.84,
+   "d": 1.8,
+   "text": "That would be good coincidence."
+  },
+  {
+   "t": 752.64,
+   "d": 6.03,
+   "text": "But if there is one that came up a year later while the first Parker already has a -- when"
+  },
+  {
+   "t": 758.67,
+   "d": 8.19,
+   "text": "you hear that word something comes to mind, that's not -- it is distracting."
+  },
+  {
+   "t": 766.86,
+   "d": 5.89,
+   "text": "That character can't be their own person so, you know, in the same way you kind of retire"
+  },
+  {
+   "t": 772.75,
+   "d": 5.48,
+   "text": "a jersey number sort of, we wanted to make sure those old names wouldn't come back and"
+  },
+  {
+   "t": 778.23,
+   "d": 6.55,
+   "text": "have a whole meme expectation about them because they sound similar."
+  },
+  {
+   "t": 784.78,
+   "d": 3.21,
+   "text": "We wanted to set aside the user submitted name parts for a while."
+  },
+  {
+   "t": 787.99,
+   "d": 5.09,
+   "text": "Blaseball was running much longer and went on to run much longer we would probably bring"
+  },
+  {
+   "t": 793.08,
+   "d": 6.35,
+   "text": "them back once we generated a lot of kind of manually curated names."
+  },
+  {
+   "t": 799.43,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 800.43,
+   "d": 2.21,
+   "text": "We wanted to start that new season fresh."
+  },
+  {
+   "t": 802.64,
+   "d": 8.91,
+   "text": "Another thing in the narrative team wanted to encourage was more nobody characters."
+  },
+  {
+   "t": 811.55,
+   "d": 6.32,
+   "text": "Getting the chance to rise in popularity just because of stuff that happened to them through"
+  },
+  {
+   "t": 817.87,
+   "d": 2.22,
+   "text": "the procedurally generated events of the game."
+  },
+  {
+   "t": 820.09,
+   "d": 8.92,
+   "text": "It is like once there were a bunch of characters getting generated with very loud, very main"
+  },
+  {
+   "t": 829.01,
+   "d": 2.79,
+   "text": "character sounding names that's cool."
+  },
+  {
+   "t": 831.8,
+   "d": 5.02,
+   "text": "They would get a dedicated following like immediately and they would get people drawing"
+  },
+  {
+   "t": 836.82,
+   "d": 4.24,
+   "text": "art of them but, you know, it is all random."
+  },
+  {
+   "t": 841.06,
+   "d": 3.82,
+   "text": "Sometimes they just get benched and never do anything."
+  },
+  {
+   "t": 844.88,
+   "d": 6.2,
+   "text": "On the flip side, you can have this whole art from a character that doesn't sound like"
+  },
+  {
+   "t": 851.08,
+   "d": 1.07,
+   "text": "anything special."
+  },
+  {
+   "t": 852.15,
+   "d": 7.12,
+   "text": "Mike Townsend a really plain fame but in the history -- name -- of Blaseball they started"
+  },
+  {
+   "t": 859.27,
+   "d": 8.97,
+   "text": "out so plain they were like hated on the Seattle garages because they were such a crappy pitcher"
+  },
+  {
+   "t": 868.24,
+   "d": 7.09,
+   "text": "so much that they became a meme and then they wrote a song about them and then over time"
+  },
+  {
+   "t": 875.33,
+   "d": 6.39,
+   "text": "Mike Townsend became such a good player and so center to a lot of world events in Blaseball"
+  },
+  {
+   "t": 881.72,
+   "d": 2.7,
+   "text": "that they are the spoke hero now."
+  },
+  {
+   "t": 884.42,
+   "d": 9.43,
+   "text": "This totally plain, unassuming and unremarkable character had this arc with a plain name because"
+  },
+  {
+   "t": 893.85,
+   "d": 5.51,
+   "text": "there was already this kind of community narrative attraction to plucking out this really plain"
+  },
+  {
+   "t": 899.36,
+   "d": 4.22,
+   "text": "guy and giving him a more interesting story."
+  },
+  {
+   "t": 903.58,
+   "d": 4.6,
+   "text": "Also, just by chance getting an interesting story."
+  },
+  {
+   "t": 908.18,
+   "d": 3.47,
+   "text": "User submitted names."
+  },
+  {
+   "t": 911.65,
+   "d": 3.45,
+   "text": "I talked about this a little bit and I think it is tough."
+  },
+  {
+   "t": 915.1,
+   "d": 1.54,
+   "text": "There is a lot of pros and cons."
+  },
+  {
+   "t": 916.64,
+   "d": 5.76,
+   "text": "It is great to get people in DBIT but it is a lot of extra work and worth knowing when"
+  },
+  {
+   "t": 922.4,
+   "d": 6.27,
+   "text": "you do so, you invite people to submit bombastic name and make their mark on that."
+  },
+  {
+   "t": 928.67,
+   "d": 7.36,
+   "text": "Our second goal was to expand cultural diversity in the name pool."
+  },
+  {
+   "t": 936.03,
+   "d": 4.45,
+   "text": "This was led by the community team that I was a part of."
+  },
+  {
+   "t": 940.48,
+   "d": 5.7,
+   "text": "At this point, the earliest name pool did include some multicultural names from sports"
+  },
+  {
+   "t": 946.18,
+   "d": 4.25,
+   "text": "but this project would have been the first audit of looking at the name generator as"
+  },
+  {
+   "t": 950.43,
+   "d": 7.81,
+   "text": "a whole and seeing the names proportion of names that come from origin or a silly word."
+  },
+  {
+   "t": 958.24,
+   "d": 2.62,
+   "text": "It was lacking."
+  },
+  {
+   "t": 960.86,
+   "d": 5.31,
+   "text": "Through Blaseball running we didn't put a lot of conscious effort into it because there"
+  },
+  {
+   "t": 966.17,
+   "d": 3.63,
+   "text": "was so many plates to spin at the same time."
+  },
+  {
+   "t": 969.8,
+   "d": 2.49,
+   "text": "I think it was felt too."
+  },
+  {
+   "t": 972.29,
+   "d": 1.27,
+   "text": "Like this lacking was felt."
+  },
+  {
+   "t": 973.56,
+   "d": 5.49,
+   "text": "Blaseball felt global both in the fiction and in the fan base but the characters it"
+  },
+  {
+   "t": 979.05,
+   "d": 4.46,
+   "text": "generated didn't so I wanted to fix that."
+  },
+  {
+   "t": 983.51,
+   "d": 4.23,
+   "text": "From a community perspective, I will say that online audiences even when they are themselves"
+  },
+  {
+   "t": 987.74,
+   "d": 8.9,
+   "text": "diverse, diverse in gender and sexuality and geography, they will default to a white American"
+  },
+  {
+   "t": 996.64,
+   "d": 1.0,
+   "text": "perspective."
+  },
+  {
+   "t": 997.64,
+   "d": 7.28,
+   "text": "That's how English speaking fandoms often find themselves talking about the things they"
+  },
+  {
+   "t": 1004.92,
+   "d": 1.0,
+   "text": "like."
+  },
+  {
+   "t": 1005.92,
+   "d": 10.13,
+   "text": "That's how discord happens online."
+  },
+  {
+   "t": 1016.05,
+   "d": 8.14,
+   "text": "You know, we wanted to make sure that there were so many -- they didn't have to resort"
+  },
+  {
+   "t": 1024.19,
+   "d": 5.96,
+   "text": "to the ones here and there being representative of an entire culture."
+  },
+  {
+   "t": 1030.15,
+   "d": 5.87,
+   "text": "Even though, and like, even if that's not like part of the game Blaseball, even if that"
+  },
+  {
+   "t": 1036.02,
+   "d": 4.56,
+   "text": "doesn't engage with any of the mechanics of what you are doing in the website, that is"
+  },
+  {
+   "t": 1040.58,
+   "d": 5.0,
+   "text": "such a large part of the community of how people interact with the game and the characters"
+  },
+  {
+   "t": 1045.58,
+   "d": 7.92,
+   "text": "and how they kind of just form attachments to watching Blaseball that like it was as"
+  },
+  {
+   "t": 1053.5,
+   "d": 1.0,
+   "text": "important as anything else."
+  },
+  {
+   "t": 1054.5,
+   "d": 4.28,
+   "text": "It is a high priority for us on the community team and for the health of the fandom."
+  },
+  {
+   "t": 1058.78,
+   "d": 11.48,
+   "text": "We found that investing in an anti-race racist fandom cultivates an audience and gives you"
+  },
+  {
+   "t": 1070.26,
+   "d": 2.71,
+   "text": "a community that sucks less."
+  },
+  {
+   "t": 1072.97,
+   "d": 4.77,
+   "text": "That is like less difficult to manage and less difficult to interact with."
+  },
+  {
+   "t": 1077.74,
+   "d": 3.55,
+   "text": "And that is all -- that's all beyond the scope of this talk."
+  },
+  {
+   "t": 1081.29,
+   "d": 6.66,
+   "text": "If you want to learn more I have to shout-out a GDC talk given by Bria Davis that you can"
+  },
+  {
+   "t": 1087.95,
+   "d": 3.52,
+   "text": "find the GDC Vault."
+  },
+  {
+   "t": 1091.47,
+   "d": 3.6,
+   "text": "We love talking about community management from Blaseball."
+  },
+  {
+   "t": 1095.07,
+   "d": 1.44,
+   "text": "Let's see."
+  },
+  {
+   "t": 1096.51,
+   "d": 3.52,
+   "text": "I can skip these a bit."
+  },
+  {
+   "t": 1100.03,
+   "d": 6.48,
+   "text": "This kind of talks about how I decided to just pick out where to start in terms of having"
+  },
+  {
+   "t": 1106.51,
+   "d": 4.43,
+   "text": "this global representation for names across the world."
+  },
+  {
+   "t": 1110.94,
+   "d": 6.85,
+   "text": "I can start with the ones that were already have a connection to the world of sports and"
+  },
+  {
+   "t": 1117.79,
+   "d": 4.21,
+   "text": "baseball specifically."
+  },
+  {
+   "t": 1122.0,
+   "d": 5.04,
+   "text": "In building up resources and having a pipeline to that and getting used to doing that research,"
+  },
+  {
+   "t": 1127.04,
+   "d": 5.59,
+   "text": "moving on to ones that I wanted to also represent and just further my curiosity, and you know,"
+  },
+  {
+   "t": 1132.63,
+   "d": 1.12,
+   "text": "you can do the same."
+  },
+  {
+   "t": 1133.75,
+   "d": 5.53,
+   "text": "You will research and find more about what you know and want to add to the game to give"
+  },
+  {
+   "t": 1139.28,
+   "d": 1.85,
+   "text": "it more life and diversity."
+  },
+  {
+   "t": 1141.13,
+   "d": 2.22,
+   "text": "In the same way, this is more stuff."
+  },
+  {
+   "t": 1143.35,
+   "d": 5.27,
+   "text": "These are supposed to be skipped slides but like you can research more about how foreign"
+  },
+  {
+   "t": 1148.62,
+   "d": 2.81,
+   "text": "names are transcribed in English."
+  },
+  {
+   "t": 1151.43,
+   "d": 5.62,
+   "text": "How do you actually source real names?"
+  },
+  {
+   "t": 1157.05,
+   "d": 2.22,
+   "text": "It is just through research."
+  },
+  {
+   "t": 1159.27,
+   "d": 4.05,
+   "text": "You do a lot of searching and looking around as many sources as possible."
+  },
+  {
+   "t": 1163.32,
+   "d": 3.66,
+   "text": "More importantly the ones you are unfamiliar with, when you are unfamiliar with language,"
+  },
+  {
+   "t": 1166.98,
+   "d": 7.11,
+   "text": "you should cross reference as many sources as possible, just so you have a wide base"
+  },
+  {
+   "t": 1174.09,
+   "d": 5.97,
+   "text": "of knowledge and you kind of make sure you are not missing things or getting misinformation."
+  },
+  {
+   "t": 1180.06,
+   "d": 7.01,
+   "text": "You can look up Egyptian names but you will get like a mommy blog about like how to name"
+  },
+  {
+   "t": 1187.07,
+   "d": 6.99,
+   "text": "your son a Pharaoh or do searches that reference census data or statistics."
+  },
+  {
+   "t": 1194.06,
+   "d": 1.3,
+   "text": "That's useful."
+  },
+  {
+   "t": 1195.36,
+   "d": 7.58,
+   "text": "It will give you a pretty good basis to find out in our case what was important was accuracy"
+  },
+  {
+   "t": 1202.94,
+   "d": 5.61,
+   "text": "to real world names and you know you can do that thorough research."
+  },
+  {
+   "t": 1208.55,
+   "d": 7.06,
+   "text": "Getting to the fun part, for me, I think was breathing new life into the these name lists"
+  },
+  {
+   "t": 1215.61,
+   "d": 2.72,
+   "text": "which is to surprise and delight."
+  },
+  {
+   "t": 1218.33,
+   "d": 3.62,
+   "text": "We have got new names."
+  },
+  {
+   "t": 1221.95,
+   "d": 7.4,
+   "text": "Eduardo Soprano is a new one."
+  },
+  {
+   "t": 1229.35,
+   "d": 3.72,
+   "text": "I don't have more to say about these names."
+  },
+  {
+   "t": 1233.07,
+   "d": 5.64,
+   "text": "I love generating names and reading them out loud."
+  },
+  {
+   "t": 1238.71,
+   "d": 6.79,
+   "text": "First tip for adding new stuff to the name pool that I worked on is to create internal"
+  },
+  {
+   "t": 1245.5,
+   "d": 1.0,
+   "text": "consistency."
+  },
+  {
+   "t": 1246.5,
+   "d": 3.22,
+   "text": "For me it was helpful to pick a repeating pattern or inspiration."
+  },
+  {
+   "t": 1249.72,
+   "d": 5.75,
+   "text": "In this case you will see that I add a lot of names themed on animals or foods."
+  },
+  {
+   "t": 1255.47,
+   "d": 3.53,
+   "text": "Especially ones that had a good sound to me."
+  },
+  {
+   "t": 1259.0,
+   "d": 7.44,
+   "text": "I kind of liken that to magic the gathering cycle cards where you can open up a booster"
+  },
+  {
+   "t": 1266.44,
+   "d": 5.67,
+   "text": "pack and you don't need to know 200-ish cards of that booster but if you pick out a few"
+  },
+  {
+   "t": 1272.11,
+   "d": 5.94,
+   "text": "that you know are thematically similar to other ones that helps you compartmentalize"
+  },
+  {
+   "t": 1278.05,
+   "d": 1.29,
+   "text": "them."
+  },
+  {
+   "t": 1279.34,
+   "d": 6.16,
+   "text": "It is less having like hundreds and hundreds."
+  },
+  {
+   "t": 1285.5,
+   "d": 2.69,
+   "text": "There is cohesivity in the world."
+  },
+  {
+   "t": 1288.19,
+   "d": 3.4,
+   "text": "Especially as far as you a game heavier on fiction."
+  },
+  {
+   "t": 1291.59,
+   "d": 5.36,
+   "text": "On world building, the kinds of name patterns you find that pop up in your world will tell"
+  },
+  {
+   "t": 1296.95,
+   "d": 1.44,
+   "text": "you more about the world."
+  },
+  {
+   "t": 1298.39,
+   "d": 5.1,
+   "text": "How parents name their kids or how names get passed down over time."
+  },
+  {
+   "t": 1303.49,
+   "d": 1.0,
+   "text": "You know?"
+  },
+  {
+   "t": 1304.49,
+   "d": 16.76,
+   "text": "That's worth thinking about."
+  },
+  {
+   "t": 1321.25,
+   "d": 6.72,
+   "text": "I was able to seed in fun things I hoped would pan out and some did."
+  },
+  {
+   "t": 1327.97,
+   "d": 6.41,
+   "text": "There was a character that got rolled with the name Zuri shoelace and I added that as"
+  },
+  {
+   "t": 1334.38,
+   "d": 1.0,
+   "text": "a fun thing."
+  },
+  {
+   "t": 1335.38,
+   "d": 2.97,
+   "text": "It is like a one in a million chance."
+  },
+  {
+   "t": 1338.35,
+   "d": 5.61,
+   "text": "What are the chances this would get pulled and pulled on to the team called the Charleston"
+  },
+  {
+   "t": 1343.96,
+   "d": 4.14,
+   "text": "shoe thieves who are shoe themed."
+  },
+  {
+   "t": 1348.1,
+   "d": 6.28,
+   "text": "I added bits here and there of I hope this gets pulled in a way that's relevant or if"
+  },
+  {
+   "t": 1354.38,
+   "d": 3.71,
+   "text": "it gets pulled in a way that's irrelevant that's special."
+  },
+  {
+   "t": 1358.09,
+   "d": 7.25,
+   "text": "In a world with Zuri Shoelace gets put on the Hawaii Friday team you would still have"
+  },
+  {
+   "t": 1365.34,
+   "d": 4.61,
+   "text": "a situation where fans of the Charleston shoe thieves were like I want that character."
+  },
+  {
+   "t": 1369.95,
+   "d": 1.41,
+   "text": "I don't care how good they are."
+  },
+  {
+   "t": 1371.36,
+   "d": 2.92,
+   "text": "They have a shoe-themed name."
+  },
+  {
+   "t": 1374.28,
+   "d": 2.15,
+   "text": "How can we steal them?"
+  },
+  {
+   "t": 1376.43,
+   "d": 7.9,
+   "text": "That's engaging players and driving mote motivation to attach to characters and follow them along"
+  },
+  {
+   "t": 1384.33,
+   "d": 1.3,
+   "text": "the game."
+  },
+  {
+   "t": 1385.63,
+   "d": 6.25,
+   "text": "And beef knight is a favorite example I am happy to talk about."
+  },
+  {
+   "t": 1391.88,
+   "d": 5.09,
+   "text": "A character got rolled with the name beef knight which is amusing on its own."
+  },
+  {
+   "t": 1396.97,
+   "d": 4.94,
+   "text": "Who doesn't like saying beef knight?"
+  },
+  {
+   "t": 1401.91,
+   "d": 7.45,
+   "text": "I added the word beef in there as a nickname that the actual sports players have because"
+  },
+  {
+   "t": 1409.36,
+   "d": 3.42,
+   "text": "it would be funny if they got rolled on to the Dallas stakes and they didn't -- Dallas"
+  },
+  {
+   "t": 1412.78,
+   "d": 1.0,
+   "text": "steaks."
+  },
+  {
+   "t": 1413.78,
+   "d": 6.08,
+   "text": "But because they didn't we see people saying how do we get them on there?"
+  },
+  {
+   "t": 1419.86,
+   "d": 3.17,
+   "text": "And very quickly, beef knight died."
+  },
+  {
+   "t": 1423.03,
+   "d": 4.55,
+   "text": "Lots of jokes ensued."
+  },
+  {
+   "t": 1427.58,
+   "d": 6.23,
+   "text": "And even funnier, who replaced beef knight but a character named flan prince which I"
+  },
+  {
+   "t": 1433.81,
+   "d": 5.38,
+   "text": "think is funnier than anything we could have written ourselves."
+  },
+  {
+   "t": 1439.19,
+   "d": 9.25,
+   "text": "It is -- the death of beef knight replaced by flan prince who has a similarly themed"
+  },
+  {
+   "t": 1448.44,
+   "d": 6.76,
+   "text": "name for reasons that are similar and one in a million chance to have happened?"
+  },
+  {
+   "t": 1455.2,
+   "d": 1.21,
+   "text": "It is amazing."
+  },
+  {
+   "t": 1456.41,
+   "d": 6.38,
+   "text": "This created a character that instantly has a backstory and engagement and like people"
+  },
+  {
+   "t": 1462.79,
+   "d": 5.71,
+   "text": "are interested in them and are already thinking about ways to explain the randomness like"
+  },
+  {
+   "t": 1468.5,
+   "d": 3.15,
+   "text": "how are they related?"
+  },
+  {
+   "t": 1471.65,
+   "d": 3.06,
+   "text": "Was flan prince the leech of beef knight?"
+  },
+  {
+   "t": 1474.71,
+   "d": 1.27,
+   "text": "Did they have a relationship?"
+  },
+  {
+   "t": 1475.98,
+   "d": 6.34,
+   "text": "That's all this fun stuff that can come out from seeding little fun things and fun little"
+  },
+  {
+   "t": 1482.32,
+   "d": 4.66,
+   "text": "consistency in a random name generator and when it spits out a hundred things people"
+  },
+  {
+   "t": 1486.98,
+   "d": 5.4,
+   "text": "are of course going to try to connect the dots one way or another, right?"
+  },
+  {
+   "t": 1492.38,
+   "d": 3.69,
+   "text": "So, yeah, let's talk about testing and tuning."
+  },
+  {
+   "t": 1496.07,
+   "d": 3.42,
+   "text": "I will try to get through these quick."
+  },
+  {
+   "t": 1499.49,
+   "d": 4.67,
+   "text": "How do I -- how do we decide on what success looks like?"
+  },
+  {
+   "t": 1504.16,
+   "d": 4.91,
+   "text": "For me, it was just doing trial and error quick and easy."
+  },
+  {
+   "t": 1509.07,
+   "d": 4.78,
+   "text": "You know, you could write a program to like tag names and try to make sure they are balanced"
+  },
+  {
+   "t": 1513.85,
+   "d": 4.26,
+   "text": "but we just wanted to kind of roll the numbers."
+  },
+  {
+   "t": 1518.11,
+   "d": 4.06,
+   "text": "For me it was generating 10 in a spreadsheet over and over as I worked."
+  },
+  {
+   "t": 1522.17,
+   "d": 6.79,
+   "text": "I just read them out loud to myself and see if they feel good and have a good mouth feel"
+  },
+  {
+   "t": 1528.96,
+   "d": 1.0,
+   "text": "and feel balanced."
+  },
+  {
+   "t": 1529.96,
+   "d": 4.69,
+   "text": "Then once I decided I was done with adding names, I created a target ratio."
+  },
+  {
+   "t": 1534.65,
+   "d": 4.57,
+   "text": "That being for every 10 names I wanted to achieve these goals, for every 10 names I"
+  },
+  {
+   "t": 1539.22,
+   "d": 7.64,
+   "text": "wanted 1-2 to be absurd and comedic and 5-10 to sound explicitly non-white, and 9-10 to"
+  },
+  {
+   "t": 1546.86,
+   "d": 7.07,
+   "text": "be fun to say, and maybe one is a tongue twister in this 10 I generated here."
+  },
+  {
+   "t": 1553.93,
+   "d": 11.34,
+   "text": "Quinoa Peu is the one that's difficult to say -- Pugh."
+  },
+  {
+   "t": 1565.27,
+   "d": 3.28,
+   "text": "That's only one."
+  },
+  {
+   "t": 1568.55,
+   "d": 5.75,
+   "text": "If half were hard to pronounce, I would have to look at those on the list and maybe either"
+  },
+  {
+   "t": 1574.3,
+   "d": 4.72,
+   "text": "remove them or change them or change the proportions by adding other things."
+  },
+  {
+   "t": 1579.02,
+   "d": 4.22,
+   "text": "So it was a lot of trial and error to balance everything out."
+  },
+  {
+   "t": 1583.24,
+   "d": 7.02,
+   "text": "My last tip here for working on the same generator was to be open to feedback."
+  },
+  {
+   "t": 1590.26,
+   "d": 1.8,
+   "text": "Remember that this is a living document."
+  },
+  {
+   "t": 1592.06,
+   "d": 4.96,
+   "text": "Not only is your game a living document in which you are interacting with the audience"
+  },
+  {
+   "t": 1597.02,
+   "d": 3.59,
+   "text": "and fans but names can ask should change."
+  },
+  {
+   "t": 1600.61,
+   "d": 4.33,
+   "text": "They are susceptible to negative associations you couldn't imagine."
+  },
+  {
+   "t": 1604.94,
+   "d": 7.93,
+   "text": "You will probably get something wrong and it isn't personable and beyond predictions."
+  },
+  {
+   "t": 1612.87,
+   "d": 7.08,
+   "text": "In Blaseball one of the names in the pool was the last name of a real life famous football"
+  },
+  {
+   "t": 1619.95,
+   "d": 1.0,
+   "text": "player."
+  },
+  {
+   "t": 1620.95,
+   "d": 2.19,
+   "text": "I forgot what it was."
+  },
+  {
+   "t": 1623.14,
+   "d": 7.26,
+   "text": "Famous football player who got generated on to a couple teams and in 2020 that real life"
+  },
+  {
+   "t": 1630.4,
+   "d": 6.76,
+   "text": "person said some pretty crappy things about the Black Lives Matter movement and the people,"
+  },
+  {
+   "t": 1637.16,
+   "d": 4.3,
+   "text": "the Blaseball fans on that team said, you know, brought it to our attention and said"
+  },
+  {
+   "t": 1641.46,
+   "d": 5.18,
+   "text": "this kind of sucks every time we cheer for our team we are cheering for this guy whose"
+  },
+  {
+   "t": 1646.64,
+   "d": 5.25,
+   "text": "namesake is in here can you change it and we were like actually yeah."
+  },
+  {
+   "t": 1651.89,
+   "d": 1.88,
+   "text": "That is no trouble to us."
+  },
+  {
+   "t": 1653.77,
+   "d": 1.0,
+   "text": "Doesn't cost us anything."
+  },
+  {
+   "t": 1654.77,
+   "d": 8.35,
+   "text": "And it is a win-win situation to bolster the narrative and remove an element that reminds"
+  },
+  {
+   "t": 1663.12,
+   "d": 6.55,
+   "text": "people of something really crappy and flourish it with something that everyone can enjoy"
+  },
+  {
+   "t": 1669.67,
+   "d": 2.72,
+   "text": "better."
+  },
+  {
+   "t": 1672.39,
+   "d": 4.37,
+   "text": "So in addition to that, strongly consider hiring a sensitivity consultant depending"
+  },
+  {
+   "t": 1676.76,
+   "d": 1.63,
+   "text": "on the subject matter."
+  },
+  {
+   "t": 1678.39,
+   "d": 6.05,
+   "text": "If you are taking on a fantasy game that takes a lot of inspiration from a real world culture"
+  },
+  {
+   "t": 1684.44,
+   "d": 5.33,
+   "text": "there are people out there more expert than you are and it is worth listening to them"
+  },
+  {
+   "t": 1689.77,
+   "d": 5.77,
+   "text": "and hiring them to hear what they have to say and hear what their feedback is and make"
+  },
+  {
+   "t": 1695.54,
+   "d": 2.96,
+   "text": "sure you are not making any missteps."
+  },
+  {
+   "t": 1698.5,
+   "d": 2.17,
+   "text": "That is it."
+  },
+  {
+   "t": 1700.67,
+   "d": 2.15,
+   "text": "I think that's 30 minutes."
+  },
+  {
+   "t": 1702.82,
+   "d": 2.09,
+   "text": "I am happy to answer questions here."
+  },
+  {
+   "t": 1704.91,
+   "d": 1.0,
+   "text": "ALEXEI: Thank you."
+  },
+  {
+   "t": 1705.91,
+   "d": 1.0,
+   "text": "That was great."
+  },
+  {
+   "t": 1706.91,
+   "d": 1.0,
+   "text": "Well done."
+  },
+  {
+   "t": 1707.91,
+   "d": 4.85,
+   "text": "I will say if anyone wants to throw up a question we can probably do one especially since this"
+  },
+  {
+   "t": 1712.76,
+   "d": 2.71,
+   "text": "is the start of the social break."
+  },
+  {
+   "t": 1715.47,
+   "d": 1.72,
+   "text": "Yeah, no, excellent."
+  },
+  {
+   "t": 1717.19,
+   "d": 5.79,
+   "text": "Fun to watch people experience the beef knight flan prince moment in chat."
+  },
+  {
+   "t": 1722.98,
+   "d": 2.02,
+   "text": "ELLIOT: I love beef knight."
+  },
+  {
+   "t": 1725.0,
+   "d": 3.75,
+   "text": "ALEXEI: It is so good."
+  },
+  {
+   "t": 1728.75,
+   "d": 5.88,
+   "text": "The experience of working on the game is fun."
+  },
+  {
+   "t": 1734.63,
+   "d": 2.83,
+   "text": "We were surprised as anybody."
+  },
+  {
+   "t": 1737.46,
+   "d": 4.79,
+   "text": "ELLIOT: All remote obviously but we were in our separate departments."
+  },
+  {
+   "t": 1742.25,
+   "d": 5.99,
+   "text": "I was so excited to work on design stuff and we would have if Blaseball went on but there"
+  },
+  {
+   "t": 1748.24,
+   "d": 1.0,
+   "text": "is always a future."
+  },
+  {
+   "t": 1749.24,
+   "d": 6.73,
+   "text": "ALEXEI: You are a community designer which isn't a super common job title in the industry"
+  },
+  {
+   "t": 1755.97,
+   "d": 1.0,
+   "text": "but awesome."
+  },
+  {
+   "t": 1756.97,
+   "d": 3.64,
+   "text": "More places should use it because the community team being tied into the design was crucial"
+  },
+  {
+   "t": 1760.61,
+   "d": 9.49,
+   "text": "for things like this and you need to be listening to the community and how it is responding"
+  },
+  {
+   "t": 1770.1,
+   "d": 8.22,
+   "text": "and feeling about names and factor that into the design process to make something compelling."
+  },
+  {
+   "t": 1778.32,
+   "d": 1.23,
+   "text": "ELLIOT: 100%."
+  },
+  {
+   "t": 1779.55,
+   "d": 6.15,
+   "text": "Since so much of Blaseball relies on the people interacting with the game it was important"
+  },
+  {
+   "t": 1785.7,
+   "d": 6.16,
+   "text": "to cultivate that in a healthy way not just in a way that like people are not having fights"
+  },
+  {
+   "t": 1791.86,
+   "d": 5.26,
+   "text": "but also in a way people are engaging with the game in a way that makes them happy and"
+  },
+  {
+   "t": 1797.12,
+   "d": 5.08,
+   "text": "not just complaining all of the time as a lot of gamer communities end up getting into"
+  },
+  {
+   "t": 1802.2,
+   "d": 2.4,
+   "text": "as they get bigger."
+  },
+  {
+   "t": 1804.6,
+   "d": 5.15,
+   "text": "ALEXEI: There is a question of will you release the name list?"
+  },
+  {
+   "t": 1809.75,
+   "d": 3.0,
+   "text": "I don't think we are allowed to release it?"
+  },
+  {
+   "t": 1812.75,
+   "d": 2.0,
+   "text": "ELLIOT: I will find a way."
+  },
+  {
+   "t": 1814.75,
+   "d": 3.1,
+   "text": "It is not technically my ownership."
+  },
+  {
+   "t": 1817.85,
+   "d": 3.02,
+   "text": "I would find a way to do something with it."
+  },
+  {
+   "t": 1820.87,
+   "d": 4.21,
+   "text": "ALEXEI: I know people could tweet at you for a while."
+  },
+  {
+   "t": 1825.08,
+   "d": 5.46,
+   "text": "ELLIOT: If you find my Twitter you can @ me and I will generate a name just for you."
+  },
+  {
+   "t": 1830.54,
+   "d": 6.09,
+   "text": "ALEXEI: You can @ Elliot to get your Blaseball generator official name."
+  },
+  {
+   "t": 1836.63,
+   "d": 1.0,
+   "text": "Excellent."
+  },
+  {
+   "t": 1837.63,
+   "d": 5.63,
+   "text": "We should probably move on to the social space."
+  },
+  {
+   "t": 1843.26,
+   "d": 4.75,
+   "text": "Thank you so much, Elliot."
+  }
+ ]
+}

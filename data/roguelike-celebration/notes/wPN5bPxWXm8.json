@@ -1,0 +1,129 @@
+{
+  "id": "wPN5bPxWXm8",
+  "title": "Michael Langford - For the Squishies: Making Roguelikes Accessible to Children and their Parents",
+  "speaker": "Michael Langford",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=wPN5bPxWXm8",
+  "talk_type": "design",
+  "summary": "In this lightning talk, iOS developer Michael Langford gives cheap, test-driven ways to make roguelikes playable by young children and their parents, arguing it widens the market, especially on consoles. He proposes a series of role-play tests (small hands, cheese strategies in co-op, shaking the controller, pre-literate and older eyes, slow-loading hardware, and a 'shame' test for content) each paired with a low-cost fix such as button remapping, toggled items instead of held chords, extra confirmations, icons, larger text, and content toggles. In Q&A he suggests optional modes that remove or soften permadeath, citing Son of a Witch.",
+  "games": [
+    "Son of a Witch",
+    "Swords of Ditto",
+    "Cat Quest 2",
+    "Rayman Legends",
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "children market",
+      "kind": "principle",
+      "claim": "Roguelikes suit young children because they offer lots of replayable content at a single skill level, and small accessibility changes open up parents' large spending on children, especially on non-PC platforms.",
+      "detail": "Langford contrasts roguelikes with 'one and done' games like Mario: a kid can replay a roguelike many times at an appropriate level. He frames child accessibility as cost-effective changes that raise sales.",
+      "t": 140,
+      "quote": "A kid can play a Roguelike many times at a level appropriate for them far more than something like a Mario Brothers Game.",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "small hands",
+      "kind": "technique",
+      "claim": "Test whether a player with small hands can perform the game's required inputs without discomfort by recording a child playing with various controllers, watching for reach problems and chorded inputs.",
+      "detail": "Kids climb up the controller and flick sticks fighting dead zones. During testing, remap shoulder buttons down to see whether they can then finish. Chorded held inputs almost always trip up kids and are also an injury risk for adults on keyboards.",
+      "t": 331,
+      "quote": "One huge problem that will almost always trip up kids is look for issues with corded-held modes.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "button remapping",
+      "kind": "technique",
+      "claim": "In-game button remapping fixes almost all parents' control issues without reworking the control scheme, and held-button modes can be replaced by equippable, toggled items.",
+      "detail": "System-level remapping is cumbersome and fails with multiple controllers. Langford suggests turning hold-to-activate modes into items the player swaps to, as higher-rated games do.",
+      "t": 376,
+      "quote": "You can add a button fixing map and that will address almost 100% of parent issues.",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "co-op with children",
+      "kind": "technique",
+      "claim": "In multiplayer, children survive with simple 'cheese' strategies like circling and shooting, so co-op design should let such strategies get through rather than punishing them.",
+      "detail": "Testers should role-play deliberately weak AI-like strategies a parent tells a child to use, note which items and characters enable them, and flip the incentive: fight cheese in single player but let it work in multiplayer so the child can play alongside a parent.",
+      "t": 490,
+      "quote": "you might want to fight cheese strategy in single player but in multiplayer you want to flip the incentive so cheese can get past",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "character choice",
+      "kind": "principle",
+      "claim": "Characters that enable easy strategies should include options of different genders, since young children want to play a character like themselves.",
+      "detail": "Langford says at the youngest ages there's no ability difference by gender, but kids will want the character matching their gender if the cheese-friendly characters don't allow it.",
+      "t": 512,
+      "quote": "figure out if you have characters that are the good ones for cheese and they are not of a gender that some kid Nate -- may not want to play",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "confirmation screens",
+      "kind": "technique",
+      "claim": "Test menus by shaking a wrapped controller at random, and add stronger confirmations where random input could delete a profile, end a run or waste rare items.",
+      "detail": "Kids snack, wiggle and bump every button. Pause and load menus are where random input does damage; adults also make such accidents. A more complicated confirm screen is a quick fix.",
+      "t": 569,
+      "quote": "did you delete player profile that took 80 hours to make?",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "pre-literate players",
+      "kind": "technique",
+      "claim": "Simulate pre-literate players by replacing your font's glyphs with unreadable characters; if someone else can still get through the game, a child probably can, and icons fix most gaps.",
+      "detail": "Langford calls it turning on a fake localization. The general fix is to add glyphs, like a heart or a bullseye for archery, to important text.",
+      "t": 624,
+      "quote": "hack all the characters to be similar size characters but different, and play there game that way and congratulations you just made a new language",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "text size",
+      "kind": "technique",
+      "claim": "For parents' older eyes, play from 1.5 times the normal distance from the screen, then cut down and enlarge on-screen text.",
+      "detail": "A quick vision test paired with reducing the amount of text and making it bigger.",
+      "t": 658,
+      "quote": "Sit one and a half times as far as normal from your screen or television and play the game.",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "load screens",
+      "kind": "technique",
+      "claim": "Run the game on slow hardware and fix any death that happens right after a load screen by adding a partially obscuring confirmation screen or transit hub rather than optimizing loading.",
+      "detail": "Players who look away during loads die on arrival. Langford says optimizing load performance is a lot of work; a confirmation screen solves it and needn't appear on fast systems. He cites Swords of Ditto's load screens as a problem.",
+      "t": 682,
+      "quote": "Any time they die right after a load screen, that's what you got to fix. Don't go fix your load screen performance.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "content toggles",
+      "kind": "technique",
+      "claim": "A 'shame test' (imagining a child you have no relationship with is within earshot) finds gross sounds, graphic art or deceptive content to put behind toggles so parents can let children play.",
+      "detail": "Langford stages a scenario where you're playing within earshot of a friend's husband's boss's child, someone you could easily embarrass, and screenshot every moment you'd feel anxious. If such content can be turned off by modes, the game is playable for children; he stresses art should still express the full range of emotions.",
+      "t": 780,
+      "quote": "If that's behind modes where they can turn off a lot of that, a lot of that, then the game is playable to children.",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "technique",
+      "claim": "For less proficient players such as children, offer optional modes that remove permadeath or keep it with easier difficulty, as Son of a Witch did.",
+      "detail": "In Q&A Langford says permadeath helps keep a game at the kid's level, but giving them a no-permadeath option lets them experience the rest of the game; the host notes Caves of Qud added such a mode.",
+      "t": 918,
+      "quote": "Permadeath is useful for keeping the game at the level of the kid but you may also want to give them a chance to not have permadeath",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

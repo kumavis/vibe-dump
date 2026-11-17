@@ -1,0 +1,2322 @@
+{
+ "id": "s9Wyn9BJJI4",
+ "url": "https://www.youtube.com/watch?v=s9Wyn9BJJI4",
+ "title": "Scott Kovach - Managing Game Logic With Rule Systems - Using Relational Programming to Build Games",
+ "speaker": "Scott Kovach",
+ "talk_title": "Managing Game Logic With Rule Systems - Using Relational Programming to Build Games",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 2100,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nScott is a computer science PhD student at Stanford. He's interested in helping people build programs that are simple and understandable.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 238,
+   "title": "Puzzle Script"
+  },
+  {
+   "start": 399,
+   "title": "Interactive Fiction Games"
+  },
+  {
+   "start": 612,
+   "title": "Creating Many Intricate Rule Systems That Interact"
+  },
+  {
+   "start": 814,
+   "title": "Picking a Programming Language"
+  },
+  {
+   "start": 832,
+   "title": "Haskell"
+  },
+  {
+   "start": 987,
+   "title": "Types of Facts"
+  },
+  {
+   "start": 1135,
+   "title": "Facts with Variables"
+  },
+  {
+   "start": 1238,
+   "title": "Game Loop"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 5120,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.33,
+   "d": 2.87,
+   "text": "SCOTT KOVACH: My name is Scott."
+  },
+  {
+   "t": 3.2,
+   "d": 6.91,
+   "text": "The name of my talk today is Managing Game Logic with Relational Rule Programs."
+  },
+  {
+   "t": 10.11,
+   "d": 6.44,
+   "text": "That title is kind of vague and kind of a mouthful so let me explain."
+  },
+  {
+   "t": 16.55,
+   "d": 7.31,
+   "text": "Today I am mainly going to talk about sort of the interactions between programming languages"
+  },
+  {
+   "t": 23.86,
+   "d": 1.35,
+   "text": "and game programming."
+  },
+  {
+   "t": 25.21,
+   "d": 7.17,
+   "text": "I am going to try to argue that coming up with new domain-specific languages for working"
+  },
+  {
+   "t": 32.38,
+   "d": 3.33,
+   "text": "with different types of games is a good idea."
+  },
+  {
+   "t": 35.71,
+   "d": 6.2,
+   "text": "I will talk about a couple examples with puzzle games and interactive fiction."
+  },
+  {
+   "t": 41.91,
+   "d": 8.53,
+   "text": "In the second part, I am going to talk about some problems that I think tend to arise when"
+  },
+  {
+   "t": 50.44,
+   "d": 6.89,
+   "text": "making Roguelikes and other complex rule-based games and some progress I have made in making"
+  },
+  {
+   "t": 57.33,
+   "d": 2.9,
+   "text": "a new programming language to address those problems."
+  },
+  {
+   "t": 60.23,
+   "d": 3.45,
+   "text": "First, I have to confess."
+  },
+  {
+   "t": 63.68,
+   "d": 4.07,
+   "text": "As I alluded to in the bio, I have never actually finished writing a Roguelike."
+  },
+  {
+   "t": 67.75,
+   "d": 4.86,
+   "text": "Somehow I slipped through the vetting process for this conference."
+  },
+  {
+   "t": 72.61,
+   "d": 4.04,
+   "text": "My thought process is typically something like dang, it would be really fun to make"
+  },
+  {
+   "t": 76.65,
+   "d": 6.42,
+   "text": "a Roguelike like this but programming is kind of tedious and not that much fun sometimes"
+  },
+  {
+   "t": 83.07,
+   "d": 6.21,
+   "text": "so maybe I’ll try to design a new language to make the problem a little bit easier."
+  },
+  {
+   "t": 89.28,
+   "d": 10.34,
+   "text": "Now, I know this is kind of a perverse sort of procrastination but I will take the rest"
+  },
+  {
+   "t": 99.62,
+   "d": 6.46,
+   "text": "of the talk to try to rationalize my behavior."
+  },
+  {
+   "t": 106.08,
+   "d": 6.72,
+   "text": "The main point here is that there is a lot of incidental problems that come up when you"
+  },
+  {
+   "t": 112.8,
+   "d": 1.61,
+   "text": "are implementing a game."
+  },
+  {
+   "t": 114.41,
+   "d": 4.87,
+   "text": "I think that if you have a lot of experience programming sometimes you forget about how"
+  },
+  {
+   "t": 119.28,
+   "d": 1.78,
+   "text": "hard it can be to start."
+  },
+  {
+   "t": 121.06,
+   "d": 6.16,
+   "text": "There’s a lot of libraries to help you build roguelikes but to even start using one you"
+  },
+  {
+   "t": 127.22,
+   "d": 5.76,
+   "text": "have to overcome some problems like package management, dealing with different dependencies"
+  },
+  {
+   "t": 132.98,
+   "d": 6.07,
+   "text": "and versions of the libraries you use, you have to learn syntax and APIs for the libraries,"
+  },
+  {
+   "t": 139.05,
+   "d": 8.17,
+   "text": "and you also have to work on building up mental model of how the machine will actually do"
+  },
+  {
+   "t": 147.22,
+   "d": 4.09,
+   "text": "with your program, and sometimes you have to spend a lot of time thinking about data"
+  },
+  {
+   "t": 151.31,
+   "d": 2.13,
+   "text": "structures and things like that."
+  },
+  {
+   "t": 153.44,
+   "d": 6.67,
+   "text": "Now, I don't think that building games is fundamentally like a super easy thing to do."
+  },
+  {
+   "t": 160.11,
+   "d": 6.49,
+   "text": "I think there is a lot of really hard problems to solve, like coming up with sets of rules"
+  },
+  {
+   "t": 166.6,
+   "d": 4.79,
+   "text": "and game mechanics that are fun and fair and easy to learn."
+  },
+  {
+   "t": 171.39,
+   "d": 4.86,
+   "text": "Coming up with user interfaces that communicate effectively is really hard."
+  },
+  {
+   "t": 176.25,
+   "d": 5.49,
+   "text": "I think if we are careful about the languages we use, we can help people spend more time"
+  },
+  {
+   "t": 181.74,
+   "d": 4.97,
+   "text": "thinking about the interesting problems they need to solve and less time worrying about"
+  },
+  {
+   "t": 186.71,
+   "d": 2.75,
+   "text": "the annoying problems."
+  },
+  {
+   "t": 189.46,
+   "d": 5.99,
+   "text": "First, I am going to talk about a couple of really cool projects that you all should check"
+  },
+  {
+   "t": 195.45,
+   "d": 1.52,
+   "text": "out."
+  },
+  {
+   "t": 196.97,
+   "d": 7.31,
+   "text": "The first is a specialized language for making puzzle games, especially sokoban-based two-dimensional"
+  },
+  {
+   "t": 204.28,
+   "d": 4.75,
+   "text": "tile base puzzles and the second one is about interactive fiction."
+  },
+  {
+   "t": 209.03,
+   "d": 6.4,
+   "text": "My pdf slides are not doing justice to this animated gif, but imagine that the little"
+  },
+  {
+   "t": 215.43,
+   "d": 6.78,
+   "text": "guy here is moving around, pushing the orange crates and trying to align them with the black"
+  },
+  {
+   "t": 222.21,
+   "d": 1.0,
+   "text": "boxes."
+  },
+  {
+   "t": 223.21,
+   "d": 7.1,
+   "text": "This is a basic mechanic in the sokoban genre, although there’s lots of variations."
+  },
+  {
+   "t": 230.31,
+   "d": 4.45,
+   "text": "Sort of the whole core game mechanic is summed up in this one sentence."
+  },
+  {
+   "t": 234.76,
+   "d": 5.06,
+   "text": "The player is trying to walk into the crate and push the crate."
+  },
+  {
+   "t": 239.82,
+   "d": 8.25,
+   "text": "PuzzleScript is a special language and development environment made by Stephen Lavelle that helps"
+  },
+  {
+   "t": 248.07,
+   "d": 6.72,
+   "text": "people focus on level design and just sort of the core rules for the game and avoids"
+  },
+  {
+   "t": 254.79,
+   "d": 3.77,
+   "text": "a lot of other problems."
+  },
+  {
+   "t": 258.56,
+   "d": 1.6,
+   "text": "Someone comes along and plays a sokoban game."
+  },
+  {
+   "t": 260.16,
+   "d": 2.7,
+   "text": "They might ask, how does this work?"
+  },
+  {
+   "t": 262.86,
+   "d": 3.49,
+   "text": "Maybe I’d like to change it, make some tweaks."
+  },
+  {
+   "t": 266.35,
+   "d": 3.61,
+   "text": "PuzzleScript gives you this remarkable answer which is there is only one line of code in"
+  },
+  {
+   "t": 269.96,
+   "d": 1.0,
+   "text": "the game."
+  },
+  {
+   "t": 270.96,
+   "d": 4.0,
+   "text": "I’ll go ahead and explain it."
+  },
+  {
+   "t": 274.96,
+   "d": 2.88,
+   "text": "You should think of it as a rule."
+  },
+  {
+   "t": 277.84,
+   "d": 6.35,
+   "text": "You can see the arrow in the middle which separates the pattern on the left from the"
+  },
+  {
+   "t": 284.19,
+   "d": 2.17,
+   "text": "consequence on the right."
+  },
+  {
+   "t": 286.36,
+   "d": 5.04,
+   "text": "Basically, what this pattern denotes is that when the player is next to a crate and wants"
+  },
+  {
+   "t": 291.4,
+   "d": 5.3,
+   "text": "to move towards the crate, we should attempt to move the crate as well."
+  },
+  {
+   "t": 296.7,
+   "d": 4.36,
+   "text": "That's what the propagated arrow on the right means."
+  },
+  {
+   "t": 301.06,
+   "d": 5.07,
+   "text": "Now as you might imagine, this language is not very good if you want to reverse the linked"
+  },
+  {
+   "t": 306.13,
+   "d": 6.34,
+   "text": "list in place, or account the frequency of words in a passage of English text."
+  },
+  {
+   "t": 312.47,
+   "d": 6.24,
+   "text": "It is simply not designed for those things but instead provides a well thought out toolkit"
+  },
+  {
+   "t": 318.71,
+   "d": 3.53,
+   "text": "of mechanisms that are useful for puzzle games."
+  },
+  {
+   "t": 322.24,
+   "d": 5.18,
+   "text": "For instance, by simply reversing the direction of his arrow that shows up three times in"
+  },
+  {
+   "t": 327.42,
+   "d": 8.45,
+   "text": "the rule, you have a new rule that allows the player to pull crates instead of pushing"
+  },
+  {
+   "t": 335.87,
+   "d": 1.0,
+   "text": "them."
+  },
+  {
+   "t": 336.87,
+   "d": 5.31,
+   "text": "Furthermore, it gives the designer of the game a simple model of what the machine is"
+  },
+  {
+   "t": 342.18,
+   "d": 1.74,
+   "text": "going to do with their program."
+  },
+  {
+   "t": 343.92,
+   "d": 6.33,
+   "text": "From the documentation, the whole engine fits on one slide."
+  },
+  {
+   "t": 350.25,
+   "d": 3.74,
+   "text": "The player is the thing that's trying to move around."
+  },
+  {
+   "t": 353.99,
+   "d": 4.63,
+   "text": "Each of the rules get applied as often as they can given the movement, then the movement"
+  },
+  {
+   "t": 358.62,
+   "d": 4.61,
+   "text": "happens, and then there is an extra stage for other stuff that might want to do."
+  },
+  {
+   "t": 363.23,
+   "d": 5.66,
+   "text": "Clearly there is some detail left out here but this is a good enough model that people"
+  },
+  {
+   "t": 368.89,
+   "d": 6.07,
+   "text": "can get started writing games pretty easily."
+  },
+  {
+   "t": 374.96,
+   "d": 7.22,
+   "text": "In addition to that, the toolkit comes along with some good tools for making pixel art"
+  },
+  {
+   "t": 382.18,
+   "d": 3.68,
+   "text": "and making levels and sharing the things you make online."
+  },
+  {
+   "t": 385.86,
+   "d": 2.34,
+   "text": "Go check it out."
+  },
+  {
+   "t": 388.2,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 389.2,
+   "d": 3.92,
+   "text": "The other example is in the domain of interactive fiction."
+  },
+  {
+   "t": 393.12,
+   "d": 6.74,
+   "text": "Very interesting language that wanted to test this hypothesis that the right way to author"
+  },
+  {
+   "t": 399.86,
+   "d": 4.92,
+   "text": "interactive fiction games is by using natural language."
+  },
+  {
+   "t": 404.78,
+   "d": 4.83,
+   "text": "The programming language is actually sort of a dialect of English."
+  },
+  {
+   "t": 409.61,
+   "d": 6.69,
+   "text": "If you are not familiar with interactive fiction, a typical situation looks like this."
+  },
+  {
+   "t": 416.3,
+   "d": 8.06,
+   "text": "Mainly the developer is writing narrative descriptions of scenery and items that the"
+  },
+  {
+   "t": 424.36,
+   "d": 4.72,
+   "text": "player might want to interact with and options they have to pursue."
+  },
+  {
+   "t": 429.08,
+   "d": 5.1,
+   "text": "The player interacts with the game by typing commands that are parsed and turned into game"
+  },
+  {
+   "t": 434.18,
+   "d": 1.66,
+   "text": "actions."
+  },
+  {
+   "t": 435.84,
+   "d": 4.5,
+   "text": "This is what a player sees when they're playing a game and this is what the author sees when"
+  },
+  {
+   "t": 440.34,
+   "d": 2.73,
+   "text": "they are editing an Inform 7 program."
+  },
+  {
+   "t": 443.07,
+   "d": 3.29,
+   "text": "This is actually a program, I think it’s very beautiful."
+  },
+  {
+   "t": 446.36,
+   "d": 1.94,
+   "text": "It says east of the garden is the gazebo."
+  },
+  {
+   "t": 448.3,
+   "d": 2.96,
+   "text": "Above is the treehouse."
+  },
+  {
+   "t": 451.26,
+   "d": 2.13,
+   "text": "A billiards table is in the gazebo."
+  },
+  {
+   "t": 453.39,
+   "d": 1.0,
+   "text": "On it is a trophy cup."
+  },
+  {
+   "t": 454.39,
+   "d": 3.84,
+   "text": "A starting pistol is in the cup."
+  },
+  {
+   "t": 458.23,
+   "d": 4.61,
+   "text": "We see there’s absolutely no angle braces or funny programming syntax."
+  },
+  {
+   "t": 462.84,
+   "d": 5.12,
+   "text": "It more or less flows like regular English text, and it has some pretty crazy features"
+  },
+  {
+   "t": 467.96,
+   "d": 6.49,
+   "text": "like there’s a pronoun in the fourth sentence, presumably referring to the billiards table."
+  },
+  {
+   "t": 474.45,
+   "d": 3.39,
+   "text": "The engine is able to figure it out based on the properties of the different objects"
+  },
+  {
+   "t": 477.84,
+   "d": 1.79,
+   "text": "in the scene."
+  },
+  {
+   "t": 479.63,
+   "d": 4.39,
+   "text": "Similarly the second sentence is elaborating on the first sentence without unnecessarily"
+  },
+  {
+   "t": 484.02,
+   "d": 3.54,
+   "text": "duplicating text from it."
+  },
+  {
+   "t": 487.56,
+   "d": 3.31,
+   "text": "It goes beyond static scene descriptions."
+  },
+  {
+   "t": 490.87,
+   "d": 4.42,
+   "text": "Here is part of a program that defines a new sort of quantity."
+  },
+  {
+   "t": 495.29,
+   "d": 5.42,
+   "text": "The first paragraph defines weight as a new type of property that something might have."
+  },
+  {
+   "t": 500.71,
+   "d": 4.7,
+   "text": "Defines the syntax for specifying a weight by giving an example."
+  },
+  {
+   "t": 505.41,
+   "d": 5.65,
+   "text": "And it establishes some default behavior so that the author doesn't have to go through"
+  },
+  {
+   "t": 511.06,
+   "d": 6.13,
+   "text": "and laboriously append weight attributes to all the data structures they have implicitly"
+  },
+  {
+   "t": 517.19,
+   "d": 2.45,
+   "text": "built up in their program."
+  },
+  {
+   "t": 519.64,
+   "d": 5.12,
+   "text": "The second paragraph defines a special kind of weight and it actually contains a rule"
+  },
+  {
+   "t": 524.76,
+   "d": 4.63,
+   "text": "which specifies a new behavior in the world."
+  },
+  {
+   "t": 529.39,
+   "d": 4.49,
+   "text": "We see there is a sentence that says definition, a container is bursting if the total weight"
+  },
+  {
+   "t": 533.88,
+   "d": 4.53,
+   "text": "of things in it is greater than its breaking strain."
+  },
+  {
+   "t": 538.41,
+   "d": 4.37,
+   "text": "Just in that totally natural sentence, we have written a program that will update the"
+  },
+  {
+   "t": 542.78,
+   "d": 6.25,
+   "text": "world and mark things as bursting whenever they are."
+  },
+  {
+   "t": 549.03,
+   "d": 6.15,
+   "text": "Bursting isn't defined but presumably somewhere else there’s some rules that change a bursting"
+  },
+  {
+   "t": 555.18,
+   "d": 4.26,
+   "text": "container into something that is probably not a container any more."
+  },
+  {
+   "t": 559.44,
+   "d": 5.39,
+   "text": "There is a little scene that uses the concept."
+  },
+  {
+   "t": 564.83,
+   "d": 2.22,
+   "text": "Now I’ll try to pose the question."
+  },
+  {
+   "t": 567.05,
+   "d": 5.88,
+   "text": "What if we wanted to create a really ideal programming language for making Roguelikes?"
+  },
+  {
+   "t": 572.93,
+   "d": 12.18,
+   "text": "I have no idea what the optimal answer is there but I wanted to call attention to a"
+  },
+  {
+   "t": 585.11,
+   "d": 1.85,
+   "text": "certain problem that I think comes up a lot."
+  },
+  {
+   "t": 586.96,
+   "d": 5.73,
+   "text": "I know this slide absolutely does not do justice to all the problems that arise in building"
+  },
+  {
+   "t": 592.69,
+   "d": 1.0,
+   "text": "roguelikes."
+  },
+  {
+   "t": 593.69,
+   "d": 4.09,
+   "text": "There have been dozens of interesting talks at this conference for several years discussing"
+  },
+  {
+   "t": 597.78,
+   "d": 7.17,
+   "text": "that and discussing all the different interesting problems that come up."
+  },
+  {
+   "t": 604.95,
+   "d": 7.86,
+   "text": "The one I am curious about and the one I think is amenable to like a language design is the"
+  },
+  {
+   "t": 612.81,
+   "d": 6.63,
+   "text": "problem of creating many intricate rule systems that interact."
+  },
+  {
+   "t": 619.44,
+   "d": 4.34,
+   "text": "Imagine that you are making a Roguelike and want your player to move around, because moving"
+  },
+  {
+   "t": 623.78,
+   "d": 1.16,
+   "text": "is cool."
+  },
+  {
+   "t": 624.94,
+   "d": 5.69,
+   "text": "You write code for that and come along later and think maybe I would like different types"
+  },
+  {
+   "t": 630.63,
+   "d": 3.5,
+   "text": "of terrain and like that terrain to affect how they can move."
+  },
+  {
+   "t": 634.13,
+   "d": 6.13,
+   "text": "Maybe you add water and lava tiles and say the player’s not allowed to step into these"
+  },
+  {
+   "t": 640.26,
+   "d": 3.99,
+   "text": "because they might drown or burn up or something like that."
+  },
+  {
+   "t": 644.25,
+   "d": 2.6,
+   "text": "You go back and tweak the movement code a little bit."
+  },
+  {
+   "t": 646.85,
+   "d": 2.97,
+   "text": "Then you come along and want to add items."
+  },
+  {
+   "t": 649.82,
+   "d": 4.06,
+   "text": "Maybe there are boots of flying in a chest somewhere."
+  },
+  {
+   "t": 653.88,
+   "d": 4.28,
+   "text": "When the player is wearing the boots they can fly and should be allowed to pass over"
+  },
+  {
+   "t": 658.16,
+   "d": 6.14,
+   "text": "any terrain including the lava."
+  },
+  {
+   "t": 664.3,
+   "d": 5.33,
+   "text": "Then maybe someone new comes along and wants to add in some really intricate physical simulation"
+  },
+  {
+   "t": 669.63,
+   "d": 7.38,
+   "text": "of weapons and monsters, and they want to give everything a combustion point."
+  },
+  {
+   "t": 677.01,
+   "d": 5.65,
+   "text": "They want to sort of describe what material things are made out of."
+  },
+  {
+   "t": 682.66,
+   "d": 5.66,
+   "text": "And maybe they add some logic that wants to make the boots flying made out of cloth."
+  },
+  {
+   "t": 688.32,
+   "d": 2.28,
+   "text": "Maybe cloth is very combustible."
+  },
+  {
+   "t": 690.6,
+   "d": 5.22,
+   "text": "All these factors align and one day a player wearing boots of flying tries to go over lava"
+  },
+  {
+   "t": 695.82,
+   "d": 3.76,
+   "text": "and the boots burn up and they fall in and die."
+  },
+  {
+   "t": 699.58,
+   "d": 6.12,
+   "text": "I think that's a funny story and we should all be trying to make games that lead to these"
+  },
+  {
+   "t": 705.7,
+   "d": 2.55,
+   "text": "complicated little unexpected interactions."
+  },
+  {
+   "t": 708.25,
+   "d": 4.89,
+   "text": "I think writing the code behind those can be difficult and complex."
+  },
+  {
+   "t": 713.14,
+   "d": 5.68,
+   "text": "Now I am going to talk a little bit about the language project that I have been working"
+  },
+  {
+   "t": 718.82,
+   "d": 1.0,
+   "text": "on."
+  },
+  {
+   "t": 719.82,
+   "d": 1.38,
+   "text": "It is called itch for now."
+  },
+  {
+   "t": 721.2,
+   "d": 9.29,
+   "text": "I am working on a web-based environment for it that will be available at this URL eventually."
+  },
+  {
+   "t": 730.49,
+   "d": 6.44,
+   "text": "It is mostly based on some pretty standard ideas from logic programming languages which"
+  },
+  {
+   "t": 736.93,
+   "d": 2.44,
+   "text": "have been around for a long time."
+  },
+  {
+   "t": 739.37,
+   "d": 5.6,
+   "text": "They resemble in a lot of ways the other two languages I just talked about."
+  },
+  {
+   "t": 744.97,
+   "d": 4.81,
+   "text": "If you are an experienced programmer, this language that I’m gonna start talking about"
+  },
+  {
+   "t": 749.78,
+   "d": 1.02,
+   "text": "may look really weird."
+  },
+  {
+   "t": 750.8,
+   "d": 5.69,
+   "text": "You may think geez this is contrived and all these things that are normally easy seem hard"
+  },
+  {
+   "t": 756.49,
+   "d": 2.06,
+   "text": "or verbose in this or whatever."
+  },
+  {
+   "t": 758.55,
+   "d": 3.21,
+   "text": "If you feel like that, I want you to think about it this way."
+  },
+  {
+   "t": 761.76,
+   "d": 3.68,
+   "text": "Think about a conduct in a Roguelike."
+  },
+  {
+   "t": 765.44,
+   "d": 4.97,
+   "text": "I won't go into detail because I think the next talk is all about conducts and I am excited"
+  },
+  {
+   "t": 770.41,
+   "d": 1.0,
+   "text": "for that."
+  },
+  {
+   "t": 771.41,
+   "d": 5.09,
+   "text": "But basically a conduct is like an extra constraint you put on yourself in order to make gameplay"
+  },
+  {
+   "t": 776.5,
+   "d": 1.83,
+   "text": "experience more challenging."
+  },
+  {
+   "t": 778.33,
+   "d": 4.94,
+   "text": "Maybe you have like totally mastered a game and you have decided to only play characters"
+  },
+  {
+   "t": 783.27,
+   "d": 3.71,
+   "text": "that don't equip any item or weapons."
+  },
+  {
+   "t": 786.98,
+   "d": 5.88,
+   "text": "The neat thing about this is it doesn't just give you, you know, bragging rights for being"
+  },
+  {
+   "t": 792.86,
+   "d": 5.72,
+   "text": "a hard-core Roguelike player, it forces you to learn new things about the game."
+  },
+  {
+   "t": 798.58,
+   "d": 7.77,
+   "text": "When you force yourself to play under a new constraint, things that previously were very"
+  },
+  {
+   "t": 806.35,
+   "d": 4.15,
+   "text": "easy become hard and you learn new things about the game and improve."
+  },
+  {
+   "t": 810.5,
+   "d": 6.48,
+   "text": "I want to encourage you to think today about programming, picking a programming language"
+  },
+  {
+   "t": 816.98,
+   "d": 2.09,
+   "text": "as sort of like picking a conduct."
+  },
+  {
+   "t": 819.07,
+   "d": 9.31,
+   "text": "C is a low level powerful language but forces you to manually manage memory and forces you"
+  },
+  {
+   "t": 828.38,
+   "d": 5.33,
+   "text": "to learn how data structures are represented in a very fine grained way."
+  },
+  {
+   "t": 833.71,
+   "d": 1.9,
+   "text": "Haskell is another example of a weird conduct."
+  },
+  {
+   "t": 835.61,
+   "d": 4.86,
+   "text": "It’s a very high level language, but it doesn't let you use mutable states, which"
+  },
+  {
+   "t": 840.47,
+   "d": 4.02,
+   "text": "is very alienating and forces you to do a lot of things differently."
+  },
+  {
+   "t": 844.49,
+   "d": 3.76,
+   "text": "There are other languages that are notorious for being extremely terse."
+  },
+  {
+   "t": 848.25,
+   "d": 4.31,
+   "text": "You might spend many hours writing an APL program that ends up being a few characters"
+  },
+  {
+   "t": 852.56,
+   "d": 5.51,
+   "text": "long and does one thing well but can't be changed."
+  },
+  {
+   "t": 858.07,
+   "d": 3.7,
+   "text": "What is the weird conduct in this language I’m talking about?"
+  },
+  {
+   "t": 861.77,
+   "d": 5.76,
+   "text": "It doesn’t have any functions, or methods or procedures, it doesn't really have any"
+  },
+  {
+   "t": 867.53,
+   "d": 6.21,
+   "text": "local state like you might normally be able to declare some variables in a method, doesn't"
+  },
+  {
+   "t": 873.74,
+   "d": 3.93,
+   "text": "really have that, doesn't have any control flow mechanisms, and it sort of only has one"
+  },
+  {
+   "t": 877.67,
+   "d": 2.49,
+   "text": "data type."
+  },
+  {
+   "t": 880.16,
+   "d": 6.33,
+   "text": "All together it may look kind of odd but I promise you that programming is still possible."
+  },
+  {
+   "t": 886.49,
+   "d": 7.61,
+   "text": "I am going to try to explain everything from scratch and I am going to try to, you know,"
+  },
+  {
+   "t": 894.1,
+   "d": 3.31,
+   "text": "organize my description with these three pieces."
+  },
+  {
+   "t": 897.41,
+   "d": 7.68,
+   "text": "The first piece is that in a relational programming language, the whole state of the game or program"
+  },
+  {
+   "t": 905.09,
+   "d": 7.39,
+   "text": "or world is stored as a collection of facts, and these facts are sort of broken up into"
+  },
+  {
+   "t": 912.48,
+   "d": 1.0,
+   "text": "different relations."
+  },
+  {
+   "t": 913.48,
+   "d": 3.27,
+   "text": "I will define those things in a second."
+  },
+  {
+   "t": 916.75,
+   "d": 9.93,
+   "text": "The second is that defining logical rules is sort of a convenient way to derive new"
+  },
+  {
+   "t": 926.68,
+   "d": 1.45,
+   "text": "facts from other ones."
+  },
+  {
+   "t": 928.13,
+   "d": 5.7,
+   "text": "It is kind of like functional abstraction in other languages."
+  },
+  {
+   "t": 933.83,
+   "d": 6.84,
+   "text": "And finally, you can describe games that change over time by creating rules that create new"
+  },
+  {
+   "t": 940.67,
+   "d": 3.84,
+   "text": "facts from old ones."
+  },
+  {
+   "t": 944.51,
+   "d": 4.26,
+   "text": "The slogan for what a fact here is we take from Wittgenstein."
+  },
+  {
+   "t": 948.77,
+   "d": 2.69,
+   "text": "He was a strange guy."
+  },
+  {
+   "t": 951.46,
+   "d": 4.61,
+   "text": "He wrote a book and the first sentence of his book was the world is everything that"
+  },
+  {
+   "t": 956.07,
+   "d": 1.08,
+   "text": "is the case."
+  },
+  {
+   "t": 957.15,
+   "d": 8.1,
+   "text": "This was sort of a definition for him to sort of establish, like, what it’s possible to"
+  },
+  {
+   "t": 965.25,
+   "d": 1.0,
+   "text": "talk about."
+  },
+  {
+   "t": 966.25,
+   "d": 3.92,
+   "text": "The book contained a lot of other interesting useful things."
+  },
+  {
+   "t": 970.17,
+   "d": 1.97,
+   "text": "We’re gonna stop reading at the first sentence."
+  },
+  {
+   "t": 972.14,
+   "d": 5.23,
+   "text": "We’re just gonna take this slogan the world is everything that is a case because I think"
+  },
+  {
+   "t": 977.37,
+   "d": 2.82,
+   "text": "it’s a good slogan for logic programming."
+  },
+  {
+   "t": 980.19,
+   "d": 7.31,
+   "text": "Basically, the whole state of the program is broken up into facts starting with very"
+  },
+  {
+   "t": 987.5,
+   "d": 1.68,
+   "text": "basic types of facts."
+  },
+  {
+   "t": 989.18,
+   "d": 4.05,
+   "text": "I have written a few down here on the slide."
+  },
+  {
+   "t": 993.23,
+   "d": 6.79,
+   "text": "For each one, they each have a sort of type which I will also call the name of the relation"
+  },
+  {
+   "t": 1000.02,
+   "d": 1.21,
+   "text": "that the fact is a part of."
+  },
+  {
+   "t": 1001.23,
+   "d": 9.13,
+   "text": "So for instance, in the first line, positive is the name of the type and 7 is the value"
+  },
+  {
+   "t": 1010.36,
+   "d": 2.55,
+   "text": "that the fact is being applied to."
+  },
+  {
+   "t": 1012.91,
+   "d": 4.73,
+   "text": "The first statement says 7 is a positive number, intuitively."
+  },
+  {
+   "t": 1017.64,
+   "d": 4.64,
+   "text": "You can imagine this relation might contain a great deal of other facts for other numbers"
+  },
+  {
+   "t": 1022.28,
+   "d": 4.97,
+   "text": "that are positive but we won't try to write them all down."
+  },
+  {
+   "t": 1027.25,
+   "d": 2.04,
+   "text": "Facts can relate more than one value."
+  },
+  {
+   "t": 1029.29,
+   "d": 5.41,
+   "text": "The second is a simple example saying that the number four is greater than the number"
+  },
+  {
+   "t": 1034.7,
+   "d": 1.0,
+   "text": "two."
+  },
+  {
+   "t": 1035.7,
+   "d": 1.0,
+   "text": "Very mundane."
+  },
+  {
+   "t": 1036.7,
+   "d": 8.62,
+   "text": "If we were making a game, we might want to make a various simple definition like west"
+  },
+  {
+   "t": 1045.32,
+   "d": 1.46,
+   "text": "is a direction."
+  },
+  {
+   "t": 1046.78,
+   "d": 3.77,
+   "text": "That might be relevant if we are trying to move around and use west to denote a particular"
+  },
+  {
+   "t": 1050.55,
+   "d": 2.28,
+   "text": "way of moving on a map."
+  },
+  {
+   "t": 1052.83,
+   "d": 3.66,
+   "text": "We might want to say the player is symbolized by the string at."
+  },
+  {
+   "t": 1056.49,
+   "d": 3.73,
+   "text": "That’s a familiar way of denoting a player Roguelike."
+  },
+  {
+   "t": 1060.22,
+   "d": 3.97,
+   "text": "Does that all make sense?"
+  },
+  {
+   "t": 1064.19,
+   "d": 5.93,
+   "text": "I am going to start throwing code and notation on the slides now, so if anything doesn't"
+  },
+  {
+   "t": 1070.12,
+   "d": 4.84,
+   "text": "make sense, please, interrupt me."
+  },
+  {
+   "t": 1074.96,
+   "d": 5.75,
+   "text": "Now, just to give you a sense of what a collection of relations might look like for a game."
+  },
+  {
+   "t": 1080.71,
+   "d": 2.46,
+   "text": "One time I implemented Go in this language."
+  },
+  {
+   "t": 1083.17,
+   "d": 6.26,
+   "text": "Go is a board game that involves placing stones on a board and one of the interesting parts"
+  },
+  {
+   "t": 1089.43,
+   "d": 6.19,
+   "text": "of it is that it involves computing paths between different stones on the board."
+  },
+  {
+   "t": 1095.62,
+   "d": 6.87,
+   "text": "This is a run down of all relations I had to define for this simple example."
+  },
+  {
+   "t": 1102.49,
+   "d": 1.62,
+   "text": "Here is another example."
+  },
+  {
+   "t": 1104.11,
+   "d": 3.91,
+   "text": "I made a janky little slide presentation program once."
+  },
+  {
+   "t": 1108.02,
+   "d": 2.94,
+   "text": "These are all the relations it needed."
+  },
+  {
+   "t": 1110.96,
+   "d": 6.39,
+   "text": "We see there are some ways to refer to slides, title, data that appears on a slide, some"
+  },
+  {
+   "t": 1117.35,
+   "d": 6.13,
+   "text": "actions like moving to the next slide and the previous slide, and these are the things"
+  },
+  {
+   "t": 1123.48,
+   "d": 3.44,
+   "text": "that were used to sort of define the state of the program at any given point in time"
+  },
+  {
+   "t": 1126.92,
+   "d": 1.36,
+   "text": "but not the behavior."
+  },
+  {
+   "t": 1128.28,
+   "d": 3.49,
+   "text": "This is just the state so far."
+  },
+  {
+   "t": 1131.77,
+   "d": 1.06,
+   "text": "OK."
+  },
+  {
+   "t": 1132.83,
+   "d": 6.01,
+   "text": "The next thing that we need to do is talk about facts with variables."
+  },
+  {
+   "t": 1138.84,
+   "d": 4.97,
+   "text": "Talking about individual facts is all good but we also need to be able to talk about"
+  },
+  {
+   "t": 1143.81,
+   "d": 2.27,
+   "text": "collections of facts all at once."
+  },
+  {
+   "t": 1146.08,
+   "d": 5.57,
+   "text": "In the first line, m is supposed to denote a variable."
+  },
+  {
+   "t": 1151.65,
+   "d": 4.73,
+   "text": "The whole expression, monster m is supposed to denote the set of all monsters."
+  },
+  {
+   "t": 1156.38,
+   "d": 5.49,
+   "text": "You might imagine that you generate the first level of your dungeon, you create a bunch"
+  },
+  {
+   "t": 1161.87,
+   "d": 5.99,
+   "text": "of goblins, and to label them as monsters, you would generate one fact for each of them"
+  },
+  {
+   "t": 1167.86,
+   "d": 5.89,
+   "text": "that sort of refers to maybe like a unique identifier for the monster, and says that"
+  },
+  {
+   "t": 1173.75,
+   "d": 2.15,
+   "text": "it is a monster."
+  },
+  {
+   "t": 1175.9,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 1176.9,
+   "d": 10.64,
+   "text": "In the next line, there is a way of programming here where we are very explicit about positions"
+  },
+  {
+   "t": 1187.54,
+   "d": 2.0,
+   "text": "in the map."
+  },
+  {
+   "t": 1189.54,
+   "d": 5.03,
+   "text": "Imagine labeling every tile in your game as a position that could potentially be inhabited."
+  },
+  {
+   "t": 1194.57,
+   "d": 2.47,
+   "text": "That’s what this relation is supposed to represent."
+  },
+  {
+   "t": 1197.04,
+   "d": 6.4,
+   "text": "The next is supposed to encode the idea that two positions next to each other."
+  },
+  {
+   "t": 1203.44,
+   "d": 4.88,
+   "text": "That's a very important basic fact that you need around to talk about movement."
+  },
+  {
+   "t": 1208.32,
+   "d": 7.22,
+   "text": "You might only want to let the player move from one position to another that is adjacent."
+  },
+  {
+   "t": 1215.54,
+   "d": 6.11,
+   "text": "And then similarly, we are going to want to attach like properties to different things."
+  },
+  {
+   "t": 1221.65,
+   "d": 5.48,
+   "text": "If P represents a position, and M represents a monster, we might want to assert that the"
+  },
+  {
+   "t": 1227.13,
+   "d": 4.16,
+   "text": "monster is at that position as opposed to any other position."
+  },
+  {
+   "t": 1231.29,
+   "d": 8.04,
+   "text": "Finally, we can use these facts to represent input and output from the game as well."
+  },
+  {
+   "t": 1239.33,
+   "d": 7.2,
+   "text": "A game loop might look like taking some keypresses from keyboard somewhere and transcribing them"
+  },
+  {
+   "t": 1246.53,
+   "d": 5.95,
+   "text": "into facts and putting them into the world."
+  },
+  {
+   "t": 1252.48,
+   "d": 5.68,
+   "text": "We should think of those as denoting all the things in a given fact."
+  },
+  {
+   "t": 1258.16,
+   "d": 8.01,
+   "text": "The first is all the monsters and second one is all the positions, all the adjacencies,"
+  },
+  {
+   "t": 1266.17,
+   "d": 2.8,
+   "text": "etcetera."
+  },
+  {
+   "t": 1268.97,
+   "d": 5.1,
+   "text": "In addition to all these sort of atomic facts, we can make more interesting combinations."
+  },
+  {
+   "t": 1274.07,
+   "d": 5.82,
+   "text": "We might want to ask for all the pairs of monsters that are next to each other."
+  },
+  {
+   "t": 1279.89,
+   "d": 4.05,
+   "text": "The previous slide we said what a monster is and what it means for two positions to"
+  },
+  {
+   "t": 1283.94,
+   "d": 1.7,
+   "text": "be next to each other."
+  },
+  {
+   "t": 1285.64,
+   "d": 10.34,
+   "text": "We can actually combine those things into a query that runs and gives the values that"
+  },
+  {
+   "t": 1295.98,
+   "d": 2.62,
+   "text": "satisfy the property we want."
+  },
+  {
+   "t": 1298.6,
+   "d": 7.09,
+   "text": "Here we have three facts sort of joined together, and they share the same set of variables."
+  },
+  {
+   "t": 1305.69,
+   "d": 11.08,
+   "text": "The meaning of this compound expression is the set of all creatures next to each other."
+  },
+  {
+   "t": 1316.77,
+   "d": 5.54,
+   "text": "Just to summarize all that stuff, we will assume that the world in our game, at any"
+  },
+  {
+   "t": 1322.31,
+   "d": 3.54,
+   "text": "given point in time, is fully described by some facts."
+  },
+  {
+   "t": 1325.85,
+   "d": 4.6,
+   "text": "Maybe lots of examples."
+  },
+  {
+   "t": 1330.45,
+   "d": 7.18,
+   "text": "The next thing that we can do is actually define facts in terms of other ones."
+  },
+  {
+   "t": 1337.63,
+   "d": 5.36,
+   "text": "We can define them in such a way that they change over time."
+  },
+  {
+   "t": 1342.99,
+   "d": 4.22,
+   "text": "In that last slide, it was sort of a verbose thing."
+  },
+  {
+   "t": 1347.21,
+   "d": 3.54,
+   "text": "We might want to know that when the player is next to a monster to know whether they"
+  },
+  {
+   "t": 1350.75,
+   "d": 1.0,
+   "text": "can attack each other."
+  },
+  {
+   "t": 1351.75,
+   "d": 3.59,
+   "text": "We might want to know when two monsters are next to each other so they can hug each other"
+  },
+  {
+   "t": 1355.34,
+   "d": 2.77,
+   "text": "or talk."
+  },
+  {
+   "t": 1358.11,
+   "d": 3.52,
+   "text": "We don't want to have to rewrite all three clauses all over the program."
+  },
+  {
+   "t": 1361.63,
+   "d": 5.4,
+   "text": "We want to abstract things because we are programmers and, you know, we want to simplify"
+  },
+  {
+   "t": 1367.03,
+   "d": 2.44,
+   "text": "our job and automate whenever we can."
+  },
+  {
+   "t": 1369.47,
+   "d": 5.66,
+   "text": "This is an example of a rule that takes the result of some query and then populates some"
+  },
+  {
+   "t": 1375.13,
+   "d": 2.53,
+   "text": "collection of new facts."
+  },
+  {
+   "t": 1377.66,
+   "d": 5.84,
+   "text": "In this case, we sort of dropped the location stuff because once we know they are adjacent"
+  },
+  {
+   "t": 1383.5,
+   "d": 1.97,
+   "text": "we don't necessarily care where they are."
+  },
+  {
+   "t": 1385.47,
+   "d": 1.98,
+   "text": "We just want to know who they are."
+  },
+  {
+   "t": 1387.45,
+   "d": 10.01,
+   "text": "We want to know the two creatures that are touching next to each other."
+  },
+  {
+   "t": 1397.46,
+   "d": 1.29,
+   "text": "Another very simple one."
+  },
+  {
+   "t": 1398.75,
+   "d": 6.14,
+   "text": "We might have a fact that records how much HP a character has at a given point in time"
+  },
+  {
+   "t": 1404.89,
+   "d": 6.73,
+   "text": "and might want to note they are alive and check to see the HP is greater than 0 and"
+  },
+  {
+   "t": 1411.62,
+   "d": 7.75,
+   "text": "if at any later point in time it falls to 0 this fact would cease being true."
+  },
+  {
+   "t": 1419.37,
+   "d": 7.57,
+   "text": "Finally, this is like a famous one because for some reason it is like the hello, world"
+  },
+  {
+   "t": 1426.94,
+   "d": 1.67,
+   "text": "in logic programs."
+  },
+  {
+   "t": 1428.61,
+   "d": 4.66,
+   "text": "This is it."
+  },
+  {
+   "t": 1433.27,
+   "d": 7.06,
+   "text": "What it means is the input to this pair of rules is sort of the adjacency relation."
+  },
+  {
+   "t": 1440.33,
+   "d": 7.13,
+   "text": "Imagine a big complicated graph you specified with nodes like location and edges representing"
+  },
+  {
+   "t": 1447.46,
+   "d": 4.01,
+   "text": "where you can go and then you might want to do, you know, as in the previous talk, you"
+  },
+  {
+   "t": 1451.47,
+   "d": 3.69,
+   "text": "might want to calculate whether two nodes are reachable from each other and whether"
+  },
+  {
+   "t": 1455.16,
+   "d": 1.79,
+   "text": "there exists a path."
+  },
+  {
+   "t": 1456.95,
+   "d": 3.07,
+   "text": "These two rules completely encapsulate that problem."
+  },
+  {
+   "t": 1460.02,
+   "d": 3.89,
+   "text": "They don’t do A*, they don’t find an optimal path, but they do calculate whether or not"
+  },
+  {
+   "t": 1463.91,
+   "d": 1.74,
+   "text": "there is a path."
+  },
+  {
+   "t": 1465.65,
+   "d": 6.19,
+   "text": "The interpretation is just that if two things are adjacent one is reachable from the other."
+  },
+  {
+   "t": 1471.84,
+   "d": 6.79,
+   "text": "If X and Y are adjacent and Y is reachable from Z then that implies X is reachable from"
+  },
+  {
+   "t": 1478.63,
+   "d": 3.46,
+   "text": "Z."
+  },
+  {
+   "t": 1482.09,
+   "d": 5.0,
+   "text": "That covers the second point."
+  },
+  {
+   "t": 1487.09,
+   "d": 9.88,
+   "text": "The third point is that it is actually possible to define changes in the world over time in"
+  },
+  {
+   "t": 1496.97,
+   "d": 4.69,
+   "text": "terms of very similar looking rules."
+  },
+  {
+   "t": 1501.66,
+   "d": 3.12,
+   "text": "OK."
+  },
+  {
+   "t": 1504.78,
+   "d": 1.89,
+   "text": "Here is a sort of simple example."
+  },
+  {
+   "t": 1506.67,
+   "d": 6.55,
+   "text": "Let's say we want to create an 8X8 board of locations that will let the player place their"
+  },
+  {
+   "t": 1513.22,
+   "d": 1.26,
+   "text": "pieces down on."
+  },
+  {
+   "t": 1514.48,
+   "d": 2.05,
+   "text": "We might do this manually."
+  },
+  {
+   "t": 1516.53,
+   "d": 5.29,
+   "text": "We might simply write all 64 positions down one at a time."
+  },
+  {
+   "t": 1521.82,
+   "d": 4.07,
+   "text": "Or we could try writing some rules to do it for us."
+  },
+  {
+   "t": 1525.89,
+   "d": 6.69,
+   "text": "Here is an example of a rule that says that first of all that we will have a row labeled"
+  },
+  {
+   "t": 1532.58,
+   "d": 2.45,
+   "text": "8."
+  },
+  {
+   "t": 1535.03,
+   "d": 6.35,
+   "text": "The second line says now that whenever we have a row, and labeled N, so N here is a"
+  },
+  {
+   "t": 1541.38,
+   "d": 5.5,
+   "text": "variable, and N is greater than 1, we will create a row of N minus 1."
+  },
+  {
+   "t": 1546.88,
+   "d": 1.24,
+   "text": "OK?"
+  },
+  {
+   "t": 1548.12,
+   "d": 4.52,
+   "text": "This rule is going to start with row 8 and it will make row 7 and then it will take row"
+  },
+  {
+   "t": 1552.64,
+   "d": 4.88,
+   "text": "7 and make row 6 and go all the way down to row 1."
+  },
+  {
+   "t": 1557.52,
+   "d": 2.78,
+   "text": "We can do the same thing with columns."
+  },
+  {
+   "t": 1560.3,
+   "d": 6.28,
+   "text": "And then does anyone have an idea for what the next rule looks like?"
+  },
+  {
+   "t": 1566.58,
+   "d": 6.04,
+   "text": "We have eight rows and eight columns and now we want to create one cell for each pair."
+  },
+  {
+   "t": 1572.62,
+   "d": 3.42,
+   "text": "It looks something like this."
+  },
+  {
+   "t": 1576.04,
+   "d": 5.29,
+   "text": "So we write this query that says whenever we have a row i, and a column j, we will create"
+  },
+  {
+   "t": 1581.33,
+   "d": 1.53,
+   "text": "a cell."
+  },
+  {
+   "t": 1582.86,
+   "d": 1.05,
+   "text": "OK?"
+  },
+  {
+   "t": 1583.91,
+   "d": 3.01,
+   "text": "In one step we created a bunch of things."
+  },
+  {
+   "t": 1586.92,
+   "d": 8.2,
+   "text": "There is another tricky thing going on that I don't have time to explain just yet."
+  },
+  {
+   "t": 1595.12,
+   "d": 4.7,
+   "text": "Anyway, in addition to just the cells on the board, like I said before, we might want to"
+  },
+  {
+   "t": 1599.82,
+   "d": 3.41,
+   "text": "- if we are making a Roguelike, we might want to abstract the grid into a graph, we might"
+  },
+  {
+   "t": 1603.23,
+   "d": 4.76,
+   "text": "wanna calculate all the ways a player can move from one cell to another."
+  },
+  {
+   "t": 1607.99,
+   "d": 3.17,
+   "text": "To do that we might have some rules like this."
+  },
+  {
+   "t": 1611.16,
+   "d": 4.49,
+   "text": "These rules have to do a little bit of tricky index calculation, they have to take i and"
+  },
+  {
+   "t": 1615.65,
+   "d": 2.59,
+   "text": "add i plus 1."
+  },
+  {
+   "t": 1618.24,
+   "d": 6.02,
+   "text": "Once we do that query, we have some facts that represent adjacent and down the line"
+  },
+  {
+   "t": 1624.26,
+   "d": 6.76,
+   "text": "we don’t have to do any more index calculations, we can just query for all the adjacencies."
+  },
+  {
+   "t": 1631.02,
+   "d": 2.46,
+   "text": "And now I think I’ll end with this slide."
+  },
+  {
+   "t": 1633.48,
+   "d": 8.46,
+   "text": "This is my attempt at encapsulating that silly example that I said earlier, where one person"
+  },
+  {
+   "t": 1641.94,
+   "d": 5.09,
+   "text": "comes along, defines a new item, they are called the flying boots and they’re made"
+  },
+  {
+   "t": 1647.03,
+   "d": 1.0,
+   "text": "of cloth."
+  },
+  {
+   "t": 1648.03,
+   "d": 8.56,
+   "text": "Another person comes along and says if a position in the game has a lava tile on it then its"
+  },
+  {
+   "t": 1656.59,
+   "d": 4.35,
+   "text": "temperature should be pretty high and maybe that's 100."
+  },
+  {
+   "t": 1660.94,
+   "d": 3.48,
+   "text": "Then someone else comes along and adds a complicated simulation code."
+  },
+  {
+   "t": 1664.42,
+   "d": 6.85,
+   "text": "They say something like whenever we have an item that has a combustion point that's temperature"
+  },
+  {
+   "t": 1671.27,
+   "d": 4.47,
+   "text": "and whenever that item is being worn by a character and whatever that character is located"
+  },
+  {
+   "t": 1675.74,
+   "d": 5.72,
+   "text": "at some position p and when that position has a temperature t that's greater than the"
+  },
+  {
+   "t": 1681.46,
+   "d": 5.02,
+   "text": "temperature of the combustion point of the item, let's combust the item."
+  },
+  {
+   "t": 1686.48,
+   "d": 5.6,
+   "text": "The combustion is handled by a couple more rules saying if the item is being combusted"
+  },
+  {
+   "t": 1692.08,
+   "d": 4.53,
+   "text": "and it’s worn by a player they should unequip it and then it should get destroyed."
+  },
+  {
+   "t": 1696.61,
+   "d": 9.62,
+   "text": "At the end, there is a specification of property of cloth in the situation."
+  },
+  {
+   "t": 1706.23,
+   "d": 3.11,
+   "text": "What did we do?"
+  },
+  {
+   "t": 1709.34,
+   "d": 4.6,
+   "text": "We talked about encoding the state of the game as a bunch of facts."
+  },
+  {
+   "t": 1713.94,
+   "d": 4.88,
+   "text": "We talked about avoiding having to explicitly write down all the facts we need by writing"
+  },
+  {
+   "t": 1718.82,
+   "d": 8.29,
+   "text": "logical rules, and then talked about how the evolution of the game can happen via rules"
+  },
+  {
+   "t": 1727.11,
+   "d": 4.2,
+   "text": "that modify things and create new facts."
+  },
+  {
+   "t": 1731.31,
+   "d": 2.76,
+   "text": "What did we get from this?"
+  },
+  {
+   "t": 1734.07,
+   "d": 2.06,
+   "text": "OK."
+  },
+  {
+   "t": 1736.13,
+   "d": 3.92,
+   "text": "One kind of wacky thing about this programming model is that everything has happened for"
+  },
+  {
+   "t": 1740.05,
+   "d": 1.94,
+   "text": "a reason."
+  },
+  {
+   "t": 1741.99,
+   "d": 5.32,
+   "text": "When everything is defined by a rule, you can take any given fact and ask, why is this"
+  },
+  {
+   "t": 1747.31,
+   "d": 1.0,
+   "text": "around."
+  },
+  {
+   "t": 1748.31,
+   "d": 2.17,
+   "text": "The answer is always a rule fired."
+  },
+  {
+   "t": 1750.48,
+   "d": 4.07,
+   "text": "The reason it fired is similarly some other facts that were around at some previous point"
+  },
+  {
+   "t": 1754.55,
+   "d": 1.68,
+   "text": "in time."
+  },
+  {
+   "t": 1756.23,
+   "d": 7.93,
+   "text": "It is possible starting from any visible thing to trace backwards in time through all the"
+  },
+  {
+   "t": 1764.16,
+   "d": 5.32,
+   "text": "past events that contributed toward that thing being something in the presence of the player."
+  },
+  {
+   "t": 1769.48,
+   "d": 2.3,
+   "text": "That is pretty cool."
+  },
+  {
+   "t": 1771.78,
+   "d": 8.15,
+   "text": "I think it could help with debugging and helps users peel back layers of complexity and see"
+  },
+  {
+   "t": 1779.93,
+   "d": 3.6,
+   "text": "the internals and change them."
+  },
+  {
+   "t": 1783.53,
+   "d": 5.56,
+   "text": "The other thing that is interesting is that it is often possible to modify a game by simply"
+  },
+  {
+   "t": 1789.09,
+   "d": 5.61,
+   "text": "adding more rules on the end, or adding more rules at the beginning that are sort of higher"
+  },
+  {
+   "t": 1794.7,
+   "d": 7.29,
+   "text": "priority, so you don't need to spend as much time touching old code and you can sort of"
+  },
+  {
+   "t": 1801.99,
+   "d": 5.23,
+   "text": "structure the program in a more natural way by sort of just a new writing of rules."
+  },
+  {
+   "t": 1807.22,
+   "d": 13.92,
+   "text": "I think I am out of time so if we have time for any questions."
+  },
+  {
+   "t": 1821.14,
+   "d": 2.83,
+   "text": "[Applause] >> Cool."
+  },
+  {
+   "t": 1823.97,
+   "d": 2.83,
+   "text": "Any questions?"
+  },
+  {
+   "t": 1826.8,
+   "d": 2.83,
+   "text": "AUDIENCE: Hey."
+  },
+  {
+   "t": 1829.63,
+   "d": 4.25,
+   "text": "That was interesting."
+  },
+  {
+   "t": 1833.88,
+   "d": 5.39,
+   "text": "How would you do like a presentation layer for that kind of system?"
+  },
+  {
+   "t": 1839.27,
+   "d": 3.3,
+   "text": "How would you draw the Go game and collect input?"
+  },
+  {
+   "t": 1842.57,
+   "d": 6.03,
+   "text": "SCOTT KOVACH: The model I had for this is that input and output are also handled by"
+  },
+  {
+   "t": 1848.6,
+   "d": 2.38,
+   "text": "special relations also."
+  },
+  {
+   "t": 1850.98,
+   "d": 5.66,
+   "text": "Like I said earlier whenever somebody presses a key it is easy to represent that as a tuple,"
+  },
+  {
+   "t": 1856.64,
+   "d": 7.16,
+   "text": "fed into the system and the rules fire and then in order to render it to the screen,"
+  },
+  {
+   "t": 1863.8,
+   "d": 7.01,
+   "text": "one simply adds some rules that create relations in some sort of output layer."
+  },
+  {
+   "t": 1870.81,
+   "d": 7.17,
+   "text": "In the slide, I had a few relations that had the letters js in the name."
+  },
+  {
+   "t": 1877.98,
+   "d": 4.82,
+   "text": "Those are actually relations that I am interpreting as DOM nodes, with a little driver program"
+  },
+  {
+   "t": 1882.8,
+   "d": 4.78,
+   "text": "that was outside the engine."
+  },
+  {
+   "t": 1887.58,
+   "d": 5.55,
+   "text": "You can basically think about mapping the facts in your game logic into facts about,"
+  },
+  {
+   "t": 1893.13,
+   "d": 10.53,
+   "text": "directly into facts about DOM objects, for example, or glyphs that should show up on"
+  },
+  {
+   "t": 1903.66,
+   "d": 1.0,
+   "text": "a grid."
+  },
+  {
+   "t": 1904.66,
+   "d": 1.0,
+   "text": "That's how I handled it."
+  },
+  {
+   "t": 1905.66,
+   "d": 3.54,
+   "text": "AUDIENCE: I had a hard time parsing the code stuff because it seemed like the definitions"
+  },
+  {
+   "t": 1909.2,
+   "d": 2.4,
+   "text": "and checking for the definitions was the same thing."
+  },
+  {
+   "t": 1911.6,
+   "d": 8.14,
+   "text": "It is like combust item is defining the rule combust item and later it was like combust"
+  },
+  {
+   "t": 1919.74,
+   "d": 3.52,
+   "text": "item is also saying if the item is combusted."
+  },
+  {
+   "t": 1923.26,
+   "d": 1.98,
+   "text": "I don't get that?"
+  },
+  {
+   "t": 1925.24,
+   "d": 3.77,
+   "text": "SCOTT KOVACH: OK."
+  },
+  {
+   "t": 1929.01,
+   "d": 8.77,
+   "text": "So, yeah, I will try to explain."
+  },
+  {
+   "t": 1937.78,
+   "d": 6.98,
+   "text": "The basic idea is that the facts themselves, they don't mean anything on their own."
+  },
+  {
+   "t": 1944.76,
+   "d": 7.1,
+   "text": "Sort of the creation of a fact is driven by some rule where combust shows up on the right-hand"
+  },
+  {
+   "t": 1951.86,
+   "d": 1.0,
+   "text": "side."
+  },
+  {
+   "t": 1952.86,
+   "d": 8.82,
+   "text": "So the big complicated rule here is the one that creates this sort of combustion event"
+  },
+  {
+   "t": 1961.68,
+   "d": 4.44,
+   "text": "and you can think of the other rules that reference it on the left hand side as being"
+  },
+  {
+   "t": 1966.12,
+   "d": 7.16,
+   "text": "the event handlers that look for that event and then do something with it that is like"
+  },
+  {
+   "t": 1973.28,
+   "d": 3.68,
+   "text": "meaningful in some other way."
+  },
+  {
+   "t": 1976.96,
+   "d": 1.49,
+   "text": "This is sort of like a fragment."
+  },
+  {
+   "t": 1978.45,
+   "d": 6.17,
+   "text": "You know, you might imagine unequip is interpreted somewhere else."
+  },
+  {
+   "t": 1984.62,
+   "d": 8.12,
+   "text": "What this little program does is it simply looks for a combustion and then creates a"
+  },
+  {
+   "t": 1992.74,
+   "d": 4.71,
+   "text": "new event that destroys the item or unequips it."
+  },
+  {
+   "t": 1997.45,
+   "d": 2.69,
+   "text": "Does that help?"
+  },
+  {
+   "t": 2000.14,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 2001.14,
+   "d": 1.0,
+   "text": "Cool."
+  },
+  {
+   "t": 2002.14,
+   "d": 1.59,
+   "text": "Good question."
+  },
+  {
+   "t": 2003.73,
+   "d": 1.87,
+   "text": ">> AUDIENCE: I feel like I have to complete the"
+  },
+  {
+   "t": 2005.6,
+   "d": 3.68,
+   "text": "line of people asking questions here."
+  },
+  {
+   "t": 2009.28,
+   "d": 5.55,
+   "text": "I am curious how you would represent - you have these equipment on equip facts."
+  },
+  {
+   "t": 2014.83,
+   "d": 7.88,
+   "text": "I am curious how you would represent the inventory, like the set of equipped things in this system."
+  },
+  {
+   "t": 2022.71,
+   "d": 3.92,
+   "text": "SCOTT KOVACH: OK."
+  },
+  {
+   "t": 2026.63,
+   "d": 2.61,
+   "text": "Let's see."
+  },
+  {
+   "t": 2029.24,
+   "d": 1.31,
+   "text": "OK."
+  },
+  {
+   "t": 2030.55,
+   "d": 4.18,
+   "text": "So there is a part that I didn't quite get to talk about that's also interesting and"
+  },
+  {
+   "t": 2034.73,
+   "d": 5.22,
+   "text": "important which involves sort of aggregation."
+  },
+  {
+   "t": 2039.95,
+   "d": 9.15,
+   "text": "So one - there is a way to sort of think - sorry."
+  },
+  {
+   "t": 2049.1,
+   "d": 4.55,
+   "text": "There is probably a lot of ways to kind of implement in inventory and a set of equipped"
+  },
+  {
+   "t": 2053.65,
+   "d": 7.5,
+   "text": "items but one way is to, you know, consider like the boot slot maybe that the character"
+  },
+  {
+   "t": 2061.15,
+   "d": 1.0,
+   "text": "has."
+  },
+  {
+   "t": 2062.15,
+   "d": 7.14,
+   "text": "You could write sort of an aggregation that takes each equip message, or each equip fact"
+  },
+  {
+   "t": 2069.29,
+   "d": 7.32,
+   "text": "that has been generated, and sets it as like the current one and then similarly takes an"
+  },
+  {
+   "t": 2076.61,
+   "d": 3.8,
+   "text": "unequip event and nulls out the current one."
+  },
+  {
+   "t": 2080.41,
+   "d": 7.92,
+   "text": "It is kind of a way of, like, bringing variables back into the programming model by associating"
+  },
+  {
+   "t": 2088.33,
+   "d": 1.64,
+   "text": "them with certain facts."
+  },
+  {
+   "t": 2089.97,
+   "d": 1.0,
+   "text": ">> Cool."
+  },
+  {
+   "t": 2090.97,
+   "d": 2.43,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 2093.4,
+   "d": 0.69,
+   "text": "[Applause]"
+  }
+ ]
+}

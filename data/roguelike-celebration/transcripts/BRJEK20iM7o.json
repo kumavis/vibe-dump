@@ -1,0 +1,2217 @@
+{
+ "id": "BRJEK20iM7o",
+ "url": "https://www.youtube.com/watch?v=BRJEK20iM7o",
+ "title": "Courtney Liessen: Cheating the System (By Design!) for Epic Combos",
+ "speaker": "Courtney Liessen",
+ "talk_title": "Cheating the System (By Design!) for Epic Combos",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1118,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Some games are designed with player-directed \"cheating\" in mind, where you build up a character with broken-seeming combos that make you feel like you're exploiting the game by growing your power exponentially. The Roguelike genre, in particular, has many examples of this phenomenon, benefitting from its coolness while having the built-in counterbalance of a frequent progress reset. In this talk, I'll discuss some of the reasons why these kinds of power escalations feel so good, approaches to balancing them, how they might apply to various genres, and how to design and implement them in a way that tips the scales into \"cheating\" rather than just \"here's a stronger weapon\". Done right, players will feel like they've done something even the game's developer didn't anticipate!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 72,
+   "title": "Defining intentional cheating"
+  },
+  {
+   "start": 207,
+   "title": "Stat scaling mechanics"
+  },
+  {
+   "start": 343,
+   "title": "Scaling visual and ability effects"
+  },
+  {
+   "start": 448,
+   "title": "Lessons from Monster Train"
+  },
+  {
+   "start": 573,
+   "title": "Case study: Reality Break"
+  },
+  {
+   "start": 697,
+   "title": "The role of the roguelike genre"
+  },
+  {
+   "start": 796,
+   "title": "Conclusion and core principles"
+  },
+  {
+   "start": 839,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2911,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.88,
+   "d": 2.92,
+   "text": "cool our next talk should also be"
+  },
+  {
+   "t": 6.8,
+   "d": 4.32,
+   "text": "awesome um It Is by Courtney cheating"
+  },
+  {
+   "t": 11.12,
+   "d": 2.28,
+   "text": "the system by design for epic"
+  },
+  {
+   "t": 13.4,
+   "d": 2.32,
+   "text": "combos Courtney has been in the game"
+  },
+  {
+   "t": 15.72,
+   "d": 1.96,
+   "text": "industry for over 20 years"
+  },
+  {
+   "t": 17.68,
+   "d": 1.4,
+   "text": "professionally working in key"
+  },
+  {
+   "t": 19.08,
+   "d": 1.84,
+   "text": "programming and design roles on games"
+  },
+  {
+   "t": 20.92,
+   "d": 2.64,
+   "text": "such as Halo Wars Age of Mythology and"
+  },
+  {
+   "t": 23.56,
+   "d": 2.44,
+   "text": "Age of Empires Orcs Must Die stranger"
+  },
+  {
+   "t": 26.0,
+   "d": 2.48,
+   "text": "things 3 the game and a lead designer"
+  },
+  {
+   "t": 28.48,
+   "d": 2.0,
+   "text": "for the AI"
+  },
+  {
+   "t": 30.48,
+   "d": 2.12,
+   "text": "2013 mobile game of the year Hero"
+  },
+  {
+   "t": 32.6,
+   "d": 2.24,
+   "text": "Academy since starting as a solo"
+  },
+  {
+   "t": 34.84,
+   "d": 2.88,
+   "text": "developer in 2014 Courtney has published"
+  },
+  {
+   "t": 37.72,
+   "d": 3.04,
+   "text": "the VR Tower Defense hit evil robot"
+  },
+  {
+   "t": 40.76,
+   "d": 2.24,
+   "text": "traffic jam as well as the ramp Park"
+  },
+  {
+   "t": 43.0,
+   "d": 2.96,
+   "text": "homage Sky caner uh Courtney is"
+  },
+  {
+   "t": 45.96,
+   "d": 2.56,
+   "text": "currently working on a dream project um"
+  },
+  {
+   "t": 48.52,
+   "d": 2.64,
+   "text": "with her road like space arpg reality"
+  },
+  {
+   "t": 51.16,
+   "d": 2.0,
+   "text": "break where she continues to emphasize"
+  },
+  {
+   "t": 53.16,
+   "d": 2.0,
+   "text": "visceral movement to movement fund"
+  },
+  {
+   "t": 55.16,
+   "d": 1.76,
+   "text": "polished Aesthetics and long-term depth"
+  },
+  {
+   "t": 56.92,
+   "d": 3.56,
+   "text": "and replayability uh that is um"
+  },
+  {
+   "t": 60.48,
+   "d": 1.84,
+   "text": "the CV Courtney thank you so much for"
+  },
+  {
+   "t": 62.32,
+   "d": 2.8,
+   "text": "joining us thank you so much for having"
+  },
+  {
+   "t": 65.12,
+   "d": 3.16,
+   "text": "me it's great to be"
+  },
+  {
+   "t": 72.52,
+   "d": 4.0,
+   "text": "here it's sorry yes you are good to go I"
+  },
+  {
+   "t": 76.52,
+   "d": 0.92,
+   "text": "so"
+  },
+  {
+   "t": 77.44,
+   "d": 3.4,
+   "text": "sorry um awesome yes hi everyone uh my"
+  },
+  {
+   "t": 80.84,
+   "d": 2.96,
+   "text": "name is uh Courtney she her and yeah"
+  },
+  {
+   "t": 83.8,
+   "d": 2.04,
+   "text": "I've been at Game Dev for kind of"
+  },
+  {
+   "t": 85.84,
+   "d": 2.64,
+   "text": "forever um and today I'm excited to talk"
+  },
+  {
+   "t": 88.48,
+   "d": 2.84,
+   "text": "about one of my favorite topics uh it's"
+  },
+  {
+   "t": 91.32,
+   "d": 2.8,
+   "text": "the feeling while you're playing a game"
+  },
+  {
+   "t": 94.12,
+   "d": 2.12,
+   "text": "that you found a way to break its"
+  },
+  {
+   "t": 96.24,
+   "d": 2.68,
+   "text": "gameplay systems in a way that feels"
+  },
+  {
+   "t": 98.92,
+   "d": 0.92,
+   "text": "like"
+  },
+  {
+   "t": 99.84,
+   "d": 2.6,
+   "text": "cheating uh some of my favorite types of"
+  },
+  {
+   "t": 102.44,
+   "d": 3.08,
+   "text": "entertainment including shows and movies"
+  },
+  {
+   "t": 105.52,
+   "d": 3.24,
+   "text": "present experiences that surprise me by"
+  },
+  {
+   "t": 108.76,
+   "d": 2.92,
+   "text": "breaking their own implicit and explicit"
+  },
+  {
+   "t": 111.68,
+   "d": 3.28,
+   "text": "rules to ascend to Heights I never"
+  },
+  {
+   "t": 114.96,
+   "d": 2.04,
+   "text": "expected these aren't just things I"
+  },
+  {
+   "t": 117.0,
+   "d": 2.32,
+   "text": "didn't predict these are things I didn't"
+  },
+  {
+   "t": 119.32,
+   "d": 2.96,
+   "text": "think Poss possible and I think that if"
+  },
+  {
+   "t": 122.28,
+   "d": 2.76,
+   "text": "developed well and executed well this"
+  },
+  {
+   "t": 125.04,
+   "d": 2.52,
+   "text": "instills in me and others a sense of"
+  },
+  {
+   "t": 127.56,
+   "d": 2.96,
+   "text": "like delight and curiosity uh about how"
+  },
+  {
+   "t": 130.52,
+   "d": 2.24,
+   "text": "much farther it could"
+  },
+  {
+   "t": 132.76,
+   "d": 3.24,
+   "text": "go so what do I mean by that in the"
+  },
+  {
+   "t": 136.0,
+   "d": 2.84,
+   "text": "context of games it's about giving"
+  },
+  {
+   "t": 138.84,
+   "d": 2.28,
+   "text": "players the ability to circumvent"
+  },
+  {
+   "t": 141.12,
+   "d": 2.36,
+   "text": "apparent rules in such a way that it"
+  },
+  {
+   "t": 143.48,
+   "d": 2.2,
+   "text": "feels like they're breaking out of the"
+  },
+  {
+   "t": 145.68,
+   "d": 2.0,
+   "text": "game's"
+  },
+  {
+   "t": 147.68,
+   "d": 2.84,
+   "text": "design it's not literal cheating"
+  },
+  {
+   "t": 150.52,
+   "d": 2.36,
+   "text": "uh where I edit a data file or save file"
+  },
+  {
+   "t": 152.88,
+   "d": 2.92,
+   "text": "or use an exploit that breaks the game"
+  },
+  {
+   "t": 155.8,
+   "d": 1.72,
+   "text": "um it's not about getting so powerful"
+  },
+  {
+   "t": 157.52,
+   "d": 2.24,
+   "text": "that you just overwhelm a difficult"
+  },
+  {
+   "t": 159.76,
+   "d": 2.28,
+   "text": "enemy uh it's not about cheesing a"
+  },
+  {
+   "t": 162.04,
+   "d": 2.4,
+   "text": "system to make it irrelevant um like"
+  },
+  {
+   "t": 164.44,
+   "d": 2.24,
+   "text": "finding a spot on the battlefield where"
+  },
+  {
+   "t": 166.68,
+   "d": 2.48,
+   "text": "an enemy can't get to you and that which"
+  },
+  {
+   "t": 169.16,
+   "d": 2.72,
+   "text": "collapses one of the systems pathfinding"
+  },
+  {
+   "t": 171.88,
+   "d": 2.16,
+   "text": "out of"
+  },
+  {
+   "t": 174.04,
+   "d": 2.2,
+   "text": "existence now what I mean is something"
+  },
+  {
+   "t": 176.24,
+   "d": 2.12,
+   "text": "that feels more or less like you're"
+  },
+  {
+   "t": 178.36,
+   "d": 2.2,
+   "text": "using some combination"
+  },
+  {
+   "t": 180.56,
+   "d": 3.32,
+   "text": "of the games systems as intended to"
+  },
+  {
+   "t": 183.88,
+   "d": 2.64,
+   "text": "obtain what you perceive to be uned"
+  },
+  {
+   "t": 186.52,
+   "d": 3.44,
+   "text": "benefits as in unintended by the games"
+  },
+  {
+   "t": 189.96,
+   "d": 2.76,
+   "text": "developer um this is a little thrilling"
+  },
+  {
+   "t": 192.72,
+   "d": 1.48,
+   "text": "you know um almost like something you"
+  },
+  {
+   "t": 194.2,
+   "d": 2.6,
+   "text": "want to keep a secret and get away with"
+  },
+  {
+   "t": 196.8,
+   "d": 2.48,
+   "text": "it can make you feel very smart uh and"
+  },
+  {
+   "t": 199.28,
+   "d": 2.4,
+   "text": "can make you feel a sense of Mastery"
+  },
+  {
+   "t": 201.68,
+   "d": 2.88,
+   "text": "over the game uh which holds powerful"
+  },
+  {
+   "t": 204.56,
+   "d": 2.68,
+   "text": "appeal let's get into some practical"
+  },
+  {
+   "t": 207.24,
+   "d": 2.56,
+   "text": "examples starting with the well-known TR"
+  },
+  {
+   "t": 209.8,
+   "d": 2.44,
+   "text": "scope of a stat called strength that"
+  },
+  {
+   "t": 212.24,
+   "d": 2.28,
+   "text": "affects your character's damage uh your"
+  },
+  {
+   "t": 214.52,
+   "d": 2.36,
+   "text": "damage scales predictably getting plus"
+  },
+  {
+   "t": 216.88,
+   "d": 2.68,
+   "text": "one to strength gives you plus one to"
+  },
+  {
+   "t": 219.56,
+   "d": 2.68,
+   "text": "damage a simple on-ramp to making"
+  },
+  {
+   "t": 222.24,
+   "d": 2.08,
+   "text": "players feel like they're cheating the"
+  },
+  {
+   "t": 224.32,
+   "d": 2.04,
+   "text": "system is to allow them to change the"
+  },
+  {
+   "t": 226.36,
+   "d": 3.28,
+   "text": "equation the conversion equation via an"
+  },
+  {
+   "t": 229.64,
+   "d": 2.92,
+   "text": "upgrade that grants a 2X multiplier to"
+  },
+  {
+   "t": 232.56,
+   "d": 2.96,
+   "text": "stack conversions plus one strength now"
+  },
+  {
+   "t": 235.52,
+   "d": 3.6,
+   "text": "converts into two damage that's a fun if"
+  },
+  {
+   "t": 239.12,
+   "d": 2.2,
+   "text": "straightforward W damage"
+  },
+  {
+   "t": 241.32,
+   "d": 3.0,
+   "text": "boost but now imagine another upgrade"
+  },
+  {
+   "t": 244.32,
+   "d": 2.92,
+   "text": "that increases multiplier upgrades by"
+  },
+  {
+   "t": 247.24,
+   "d": 3.56,
+   "text": "plus one so even if you have 10 strength"
+  },
+  {
+   "t": 250.8,
+   "d": 2.64,
+   "text": "if you get plus one to strength you just"
+  },
+  {
+   "t": 253.44,
+   "d": 1.8,
+   "text": "get plus one damage you went from 10 to"
+  },
+  {
+   "t": 255.24,
+   "d": 2.72,
+   "text": "11 you have one one more damage but a"
+  },
+  {
+   "t": 257.96,
+   "d": 2.2,
+   "text": "plus one upgrade to the multiplier that"
+  },
+  {
+   "t": 260.16,
+   "d": 2.52,
+   "text": "controls the damage conversion will give"
+  },
+  {
+   "t": 262.68,
+   "d": 3.2,
+   "text": "plus 10 damage skyrocketing the"
+  },
+  {
+   "t": 265.88,
+   "d": 2.72,
+   "text": "equation this sort of indirection allows"
+  },
+  {
+   "t": 268.6,
+   "d": 1.88,
+   "text": "for a subtle but Power powerful"
+  },
+  {
+   "t": 270.48,
+   "d": 2.96,
+   "text": "combination of two independent Concepts"
+  },
+  {
+   "t": 273.44,
+   "d": 2.48,
+   "text": "into something that feels a little"
+  },
+  {
+   "t": 275.92,
+   "d": 2.12,
+   "text": "unfair something like this has the"
+  },
+  {
+   "t": 278.04,
+   "d": 2.6,
+   "text": "potential to energize a player with the"
+  },
+  {
+   "t": 280.64,
+   "d": 1.84,
+   "text": "knowledge that when they see an item"
+  },
+  {
+   "t": 282.48,
+   "d": 2.24,
+   "text": "with stats on it it could count for so"
+  },
+  {
+   "t": 284.72,
+   "d": 2.72,
+   "text": "much more and they might even wonder is"
+  },
+  {
+   "t": 287.44,
+   "d": 3.12,
+   "text": "there a way to change all multipliers to"
+  },
+  {
+   "t": 290.56,
+   "d": 2.76,
+   "text": "Time 5 *"
+  },
+  {
+   "t": 293.32,
+   "d": 3.32,
+   "text": "10 so this example illustrates the core"
+  },
+  {
+   "t": 296.64,
+   "d": 3.52,
+   "text": "idea of subverting player expectation in"
+  },
+  {
+   "t": 300.16,
+   "d": 2.28,
+   "text": "ways that surprise them with a game's"
+  },
+  {
+   "t": 302.44,
+   "d": 2.88,
+   "text": "hidden potential as it"
+  },
+  {
+   "t": 305.32,
+   "d": 2.16,
+   "text": "unfolds because games come with sets of"
+  },
+  {
+   "t": 307.48,
+   "d": 2.72,
+   "text": "rules many defined by genre tropes"
+  },
+  {
+   "t": 310.2,
+   "d": 2.48,
+   "text": "franchise tropes that create assumptions"
+  },
+  {
+   "t": 312.68,
+   "d": 2.48,
+   "text": "and expectations in a player's mind"
+  },
+  {
+   "t": 315.16,
+   "d": 2.08,
+   "text": "being able to change the equation that"
+  },
+  {
+   "t": 317.24,
+   "d": 2.48,
+   "text": "controls the damage conversion in an"
+  },
+  {
+   "t": 319.72,
+   "d": 2.76,
+   "text": "action RPG is not something players will"
+  },
+  {
+   "t": 322.48,
+   "d": 2.88,
+   "text": "generally assume to be possible and the"
+  },
+  {
+   "t": 325.36,
+   "d": 2.84,
+   "text": "realization that it is might very well"
+  },
+  {
+   "t": 328.2,
+   "d": 2.92,
+   "text": "Delight them it will also instill in"
+  },
+  {
+   "t": 331.12,
+   "d": 2.2,
+   "text": "players a sense of wonder about other"
+  },
+  {
+   "t": 333.32,
+   "d": 2.28,
+   "text": "ways they might be able to make the game"
+  },
+  {
+   "t": 335.6,
+   "d": 1.24,
+   "text": "more their"
+  },
+  {
+   "t": 336.84,
+   "d": 2.72,
+   "text": "own but even that is just the starting"
+  },
+  {
+   "t": 339.56,
+   "d": 2.56,
+   "text": "point kind of a baseline let's step out"
+  },
+  {
+   "t": 342.12,
+   "d": 3.04,
+   "text": "of stat systems for a moment even though"
+  },
+  {
+   "t": 345.16,
+   "d": 2.96,
+   "text": "I could talk about stat systems for"
+  },
+  {
+   "t": 348.12,
+   "d": 3.56,
+   "text": "hours um and talk about other player"
+  },
+  {
+   "t": 351.68,
+   "d": 2.6,
+   "text": "expectations various games have special"
+  },
+  {
+   "t": 354.28,
+   "d": 2.84,
+   "text": "abilities with defined attributes such"
+  },
+  {
+   "t": 357.12,
+   "d": 2.24,
+   "text": "as the damage radius for a whirlwind"
+  },
+  {
+   "t": 359.36,
+   "d": 2.6,
+   "text": "attack or an explosive Fireball those"
+  },
+  {
+   "t": 361.96,
+   "d": 1.88,
+   "text": "abilities often have upgrades including"
+  },
+  {
+   "t": 363.84,
+   "d": 2.84,
+   "text": "a larger range for that Whirlwind or the"
+  },
+  {
+   "t": 366.68,
+   "d": 2.8,
+   "text": "blast radius of the fireball typically"
+  },
+  {
+   "t": 369.48,
+   "d": 2.32,
+   "text": "these upgrades are quantized a single"
+  },
+  {
+   "t": 371.8,
+   "d": 2.52,
+   "text": "upgrade that increases the radius by 20%"
+  },
+  {
+   "t": 374.32,
+   "d": 3.04,
+   "text": "or 50% and that's it and the game will"
+  },
+  {
+   "t": 377.36,
+   "d": 2.8,
+   "text": "often have a custom piece of FXR maybe a"
+  },
+  {
+   "t": 380.16,
+   "d": 2.68,
+   "text": "custom sound for the upgraded forms of"
+  },
+  {
+   "t": 382.84,
+   "d": 2.68,
+   "text": "these abilities a larger spin slash"
+  },
+  {
+   "t": 385.52,
+   "d": 2.8,
+   "text": "larger explosion our expectations are"
+  },
+  {
+   "t": 388.32,
+   "d": 2.68,
+   "text": "that this blast radius isn't something"
+  },
+  {
+   "t": 391.0,
+   "d": 3.08,
+   "text": "you can affect in too many other ways if"
+  },
+  {
+   "t": 394.08,
+   "d": 2.96,
+   "text": "any um art contents is expensive sounds"
+  },
+  {
+   "t": 397.04,
+   "d": 1.96,
+   "text": "are expensive after"
+  },
+  {
+   "t": 399.0,
+   "d": 2.44,
+   "text": "all but what if you get an upgrade that"
+  },
+  {
+   "t": 401.44,
+   "d": 4.44,
+   "text": "says abilities gain a 2X multiplier to"
+  },
+  {
+   "t": 405.88,
+   "d": 2.68,
+   "text": "radius wait does that mean the plus one"
+  },
+  {
+   "t": 408.56,
+   "d": 1.76,
+   "text": "multipliers upgrade we talked about"
+  },
+  {
+   "t": 410.32,
+   "d": 2.24,
+   "text": "before would apply here"
+  },
+  {
+   "t": 412.56,
+   "d": 2.84,
+   "text": "too if we buff our multipliers enough"
+  },
+  {
+   "t": 415.4,
+   "d": 1.96,
+   "text": "can one of these abilities grow big"
+  },
+  {
+   "t": 417.36,
+   "d": 3.12,
+   "text": "enough to blanket the entire screen"
+  },
+  {
+   "t": 420.48,
+   "d": 1.72,
+   "text": "this possibility violates the"
+  },
+  {
+   "t": 422.2,
+   "d": 3.28,
+   "text": "expectation that art content variety is"
+  },
+  {
+   "t": 425.48,
+   "d": 2.64,
+   "text": "constrained in specific ways great"
+  },
+  {
+   "t": 428.12,
+   "d": 1.72,
+   "text": "examples of this include Hades and"
+  },
+  {
+   "t": 429.84,
+   "d": 2.28,
+   "text": "vampire survivors which have multitudes"
+  },
+  {
+   "t": 432.12,
+   "d": 1.8,
+   "text": "of upgrades that scale their visual"
+  },
+  {
+   "t": 433.92,
+   "d": 1.84,
+   "text": "effects"
+  },
+  {
+   "t": 435.76,
+   "d": 2.56,
+   "text": "substantially uh and by the way yes I"
+  },
+  {
+   "t": 438.32,
+   "d": 2.64,
+   "text": "did all this programmer art by myself"
+  },
+  {
+   "t": 440.96,
+   "d": 2.08,
+   "text": "and yes I am taking commissions for your"
+  },
+  {
+   "t": 443.04,
+   "d": 2.24,
+   "text": "own"
+  },
+  {
+   "t": 445.32,
+   "d": 2.68,
+   "text": "projects so one of the most striking"
+  },
+  {
+   "t": 448.0,
+   "d": 2.48,
+   "text": "examples uh of sub fting our assumptions"
+  },
+  {
+   "t": 450.48,
+   "d": 2.48,
+   "text": "comes from another fantastic Rog likee"
+  },
+  {
+   "t": 452.96,
+   "d": 2.4,
+   "text": "monster"
+  },
+  {
+   "t": 455.52,
+   "d": 2.88,
+   "text": "train I remember a run where I gained"
+  },
+  {
+   "t": 458.4,
+   "d": 2.56,
+   "text": "some upgrades to increase the size of"
+  },
+  {
+   "t": 460.96,
+   "d": 3.08,
+   "text": "one of my minions by something like"
+  },
+  {
+   "t": 464.04,
+   "d": 3.32,
+   "text": "3x it gave that minion a massive stab"
+  },
+  {
+   "t": 467.36,
+   "d": 2.6,
+   "text": "boost and increased its visual scale to"
+  },
+  {
+   "t": 469.96,
+   "d": 2.4,
+   "text": "match it was a fun moment but it"
+  },
+  {
+   "t": 472.36,
+   "d": 1.96,
+   "text": "strained my minion budget there's a"
+  },
+  {
+   "t": 474.32,
+   "d": 1.64,
+   "text": "floor budget and you can only have so"
+  },
+  {
+   "t": 475.96,
+   "d": 2.6,
+   "text": "many minion points so I couldn't place"
+  },
+  {
+   "t": 478.56,
+   "d": 2.44,
+   "text": "as many other minions if I deployed this"
+  },
+  {
+   "t": 481.0,
+   "d": 3.4,
+   "text": "one this felt like an interesting but"
+  },
+  {
+   "t": 484.4,
+   "d": 1.92,
+   "text": "really kind of a typical balancing"
+  },
+  {
+   "t": 486.32,
+   "d": 3.52,
+   "text": "tradeoff more power for more"
+  },
+  {
+   "t": 489.84,
+   "d": 2.64,
+   "text": "cost however I happened to look into"
+  },
+  {
+   "t": 492.48,
+   "d": 2.12,
+   "text": "another upgrade one that could shrink"
+  },
+  {
+   "t": 494.6,
+   "d": 1.96,
+   "text": "one of my minions to the smallest that"
+  },
+  {
+   "t": 496.56,
+   "d": 3.2,
+   "text": "the game supports without affecting its"
+  },
+  {
+   "t": 499.76,
+   "d": 2.92,
+   "text": "stats this violated another core"
+  },
+  {
+   "t": 502.68,
+   "d": 2.48,
+   "text": "assumption that my minion budget's"
+  },
+  {
+   "t": 505.16,
+   "d": 2.04,
+   "text": "interaction with the floor budget was"
+  },
+  {
+   "t": 507.2,
+   "d": 2.32,
+   "text": "fixed that I would forever have to make"
+  },
+  {
+   "t": 509.52,
+   "d": 2.52,
+   "text": "a trade-off between minion quantity and"
+  },
+  {
+   "t": 512.04,
+   "d": 2.24,
+   "text": "having this Bruiser on my team giving"
+  },
+  {
+   "t": 514.28,
+   "d": 2.44,
+   "text": "players a way to ignore what appeared to"
+  },
+  {
+   "t": 516.72,
+   "d": 2.76,
+   "text": "be important balancing points in a game"
+  },
+  {
+   "t": 519.48,
+   "d": 2.2,
+   "text": "is a fantastic way to make them feel"
+  },
+  {
+   "t": 521.68,
+   "d": 2.8,
+   "text": "they are cheating the designer's"
+  },
+  {
+   "t": 524.48,
+   "d": 2.08,
+   "text": "intent there was a cherry on this cake"
+  },
+  {
+   "t": 526.56,
+   "d": 2.12,
+   "text": "too as I progressed I found multiple"
+  },
+  {
+   "t": 528.68,
+   "d": 2.64,
+   "text": "upgrades that allow me to duplicate any"
+  },
+  {
+   "t": 531.32,
+   "d": 2.44,
+   "text": "minion of my choice without a second"
+  },
+  {
+   "t": 533.76,
+   "d": 3.24,
+   "text": "thought I cloned this little guy again"
+  },
+  {
+   "t": 537.0,
+   "d": 3.56,
+   "text": "and again and again you might note that"
+  },
+  {
+   "t": 540.56,
+   "d": 2.16,
+   "text": "this is a hidden multiplier upgrade"
+  },
+  {
+   "t": 542.72,
+   "d": 2.0,
+   "text": "within that game's"
+  },
+  {
+   "t": 544.72,
+   "d": 2.0,
+   "text": "design uh I had already been breezing"
+  },
+  {
+   "t": 546.72,
+   "d": 2.44,
+   "text": "through most fights so needless to say I"
+  },
+  {
+   "t": 549.16,
+   "d": 2.96,
+   "text": "created easy mode and won that run not"
+  },
+  {
+   "t": 552.12,
+   "d": 2.72,
+   "text": "only that but this run was many years"
+  },
+  {
+   "t": 554.84,
+   "d": 3.32,
+   "text": "ago yet I remember it to this day that I"
+  },
+  {
+   "t": 558.16,
+   "d": 2.16,
+   "text": "feel illustrates the power of letting"
+  },
+  {
+   "t": 560.32,
+   "d": 3.76,
+   "text": "players feel like they are somehow"
+  },
+  {
+   "t": 564.08,
+   "d": 3.0,
+   "text": "cheating of note this type of experience"
+  },
+  {
+   "t": 567.08,
+   "d": 3.04,
+   "text": "has been so foundational for me that I"
+  },
+  {
+   "t": 570.12,
+   "d": 2.2,
+   "text": "made it the core hook of my upcoming"
+  },
+  {
+   "t": 572.32,
+   "d": 3.56,
+   "text": "Game reality break it's rewrite mechanic"
+  },
+  {
+   "t": 575.88,
+   "d": 2.4,
+   "text": "in the game anytime you see a special"
+  },
+  {
+   "t": 578.28,
+   "d": 2.56,
+   "text": "lightning bolt uh next to a game element"
+  },
+  {
+   "t": 580.84,
+   "d": 3.08,
+   "text": "it indicates that you can rewrite it"
+  },
+  {
+   "t": 583.92,
+   "d": 1.92,
+   "text": "change it somehow edit it somehow this"
+  },
+  {
+   "t": 585.84,
+   "d": 1.92,
+   "text": "happen this can happen to item stats in"
+  },
+  {
+   "t": 587.76,
+   "d": 2.76,
+   "text": "the beginning such as power that you can"
+  },
+  {
+   "t": 590.52,
+   "d": 2.44,
+   "text": "modify but it expands"
+  },
+  {
+   "t": 592.96,
+   "d": 2.52,
+   "text": "dramatically one early example comes up"
+  },
+  {
+   "t": 595.48,
+   "d": 2.68,
+   "text": "when you defeat larger ships in the game"
+  },
+  {
+   "t": 598.16,
+   "d": 2.44,
+   "text": "these warships drop larger items that"
+  },
+  {
+   "t": 600.6,
+   "d": 2.04,
+   "text": "don't fit on your star fighter because"
+  },
+  {
+   "t": 602.64,
+   "d": 2.16,
+   "text": "they require a warship sized equipment"
+  },
+  {
+   "t": 604.8,
+   "d": 2.6,
+   "text": "slot just total tropes all the"
+  },
+  {
+   "t": 607.4,
+   "d": 3.24,
+   "text": "way however when you inspect these items"
+  },
+  {
+   "t": 610.64,
+   "d": 1.76,
+   "text": "there's a lightning bolt next to une"
+  },
+  {
+   "t": 612.4,
+   "d": 2.68,
+   "text": "equipable warship"
+  },
+  {
+   "t": 615.08,
+   "d": 2.88,
+   "text": "class you can rewrite that requirement"
+  },
+  {
+   "t": 617.96,
+   "d": 2.48,
+   "text": "changing it to the fighter ship"
+  },
+  {
+   "t": 620.44,
+   "d": 3.0,
+   "text": "class the item visibly shrinks in your"
+  },
+  {
+   "t": 623.44,
+   "d": 1.84,
+   "text": "inventory to indicate that it has been"
+  },
+  {
+   "t": 625.28,
+   "d": 1.96,
+   "text": "miniaturized its reality has been"
+  },
+  {
+   "t": 627.24,
+   "d": 3.0,
+   "text": "changed and that you can now equip it"
+  },
+  {
+   "t": 630.24,
+   "d": 2.24,
+   "text": "this goes against player expectation"
+  },
+  {
+   "t": 632.48,
+   "d": 2.12,
+   "text": "that equipping a large item first"
+  },
+  {
+   "t": 634.6,
+   "d": 3.16,
+   "text": "requires you to obtain a larger ship and"
+  },
+  {
+   "t": 637.76,
+   "d": 2.44,
+   "text": "in fact it has been an interesting issue"
+  },
+  {
+   "t": 640.2,
+   "d": 2.48,
+   "text": "with teaching players because even ex"
+  },
+  {
+   "t": 642.68,
+   "d": 1.72,
+   "text": "people who have played the game for a"
+  },
+  {
+   "t": 644.4,
+   "d": 2.28,
+   "text": "long time they see the lightning bolt"
+  },
+  {
+   "t": 646.68,
+   "d": 2.8,
+   "text": "next to it and still don't realize that"
+  },
+  {
+   "t": 649.48,
+   "d": 1.36,
+   "text": "instead of getting a bigger ship to"
+  },
+  {
+   "t": 650.84,
+   "d": 3.28,
+   "text": "equip this item they can just shrink it"
+  },
+  {
+   "t": 654.12,
+   "d": 2.4,
+   "text": "that's how baked in that assumption is"
+  },
+  {
+   "t": 656.52,
+   "d": 1.96,
+   "text": "and some work has to be done on"
+  },
+  {
+   "t": 658.48,
+   "d": 1.84,
+   "text": "communicating it even more"
+  },
+  {
+   "t": 660.32,
+   "d": 2.8,
+   "text": "clearly at this point in the game a"
+  },
+  {
+   "t": 663.12,
+   "d": 2.4,
+   "text": "player forms an expectation that item"
+  },
+  {
+   "t": 665.52,
+   "d": 3.2,
+   "text": "stats and item size are rewritable and"
+  },
+  {
+   "t": 668.72,
+   "d": 1.96,
+   "text": "might wonder what other item properties"
+  },
+  {
+   "t": 670.68,
+   "d": 0.84,
+   "text": "can be"
+  },
+  {
+   "t": 671.52,
+   "d": 2.68,
+   "text": "edited however as you progress further"
+  },
+  {
+   "t": 674.2,
+   "d": 1.92,
+   "text": "that lightning bolt begins appearing in"
+  },
+  {
+   "t": 676.12,
+   "d": 3.28,
+   "text": "brand new places on Mission time limits"
+  },
+  {
+   "t": 679.4,
+   "d": 3.12,
+   "text": "and region hazards on pilot skill"
+  },
+  {
+   "t": 682.52,
+   "d": 3.64,
+   "text": "cooldowns and level caps and even on"
+  },
+  {
+   "t": 686.16,
+   "d": 4.4,
+   "text": "Treasure crates in space itself"
+  },
+  {
+   "t": 690.56,
+   "d": 2.04,
+   "text": "now these ways of subverting player"
+  },
+  {
+   "t": 692.6,
+   "d": 2.08,
+   "text": "expectations would be intriguing to play"
+  },
+  {
+   "t": 694.68,
+   "d": 4.08,
+   "text": "with in almost any genre I think but Rog"
+  },
+  {
+   "t": 698.76,
+   "d": 2.76,
+   "text": "likes are particularly well suited to"
+  },
+  {
+   "t": 701.52,
+   "d": 2.04,
+   "text": "designs that enable and encourage"
+  },
+  {
+   "t": 703.56,
+   "d": 2.96,
+   "text": "cheating and breaking their systems for"
+  },
+  {
+   "t": 706.52,
+   "d": 2.08,
+   "text": "one if you create a combo that breaks"
+  },
+  {
+   "t": 708.6,
+   "d": 2.76,
+   "text": "the game's design intent you only have"
+  },
+  {
+   "t": 711.36,
+   "d": 1.72,
+   "text": "until the end of that run to benefit"
+  },
+  {
+   "t": 713.08,
+   "d": 3.2,
+   "text": "from it it won't trivialize the game"
+  },
+  {
+   "t": 716.28,
+   "d": 2.68,
+   "text": "forever in addition Rog likes mitigate"
+  },
+  {
+   "t": 718.96,
+   "d": 2.52,
+   "text": "one of the main risks of this concept"
+  },
+  {
+   "t": 721.48,
+   "d": 2.48,
+   "text": "which is the risk to the flow state that"
+  },
+  {
+   "t": 723.96,
+   "d": 2.96,
+   "text": "we want players to experience if allowed"
+  },
+  {
+   "t": 726.92,
+   "d": 2.32,
+   "text": "to persist for too long breaking out of"
+  },
+  {
+   "t": 729.24,
+   "d": 2.0,
+   "text": "a game's designed guard rails can lead"
+  },
+  {
+   "t": 731.24,
+   "d": 3.0,
+   "text": "to trivializing the game and to eventual"
+  },
+  {
+   "t": 734.24,
+   "d": 2.4,
+   "text": "boredom but Rog likes encourage players"
+  },
+  {
+   "t": 736.64,
+   "d": 2.6,
+   "text": "to see their runs as transient where it"
+  },
+  {
+   "t": 739.24,
+   "d": 2.96,
+   "text": "feels natural and often desirable to end"
+  },
+  {
+   "t": 742.2,
+   "d": 2.96,
+   "text": "a run and start over something that an"
+  },
+  {
+   "t": 745.16,
+   "d": 4.44,
+   "text": "OP combo can speed up dramatically"
+  },
+  {
+   "t": 749.6,
+   "d": 1.72,
+   "text": "this has an additional implication for"
+  },
+  {
+   "t": 751.32,
+   "d": 2.04,
+   "text": "The Meta progression found in Rogue"
+  },
+  {
+   "t": 753.36,
+   "d": 2.24,
+   "text": "lights The Meta game unlocks should be"
+  },
+  {
+   "t": 755.6,
+   "d": 3.48,
+   "text": "dled out more judiciously and carefully"
+  },
+  {
+   "t": 759.08,
+   "d": 1.84,
+   "text": "so that a permanently broken State"
+  },
+  {
+   "t": 760.92,
+   "d": 3.08,
+   "text": "doesn't get locked in or this power"
+  },
+  {
+   "t": 764.0,
+   "d": 2.64,
+   "text": "escalation could be incorporated into a"
+  },
+  {
+   "t": 766.64,
+   "d": 3.76,
+   "text": "game's design as one of the paths to"
+  },
+  {
+   "t": 770.52,
+   "d": 3.24,
+   "text": "Victory a fun side note as I wrap up uh"
+  },
+  {
+   "t": 773.76,
+   "d": 2.2,
+   "text": "I asked Alexi one of this festivals"
+  },
+  {
+   "t": 775.96,
+   "d": 1.68,
+   "text": "organizers if she could look over my"
+  },
+  {
+   "t": 777.64,
+   "d": 2.52,
+   "text": "draft of this talk among other things"
+  },
+  {
+   "t": 780.16,
+   "d": 2.12,
+   "text": "she mentioned that she co-wrote a paper"
+  },
+  {
+   "t": 782.28,
+   "d": 3.08,
+   "text": "titled understanding systems suspense"
+  },
+  {
+   "t": 785.36,
+   "d": 2.24,
+   "text": "that has substantial overlap with this"
+  },
+  {
+   "t": 787.6,
+   "d": 3.0,
+   "text": "talk I greatly enjoyed reading it and I"
+  },
+  {
+   "t": 790.6,
+   "d": 1.48,
+   "text": "recommend you check it out if you're"
+  },
+  {
+   "t": 792.08,
+   "d": 3.52,
+   "text": "interested in delving deeper into these"
+  },
+  {
+   "t": 795.6,
+   "d": 2.88,
+   "text": "topics uh to sum up if you think about"
+  },
+  {
+   "t": 798.48,
+   "d": 2.6,
+   "text": "the expectations players have coming"
+  },
+  {
+   "t": 801.08,
+   "d": 3.32,
+   "text": "into your game your franchise your genre"
+  },
+  {
+   "t": 804.4,
+   "d": 2.4,
+   "text": "you can purposely twist them around so"
+  },
+  {
+   "t": 806.8,
+   "d": 2.08,
+   "text": "that they represent soft boundaries"
+  },
+  {
+   "t": 808.88,
+   "d": 1.56,
+   "text": "rather rather than hard"
+  },
+  {
+   "t": 810.44,
+   "d": 2.92,
+   "text": "walls fundamentally games with many"
+  },
+  {
+   "t": 813.36,
+   "d": 2.08,
+   "text": "systems which can interact with each"
+  },
+  {
+   "t": 815.44,
+   "d": 2.48,
+   "text": "other will set themselves up for more"
+  },
+  {
+   "t": 817.92,
+   "d": 3.28,
+   "text": "satisfying and surprising balance breaks"
+  },
+  {
+   "t": 821.2,
+   "d": 1.88,
+   "text": "and will in fact surprise even the"
+  },
+  {
+   "t": 823.08,
+   "d": 1.6,
+   "text": "developer with things they never"
+  },
+  {
+   "t": 824.68,
+   "d": 3.8,
+   "text": "intended but which I as a developer am"
+  },
+  {
+   "t": 828.48,
+   "d": 3.24,
+   "text": "always thrilled to see players"
+  },
+  {
+   "t": 831.72,
+   "d": 2.08,
+   "text": "discover thank you very much and thank"
+  },
+  {
+   "t": 833.8,
+   "d": 2.12,
+   "text": "you so much for inviting me to give a"
+  },
+  {
+   "t": 835.92,
+   "d": 3.0,
+   "text": "presentation"
+  },
+  {
+   "t": 839.2,
+   "d": 1.48,
+   "text": "awesome thank you so much for coming"
+  },
+  {
+   "t": 840.68,
+   "d": 3.28,
+   "text": "Courtney that was really awesome yeah I"
+  },
+  {
+   "t": 843.96,
+   "d": 2.44,
+   "text": "know a couple of us in chat were talking"
+  },
+  {
+   "t": 846.4,
+   "d": 1.84,
+   "text": "about Dio mancer which came out very"
+  },
+  {
+   "t": 848.24,
+   "d": 2.64,
+   "text": "recently is like a cool example of being"
+  },
+  {
+   "t": 850.88,
+   "d": 1.8,
+   "text": "able to edit things that you wouldn't"
+  },
+  {
+   "t": 852.68,
+   "d": 3.44,
+   "text": "expect to I'm so which one was that Ico"
+  },
+  {
+   "t": 856.12,
+   "d": 3.48,
+   "text": "maner oh okay I haven't played that one"
+  },
+  {
+   "t": 859.6,
+   "d": 1.64,
+   "text": "it's what I've been playing this weekend"
+  },
+  {
+   "t": 861.24,
+   "d": 3.6,
+   "text": "I highly recommend it awesome we did"
+  },
+  {
+   "t": 864.84,
+   "d": 2.96,
+   "text": "have uh we had a question in chat from"
+  },
+  {
+   "t": 867.8,
+   "d": 2.68,
+   "text": "two match abstract"
+  },
+  {
+   "t": 870.48,
+   "d": 2.0,
+   "text": "wondering if something is lost by"
+  },
+  {
+   "t": 872.48,
+   "d": 1.52,
+   "text": "specifically calling out theu you're"
+  },
+  {
+   "t": 874.0,
+   "d": 3.44,
+   "text": "allowed to edit or what's the tradeoff"
+  },
+  {
+   "t": 877.44,
+   "d": 2.84,
+   "text": "there yeah that's that's a really good"
+  },
+  {
+   "t": 880.28,
+   "d": 2.04,
+   "text": "question um"
+  },
+  {
+   "t": 882.32,
+   "d": 2.4,
+   "text": "because I I do think that there is an"
+  },
+  {
+   "t": 884.72,
+   "d": 3.4,
+   "text": "element that is definitely lost as far"
+  },
+  {
+   "t": 888.12,
+   "d": 4.04,
+   "text": "as you are expected in especially in the"
+  },
+  {
+   "t": 892.16,
+   "d": 3.96,
+   "text": "Rog light genre to you're expected to"
+  },
+  {
+   "t": 896.12,
+   "d": 1.8,
+   "text": "find the unexpected so like people you"
+  },
+  {
+   "t": 897.92,
+   "d": 1.92,
+   "text": "know play these games and and we"
+  },
+  {
+   "t": 899.84,
+   "d": 1.92,
+   "text": "generate stories or the games generate"
+  },
+  {
+   "t": 901.76,
+   "d": 4.76,
+   "text": "stories for us um it's kind of it's in a"
+  },
+  {
+   "t": 906.52,
+   "d": 1.12,
+   "text": "sense like"
+  },
+  {
+   "t": 907.64,
+   "d": 2.84,
+   "text": "bringing some of those stories maybe to"
+  },
+  {
+   "t": 910.48,
+   "d": 3.68,
+   "text": "more people who um don't play as much to"
+  },
+  {
+   "t": 914.16,
+   "d": 1.8,
+   "text": "look into those things or who don't play"
+  },
+  {
+   "t": 915.96,
+   "d": 3.28,
+   "text": "as much to really understand how to like"
+  },
+  {
+   "t": 919.24,
+   "d": 3.32,
+   "text": "really exploit the game's systems to to"
+  },
+  {
+   "t": 922.56,
+   "d": 1.48,
+   "text": "Really find those things and let them"
+  },
+  {
+   "t": 924.04,
+   "d": 1.92,
+   "text": "happen or play you know something for a"
+  },
+  {
+   "t": 925.96,
+   "d": 2.6,
+   "text": "100 hours to let it develop so I think"
+  },
+  {
+   "t": 928.56,
+   "d": 1.6,
+   "text": "that there's bit I I think it's a very"
+  },
+  {
+   "t": 930.16,
+   "d": 2.56,
+   "text": "good point and I I think there's a bit"
+  },
+  {
+   "t": 932.72,
+   "d": 1.84,
+   "text": "of a off the top of my head I feel like"
+  },
+  {
+   "t": 934.56,
+   "d": 1.52,
+   "text": "there is a bit of a trade-off there with"
+  },
+  {
+   "t": 936.08,
+   "d": 2.76,
+   "text": "kind of a pros and"
+  },
+  {
+   "t": 939.32,
+   "d": 4.72,
+   "text": "cons absolutely um were there any things"
+  },
+  {
+   "t": 944.04,
+   "d": 2.44,
+   "text": "in your game that you thought were too"
+  },
+  {
+   "t": 946.48,
+   "d": 3.36,
+   "text": "much to allow the player to alter or is"
+  },
+  {
+   "t": 949.84,
+   "d": 1.8,
+   "text": "it just completely free"
+  },
+  {
+   "t": 951.64,
+   "d": 3.76,
+   "text": "range well that's a great question so"
+  },
+  {
+   "t": 955.4,
+   "d": 1.16,
+   "text": "I've"
+  },
+  {
+   "t": 956.56,
+   "d": 2.44,
+   "text": "been I I've been working on this game"
+  },
+  {
+   "t": 959.0,
+   "d": 2.92,
+   "text": "for a while for um I think this week"
+  },
+  {
+   "t": 961.92,
+   "d": 1.72,
+   "text": "will be the 5year anniversary of my"
+  },
+  {
+   "t": 963.64,
+   "d": 4.36,
+   "text": "first GI uh git check-in so initially it"
+  },
+  {
+   "t": 968.0,
+   "d": 3.0,
+   "text": "was just items and and skills I think"
+  },
+  {
+   "t": 971.0,
+   "d": 2.2,
+   "text": "but then I kept thinking like wait but"
+  },
+  {
+   "t": 973.2,
+   "d": 2.92,
+   "text": "what if there was a lightning bolt here"
+  },
+  {
+   "t": 976.12,
+   "d": 4.08,
+   "text": "so far I haven't really hit um like this"
+  },
+  {
+   "t": 980.2,
+   "d": 2.0,
+   "text": "is too much except in terms of"
+  },
+  {
+   "t": 982.2,
+   "d": 1.8,
+   "text": "implementation like some things I just"
+  },
+  {
+   "t": 984.0,
+   "d": 2.56,
+   "text": "start working and I I designed a generic"
+  },
+  {
+   "t": 986.56,
+   "d": 3.76,
+   "text": "system that could in Theory like support"
+  },
+  {
+   "t": 990.32,
+   "d": 4.32,
+   "text": "any kind of rewritable um uh"
+  },
+  {
+   "t": 994.64,
+   "d": 1.84,
+   "text": "but sometimes something would just I"
+  },
+  {
+   "t": 996.48,
+   "d": 1.28,
+   "text": "would just go into it and think okay"
+  },
+  {
+   "t": 997.76,
+   "d": 2.56,
+   "text": "this is you know I'm I'm a solo Indie"
+  },
+  {
+   "t": 1000.32,
+   "d": 2.56,
+   "text": "what am I doing here um but some things"
+  },
+  {
+   "t": 1002.88,
+   "d": 2.76,
+   "text": "I would say are easy to implement like"
+  },
+  {
+   "t": 1005.64,
+   "d": 4.56,
+   "text": "version one but then that shows me the"
+  },
+  {
+   "t": 1010.2,
+   "d": 2.36,
+   "text": "potential of what this could be so a"
+  },
+  {
+   "t": 1012.56,
+   "d": 1.36,
+   "text": "great example of that is actually"
+  },
+  {
+   "t": 1013.92,
+   "d": 1.96,
+   "text": "something that was in the presentation"
+  },
+  {
+   "t": 1015.88,
+   "d": 3.08,
+   "text": "but everyone here gets a sneak peek is"
+  },
+  {
+   "t": 1018.96,
+   "d": 1.8,
+   "text": "story fragments like when characters are"
+  },
+  {
+   "t": 1020.76,
+   "d": 1.44,
+   "text": "talking to you eventually you get"
+  },
+  {
+   "t": 1022.2,
+   "d": 2.08,
+   "text": "powerful enough that a fragment of"
+  },
+  {
+   "t": 1024.28,
+   "d": 1.96,
+   "text": "dialogue gets lit up and there's a"
+  },
+  {
+   "t": 1026.24,
+   "d": 1.96,
+   "text": "lightning bolt next to it and when you"
+  },
+  {
+   "t": 1028.2,
+   "d": 2.32,
+   "text": "rewrite that you get a a dialogue that"
+  },
+  {
+   "t": 1030.52,
+   "d": 2.72,
+   "text": "says here's the sentence they say and"
+  },
+  {
+   "t": 1033.24,
+   "d": 3.24,
+   "text": "that changing that rewrites the reality"
+  },
+  {
+   "t": 1036.48,
+   "d": 3.28,
+   "text": "it ripples out what what changes right"
+  },
+  {
+   "t": 1039.76,
+   "d": 2.92,
+   "text": "and so that feels like a like as soon as"
+  },
+  {
+   "t": 1042.68,
+   "d": 1.44,
+   "text": "I got that working it kind of like"
+  },
+  {
+   "t": 1044.12,
+   "d": 2.44,
+   "text": "shifted something in my head but also it"
+  },
+  {
+   "t": 1046.56,
+   "d": 2.72,
+   "text": "would have to really run that all the"
+  },
+  {
+   "t": 1049.28,
+   "d": 2.08,
+   "text": "way down I think would take it could"
+  },
+  {
+   "t": 1051.36,
+   "d": 2.44,
+   "text": "potentially be its own game honestly but"
+  },
+  {
+   "t": 1053.8,
+   "d": 2.04,
+   "text": "it would take a lot of effort to kind of"
+  },
+  {
+   "t": 1055.84,
+   "d": 2.2,
+   "text": "figure out how to do this where it's"
+  },
+  {
+   "t": 1058.04,
+   "d": 2.2,
+   "text": "like conversation trees except you're"
+  },
+  {
+   "t": 1060.24,
+   "d": 1.88,
+   "text": "not choosing what you say you're"
+  },
+  {
+   "t": 1062.12,
+   "d": 2.24,
+   "text": "choosing what somebody else says and"
+  },
+  {
+   "t": 1064.36,
+   "d": 2.04,
+   "text": "also those like philosophical"
+  },
+  {
+   "t": 1066.4,
+   "d": 2.24,
+   "text": "implications where okay I want a better"
+  },
+  {
+   "t": 1068.64,
+   "d": 2.16,
+   "text": "item I want an epic item but am I really"
+  },
+  {
+   "t": 1070.8,
+   "d": 2.4,
+   "text": "going to rewrite what this person said"
+  },
+  {
+   "t": 1073.2,
+   "d": 2.48,
+   "text": "to me to you know so like there's a lot"
+  },
+  {
+   "t": 1075.68,
+   "d": 1.88,
+   "text": "of stuff that that unlocked that was I"
+  },
+  {
+   "t": 1077.56,
+   "d": 5.28,
+   "text": "felt like was very surprising in in many"
+  },
+  {
+   "t": 1083.48,
+   "d": 5.8,
+   "text": "ways fantastic um and I can totally see"
+  },
+  {
+   "t": 1089.28,
+   "d": 2.12,
+   "text": "how there would be places where planning"
+  },
+  {
+   "t": 1091.4,
+   "d": 1.92,
+   "text": "ahead would be really beneficial but"
+  },
+  {
+   "t": 1093.32,
+   "d": 2.36,
+   "text": "also you can't predict all of the things"
+  },
+  {
+   "t": 1095.68,
+   "d": 2.48,
+   "text": "that are kind of come up um so I guess"
+  },
+  {
+   "t": 1098.16,
+   "d": 2.56,
+   "text": "that's another check in the box of why"
+  },
+  {
+   "t": 1100.72,
+   "d": 4.32,
+   "text": "prototyping is really awesome um I yeah"
+  },
+  {
+   "t": 1105.04,
+   "d": 3.48,
+   "text": "I can't imagine how huge it would get uh"
+  },
+  {
+   "t": 1108.52,
+   "d": 1.96,
+   "text": "the possibility space of being able to"
+  },
+  {
+   "t": 1110.48,
+   "d": 1.64,
+   "text": "affect dialog I'm definitely going to"
+  },
+  {
+   "t": 1112.12,
+   "d": 2.48,
+   "text": "check the game out after this thank you"
+  },
+  {
+   "t": 1114.6,
+   "d": 4.88,
+   "text": "so much awesome thank you so much"
+  }
+ ]
+}

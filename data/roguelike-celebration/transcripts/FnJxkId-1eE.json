@@ -1,0 +1,2774 @@
+{
+ "id": "FnJxkId-1eE",
+ "url": "https://www.youtube.com/watch?v=FnJxkId-1eE",
+ "title": "Dan Recht - Startup Lessons Learned From Roguelikes",
+ "speaker": "Dan Recht",
+ "talk_title": "Startup Lessons Learned From Roguelikes",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1386,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Dan Recht talks about how roguelikes taught him how to lead a startup.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to roguelikes"
+  },
+  {
+   "start": 86,
+   "title": "Leadership as a craft"
+  },
+  {
+   "start": 235,
+   "title": "Dream Quest and strategy"
+  },
+  {
+   "start": 397,
+   "title": "Uncertainty and hiring"
+  },
+  {
+   "start": 597,
+   "title": "Managing team stress"
+  },
+  {
+   "start": 842,
+   "title": "Voyages and milestones"
+  },
+  {
+   "start": 1168,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3690,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.92,
+   "d": 4.83,
+   "text": "awesome thank you for coming back so"
+  },
+  {
+   "t": 6.68,
+   "d": 3.79,
+   "text": "I'll jump right in I am standing in"
+  },
+  {
+   "t": 10.47,
+   "d": 1.44,
+   "text": "front of you to make and then hopefully"
+  },
+  {
+   "t": 11.91,
+   "d": 2.55,
+   "text": "defend a rather bold claim and that"
+  },
+  {
+   "t": 14.46,
+   "d": 2.01,
+   "text": "claim is that roguelike games made me a"
+  },
+  {
+   "t": 16.47,
+   "d": 2.91,
+   "text": "better CEO and the first thing first"
+  },
+  {
+   "t": 19.38,
+   "d": 1.65,
+   "text": "thing I should cover is Who am I to make"
+  },
+  {
+   "t": 21.03,
+   "d": 2.16,
+   "text": "that claim and here is the least useful"
+  },
+  {
+   "t": 23.19,
+   "d": 1.59,
+   "text": "piece of information I can give you"
+  },
+  {
+   "t": 24.78,
+   "d": 1.98,
+   "text": "which is my contact information in name"
+  },
+  {
+   "t": 26.76,
+   "d": 2.52,
+   "text": "I am danrekt that is how to reach me if"
+  },
+  {
+   "t": 29.28,
+   "d": 1.28,
+   "text": "you would like to"
+  },
+  {
+   "t": 30.56,
+   "d": 3.07,
+   "text": "but to really understand why I'm giving"
+  },
+  {
+   "t": 33.63,
+   "d": 1.44,
+   "text": "this talk let's go back in time to"
+  },
+  {
+   "t": 35.07,
+   "d": 3.96,
+   "text": "Hanukkah 1995 I am giving this talk"
+  },
+  {
+   "t": 39.03,
+   "d": 3.44,
+   "text": "because I love games I"
+  },
+  {
+   "t": 42.47,
+   "d": 3.55,
+   "text": "really cannot stress that enough in fact"
+  },
+  {
+   "t": 46.02,
+   "d": 2.1,
+   "text": "I love games so indiscriminately that if"
+  },
+  {
+   "t": 48.12,
+   "d": 2.1,
+   "text": "you look closely at the next time step"
+  },
+  {
+   "t": 50.22,
+   "d": 2.16,
+   "text": "in this scene you find out that I am"
+  },
+  {
+   "t": 52.38,
+   "d": 2.67,
+   "text": "losing my mind over Street Fighter 2 the"
+  },
+  {
+   "t": 55.05,
+   "d": 3.89,
+   "text": "movie the game for the Sega Saturn"
+  },
+  {
+   "t": 61.37,
+   "d": 2.34,
+   "text": "truly I"
+  },
+  {
+   "t": 63.71,
+   "d": 2.77,
+   "text": "was and continue to be a voracious"
+  },
+  {
+   "t": 66.48,
+   "d": 3.36,
+   "text": "player of games all kinds I love the"
+  },
+  {
+   "t": 69.84,
+   "d": 2.31,
+   "text": "roguelike genre especially as an adult I"
+  },
+  {
+   "t": 72.15,
+   "d": 1.77,
+   "text": "like the challenge and the fact that it"
+  },
+  {
+   "t": 73.92,
+   "d": 2.13,
+   "text": "can be either bite-sized or epic"
+  },
+  {
+   "t": 76.05,
+   "d": 3.5,
+   "text": "depending on my availability"
+  },
+  {
+   "t": 79.55,
+   "d": 4.17,
+   "text": "but ultimately I"
+  },
+  {
+   "t": 83.72,
+   "d": 2.11,
+   "text": "did have to do something else besides"
+  },
+  {
+   "t": 85.83,
+   "d": 3.15,
+   "text": "games and as it turns out that thing was"
+  },
+  {
+   "t": 88.98,
+   "d": 2.19,
+   "text": "being a CEO so I am the CEO of a company"
+  },
+  {
+   "t": 91.17,
+   "d": 2.64,
+   "text": "called volute we make conformable"
+  },
+  {
+   "t": 93.81,
+   "d": 1.98,
+   "text": "hydrogen tanks so what that means is we"
+  },
+  {
+   "t": 95.79,
+   "d": 2.25,
+   "text": "make this object it's about 4 feet long"
+  },
+  {
+   "t": 98.04,
+   "d": 3.36,
+   "text": "and a foot wide and it holds hydrogen"
+  },
+  {
+   "t": 101.4,
+   "d": 3.21,
+   "text": "gas at very high pressure like 700 times"
+  },
+  {
+   "t": 104.61,
+   "d": 2.28,
+   "text": "atmospheric pressure so a lot and the"
+  },
+  {
+   "t": 106.89,
+   "d": 1.65,
+   "text": "purpose of this object is to be the fuel"
+  },
+  {
+   "t": 108.54,
+   "d": 1.59,
+   "text": "tank in a hydrogen fuel cell car or"
+  },
+  {
+   "t": 110.13,
+   "d": 1.52,
+   "text": "truck"
+  },
+  {
+   "t": 111.65,
+   "d": 2.41,
+   "text": "the reason we do this is because we have"
+  },
+  {
+   "t": 114.06,
+   "d": 2.04,
+   "text": "the only fuel tank that can fold up to"
+  },
+  {
+   "t": 116.1,
+   "d": 1.71,
+   "text": "fit in all the places that are actually"
+  },
+  {
+   "t": 117.81,
+   "d": 2.21,
+   "text": "available in a vehicle as opposed to"
+  },
+  {
+   "t": 120.02,
+   "d": 2.74,
+   "text": "having to design a vehicle around a big"
+  },
+  {
+   "t": 122.76,
+   "d": 1.59,
+   "text": "tank that's shaped like a barrel which"
+  },
+  {
+   "t": 124.35,
+   "d": 3.12,
+   "text": "is what our competition is now being the"
+  },
+  {
+   "t": 127.47,
+   "d": 1.68,
+   "text": "CEO I don't actually make any of these"
+  },
+  {
+   "t": 129.15,
+   "d": 1.86,
+   "text": "things my job is to lead this group of"
+  },
+  {
+   "t": 131.01,
+   "d": 1.51,
+   "text": "people"
+  },
+  {
+   "t": 132.52,
+   "d": 3.45,
+   "text": "and the company including me is 14 we've"
+  },
+  {
+   "t": 135.97,
+   "d": 2.64,
+   "text": "been around now as a company for about"
+  },
+  {
+   "t": 138.61,
+   "d": 2.42,
+   "text": "four years and"
+  },
+  {
+   "t": 141.03,
+   "d": 3.61,
+   "text": "the question I ask myself all the time"
+  },
+  {
+   "t": 144.64,
+   "d": 1.77,
+   "text": "and that I hope some of you are asking"
+  },
+  {
+   "t": 146.41,
+   "d": 3.38,
+   "text": "yourselves is how do you learn to lead"
+  },
+  {
+   "t": 149.79,
+   "d": 3.75,
+   "text": "they don't teach you that in school and"
+  },
+  {
+   "t": 153.54,
+   "d": 2.56,
+   "text": "there aren't necessarily approved"
+  },
+  {
+   "t": 156.1,
+   "d": 2.12,
+   "text": "sources for teaching yourself"
+  },
+  {
+   "t": 158.22,
+   "d": 2.47,
+   "text": "so when I approach this question and I"
+  },
+  {
+   "t": 160.69,
+   "d": 1.62,
+   "text": "still ask myself this question all the"
+  },
+  {
+   "t": 162.31,
+   "d": 2.97,
+   "text": "time one of the approaches I take is to"
+  },
+  {
+   "t": 165.28,
+   "d": 2.16,
+   "text": "look out into the culture and say what"
+  },
+  {
+   "t": 167.44,
+   "d": 2.72,
+   "text": "are things that I find very affecting"
+  },
+  {
+   "t": 170.16,
+   "d": 3.04,
+   "text": "right those things because I'm a person"
+  },
+  {
+   "t": 173.2,
+   "d": 2.01,
+   "text": "must encode something about the human"
+  },
+  {
+   "t": 175.21,
+   "d": 2.7,
+   "text": "experience and leading is dealing with"
+  },
+  {
+   "t": 177.91,
+   "d": 2.19,
+   "text": "people and so whatever's encoded maybe I"
+  },
+  {
+   "t": 180.1,
+   "d": 2.49,
+   "text": "can learn to lead from that and I'm not"
+  },
+  {
+   "t": 182.59,
+   "d": 2.79,
+   "text": "alone in thinking this there's an entire"
+  },
+  {
+   "t": 185.38,
+   "d": 2.34,
+   "text": "industry of selling you leadership"
+  },
+  {
+   "t": 187.72,
+   "d": 2.85,
+   "text": "advice based on things that are very"
+  },
+  {
+   "t": 190.57,
+   "d": 1.65,
+   "text": "affecting new people so here are the"
+  },
+  {
+   "t": 192.22,
+   "d": 2.58,
+   "text": "first 10 leadership books based on"
+  },
+  {
+   "t": 194.8,
+   "d": 3.26,
+   "text": "Shakespeare I was able to find"
+  },
+  {
+   "t": 199.05,
+   "d": 3.01,
+   "text": "but there's something missing here right"
+  },
+  {
+   "t": 202.06,
+   "d": 2.22,
+   "text": "we're laughing at this for a reason"
+  },
+  {
+   "t": 204.28,
+   "d": 4.2,
+   "text": "which is that intuitively you know that"
+  },
+  {
+   "t": 208.48,
+   "d": 1.74,
+   "text": "you can't get leadership skills just out"
+  },
+  {
+   "t": 210.22,
+   "d": 1.58,
+   "text": "of a book and"
+  },
+  {
+   "t": 211.8,
+   "d": 2.14,
+   "text": "Shakespeare ironically is able to"
+  },
+  {
+   "t": 213.94,
+   "d": 1.38,
+   "text": "capture this in the Merchant of Venice"
+  },
+  {
+   "t": 215.32,
+   "d": 2.58,
+   "text": "he writes I can easier teach xx what"
+  },
+  {
+   "t": 217.9,
+   "d": 1.59,
+   "text": "we're good to be done than to be one of"
+  },
+  {
+   "t": 219.49,
+   "d": 2.1,
+   "text": "20 to follow my own teaching in other"
+  },
+  {
+   "t": 221.59,
+   "d": 1.65,
+   "text": "words reading something does not mean"
+  },
+  {
+   "t": 223.24,
+   "d": 2.67,
+   "text": "that you're able to do it we're hearing"
+  },
+  {
+   "t": 225.91,
+   "d": 2.1,
+   "text": "it also right just because I'm talking"
+  },
+  {
+   "t": 228.01,
+   "d": 1.26,
+   "text": "to you doesn't mean you're going to be"
+  },
+  {
+   "t": 229.27,
+   "d": 2.34,
+   "text": "able to just do what I say and so what"
+  },
+  {
+   "t": 231.61,
+   "d": 3.56,
+   "text": "this talk is really about is a method"
+  },
+  {
+   "t": 235.17,
+   "d": 4.57,
+   "text": "you learn to lead by doing and I would"
+  },
+  {
+   "t": 239.74,
+   "d": 1.95,
+   "text": "like to tell you how I learned by doing"
+  },
+  {
+   "t": 241.69,
+   "d": 3.38,
+   "text": "using roguelikes and"
+  },
+  {
+   "t": 245.07,
+   "d": 2.62,
+   "text": "I'm going to do that through this story"
+  },
+  {
+   "t": 247.69,
+   "d": 1.98,
+   "text": "of my experiences with three roguelikes"
+  },
+  {
+   "t": 249.67,
+   "d": 3.06,
+   "text": "but really I've learned from a lot more"
+  },
+  {
+   "t": 252.73,
+   "d": 2.58,
+   "text": "than that and you can learn from your"
+  },
+  {
+   "t": 255.31,
+   "d": 1.89,
+   "text": "favorite roguelike just by thinking"
+  },
+  {
+   "t": 257.2,
+   "d": 4.55,
+   "text": "deeply about how it was made and why"
+  },
+  {
+   "t": 261.9,
+   "d": 2.41,
+   "text": "fundamentally what makes roguelikes a"
+  },
+  {
+   "t": 264.31,
+   "d": 2.22,
+   "text": "great tool for learning by doing"
+  },
+  {
+   "t": 266.53,
+   "d": 3.09,
+   "text": "is that they have this incredible set of"
+  },
+  {
+   "t": 269.62,
+   "d": 3.39,
+   "text": "interacting systems and those systems"
+  },
+  {
+   "t": 273.01,
+   "d": 3.27,
+   "text": "lead to trade-offs you can't always be"
+  },
+  {
+   "t": 276.28,
+   "d": 1.83,
+   "text": "perfect at all the systems all the time"
+  },
+  {
+   "t": 278.11,
+   "d": 3.27,
+   "text": "and those trade-offs then create choices"
+  },
+  {
+   "t": 281.38,
+   "d": 1.74,
+   "text": "for the player and those choices are"
+  },
+  {
+   "t": 283.12,
+   "d": 2.67,
+   "text": "difficult and meaningful they have big"
+  },
+  {
+   "t": 285.79,
+   "d": 3.02,
+   "text": "world impact and"
+  },
+  {
+   "t": 288.81,
+   "d": 2.32,
+   "text": "once you make those choices and get"
+  },
+  {
+   "t": 291.13,
+   "d": 2.85,
+   "text": "feedback from the game that feedback is"
+  },
+  {
+   "t": 293.98,
+   "d": 2.43,
+   "text": "really powerful and that initiates"
+  },
+  {
+   "t": 296.41,
+   "d": 2.91,
+   "text": "learning and the game is a really nice"
+  },
+  {
+   "t": 299.32,
+   "d": 2.79,
+   "text": "source of directed practice at handling"
+  },
+  {
+   "t": 302.11,
+   "d": 2.76,
+   "text": "trade-offs because you can just go back"
+  },
+  {
+   "t": 304.87,
+   "d": 2.1,
+   "text": "and do it again if it goes wrong and you"
+  },
+  {
+   "t": 306.97,
+   "d": 1.47,
+   "text": "see many different examples of many"
+  },
+  {
+   "t": 308.44,
+   "d": 1.86,
+   "text": "kinds of trade-offs and you make hard"
+  },
+  {
+   "t": 310.3,
+   "d": 2.43,
+   "text": "choices and you get to learn in a"
+  },
+  {
+   "t": 312.73,
+   "d": 1.41,
+   "text": "sandbox environment where you're not"
+  },
+  {
+   "t": 314.14,
+   "d": 2.75,
+   "text": "hurting anyone or ruining a business"
+  },
+  {
+   "t": 316.89,
+   "d": 2.77,
+   "text": "so the stakes feel high but in some"
+  },
+  {
+   "t": 319.66,
+   "d": 2.54,
+   "text": "sense they're not"
+  },
+  {
+   "t": 322.47,
+   "d": 1.72,
+   "text": "let's take a rather straightforward"
+  },
+  {
+   "t": 324.19,
+   "d": 1.89,
+   "text": "example of one of my favorite roguelikes"
+  },
+  {
+   "t": 326.08,
+   "d": 3.29,
+   "text": "this is dream quest by Peter Whelan"
+  },
+  {
+   "t": 329.37,
+   "d": 2.02,
+   "text": "this map screen is going to look pretty"
+  },
+  {
+   "t": 331.39,
+   "d": 2.16,
+   "text": "familiar if you've seen any roguelike"
+  },
+  {
+   "t": 333.55,
+   "d": 2.49,
+   "text": "but what's unique or at least what I"
+  },
+  {
+   "t": 336.04,
+   "d": 1.95,
+   "text": "find special about dream quest I'm sure"
+  },
+  {
+   "t": 337.99,
+   "d": 1.26,
+   "text": "there are other games that do this is"
+  },
+  {
+   "t": 339.25,
+   "d": 1.92,
+   "text": "that instead of having an inventory you"
+  },
+  {
+   "t": 341.17,
+   "d": 1.35,
+   "text": "have a deck of cards and instead of"
+  },
+  {
+   "t": 342.52,
+   "d": 2.54,
+   "text": "fighting you play a card game and"
+  },
+  {
+   "t": 345.06,
+   "d": 2.44,
+   "text": "what's interesting about that to me is"
+  },
+  {
+   "t": 347.5,
+   "d": 3.51,
+   "text": "as you gain equipment over time and get"
+  },
+  {
+   "t": 351.01,
+   "d": 1.38,
+   "text": "stronger as a character what you really"
+  },
+  {
+   "t": 352.39,
+   "d": 3.98,
+   "text": "do is get more cards so I can't directly"
+  },
+  {
+   "t": 356.37,
+   "d": 3.19,
+   "text": "influence my ability to win fights but I"
+  },
+  {
+   "t": 359.56,
+   "d": 2.55,
+   "text": "can improve the probabilities that I"
+  },
+  {
+   "t": 362.11,
+   "d": 3.48,
+   "text": "have in combat similarly the between"
+  },
+  {
+   "t": 365.59,
+   "d": 2.3,
+   "text": "dungeon crawl system right so the"
+  },
+  {
+   "t": 367.89,
+   "d": 2.53,
+   "text": "between game system meta progression"
+  },
+  {
+   "t": 370.42,
+   "d": 1.7,
+   "text": "that people have been talking about is"
+  },
+  {
+   "t": 372.12,
+   "d": 3.61,
+   "text": "an achievement system where the rewards"
+  },
+  {
+   "t": 375.73,
+   "d": 2.55,
+   "text": "are just new cards that show up in the"
+  },
+  {
+   "t": 378.28,
+   "d": 1.13,
+   "text": "game and"
+  },
+  {
+   "t": 379.41,
+   "d": 3.25,
+   "text": "so again all you can do is the player is"
+  },
+  {
+   "t": 382.66,
+   "d": 1.41,
+   "text": "manipulate probabilities you are"
+  },
+  {
+   "t": 384.07,
+   "d": 3.06,
+   "text": "changing what is possible and what the"
+  },
+  {
+   "t": 387.13,
+   "d": 3.12,
+   "text": "odds of things are and that reminded me"
+  },
+  {
+   "t": 390.25,
+   "d": 2.94,
+   "text": "immediately of setting up at a trade"
+  },
+  {
+   "t": 393.19,
+   "d": 1.61,
+   "text": "show for the first time"
+  },
+  {
+   "t": 394.8,
+   "d": 3.01,
+   "text": "so that's a booth of ours in Germany I"
+  },
+  {
+   "t": 397.81,
+   "d": 1.17,
+   "text": "went out to see a bunch of auto"
+  },
+  {
+   "t": 398.98,
+   "d": 1.32,
+   "text": "companies there"
+  },
+  {
+   "t": 400.3,
+   "d": 4.05,
+   "text": "and at the moment I got that all set up"
+  },
+  {
+   "t": 404.35,
+   "d": 2.22,
+   "text": "early in the morning on day one I was"
+  },
+  {
+   "t": 406.57,
+   "d": 2.64,
+   "text": "thinking to myself well nothing will be"
+  },
+  {
+   "t": 409.21,
+   "d": 3.42,
+   "text": "finished today but what I am going to do"
+  },
+  {
+   "t": 412.63,
+   "d": 1.98,
+   "text": "is change the probabilities of things"
+  },
+  {
+   "t": 414.61,
+   "d": 3.02,
+   "text": "that come later and"
+  },
+  {
+   "t": 418.35,
+   "d": 1.93,
+   "text": "this led me to really start thinking"
+  },
+  {
+   "t": 420.28,
+   "d": 1.56,
+   "text": "deeply about dream quest and what I"
+  },
+  {
+   "t": 421.84,
+   "d": 2.0,
+   "text": "might learn from it so"
+  },
+  {
+   "t": 423.84,
+   "d": 3.33,
+   "text": "the first thing I pulled is"
+  },
+  {
+   "t": 427.17,
+   "d": 2.68,
+   "text": "really the idea of what I wanted to do"
+  },
+  {
+   "t": 429.85,
+   "d": 3.24,
+   "text": "is to make luck write luck is this thing"
+  },
+  {
+   "t": 433.09,
+   "d": 1.44,
+   "text": "that we feel like happens to us it's"
+  },
+  {
+   "t": 434.53,
+   "d": 1.8,
+   "text": "this property of random things going"
+  },
+  {
+   "t": 436.33,
+   "d": 1.79,
+   "text": "well but"
+  },
+  {
+   "t": 438.12,
+   "d": 1.96,
+   "text": "surely there must be a way to manipulate"
+  },
+  {
+   "t": 440.08,
+   "d": 1.73,
+   "text": "it"
+  },
+  {
+   "t": 441.81,
+   "d": 3.43,
+   "text": "the first step and I think dream quest"
+  },
+  {
+   "t": 445.24,
+   "d": 1.35,
+   "text": "is really good at teaching this is to"
+  },
+  {
+   "t": 446.59,
+   "d": 2.91,
+   "text": "accept uncertainty so recently I was"
+  },
+  {
+   "t": 449.5,
+   "d": 2.94,
+   "text": "actually writing a long document for my"
+  },
+  {
+   "t": 452.44,
+   "d": 2.37,
+   "text": "team about what was happening in our"
+  },
+  {
+   "t": 454.81,
+   "d": 2.19,
+   "text": "company in the future so at the top is"
+  },
+  {
+   "t": 457.0,
+   "d": 2.82,
+   "text": "our company intranet page if you work at"
+  },
+  {
+   "t": 459.82,
+   "d": 1.68,
+   "text": "a company that has at least one software"
+  },
+  {
+   "t": 461.5,
+   "d": 1.86,
+   "text": "engineer I imagine yours does not look"
+  },
+  {
+   "t": 463.36,
+   "d": 1.95,
+   "text": "like that as a company with zero"
+  },
+  {
+   "t": 465.31,
+   "d": 1.53,
+   "text": "software engineers this is what we've"
+  },
+  {
+   "t": 466.84,
+   "d": 2.79,
+   "text": "got and when I tried to summarize really"
+  },
+  {
+   "t": 469.63,
+   "d": 3.45,
+   "text": "what the essence of my job was I came up"
+  },
+  {
+   "t": 473.08,
+   "d": 1.4,
+   "text": "with the quote at the bottom of the page"
+  },
+  {
+   "t": 474.48,
+   "d": 2.02,
+   "text": "so I'm gonna commit the faux pas of"
+  },
+  {
+   "t": 476.5,
+   "d": 1.44,
+   "text": "quoting myself but I only do it this"
+  },
+  {
+   "t": 477.94,
+   "d": 2.25,
+   "text": "once I think of different ways things"
+  },
+  {
+   "t": 480.19,
+   "d": 1.53,
+   "text": "might play out in the future decide"
+  },
+  {
+   "t": 481.72,
+   "d": 2.01,
+   "text": "which versions of the future are best"
+  },
+  {
+   "t": 483.73,
+   "d": 2.1,
+   "text": "for us so for the company and act to"
+  },
+  {
+   "t": 485.83,
+   "d": 1.41,
+   "text": "make good scenarios more likely in bad"
+  },
+  {
+   "t": 487.24,
+   "d": 2.46,
+   "text": "scenarios less likely that's CEO in a"
+  },
+  {
+   "t": 489.7,
+   "d": 1.49,
+   "text": "nutshell"
+  },
+  {
+   "t": 491.19,
+   "d": 2.68,
+   "text": "but key to this definition is accepting"
+  },
+  {
+   "t": 493.87,
+   "d": 1.68,
+   "text": "that things are uncertain in fact"
+  },
+  {
+   "t": 495.55,
+   "d": 2.28,
+   "text": "everything that matters is uncertain so"
+  },
+  {
+   "t": 497.83,
+   "d": 1.62,
+   "text": "what can you do in an environment like"
+  },
+  {
+   "t": 499.45,
+   "d": 1.23,
+   "text": "that well dream quest gives us two"
+  },
+  {
+   "t": 500.68,
+   "d": 2.07,
+   "text": "answers the first is to draw more cards"
+  },
+  {
+   "t": 502.75,
+   "d": 3.89,
+   "text": "right we can make more attempts at"
+  },
+  {
+   "t": 506.64,
+   "d": 2.59,
+   "text": "succeeding so what does that look like"
+  },
+  {
+   "t": 509.23,
+   "d": 2.82,
+   "text": "in start-up land well for us that means"
+  },
+  {
+   "t": 512.05,
+   "d": 2.18,
+   "text": "just trying more times so"
+  },
+  {
+   "t": 514.23,
+   "d": 2.32,
+   "text": "we're a business to business company"
+  },
+  {
+   "t": 516.55,
+   "d": 1.86,
+   "text": "which means we think about the world in"
+  },
+  {
+   "t": 518.41,
+   "d": 1.23,
+   "text": "terms of partner companies that we work"
+  },
+  {
+   "t": 519.64,
+   "d": 1.38,
+   "text": "with either as suppliers or customers"
+  },
+  {
+   "t": 521.02,
+   "d": 1.31,
+   "text": "and"
+  },
+  {
+   "t": 522.33,
+   "d": 2.82,
+   "text": "it's not one negotiation to one partner"
+  },
+  {
+   "t": 525.15,
+   "d": 1.9,
+   "text": "because we're in Hardware we're pretty"
+  },
+  {
+   "t": 527.05,
+   "d": 2.19,
+   "text": "stingy with NDA's but we work with about"
+  },
+  {
+   "t": 529.24,
+   "d": 1.95,
+   "text": "20 companies however my folder of"
+  },
+  {
+   "t": 531.19,
+   "d": 1.68,
+   "text": "executed NDA's has about a hundred in it"
+  },
+  {
+   "t": 532.87,
+   "d": 1.56,
+   "text": "which means that for every company we"
+  },
+  {
+   "t": 534.43,
+   "d": 1.62,
+   "text": "work with we had a serious negotiation"
+  },
+  {
+   "t": 536.05,
+   "d": 1.04,
+   "text": "with five"
+  },
+  {
+   "t": 537.09,
+   "d": 3.13,
+   "text": "similarly when we're hiring candidates"
+  },
+  {
+   "t": 540.22,
+   "d": 1.92,
+   "text": "for every candidate we interview we"
+  },
+  {
+   "t": 542.14,
+   "d": 2.19,
+   "text": "receive about 30 resumes and for every"
+  },
+  {
+   "t": 544.33,
+   "d": 1.86,
+   "text": "hire we do we have to do about 15"
+  },
+  {
+   "t": 546.19,
+   "d": 2.73,
+   "text": "interviews so again if you want things"
+  },
+  {
+   "t": 548.92,
+   "d": 2.52,
+   "text": "to go really well draw more cards try"
+  },
+  {
+   "t": 551.44,
+   "d": 1.31,
+   "text": "more"
+  },
+  {
+   "t": 552.75,
+   "d": 2.62,
+   "text": "the other thing dream quests teaches us"
+  },
+  {
+   "t": 555.37,
+   "d": 2.07,
+   "text": "to do is to stack the deck right if you"
+  },
+  {
+   "t": 557.44,
+   "d": 1.62,
+   "text": "want to draw more better cards have a"
+  },
+  {
+   "t": 559.06,
+   "d": 2.7,
+   "text": "deck full of better cards and again the"
+  },
+  {
+   "t": 561.76,
+   "d": 1.86,
+   "text": "way I looked at that in a startup"
+  },
+  {
+   "t": 563.62,
+   "d": 1.89,
+   "text": "context in the context of volute was to"
+  },
+  {
+   "t": 565.51,
+   "d": 3.18,
+   "text": "say well what is doing the trying the"
+  },
+  {
+   "t": 568.69,
+   "d": 1.41,
+   "text": "answer is not what is doing the trying"
+  },
+  {
+   "t": 570.1,
+   "d": 2.94,
+   "text": "but who is doing the trying every try"
+  },
+  {
+   "t": 573.04,
+   "d": 2.18,
+   "text": "everything we do is done by our team and"
+  },
+  {
+   "t": 575.22,
+   "d": 2.56,
+   "text": "so the number one thing that I can do to"
+  },
+  {
+   "t": 577.78,
+   "d": 1.68,
+   "text": "make us succeed is to have as good a"
+  },
+  {
+   "t": 579.46,
+   "d": 3.33,
+   "text": "team as possible this is the toolkit"
+  },
+  {
+   "t": 582.79,
+   "d": 2.22,
+   "text": "this is the underlying probabilities of"
+  },
+  {
+   "t": 585.01,
+   "d": 2.43,
+   "text": "success it's these people so I had"
+  },
+  {
+   "t": 587.44,
+   "d": 1.86,
+   "text": "better select an incredible group of"
+  },
+  {
+   "t": 589.3,
+   "d": 2.31,
+   "text": "people which then plays back to why we"
+  },
+  {
+   "t": 591.61,
+   "d": 1.35,
+   "text": "look at so many resumes and do so many"
+  },
+  {
+   "t": 592.96,
+   "d": 3.05,
+   "text": "interviews before we hire someone"
+  },
+  {
+   "t": 597.48,
+   "d": 2.82,
+   "text": "so let's do a more complicated example"
+  },
+  {
+   "t": 600.3,
+   "d": 3.1,
+   "text": "darkest dungeon this is a game that is"
+  },
+  {
+   "t": 603.4,
+   "d": 2.31,
+   "text": "very near and dear to my heart for those"
+  },
+  {
+   "t": 605.71,
+   "d": 1.92,
+   "text": "of you who may not be familiar with it"
+  },
+  {
+   "t": 607.63,
+   "d": 2.25,
+   "text": "you take a party of people down into a"
+  },
+  {
+   "t": 609.88,
+   "d": 3.78,
+   "text": "really terrifying dungeon and what is"
+  },
+  {
+   "t": 613.66,
+   "d": 3.69,
+   "text": "unique about darkest dungeon is this"
+  },
+  {
+   "t": 617.35,
+   "d": 2.25,
+   "text": "little stat bar right there that's your"
+  },
+  {
+   "t": 619.6,
+   "d": 2.75,
+   "text": "stress meter for each character"
+  },
+  {
+   "t": 622.35,
+   "d": 4.0,
+   "text": "dungeon crawling is not fun for them for"
+  },
+  {
+   "t": 626.35,
+   "d": 1.86,
+   "text": "you maybe but for them not so much and"
+  },
+  {
+   "t": 628.21,
+   "d": 1.95,
+   "text": "what that means is as you go deeper and"
+  },
+  {
+   "t": 630.16,
+   "d": 1.29,
+   "text": "deeper into the dungeon your characters"
+  },
+  {
+   "t": 631.45,
+   "d": 2.36,
+   "text": "get less and less happy they stress out"
+  },
+  {
+   "t": 633.81,
+   "d": 3.37,
+   "text": "if they get too stressed in one dungeon"
+  },
+  {
+   "t": 637.18,
+   "d": 2.58,
+   "text": "crawl they become afflicted something"
+  },
+  {
+   "t": 639.76,
+   "d": 1.29,
+   "text": "bad happens immediately it's like a"
+  },
+  {
+   "t": 641.05,
+   "d": 1.29,
+   "text": "mental breakdown so they might become"
+  },
+  {
+   "t": 642.34,
+   "d": 2.79,
+   "text": "for example hopeless but if they're"
+  },
+  {
+   "t": 645.13,
+   "d": 3.42,
+   "text": "stressed over time they develop quirks"
+  },
+  {
+   "t": 648.55,
+   "d": 1.8,
+   "text": "which show up as permanent traits on"
+  },
+  {
+   "t": 650.35,
+   "d": 1.88,
+   "text": "their character sheet and"
+  },
+  {
+   "t": 652.23,
+   "d": 4.06,
+   "text": "there's a lot of different quirks it can"
+  },
+  {
+   "t": 656.29,
+   "d": 3.57,
+   "text": "be everything from being too calm to"
+  },
+  {
+   "t": 659.86,
+   "d": 3.53,
+   "text": "falling in love to being a bad gambler"
+  },
+  {
+   "t": 663.39,
+   "d": 4.21,
+   "text": "to being afraid of robots and anything"
+  },
+  {
+   "t": 667.6,
+   "d": 2.33,
+   "text": "is possible in darkest dungeon"
+  },
+  {
+   "t": 669.93,
+   "d": 1.83,
+   "text": "and"
+  },
+  {
+   "t": 671.76,
+   "d": 2.71,
+   "text": "it gives you ways to mitigate stress so"
+  },
+  {
+   "t": 674.47,
+   "d": 1.71,
+   "text": "you don't come down with these quirks so"
+  },
+  {
+   "t": 676.18,
+   "d": 2.1,
+   "text": "you don't have these afflictions you"
+  },
+  {
+   "t": 678.28,
+   "d": 1.26,
+   "text": "want to keep your characters mentally"
+  },
+  {
+   "t": 679.54,
+   "d": 2.55,
+   "text": "healthy so you can take breaks in the"
+  },
+  {
+   "t": 682.09,
+   "d": 2.54,
+   "text": "dungeon and make light of the situation"
+  },
+  {
+   "t": 684.63,
+   "d": 3.01,
+   "text": "or you can go to the tavern after the"
+  },
+  {
+   "t": 687.64,
+   "d": 2.76,
+   "text": "dungeon crawl and either as the game"
+  },
+  {
+   "t": 690.4,
+   "d": 3.0,
+   "text": "says drink your cares away or gamble or"
+  },
+  {
+   "t": 693.4,
+   "d": 3.5,
+   "text": "do less work acceptable things"
+  },
+  {
+   "t": 696.9,
+   "d": 1.56,
+   "text": "and"
+  },
+  {
+   "t": 698.46,
+   "d": 3.4,
+   "text": "so the obvious thing for me to take this"
+  },
+  {
+   "t": 701.86,
+   "d": 2.34,
+   "text": "around to what we're doing as a company"
+  },
+  {
+   "t": 704.2,
+   "d": 1.62,
+   "text": "would be to say well let's relieve"
+  },
+  {
+   "t": 705.82,
+   "d": 1.35,
+   "text": "stress like darkest dungeon relieve"
+  },
+  {
+   "t": 707.17,
+   "d": 3.3,
+   "text": "stress so let's you know we do a lot of"
+  },
+  {
+   "t": 710.47,
+   "d": 3.78,
+   "text": "high pressure testing and it can feel"
+  },
+  {
+   "t": 714.25,
+   "d": 2.39,
+   "text": "like we're under a lot of pressure"
+  },
+  {
+   "t": 716.64,
+   "d": 2.35,
+   "text": "so let's make a little bit of fun of"
+  },
+  {
+   "t": 718.99,
+   "d": 2.19,
+   "text": "that right so when we talk about stress"
+  },
+  {
+   "t": 721.18,
+   "d": 2.82,
+   "text": "let's make fun of that pressure so"
+  },
+  {
+   "t": 724.0,
+   "d": 1.47,
+   "text": "there's our safety sign we have a big"
+  },
+  {
+   "t": 725.47,
+   "d": 1.38,
+   "text": "glowing green light when we're pressure"
+  },
+  {
+   "t": 726.85,
+   "d": 2.88,
+   "text": "testing that corresponds to this side we"
+  },
+  {
+   "t": 729.73,
+   "d": 1.41,
+   "text": "can go to the tavern in this case the"
+  },
+  {
+   "t": 731.14,
+   "d": 2.85,
+   "text": "Korean restaurant after work but really"
+  },
+  {
+   "t": 733.99,
+   "d": 2.58,
+   "text": "that's not the point the point of"
+  },
+  {
+   "t": 736.57,
+   "d": 1.89,
+   "text": "darkest dungeon for me and what I felt"
+  },
+  {
+   "t": 738.46,
+   "d": 1.62,
+   "text": "like the designers in this system we're"
+  },
+  {
+   "t": 740.08,
+   "d": 2.7,
+   "text": "trying to tell me is that it is worth"
+  },
+  {
+   "t": 742.78,
+   "d": 3.71,
+   "text": "making trade-offs to manage stress"
+  },
+  {
+   "t": 746.49,
+   "d": 2.44,
+   "text": "stress management isn't free and it"
+  },
+  {
+   "t": 748.93,
+   "d": 1.98,
+   "text": "isn't necessarily easy and that extends"
+  },
+  {
+   "t": 750.91,
+   "d": 2.91,
+   "text": "to managing and making sure your team is"
+  },
+  {
+   "t": 753.82,
+   "d": 1.85,
+   "text": "mentally healthy"
+  },
+  {
+   "t": 755.67,
+   "d": 5.04,
+   "text": "so I choose to spend resources on that I"
+  },
+  {
+   "t": 760.71,
+   "d": 2.89,
+   "text": "spend my time I check in with everybody"
+  },
+  {
+   "t": 763.6,
+   "d": 2.69,
+   "text": "on the team 30 minutes every month"
+  },
+  {
+   "t": 766.29,
+   "d": 2.56,
+   "text": "that's costly right I could use those 30"
+  },
+  {
+   "t": 768.85,
+   "d": 2.46,
+   "text": "minutes times 13 other people for other"
+  },
+  {
+   "t": 771.31,
+   "d": 2.28,
+   "text": "things but it's a good time for me to"
+  },
+  {
+   "t": 773.59,
+   "d": 2.07,
+   "text": "ask what are you working on how's your"
+  },
+  {
+   "t": 775.66,
+   "d": 1.62,
+   "text": "stress level are you excited about what"
+  },
+  {
+   "t": 777.28,
+   "d": 2.42,
+   "text": "you're doing"
+  },
+  {
+   "t": 779.7,
+   "d": 2.56,
+   "text": "we offer health insurance that has"
+  },
+  {
+   "t": 782.26,
+   "d": 2.72,
+   "text": "mental health benefits this costs money"
+  },
+  {
+   "t": 784.98,
+   "d": 3.43,
+   "text": "but again I think that trade-off is"
+  },
+  {
+   "t": 788.41,
+   "d": 1.86,
+   "text": "worth it and I think darkest dungeon has"
+  },
+  {
+   "t": 790.27,
+   "d": 2.57,
+   "text": "that message embedded in it and"
+  },
+  {
+   "t": 792.84,
+   "d": 2.04,
+   "text": "then I"
+  },
+  {
+   "t": 794.88,
+   "d": 2.83,
+   "text": "spend the team's time on this our"
+  },
+  {
+   "t": 797.71,
+   "d": 1.92,
+   "text": "culture is one in which we take care of"
+  },
+  {
+   "t": 799.63,
+   "d": 2.79,
+   "text": "each other we're a motional labor isn't"
+  },
+  {
+   "t": 802.42,
+   "d": 1.5,
+   "text": "the province of just one or two people"
+  },
+  {
+   "t": 803.92,
+   "d": 4.11,
+   "text": "and what that means is every interaction"
+  },
+  {
+   "t": 808.03,
+   "d": 1.65,
+   "text": "or at least many interactions between"
+  },
+  {
+   "t": 809.68,
+   "d": 0.96,
+   "text": "people on the team can be"
+  },
+  {
+   "t": 810.64,
+   "d": 2.37,
+   "text": "stress-reducing even if externally there"
+  },
+  {
+   "t": 813.01,
+   "d": 2.04,
+   "text": "are stressors and pressures and problems"
+  },
+  {
+   "t": 815.05,
+   "d": 2.19,
+   "text": "that we're trying to solve and having"
+  },
+  {
+   "t": 817.24,
+   "d": 1.56,
+   "text": "that kind of culture means maybe you do"
+  },
+  {
+   "t": 818.8,
+   "d": 1.53,
+   "text": "a little bit less engineering per unit"
+  },
+  {
+   "t": 820.33,
+   "d": 2.4,
+   "text": "time but in the long run because the"
+  },
+  {
+   "t": 822.73,
+   "d": 1.35,
+   "text": "kind of engineering we're doing is"
+  },
+  {
+   "t": 824.08,
+   "d": 1.17,
+   "text": "really difficult in really"
+  },
+  {
+   "t": 825.25,
+   "d": 2.25,
+   "text": "time-consuming and is going to be a long"
+  },
+  {
+   "t": 827.5,
+   "d": 2.91,
+   "text": "haul because the first hydrogen vehicles"
+  },
+  {
+   "t": 830.41,
+   "d": 1.53,
+   "text": "with our tanks in them probably won't be"
+  },
+  {
+   "t": 831.94,
+   "d": 2.66,
+   "text": "on the roads until like 2023"
+  },
+  {
+   "t": 834.6,
+   "d": 2.53,
+   "text": "we have to do something that is"
+  },
+  {
+   "t": 837.13,
+   "d": 2.81,
+   "text": "self-sustaining"
+  },
+  {
+   "t": 842.19,
+   "d": 1.75,
+   "text": "now I'm going to wade into some"
+  },
+  {
+   "t": 843.94,
+   "d": 1.41,
+   "text": "controversial territory because I'm"
+  },
+  {
+   "t": 845.35,
+   "d": 1.65,
+   "text": "gonna talk about how fast the boat goes"
+  },
+  {
+   "t": 847.0,
+   "d": 2.75,
+   "text": "and sunless sea"
+  },
+  {
+   "t": 850.23,
+   "d": 2.77,
+   "text": "this was another game that I spent a lot"
+  },
+  {
+   "t": 853.0,
+   "d": 2.82,
+   "text": "of time with and that really means a lot"
+  },
+  {
+   "t": 855.82,
+   "d": 1.43,
+   "text": "to me personally"
+  },
+  {
+   "t": 857.25,
+   "d": 3.34,
+   "text": "in sunless sea you play a sea captain in"
+  },
+  {
+   "t": 860.59,
+   "d": 1.95,
+   "text": "the ocean underground that was"
+  },
+  {
+   "t": 862.54,
+   "d": 1.8,
+   "text": "discovered when London fell through the"
+  },
+  {
+   "t": 864.34,
+   "d": 3.68,
+   "text": "crust of the earth and"
+  },
+  {
+   "t": 868.23,
+   "d": 2.8,
+   "text": "one of the key things about sunless sea"
+  },
+  {
+   "t": 871.03,
+   "d": 2.64,
+   "text": "is just how big the world is so sunless"
+  },
+  {
+   "t": 873.67,
+   "d": 2.37,
+   "text": "sea takes place on a huge procedurally"
+  },
+  {
+   "t": 876.04,
+   "d": 1.35,
+   "text": "shuffled though not procedurally"
+  },
+  {
+   "t": 877.39,
+   "d": 3.36,
+   "text": "generated map where that screenshot I"
+  },
+  {
+   "t": 880.75,
+   "d": 2.09,
+   "text": "just showed you is this tiny box"
+  },
+  {
+   "t": 882.84,
+   "d": 3.01,
+   "text": "so the world is really big and as I"
+  },
+  {
+   "t": 885.85,
+   "d": 2.16,
+   "text": "alluded to earlier the boat goes really"
+  },
+  {
+   "t": 888.01,
+   "d": 2.36,
+   "text": "slow"
+  },
+  {
+   "t": 890.37,
+   "d": 2.43,
+   "text": "yikes and"
+  },
+  {
+   "t": 892.8,
+   "d": 2.53,
+   "text": "people complain about this and the"
+  },
+  {
+   "t": 895.33,
+   "d": 2.25,
+   "text": "creator of the game came out and made a"
+  },
+  {
+   "t": 897.58,
+   "d": 2.31,
+   "text": "statement he said sunless sea is a"
+  },
+  {
+   "t": 899.89,
+   "d": 2.76,
+   "text": "stately game you could reasonably call"
+  },
+  {
+   "t": 902.65,
+   "d": 2.79,
+   "text": "it a slow game but we've resisted"
+  },
+  {
+   "t": 905.44,
+   "d": 1.5,
+   "text": "speeding up the ship because it would"
+  },
+  {
+   "t": 906.94,
+   "d": 1.95,
+   "text": "reduce the tension the sense of space"
+  },
+  {
+   "t": 908.89,
+   "d": 2.31,
+   "text": "and distance and the Menace of the dark"
+  },
+  {
+   "t": 911.2,
+   "d": 3.96,
+   "text": "and that hit home for me some of the sea"
+  },
+  {
+   "t": 915.16,
+   "d": 1.38,
+   "text": "is a game that you play with somebody"
+  },
+  {
+   "t": 916.54,
+   "d": 1.44,
+   "text": "else in the room if you can so you can"
+  },
+  {
+   "t": 917.98,
+   "d": 3.26,
+   "text": "talk to them while you're voyages"
+  },
+  {
+   "t": 921.48,
+   "d": 4.21,
+   "text": "of actually is the overall management of"
+  },
+  {
+   "t": 925.69,
+   "d": 2.33,
+   "text": "volute"
+  },
+  {
+   "t": 928.8,
+   "d": 4.09,
+   "text": "because in sunless sea as you're going"
+  },
+  {
+   "t": 932.89,
+   "d": 2.1,
+   "text": "off on those long voyages"
+  },
+  {
+   "t": 934.99,
+   "d": 2.43,
+   "text": "sources to worry about you have fuel you"
+  },
+  {
+   "t": 937.42,
+   "d": 1.76,
+   "text": "have food and"
+  },
+  {
+   "t": 939.18,
+   "d": 3.81,
+   "text": "your crew members can become afraid and"
+  },
+  {
+   "t": 942.99,
+   "d": 2.68,
+   "text": "this leads to the motto of the game this"
+  },
+  {
+   "t": 945.67,
+   "d": 2.01,
+   "text": "is their tagline lose your mind eat your"
+  },
+  {
+   "t": 947.68,
+   "d": 3.9,
+   "text": "crew but if you actually look at the"
+  },
+  {
+   "t": 951.58,
+   "d": 2.12,
+   "text": "starting screen there's another tagline"
+  },
+  {
+   "t": 953.7,
+   "d": 3.06,
+   "text": "explore take risks and"
+  },
+  {
+   "t": 956.76,
+   "d": 2.62,
+   "text": "balancing those two things hit me is"
+  },
+  {
+   "t": 959.38,
+   "d": 2.51,
+   "text": "really resonant and"
+  },
+  {
+   "t": 961.89,
+   "d": 2.95,
+   "text": "it was at a time I first discovered some"
+  },
+  {
+   "t": 964.84,
+   "d": 1.59,
+   "text": "let's see when velu is not doing that"
+  },
+  {
+   "t": 966.43,
+   "d": 2.87,
+   "text": "great financially and so I immediately"
+  },
+  {
+   "t": 969.3,
+   "d": 2.38,
+   "text": "looked at our bank account and saw the"
+  },
+  {
+   "t": 971.68,
+   "d": 2.33,
+   "text": "arc of the game in it"
+  },
+  {
+   "t": 974.01,
+   "d": 2.53,
+   "text": "so this is really our bank balance from"
+  },
+  {
+   "t": 976.54,
+   "d": 4.34,
+   "text": "October 14 to November 17 and"
+  },
+  {
+   "t": 980.88,
+   "d": 2.71,
+   "text": "you can see these moments where things"
+  },
+  {
+   "t": 983.59,
+   "d": 3.47,
+   "text": "were getting a little dicey"
+  },
+  {
+   "t": 987.18,
+   "d": 2.01,
+   "text": "and"
+  },
+  {
+   "t": 989.19,
+   "d": 3.82,
+   "text": "what sunless sea taught me to do was to"
+  },
+  {
+   "t": 993.01,
+   "d": 3.17,
+   "text": "think in terms of voyages as"
+  },
+  {
+   "t": 996.18,
+   "d": 2.28,
+   "text": "opposed to"
+  },
+  {
+   "t": 998.46,
+   "d": 2.61,
+   "text": "isolated problems or"
+  },
+  {
+   "t": 1001.07,
+   "d": 3.73,
+   "text": "projects or short-term goals and if"
+  },
+  {
+   "t": 1004.8,
+   "d": 1.17,
+   "text": "you're going to go off on a voyage the"
+  },
+  {
+   "t": 1005.97,
+   "d": 0.99,
+   "text": "first thing you need to do is know how"
+  },
+  {
+   "t": 1006.96,
+   "d": 2.97,
+   "text": "fast that you can go so after playing"
+  },
+  {
+   "t": 1009.93,
+   "d": 1.23,
+   "text": "some let's see I actually started"
+  },
+  {
+   "t": 1011.16,
+   "d": 3.32,
+   "text": "measuring how fast can we do things I"
+  },
+  {
+   "t": 1014.48,
+   "d": 2.2,
+   "text": "found out it takes us about three months"
+  },
+  {
+   "t": 1016.68,
+   "d": 1.98,
+   "text": "to hire a mechanical engineer if we want"
+  },
+  {
+   "t": 1018.66,
+   "d": 1.38,
+   "text": "to produce it a new supplier it takes us"
+  },
+  {
+   "t": 1020.04,
+   "d": 2.07,
+   "text": "about six months and if I want to form a"
+  },
+  {
+   "t": 1022.11,
+   "d": 1.56,
+   "text": "major partnership it takes more than a"
+  },
+  {
+   "t": 1023.67,
+   "d": 3.66,
+   "text": "year but knowing these things means that"
+  },
+  {
+   "t": 1027.33,
+   "d": 2.81,
+   "text": "we can plan the cadence of our work"
+  },
+  {
+   "t": 1030.14,
+   "d": 2.44,
+   "text": "the other big part of a voyage is"
+  },
+  {
+   "t": 1032.58,
+   "d": 3.57,
+   "text": "knowing where you're going in some lesya"
+  },
+  {
+   "t": 1036.15,
+   "d": 1.62,
+   "text": "especially if you don't have a plan"
+  },
+  {
+   "t": 1037.77,
+   "d": 2.37,
+   "text": "about where your destination is you're"
+  },
+  {
+   "t": 1040.14,
+   "d": 1.35,
+   "text": "going to run out of things really fast"
+  },
+  {
+   "t": 1041.49,
+   "d": 1.83,
+   "text": "and at best limp home and at worst"
+  },
+  {
+   "t": 1043.32,
+   "d": 3.05,
+   "text": "terrible things"
+  },
+  {
+   "t": 1046.58,
+   "d": 3.28,
+   "text": "so those endpoints were things as I said"
+  },
+  {
+   "t": 1049.86,
+   "d": 1.26,
+   "text": "before we're getting a little dicey"
+  },
+  {
+   "t": 1051.12,
+   "d": 3.59,
+   "text": "we're easier for me to understand and"
+  },
+  {
+   "t": 1054.71,
+   "d": 4.51,
+   "text": "also to plan for and through once I"
+  },
+  {
+   "t": 1059.22,
+   "d": 3.51,
+   "text": "began to think of them as the endpoint"
+  },
+  {
+   "t": 1062.73,
+   "d": 4.14,
+   "text": "of a planned voyage and so if you look"
+  },
+  {
+   "t": 1066.87,
+   "d": 3.54,
+   "text": "at that march 16 point what's really"
+  },
+  {
+   "t": 1070.41,
+   "d": 1.83,
+   "text": "going on there is not a sudden crisis"
+  },
+  {
+   "t": 1072.24,
+   "d": 2.37,
+   "text": "but rather the end of a process that"
+  },
+  {
+   "t": 1074.61,
+   "d": 2.58,
+   "text": "began in October of 2014 where we had an"
+  },
+  {
+   "t": 1077.19,
+   "d": 1.56,
+   "text": "idea of what the product should look"
+  },
+  {
+   "t": 1078.75,
+   "d": 3.5,
+   "text": "like and how we would make it and"
+  },
+  {
+   "t": 1082.25,
+   "d": 4.75,
+   "text": "planned out a voyage of more than a year"
+  },
+  {
+   "t": 1087.0,
+   "d": 1.95,
+   "text": "of getting to the end and actually"
+  },
+  {
+   "t": 1088.95,
+   "d": 2.93,
+   "text": "having that object so on March 16"
+  },
+  {
+   "t": 1091.88,
+   "d": 2.68,
+   "text": "we're absolutely exhausted as a company"
+  },
+  {
+   "t": 1094.56,
+   "d": 1.38,
+   "text": "we have basically no money left in the"
+  },
+  {
+   "t": 1095.94,
+   "d": 2.16,
+   "text": "bank account but we have the thing that"
+  },
+  {
+   "t": 1098.1,
+   "d": 3.45,
+   "text": "we meant to make there's the tank we got"
+  },
+  {
+   "t": 1101.55,
+   "d": 1.71,
+   "text": "to the end of the voyage we're in port"
+  },
+  {
+   "t": 1103.26,
+   "d": 3.51,
+   "text": "and what that means is we can turn"
+  },
+  {
+   "t": 1106.77,
+   "d": 4.35,
+   "text": "around and go on the next voyage so even"
+  },
+  {
+   "t": 1111.12,
+   "d": 2.25,
+   "text": "though the bank balance was basically"
+  },
+  {
+   "t": 1113.37,
+   "d": 2.27,
+   "text": "zero"
+  },
+  {
+   "t": 1115.64,
+   "d": 2.44,
+   "text": "we blew up the tank to prove that it"
+  },
+  {
+   "t": 1118.08,
+   "d": 1.13,
+   "text": "works and"
+  },
+  {
+   "t": 1119.21,
+   "d": 3.16,
+   "text": "celebrated because we knew with that we"
+  },
+  {
+   "t": 1122.37,
+   "d": 1.62,
+   "text": "could turn around and start that next"
+  },
+  {
+   "t": 1123.99,
+   "d": 1.55,
+   "text": "project"
+  },
+  {
+   "t": 1125.54,
+   "d": 1.77,
+   "text": "and"
+  },
+  {
+   "t": 1127.31,
+   "d": 4.32,
+   "text": "so what I want to leave you with is"
+  },
+  {
+   "t": 1131.63,
+   "d": 2.22,
+   "text": "for us anyway"
+  },
+  {
+   "t": 1133.85,
+   "d": 5.29,
+   "text": "that idea of voyages of well let's not"
+  },
+  {
+   "t": 1139.14,
+   "d": 1.97,
+   "text": "hold anything back"
+  },
+  {
+   "t": 1141.11,
+   "d": 2.53,
+   "text": "let's leave it all on the floor let's do"
+  },
+  {
+   "t": 1143.64,
+   "d": 2.73,
+   "text": "everything that we can towards a planned"
+  },
+  {
+   "t": 1146.37,
+   "d": 1.53,
+   "text": "goal that we know we can move fast"
+  },
+  {
+   "t": 1147.9,
+   "d": 2.16,
+   "text": "enough to reach has served us really"
+  },
+  {
+   "t": 1150.06,
+   "d": 2.22,
+   "text": "well and you can see the evidence of two"
+  },
+  {
+   "t": 1152.28,
+   "d": 1.44,
+   "text": "additional voyages after the one I just"
+  },
+  {
+   "t": 1153.72,
+   "d": 2.97,
+   "text": "talked about on that chart and now we're"
+  },
+  {
+   "t": 1156.69,
+   "d": 1.92,
+   "text": "in the middle of a third or a fourth"
+  },
+  {
+   "t": 1158.61,
+   "d": 1.35,
+   "text": "sorry we're in the middle of a fourth"
+  },
+  {
+   "t": 1159.96,
+   "d": 2.16,
+   "text": "voyage and I'm really excited to see"
+  },
+  {
+   "t": 1162.12,
+   "d": 1.77,
+   "text": "what will happen next and I have a"
+  },
+  {
+   "t": 1163.89,
+   "d": 2.19,
+   "text": "destination in mind and it'll be"
+  },
+  {
+   "t": 1166.08,
+   "d": 1.11,
+   "text": "interesting to know if we can actually"
+  },
+  {
+   "t": 1167.19,
+   "d": 1.37,
+   "text": "get there"
+  },
+  {
+   "t": 1168.56,
+   "d": 3.24,
+   "text": "thanks very much"
+  },
+  {
+   "t": 1172.27,
+   "d": 3.15,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1177.83,
+   "d": 4.26,
+   "text": "um we have time for some questions"
+  },
+  {
+   "t": 1182.09,
+   "d": 2.38,
+   "text": "ashish is gonna run around with this mic"
+  },
+  {
+   "t": 1184.47,
+   "d": 4.04,
+   "text": "and hand it off to anyone with question"
+  },
+  {
+   "t": 1197.48,
+   "d": 3.0,
+   "text": "Thanks"
+  },
+  {
+   "t": 1202.37,
+   "d": 2.37,
+   "text": "hi thanks for your talk"
+  },
+  {
+   "t": 1204.74,
+   "d": 2.45,
+   "text": "I had a question about"
+  },
+  {
+   "t": 1207.19,
+   "d": 3.36,
+   "text": "gauging when to persist persist persist"
+  },
+  {
+   "t": 1210.55,
+   "d": 2.89,
+   "text": "on a certain project or question and"
+  },
+  {
+   "t": 1213.44,
+   "d": 3.6,
+   "text": "when you've sort of decided we need to"
+  },
+  {
+   "t": 1217.04,
+   "d": 2.24,
+   "text": "go in a new direction"
+  },
+  {
+   "t": 1219.28,
+   "d": 3.88,
+   "text": "right so red flags or moments that you"
+  },
+  {
+   "t": 1223.16,
+   "d": 1.83,
+   "text": "can identify when you need to switch"
+  },
+  {
+   "t": 1224.99,
+   "d": 3.15,
+   "text": "projects or you just keep banging your"
+  },
+  {
+   "t": 1228.14,
+   "d": 3.02,
+   "text": "head against the wall basically"
+  },
+  {
+   "t": 1232.9,
+   "d": 3.93,
+   "text": "so the way we approach that question is"
+  },
+  {
+   "t": 1236.83,
+   "d": 2.89,
+   "text": "first to really be careful about what"
+  },
+  {
+   "t": 1239.72,
+   "d": 1.43,
+   "text": "that destination is"
+  },
+  {
+   "t": 1241.15,
+   "d": 2.56,
+   "text": "so that that place where we want to go"
+  },
+  {
+   "t": 1243.71,
+   "d": 1.44,
+   "text": "we have to know that we need to be there"
+  },
+  {
+   "t": 1245.15,
+   "d": 2.25,
+   "text": "and we pay attention to things like the"
+  },
+  {
+   "t": 1247.4,
+   "d": 1.77,
+   "text": "market and our customers to see if that"
+  },
+  {
+   "t": 1249.17,
+   "d": 2.96,
+   "text": "really should stay the destination"
+  },
+  {
+   "t": 1252.13,
+   "d": 2.44,
+   "text": "then the head begging problem if we have"
+  },
+  {
+   "t": 1254.57,
+   "d": 1.74,
+   "text": "that fixed becomes much more about route"
+  },
+  {
+   "t": 1256.31,
+   "d": 3.26,
+   "text": "finding than about Direction setting and"
+  },
+  {
+   "t": 1259.57,
+   "d": 2.35,
+   "text": "you can start doing things like pursuing"
+  },
+  {
+   "t": 1261.92,
+   "d": 2.37,
+   "text": "multiple routes in parallel and dropping"
+  },
+  {
+   "t": 1264.29,
+   "d": 1.62,
+   "text": "them when it makes sense to drop them I"
+  },
+  {
+   "t": 1265.91,
+   "d": 3.53,
+   "text": "think the hardest time to quit is when"
+  },
+  {
+   "t": 1269.44,
+   "d": 2.62,
+   "text": "you're not sure about the destination"
+  },
+  {
+   "t": 1272.06,
+   "d": 2.76,
+   "text": "you're heading to and we try to head"
+  },
+  {
+   "t": 1274.82,
+   "d": 1.47,
+   "text": "that off as much as possible by just"
+  },
+  {
+   "t": 1276.29,
+   "d": 1.77,
+   "text": "working really hard on that up front and"
+  },
+  {
+   "t": 1278.06,
+   "d": 3.38,
+   "text": "then paying attention to it as we go"
+  },
+  {
+   "t": 1286.01,
+   "d": 2.95,
+   "text": "would you say that your startup adheres"
+  },
+  {
+   "t": 1288.96,
+   "d": 3.62,
+   "text": "to the Berlin interpretation"
+  },
+  {
+   "t": 1292.58,
+   "d": 2.77,
+   "text": "so that tradeshow was actually in Berlin"
+  },
+  {
+   "t": 1295.35,
+   "d": 2.24,
+   "text": "so"
+  },
+  {
+   "t": 1299.51,
+   "d": 3.55,
+   "text": "I certainly interpreted our startup in"
+  },
+  {
+   "t": 1303.06,
+   "d": 3.14,
+   "text": "Berlin so yes"
+  },
+  {
+   "t": 1310.04,
+   "d": 4.15,
+   "text": "so it sounds like some aspects of this"
+  },
+  {
+   "t": 1314.19,
+   "d": 2.04,
+   "text": "are talking about risk management as an"
+  },
+  {
+   "t": 1316.23,
+   "d": 4.74,
+   "text": "approach for CEO Inge what roguelike"
+  },
+  {
+   "t": 1320.97,
+   "d": 3.51,
+   "text": "games do you think embed that mechanic"
+  },
+  {
+   "t": 1324.48,
+   "d": 1.98,
+   "text": "of risk management rather than just"
+  },
+  {
+   "t": 1326.46,
+   "d": 3.74,
+   "text": "resource management if any"
+  },
+  {
+   "t": 1332.93,
+   "d": 3.79,
+   "text": "that's a really great question I think"
+  },
+  {
+   "t": 1336.72,
+   "d": 3.93,
+   "text": "as I am like thumbing through the"
+  },
+  {
+   "t": 1340.65,
+   "d": 1.74,
+   "text": "library in my head right now right"
+  },
+  {
+   "t": 1342.39,
+   "d": 2.22,
+   "text": "picture the rolodex of roguelike"
+  },
+  {
+   "t": 1344.61,
+   "d": 2.69,
+   "text": "spinning"
+  },
+  {
+   "t": 1348.02,
+   "d": 2.17,
+   "text": "one of the things that I think does it"
+  },
+  {
+   "t": 1350.19,
+   "d": 1.68,
+   "text": "you know way of handling short-term risk"
+  },
+  {
+   "t": 1351.87,
+   "d": 1.49,
+   "text": "is actually crypt of the necrodancer"
+  },
+  {
+   "t": 1353.36,
+   "d": 2.23,
+   "text": "does a really nice job of it because"
+  },
+  {
+   "t": 1355.59,
+   "d": 1.23,
+   "text": "there's always the question of do I act"
+  },
+  {
+   "t": 1356.82,
+   "d": 1.59,
+   "text": "on this beat or do I wait for the next"
+  },
+  {
+   "t": 1358.41,
+   "d": 2.28,
+   "text": "beat because everybody's gonna act on"
+  },
+  {
+   "t": 1360.69,
+   "d": 3.83,
+   "text": "this beat but me if I pause and so that"
+  },
+  {
+   "t": 1364.52,
+   "d": 4.15,
+   "text": "that timing management is one form of"
+  },
+  {
+   "t": 1368.67,
+   "d": 1.58,
+   "text": "actually"
+  },
+  {
+   "t": 1370.25,
+   "d": 2.47,
+   "text": "approaching risk directly as opposed to"
+  },
+  {
+   "t": 1372.72,
+   "d": 2.07,
+   "text": "resources but I think different games"
+  },
+  {
+   "t": 1374.79,
+   "d": 3.32,
+   "text": "really get at it in different ways"
+  },
+  {
+   "t": 1378.11,
+   "d": 2.56,
+   "text": "cool thank you so much that was"
+  },
+  {
+   "t": 1380.67,
+   "d": 2.3,
+   "text": "wonderful"
+  }
+ ]
+}

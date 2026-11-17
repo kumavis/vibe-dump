@@ -1,0 +1,78 @@
+{
+  "id": "j9ykOdQRUQk",
+  "title": "Rosalind Miles Chapman - Hungry Rogues: The evolution of roguelike hunger mechanics",
+  "speaker": "Rosalind Miles Chapman",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=j9ykOdQRUQk",
+  "talk_type": "design",
+  "summary": "A ten-minute talk on why roguelikes have hunger mechanics and how the underlying function, time pressure, has evolved in modern games. Chapman argues hunger exists to stop grinding by turning time into a resource, then surveys alternatives: mutually exclusive route choices, wandering monsters as a clock, global difficulty scaling as in Invisible Inc., and non-recoverable stress resources. She closes with the 'haunts' planned for her game Castle Cthulhu, mechanically harmful effects that escalate the longer you linger.",
+  "games": [
+    "Pixel Dungeon",
+    "Spelunky",
+    "Invisible, Inc.",
+    "Castle Cthulhu"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hunger clock",
+      "kind": "principle",
+      "claim": "Roguelike hunger mechanics exist to stop players grinding every resource, by turning time into a resource that must be weighed against other options.",
+      "detail": "Because the protagonist grows stronger the more they explore and fight, with no time pressure the optimal but unfun strategy is to exhaust everything before progressing. Hunger makes thoroughness a strategic choice rather than a clearly optimal strategy.",
+      "t": 126,
+      "quote": "What hunger does is turns time into a resource. Now they are a strategic choice you have to weigh up against other options",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hunger clock",
+      "kind": "technique",
+      "claim": "Traditional hunger makes the character weaker, lose health and eventually die over time unless they eat food items, and caps how much food can be banked, interacting with inventory limits.",
+      "detail": "Chapman notes Pixel Dungeon's horn of plenty occupies the trinket slot, creating a trade-off against other trinkets. Hunger also limits powerful but slow and unfun options such as sleeping to recover.",
+      "t": 188,
+      "quote": "It limits powerful options that take a long time like sleeping which can be effective but not the most fun to play.",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "branching routes",
+      "kind": "technique",
+      "claim": "Modern roguelikes replace hunger with mutually exclusive path choices, making the formerly invisible push-your-luck decision about exploration explicit.",
+      "detail": "Choosing one route forecloses another, so the player asks which challenge and reward their run needs now and in the future, instead of silently weighing thorough exploration against dwindling food.",
+      "t": 234,
+      "quote": "they turn a previously invisible layer of strategy about how much do you push your luck of thorough exploration versus dwindling food and make it really explicit",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "wandering monsters",
+      "kind": "technique",
+      "claim": "Wandering monsters can act as a clock that pushes players forward, offering more counterplay than a timer because combat is usually the game's most detailed system.",
+      "detail": "Common in roguelike-adjacent board games, this works only if monsters are threatening and not worth farming. Players can evade or power through them, avoiding the arbitrary feel of a timer that simply kills you; Spelunky's version breaks the normal rules but serves the same purpose.",
+      "t": 301,
+      "quote": "because combat is likely the most detailed system you can evade them and try to power through",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty scaling",
+      "kind": "example",
+      "claim": "Invisible, Inc. applies time pressure in its purest form: everything in the game gets harder the longer you stay.",
+      "detail": "Chapman calls this the absolute baseline of the mechanic with everything else removed. She also mentions stress mechanics in other games, where some actions reduce stress gain but you can never break even, putting a hard cap on the run.",
+      "t": 344,
+      "quote": "Basically an invisible inc everything in the game gets harder the longer you stick around.",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "haunts",
+      "kind": "example",
+      "claim": "Castle Cthulhu's planned 'haunts' are escalating effects for lingering too long, such as jammed doors and collapsing passageways, and unlike typical horror sanity effects they are genuinely dangerous.",
+      "detail": "Chapman contrasts them with horror games whose spooky-event lists are mostly aesthetic: to serve as time pressure, haunts must be able to kill you, mess with your map, and spawn dangerous things, while still tying in thematically.",
+      "t": 444,
+      "quote": "in order for them to serve that purpose is they can all kill you and screw with your map and spawn things that are dangerous",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,101 @@
+{
+  "id": "-MX1imoSxTg",
+  "title": "Tabea Iseli: Animal Crossing meets Roguelite Dungeon Crawler: The genre mixture of Grimoire Groves",
+  "speaker": "Tabea Iseli",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=-MX1imoSxTg",
+  "talk_type": "postmortem",
+  "summary": "Tabea Iseli describes how her studio built Grimoire Groves, a non-violent, cozy roguelite dungeon crawler in which a witch grows plant creatures with magic instead of slaying monsters. She explains why farming-game mechanics blend naturally with roguelite loops, how the meta-progression became a literal garden in the home base, and how player feedback pushed the game toward more story and Animal Crossing-style friendship mechanics. She closes by arguing the roguelike genre is versatile enough for many cozy reinventions, citing other non-violent roguelikes.",
+  "games": [
+    "Grimoire Groves",
+    "Animal Crossing: New Horizons",
+    "Wizard of Legend",
+    "Hades",
+    "Cult of the Lamb",
+    "Moonstone Island",
+    "Dave the Diver"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelike appeal",
+      "kind": "principle",
+      "claim": "The lasting appeal of the roguelike formula comes from anticipation of the next draw, hoping build components click, living on the edge, and (for roguelites) progress even on failure.",
+      "detail": "Iseli lists these as the captivating elements her team wanted to keep while moving the genre out of its usual dark dungeon setting into a colorful, cute, cozy world.",
+      "t": 105,
+      "quote": "The anticipation of what you might encounter on the next draw, the hope of finding the right components for your build to click",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "cozy roguelike",
+      "kind": "example",
+      "claim": "Grimoire Groves keeps a traditional roguelite dungeon-crawler structure but replaces enemies with plant creatures the player witch casts spells on to grow, making the game non-violent.",
+      "detail": "Players explore a procedurally generated map, cast spells on plant creatures that take the place of enemies, buy boons that hopefully synergize, and face a boss fight at the end of a run. The original pitch was Wizard of Legend meets Adventure Time.",
+      "t": 169,
+      "quote": "cast spells on plant creatures that replace the enemies in a traditional roguelike game",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "farming games",
+      "kind": "principle",
+      "claim": "Farming games blend well with roguelites because both revolve around collecting resources, letting players choose their own priorities, and working toward goals over several runs or game days.",
+      "detail": "Iseli says farming was also popular with the target audience and helped explain the non-violent mechanics, since players intuitively understood watering plants with magic.",
+      "t": 209,
+      "quote": "both are about collecting resources, both have have these freedom for players to choose their own approaches and priorities",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "example",
+      "claim": "Grimoire Groves presents its meta-progression as a garden in the home base: unlocks are plants placed into an overgrown plot that becomes a pretty home, visually representing the player's capabilities.",
+      "detail": "The spell tree is a literal tree. Players loved this and asked to place the objects freely, which the team could not implement.",
+      "t": 256,
+      "quote": "we made the whole upgrading and unlocking system a garden in your home base. Unlocks are plants that you can put into your garden",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story in roguelites",
+      "kind": "example",
+      "claim": "Grimoire Groves' players unexpectedly wanted more story, and the team leaned into it partly because narrative helps newcomers understand how roguelikes work.",
+      "detail": "The team feared the dialogue needed to explain its unusual non-violent mechanics would turn players off, since roguelikes and farming sims are rarely story-rich. Instead players loved the elemental spirits, sibling quarrels, quirky characters and humour.",
+      "t": 414,
+      "quote": "it was also a way to help players understand the roguelike genre because it isn't super simple to understand how roguelikes work",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "friendship mechanics",
+      "kind": "technique",
+      "claim": "Grimoire Groves ties Animal Crossing-style befriending to roguelite mechanics: befriended shop NPCs give extra shop choices and discounts, can move permanently into your forest, and grant boss-fight benefits.",
+      "detail": "Players befriend shop NPCs via mini games. Boss plants were placed in the backyards of those characters, so befriending them gives additional benefits in the boss fight, which is framed cozily as helping friends harvest huge plants.",
+      "t": 458,
+      "quote": "you can befriend them doing fun little mini games giving additional choices in the shop and a discount",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "participatory design",
+      "kind": "technique",
+      "claim": "The Grimoire Groves team used participatory design, going to players as early as possible to ask what they wanted; players chose art direction and named the game.",
+      "detail": "Iseli says the cozy audience was underserved in 2020, so giving them a voice was important, within the limits of an indie budget. Feedback also shifted the pitch from Wizard of Legend meets Adventure Time to Hades or Cult of the Lamb meets Animal Crossing.",
+      "t": 711,
+      "quote": "we kind of want to do this participation design where we would go throughout as early as possible to players",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "cozy roguelike",
+      "kind": "principle",
+      "claim": "The roguelike genre is versatile enough to support non-violent and cozy reinventions, and cozy audiences will embrace roguelikes made for them.",
+      "detail": "Iseli cites a non-violent farming roguelike, a roguelike about dog shows she found at the conference, and Dave the Diver as evidence the cozy crowd is ready for roguelike games.",
+      "t": 583,
+      "quote": "the cozy crowd is ready to embrace roguelike games if they are made for a cozy crowd",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

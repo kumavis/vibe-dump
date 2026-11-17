@@ -1,0 +1,200 @@
+{
+  "id": "SDojcmObQzw",
+  "title": "Roguelike Celebration 2016 - Lightning Talks",
+  "speaker": "Tariq (Catacomb Kids), Sean Mayne, Casey, Steve Mason, Russ, Dan, Ian Bettencourt, Alex Handy, Gabriel, and other lightning speakers",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=SDojcmObQzw",
+  "talk_type": "other",
+  "summary": "A run of short lightning talks from the first Roguelike Celebration. Topics include where procedural generation 'begins' and why it needs a community to discuss divergent runs (Catacomb Kids developer), uncertainty rather than randomness as the source of drama (a Magic: The Gathering designer), streaming NetHack, a turn-based VR roguelike, a university NetHack server whose patches ran into save-file compatibility, business lessons from roguelikes, starting a roguelike in C with ncurses, a Dungeon Crawl Stone Soup death story about Demonspawn mutations, a networked multiplayer Angband variant, a games museum offering event space, and ASCII art as an art form (Stone Story).",
+  "games": [
+    "Catacomb Kids",
+    "Dwarf Fortress",
+    "The Legend of Zelda",
+    "Magic: The Gathering",
+    "Diplomacy",
+    "NetHack",
+    "Rogue",
+    "Darkest Dungeon",
+    "Sunless Sea",
+    "Enter the Gungeon",
+    "Dungeon Crawl Stone Soup",
+    "Angband",
+    "Spelunky",
+    "ToeJam & Earl",
+    "Cogmind",
+    "Stone Story"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "shared experience",
+      "kind": "principle",
+      "claim": "Procedural generation in games gains much of its point from a community of players who compare and discuss how their different runs went.",
+      "detail": "Tariq, developer of Catacomb Kids, reasoned from a thought experiment about removing procedural generation from life: different choices only matter if you can talk to others about them. He concluded that procedural generation without a community to discuss the differences loses its purpose.",
+      "t": 123,
+      "quote": "what's the point of having procedural generation in games if there's no community around to like discuss the differences of their experience",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generation timing",
+      "kind": "open-question",
+      "claim": "Procedural generation can begin at very different depths, from simulating an entire world history like Dwarf Fortress to generating a room or character only at the moment the player first interacts with it.",
+      "detail": "Tariq contrasted the Dwarf Fortress approach of generating the whole history up front with generating the next room as you enter it, or treating an NPC as not really existing until you talk to them. He posed where procedurality should 'begin' as an open question.",
+      "t": 163,
+      "quote": "you can do like the dwarf fortress way where you like generate the entire history like you'd go way back",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and uncertainty",
+      "kind": "principle",
+      "claim": "Games that do not test physical skill need uncertainty to create drama, but that uncertainty need not come from explicit randomness.",
+      "detail": "Sean Mayne, a Magic: The Gathering designer, said his reputation for liking randomness is really a love of large possibility spaces. Uncertainty is what produces drama; explicit randomness is the most common historical source, but not the only one.",
+      "t": 243,
+      "quote": "i don't think games need this explicit uh randomness in in them but what they need is uncertainty because uncertainty creates drama",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden information",
+      "kind": "example",
+      "claim": "Hidden information, as in Diplomacy's secret simultaneous moves, is an alternative to dice for generating uncertainty, while puzzle games create uncertainty but lack long-tail replayability.",
+      "detail": "Sean Mayne gave Diplomacy as a game where players make moves in secret with imperfect information. He noted puzzle games also create uncertainty but lack the wide possibility space needed for replayability.",
+      "t": 270,
+      "quote": "there are other sources there are things like hidden information a game like diplomacy is really good at hiding information from the players",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "streaming",
+      "kind": "example",
+      "claim": "NetHack works well for live streaming because surprising events arise in any run, chat viewers who know the game react and advise, and it needs only a terminal and streaming software.",
+      "detail": "Casey, who hosts the 'NetHack Nights' Twitch stream, learned the game largely from scratch on stream and urged others to stream it. He described viewers yelling at him on a 20-second delay after mistakes and said no fast computer is needed.",
+      "t": 382,
+      "quote": "streaming's really easy with nethack especially you don't need a fast computer obviously you just need to run the streaming software and then a terminal",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "vr roguelike",
+      "kind": "example",
+      "claim": "Steve Mason's VR roguelike represents the abstract text-roguelike form as tabletop-miniature-style 3D dungeon tiles while keeping turn-based play and procedural dungeons and drops.",
+      "detail": "He described adapting something as abstract as a text game to VR as an interesting design challenge, ending up with a conflation of roguelike conventions and pen-and-paper D&D miniature action. It looks like Diablo or Gauntlet but remains turn-based, procedural and a 'coffee break' roguelike.",
+      "t": 468,
+      "quote": "it sort of ended up as a conflation of roguelikes and traditional roguelike conventions and also tabletop pen and paper d d style miniature action",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "save compatibility",
+      "kind": "warning",
+      "claim": "In NetHack (and similarly Rogue), changing the player structure or many other parts of the source breaks every existing save game and bones file, which constrains modifying a live server.",
+      "detail": "Russ described running a patched NetHack server ('BingeHack') at RIT's Computer Science House with a live 'binge board', database-backed achievements and a death-tweeting bot. Save breakage was one of the biggest limiting factors on their changes, so he pursued forward-compatible saves.",
+      "t": 696,
+      "quote": "the way that the save game is structured uh you break all save games",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "serialization",
+      "kind": "technique",
+      "claim": "To get forward-compatible NetHack saves, Russ serialized the game's C structs to JSON by obtaining introspection through self-debugging, the subject of his master's thesis.",
+      "detail": "He decided saves needed to be in JSON, but C lacks introspection, which he needed given the complexity of the NetHack codebase. His thesis, 'Introspection via self-debugging', used a debugger to serialize the structs; the project took about a year.",
+      "t": 742,
+      "quote": "i needed to have the save game format in json and uh in order to do that the core feature that was missing",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "metagame features",
+      "kind": "example",
+      "claim": "A university NetHack server added a live projected status board, a stats database with cross-game achievements, and a Twitter bot announcing deaths to support group 'binge' play sessions.",
+      "detail": "Russ described 12-24 hour group NetHack binges with a curses 'binge board' showing player lines updating in real time on a projector. They wrote player stats to a database, rendered a website granting achievements such as first game played, and tweeted games as players died.",
+      "t": 655,
+      "quote": "we made it so that games would actually write uh the the x stats the player stats to a database",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player knowledge",
+      "kind": "principle",
+      "claim": "In roguelikes the only thing a player keeps between runs is what they have learned, so progress comes from spotting patterns and not repeating mistakes.",
+      "detail": "Dan, a hardware startup CEO, presented business lessons from roguelikes (Darkest Dungeon on team mental health, Sunless Sea on development pace, Enter the Gungeon on humour). His general lesson was that the thing you keep is what is in your head: not experience points but actual experience.",
+      "t": 1078,
+      "quote": "fundamentally the thing that you get to keep with you is whatever is in your head and so every day is a new play through",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "mobile market",
+      "kind": "warning",
+      "claim": "Many games on the iOS App Store label themselves roguelikes while mainly trying to take players' money and waste their time.",
+      "detail": "Dan lumped every roguelike on the iOS App Store together, acknowledging some gems but saying a lot of games calling themselves roguelikes want your dollars and don't do much, comparing them to vendors who overpromise.",
+      "t": 1054,
+      "quote": "there a lot of things that call themselves roguelike out roguelikes out there that want your dollars and don't do much",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "learning to program",
+      "kind": "technique",
+      "claim": "A beginner can build a roguelike from scratch with only C, a compiler, a debugger and ncurses, and learn practical skills like decoupling code by showing it to others.",
+      "detail": "Ian Bettencourt started a roguelike in C to learn the language before a college class and wrote his own engine on ncurses rather than using a library. He found linked lists and arrays far more useful than the trees his classes emphasised, and learned decoupling from his roommate; he recommended r/roguelikedev.",
+      "t": 1249,
+      "quote": "that's all you basically need c a compiler a debugger if if you're actually going to be spending a lot of time on it and n curses",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "mutations",
+      "kind": "example",
+      "claim": "Dungeon Crawl Stone Soup's Demonspawn gain powerful three-stage mutations as they level, forcing players to adapt their build to whatever mutations arrive.",
+      "detail": "A speaker described Demonspawn as frail humanoids whose mutations come in three phases, e.g. horns that grow to give an extra melee attack but forbid helmets. You may intend a magic user but get stealth and melee mutations and should shift direction.",
+      "t": 1373,
+      "quote": "you have to roll with the punches you have to adapt your play style like you may have started with some magic user intentions",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "mutation interactions",
+      "kind": "example",
+      "claim": "In Dungeon Crawl Stone Soup a Demonspawn levelling up over deep water gained hooves, which shed their boots of flying, causing them to fall in and drown.",
+      "detail": "The speaker was a level 17 Demonspawn in the Shoals relying on boots of flying to fight a snapping turtle over water. Killing it triggered level 17, the demonic ancestry mutated their feet into hooves, the boots fell away and they drowned: their favourite death.",
+      "t": 1458,
+      "quote": "your feet mutate into hooves your plus two pair of boots of flying falls away you float gracefully downwards you fall into the water",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "multiplayer permadeath",
+      "kind": "example",
+      "claim": "A real-time networked multiplayer Angband variant softens permadeath by turning dead characters into ghosts that other players can revive, with permadeath only if the ghost dies.",
+      "detail": "A speaker showed an old Angband version made real-time and multiplayer. It also has a shared town where players buy houses and run stores, and levels persist while any player is in them, so to scum a level you must ask others to leave.",
+      "t": 1607,
+      "quote": "if you die you turn into a ghost and other players can come down and revive you it's super cool but if your ghost dies then you're permadead",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "museum exhibits",
+      "kind": "history",
+      "claim": "The Museum of Art and Digital Entertainment in Oakland's first exhibit featured procedurally generated games, later adding Dwarf Fortress and NetHack, and it offers free space for roguelike events.",
+      "detail": "Alex Handy, its founder, said the first exhibit included Dungeons & Dragons Cloudy Mountain, Bomberman, ToeJam & Earl and Spelunky. He offered to host NetHack events, wiki edit sessions, meetups and game jams for free.",
+      "t": 1744,
+      "quote": "our first exhibit was a proceed random",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii art",
+      "kind": "principle",
+      "claim": "Beyond the data-delivering top-down view of games like NetHack, ASCII art can be developed as an art form in its own right to give players a stronger visual experience, as in Stone Story.",
+      "detail": "Gabriel praised top-down ASCII for delivering data and cited Cogmind, but wants to push how far ASCII art can go, using games as the medium. He showed his iteration process on a boss fight in the sacrificial pit and an animated trailer.",
+      "t": 1811,
+      "quote": "my goal with ascii art is to show is to develop it as an art form using games as a medium to deliver it",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

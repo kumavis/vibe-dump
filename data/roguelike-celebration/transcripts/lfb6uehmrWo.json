@@ -1,0 +1,4733 @@
+{
+ "id": "lfb6uehmrWo",
+ "url": "https://www.youtube.com/watch?v=lfb6uehmrWo",
+ "title": "Brian Walker - Proc gen & gameplay",
+ "speaker": "Brian Walker",
+ "talk_title": "Proc gen & gameplay",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1826,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nThe creator of Brogue will talk about emergent storytelling in roguelikes. How can each play of a procedurally generated game feel distinct and memorable to a veteran player? And how can a single player game reward both skill and creativity? Brian will discuss specific gameplay elements and game design techniques to maximize the number of unique player experiences per unit of game content.\n\nBrian Walker grew up playing the original Rogue. He taught himself to code by developing Brogue to be the roguelike that he always wanted to play.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 44,
+   "title": "Story time"
+  },
+  {
+   "start": 119,
+   "title": "Exciting situations"
+  },
+  {
+   "start": 153,
+   "title": "What makes an exciting situation"
+  },
+  {
+   "start": 212,
+   "title": "Tic Tac Toe"
+  },
+  {
+   "start": 330,
+   "title": "Character Advancement"
+  },
+  {
+   "start": 367,
+   "title": "Character Classes"
+  },
+  {
+   "start": 393,
+   "title": "Starting from scratch"
+  },
+  {
+   "start": 447,
+   "title": "brogue system"
+  },
+  {
+   "start": 460,
+   "title": "metaphor"
+  },
+  {
+   "start": 540,
+   "title": "synergies"
+  },
+  {
+   "start": 671,
+   "title": "disposable items"
+  },
+  {
+   "start": 684,
+   "title": "forced improvisation"
+  },
+  {
+   "start": 799,
+   "title": "balancing power"
+  },
+  {
+   "start": 995,
+   "title": "overlapping zones"
+  },
+  {
+   "start": 1026,
+   "title": "space structure"
+  },
+  {
+   "start": 1411,
+   "title": "summary"
+  },
+  {
+   "start": 1510,
+   "title": "QA"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5391,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 6.16,
+   "d": 1.12,
+   "text": "hi everyone"
+  },
+  {
+   "t": 7.28,
+   "d": 4.48,
+   "text": "my name is brian walker i created brogue"
+  },
+  {
+   "t": 11.76,
+   "d": 2.72,
+   "text": "and i was brainstorming ideas for a talk"
+  },
+  {
+   "t": 14.48,
+   "d": 1.68,
+   "text": "i wrote out a long presentation"
+  },
+  {
+   "t": 16.16,
+   "d": 2.64,
+   "text": "then timed myself and cut half of it so"
+  },
+  {
+   "t": 18.8,
+   "d": 2.48,
+   "text": "i hope i cut the right half"
+  },
+  {
+   "t": 21.28,
+   "d": 2.4,
+   "text": "i decided to focus on how brogue tells"
+  },
+  {
+   "t": 23.68,
+   "d": 1.28,
+   "text": "stories"
+  },
+  {
+   "t": 24.96,
+   "d": 0.96,
+   "text": "i think there have been a few"
+  },
+  {
+   "t": 25.92,
+   "d": 2.4,
+   "text": "presentations that that that gestured at"
+  },
+  {
+   "t": 28.32,
+   "d": 1.76,
+   "text": "this concept this question of how you"
+  },
+  {
+   "t": 30.08,
+   "d": 0.56,
+   "text": "generate"
+  },
+  {
+   "t": 30.64,
+   "d": 2.4,
+   "text": "emergent gameplay uh interesting"
+  },
+  {
+   "t": 33.04,
+   "d": 2.8,
+   "text": "narratives and exciting experiences"
+  },
+  {
+   "t": 35.84,
+   "d": 1.92,
+   "text": "uh for characters from procedurally"
+  },
+  {
+   "t": 37.76,
+   "d": 1.52,
+   "text": "generated elements"
+  },
+  {
+   "t": 39.28,
+   "d": 2.8,
+   "text": "um and so that that's the focus of the"
+  },
+  {
+   "t": 42.08,
+   "d": 1.12,
+   "text": "talk"
+  },
+  {
+   "t": 43.2,
+   "d": 2.0,
+   "text": "and so before we begin we'll have a"
+  },
+  {
+   "t": 45.2,
+   "d": 1.36,
+   "text": "little story time"
+  },
+  {
+   "t": 46.56,
+   "d": 1.44,
+   "text": "this is the most flattering thing i've"
+  },
+  {
+   "t": 48.0,
+   "d": 1.68,
+   "text": "read about my game this was on the"
+  },
+  {
+   "t": 49.68,
+   "d": 1.68,
+   "text": "hitbox team forum"
+  },
+  {
+   "t": 51.36,
+   "d": 2.72,
+   "text": "or on the development blog the folks who"
+  },
+  {
+   "t": 54.08,
+   "d": 1.44,
+   "text": "make dust force"
+  },
+  {
+   "t": 55.52,
+   "d": 2.72,
+   "text": "so let me read this to you there he was"
+  },
+  {
+   "t": 58.24,
+   "d": 1.76,
+   "text": "stuck on a wooden bridge over a deep"
+  },
+  {
+   "t": 60.0,
+   "d": 0.56,
+   "text": "chasm"
+  },
+  {
+   "t": 60.56,
+   "d": 1.76,
+   "text": "goblins closing in on both sides"
+  },
+  {
+   "t": 62.32,
+   "d": 1.68,
+   "text": "blocking the bridge exits"
+  },
+  {
+   "t": 64.0,
+   "d": 2.08,
+   "text": "all he has is an unidentified potion"
+  },
+  {
+   "t": 66.08,
+   "d": 1.52,
+   "text": "which he can only hope is a potion of"
+  },
+  {
+   "t": 67.6,
+   "d": 1.92,
+   "text": "levitation so he can fly off the bridge"
+  },
+  {
+   "t": 69.52,
+   "d": 1.04,
+   "text": "to safety"
+  },
+  {
+   "t": 70.56,
+   "d": 1.76,
+   "text": "with the goblins just steps away he"
+  },
+  {
+   "t": 72.32,
+   "d": 2.24,
+   "text": "drinks the potion unfortunately it was a"
+  },
+  {
+   "t": 74.56,
+   "d": 1.92,
+   "text": "potion of incineration"
+  },
+  {
+   "t": 76.48,
+   "d": 1.76,
+   "text": "a huge burst of flames erupts setting"
+  },
+  {
+   "t": 78.24,
+   "d": 2.24,
+   "text": "him the goblins and the bridge on fire"
+  },
+  {
+   "t": 80.48,
+   "d": 1.76,
+   "text": "the bridge burns away and everyone falls"
+  },
+  {
+   "t": 82.24,
+   "d": 1.6,
+   "text": "into the chasm below"
+  },
+  {
+   "t": 83.84,
+   "d": 1.92,
+   "text": "fortunately he lands safely in a pool of"
+  },
+  {
+   "t": 85.76,
+   "d": 2.64,
+   "text": "water which also puts out the flames"
+  },
+  {
+   "t": 88.4,
+   "d": 2.0,
+   "text": "some of the goblins survive while others"
+  },
+  {
+   "t": 90.4,
+   "d": 1.84,
+   "text": "hit the ground nearby and die"
+  },
+  {
+   "t": 92.24,
+   "d": 2.08,
+   "text": "however one of the flaming goblins lands"
+  },
+  {
+   "t": 94.32,
+   "d": 2.0,
+   "text": "in a bog filled with explosive gas"
+  },
+  {
+   "t": 96.32,
+   "d": 2.08,
+   "text": "and triggers a massive explosion that"
+  },
+  {
+   "t": 98.4,
+   "d": 1.92,
+   "text": "wipes out the remaining goblins"
+  },
+  {
+   "t": 100.32,
+   "d": 1.6,
+   "text": "my friend escapes and continues his"
+  },
+  {
+   "t": 101.92,
+   "d": 2.08,
+   "text": "journey deeper into the cave"
+  },
+  {
+   "t": 104.0,
+   "d": 2.32,
+   "text": "so i think this is a great experience if"
+  },
+  {
+   "t": 106.32,
+   "d": 0.88,
+   "text": "every game"
+  },
+  {
+   "t": 107.2,
+   "d": 2.08,
+   "text": "included a vignette like this i think"
+  },
+  {
+   "t": 109.28,
+   "d": 2.4,
+   "text": "the roguelike genre would be"
+  },
+  {
+   "t": 111.68,
+   "d": 3.28,
+   "text": "more popular than than the big games um"
+  },
+  {
+   "t": 114.96,
+   "d": 2.48,
+   "text": "and i think uh this sort of experience"
+  },
+  {
+   "t": 117.44,
+   "d": 2.72,
+   "text": "is really an exciting situation"
+  },
+  {
+   "t": 120.16,
+   "d": 2.64,
+   "text": "um and i this is i think the core of"
+  },
+  {
+   "t": 122.8,
+   "d": 1.44,
+   "text": "what the genre can offer"
+  },
+  {
+   "t": 124.24,
+   "d": 1.84,
+   "text": "and that that expression on his face by"
+  },
+  {
+   "t": 126.08,
+   "d": 1.76,
+   "text": "the way is excellent that is the face of"
+  },
+  {
+   "t": 127.84,
+   "d": 1.71,
+   "text": "a player who's having fun"
+  },
+  {
+   "t": 129.55,
+   "d": 4.29,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 133.84,
+   "d": 2.08,
+   "text": "so if we can chain these exciting"
+  },
+  {
+   "t": 135.92,
+   "d": 2.16,
+   "text": "situations back to back for an hour on"
+  },
+  {
+   "t": 138.08,
+   "d": 1.68,
+   "text": "end and you finish your game and you"
+  },
+  {
+   "t": 139.76,
+   "d": 1.76,
+   "text": "feel sweat dripping down your back and"
+  },
+  {
+   "t": 141.52,
+   "d": 0.48,
+   "text": "you stand"
+  },
+  {
+   "t": 142.0,
+   "d": 1.44,
+   "text": "up and you feel like you're emerging"
+  },
+  {
+   "t": 143.44,
+   "d": 2.88,
+   "text": "from a different universe then i think"
+  },
+  {
+   "t": 146.32,
+   "d": 2.64,
+   "text": "the game designer has done his job well"
+  },
+  {
+   "t": 148.96,
+   "d": 2.48,
+   "text": "so what makes an exciting situation i"
+  },
+  {
+   "t": 151.44,
+   "d": 0.72,
+   "text": "think there are"
+  },
+  {
+   "t": 152.16,
+   "d": 3.2,
+   "text": "basically five primary elements it's got"
+  },
+  {
+   "t": 155.36,
+   "d": 1.68,
+   "text": "to be a high-stakes situation"
+  },
+  {
+   "t": 157.04,
+   "d": 2.96,
+   "text": "where failure is very possible if not"
+  },
+  {
+   "t": 160.0,
+   "d": 1.76,
+   "text": "the default outcome"
+  },
+  {
+   "t": 161.76,
+   "d": 2.0,
+   "text": "it has to be a situation where the"
+  },
+  {
+   "t": 163.76,
+   "d": 1.6,
+   "text": "player really wants to win"
+  },
+  {
+   "t": 165.36,
+   "d": 2.4,
+   "text": "highly motivated it's got to be"
+  },
+  {
+   "t": 167.76,
+   "d": 0.72,
+   "text": "immersive"
+  },
+  {
+   "t": 168.48,
+   "d": 1.84,
+   "text": "so the player sort of identifies with"
+  },
+  {
+   "t": 170.32,
+   "d": 1.6,
+   "text": "the character instead of"
+  },
+  {
+   "t": 171.92,
+   "d": 2.0,
+   "text": "feels like she's manipulating a data"
+  },
+  {
+   "t": 173.92,
+   "d": 2.4,
+   "text": "structure somewhere on a computer"
+  },
+  {
+   "t": 176.32,
+   "d": 2.72,
+   "text": "it has to be meritocratic the player has"
+  },
+  {
+   "t": 179.04,
+   "d": 1.76,
+   "text": "to perceive it as being meritocratic"
+  },
+  {
+   "t": 180.8,
+   "d": 1.36,
+   "text": "it's got to be skill that makes the"
+  },
+  {
+   "t": 182.16,
+   "d": 1.76,
+   "text": "difference at least for me some people"
+  },
+  {
+   "t": 183.92,
+   "d": 1.68,
+   "text": "like slot machines but"
+  },
+  {
+   "t": 185.6,
+   "d": 2.4,
+   "text": "i think it's it's it's it's great to"
+  },
+  {
+   "t": 188.0,
+   "d": 0.64,
+   "text": "feel like you"
+  },
+  {
+   "t": 188.64,
+   "d": 2.56,
+   "text": "you're controlling the outcome and it's"
+  },
+  {
+   "t": 191.2,
+   "d": 1.84,
+   "text": "got to be cognitively interesting to"
+  },
+  {
+   "t": 193.04,
+   "d": 1.12,
+   "text": "optimize"
+  },
+  {
+   "t": 194.16,
+   "d": 2.68,
+   "text": "it's got to be a puzzle that's fun to"
+  },
+  {
+   "t": 196.84,
+   "d": 1.24,
+   "text": "solve"
+  },
+  {
+   "t": 198.08,
+   "d": 1.44,
+   "text": "and i think the biggest risk to the"
+  },
+  {
+   "t": 199.52,
+   "d": 2.48,
+   "text": "longevity of a game is where"
+  },
+  {
+   "t": 202.0,
+   "d": 2.0,
+   "text": "the game fails to maintain that sense of"
+  },
+  {
+   "t": 204.0,
+   "d": 1.76,
+   "text": "interestingness"
+  },
+  {
+   "t": 205.76,
+   "d": 2.32,
+   "text": "where it becomes wrote and systematized"
+  },
+  {
+   "t": 208.08,
+   "d": 1.52,
+   "text": "where the player immediately knows the"
+  },
+  {
+   "t": 209.6,
+   "d": 2.48,
+   "text": "answer to every situation"
+  },
+  {
+   "t": 212.08,
+   "d": 1.92,
+   "text": "and here's an example of a game that has"
+  },
+  {
+   "t": 214.0,
+   "d": 1.36,
+   "text": "been completely solved this is"
+  },
+  {
+   "t": 215.36,
+   "d": 2.08,
+   "text": "tic-tac-toe"
+  },
+  {
+   "t": 217.44,
+   "d": 1.6,
+   "text": "this tells you if you're x and you're"
+  },
+  {
+   "t": 219.04,
+   "d": 1.6,
+   "text": "playing first the red tells you where to"
+  },
+  {
+   "t": 220.64,
+   "d": 1.12,
+   "text": "play"
+  },
+  {
+   "t": 221.76,
+   "d": 2.72,
+   "text": "and then the other squares show you if o"
+  },
+  {
+   "t": 224.48,
+   "d": 1.6,
+   "text": "plays there it shows you where to play"
+  },
+  {
+   "t": 226.08,
+   "d": 0.8,
+   "text": "in that square"
+  },
+  {
+   "t": 226.88,
+   "d": 2.16,
+   "text": "and so on builds the whole tree out"
+  },
+  {
+   "t": 229.04,
+   "d": 1.68,
+   "text": "entire game is solved"
+  },
+  {
+   "t": 230.72,
+   "d": 3.04,
+   "text": "uh so if you have this map in your"
+  },
+  {
+   "t": 233.76,
+   "d": 0.56,
+   "text": "memory"
+  },
+  {
+   "t": 234.32,
+   "d": 1.2,
+   "text": "you'll never be entertained by"
+  },
+  {
+   "t": 235.52,
+   "d": 1.44,
+   "text": "tic-tac-toe again it's pretty much"
+  },
+  {
+   "t": 236.96,
+   "d": 2.64,
+   "text": "guaranteed you'll be totally bored"
+  },
+  {
+   "t": 239.6,
+   "d": 2.08,
+   "text": "and the the the great and awful thing"
+  },
+  {
+   "t": 241.68,
+   "d": 1.52,
+   "text": "about the internet age"
+  },
+  {
+   "t": 243.2,
+   "d": 1.52,
+   "text": "is that you don't even need to spend the"
+  },
+  {
+   "t": 244.72,
+   "d": 2.16,
+   "text": "time to build this intuition yourself"
+  },
+  {
+   "t": 246.88,
+   "d": 2.16,
+   "text": "um you can just look it up online in"
+  },
+  {
+   "t": 249.04,
+   "d": 1.28,
+   "text": "fact in the middle of the game you"
+  },
+  {
+   "t": 250.32,
+   "d": 1.6,
+   "text": "realize that there's some strategic"
+  },
+  {
+   "t": 251.92,
+   "d": 0.96,
+   "text": "depth to it"
+  },
+  {
+   "t": 252.88,
+   "d": 2.16,
+   "text": "you can just alt tab over to the wiki"
+  },
+  {
+   "t": 255.04,
+   "d": 1.6,
+   "text": "look it up and you never have to think"
+  },
+  {
+   "t": 256.64,
+   "d": 1.76,
+   "text": "for yourself"
+  },
+  {
+   "t": 258.4,
+   "d": 3.44,
+   "text": "so it's a it's a pretty"
+  },
+  {
+   "t": 261.84,
+   "d": 1.76,
+   "text": "narrow path that the game designer has"
+  },
+  {
+   "t": 263.6,
+   "d": 1.28,
+   "text": "to walk i think"
+  },
+  {
+   "t": 264.88,
+   "d": 2.8,
+   "text": "to develop a system that's exciting to"
+  },
+  {
+   "t": 267.68,
+   "d": 0.4,
+   "text": "solve"
+  },
+  {
+   "t": 268.08,
+   "d": 2.08,
+   "text": "and frankly also resistant to that sort"
+  },
+  {
+   "t": 270.16,
+   "d": 2.08,
+   "text": "of uh data dump download from the"
+  },
+  {
+   "t": 272.24,
+   "d": 1.92,
+   "text": "internet from the crowdsourcing"
+  },
+  {
+   "t": 274.16,
+   "d": 2.08,
+   "text": "i think uh we had a crawl dev here"
+  },
+  {
+   "t": 276.24,
+   "d": 1.12,
+   "text": "earlier today"
+  },
+  {
+   "t": 277.36,
+   "d": 1.92,
+   "text": "uh who talked about how optimal play"
+  },
+  {
+   "t": 279.28,
+   "d": 1.44,
+   "text": "should be fun"
+  },
+  {
+   "t": 280.72,
+   "d": 1.76,
+   "text": "and i think they the crawl team in"
+  },
+  {
+   "t": 282.48,
+   "d": 1.68,
+   "text": "particular has done excellent work in"
+  },
+  {
+   "t": 284.16,
+   "d": 1.6,
+   "text": "popularizing that notion i think it's"
+  },
+  {
+   "t": 285.76,
+   "d": 1.2,
+   "text": "the most important"
+  },
+  {
+   "t": 286.96,
+   "d": 3.36,
+   "text": "uh aspect of game design um"
+  },
+  {
+   "t": 290.32,
+   "d": 2.16,
+   "text": "and i think uh the sort of metagame"
+  },
+  {
+   "t": 292.48,
+   "d": 2.4,
+   "text": "elements all tabbing out to a wiki"
+  },
+  {
+   "t": 294.88,
+   "d": 3.36,
+   "text": "or reading the dominant strategy"
+  },
+  {
+   "t": 298.24,
+   "d": 1.84,
+   "text": "and then just you know playing that"
+  },
+  {
+   "t": 300.08,
+   "d": 1.52,
+   "text": "strategy"
+  },
+  {
+   "t": 301.6,
+   "d": 1.6,
+   "text": "or every time you find an item in the"
+  },
+  {
+   "t": 303.2,
+   "d": 1.92,
+   "text": "game alt-tabbing out to see what it does"
+  },
+  {
+   "t": 305.12,
+   "d": 2.24,
+   "text": "i think that's also"
+  },
+  {
+   "t": 307.36,
+   "d": 1.76,
+   "text": "an optimal play strategy that's not"
+  },
+  {
+   "t": 309.12,
+   "d": 1.44,
+   "text": "particularly fun"
+  },
+  {
+   "t": 310.56,
+   "d": 3.04,
+   "text": "um so we have to cope for uh with with"
+  },
+  {
+   "t": 313.6,
+   "d": 1.84,
+   "text": "the changes to game play that that"
+  },
+  {
+   "t": 315.44,
+   "d": 1.68,
+   "text": "exists in this internet age"
+  },
+  {
+   "t": 317.12,
+   "d": 1.84,
+   "text": "so when you add more content which is"
+  },
+  {
+   "t": 318.96,
+   "d": 1.84,
+   "text": "the primary way a game dev tries to keep"
+  },
+  {
+   "t": 320.8,
+   "d": 2.16,
+   "text": "people from from getting bored"
+  },
+  {
+   "t": 322.96,
+   "d": 1.84,
+   "text": "how do you do it to get the most bang"
+  },
+  {
+   "t": 324.8,
+   "d": 2.4,
+   "text": "for your buck"
+  },
+  {
+   "t": 327.2,
+   "d": 1.28,
+   "text": "and there are two kinds of content"
+  },
+  {
+   "t": 328.48,
+   "d": 1.84,
+   "text": "really that you can add in a roguelike"
+  },
+  {
+   "t": 330.32,
+   "d": 1.36,
+   "text": "game"
+  },
+  {
+   "t": 331.68,
+   "d": 1.28,
+   "text": "there's content that goes toward"
+  },
+  {
+   "t": 332.96,
+   "d": 1.92,
+   "text": "character advancement so this is the"
+  },
+  {
+   "t": 334.88,
+   "d": 1.76,
+   "text": "items you can find the skills you can"
+  },
+  {
+   "t": 336.64,
+   "d": 0.48,
+   "text": "use"
+  },
+  {
+   "t": 337.12,
+   "d": 2.48,
+   "text": "the points that you can invest in uh the"
+  },
+  {
+   "t": 339.6,
+   "d": 1.36,
+   "text": "skill tree"
+  },
+  {
+   "t": 340.96,
+   "d": 1.92,
+   "text": "uh and so on the the things that build"
+  },
+  {
+   "t": 342.88,
+   "d": 2.16,
+   "text": "your character's power and abilities"
+  },
+  {
+   "t": 345.04,
+   "d": 1.52,
+   "text": "and then there's the environment and"
+  },
+  {
+   "t": 346.56,
+   "d": 1.52,
+   "text": "this is the the whom"
+  },
+  {
+   "t": 348.08,
+   "d": 2.0,
+   "text": "of the who and whom dichotomy this is"
+  },
+  {
+   "t": 350.08,
+   "d": 1.6,
+   "text": "what your character is using his"
+  },
+  {
+   "t": 351.68,
+   "d": 0.96,
+   "text": "abilities on"
+  },
+  {
+   "t": 352.64,
+   "d": 3.04,
+   "text": "to overcome the obstacles so taking"
+  },
+  {
+   "t": 355.68,
+   "d": 1.12,
+   "text": "those in order"
+  },
+  {
+   "t": 356.8,
+   "d": 2.64,
+   "text": "um how do you add character advancement"
+  },
+  {
+   "t": 359.44,
+   "d": 0.72,
+   "text": "content"
+  },
+  {
+   "t": 360.16,
+   "d": 1.84,
+   "text": "to make your character interesting and"
+  },
+  {
+   "t": 362.0,
+   "d": 1.2,
+   "text": "also"
+  },
+  {
+   "t": 363.2,
+   "d": 2.16,
+   "text": "despite the pressure that the existence"
+  },
+  {
+   "t": 365.36,
+   "d": 1.44,
+   "text": "of the internet puts on the game"
+  },
+  {
+   "t": 366.8,
+   "d": 1.6,
+   "text": "designer"
+  },
+  {
+   "t": 368.4,
+   "d": 2.16,
+   "text": "so one approach is to create a bunch of"
+  },
+  {
+   "t": 370.56,
+   "d": 1.28,
+   "text": "character classes"
+  },
+  {
+   "t": 371.84,
+   "d": 2.16,
+   "text": "um and i think it's a valid approach"
+  },
+  {
+   "t": 374.0,
+   "d": 1.12,
+   "text": "it's certainly"
+  },
+  {
+   "t": 375.12,
+   "d": 1.76,
+   "text": "particularly for a roguelike that has to"
+  },
+  {
+   "t": 376.88,
+   "d": 1.84,
+   "text": "inherit a legacy audience that's used to"
+  },
+  {
+   "t": 378.72,
+   "d": 2.16,
+   "text": "a diversity of play styles i think this"
+  },
+  {
+   "t": 380.88,
+   "d": 1.6,
+   "text": "is a great way to cater to people who"
+  },
+  {
+   "t": 382.48,
+   "d": 1.04,
+   "text": "want to play"
+  },
+  {
+   "t": 383.52,
+   "d": 3.04,
+   "text": "different kinds of games within one game"
+  },
+  {
+   "t": 386.56,
+   "d": 1.52,
+   "text": "i think if you're starting from scratch"
+  },
+  {
+   "t": 388.08,
+   "d": 1.44,
+   "text": "if you have the luxury of starting with"
+  },
+  {
+   "t": 389.52,
+   "d": 1.6,
+   "text": "a blank slate like i did when i"
+  },
+  {
+   "t": 391.12,
+   "d": 2.64,
+   "text": "when i built brogue i think there are a"
+  },
+  {
+   "t": 393.76,
+   "d": 0.4,
+   "text": "few"
+  },
+  {
+   "t": 394.16,
+   "d": 2.56,
+   "text": "issues choosing that as a means of"
+  },
+  {
+   "t": 396.72,
+   "d": 2.24,
+   "text": "making the game's longevity is as long"
+  },
+  {
+   "t": 398.96,
+   "d": 1.36,
+   "text": "as possible"
+  },
+  {
+   "t": 400.32,
+   "d": 2.48,
+   "text": "um by default there's going to be one"
+  },
+  {
+   "t": 402.8,
+   "d": 1.68,
+   "text": "class that's just more powerful than all"
+  },
+  {
+   "t": 404.48,
+   "d": 0.56,
+   "text": "the others"
+  },
+  {
+   "t": 405.04,
+   "d": 1.84,
+   "text": "unless by a miracle of game design you"
+  },
+  {
+   "t": 406.88,
+   "d": 3.36,
+   "text": "manage to perfectly balance them"
+  },
+  {
+   "t": 410.24,
+   "d": 1.84,
+   "text": "and even if you do there's probably one"
+  },
+  {
+   "t": 412.08,
+   "d": 2.0,
+   "text": "dominant build within each class"
+  },
+  {
+   "t": 414.08,
+   "d": 2.32,
+   "text": "i know when i played diablo 2 decades"
+  },
+  {
+   "t": 416.4,
+   "d": 1.6,
+   "text": "ago"
+  },
+  {
+   "t": 418.0,
+   "d": 1.84,
+   "text": "i just looked up the best build for the"
+  },
+  {
+   "t": 419.84,
+   "d": 1.76,
+   "text": "sorceress and then i just built it and"
+  },
+  {
+   "t": 421.6,
+   "d": 1.76,
+   "text": "so all of that other content was wasted"
+  },
+  {
+   "t": 423.36,
+   "d": 1.12,
+   "text": "for me"
+  },
+  {
+   "t": 424.48,
+   "d": 2.88,
+   "text": "um and so that that that is the optimal"
+  },
+  {
+   "t": 427.36,
+   "d": 2.16,
+   "text": "play that's how the optimal player plays"
+  },
+  {
+   "t": 429.52,
+   "d": 2.64,
+   "text": "uh they if they really want to win and i"
+  },
+  {
+   "t": 432.16,
+   "d": 1.92,
+   "text": "think to get a player really invested in"
+  },
+  {
+   "t": 434.08,
+   "d": 0.48,
+   "text": "a game"
+  },
+  {
+   "t": 434.56,
+   "d": 2.56,
+   "text": "they do need to really want to win they"
+  },
+  {
+   "t": 437.12,
+   "d": 1.92,
+   "text": "just look it up online"
+  },
+  {
+   "t": 439.04,
+   "d": 2.32,
+   "text": "so adding classes like new classes is"
+  },
+  {
+   "t": 441.36,
+   "d": 1.84,
+   "text": "probably not the way that you maximize"
+  },
+  {
+   "t": 443.2,
+   "d": 2.0,
+   "text": "the number of hours of fun"
+  },
+  {
+   "t": 445.2,
+   "d": 4.08,
+   "text": "per unit of content so brogue system i"
+  },
+  {
+   "t": 449.28,
+   "d": 0.72,
+   "text": "think"
+  },
+  {
+   "t": 450.0,
+   "d": 3.04,
+   "text": "i'm not sure that i know of any other"
+  },
+  {
+   "t": 453.04,
+   "d": 2.56,
+   "text": "games that had a system quite like this"
+  },
+  {
+   "t": 455.6,
+   "d": 1.84,
+   "text": "but the idea is that it's improvised"
+  },
+  {
+   "t": 457.44,
+   "d": 1.76,
+   "text": "item-based advancement"
+  },
+  {
+   "t": 459.2,
+   "d": 2.48,
+   "text": "so first the metaphor instead of"
+  },
+  {
+   "t": 461.68,
+   "d": 1.28,
+   "text": "character skills"
+  },
+  {
+   "t": 462.96,
+   "d": 1.92,
+   "text": "there are skill items that you find in"
+  },
+  {
+   "t": 464.88,
+   "d": 1.76,
+   "text": "the dungeon these are weapons armor"
+  },
+  {
+   "t": 466.64,
+   "d": 1.76,
+   "text": "staffs charms rings"
+  },
+  {
+   "t": 468.4,
+   "d": 2.08,
+   "text": "these are things that are reusable they"
+  },
+  {
+   "t": 470.48,
+   "d": 2.24,
+   "text": "become your character's abilities"
+  },
+  {
+   "t": 472.72,
+   "d": 1.44,
+   "text": "you can use them over and over again"
+  },
+  {
+   "t": 474.16,
+   "d": 1.68,
+   "text": "throughout your adventure"
+  },
+  {
+   "t": 475.84,
+   "d": 1.28,
+   "text": "and they help your character throughout"
+  },
+  {
+   "t": 477.12,
+   "d": 2.32,
+   "text": "your adventure they're not disposable"
+  },
+  {
+   "t": 479.44,
+   "d": 2.48,
+   "text": "and then instead of skill points uh"
+  },
+  {
+   "t": 481.92,
+   "d": 3.04,
+   "text": "which is a pretty common rpg trope"
+  },
+  {
+   "t": 484.96,
+   "d": 2.56,
+   "text": "you have basically skill point items"
+  },
+  {
+   "t": 487.52,
+   "d": 1.76,
+   "text": "which in brogue's case are scrolls of"
+  },
+  {
+   "t": 489.28,
+   "d": 0.72,
+   "text": "enchantment"
+  },
+  {
+   "t": 490.0,
+   "d": 1.92,
+   "text": "that are found throughout the dungeon"
+  },
+  {
+   "t": 491.92,
+   "d": 2.0,
+   "text": "and each time you use one of those"
+  },
+  {
+   "t": 493.92,
+   "d": 2.16,
+   "text": "you can only use each one once it"
+  },
+  {
+   "t": 496.08,
+   "d": 1.36,
+   "text": "permanently improves"
+  },
+  {
+   "t": 497.44,
+   "d": 2.24,
+   "text": "one of your skill items so your weapons"
+  },
+  {
+   "t": 499.68,
+   "d": 2.48,
+   "text": "become stronger and hit more often"
+  },
+  {
+   "t": 502.16,
+   "d": 2.48,
+   "text": "your armor becomes less burdensome and"
+  },
+  {
+   "t": 504.64,
+   "d": 1.76,
+   "text": "more protective"
+  },
+  {
+   "t": 506.4,
+   "d": 2.56,
+   "text": "your staffs have more charge to them and"
+  },
+  {
+   "t": 508.96,
+   "d": 2.08,
+   "text": "the effects are more powerful"
+  },
+  {
+   "t": 511.04,
+   "d": 1.76,
+   "text": "your charms recharge faster and the"
+  },
+  {
+   "t": 512.8,
+   "d": 1.68,
+   "text": "effects are more powerful"
+  },
+  {
+   "t": 514.48,
+   "d": 2.48,
+   "text": "and the the effects of the rings also"
+  },
+  {
+   "t": 516.96,
+   "d": 2.56,
+   "text": "become more powerful"
+  },
+  {
+   "t": 519.52,
+   "d": 1.68,
+   "text": "and then when you generate those skill"
+  },
+  {
+   "t": 521.2,
+   "d": 1.68,
+   "text": "point items it"
+  },
+  {
+   "t": 522.88,
+   "d": 2.08,
+   "text": "might look random to the player but it's"
+  },
+  {
+   "t": 524.96,
+   "d": 1.6,
+   "text": "very carefully controlled the rate at"
+  },
+  {
+   "t": 526.56,
+   "d": 1.36,
+   "text": "which they're spawned so that every"
+  },
+  {
+   "t": 527.92,
+   "d": 1.68,
+   "text": "player has basically the same number of"
+  },
+  {
+   "t": 529.6,
+   "d": 3.04,
+   "text": "points at basically the same rate"
+  },
+  {
+   "t": 532.64,
+   "d": 2.56,
+   "text": "so that's the metaphor um it's basically"
+  },
+  {
+   "t": 535.2,
+   "d": 1.76,
+   "text": "just translating the traditional"
+  },
+  {
+   "t": 536.96,
+   "d": 2.0,
+   "text": "uh character-based development into"
+  },
+  {
+   "t": 538.96,
+   "d": 1.36,
+   "text": "items uh"
+  },
+  {
+   "t": 540.32,
+   "d": 1.76,
+   "text": "there are a few advantage well like i"
+  },
+  {
+   "t": 542.08,
+   "d": 1.92,
+   "text": "guess and and that you use those items"
+  },
+  {
+   "t": 544.0,
+   "d": 1.2,
+   "text": "to build synergies"
+  },
+  {
+   "t": 545.2,
+   "d": 2.32,
+   "text": "um and and what you come out with looks"
+  },
+  {
+   "t": 547.52,
+   "d": 2.72,
+   "text": "a lot like traditional character classes"
+  },
+  {
+   "t": 550.24,
+   "d": 1.52,
+   "text": "so for example if you want to build a"
+  },
+  {
+   "t": 551.76,
+   "d": 1.92,
+   "text": "fire mage character"
+  },
+  {
+   "t": 553.68,
+   "d": 2.24,
+   "text": "you can find a staff of firebolt and"
+  },
+  {
+   "t": 555.92,
+   "d": 1.2,
+   "text": "some items to keep the"
+  },
+  {
+   "t": 557.12,
+   "d": 2.4,
+   "text": "the staff topped off so it doesn't run"
+  },
+  {
+   "t": 559.52,
+   "d": 1.04,
+   "text": "out of charge"
+  },
+  {
+   "t": 560.56,
+   "d": 2.8,
+   "text": "or a berserker can have an axe uh armor"
+  },
+  {
+   "t": 563.36,
+   "d": 1.84,
+   "text": "that sort of helps them in a crowd and"
+  },
+  {
+   "t": 565.2,
+   "d": 1.92,
+   "text": "transference that uh"
+  },
+  {
+   "t": 567.12,
+   "d": 1.6,
+   "text": "like a vampiric effect so they can"
+  },
+  {
+   "t": 568.72,
+   "d": 1.52,
+   "text": "regenerate health when they when they"
+  },
+  {
+   "t": 570.24,
+   "d": 0.64,
+   "text": "hit"
+  },
+  {
+   "t": 570.88,
+   "d": 1.92,
+   "text": "that's a very potent combination and in"
+  },
+  {
+   "t": 572.8,
+   "d": 1.52,
+   "text": "a in a sea of enemies that"
+  },
+  {
+   "t": 574.32,
+   "d": 1.52,
+   "text": "that character build will just mow them"
+  },
+  {
+   "t": 575.84,
+   "d": 2.4,
+   "text": "down you could build an assassin with a"
+  },
+  {
+   "t": 578.24,
+   "d": 1.2,
+   "text": "ring of stealth"
+  },
+  {
+   "t": 579.44,
+   "d": 2.96,
+   "text": "an escape item to get away and then a"
+  },
+  {
+   "t": 582.4,
+   "d": 1.12,
+   "text": "big heavy"
+  },
+  {
+   "t": 583.52,
+   "d": 2.24,
+   "text": "weapon to deal killing blows whenever"
+  },
+  {
+   "t": 585.76,
+   "d": 1.6,
+   "text": "there's an opportunity to do a stealth"
+  },
+  {
+   "t": 587.36,
+   "d": 0.8,
+   "text": "attack"
+  },
+  {
+   "t": 588.16,
+   "d": 1.92,
+   "text": "so you can see how even though it's"
+  },
+  {
+   "t": 590.08,
+   "d": 2.0,
+   "text": "purely item-based uh character"
+  },
+  {
+   "t": 592.08,
+   "d": 0.88,
+   "text": "advancement"
+  },
+  {
+   "t": 592.96,
+   "d": 2.24,
+   "text": "you can still come up with uh builds"
+  },
+  {
+   "t": 595.2,
+   "d": 2.88,
+   "text": "that look a lot like traditional rpgs"
+  },
+  {
+   "t": 598.08,
+   "d": 2.16,
+   "text": "but the key is that these builds aren't"
+  },
+  {
+   "t": 600.24,
+   "d": 1.04,
+   "text": "built into the game"
+  },
+  {
+   "t": 601.28,
+   "d": 2.08,
+   "text": "there's no line of code that that refers"
+  },
+  {
+   "t": 603.36,
+   "d": 2.0,
+   "text": "to a fire mage or distinguishes a fire"
+  },
+  {
+   "t": 605.36,
+   "d": 1.36,
+   "text": "mage from a berserker"
+  },
+  {
+   "t": 606.72,
+   "d": 1.68,
+   "text": "these are sort of improvised character"
+  },
+  {
+   "t": 608.4,
+   "d": 2.48,
+   "text": "classes"
+  },
+  {
+   "t": 611.6,
+   "d": 1.52,
+   "text": "you look at the items that are available"
+  },
+  {
+   "t": 613.12,
+   "d": 1.52,
+   "text": "and cobble one of these together for"
+  },
+  {
+   "t": 614.64,
+   "d": 1.84,
+   "text": "yourself"
+  },
+  {
+   "t": 616.48,
+   "d": 2.24,
+   "text": "um so the fact that you only find a"
+  },
+  {
+   "t": 618.72,
+   "d": 1.92,
+   "text": "subset of these skills per game"
+  },
+  {
+   "t": 620.64,
+   "d": 2.96,
+   "text": "means that you really it's it's tough to"
+  },
+  {
+   "t": 623.6,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 624.4,
+   "d": 2.8,
+   "text": "to systematize too rigidly um you only"
+  },
+  {
+   "t": 627.2,
+   "d": 1.76,
+   "text": "find a subset you don't necessarily know"
+  },
+  {
+   "t": 628.96,
+   "d": 1.6,
+   "text": "what you're going to find"
+  },
+  {
+   "t": 630.56,
+   "d": 1.44,
+   "text": "there are some special rooms that let"
+  },
+  {
+   "t": 632.0,
+   "d": 2.24,
+   "text": "you choose any one item from a set of"
+  },
+  {
+   "t": 634.24,
+   "d": 1.92,
+   "text": "items which can help you"
+  },
+  {
+   "t": 636.16,
+   "d": 2.72,
+   "text": "have some some choice over what sort of"
+  },
+  {
+   "t": 638.88,
+   "d": 1.84,
+   "text": "a build you come out with"
+  },
+  {
+   "t": 640.72,
+   "d": 1.76,
+   "text": "but it doesn't give you free rein you"
+  },
+  {
+   "t": 642.48,
+   "d": 2.64,
+   "text": "have to be able to be flexible"
+  },
+  {
+   "t": 645.12,
+   "d": 1.52,
+   "text": "and you also have to start committing to"
+  },
+  {
+   "t": 646.64,
+   "d": 1.92,
+   "text": "a build before you know what items are"
+  },
+  {
+   "t": 648.56,
+   "d": 2.0,
+   "text": "going to be available in the dungeon"
+  },
+  {
+   "t": 650.56,
+   "d": 1.6,
+   "text": "because the difficulty ramps up pretty"
+  },
+  {
+   "t": 652.16,
+   "d": 1.92,
+   "text": "quickly and you need to start committing"
+  },
+  {
+   "t": 654.08,
+   "d": 2.24,
+   "text": "to a build to overcome those challenges"
+  },
+  {
+   "t": 656.32,
+   "d": 1.6,
+   "text": "uh even while you're waiting for for"
+  },
+  {
+   "t": 657.92,
+   "d": 2.72,
+   "text": "more items to appear and then finally"
+  },
+  {
+   "t": 660.64,
+   "d": 0.4,
+   "text": "there's"
+  },
+  {
+   "t": 661.04,
+   "d": 1.84,
+   "text": "you know a limited pool of disposable"
+  },
+  {
+   "t": 662.88,
+   "d": 3.6,
+   "text": "items wild card items i call them"
+  },
+  {
+   "t": 666.48,
+   "d": 2.48,
+   "text": "like you know scrolls of teleportation"
+  },
+  {
+   "t": 668.96,
+   "d": 2.08,
+   "text": "are the classic example from rogue"
+  },
+  {
+   "t": 671.04,
+   "d": 3.04,
+   "text": "to let you escape from situations that"
+  },
+  {
+   "t": 674.08,
+   "d": 2.24,
+   "text": "um"
+  },
+  {
+   "t": 677.52,
+   "d": 4.88,
+   "text": "that are um beyond your abilities"
+  },
+  {
+   "t": 682.4,
+   "d": 4.32,
+   "text": "um great so i think the key"
+  },
+  {
+   "t": 686.72,
+   "d": 1.92,
+   "text": "features of that system are forced"
+  },
+  {
+   "t": 688.64,
+   "d": 3.2,
+   "text": "improvisation and imperfect information"
+  },
+  {
+   "t": 691.84,
+   "d": 2.29,
+   "text": "so the fact that we um"
+  },
+  {
+   "t": 694.13,
+   "d": 2.03,
+   "text": "[Music]"
+  },
+  {
+   "t": 696.16,
+   "d": 3.36,
+   "text": "we decouple the advancement from combat"
+  },
+  {
+   "t": 699.52,
+   "d": 2.08,
+   "text": "which means that a whole diversity of"
+  },
+  {
+   "t": 701.6,
+   "d": 1.44,
+   "text": "character builds are encouraged"
+  },
+  {
+   "t": 703.04,
+   "d": 1.6,
+   "text": "including character builds that are all"
+  },
+  {
+   "t": 704.64,
+   "d": 2.24,
+   "text": "about avoiding conflict with monsters"
+  },
+  {
+   "t": 706.88,
+   "d": 1.52,
+   "text": "there's no experience points from"
+  },
+  {
+   "t": 708.4,
+   "d": 3.12,
+   "text": "fighting monsters anymore"
+  },
+  {
+   "t": 711.52,
+   "d": 4.08,
+   "text": "and it really lets you build alternative"
+  },
+  {
+   "t": 715.6,
+   "d": 1.52,
+   "text": "types of builds that are not just about"
+  },
+  {
+   "t": 717.12,
+   "d": 1.44,
+   "text": "killing monsters"
+  },
+  {
+   "t": 718.56,
+   "d": 3.28,
+   "text": "uh this kind of scheme uh really rewards"
+  },
+  {
+   "t": 721.84,
+   "d": 1.68,
+   "text": "like trickery and resourcefulness"
+  },
+  {
+   "t": 723.52,
+   "d": 2.0,
+   "text": "scheming and being a scoundrel"
+  },
+  {
+   "t": 725.52,
+   "d": 2.08,
+   "text": "and i think that's a good feature"
+  },
+  {
+   "t": 727.6,
+   "d": 2.0,
+   "text": "because that's a feature that the player"
+  },
+  {
+   "t": 729.6,
+   "d": 0.56,
+   "text": "themselves"
+  },
+  {
+   "t": 730.16,
+   "d": 2.64,
+   "text": "can have um if you're playing a really"
+  },
+  {
+   "t": 732.8,
+   "d": 1.28,
+   "text": "strong warrior"
+  },
+  {
+   "t": 734.08,
+   "d": 3.2,
+   "text": "character and the the um"
+  },
+  {
+   "t": 737.28,
+   "d": 2.4,
+   "text": "the the strength of the characters just"
+  },
+  {
+   "t": 739.68,
+   "d": 1.52,
+   "text": "being really strong or really good with"
+  },
+  {
+   "t": 741.2,
+   "d": 0.24,
+   "text": "an"
+  },
+  {
+   "t": 741.44,
+   "d": 2.08,
+   "text": "axe that's not really a skill that the"
+  },
+  {
+   "t": 743.52,
+   "d": 1.52,
+   "text": "player can identify with that's"
+  },
+  {
+   "t": 745.04,
+   "d": 2.48,
+   "text": "not a skill that most of us have or"
+  },
+  {
+   "t": 747.52,
+   "d": 1.36,
+   "text": "those of you who might have it you don't"
+  },
+  {
+   "t": 748.88,
+   "d": 1.68,
+   "text": "really express it by like poking at a"
+  },
+  {
+   "t": 750.56,
+   "d": 1.2,
+   "text": "keyboard"
+  },
+  {
+   "t": 751.76,
+   "d": 2.64,
+   "text": "um but being devious is something that"
+  },
+  {
+   "t": 754.4,
+   "d": 1.92,
+   "text": "you can express by poking at a keyboard"
+  },
+  {
+   "t": 756.32,
+   "d": 1.68,
+   "text": "so i think there's a kind of identity"
+  },
+  {
+   "t": 758.0,
+   "d": 3.36,
+   "text": "of the character's um"
+  },
+  {
+   "t": 761.36,
+   "d": 2.48,
+   "text": "strength and the player's skill that"
+  },
+  {
+   "t": 763.84,
+   "d": 2.0,
+   "text": "that kind of"
+  },
+  {
+   "t": 765.84,
+   "d": 1.44,
+   "text": "gives rise to a little bit of extra"
+  },
+  {
+   "t": 767.28,
+   "d": 2.64,
+   "text": "immersion um and then the the other"
+  },
+  {
+   "t": 769.92,
+   "d": 2.16,
+   "text": "advantage here is that every dungeon"
+  },
+  {
+   "t": 772.08,
+   "d": 2.24,
+   "text": "allows subtly different character types"
+  },
+  {
+   "t": 774.32,
+   "d": 2.72,
+   "text": "um you know"
+  },
+  {
+   "t": 777.04,
+   "d": 1.68,
+   "text": "it's hard to say going in what kinds of"
+  },
+  {
+   "t": 778.72,
+   "d": 1.76,
+   "text": "characters will be available"
+  },
+  {
+   "t": 780.48,
+   "d": 1.76,
+   "text": "and the build strategies are going to be"
+  },
+  {
+   "t": 782.24,
+   "d": 1.36,
+   "text": "very rich and contingent"
+  },
+  {
+   "t": 783.6,
+   "d": 2.0,
+   "text": "on the facts and that means that it's"
+  },
+  {
+   "t": 785.6,
+   "d": 1.84,
+   "text": "really hard to just alt tab over to a"
+  },
+  {
+   "t": 787.44,
+   "d": 0.64,
+   "text": "wiki"
+  },
+  {
+   "t": 788.08,
+   "d": 1.76,
+   "text": "and look up the dominant strategy for"
+  },
+  {
+   "t": 789.84,
+   "d": 1.44,
+   "text": "any particular game"
+  },
+  {
+   "t": 791.28,
+   "d": 1.92,
+   "text": "you really have to build the intuition"
+  },
+  {
+   "t": 793.2,
+   "d": 1.84,
+   "text": "you have to have played a lot of games"
+  },
+  {
+   "t": 795.04,
+   "d": 1.68,
+   "text": "and it's it's really resistant to"
+  },
+  {
+   "t": 796.72,
+   "d": 2.56,
+   "text": "spoilers"
+  },
+  {
+   "t": 799.36,
+   "d": 2.8,
+   "text": "um so then when designing these kinds of"
+  },
+  {
+   "t": 802.16,
+   "d": 1.44,
+   "text": "content"
+  },
+  {
+   "t": 803.6,
+   "d": 2.4,
+   "text": "um i think a really good rule of thumb"
+  },
+  {
+   "t": 806.0,
+   "d": 1.44,
+   "text": "is that you want to make them as"
+  },
+  {
+   "t": 807.44,
+   "d": 3.04,
+   "text": "intense and powerful as possible and"
+  },
+  {
+   "t": 810.48,
+   "d": 0.8,
+   "text": "normally"
+  },
+  {
+   "t": 811.28,
+   "d": 2.56,
+   "text": "you would shy away from that because a"
+  },
+  {
+   "t": 813.84,
+   "d": 1.84,
+   "text": "really powerful player ability is just"
+  },
+  {
+   "t": 815.68,
+   "d": 1.68,
+   "text": "going to overpower the game and make it"
+  },
+  {
+   "t": 817.36,
+   "d": 2.08,
+   "text": "not challenging"
+  },
+  {
+   "t": 819.44,
+   "d": 2.16,
+   "text": "and the argument there is instead of"
+  },
+  {
+   "t": 821.6,
+   "d": 2.8,
+   "text": "balancing power by dialing it back down"
+  },
+  {
+   "t": 824.4,
+   "d": 2.56,
+   "text": "balance it with situationality so come"
+  },
+  {
+   "t": 826.96,
+   "d": 1.04,
+   "text": "up with really powerful"
+  },
+  {
+   "t": 828.0,
+   "d": 1.44,
+   "text": "techniques that can only be used in"
+  },
+  {
+   "t": 829.44,
+   "d": 1.68,
+   "text": "certain circumstances"
+  },
+  {
+   "t": 831.12,
+   "d": 1.36,
+   "text": "uh and then you don't have to worry how"
+  },
+  {
+   "t": 832.48,
+   "d": 1.44,
+   "text": "powerful they get you can turn them all"
+  },
+  {
+   "t": 833.92,
+   "d": 1.6,
+   "text": "the way up to the maximum"
+  },
+  {
+   "t": 835.52,
+   "d": 3.2,
+   "text": "and uh the these these effects and"
+  },
+  {
+   "t": 838.72,
+   "d": 2.0,
+   "text": "interactions are what differentiates one"
+  },
+  {
+   "t": 840.72,
+   "d": 1.92,
+   "text": "character from another or one situation"
+  },
+  {
+   "t": 842.64,
+   "d": 0.96,
+   "text": "from another"
+  },
+  {
+   "t": 843.6,
+   "d": 1.92,
+   "text": "so the more you turn up the power of"
+  },
+  {
+   "t": 845.52,
+   "d": 2.0,
+   "text": "that ability the more you encourage an"
+  },
+  {
+   "t": 847.52,
+   "d": 1.92,
+   "text": "optimal player to take advantage of them"
+  },
+  {
+   "t": 849.44,
+   "d": 2.0,
+   "text": "and the more different that particular"
+  },
+  {
+   "t": 851.44,
+   "d": 1.2,
+   "text": "character feels"
+  },
+  {
+   "t": 852.64,
+   "d": 2.88,
+   "text": "from previous games so it's a technique"
+  },
+  {
+   "t": 855.52,
+   "d": 0.56,
+   "text": "of of"
+  },
+  {
+   "t": 856.08,
+   "d": 1.68,
+   "text": "encouraging the game to tell different"
+  },
+  {
+   "t": 857.76,
+   "d": 1.68,
+   "text": "stories every time you play it instead"
+  },
+  {
+   "t": 859.44,
+   "d": 1.68,
+   "text": "of feeling like you're playing the same"
+  },
+  {
+   "t": 861.12,
+   "d": 1.76,
+   "text": "game over and over"
+  },
+  {
+   "t": 862.88,
+   "d": 2.0,
+   "text": "um so some examples of of really"
+  },
+  {
+   "t": 864.88,
+   "d": 1.64,
+   "text": "powerful effects that are balanced by"
+  },
+  {
+   "t": 866.52,
+   "d": 1.48,
+   "text": "situationality"
+  },
+  {
+   "t": 868.0,
+   "d": 2.32,
+   "text": "uh spiderwebs uh when a creature or"
+  },
+  {
+   "t": 870.32,
+   "d": 1.84,
+   "text": "player is entangled in them"
+  },
+  {
+   "t": 872.16,
+   "d": 3.04,
+   "text": "uh every attack hits them uh i"
+  },
+  {
+   "t": 875.2,
+   "d": 1.84,
+   "text": "i think in the early days of the game i"
+  },
+  {
+   "t": 877.04,
+   "d": 2.32,
+   "text": "used to apply like a minus four"
+  },
+  {
+   "t": 879.36,
+   "d": 1.92,
+   "text": "modifier here and another minus four"
+  },
+  {
+   "t": 881.28,
+   "d": 1.2,
+   "text": "modifier there"
+  },
+  {
+   "t": 882.48,
+   "d": 1.36,
+   "text": "i realized that you could just turn it"
+  },
+  {
+   "t": 883.84,
+   "d": 1.92,
+   "text": "up all the way and just make it 100 auto"
+  },
+  {
+   "t": 885.76,
+   "d": 1.04,
+   "text": "hit"
+  },
+  {
+   "t": 886.8,
+   "d": 2.08,
+   "text": "and it only makes them more interesting"
+  },
+  {
+   "t": 888.88,
+   "d": 1.2,
+   "text": "there's even an uh"
+  },
+  {
+   "t": 890.08,
+   "d": 1.44,
+   "text": "a trap in the dungeon that lets you"
+  },
+  {
+   "t": 891.52,
+   "d": 2.56,
+   "text": "generate these spider webs whenever you"
+  },
+  {
+   "t": 894.08,
+   "d": 2.0,
+   "text": "throw something at it or touch it so you"
+  },
+  {
+   "t": 896.08,
+   "d": 1.76,
+   "text": "can use these over and over you can lure"
+  },
+  {
+   "t": 897.84,
+   "d": 2.48,
+   "text": "monsters into them and slaughter them"
+  },
+  {
+   "t": 900.32,
+   "d": 1.84,
+   "text": "but it's only useful if the spider webs"
+  },
+  {
+   "t": 902.16,
+   "d": 2.0,
+   "text": "are available and it's only useful for"
+  },
+  {
+   "t": 904.16,
+   "d": 1.28,
+   "text": "monsters that were hard to hit in the"
+  },
+  {
+   "t": 905.44,
+   "d": 0.96,
+   "text": "first place"
+  },
+  {
+   "t": 906.4,
+   "d": 2.08,
+   "text": "so it's the power of it is balanced by"
+  },
+  {
+   "t": 908.48,
+   "d": 4.96,
+   "text": "that situationality"
+  },
+  {
+   "t": 913.44,
+   "d": 2.72,
+   "text": "uh lava is another great example instant"
+  },
+  {
+   "t": 916.16,
+   "d": 1.92,
+   "text": "death for any creature that enters it"
+  },
+  {
+   "t": 918.08,
+   "d": 1.6,
+   "text": "unless the creature is flying or fire"
+  },
+  {
+   "t": 919.68,
+   "d": 1.84,
+   "text": "immune and there are"
+  },
+  {
+   "t": 921.52,
+   "d": 1.44,
+   "text": "a whole bunch of different abilities"
+  },
+  {
+   "t": 922.96,
+   "d": 1.76,
+   "text": "that you can use to either trick cokes"
+  },
+  {
+   "t": 924.72,
+   "d": 1.28,
+   "text": "or push monsters into"
+  },
+  {
+   "t": 926.0,
+   "d": 2.0,
+   "text": "lava and a lot of these abilities you"
+  },
+  {
+   "t": 928.0,
+   "d": 1.6,
+   "text": "can use over and over again"
+  },
+  {
+   "t": 929.6,
+   "d": 2.96,
+   "text": "entrancement staffs you can just you can"
+  },
+  {
+   "t": 932.56,
+   "d": 0.56,
+   "text": "build your"
+  },
+  {
+   "t": 933.12,
+   "d": 2.0,
+   "text": "whole character around that item every"
+  },
+  {
+   "t": 935.12,
+   "d": 1.44,
+   "text": "time you see a lava pit that's the"
+  },
+  {
+   "t": 936.56,
+   "d": 1.68,
+   "text": "opportunity to just slaughter as many"
+  },
+  {
+   "t": 938.24,
+   "d": 1.12,
+   "text": "monsters"
+  },
+  {
+   "t": 939.36,
+   "d": 1.36,
+   "text": "as you can bring over there but you've"
+  },
+  {
+   "t": 940.72,
+   "d": 1.12,
+   "text": "got to bring them over there and you've"
+  },
+  {
+   "t": 941.84,
+   "d": 2.08,
+   "text": "got to find the lava in the first place"
+  },
+  {
+   "t": 943.92,
+   "d": 1.44,
+   "text": "and you're likely to get cornered while"
+  },
+  {
+   "t": 945.36,
+   "d": 1.84,
+   "text": "you're away from the lava"
+  },
+  {
+   "t": 947.2,
+   "d": 1.44,
+   "text": "which creates i think an interesting"
+  },
+  {
+   "t": 948.64,
+   "d": 2.4,
+   "text": "character narrative"
+  },
+  {
+   "t": 951.04,
+   "d": 1.76,
+   "text": "negation on magic themed monsters"
+  },
+  {
+   "t": 952.8,
+   "d": 2.0,
+   "text": "similar instant death for certain"
+  },
+  {
+   "t": 954.8,
+   "d": 2.0,
+   "text": "monsters that are magic themed"
+  },
+  {
+   "t": 956.8,
+   "d": 3.44,
+   "text": "such as summon spectral blades or golems"
+  },
+  {
+   "t": 960.24,
+   "d": 1.36,
+   "text": "but it's only effective on certain"
+  },
+  {
+   "t": 961.6,
+   "d": 2.48,
+   "text": "monsters axe weapons"
+  },
+  {
+   "t": 964.08,
+   "d": 2.48,
+   "text": "hits every surrounding enemy i think a"
+  },
+  {
+   "t": 966.56,
+   "d": 2.0,
+   "text": "lot of games have kind of struggled to"
+  },
+  {
+   "t": 968.56,
+   "d": 2.32,
+   "text": "to decide how to make weapons feel"
+  },
+  {
+   "t": 970.88,
+   "d": 0.88,
+   "text": "distinct"
+  },
+  {
+   "t": 971.76,
+   "d": 2.72,
+   "text": "and i think the the the right answer is"
+  },
+  {
+   "t": 974.48,
+   "d": 1.36,
+   "text": "to just make them as distinct as"
+  },
+  {
+   "t": 975.84,
+   "d": 1.36,
+   "text": "possible to make them as different from"
+  },
+  {
+   "t": 977.2,
+   "d": 1.44,
+   "text": "one another as possible"
+  },
+  {
+   "t": 978.64,
+   "d": 1.92,
+   "text": "don't just hit the three monsters in"
+  },
+  {
+   "t": 980.56,
+   "d": 1.76,
+   "text": "front and only if there's no doorway in"
+  },
+  {
+   "t": 982.32,
+   "d": 0.56,
+   "text": "the way"
+  },
+  {
+   "t": 982.88,
+   "d": 2.32,
+   "text": "just hit every monster around you it"
+  },
+  {
+   "t": 985.2,
+   "d": 1.36,
+   "text": "doesn't make the fight any"
+  },
+  {
+   "t": 986.56,
+   "d": 1.44,
+   "text": "less challenging than if it were a"
+  },
+  {
+   "t": 988.0,
+   "d": 2.32,
+   "text": "one-on-one fight and it won't be an"
+  },
+  {
+   "t": 990.32,
+   "d": 1.92,
+   "text": "advantage if it is a one-on-one fight so"
+  },
+  {
+   "t": 992.24,
+   "d": 2.6,
+   "text": "it's still situationally"
+  },
+  {
+   "t": 994.84,
+   "d": 2.2,
+   "text": "balanced that's how to"
+  },
+  {
+   "t": 997.04,
+   "d": 2.0,
+   "text": "design character abilities in character"
+  },
+  {
+   "t": 999.04,
+   "d": 1.04,
+   "text": "classes"
+  },
+  {
+   "t": 1000.08,
+   "d": 2.0,
+   "text": "i think the other piece is making the"
+  },
+  {
+   "t": 1002.08,
+   "d": 2.24,
+   "text": "space itself interesting"
+  },
+  {
+   "t": 1004.32,
+   "d": 1.76,
+   "text": "and it took me a while to realize this"
+  },
+  {
+   "t": 1006.08,
+   "d": 1.84,
+   "text": "but i think the key is to come up with"
+  },
+  {
+   "t": 1007.92,
+   "d": 2.4,
+   "text": "combinatorially overlapping zones with"
+  },
+  {
+   "t": 1010.32,
+   "d": 2.08,
+   "text": "qualitatively different advantages and"
+  },
+  {
+   "t": 1012.4,
+   "d": 1.44,
+   "text": "disadvantages"
+  },
+  {
+   "t": 1013.84,
+   "d": 1.84,
+   "text": "so in other words a bunch of different"
+  },
+  {
+   "t": 1015.68,
+   "d": 1.52,
+   "text": "zones with a whole bunch of different"
+  },
+  {
+   "t": 1017.2,
+   "d": 2.24,
+   "text": "kinds of advantages and penalties"
+  },
+  {
+   "t": 1019.44,
+   "d": 1.84,
+   "text": "and then you just overlay them in such a"
+  },
+  {
+   "t": 1021.28,
+   "d": 1.76,
+   "text": "way you get every conceivable"
+  },
+  {
+   "t": 1023.04,
+   "d": 1.6,
+   "text": "permutation on every level of the"
+  },
+  {
+   "t": 1024.64,
+   "d": 1.76,
+   "text": "dungeon"
+  },
+  {
+   "t": 1026.4,
+   "d": 2.24,
+   "text": "so as just a quick aside in terms of how"
+  },
+  {
+   "t": 1028.64,
+   "d": 2.0,
+   "text": "to structure the space of the dungeon"
+  },
+  {
+   "t": 1030.64,
+   "d": 3.28,
+   "text": "grids are great i think you sometimes"
+  },
+  {
+   "t": 1033.92,
+   "d": 0.88,
+   "text": "see"
+  },
+  {
+   "t": 1034.8,
+   "d": 3.2,
+   "text": "gamers moving toward hex-based grids or"
+  },
+  {
+   "t": 1038.0,
+   "d": 2.64,
+   "text": "lamenting the fact that on a grid a"
+  },
+  {
+   "t": 1040.64,
+   "d": 1.76,
+   "text": "diagonal movement takes you farther in"
+  },
+  {
+   "t": 1042.4,
+   "d": 1.12,
+   "text": "euclidean terms"
+  },
+  {
+   "t": 1043.52,
+   "d": 1.92,
+   "text": "even though you still only use one one"
+  },
+  {
+   "t": 1045.44,
+   "d": 1.92,
+   "text": "movement point i think it's great the"
+  },
+  {
+   "t": 1047.36,
+   "d": 1.68,
+   "text": "fact that diagonals take you farther"
+  },
+  {
+   "t": 1049.04,
+   "d": 1.36,
+   "text": "actually increases the"
+  },
+  {
+   "t": 1050.4,
+   "d": 3.04,
+   "text": "the strategic interest of the space"
+  },
+  {
+   "t": 1053.44,
+   "d": 1.6,
+   "text": "it means that for any pair of points"
+  },
+  {
+   "t": 1055.04,
+   "d": 1.36,
+   "text": "there's probably a lot of different"
+  },
+  {
+   "t": 1056.4,
+   "d": 1.68,
+   "text": "paths between those points that take the"
+  },
+  {
+   "t": 1058.08,
+   "d": 1.6,
+   "text": "same number of moves"
+  },
+  {
+   "t": 1059.68,
+   "d": 1.44,
+   "text": "and then when you layer on soft"
+  },
+  {
+   "t": 1061.12,
+   "d": 1.92,
+   "text": "constraints throughout the dungeon"
+  },
+  {
+   "t": 1063.04,
+   "d": 1.52,
+   "text": "it makes the challenge of picking which"
+  },
+  {
+   "t": 1064.56,
+   "d": 1.36,
+   "text": "of those paths you take much more"
+  },
+  {
+   "t": 1065.92,
+   "d": 1.6,
+   "text": "interesting"
+  },
+  {
+   "t": 1067.52,
+   "d": 2.8,
+   "text": "and just one side note there is like an"
+  },
+  {
+   "t": 1070.32,
+   "d": 2.24,
+   "text": "element of euclideanness anyway"
+  },
+  {
+   "t": 1072.56,
+   "d": 3.04,
+   "text": "um so for example uh"
+  },
+  {
+   "t": 1075.6,
+   "d": 2.32,
+   "text": "there's this mechanism of gas diffusion"
+  },
+  {
+   "t": 1077.92,
+   "d": 1.36,
+   "text": "in brogue"
+  },
+  {
+   "t": 1079.28,
+   "d": 3.28,
+   "text": "where each tile has a certain amount of"
+  },
+  {
+   "t": 1082.56,
+   "d": 1.2,
+   "text": "gas in it"
+  },
+  {
+   "t": 1083.76,
+   "d": 2.72,
+   "text": "and every turn it diffuses and the"
+  },
+  {
+   "t": 1086.48,
+   "d": 1.84,
+   "text": "diffusion formula is simple it just"
+  },
+  {
+   "t": 1088.32,
+   "d": 2.24,
+   "text": "averages the gas quantities of itself"
+  },
+  {
+   "t": 1090.56,
+   "d": 1.68,
+   "text": "and it's it's eight neighbors"
+  },
+  {
+   "t": 1092.24,
+   "d": 2.16,
+   "text": "every turn from the previous turn and"
+  },
+  {
+   "t": 1094.4,
+   "d": 1.36,
+   "text": "you can see that even though"
+  },
+  {
+   "t": 1095.76,
+   "d": 3.04,
+   "text": "diagonal points"
+  },
+  {
+   "t": 1098.8,
+   "d": 1.52,
+   "text": "diagonal moves still count for one"
+  },
+  {
+   "t": 1100.32,
+   "d": 1.84,
+   "text": "movement point you still end up with a"
+  },
+  {
+   "t": 1102.16,
+   "d": 1.92,
+   "text": "round space after the gas is diffused"
+  },
+  {
+   "t": 1104.08,
+   "d": 1.76,
+   "text": "for a couple turns"
+  },
+  {
+   "t": 1105.84,
+   "d": 4.0,
+   "text": "so it's not as simple as saying uh"
+  },
+  {
+   "t": 1109.84,
+   "d": 2.08,
+   "text": "there is an element of of euclideanness"
+  },
+  {
+   "t": 1111.92,
+   "d": 1.92,
+   "text": "sort of hidden underneath the grid"
+  },
+  {
+   "t": 1113.84,
+   "d": 2.64,
+   "text": "uh which comes out in in especially in"
+  },
+  {
+   "t": 1116.48,
+   "d": 1.2,
+   "text": "in combinatorial"
+  },
+  {
+   "t": 1117.68,
+   "d": 3.28,
+   "text": "uh situations uh so anyway back to the"
+  },
+  {
+   "t": 1120.96,
+   "d": 1.28,
+   "text": "importance of making the space"
+  },
+  {
+   "t": 1122.24,
+   "d": 0.8,
+   "text": "interesting"
+  },
+  {
+   "t": 1123.04,
+   "d": 3.28,
+   "text": "i think rich terrain is uh one of the"
+  },
+  {
+   "t": 1126.32,
+   "d": 1.2,
+   "text": "really key elements"
+  },
+  {
+   "t": 1127.52,
+   "d": 2.48,
+   "text": "uh i think for some reason i don't know"
+  },
+  {
+   "t": 1130.0,
+   "d": 1.6,
+   "text": "why this is but i would argue that"
+  },
+  {
+   "t": 1131.6,
+   "d": 1.6,
+   "text": "terrain is just fundamentally more"
+  },
+  {
+   "t": 1133.2,
+   "d": 1.84,
+   "text": "interesting than monsters"
+  },
+  {
+   "t": 1135.04,
+   "d": 2.24,
+   "text": "and i would say if you think about"
+  },
+  {
+   "t": 1137.28,
+   "d": 1.2,
+   "text": "movies"
+  },
+  {
+   "t": 1138.48,
+   "d": 1.92,
+   "text": "like really professionally designed"
+  },
+  {
+   "t": 1140.4,
+   "d": 1.2,
+   "text": "plots"
+  },
+  {
+   "t": 1141.6,
+   "d": 1.76,
+   "text": "like indiana jones or the classic"
+  },
+  {
+   "t": 1143.36,
+   "d": 1.76,
+   "text": "dungeon crawl movies"
+  },
+  {
+   "t": 1145.12,
+   "d": 2.08,
+   "text": "most of their encounters are with"
+  },
+  {
+   "t": 1147.2,
+   "d": 2.16,
+   "text": "terrain elements like spikes and traps"
+  },
+  {
+   "t": 1149.36,
+   "d": 3.04,
+   "text": "and tripwires and altars and floods"
+  },
+  {
+   "t": 1152.4,
+   "d": 2.96,
+   "text": "and burning vegetation and many fewer"
+  },
+  {
+   "t": 1155.36,
+   "d": 2.48,
+   "text": "with monsters"
+  },
+  {
+   "t": 1157.84,
+   "d": 1.6,
+   "text": "i don't know exactly why that is but i"
+  },
+  {
+   "t": 1159.44,
+   "d": 2.16,
+   "text": "think it's it's worth reflecting on"
+  },
+  {
+   "t": 1161.6,
+   "d": 2.16,
+   "text": "and even in some movies where there are"
+  },
+  {
+   "t": 1163.76,
+   "d": 1.68,
+   "text": "monsters in these dungeon crawls"
+  },
+  {
+   "t": 1165.44,
+   "d": 2.48,
+   "text": "i think it's interesting how often uh"
+  },
+  {
+   "t": 1167.92,
+   "d": 0.72,
+   "text": "terrain"
+  },
+  {
+   "t": 1168.64,
+   "d": 2.72,
+   "text": "is used uh as a plot device to to"
+  },
+  {
+   "t": 1171.36,
+   "d": 3.6,
+   "text": "resolve the conflict with a monster"
+  },
+  {
+   "t": 1174.96,
+   "d": 2.4,
+   "text": "so i think part of it is that it's just"
+  },
+  {
+   "t": 1177.36,
+   "d": 0.64,
+   "text": "fundamentally"
+  },
+  {
+   "t": 1178.0,
+   "d": 1.92,
+   "text": "creates a sense of space that appeals to"
+  },
+  {
+   "t": 1179.92,
+   "d": 2.56,
+   "text": "us on a on a basic level"
+  },
+  {
+   "t": 1182.48,
+   "d": 3.36,
+   "text": "um so on the the uh"
+  },
+  {
+   "t": 1185.84,
+   "d": 2.88,
+   "text": "the image here um you have a rogue"
+  },
+  {
+   "t": 1188.72,
+   "d": 1.04,
+   "text": "standing on a bridge"
+  },
+  {
+   "t": 1189.76,
+   "d": 2.96,
+   "text": "over a chasm watching grass burn in the"
+  },
+  {
+   "t": 1192.72,
+   "d": 1.44,
+   "text": "distance"
+  },
+  {
+   "t": 1194.16,
+   "d": 2.08,
+   "text": "i think it's an evocative kind of"
+  },
+  {
+   "t": 1196.24,
+   "d": 1.12,
+   "text": "situation"
+  },
+  {
+   "t": 1197.36,
+   "d": 2.24,
+   "text": "an interesting space to be placed into"
+  },
+  {
+   "t": 1199.6,
+   "d": 0.88,
+   "text": "much more than"
+  },
+  {
+   "t": 1200.48,
+   "d": 4.32,
+   "text": "a bunch of twisty passages all alike"
+  },
+  {
+   "t": 1204.8,
+   "d": 2.0,
+   "text": "it's also self-explanatory if you see a"
+  },
+  {
+   "t": 1206.8,
+   "d": 1.76,
+   "text": "patch of dry grass you probably know"
+  },
+  {
+   "t": 1208.56,
+   "d": 0.72,
+   "text": "what it does"
+  },
+  {
+   "t": 1209.28,
+   "d": 2.32,
+   "text": "you probably understand that it burns uh"
+  },
+  {
+   "t": 1211.6,
+   "d": 0.88,
+   "text": "whereas if you see"
+  },
+  {
+   "t": 1212.48,
+   "d": 2.32,
+   "text": "like a goblin shaman like maybe it does"
+  },
+  {
+   "t": 1214.8,
+   "d": 0.96,
+   "text": "some sort of magic"
+  },
+  {
+   "t": 1215.76,
+   "d": 2.64,
+   "text": "maybe it pokes or stabs or shoots but"
+  },
+  {
+   "t": 1218.4,
+   "d": 0.88,
+   "text": "it's not as clear"
+  },
+  {
+   "t": 1219.28,
+   "d": 2.64,
+   "text": "it's not as obvious uh terrain is also a"
+  },
+  {
+   "t": 1221.92,
+   "d": 1.92,
+   "text": "lot easier to make plans around"
+  },
+  {
+   "t": 1223.84,
+   "d": 2.48,
+   "text": "and the plans are more satisfying so"
+  },
+  {
+   "t": 1226.32,
+   "d": 1.04,
+   "text": "that lets the player"
+  },
+  {
+   "t": 1227.36,
+   "d": 2.08,
+   "text": "sort of concoct more convoluted plans"
+  },
+  {
+   "t": 1229.44,
+   "d": 2.4,
+   "text": "more macgyver moments if you will"
+  },
+  {
+   "t": 1231.84,
+   "d": 1.68,
+   "text": "and watch them come to fruition which is"
+  },
+  {
+   "t": 1233.52,
+   "d": 1.76,
+   "text": "a really satisfying kind of emergent"
+  },
+  {
+   "t": 1235.28,
+   "d": 1.2,
+   "text": "narrative"
+  },
+  {
+   "t": 1236.48,
+   "d": 2.48,
+   "text": "so in this case for example the player"
+  },
+  {
+   "t": 1238.96,
+   "d": 1.52,
+   "text": "threw an incendiary dart"
+  },
+  {
+   "t": 1240.48,
+   "d": 2.08,
+   "text": "lit the grass on fire and the fire is"
+  },
+  {
+   "t": 1242.56,
+   "d": 2.8,
+   "text": "spreading toward the acid mound"
+  },
+  {
+   "t": 1245.36,
+   "d": 2.08,
+   "text": "kind of a cool way to resolve that"
+  },
+  {
+   "t": 1247.44,
+   "d": 1.12,
+   "text": "challenge um"
+  },
+  {
+   "t": 1248.56,
+   "d": 2.16,
+   "text": "very much like something you'd see in a"
+  },
+  {
+   "t": 1250.72,
+   "d": 2.56,
+   "text": "movie about a dungeon crawl"
+  },
+  {
+   "t": 1253.28,
+   "d": 2.56,
+   "text": "and as compared with making plans around"
+  },
+  {
+   "t": 1255.84,
+   "d": 1.6,
+   "text": "monsters themselves so"
+  },
+  {
+   "t": 1257.44,
+   "d": 2.16,
+   "text": "getting monsters to fight one another"
+  },
+  {
+   "t": 1259.6,
+   "d": 1.76,
+   "text": "you know it's a way to make plans and"
+  },
+  {
+   "t": 1261.36,
+   "d": 1.44,
+   "text": "watch them come to fruition"
+  },
+  {
+   "t": 1262.8,
+   "d": 1.28,
+   "text": "but it's also just kind of like you're"
+  },
+  {
+   "t": 1264.08,
+   "d": 1.04,
+   "text": "standing out of the way while the"
+  },
+  {
+   "t": 1265.12,
+   "d": 1.76,
+   "text": "monsters fight it out which is maybe not"
+  },
+  {
+   "t": 1266.88,
+   "d": 0.32,
+   "text": "as"
+  },
+  {
+   "t": 1267.2,
+   "d": 1.84,
+   "text": "exciting as setting up this rube"
+  },
+  {
+   "t": 1269.04,
+   "d": 1.84,
+   "text": "goldberg machine of terrain"
+  },
+  {
+   "t": 1270.88,
+   "d": 2.8,
+   "text": "uh and watching it do your bidding um"
+  },
+  {
+   "t": 1273.68,
+   "d": 1.6,
+   "text": "and i think one particular mechanic"
+  },
+  {
+   "t": 1275.28,
+   "d": 1.76,
+   "text": "that's that's useful in a variety of"
+  },
+  {
+   "t": 1277.04,
+   "d": 0.96,
+   "text": "different places"
+  },
+  {
+   "t": 1278.0,
+   "d": 3.12,
+   "text": "is terrain spreading over other terrain"
+  },
+  {
+   "t": 1281.12,
+   "d": 2.24,
+   "text": "and this is used to make fire spread to"
+  },
+  {
+   "t": 1283.36,
+   "d": 1.36,
+   "text": "make bridges collapse"
+  },
+  {
+   "t": 1284.72,
+   "d": 2.72,
+   "text": "to make walkways extend lakes recede"
+  },
+  {
+   "t": 1287.44,
+   "d": 1.44,
+   "text": "vegetation grow"
+  },
+  {
+   "t": 1288.88,
+   "d": 2.56,
+   "text": "tunnels appear in walls and obstructions"
+  },
+  {
+   "t": 1291.44,
+   "d": 0.72,
+   "text": "melt away"
+  },
+  {
+   "t": 1292.16,
+   "d": 2.24,
+   "text": "and that was just there may even be"
+  },
+  {
+   "t": 1294.4,
+   "d": 1.68,
+   "text": "other examples but it's a very very"
+  },
+  {
+   "t": 1296.08,
+   "d": 0.64,
+   "text": "common"
+  },
+  {
+   "t": 1296.72,
+   "d": 3.76,
+   "text": "uh effect and i think it makes the"
+  },
+  {
+   "t": 1300.48,
+   "d": 4.16,
+   "text": "terrain feel really alive and dynamic"
+  },
+  {
+   "t": 1304.64,
+   "d": 3.28,
+   "text": "so that's terrain other ways to impose"
+  },
+  {
+   "t": 1307.92,
+   "d": 0.64,
+   "text": "interesting"
+  },
+  {
+   "t": 1308.56,
+   "d": 2.16,
+   "text": "zones of influence and and sort of uh"
+  },
+  {
+   "t": 1310.72,
+   "d": 1.68,
+   "text": "combinatorially overlapping"
+  },
+  {
+   "t": 1312.4,
+   "d": 2.16,
+   "text": "advantages and disadvantages on the game"
+  },
+  {
+   "t": 1314.56,
+   "d": 0.96,
+   "text": "space"
+  },
+  {
+   "t": 1315.52,
+   "d": 3.76,
+   "text": "uh um are here are some examples so"
+  },
+  {
+   "t": 1319.28,
+   "d": 2.64,
+   "text": "um and i think chess is a testament to"
+  },
+  {
+   "t": 1321.92,
+   "d": 0.72,
+   "text": "how"
+  },
+  {
+   "t": 1322.64,
+   "d": 2.48,
+   "text": "deep uh gameplay can get with just that"
+  },
+  {
+   "t": 1325.12,
+   "d": 0.64,
+   "text": "technique"
+  },
+  {
+   "t": 1325.76,
+   "d": 2.08,
+   "text": "uh the only thing that chess pieces do"
+  },
+  {
+   "t": 1327.84,
+   "d": 1.44,
+   "text": "differently from one another is how they"
+  },
+  {
+   "t": 1329.28,
+   "d": 0.96,
+   "text": "move and attack"
+  },
+  {
+   "t": 1330.24,
+   "d": 1.52,
+   "text": "they create little zones of influence"
+  },
+  {
+   "t": 1331.76,
+   "d": 2.0,
+   "text": "and zones of jeopardy and it's just the"
+  },
+  {
+   "t": 1333.76,
+   "d": 1.6,
+   "text": "interlocking of those different shapes"
+  },
+  {
+   "t": 1335.36,
+   "d": 1.76,
+   "text": "that gives rise to all the complexity of"
+  },
+  {
+   "t": 1337.12,
+   "d": 1.36,
+   "text": "chess"
+  },
+  {
+   "t": 1338.48,
+   "d": 2.88,
+   "text": "so some examples of zones certain"
+  },
+  {
+   "t": 1341.36,
+   "d": 1.6,
+   "text": "monsters are constrained a particular"
+  },
+  {
+   "t": 1342.96,
+   "d": 1.2,
+   "text": "terrain you can have"
+  },
+  {
+   "t": 1344.16,
+   "d": 1.76,
+   "text": "monsters that are water bound you can"
+  },
+  {
+   "t": 1345.92,
+   "d": 2.16,
+   "text": "have as in this image you can have some"
+  },
+  {
+   "t": 1348.08,
+   "d": 1.36,
+   "text": "monsters that can't cross"
+  },
+  {
+   "t": 1349.44,
+   "d": 2.32,
+   "text": "chasms and others that can the little"
+  },
+  {
+   "t": 1351.76,
+   "d": 1.04,
+   "text": "lowercase f's"
+  },
+  {
+   "t": 1352.8,
+   "d": 2.24,
+   "text": "oh it's probably pretty hard to see but"
+  },
+  {
+   "t": 1355.04,
+   "d": 1.52,
+   "text": "there's a chasm here and the f's are"
+  },
+  {
+   "t": 1356.56,
+   "d": 1.6,
+   "text": "flying up to meet him"
+  },
+  {
+   "t": 1358.16,
+   "d": 1.92,
+   "text": "uh while the h is kind of stranded on"
+  },
+  {
+   "t": 1360.08,
+   "d": 2.16,
+   "text": "the other side of the chasm"
+  },
+  {
+   "t": 1362.24,
+   "d": 1.76,
+   "text": "you can have effects that depend on line"
+  },
+  {
+   "t": 1364.0,
+   "d": 2.24,
+   "text": "of sight you can have effects that"
+  },
+  {
+   "t": 1366.24,
+   "d": 2.96,
+   "text": "affect everyone within field of view"
+  },
+  {
+   "t": 1369.2,
+   "d": 1.84,
+   "text": "you can have weapons that can attack"
+  },
+  {
+   "t": 1371.04,
+   "d": 1.36,
+   "text": "from a distance but only"
+  },
+  {
+   "t": 1372.4,
+   "d": 2.4,
+   "text": "vertically horizontally or diagonally or"
+  },
+  {
+   "t": 1374.8,
+   "d": 2.0,
+   "text": "some subset of those"
+  },
+  {
+   "t": 1376.8,
+   "d": 1.76,
+   "text": "area of effect attacks where you know"
+  },
+  {
+   "t": 1378.56,
+   "d": 2.08,
+   "text": "what the shape of the effect will be"
+  },
+  {
+   "t": 1380.64,
+   "d": 1.36,
+   "text": "and you have to get the monsters into"
+  },
+  {
+   "t": 1382.0,
+   "d": 1.84,
+   "text": "the right orientation so that it affects"
+  },
+  {
+   "t": 1383.84,
+   "d": 1.68,
+   "text": "them all without affecting anyone you"
+  },
+  {
+   "t": 1385.52,
+   "d": 1.92,
+   "text": "don't want it to affect"
+  },
+  {
+   "t": 1387.44,
+   "d": 1.36,
+   "text": "you can have effects that depend on the"
+  },
+  {
+   "t": 1388.8,
+   "d": 2.0,
+   "text": "light level of the area you can have"
+  },
+  {
+   "t": 1390.8,
+   "d": 1.6,
+   "text": "monsters that avoid choke points"
+  },
+  {
+   "t": 1392.4,
+   "d": 2.0,
+   "text": "which make choke points uh more"
+  },
+  {
+   "t": 1394.4,
+   "d": 1.36,
+   "text": "interesting as a"
+  },
+  {
+   "t": 1395.76,
+   "d": 2.96,
+   "text": "as a level feature and you can have the"
+  },
+  {
+   "t": 1398.72,
+   "d": 1.2,
+   "text": "intensity of those effects"
+  },
+  {
+   "t": 1399.92,
+   "d": 1.44,
+   "text": "increase as you go farther in the"
+  },
+  {
+   "t": 1401.36,
+   "d": 1.52,
+   "text": "dungeon because the players are probably"
+  },
+  {
+   "t": 1402.88,
+   "d": 1.44,
+   "text": "more powerful"
+  },
+  {
+   "t": 1404.32,
+   "d": 4.24,
+   "text": "and better able to equip to respond to"
+  },
+  {
+   "t": 1408.56,
+   "d": 3.12,
+   "text": "threatening situations"
+  },
+  {
+   "t": 1412.8,
+   "d": 3.44,
+   "text": "so in a nutshell that's uh how we tell"
+  },
+  {
+   "t": 1416.24,
+   "d": 1.68,
+   "text": "procedural stories in brogue"
+  },
+  {
+   "t": 1417.92,
+   "d": 2.16,
+   "text": "uh so you have a bunch of zones uh and"
+  },
+  {
+   "t": 1420.08,
+   "d": 1.68,
+   "text": "then that means that a path through that"
+  },
+  {
+   "t": 1421.76,
+   "d": 1.76,
+   "text": "space tells a story"
+  },
+  {
+   "t": 1423.52,
+   "d": 1.68,
+   "text": "uh if you have very high intensity"
+  },
+  {
+   "t": 1425.2,
+   "d": 1.6,
+   "text": "effects from those zones"
+  },
+  {
+   "t": 1426.8,
+   "d": 2.16,
+   "text": "that makes the story exciting if you"
+  },
+  {
+   "t": 1428.96,
+   "d": 1.84,
+   "text": "have lots of different types of zones"
+  },
+  {
+   "t": 1430.8,
+   "d": 1.92,
+   "text": "types of zones that feel qualitatively"
+  },
+  {
+   "t": 1432.72,
+   "d": 1.36,
+   "text": "different"
+  },
+  {
+   "t": 1434.08,
+   "d": 2.16,
+   "text": "that makes the situation often very"
+  },
+  {
+   "t": 1436.24,
+   "d": 1.12,
+   "text": "novel"
+  },
+  {
+   "t": 1437.36,
+   "d": 1.68,
+   "text": "and doesn't feel like the same situation"
+  },
+  {
+   "t": 1439.04,
+   "d": 2.24,
+   "text": "that you encounter with each character"
+  },
+  {
+   "t": 1441.28,
+   "d": 1.68,
+   "text": "if the zones are really dense and"
+  },
+  {
+   "t": 1442.96,
+   "d": 1.84,
+   "text": "they're interlocking"
+  },
+  {
+   "t": 1444.8,
+   "d": 3.2,
+   "text": "then just the simple path of a simple"
+  },
+  {
+   "t": 1448.0,
+   "d": 1.76,
+   "text": "process of finding the optimal path"
+  },
+  {
+   "t": 1449.76,
+   "d": 1.2,
+   "text": "through that space"
+  },
+  {
+   "t": 1450.96,
+   "d": 2.56,
+   "text": "is like narratively interesting sort of"
+  },
+  {
+   "t": 1453.52,
+   "d": 2.32,
+   "text": "a cognitively interesting task"
+  },
+  {
+   "t": 1455.84,
+   "d": 2.0,
+   "text": "and if you have characters who have"
+  },
+  {
+   "t": 1457.84,
+   "d": 1.52,
+   "text": "improvised character builds"
+  },
+  {
+   "t": 1459.36,
+   "d": 1.92,
+   "text": "uh built with limited budget of wild"
+  },
+  {
+   "t": 1461.28,
+   "d": 1.28,
+   "text": "cards uh"
+  },
+  {
+   "t": 1462.56,
+   "d": 2.0,
+   "text": "and imperfect information then that"
+  },
+  {
+   "t": 1464.56,
+   "d": 1.76,
+   "text": "means you have a an arc of character"
+  },
+  {
+   "t": 1466.32,
+   "d": 2.0,
+   "text": "development that's unique to the game"
+  },
+  {
+   "t": 1468.32,
+   "d": 1.68,
+   "text": "and the path that that character will"
+  },
+  {
+   "t": 1470.0,
+   "d": 2.0,
+   "text": "choose through those zones depends on"
+  },
+  {
+   "t": 1472.0,
+   "d": 1.68,
+   "text": "the build that the character has"
+  },
+  {
+   "t": 1473.68,
+   "d": 3.36,
+   "text": "so the story is really"
+  },
+  {
+   "t": 1477.04,
+   "d": 1.76,
+   "text": "kind of co-authored between the players"
+  },
+  {
+   "t": 1478.8,
+   "d": 2.08,
+   "text": "choices and the environment created by"
+  },
+  {
+   "t": 1480.88,
+   "d": 1.2,
+   "text": "the dungeon"
+  },
+  {
+   "t": 1482.08,
+   "d": 2.96,
+   "text": "and then with macros and in-game info to"
+  },
+  {
+   "t": 1485.04,
+   "d": 1.68,
+   "text": "help the player move quickly between"
+  },
+  {
+   "t": 1486.72,
+   "d": 1.44,
+   "text": "situations"
+  },
+  {
+   "t": 1488.16,
+   "d": 1.68,
+   "text": "it really lets the player focus on the"
+  },
+  {
+   "t": 1489.84,
+   "d": 1.76,
+   "text": "story and not get bogged down"
+  },
+  {
+   "t": 1491.6,
+   "d": 2.8,
+   "text": "in alt tabbing or putting farming or any"
+  },
+  {
+   "t": 1494.4,
+   "d": 1.04,
+   "text": "number of other"
+  },
+  {
+   "t": 1495.44,
+   "d": 3.2,
+   "text": "maybe less exciting tasks so that was my"
+  },
+  {
+   "t": 1498.64,
+   "d": 2.0,
+   "text": "best attempt to sort of boil down"
+  },
+  {
+   "t": 1500.64,
+   "d": 2.72,
+   "text": "uh the secrets of what what i think of"
+  },
+  {
+   "t": 1503.36,
+   "d": 1.84,
+   "text": "as procedural story generation in"
+  },
+  {
+   "t": 1505.2,
+   "d": 1.12,
+   "text": "roguelikes"
+  },
+  {
+   "t": 1506.32,
+   "d": 2.0,
+   "text": "um and i think i do actually have a"
+  },
+  {
+   "t": 1508.32,
+   "d": 1.04,
+   "text": "little extra time"
+  },
+  {
+   "t": 1509.36,
+   "d": 1.92,
+   "text": "uh so i'm happy to take questions if"
+  },
+  {
+   "t": 1511.28,
+   "d": 4.56,
+   "text": "anyone would like to ask"
+  },
+  {
+   "t": 1522.32,
+   "d": 3.12,
+   "text": "yes i think your game has"
+  },
+  {
+   "t": 1525.44,
+   "d": 2.72,
+   "text": "been widely remarked upon as being very"
+  },
+  {
+   "t": 1528.16,
+   "d": 0.8,
+   "text": "well balanced"
+  },
+  {
+   "t": 1528.96,
+   "d": 2.16,
+   "text": "and i've played it a lot i think the"
+  },
+  {
+   "t": 1531.12,
+   "d": 1.12,
+   "text": "spectrum of sort of"
+  },
+  {
+   "t": 1532.24,
+   "d": 1.52,
+   "text": "monsters and environments is really"
+  },
+  {
+   "t": 1533.76,
+   "d": 1.92,
+   "text": "interesting i'm curious to know"
+  },
+  {
+   "t": 1535.68,
+   "d": 2.88,
+   "text": "what you emitted from things that you"
+  },
+  {
+   "t": 1538.56,
+   "d": 1.36,
+   "text": "tried"
+  },
+  {
+   "t": 1539.92,
+   "d": 1.84,
+   "text": "and why they didn't work that's a good"
+  },
+  {
+   "t": 1541.76,
+   "d": 1.92,
+   "text": "question the question is what i tried"
+  },
+  {
+   "t": 1543.68,
+   "d": 1.44,
+   "text": "that didn't work in the game"
+  },
+  {
+   "t": 1545.12,
+   "d": 3.28,
+   "text": "um so i guess a few"
+  },
+  {
+   "t": 1548.4,
+   "d": 1.92,
+   "text": "one early example so i have this monster"
+  },
+  {
+   "t": 1550.32,
+   "d": 1.76,
+   "text": "right now a zombie that creates"
+  },
+  {
+   "t": 1552.08,
+   "d": 3.36,
+   "text": "an aura of noxious gas and"
+  },
+  {
+   "t": 1555.44,
+   "d": 1.6,
+   "text": "it's an interesting effect because once"
+  },
+  {
+   "t": 1557.04,
+   "d": 1.52,
+   "text": "you're affected by it it creates a"
+  },
+  {
+   "t": 1558.56,
+   "d": 1.76,
+   "text": "status effect that causes you to"
+  },
+  {
+   "t": 1560.32,
+   "d": 1.44,
+   "text": "periodically forgive me it's a little"
+  },
+  {
+   "t": 1561.76,
+   "d": 1.92,
+   "text": "distasteful caused you to vomit"
+  },
+  {
+   "t": 1563.68,
+   "d": 2.24,
+   "text": "um and you you lose turns maybe every"
+  },
+  {
+   "t": 1565.92,
+   "d": 1.28,
+   "text": "other time that you move while you're"
+  },
+  {
+   "t": 1567.2,
+   "d": 2.08,
+   "text": "under this effect and it's random"
+  },
+  {
+   "t": 1569.28,
+   "d": 3.92,
+   "text": "um originally out of um"
+  },
+  {
+   "t": 1573.2,
+   "d": 2.08,
+   "text": "i guess maybe i got caught too caught up"
+  },
+  {
+   "t": 1575.28,
+   "d": 2.08,
+   "text": "in the metaphor i had to decrease your"
+  },
+  {
+   "t": 1577.36,
+   "d": 2.96,
+   "text": "your food clock every time you vomited"
+  },
+  {
+   "t": 1580.32,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 1581.52,
+   "d": 1.76,
+   "text": "which was i mean very rich metaphor"
+  },
+  {
+   "t": 1583.28,
+   "d": 1.44,
+   "text": "maybe a little too rich for polite"
+  },
+  {
+   "t": 1584.72,
+   "d": 0.72,
+   "text": "company"
+  },
+  {
+   "t": 1585.44,
+   "d": 1.84,
+   "text": "um but the problem was that the food"
+  },
+  {
+   "t": 1587.28,
+   "d": 1.84,
+   "text": "clock really served a really important"
+  },
+  {
+   "t": 1589.12,
+   "d": 0.64,
+   "text": "purpose"
+  },
+  {
+   "t": 1589.76,
+   "d": 3.36,
+   "text": "and uh that mechanism broke it um"
+  },
+  {
+   "t": 1593.12,
+   "d": 1.84,
+   "text": "so i think it's good to like let go of"
+  },
+  {
+   "t": 1594.96,
+   "d": 1.44,
+   "text": "the metaphor when there's a gameplay"
+  },
+  {
+   "t": 1596.4,
+   "d": 1.68,
+   "text": "reason to do so"
+  },
+  {
+   "t": 1598.08,
+   "d": 2.64,
+   "text": "um let me give that some more thought"
+  },
+  {
+   "t": 1600.72,
+   "d": 1.12,
+   "text": "i'll come back to you if i think of"
+  },
+  {
+   "t": 1601.84,
+   "d": 2.32,
+   "text": "anything else"
+  },
+  {
+   "t": 1604.16,
+   "d": 2.8,
+   "text": "yes so i like what you say about you"
+  },
+  {
+   "t": 1606.96,
+   "d": 1.6,
+   "text": "know your mechanisms"
+  },
+  {
+   "t": 1608.56,
+   "d": 2.08,
+   "text": "not meaning there's an optimal built but"
+  },
+  {
+   "t": 1610.64,
+   "d": 1.36,
+   "text": "there's still an optimal"
+  },
+  {
+   "t": 1612.0,
+   "d": 4.08,
+   "text": "strategy it just means that the the"
+  },
+  {
+   "t": 1616.08,
+   "d": 1.92,
+   "text": "guide has to up its game and become"
+  },
+  {
+   "t": 1618.0,
+   "d": 1.76,
+   "text": "interactive and say well if you"
+  },
+  {
+   "t": 1619.76,
+   "d": 2.0,
+   "text": "you got this first then you know"
+  },
+  {
+   "t": 1621.76,
+   "d": 1.52,
+   "text": "probably"
+  },
+  {
+   "t": 1623.28,
+   "d": 3.76,
+   "text": "you know this is how you play it and"
+  },
+  {
+   "t": 1632.24,
+   "d": 2.72,
+   "text": "absolutely so the question was um is it"
+  },
+  {
+   "t": 1634.96,
+   "d": 1.84,
+   "text": "possible that guides can just adapt to"
+  },
+  {
+   "t": 1636.8,
+   "d": 0.88,
+   "text": "this new method"
+  },
+  {
+   "t": 1637.68,
+   "d": 1.92,
+   "text": "of character development and just offer"
+  },
+  {
+   "t": 1639.6,
+   "d": 1.84,
+   "text": "richer advice as to how to advance"
+  },
+  {
+   "t": 1641.44,
+   "d": 1.36,
+   "text": "instead of a sort of cookie cutter"
+  },
+  {
+   "t": 1642.8,
+   "d": 2.24,
+   "text": "approach and yes absolutely"
+  },
+  {
+   "t": 1645.04,
+   "d": 2.64,
+   "text": "there is a brogue wiki i'm happy that it"
+  },
+  {
+   "t": 1647.68,
+   "d": 1.76,
+   "text": "exists i don't consider it an enemy by"
+  },
+  {
+   "t": 1649.44,
+   "d": 1.04,
+   "text": "any means"
+  },
+  {
+   "t": 1650.48,
+   "d": 1.04,
+   "text": "but i think there is sort of a"
+  },
+  {
+   "t": 1651.52,
+   "d": 1.52,
+   "text": "competition that goes on between the"
+  },
+  {
+   "t": 1653.04,
+   "d": 2.0,
+   "text": "game and sort of meta game elements that"
+  },
+  {
+   "t": 1655.04,
+   "d": 2.16,
+   "text": "you want to keep the players away from"
+  },
+  {
+   "t": 1657.2,
+   "d": 1.84,
+   "text": "um and i don't think that competition"
+  },
+  {
+   "t": 1659.04,
+   "d": 1.52,
+   "text": "will ever ever be like"
+  },
+  {
+   "t": 1660.56,
+   "d": 2.56,
+   "text": "one but i think you can kind of tip the"
+  },
+  {
+   "t": 1663.12,
+   "d": 1.36,
+   "text": "balance a little bit"
+  },
+  {
+   "t": 1664.48,
+   "d": 2.56,
+   "text": "i think having uh a richer and more"
+  },
+  {
+   "t": 1667.04,
+   "d": 1.44,
+   "text": "contingent uh"
+  },
+  {
+   "t": 1668.48,
+   "d": 3.04,
+   "text": "strategy space uh tips the odds in the"
+  },
+  {
+   "t": 1671.52,
+   "d": 0.88,
+   "text": "game's fader"
+  },
+  {
+   "t": 1672.4,
+   "d": 2.32,
+   "text": "favor and makes it somewhat less likely"
+  },
+  {
+   "t": 1674.72,
+   "d": 1.84,
+   "text": "that the player will sort of like emerge"
+  },
+  {
+   "t": 1676.56,
+   "d": 1.44,
+   "text": "from the game to go look up some"
+  },
+  {
+   "t": 1678.0,
+   "d": 1.76,
+   "text": "strategy advice and then return to the"
+  },
+  {
+   "t": 1679.76,
+   "d": 0.88,
+   "text": "game"
+  },
+  {
+   "t": 1680.64,
+   "d": 1.36,
+   "text": "because it's probably somewhat less"
+  },
+  {
+   "t": 1682.0,
+   "d": 2.64,
+   "text": "helpful than in a circumstance where"
+  },
+  {
+   "t": 1684.64,
+   "d": 1.6,
+   "text": "you can just look up a build strategy"
+  },
+  {
+   "t": 1686.24,
+   "d": 2.32,
+   "text": "and mechanically follow it in every game"
+  },
+  {
+   "t": 1688.56,
+   "d": 1.6,
+   "text": "but you're absolutely right i think it's"
+  },
+  {
+   "t": 1690.16,
+   "d": 1.6,
+   "text": "all a matter of degree and it's a matter"
+  },
+  {
+   "t": 1691.76,
+   "d": 0.72,
+   "text": "of like"
+  },
+  {
+   "t": 1692.48,
+   "d": 1.52,
+   "text": "gently pushing back against these"
+  },
+  {
+   "t": 1694.0,
+   "d": 1.84,
+   "text": "alternatives even if even if the battle"
+  },
+  {
+   "t": 1695.84,
+   "d": 1.12,
+   "text": "will never be"
+  },
+  {
+   "t": 1696.96,
+   "d": 3.52,
+   "text": "decisively won yes so"
+  },
+  {
+   "t": 1700.48,
+   "d": 1.52,
+   "text": "you mentioned kind of this combinatorial"
+  },
+  {
+   "t": 1702.0,
+   "d": 1.68,
+   "text": "interaction which i think rogue does a"
+  },
+  {
+   "t": 1703.68,
+   "d": 1.04,
+   "text": "great job with"
+  },
+  {
+   "t": 1704.72,
+   "d": 2.88,
+   "text": "my question is how do you make these"
+  },
+  {
+   "t": 1707.6,
+   "d": 1.28,
+   "text": "sorts of interactions or effects"
+  },
+  {
+   "t": 1708.88,
+   "d": 1.52,
+   "text": "discoverable so for example it might"
+  },
+  {
+   "t": 1710.4,
+   "d": 0.4,
+   "text": "take a"
+  },
+  {
+   "t": 1710.8,
+   "d": 1.28,
+   "text": "new player a long time to figure out"
+  },
+  {
+   "t": 1712.08,
+   "d": 1.52,
+   "text": "that there's these treasure rooms and"
+  },
+  {
+   "t": 1713.6,
+   "d": 1.44,
+   "text": "kind of how they work or figure out"
+  },
+  {
+   "t": 1715.04,
+   "d": 0.88,
+   "text": "smokers more"
+  },
+  {
+   "t": 1715.92,
+   "d": 1.36,
+   "text": "like the fire stuff is usually pretty"
+  },
+  {
+   "t": 1717.28,
+   "d": 2.0,
+   "text": "obvious because they'll explode but"
+  },
+  {
+   "t": 1719.28,
+   "d": 1.68,
+   "text": "some of it's a little more nuanced how"
+  },
+  {
+   "t": 1720.96,
+   "d": 1.6,
+   "text": "do you try and think about making that"
+  },
+  {
+   "t": 1722.56,
+   "d": 1.2,
+   "text": "discovery"
+  },
+  {
+   "t": 1723.76,
+   "d": 1.36,
+   "text": "that's a great question the question is"
+  },
+  {
+   "t": 1725.12,
+   "d": 1.84,
+   "text": "how you make these terrain effects uh"
+  },
+  {
+   "t": 1726.96,
+   "d": 1.84,
+   "text": "discoverable to the player"
+  },
+  {
+   "t": 1728.8,
+   "d": 3.2,
+   "text": "um i think uh so i i"
+  },
+  {
+   "t": 1732.0,
+   "d": 2.0,
+   "text": "i mentioned immersion at one point in"
+  },
+  {
+   "t": 1734.0,
+   "d": 1.68,
+   "text": "the presentation didn't talk a lot about"
+  },
+  {
+   "t": 1735.68,
+   "d": 0.64,
+   "text": "it"
+  },
+  {
+   "t": 1736.32,
+   "d": 2.72,
+   "text": "um there's a line on the screen it's"
+  },
+  {
+   "t": 1739.04,
+   "d": 1.52,
+   "text": "very precious screen real estate because"
+  },
+  {
+   "t": 1740.56,
+   "d": 1.68,
+   "text": "there's only like 30 or something"
+  },
+  {
+   "t": 1742.24,
+   "d": 1.52,
+   "text": "vertical lines on the screen"
+  },
+  {
+   "t": 1743.76,
+   "d": 2.56,
+   "text": "that does nothing but show flavor text"
+  },
+  {
+   "t": 1746.32,
+   "d": 1.76,
+   "text": "so whenever you step on terrain it's"
+  },
+  {
+   "t": 1748.08,
+   "d": 1.44,
+   "text": "always telling you what the character"
+  },
+  {
+   "t": 1749.52,
+   "d": 1.84,
+   "text": "sees or hears or feels"
+  },
+  {
+   "t": 1751.36,
+   "d": 1.76,
+   "text": "and i think the the trick is to like"
+  },
+  {
+   "t": 1753.12,
+   "d": 1.76,
+   "text": "weave clues into that"
+  },
+  {
+   "t": 1754.88,
+   "d": 2.0,
+   "text": "um when you move the mouse around the"
+  },
+  {
+   "t": 1756.88,
+   "d": 1.6,
+   "text": "screen or use the keyboard to move your"
+  },
+  {
+   "t": 1758.48,
+   "d": 1.36,
+   "text": "cursor around"
+  },
+  {
+   "t": 1759.84,
+   "d": 2.96,
+   "text": "it describes whatever the cursor's over"
+  },
+  {
+   "t": 1762.8,
+   "d": 1.52,
+   "text": "and so"
+  },
+  {
+   "t": 1764.32,
+   "d": 1.44,
+   "text": "if you see a glyph for the first time"
+  },
+  {
+   "t": 1765.76,
+   "d": 2.08,
+   "text": "you can always you know mouse over it or"
+  },
+  {
+   "t": 1767.84,
+   "d": 2.08,
+   "text": "cursor over it to see what it does"
+  },
+  {
+   "t": 1769.92,
+   "d": 1.76,
+   "text": "and if you write that flavor text"
+  },
+  {
+   "t": 1771.68,
+   "d": 1.6,
+   "text": "skillfully um"
+  },
+  {
+   "t": 1773.28,
+   "d": 1.76,
+   "text": "it juries out whether i've done that but"
+  },
+  {
+   "t": 1775.04,
+   "d": 2.08,
+   "text": "that's the goal uh you can kind of give"
+  },
+  {
+   "t": 1777.12,
+   "d": 1.6,
+   "text": "clues as to what the function of that"
+  },
+  {
+   "t": 1778.72,
+   "d": 2.4,
+   "text": "terrain is and i think some of it"
+  },
+  {
+   "t": 1781.12,
+   "d": 1.84,
+   "text": "over time players will come to figure"
+  },
+  {
+   "t": 1782.96,
+   "d": 2.08,
+   "text": "out as things start exploding"
+  },
+  {
+   "t": 1785.04,
+   "d": 3.04,
+   "text": "um and but hopefully for the really"
+  },
+  {
+   "t": 1788.08,
+   "d": 1.44,
+   "text": "powerful effects you can give them a"
+  },
+  {
+   "t": 1789.52,
+   "d": 0.96,
+   "text": "clue before"
+  },
+  {
+   "t": 1790.48,
+   "d": 5.04,
+   "text": "it explodes on them yeah"
+  },
+  {
+   "t": 1795.52,
+   "d": 1.52,
+   "text": "any other questions i thought i saw"
+  },
+  {
+   "t": 1797.04,
+   "d": 2.56,
+   "text": "another hand"
+  },
+  {
+   "t": 1800.88,
+   "d": 8.96,
+   "text": "okay thank you very much"
+  },
+  {
+   "t": 1825.76,
+   "d": 2.08,
+   "text": "you"
+  }
+ ]
+}

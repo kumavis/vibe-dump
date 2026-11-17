@@ -1,0 +1,140 @@
+{
+  "id": "uZdEXqRkBZA",
+  "title": "G blekkenhorst - It's Standing Right Behind You: Interface Games as Metaleptic Convergences",
+  "speaker": "G blekkenhorst",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=uZdEXqRkBZA",
+  "talk_type": "design",
+  "summary": "G blekkenhorst, drawing on their master's thesis, defines 'metaleptic interface games': games that emulate software the characters could have used and treat the player's own body as the user, so the game world converges on wherever the player is, without needing a real geographic location. They argue interface games are effective because so much of real life is mediated by screens, so hiding something magical or dangerous in an interface lends the fiction the same reality as messages from one's boss or grandmother. They extend this to 'tangible metaleptic interface games' that add a physical room and objects, describing their installations The Archive and You Are a Strange Sensor and what playtesting taught them. Q&A covers content warnings and consent for unreal-feeling horror, and why retro interfaces work as signalling.",
+  "games": [
+    "Her Story",
+    "Immortality",
+    "A Normal Lost Phone",
+    "Forbidden Solitaire",
+    "The Archive",
+    "You Are a Strange Sensor"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "interface games",
+      "kind": "principle",
+      "claim": "Interface games create an intensely first-person experience by putting the player directly in front of software the characters could have used, rather than giving them a virtual avatar.",
+      "detail": "blekkenhorst says this brings the game world right into the room with the player. They chose the short name 'interface games' over 'interface simulation games', while acknowledging every game is an interface.",
+      "t": 211,
+      "quote": "an interface game, a player is set right in front of the software that could have been used by the characters it describes",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "metalepsis",
+      "kind": "principle",
+      "claim": "Interface games achieve 'convergent metalepsis' without a real location because the story incorporates the player's hardware and body, so the game world's geography is wherever it is played.",
+      "detail": "Metareference draws attention to a story world being mediated; metalepsis is movement between levels of reality. Convergent metalepsis normally anchors a game to a real location so the game world comes to meet the player. blekkenhorst compares found-footage films and epistolary novels, which make the reader a character by claiming to be real evidence.",
+      "t": 409,
+      "quote": "an interface game makes its own metaleptic convergence without needing any specific geographical locations because the story incorporates the hardware and the player's body automatically",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "interface games",
+      "kind": "example",
+      "claim": "Many interface games still give the player a subtle virtual body, while 'metaleptic interface games' such as Her Story, Immortality and A Normal Lost Phone always keep up the fiction that you, the physical player, are using real software.",
+      "detail": "blekkenhorst contrasts these with metareferential non-interface games that suddenly turn to address the player's physical body, which they decline to name because the wall-break is meant to be a surprise, 'an existential jump scare'. Having a virtual body is not a failure.",
+      "t": 617,
+      "quote": "In these games, the interfaces always keep character that you are using real software.",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "interface horror",
+      "kind": "principle",
+      "claim": "Interface games are effective because real life is heavily mediated by screens we trust, so something magical or dangerous hidden in an interface feels as real as messages from your boss or grandmother.",
+      "detail": "Because the game's interface lines up with the interfaces of the real world, players can play at being really in danger: entities could be standing behind them or follow them home, since the interface doesn't stop existing when you stop reading. Hiding the magical in the mundane gives the everyday world a mystic quality.",
+      "t": 705,
+      "quote": "on the other end of the interface is something magic, something dangerous, that can feel real and it exists on the same plain as you, your grandma, and your boss.",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "glitches as fiction",
+      "kind": "technique",
+      "claim": "Interface games can exploit everyday frustration with misbehaving technology by framing glitches as the software being unable to contain something powerful.",
+      "detail": "blekkenhorst notes it is easy to feel persecuted by a machine that wiped an assignment, even knowing it can't understand. In The Archive, entering a player-made forgery into the database crashes it because the artifact is 'too powerful to be contained'.",
+      "t": 893,
+      "quote": "The views suggest the software is glitching because it is unable to contain something powerful.",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "job framing",
+      "kind": "example",
+      "claim": "Most interface games use a lean pretext of fictional employment to contextualize the player's tasks, which is relatable and can valorize mundane screen work.",
+      "detail": "Players are hired for a fictional future or customer service: 'Playing in the game is your job now.' blekkenhorst jokes that is horror, but says mundane moments of digging through databases and checking notifications deserve to be valorized.",
+      "t": 926,
+      "quote": "at most the games include a lean pretext story about fictional employment that contextualizes task for the player",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "tangible interface games",
+      "kind": "technique",
+      "claim": "Tangible metaleptic interface games put software in a physical room, where the software narrates the world around it, attaches history to objects players can touch, and tells them what to do with them.",
+      "detail": "blekkenhorst adds physical space as a third axis beyond interface and metareference; LARPs alone sit outside the other circles. Found-letter games and ARGs with physical components can also fall here.",
+      "t": 1027,
+      "quote": "The digital attaches history to the physical objects you can touch and the software telling you what you should be doing with them.",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "installation games",
+      "kind": "warning",
+      "claim": "In blekkenhorst's installation The Archive, once players were on the computer it was very hard to get them to engage with the physical space around them, and they did not reflect on their own bodies or histories.",
+      "detail": "The Archive was a 10x10 foot room with a physical archive and digital archive software; players volunteered for up to hour-long shifts migrating entries that told the stories of previous users who became obsessed with entities. The database format offered many ways to include character voices, and players formed varied mythologies, but exit surveys showed immersion without self-reflection.",
+      "t": 1197,
+      "quote": "once you let people on to the computer or the devices or the rectangles it is very hard to get them to pay attention to anything around them again",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "scripted dialogue",
+      "kind": "example",
+      "claim": "In You Are a Strange Sensor, a fully static script written as a self-absorbed character who isn't quite listening convinced players it was responding to them directly.",
+      "detail": "The digital entity asks players to touch artifacts and describe their texture and temperature, then digs into bodies and feelings. blekkenhorst says because we are used to computers misunderstanding us, we give them a lot of benefit of the doubt.",
+      "t": 1316,
+      "quote": "players when I spoke to them afterwards did think it was directly responding to them. We are used to computers misunderstanding us all of the time",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "physical posture",
+      "kind": "example",
+      "claim": "You Are a Strange Sensor forces players to kneel below a monitor to reach the keyboard; the large upfront commitment meant everyone who took the position played to the end, but it excluded some people.",
+      "detail": "The posture reinforces the entity mocking players for letting it put them in an uncomfortable position. blekkenhorst was injured at one point and could not play it themselves. The game ends by telling players to go find more victims, so they leave with a task.",
+      "t": 1333,
+      "quote": "It is a big up front investment to take that position in a room.",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "content warnings",
+      "kind": "technique",
+      "claim": "For immersive horror that blurs reality, blekkenhorst provides content warnings, allergen lists and safeguards, and recommends tabletop-RPG-style lines and veils plus a list of wanted content.",
+      "detail": "The Archive offered trigger warnings and a way to ask about specifics, an allergen list for touchable objects, and sealed real bones. They chose not to hide that it was a game despite the appeal. They want people 'miserable in the exact way they want to be miserable'.",
+      "t": 1670,
+      "quote": "I like how table top RPGs do it. What are your lines and bails?",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "retro interfaces",
+      "kind": "principle",
+      "claim": "Emulating retro software styles in interface games sets player expectations and dates artifacts in the fiction, evoking a feeling and not just a look.",
+      "detail": "For The Archive, blekkenhorst chose an interface era to match when the fictional volunteer cult began migrating the database, and emulated different graphic styles for artifacts from different periods. They say nostalgic design works like marketing, signalling what you are getting into.",
+      "t": 1770,
+      "quote": "I think nostalgic design always sets up the player for a specific experience.",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

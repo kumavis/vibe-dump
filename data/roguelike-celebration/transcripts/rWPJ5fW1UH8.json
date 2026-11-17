@@ -1,0 +1,3853 @@
+{
+ "id": "rWPJ5fW1UH8",
+ "url": "https://www.youtube.com/watch?v=rWPJ5fW1UH8",
+ "title": "Patrick Kemp - Design tooling at Spry Fox",
+ "speaker": "Patrick Kemp",
+ "talk_title": "Design tooling at Spry Fox",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 1785,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "A walkthrough of how Spry Fox designs are implemented under the hood. We've developed a text-based config library that contains a number of procedural patterns so our small design team can multiply our content efforts and maintain our game systems. In our latest project, we've added a \"design dashboard\" layer which lets us peer into our own game data at a higher level. I'll talk through how it works, why we like it, and where we plan to take it next.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and text files"
+  },
+  {
+   "start": 641,
+   "title": "Procedural pattern overview"
+  },
+  {
+   "start": 918,
+   "title": "Design dashboard item view"
+  },
+  {
+   "start": 1041,
+   "title": "Loot table and content usage"
+  },
+  {
+   "start": 1191,
+   "title": "Calendar and schedule view"
+  },
+  {
+   "start": 1280,
+   "title": "Future tools and balancing"
+  },
+  {
+   "start": 1408,
+   "title": "Dashboard benefits and tech"
+  },
+  {
+   "start": 1495,
+   "title": "Conclusion and Q&A"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5544,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.99,
+   "d": 3.12,
+   "text": "[Music]"
+  },
+  {
+   "t": 5.68,
+   "d": 2.32,
+   "text": "final speaker of this slot uh Patrick"
+  },
+  {
+   "t": 8.0,
+   "d": 3.8,
+   "text": "Kemp hi Patrick hello uh Patrick's a"
+  },
+  {
+   "t": 11.8,
+   "d": 1.88,
+   "text": "game designer living in Seattle he's"
+  },
+  {
+   "t": 13.68,
+   "d": 2.04,
+   "text": "worked in games for 17 years in the last"
+  },
+  {
+   "t": 15.72,
+   "d": 2.24,
+   "text": "11 of those were as a game designer at"
+  },
+  {
+   "t": 17.96,
+   "d": 2.68,
+   "text": "Spry Fox his Tech Tree started with"
+  },
+  {
+   "t": 20.64,
+   "d": 2.88,
+   "text": "click andplay basic on the ti 83 and"
+  },
+  {
+   "t": 23.52,
+   "d": 2.2,
+   "text": "action script pre Parenthood he was an"
+  },
+  {
+   "t": 25.72,
+   "d": 2.2,
+   "text": "avid game Jammer and slide project"
+  },
+  {
+   "t": 27.92,
+   "d": 2.44,
+   "text": "noodler alongside his day job work"
+  },
+  {
+   "t": 30.36,
+   "d": 1.68,
+   "text": "cooking games are his favorite kinds of"
+  },
+  {
+   "t": 32.04,
+   "d": 1.88,
+   "text": "games to make and you're here to talk"
+  },
+  {
+   "t": 33.92,
+   "d": 2.24,
+   "text": "about tools which is my favorite so take"
+  },
+  {
+   "t": 36.16,
+   "d": 1.0,
+   "text": "it away"
+  },
+  {
+   "t": 37.16,
+   "d": 4.0,
+   "text": "Patrick thank you um so like Alexi said"
+  },
+  {
+   "t": 41.16,
+   "d": 1.64,
+   "text": "I'm here to talk about design tooling at"
+  },
+  {
+   "t": 42.8,
+   "d": 4.2,
+   "text": "spray Fox um here's my uh some little"
+  },
+  {
+   "t": 47.0,
+   "d": 1.8,
+   "text": "screenshots of some of those side"
+  },
+  {
+   "t": 48.8,
+   "d": 3.24,
+   "text": "projects um so you might know spry Fox"
+  },
+  {
+   "t": 52.04,
+   "d": 1.64,
+   "text": "from some of our earlier games like"
+  },
+  {
+   "t": 53.68,
+   "d": 1.8,
+   "text": "Triple Town and alphab bear um these"
+  },
+  {
+   "t": 55.48,
+   "d": 1.8,
+   "text": "were games that were kind of based"
+  },
+  {
+   "t": 57.28,
+   "d": 2.8,
+   "text": "around a a unique core mechanic and uh"
+  },
+  {
+   "t": 60.08,
+   "d": 1.88,
+   "text": "had this kind of elegant Evergreen"
+  },
+  {
+   "t": 61.96,
+   "d": 2.96,
+   "text": "gameplay as the design philosophy um but"
+  },
+  {
+   "t": 64.92,
+   "d": 1.92,
+   "text": "in more recent years we Sprite fox has"
+  },
+  {
+   "t": 66.84,
+   "d": 2.8,
+   "text": "leaned into making bigger games um where"
+  },
+  {
+   "t": 69.64,
+   "d": 2.44,
+   "text": "we've waited into genres like Village"
+  },
+  {
+   "t": 72.08,
+   "d": 4.08,
+   "text": "Sims and MMOs um and these games you"
+  },
+  {
+   "t": 76.16,
+   "d": 2.04,
+   "text": "know involve a lot of intertwined"
+  },
+  {
+   "t": 78.2,
+   "d": 2.88,
+   "text": "systems and Rich internal internal"
+  },
+  {
+   "t": 81.08,
+   "d": 1.72,
+   "text": "economies um sometimes they're"
+  },
+  {
+   "t": 82.8,
+   "d": 4.32,
+   "text": "multiplayer games um and you know what"
+  },
+  {
+   "t": 87.12,
+   "d": 2.16,
+   "text": "that all means for us as a as a team is"
+  },
+  {
+   "t": 89.28,
+   "d": 1.52,
+   "text": "these games just require a lot more"
+  },
+  {
+   "t": 90.8,
+   "d": 2.36,
+   "text": "content to kind of make games that work"
+  },
+  {
+   "t": 93.16,
+   "d": 1.56,
+   "text": "in those genres there just has to be a"
+  },
+  {
+   "t": 94.72,
+   "d": 2.4,
+   "text": "lot more stuff in them um and we've"
+  },
+  {
+   "t": 97.12,
+   "d": 1.68,
+   "text": "certainly grown as a studio over the"
+  },
+  {
+   "t": 98.8,
+   "d": 2.6,
+   "text": "years but our design team is still"
+  },
+  {
+   "t": 101.4,
+   "d": 2.0,
+   "text": "relatively small um so we're always on"
+  },
+  {
+   "t": 103.4,
+   "d": 1.8,
+   "text": "the lookout for ways to multiply our"
+  },
+  {
+   "t": 105.2,
+   "d": 1.84,
+   "text": "efforts and you know sometimes that"
+  },
+  {
+   "t": 107.04,
+   "d": 2.32,
+   "text": "looks like procedural content Generation"
+  },
+  {
+   "t": 109.36,
+   "d": 1.92,
+   "text": "Um but a lot of times it's just building"
+  },
+  {
+   "t": 111.28,
+   "d": 2.6,
+   "text": "efficient tools that again allow us to"
+  },
+  {
+   "t": 113.88,
+   "d": 3.12,
+   "text": "get more bang for our buck um as"
+  },
+  {
+   "t": 117.0,
+   "d": 1.68,
+   "text": "designers and that's what I'm going to"
+  },
+  {
+   "t": 118.68,
+   "d": 1.92,
+   "text": "talk about the tooling piece"
+  },
+  {
+   "t": 120.6,
+   "d": 3.04,
+   "text": "um now occasionally we'll build um kind"
+  },
+  {
+   "t": 123.64,
+   "d": 2.52,
+   "text": "of cool looking graphical interactive"
+  },
+  {
+   "t": 126.16,
+   "d": 2.48,
+   "text": "tools um you know typically for things"
+  },
+  {
+   "t": 128.64,
+   "d": 3.0,
+   "text": "like editing terrain or set pieces um"
+  },
+  {
+   "t": 131.64,
+   "d": 1.88,
+   "text": "I'm not going to show any of those today"
+  },
+  {
+   "t": 133.52,
+   "d": 1.92,
+   "text": "um they're they look cool but you know I"
+  },
+  {
+   "t": 135.44,
+   "d": 1.0,
+   "text": "don't actually think we're doing"
+  },
+  {
+   "t": 136.44,
+   "d": 1.4,
+   "text": "anything particularly novel on that"
+  },
+  {
+   "t": 137.84,
+   "d": 2.92,
+   "text": "front um instead I'm going to focus on"
+  },
+  {
+   "t": 140.76,
+   "d": 2.04,
+   "text": "where the bulk of our design content"
+  },
+  {
+   "t": 142.8,
+   "d": 3.48,
+   "text": "goes which is in text files or configs"
+  },
+  {
+   "t": 146.28,
+   "d": 2.6,
+   "text": "as we call them um these are just yaml"
+  },
+  {
+   "t": 148.88,
+   "d": 3.56,
+   "text": "uh syntax files that we've built up uh"
+  },
+  {
+   "t": 152.44,
+   "d": 2.08,
+   "text": "Pipeline and tooling around um and"
+  },
+  {
+   "t": 154.52,
+   "d": 1.4,
+   "text": "that's where we build most of the sort"
+  },
+  {
+   "t": 155.92,
+   "d": 3.0,
+   "text": "of the rich design content um and then"
+  },
+  {
+   "t": 158.92,
+   "d": 1.56,
+   "text": "in our most recent project we've added"
+  },
+  {
+   "t": 160.48,
+   "d": 1.96,
+   "text": "this new element called the design"
+  },
+  {
+   "t": 162.44,
+   "d": 2.16,
+   "text": "dashboard and that's the thing I'm I'm"
+  },
+  {
+   "t": 164.6,
+   "d": 1.36,
+   "text": "really excited to talk about that's the"
+  },
+  {
+   "t": 165.96,
+   "d": 1.72,
+   "text": "whole reason I wanted to give this talk"
+  },
+  {
+   "t": 167.68,
+   "d": 1.32,
+   "text": "uh because it's this new thing we're"
+  },
+  {
+   "t": 169.0,
+   "d": 2.68,
+   "text": "trying that I'm really excited"
+  },
+  {
+   "t": 171.68,
+   "d": 3.48,
+   "text": "about um so first off why do we like"
+  },
+  {
+   "t": 175.16,
+   "d": 2.32,
+   "text": "text files so much um I'm sure this"
+  },
+  {
+   "t": 177.48,
+   "d": 1.92,
+   "text": "crowd has a fair amount of appreciation"
+  },
+  {
+   "t": 179.4,
+   "d": 2.4,
+   "text": "for text files but just to go over some"
+  },
+  {
+   "t": 181.8,
+   "d": 2.72,
+   "text": "of the basics um they're very malleable"
+  },
+  {
+   "t": 184.52,
+   "d": 3.6,
+   "text": "they're easy to hook up to code um you"
+  },
+  {
+   "t": 188.12,
+   "d": 2.68,
+   "text": "can just search them find whatever you"
+  },
+  {
+   "t": 190.8,
+   "d": 1.76,
+   "text": "any content you want in them you can"
+  },
+  {
+   "t": 192.56,
+   "d": 2.16,
+   "text": "find and replace and copy place stuff"
+  },
+  {
+   "t": 194.72,
+   "d": 2.64,
+   "text": "like that um and if you're editing text"
+  },
+  {
+   "t": 197.36,
+   "d": 1.56,
+   "text": "you kind of have your choice of all"
+  },
+  {
+   "t": 198.92,
+   "d": 4.04,
+   "text": "these you know um existing idees that"
+  },
+  {
+   "t": 202.96,
+   "d": 2.64,
+   "text": "are polished and have lots of features"
+  },
+  {
+   "t": 205.6,
+   "d": 2.52,
+   "text": "in them and they typically have uh"
+  },
+  {
+   "t": 208.12,
+   "d": 2.72,
+   "text": "extension marketplaces you can get even"
+  },
+  {
+   "t": 210.84,
+   "d": 2.32,
+   "text": "more advanced features or quality of"
+  },
+  {
+   "t": 213.16,
+   "d": 1.12,
+   "text": "life"
+  },
+  {
+   "t": 214.28,
+   "d": 2.64,
+   "text": "functionality um so in a lot of ways by"
+  },
+  {
+   "t": 216.92,
+   "d": 3.16,
+   "text": "choosing to make most of our design"
+  },
+  {
+   "t": 220.08,
+   "d": 2.0,
+   "text": "content out of text files we're"
+  },
+  {
+   "t": 222.08,
+   "d": 3.08,
+   "text": "leveraging this mature ecosystem of"
+  },
+  {
+   "t": 225.16,
+   "d": 2.72,
+   "text": "existing idees so uh a lot of our"
+  },
+  {
+   "t": 227.88,
+   "d": 1.96,
+   "text": "day-to-day tooling ends up being just"
+  },
+  {
+   "t": 229.84,
+   "d": 2.88,
+   "text": "working in nice polished Ides that we"
+  },
+  {
+   "t": 232.72,
+   "d": 1.8,
+   "text": "didn't have to build ourselves so that's"
+  },
+  {
+   "t": 234.52,
+   "d": 3.12,
+   "text": "just kind of a part of our approach um"
+  },
+  {
+   "t": 237.64,
+   "d": 2.2,
+   "text": "and as you would imagine uh having"
+  },
+  {
+   "t": 239.84,
+   "d": 3.68,
+   "text": "worked in text files for many projects"
+  },
+  {
+   "t": 243.52,
+   "d": 2.44,
+   "text": "uh many years across different platforms"
+  },
+  {
+   "t": 245.96,
+   "d": 2.48,
+   "text": "and engines we've built up a fair amount"
+  },
+  {
+   "t": 248.44,
+   "d": 3.6,
+   "text": "of code and processes uh around working"
+  },
+  {
+   "t": 252.04,
+   "d": 3.76,
+   "text": "with text files um and in fact we have"
+  },
+  {
+   "t": 255.8,
+   "d": 2.36,
+   "text": "this library of code uh that has a name"
+  },
+  {
+   "t": 258.16,
+   "d": 2.24,
+   "text": "we call it dark config uh a few years"
+  },
+  {
+   "t": 260.4,
+   "d": 1.88,
+   "text": "ago we open sourced it so if you want"
+  },
+  {
+   "t": 262.28,
+   "d": 2.92,
+   "text": "you can check it out at this GitHub URL"
+  },
+  {
+   "t": 265.2,
+   "d": 2.2,
+   "text": "um and what dark config does is it"
+  },
+  {
+   "t": 267.4,
+   "d": 1.92,
+   "text": "basically takes our yaml config files"
+  },
+  {
+   "t": 269.32,
+   "d": 2.96,
+   "text": "and you know converts them into usable"
+  },
+  {
+   "t": 272.28,
+   "d": 2.28,
+   "text": "uh gameplay data um it's also got cool"
+  },
+  {
+   "t": 274.56,
+   "d": 3.12,
+   "text": "features like hot loading and validation"
+  },
+  {
+   "t": 277.68,
+   "d": 2.16,
+   "text": "um it can validate the yaml syntax"
+  },
+  {
+   "t": 279.84,
+   "d": 2.32,
+   "text": "itself um and also it it kind of serves"
+  },
+  {
+   "t": 282.16,
+   "d": 1.64,
+   "text": "as a platform for you to write your own"
+  },
+  {
+   "t": 283.8,
+   "d": 2.88,
+   "text": "validation for your game data so you can"
+  },
+  {
+   "t": 286.68,
+   "d": 2.2,
+   "text": "kind of tell it what good or bad data"
+  },
+  {
+   "t": 288.88,
+   "d": 2.48,
+   "text": "looks like and the uh validator will"
+  },
+  {
+   "t": 291.36,
+   "d": 2.96,
+   "text": "catch issues um and then we've also"
+  },
+  {
+   "t": 294.32,
+   "d": 2.4,
+   "text": "implemented these things I kind of call"
+  },
+  {
+   "t": 296.72,
+   "d": 3.52,
+   "text": "them uh procedural patterns uh um there"
+  },
+  {
+   "t": 300.24,
+   "d": 2.6,
+   "text": "these functionality in the configs that"
+  },
+  {
+   "t": 302.84,
+   "d": 1.32,
+   "text": "again lets us"
+  },
+  {
+   "t": 304.16,
+   "d": 3.56,
+   "text": "designers uh multiply our efforts um and"
+  },
+  {
+   "t": 307.72,
+   "d": 1.44,
+   "text": "I'm going to walk through a few examples"
+  },
+  {
+   "t": 309.16,
+   "d": 1.56,
+   "text": "of these procedural patterns we use in"
+  },
+  {
+   "t": 310.72,
+   "d": 2.36,
+   "text": "our configs and that is going to lead"
+  },
+  {
+   "t": 313.08,
+   "d": 2.4,
+   "text": "into the design dashboard"
+  },
+  {
+   "t": 315.48,
+   "d": 2.52,
+   "text": "stuff okay so pattern number one this is"
+  },
+  {
+   "t": 318.0,
+   "d": 2.56,
+   "text": "a pretty uh familiar one probably it's"
+  },
+  {
+   "t": 320.56,
+   "d": 4.04,
+   "text": "tags um so all our items and content"
+  },
+  {
+   "t": 324.6,
+   "d": 2.52,
+   "text": "have an optional list of tags that uh"
+  },
+  {
+   "t": 327.12,
+   "d": 2.16,
+   "text": "live in a central registry and then any"
+  },
+  {
+   "t": 329.28,
+   "d": 2.68,
+   "text": "other piece of content or a system can"
+  },
+  {
+   "t": 331.96,
+   "d": 2.52,
+   "text": "refer to items by tags without having to"
+  },
+  {
+   "t": 334.48,
+   "d": 2.2,
+   "text": "refer to them by specific item IDs or"
+  },
+  {
+   "t": 336.68,
+   "d": 2.2,
+   "text": "content IDs so you could have loot"
+  },
+  {
+   "t": 338.88,
+   "d": 2.72,
+   "text": "tables or crafting recipes or shop"
+  },
+  {
+   "t": 341.6,
+   "d": 1.68,
+   "text": "inventories they get populated with"
+  },
+  {
+   "t": 343.28,
+   "d": 3.12,
+   "text": "items by tag without having to list uh"
+  },
+  {
+   "t": 346.4,
+   "d": 1.8,
+   "text": "create and maintain a list of specific"
+  },
+  {
+   "t": 348.2,
+   "d": 3.04,
+   "text": "items and uh again for you know we like"
+  },
+  {
+   "t": 351.24,
+   "d": 1.44,
+   "text": "to make these kind of sprawling"
+  },
+  {
+   "t": 352.68,
+   "d": 2.84,
+   "text": "intertwined economies uh within our"
+  },
+  {
+   "t": 355.52,
+   "d": 2.12,
+   "text": "content systems U this is great for us"
+  },
+  {
+   "t": 357.64,
+   "d": 2.04,
+   "text": "because you know designers can just make"
+  },
+  {
+   "t": 359.68,
+   "d": 2.56,
+   "text": "new items and assign appropriate tags"
+  },
+  {
+   "t": 362.24,
+   "d": 2.36,
+   "text": "and then that item just gets sucked into"
+  },
+  {
+   "t": 364.6,
+   "d": 0.96,
+   "text": "all these different systems"
+  },
+  {
+   "t": 365.56,
+   "d": 1.88,
+   "text": "automatically it just starts showing up"
+  },
+  {
+   "t": 367.44,
+   "d": 2.88,
+   "text": "in loot tables and crafting recipes um"
+  },
+  {
+   "t": 370.32,
+   "d": 1.88,
+   "text": "so as long as you put in the right tags"
+  },
+  {
+   "t": 372.2,
+   "d": 1.8,
+   "text": "it all works out"
+  },
+  {
+   "t": 374.0,
+   "d": 3.0,
+   "text": "great um another pattern we use are"
+  },
+  {
+   "t": 377.0,
+   "d": 3.4,
+   "text": "includes um this one uh is also pretty"
+  },
+  {
+   "t": 380.4,
+   "d": 3.36,
+   "text": "simple I think uh basically you can in a"
+  },
+  {
+   "t": 383.76,
+   "d": 1.56,
+   "text": "in a separate file from the config"
+  },
+  {
+   "t": 385.32,
+   "d": 2.32,
+   "text": "you're working in you can uh make a"
+  },
+  {
+   "t": 387.64,
+   "d": 2.48,
+   "text": "little chunk of reusable"
+  },
+  {
+   "t": 390.12,
+   "d": 2.84,
+   "text": "um config a block of config and give it"
+  },
+  {
+   "t": 392.96,
+   "d": 2.52,
+   "text": "a name and then you can include it into"
+  },
+  {
+   "t": 395.48,
+   "d": 3.8,
+   "text": "another config um so uh you can use this"
+  },
+  {
+   "t": 399.28,
+   "d": 2.16,
+   "text": "for boilerplate and stuff so like if you"
+  },
+  {
+   "t": 401.44,
+   "d": 2.36,
+   "text": "had you know all your decoration items"
+  },
+  {
+   "t": 403.8,
+   "d": 1.88,
+   "text": "you want to have you know a shared piece"
+  },
+  {
+   "t": 405.68,
+   "d": 2.88,
+   "text": "of uh block of config you can just write"
+  },
+  {
+   "t": 408.56,
+   "d": 1.92,
+   "text": "that once and then include it everywhere"
+  },
+  {
+   "t": 410.48,
+   "d": 2.64,
+   "text": "you need um you can also do these kind"
+  },
+  {
+   "t": 413.12,
+   "d": 2.64,
+   "text": "of composition style patterns where a"
+  },
+  {
+   "t": 415.76,
+   "d": 2.56,
+   "text": "config could be including like a handful"
+  },
+  {
+   "t": 418.32,
+   "d": 2.32,
+   "text": "of different um blocks um and you can"
+  },
+  {
+   "t": 420.64,
+   "d": 2.56,
+   "text": "sort of compose different Behavior by"
+  },
+  {
+   "t": 423.2,
+   "d": 2.4,
+   "text": "pulling in confing blocks from different"
+  },
+  {
+   "t": 425.6,
+   "d": 4.04,
+   "text": "sources um and this is also an example"
+  },
+  {
+   "t": 429.64,
+   "d": 3.0,
+   "text": "um here uh that I wanted to demonstrate"
+  },
+  {
+   "t": 432.64,
+   "d": 1.32,
+   "text": "um I kind of glossed over this with the"
+  },
+  {
+   "t": 433.96,
+   "d": 3.48,
+   "text": "dark conf config stuff but um there's"
+  },
+  {
+   "t": 437.44,
+   "d": 2.6,
+   "text": "this distinction between the yaml files"
+  },
+  {
+   "t": 440.04,
+   "d": 1.28,
+   "text": "the configs that the designers are"
+  },
+  {
+   "t": 441.32,
+   "d": 1.48,
+   "text": "working in which we call the source"
+  },
+  {
+   "t": 442.8,
+   "d": 2.8,
+   "text": "configs and then uh the generated"
+  },
+  {
+   "t": 445.6,
+   "d": 1.88,
+   "text": "configs that actually get consumed by"
+  },
+  {
+   "t": 447.48,
+   "d": 3.04,
+   "text": "the game engine um and so dark config"
+  },
+  {
+   "t": 450.52,
+   "d": 2.88,
+   "text": "there's this this code that gets run um"
+  },
+  {
+   "t": 453.4,
+   "d": 2.16,
+   "text": "at config generation time which happs"
+  },
+  {
+   "t": 455.56,
+   "d": 1.4,
+   "text": "either happens either at compilation"
+  },
+  {
+   "t": 456.96,
+   "d": 1.8,
+   "text": "when you run the game or you could do it"
+  },
+  {
+   "t": 458.76,
+   "d": 1.72,
+   "text": "manually as a designer to sort of test"
+  },
+  {
+   "t": 460.48,
+   "d": 3.92,
+   "text": "your work um and it basically just uh we"
+  },
+  {
+   "t": 464.4,
+   "d": 2.92,
+   "text": "call it rapies the actual working config"
+  },
+  {
+   "t": 467.32,
+   "d": 1.96,
+   "text": "so up here on this screen you can see on"
+  },
+  {
+   "t": 469.28,
+   "d": 2.04,
+   "text": "the left those two might be examples of"
+  },
+  {
+   "t": 471.32,
+   "d": 2.48,
+   "text": "source configs that have the include"
+  },
+  {
+   "t": 473.8,
+   "d": 2.08,
+   "text": "pattern and what that does in the"
+  },
+  {
+   "t": 475.88,
+   "d": 1.72,
+   "text": "generated config is it just copy and"
+  },
+  {
+   "t": 477.6,
+   "d": 1.76,
+   "text": "pastes the contents of the included"
+  },
+  {
+   "t": 479.36,
+   "d": 3.56,
+   "text": "config in place and then ends with a"
+  },
+  {
+   "t": 482.92,
+   "d": 3.24,
+   "text": "kind of a final config um and that's an"
+  },
+  {
+   "t": 486.16,
+   "d": 4.24,
+   "text": "important um uh point to understand for"
+  },
+  {
+   "t": 490.4,
+   "d": 1.68,
+   "text": "the next pattern going"
+  },
+  {
+   "t": 492.08,
+   "d": 2.08,
+   "text": "forward okay so the next pattern is"
+  },
+  {
+   "t": 494.16,
+   "d": 1.84,
+   "text": "variance and this one's maybe a little"
+  },
+  {
+   "t": 496.0,
+   "d": 3.64,
+   "text": "more complicated um the way it works is"
+  },
+  {
+   "t": 499.64,
+   "d": 2.96,
+   "text": "we can um flag a field or a part part of"
+  },
+  {
+   "t": 502.6,
+   "d": 2.28,
+   "text": "a field in a config by putting wrapping"
+  },
+  {
+   "t": 504.88,
+   "d": 3.12,
+   "text": "it in Chevrons and that marks it as to"
+  },
+  {
+   "t": 508.0,
+   "d": 2.68,
+   "text": "be replaced by a variant so in the"
+  },
+  {
+   "t": 510.68,
+   "d": 2.16,
+   "text": "example on the left you've got a flower"
+  },
+  {
+   "t": 512.84,
+   "d": 1.84,
+   "text": "with the the word type wrapped in"
+  },
+  {
+   "t": 514.68,
+   "d": 2.28,
+   "text": "Chevrons and that type part is meant to"
+  },
+  {
+   "t": 516.96,
+   "d": 2.6,
+   "text": "be replace by variants and down below we"
+  },
+  {
+   "t": 519.56,
+   "d": 4.08,
+   "text": "have an an array of of variants that U"
+  },
+  {
+   "t": 523.64,
+   "d": 3.0,
+   "text": "replace that type with uh one of five"
+  },
+  {
+   "t": 526.64,
+   "d": 2.8,
+   "text": "different flower types and what happens"
+  },
+  {
+   "t": 529.44,
+   "d": 2.64,
+   "text": "at generation time is this one config"
+  },
+  {
+   "t": 532.08,
+   "d": 3.0,
+   "text": "actually turns into five uh new config"
+  },
+  {
+   "t": 535.08,
+   "d": 3.16,
+   "text": "files with each of their IDs have that"
+  },
+  {
+   "t": 538.24,
+   "d": 1.68,
+   "text": "having that typ part placed with a name"
+  },
+  {
+   "t": 539.92,
+   "d": 3.24,
+   "text": "of flower um so this is like a a simple"
+  },
+  {
+   "t": 543.16,
+   "d": 2.84,
+   "text": "example just for to demonstrate the the"
+  },
+  {
+   "t": 546.0,
+   "d": 2.56,
+   "text": "the basic philosophy but um and and it's"
+  },
+  {
+   "t": 548.56,
+   "d": 1.2,
+   "text": "not actually doing anything interesting"
+  },
+  {
+   "t": 549.76,
+   "d": 3.08,
+   "text": "it's just creating five different items"
+  },
+  {
+   "t": 552.84,
+   "d": 1.96,
+   "text": "with different IDs um they're not like"
+  },
+  {
+   "t": 554.8,
+   "d": 2.52,
+   "text": "distinctly different uh here but because"
+  },
+  {
+   "t": 557.32,
+   "d": 2.4,
+   "text": "you can wrap you can replace anything in"
+  },
+  {
+   "t": 559.72,
+   "d": 1.48,
+   "text": "the in the config basically with"
+  },
+  {
+   "t": 561.2,
+   "d": 2.4,
+   "text": "variants you could use this to change"
+  },
+  {
+   "t": 563.6,
+   "d": 3.2,
+   "text": "the flowers color the i the icon the"
+  },
+  {
+   "t": 566.8,
+   "d": 4.16,
+   "text": "Sprite the you know economic behavior um"
+  },
+  {
+   "t": 570.96,
+   "d": 3.2,
+   "text": "all kinds of things um using variants um"
+  },
+  {
+   "t": 574.16,
+   "d": 1.8,
+   "text": "and this is also simplified because it's"
+  },
+  {
+   "t": 575.96,
+   "d": 1.56,
+   "text": "onedimensional in the sense that there's"
+  },
+  {
+   "t": 577.52,
+   "d": 3.36,
+   "text": "a single array um that's getting subbed"
+  },
+  {
+   "t": 580.88,
+   "d": 2.2,
+   "text": "in for that that that variant portion"
+  },
+  {
+   "t": 583.08,
+   "d": 1.84,
+   "text": "but the way we actually use these is in"
+  },
+  {
+   "t": 584.92,
+   "d": 2.96,
+   "text": "a multi-dimensional way so um this"
+  },
+  {
+   "t": 587.88,
+   "d": 2.64,
+   "text": "config uh flower config is a little"
+  },
+  {
+   "t": 590.52,
+   "d": 2.24,
+   "text": "closer to how like our actual flower"
+  },
+  {
+   "t": 592.76,
+   "d": 2.48,
+   "text": "configs and you can see it has um up in"
+  },
+  {
+   "t": 595.24,
+   "d": 2.16,
+   "text": "the top in the ID it's got um three"
+  },
+  {
+   "t": 597.4,
+   "d": 2.68,
+   "text": "Fields it's got type season and rare ity"
+  },
+  {
+   "t": 600.08,
+   "d": 1.6,
+   "text": "um all marked for replacement by"
+  },
+  {
+   "t": 601.68,
+   "d": 1.64,
+   "text": "variance and then down below we've got"
+  },
+  {
+   "t": 603.32,
+   "d": 2.56,
+   "text": "three arrays of variants one of types"
+  },
+  {
+   "t": 605.88,
+   "d": 2.8,
+   "text": "one of seasons and one of Rarities and"
+  },
+  {
+   "t": 608.68,
+   "d": 1.96,
+   "text": "what happens here is it um it does the"
+  },
+  {
+   "t": 610.64,
+   "d": 2.04,
+   "text": "same thing it replaces them but it the"
+  },
+  {
+   "t": 612.68,
+   "d": 2.8,
+   "text": "the at config generation time it"
+  },
+  {
+   "t": 615.48,
+   "d": 5.04,
+   "text": "actually uh generates a i a an item for"
+  },
+  {
+   "t": 620.52,
+   "d": 1.68,
+   "text": "every possible combination of those"
+  },
+  {
+   "t": 622.2,
+   "d": 2.2,
+   "text": "three arrays so you can see on the right"
+  },
+  {
+   "t": 624.4,
+   "d": 1.6,
+   "text": "sort of some examples where it'd be"
+  },
+  {
+   "t": 626.0,
+   "d": 2.56,
+   "text": "flower Aster spring common flower Aster"
+  },
+  {
+   "t": 628.56,
+   "d": 3.88,
+   "text": "spring common etc etc so this one config"
+  },
+  {
+   "t": 632.44,
+   "d": 4.4,
+   "text": "makes 36 flowers because it's 3 * 4 * 3"
+  },
+  {
+   "t": 636.84,
+   "d": 1.8,
+   "text": "um that's also simplified we usually"
+  },
+  {
+   "t": 638.64,
+   "d": 3.4,
+   "text": "have a lot more than that um and so this"
+  },
+  {
+   "t": 642.04,
+   "d": 2.08,
+   "text": "is how um in our game cozy grob if"
+  },
+  {
+   "t": 644.12,
+   "d": 1.52,
+   "text": "you've played it um we have these"
+  },
+  {
+   "t": 645.64,
+   "d": 1.92,
+   "text": "content buckets like our collectible"
+  },
+  {
+   "t": 647.56,
+   "d": 2.2,
+   "text": "flowers that um spawn throughout the"
+  },
+  {
+   "t": 649.76,
+   "d": 1.36,
+   "text": "year different seasons and have"
+  },
+  {
+   "t": 651.12,
+   "d": 2.36,
+   "text": "different Rarities and different species"
+  },
+  {
+   "t": 653.48,
+   "d": 2.36,
+   "text": "and different um buy and sell prices and"
+  },
+  {
+   "t": 655.84,
+   "d": 3.2,
+   "text": "all that stuff um we have this this bu"
+  },
+  {
+   "t": 659.04,
+   "d": 2.52,
+   "text": "bucket of content with hundreds of items"
+  },
+  {
+   "t": 661.56,
+   "d": 2.08,
+   "text": "uh for the player to collect over time"
+  },
+  {
+   "t": 663.64,
+   "d": 1.48,
+   "text": "that are all kind of created from a"
+  },
+  {
+   "t": 665.12,
+   "d": 2.16,
+   "text": "single config that the designer builds"
+  },
+  {
+   "t": 667.28,
+   "d": 1.96,
+   "text": "with variance and these procedural"
+  },
+  {
+   "t": 669.24,
+   "d": 1.68,
+   "text": "patterns and it blows out into hundreds"
+  },
+  {
+   "t": 670.92,
+   "d": 3.48,
+   "text": "of configs at at generation"
+  },
+  {
+   "t": 674.4,
+   "d": 3.16,
+   "text": "time um and so another pattern we use"
+  },
+  {
+   "t": 677.56,
+   "d": 1.32,
+   "text": "that kind of goes hand inand with the"
+  },
+  {
+   "t": 678.88,
+   "d": 2.44,
+   "text": "variant is one called mods this one"
+  },
+  {
+   "t": 681.32,
+   "d": 3.32,
+   "text": "basically allows you to within a variant"
+  },
+  {
+   "t": 684.64,
+   "d": 2.52,
+   "text": "um modify numerical properties of the"
+  },
+  {
+   "t": 687.16,
+   "d": 3.16,
+   "text": "base config so um in this"
+  },
+  {
+   "t": 690.32,
+   "d": 3.2,
+   "text": "example an uncommon Rarity variant might"
+  },
+  {
+   "t": 693.52,
+   "d": 4.12,
+   "text": "apply um mods to the drop weight so like"
+  },
+  {
+   "t": 697.64,
+   "d": 3.08,
+   "text": "How likely this the item is to show up"
+  },
+  {
+   "t": 700.72,
+   "d": 2.6,
+   "text": "in a random loot table and the sell and"
+  },
+  {
+   "t": 703.32,
+   "d": 2.92,
+   "text": "buy prices how valuable it is um to buy"
+  },
+  {
+   "t": 706.24,
+   "d": 4.88,
+   "text": "and sell and um we uh another kind of"
+  },
+  {
+   "t": 711.12,
+   "d": 1.48,
+   "text": "nice thing we do is we we build these"
+  },
+  {
+   "t": 712.6,
+   "d": 2.88,
+   "text": "Rarities uh these Rarity variants once"
+  },
+  {
+   "t": 715.48,
+   "d": 2.16,
+   "text": "um and then put them in this Global file"
+  },
+  {
+   "t": 717.64,
+   "d": 2.6,
+   "text": "called Global variance so every config"
+  },
+  {
+   "t": 720.24,
+   "d": 1.56,
+   "text": "like the flower config doesn't have to"
+  },
+  {
+   "t": 721.8,
+   "d": 3.2,
+   "text": "have all the r the RAR variants defined"
+  },
+  {
+   "t": 725.0,
+   "d": 2.76,
+   "text": "for Rarity they just reference um a"
+  },
+  {
+   "t": 727.76,
+   "d": 3.0,
+   "text": "shared block of variants for Rarity same"
+  },
+  {
+   "t": 730.76,
+   "d": 2.68,
+   "text": "with Seasons flower types all kinds"
+  },
+  {
+   "t": 733.44,
+   "d": 2.72,
+   "text": "basically and so you have this one"
+  },
+  {
+   "t": 736.16,
+   "d": 2.24,
+   "text": "config that again pulls in a bunch of"
+  },
+  {
+   "t": 738.4,
+   "d": 1.92,
+   "text": "variants so you know whether it's"
+  },
+  {
+   "t": 740.32,
+   "d": 2.28,
+   "text": "mushrooms Flowers Fish whatever we want"
+  },
+  {
+   "t": 742.6,
+   "d": 2.2,
+   "text": "to have Rarity on it for example we just"
+  },
+  {
+   "t": 744.8,
+   "d": 1.84,
+   "text": "include that Global variant and now it"
+  },
+  {
+   "t": 746.64,
+   "d": 3.84,
+   "text": "has a common version common version all"
+  },
+  {
+   "t": 750.48,
+   "d": 1.92,
+   "text": "down the line and it has its prices"
+  },
+  {
+   "t": 752.4,
+   "d": 1.72,
+   "text": "modified and stuff everything's kind of"
+  },
+  {
+   "t": 754.12,
+   "d": 1.72,
+   "text": "set up"
+  },
+  {
+   "t": 755.84,
+   "d": 3.08,
+   "text": "procedurally um so this is this a system"
+  },
+  {
+   "t": 758.92,
+   "d": 2.28,
+   "text": "we've built up over the years um we"
+  },
+  {
+   "t": 761.2,
+   "d": 1.36,
+   "text": "really like it it's got a lot of things"
+  },
+  {
+   "t": 762.56,
+   "d": 3.16,
+   "text": "going for it um it's very expressive you"
+  },
+  {
+   "t": 765.72,
+   "d": 2.4,
+   "text": "can when you get good at building these"
+  },
+  {
+   "t": 768.12,
+   "d": 2.04,
+   "text": "procedural configs you can make all"
+  },
+  {
+   "t": 770.16,
+   "d": 2.64,
+   "text": "kinds of cool stuff happen they're very"
+  },
+  {
+   "t": 772.8,
+   "d": 1.88,
+   "text": "expansible um once you've set up"
+  },
+  {
+   "t": 774.68,
+   "d": 1.72,
+   "text": "something like the flower config it's"
+  },
+  {
+   "t": 776.4,
+   "d": 2.44,
+   "text": "it's trivial to add essentially a new"
+  },
+  {
+   "t": 778.84,
+   "d": 2.6,
+   "text": "row to The Matrix of like uh you know"
+  },
+  {
+   "t": 781.44,
+   "d": 2.16,
+   "text": "like a new season or a new flower"
+  },
+  {
+   "t": 783.6,
+   "d": 2.12,
+   "text": "species you just add a few lines of"
+  },
+  {
+   "t": 785.72,
+   "d": 1.92,
+   "text": "config and and everything multiplies out"
+  },
+  {
+   "t": 787.64,
+   "d": 2.2,
+   "text": "so you have all the associated"
+  },
+  {
+   "t": 789.84,
+   "d": 2.08,
+   "text": "variations um and you know with the tags"
+  },
+  {
+   "t": 791.92,
+   "d": 1.16,
+   "text": "and everything we get all these nice"
+  },
+  {
+   "t": 793.08,
+   "d": 1.56,
+   "text": "emergent connections where we don't have"
+  },
+  {
+   "t": 794.64,
+   "d": 2.24,
+   "text": "to manually connect every little piece"
+  },
+  {
+   "t": 796.88,
+   "d": 3.2,
+   "text": "of cont content to another piece or to a"
+  },
+  {
+   "t": 800.08,
+   "d": 3.28,
+   "text": "system it all just kind of happens um"
+  },
+  {
+   "t": 803.36,
+   "d": 2.04,
+   "text": "through that substrate of the"
+  },
+  {
+   "t": 805.4,
+   "d": 3.12,
+   "text": "tags um but it does have downsides uh"
+  },
+  {
+   "t": 808.52,
+   "d": 1.72,
+   "text": "it's it's kind of complicated to work in"
+  },
+  {
+   "t": 810.24,
+   "d": 2.08,
+   "text": "I mean you if you looked at some of the"
+  },
+  {
+   "t": 812.32,
+   "d": 2.2,
+   "text": "like the the the actual configs they're"
+  },
+  {
+   "t": 814.52,
+   "d": 3.6,
+   "text": "very they're borderline codel like um uh"
+  },
+  {
+   "t": 818.12,
+   "d": 2.8,
+   "text": "and uh they can be unpredictable because"
+  },
+  {
+   "t": 820.92,
+   "d": 1.2,
+   "text": "you know you're when you're working in a"
+  },
+  {
+   "t": 822.12,
+   "d": 2.44,
+   "text": "source config that generates hundreds of"
+  },
+  {
+   "t": 824.56,
+   "d": 3.44,
+   "text": "generated configs um if you don't have"
+  },
+  {
+   "t": 828.0,
+   "d": 2.32,
+   "text": "uh if you haven't really gred how that"
+  },
+  {
+   "t": 830.32,
+   "d": 2.04,
+   "text": "Source config is set up you might"
+  },
+  {
+   "t": 832.36,
+   "d": 1.84,
+   "text": "accidentally make a bunch of bad content"
+  },
+  {
+   "t": 834.2,
+   "d": 3.24,
+   "text": "and not really uh fully realize it um"
+  },
+  {
+   "t": 837.44,
+   "d": 2.0,
+   "text": "and then you know obviously emergent"
+  },
+  {
+   "t": 839.44,
+   "d": 2.12,
+   "text": "connections are not always a good thing"
+  },
+  {
+   "t": 841.56,
+   "d": 2.12,
+   "text": "um it's easy to set up tags in the wrong"
+  },
+  {
+   "t": 843.68,
+   "d": 1.4,
+   "text": "way and get things connected that"
+  },
+  {
+   "t": 845.08,
+   "d": 4.92,
+   "text": "shouldn't be connected um so you know on"
+  },
+  {
+   "t": 850.0,
+   "d": 1.6,
+   "text": "our current project like I said we've"
+  },
+  {
+   "t": 851.6,
+   "d": 2.04,
+   "text": "been trying to address some of these"
+  },
+  {
+   "t": 853.64,
+   "d": 1.84,
+   "text": "downsides that have sort of accumulated"
+  },
+  {
+   "t": 855.48,
+   "d": 2.56,
+   "text": "over the years um and that's where this"
+  },
+  {
+   "t": 858.04,
+   "d": 3.32,
+   "text": "concept of our design dashboard comes in"
+  },
+  {
+   "t": 861.36,
+   "d": 3.56,
+   "text": "um the design dashboard is basically a"
+  },
+  {
+   "t": 864.92,
+   "d": 4.0,
+   "text": "tool we've built to help us um get a"
+  },
+  {
+   "t": 868.92,
+   "d": 2.0,
+   "text": "insight into our own game data"
+  },
+  {
+   "t": 870.92,
+   "d": 2.4,
+   "text": "especially our generated game data um so"
+  },
+  {
+   "t": 873.32,
+   "d": 1.8,
+   "text": "I've got my little so this is kind of"
+  },
+  {
+   "t": 875.12,
+   "d": 1.8,
+   "text": "just to review what we've said so far"
+  },
+  {
+   "t": 876.92,
+   "d": 3.72,
+   "text": "we've got our um Source uh yaml files"
+  },
+  {
+   "t": 880.64,
+   "d": 2.12,
+   "text": "that the the designers are actually"
+  },
+  {
+   "t": 882.76,
+   "d": 2.4,
+   "text": "authoring um which then a generation"
+  },
+  {
+   "t": 885.16,
+   "d": 3.2,
+   "text": "time blow out into many many more"
+  },
+  {
+   "t": 888.36,
+   "d": 2.76,
+   "text": "generated configs and then that that"
+  },
+  {
+   "t": 891.12,
+   "d": 1.6,
+   "text": "chunk of generated configs are what"
+  },
+  {
+   "t": 892.72,
+   "d": 2.08,
+   "text": "actually get uh consumed by the game"
+  },
+  {
+   "t": 894.8,
+   "d": 1.92,
+   "text": "engine and and determine what happens in"
+  },
+  {
+   "t": 896.72,
+   "d": 3.48,
+   "text": "the game but it's also that generated uh"
+  },
+  {
+   "t": 900.2,
+   "d": 2.76,
+   "text": "configs that get consumed by the design"
+  },
+  {
+   "t": 902.96,
+   "d": 2.24,
+   "text": "dashboard um and so what is this design"
+  },
+  {
+   "t": 905.2,
+   "d": 1.6,
+   "text": "dashboard thing I'm talking about um"
+  },
+  {
+   "t": 906.8,
+   "d": 2.76,
+   "text": "it's basically a web page um it's HTML"
+  },
+  {
+   "t": 909.56,
+   "d": 4.08,
+   "text": "HTML page that consumes this um this uh"
+  },
+  {
+   "t": 913.64,
+   "d": 2.8,
+   "text": "these text files and displays it in uh"
+  },
+  {
+   "t": 916.44,
+   "d": 2.36,
+   "text": "useful ways so let's take a look at"
+  },
+  {
+   "t": 918.8,
+   "d": 3.0,
+   "text": "it um hopefully you can see this okay um"
+  },
+  {
+   "t": 921.8,
+   "d": 1.68,
+   "text": "this is just a screenshot from the"
+  },
+  {
+   "t": 923.48,
+   "d": 2.24,
+   "text": "design dashboard it's actually showing"
+  },
+  {
+   "t": 925.72,
+   "d": 2.16,
+   "text": "actual game data um and I'm going to"
+  },
+  {
+   "t": 927.88,
+   "d": 1.44,
+   "text": "give a t little tour of what you're"
+  },
+  {
+   "t": 929.32,
+   "d": 2.52,
+   "text": "seeing here and uh and kind of tell you"
+  },
+  {
+   "t": 931.84,
+   "d": 3.16,
+   "text": "what's going on um so we divide the"
+  },
+  {
+   "t": 935.0,
+   "d": 1.4,
+   "text": "design dashboard into these things"
+  },
+  {
+   "t": 936.4,
+   "d": 2.4,
+   "text": "called views in the sense that they're"
+  },
+  {
+   "t": 938.8,
+   "d": 2.48,
+   "text": "they're uh different views into this"
+  },
+  {
+   "t": 941.28,
+   "d": 2.8,
+   "text": "kind of mass of of game data U and this"
+  },
+  {
+   "t": 944.08,
+   "d": 2.0,
+   "text": "is our item view this is our most fully"
+  },
+  {
+   "t": 946.08,
+   "d": 1.76,
+   "text": "featured View and the one we use most"
+  },
+  {
+   "t": 947.84,
+   "d": 2.84,
+   "text": "often um it basically it's a table that"
+  },
+  {
+   "t": 950.68,
+   "d": 3.8,
+   "text": "shows items in the game with pertinent"
+  },
+  {
+   "t": 954.48,
+   "d": 1.52,
+   "text": "information that you want to see with a"
+  },
+  {
+   "t": 956.0,
+   "d": 1.64,
+   "text": "bunch of different options for sorting"
+  },
+  {
+   "t": 957.64,
+   "d": 3.32,
+   "text": "and filtering and and drilling down to"
+  },
+  {
+   "t": 960.96,
+   "d": 1.36,
+   "text": "basically see what items are getting"
+  },
+  {
+   "t": 962.32,
+   "d": 3.52,
+   "text": "generated by all these configs um so in"
+  },
+  {
+   "t": 965.84,
+   "d": 2.56,
+   "text": "the upper left there you've got uh a"
+  },
+  {
+   "t": 968.4,
+   "d": 2.28,
+   "text": "little text field where you can enter in"
+  },
+  {
+   "t": 970.68,
+   "d": 2.16,
+   "text": "uh a partial Item ID right now I'm"
+  },
+  {
+   "t": 972.84,
+   "d": 2.2,
+   "text": "searching for flower underscore and so"
+  },
+  {
+   "t": 975.04,
+   "d": 1.64,
+   "text": "we're seeing"
+  },
+  {
+   "t": 976.68,
+   "d": 3.8,
+   "text": "876 uh flower uncore item IDs out of the"
+  },
+  {
+   "t": 980.48,
+   "d": 2.52,
+   "text": "total 8 8,800 items that are in the"
+  },
+  {
+   "t": 983.0,
+   "d": 2.72,
+   "text": "configs currently um then you've got"
+  },
+  {
+   "t": 985.72,
+   "d": 2.08,
+   "text": "these properties this sidebar with a"
+  },
+  {
+   "t": 987.8,
+   "d": 2.48,
+   "text": "bunch of you know uh toggle boxes that"
+  },
+  {
+   "t": 990.28,
+   "d": 1.48,
+   "text": "you can turn on and off and that shows"
+  },
+  {
+   "t": 991.76,
+   "d": 2.64,
+   "text": "and hides different Columns of data so"
+  },
+  {
+   "t": 994.4,
+   "d": 1.48,
+   "text": "you know depending on what you're trying"
+  },
+  {
+   "t": 995.88,
+   "d": 2.4,
+   "text": "to investigate in in the data you might"
+  },
+  {
+   "t": 998.28,
+   "d": 2.44,
+   "text": "you'll turn those on or off to only see"
+  },
+  {
+   "t": 1000.72,
+   "d": 1.16,
+   "text": "what you need to"
+  },
+  {
+   "t": 1001.88,
+   "d": 3.92,
+   "text": "see um there's a little column of um"
+  },
+  {
+   "t": 1005.8,
+   "d": 3.48,
+   "text": "blue Visual Studio code icons I don't"
+  },
+  {
+   "t": 1009.28,
+   "d": 1.24,
+   "text": "know if you could see them but it's"
+  },
+  {
+   "t": 1010.52,
+   "d": 1.68,
+   "text": "right to the left of like all the the"
+  },
+  {
+   "t": 1012.2,
+   "d": 2.24,
+   "text": "column with all the item IDs and those"
+  },
+  {
+   "t": 1014.44,
+   "d": 1.72,
+   "text": "are um I love this feature those are"
+  },
+  {
+   "t": 1016.16,
+   "d": 1.96,
+   "text": "clickable buttons that when you click"
+  },
+  {
+   "t": 1018.12,
+   "d": 2.16,
+   "text": "one it pops open Visual Studio code and"
+  },
+  {
+   "t": 1020.28,
+   "d": 2.84,
+   "text": "opens the source config um that"
+  },
+  {
+   "t": 1023.12,
+   "d": 2.08,
+   "text": "generated that item which is super"
+  },
+  {
+   "t": 1025.2,
+   "d": 1.96,
+   "text": "useful um so you can use the design"
+  },
+  {
+   "t": 1027.16,
+   "d": 3.16,
+   "text": "dashboard as kind of your your first uh"
+  },
+  {
+   "t": 1030.32,
+   "d": 1.32,
+   "text": "when you're investigating some sort of"
+  },
+  {
+   "t": 1031.64,
+   "d": 2.0,
+   "text": "issue you start here you find out the"
+  },
+  {
+   "t": 1033.64,
+   "d": 1.32,
+   "text": "information you need you click that"
+  },
+  {
+   "t": 1034.96,
+   "d": 1.64,
+   "text": "button and boom you're into the config"
+  },
+  {
+   "t": 1036.6,
+   "d": 2.4,
+   "text": "and you could uh figure out what's going"
+  },
+  {
+   "t": 1039.0,
+   "d": 2.48,
+   "text": "on from that"
+  },
+  {
+   "t": 1041.48,
+   "d": 2.52,
+   "text": "point um okay so this is another view"
+  },
+  {
+   "t": 1044.0,
+   "d": 3.68,
+   "text": "this is our loot table view um the uh"
+  },
+  {
+   "t": 1047.68,
+   "d": 1.48,
+   "text": "I'm looking at the the piece on the left"
+  },
+  {
+   "t": 1049.16,
+   "d": 2.16,
+   "text": "I'll explain the piece on the right next"
+  },
+  {
+   "t": 1051.32,
+   "d": 1.96,
+   "text": "um so this is basically again because"
+  },
+  {
+   "t": 1053.28,
+   "d": 2.32,
+   "text": "our loot tables typically refer to items"
+  },
+  {
+   "t": 1055.6,
+   "d": 1.96,
+   "text": "by tag when you're authoring a loot"
+  },
+  {
+   "t": 1057.56,
+   "d": 2.4,
+   "text": "table you're not actually looking at the"
+  },
+  {
+   "t": 1059.96,
+   "d": 1.4,
+   "text": "specific items that are going to drop"
+  },
+  {
+   "t": 1061.36,
+   "d": 1.28,
+   "text": "from that loot table you're you're"
+  },
+  {
+   "t": 1062.64,
+   "d": 1.48,
+   "text": "describing the types of items you want"
+  },
+  {
+   "t": 1064.12,
+   "d": 2.92,
+   "text": "to drop from that loot table by tags um"
+  },
+  {
+   "t": 1067.04,
+   "d": 1.32,
+   "text": "but sometimes it's nice to know"
+  },
+  {
+   "t": 1068.36,
+   "d": 1.2,
+   "text": "specifically what could drop out of a"
+  },
+  {
+   "t": 1069.56,
+   "d": 2.92,
+   "text": "loot table um and so what what we have"
+  },
+  {
+   "t": 1072.48,
+   "d": 1.52,
+   "text": "in the loot table view is a little"
+  },
+  {
+   "t": 1074.0,
+   "d": 1.88,
+   "text": "filter in the bottom left of the item"
+  },
+  {
+   "t": 1075.88,
+   "d": 2.12,
+   "text": "view where you you there's a drop down"
+  },
+  {
+   "t": 1078.0,
+   "d": 1.56,
+   "text": "with all are named loot tables in the"
+  },
+  {
+   "t": 1079.56,
+   "d": 1.76,
+   "text": "game you select one of those and it"
+  },
+  {
+   "t": 1081.32,
+   "d": 2.36,
+   "text": "filters the list of items to only show"
+  },
+  {
+   "t": 1083.68,
+   "d": 2.12,
+   "text": "items that will drop out of that loot"
+  },
+  {
+   "t": 1085.8,
+   "d": 2.6,
+   "text": "table and uh conversely we also have"
+  },
+  {
+   "t": 1088.4,
+   "d": 2.28,
+   "text": "this dropped by column which is you can"
+  },
+  {
+   "t": 1090.68,
+   "d": 2.04,
+   "text": "turn on and off in that sidebar of"
+  },
+  {
+   "t": 1092.72,
+   "d": 1.88,
+   "text": "properties on the left and what that"
+  },
+  {
+   "t": 1094.6,
+   "d": 2.12,
+   "text": "does is for any given item it it lists"
+  },
+  {
+   "t": 1096.72,
+   "d": 1.96,
+   "text": "out the loot tables that could drop that"
+  },
+  {
+   "t": 1098.68,
+   "d": 2.2,
+   "text": "item so um this is really great if"
+  },
+  {
+   "t": 1100.88,
+   "d": 2.36,
+   "text": "you're you know you have some random"
+  },
+  {
+   "t": 1103.24,
+   "d": 1.8,
+   "text": "item in your inventory and we like how"
+  },
+  {
+   "t": 1105.04,
+   "d": 1.4,
+   "text": "did where did that come from where you"
+  },
+  {
+   "t": 1106.44,
+   "d": 2.04,
+   "text": "know you can look it up here and then"
+  },
+  {
+   "t": 1108.48,
+   "d": 2.6,
+   "text": "looked at the drop by column and then"
+  },
+  {
+   "t": 1111.08,
+   "d": 1.6,
+   "text": "check out each one of those loot tables"
+  },
+  {
+   "t": 1112.68,
+   "d": 1.68,
+   "text": "one by one to figure out how you got"
+  },
+  {
+   "t": 1114.36,
+   "d": 3.36,
+   "text": "that item you weren't expecting to"
+  },
+  {
+   "t": 1117.8,
+   "d": 3.24,
+   "text": "get um okay this is our content usage"
+  },
+  {
+   "t": 1121.04,
+   "d": 2.2,
+   "text": "view um this one's a little more uh"
+  },
+  {
+   "t": 1123.24,
+   "d": 1.76,
+   "text": "production focused and it wasn't part of"
+  },
+  {
+   "t": 1125.0,
+   "d": 1.72,
+   "text": "the original spec for the design"
+  },
+  {
+   "t": 1126.72,
+   "d": 2.28,
+   "text": "dashboard but we realized at some point"
+  },
+  {
+   "t": 1129.0,
+   "d": 1.44,
+   "text": "it would be trivial to build this in the"
+  },
+  {
+   "t": 1130.44,
+   "d": 1.72,
+   "text": "design dashboard and it's been really"
+  },
+  {
+   "t": 1132.16,
+   "d": 3.0,
+   "text": "useful um basically all it is is a way"
+  },
+  {
+   "t": 1135.16,
+   "d": 2.48,
+   "text": "to just search for occurrences of"
+  },
+  {
+   "t": 1137.64,
+   "d": 1.6,
+   "text": "different types typ of name content in"
+  },
+  {
+   "t": 1139.24,
+   "d": 2.56,
+   "text": "the game and count them um so in this"
+  },
+  {
+   "t": 1141.8,
+   "d": 2.08,
+   "text": "one we were looking at the the dialogue"
+  },
+  {
+   "t": 1143.88,
+   "d": 2.68,
+   "text": "so all the written dialogue for NPCs in"
+  },
+  {
+   "t": 1146.56,
+   "d": 1.84,
+   "text": "the game and we're searching for"
+  },
+  {
+   "t": 1148.4,
+   "d": 3.36,
+   "text": "instances of the different um names of"
+  },
+  {
+   "t": 1151.76,
+   "d": 3.48,
+   "text": "animations so these are uh animations"
+  },
+  {
+   "t": 1155.24,
+   "d": 1.84,
+   "text": "that the writer can annotate on a line"
+  },
+  {
+   "t": 1157.08,
+   "d": 2.64,
+   "text": "of dialogue so the character the NBC"
+  },
+  {
+   "t": 1159.72,
+   "d": 1.8,
+   "text": "makes like an angry face when they're"
+  },
+  {
+   "t": 1161.52,
+   "d": 2.44,
+   "text": "saying something angrily and uh and then"
+  },
+  {
+   "t": 1163.96,
+   "d": 1.6,
+   "text": "on the column on the right is just how"
+  },
+  {
+   "t": 1165.56,
+   "d": 1.72,
+   "text": "how often those animations are being"
+  },
+  {
+   "t": 1167.28,
+   "d": 1.68,
+   "text": "used in the entire"
+  },
+  {
+   "t": 1168.96,
+   "d": 2.16,
+   "text": "uh all the game data um and this has"
+  },
+  {
+   "t": 1171.12,
+   "d": 2.32,
+   "text": "been super useful for the writers to"
+  },
+  {
+   "t": 1173.44,
+   "d": 3.04,
+   "text": "basically at a glance see how they are"
+  },
+  {
+   "t": 1176.48,
+   "d": 1.88,
+   "text": "what what animations they're over"
+  },
+  {
+   "t": 1178.36,
+   "d": 1.36,
+   "text": "utilizing or"
+  },
+  {
+   "t": 1179.72,
+   "d": 3.44,
+   "text": "underutilizing and uh likewise the"
+  },
+  {
+   "t": 1183.16,
+   "d": 2.12,
+   "text": "animators use this to see how writers"
+  },
+  {
+   "t": 1185.28,
+   "d": 2.12,
+   "text": "are using their animations and using"
+  },
+  {
+   "t": 1187.4,
+   "d": 1.96,
+   "text": "that to guide what animations they might"
+  },
+  {
+   "t": 1189.36,
+   "d": 2.52,
+   "text": "want to make"
+  },
+  {
+   "t": 1191.92,
+   "d": 2.24,
+   "text": "next um this one we're starting to get"
+  },
+  {
+   "t": 1194.16,
+   "d": 1.72,
+   "text": "into some of the work in Pro progress"
+  },
+  {
+   "t": 1195.88,
+   "d": 2.08,
+   "text": "ones because again this is a tool we're"
+  },
+  {
+   "t": 1197.96,
+   "d": 1.64,
+   "text": "building building and using on our"
+  },
+  {
+   "t": 1199.6,
+   "d": 2.6,
+   "text": "current project um so this is our"
+  },
+  {
+   "t": 1202.2,
+   "d": 2.16,
+   "text": "calendar view um what you're looking at"
+  },
+  {
+   "t": 1204.36,
+   "d": 1.92,
+   "text": "here is actually a mockup um the"
+  },
+  {
+   "t": 1206.28,
+   "d": 2.08,
+   "text": "calendar review is actually in game and"
+  },
+  {
+   "t": 1208.36,
+   "d": 1.48,
+   "text": "working right now but it's like not"
+  },
+  {
+   "t": 1209.84,
+   "d": 1.72,
+   "text": "pretty enough for for me to screenshot"
+  },
+  {
+   "t": 1211.56,
+   "d": 1.72,
+   "text": "for this talk so you just have to"
+  },
+  {
+   "t": 1213.28,
+   "d": 2.2,
+   "text": "imagine it will look it it will look"
+  },
+  {
+   "t": 1215.48,
+   "d": 2.28,
+   "text": "sort of like this um but uh so our"
+  },
+  {
+   "t": 1217.76,
+   "d": 3.32,
+   "text": "current game has a real life uh real"
+  },
+  {
+   "t": 1221.08,
+   "d": 2.16,
+   "text": "time calendar just like uh our previous"
+  },
+  {
+   "t": 1223.24,
+   "d": 2.36,
+   "text": "game cozy Grove so you know we schedule"
+  },
+  {
+   "t": 1225.6,
+   "d": 2.16,
+   "text": "Things based on the day of the week or"
+  },
+  {
+   "t": 1227.76,
+   "d": 1.76,
+   "text": "what season it is or you know to"
+  },
+  {
+   "t": 1229.52,
+   "d": 2.48,
+   "text": "correspond to holidays and things um and"
+  },
+  {
+   "t": 1232.0,
+   "d": 2.2,
+   "text": "we do all that work again in a text file"
+  },
+  {
+   "t": 1234.2,
+   "d": 2.04,
+   "text": "we have a calendar yaml that has you"
+  },
+  {
+   "t": 1236.24,
+   "d": 1.44,
+   "text": "know dates and we can fill in the"
+  },
+  {
+   "t": 1237.68,
+   "d": 1.52,
+   "text": "different scenarios and when they show"
+  },
+  {
+   "t": 1239.2,
+   "d": 2.0,
+   "text": "up but it's it's pretty hard just"
+  },
+  {
+   "t": 1241.2,
+   "d": 2.76,
+   "text": "looking at that config file to to sort"
+  },
+  {
+   "t": 1243.96,
+   "d": 3.36,
+   "text": "of get a view of temporarily what's"
+  },
+  {
+   "t": 1247.32,
+   "d": 2.08,
+   "text": "going on and that's what this calendar"
+  },
+  {
+   "t": 1249.4,
+   "d": 2.16,
+   "text": "view is all about it just draws those"
+  },
+  {
+   "t": 1251.56,
+   "d": 2.76,
+   "text": "scenarios in a horizontal timeline view"
+  },
+  {
+   "t": 1254.32,
+   "d": 2.8,
+   "text": "with their duration um and some color"
+  },
+  {
+   "t": 1257.12,
+   "d": 2.64,
+   "text": "coding so that we can see like we could"
+  },
+  {
+   "t": 1259.76,
+   "d": 1.28,
+   "text": "just add a glance we can see what the"
+  },
+  {
+   "t": 1261.04,
+   "d": 1.88,
+   "text": "coverage is on a given day is there"
+  },
+  {
+   "t": 1262.92,
+   "d": 1.72,
+   "text": "enough stuff for a player to do on that"
+  },
+  {
+   "t": 1264.64,
+   "d": 2.92,
+   "text": "day um are there gaps where we've like"
+  },
+  {
+   "t": 1267.56,
+   "d": 1.84,
+   "text": "you we've misscheduled something and"
+  },
+  {
+   "t": 1269.4,
+   "d": 1.56,
+   "text": "there's like you know a little Gap and"
+  },
+  {
+   "t": 1270.96,
+   "d": 2.32,
+   "text": "we need to move things to close those"
+  },
+  {
+   "t": 1273.28,
+   "d": 3.76,
+   "text": "gaps um and so yeah it just makes it way"
+  },
+  {
+   "t": 1277.04,
+   "d": 3.48,
+   "text": "easier to do that uh uh scheduling"
+  },
+  {
+   "t": 1280.52,
+   "d": 2.96,
+   "text": "work um this is another this one is a a"
+  },
+  {
+   "t": 1283.48,
+   "d": 1.92,
+   "text": "future one that's like on our on our"
+  },
+  {
+   "t": 1285.4,
+   "d": 2.12,
+   "text": "road map for the near future um the"
+  },
+  {
+   "t": 1287.52,
+   "d": 2.32,
+   "text": "screenshot your looking at for uh right"
+  },
+  {
+   "t": 1289.84,
+   "d": 3.44,
+   "text": "now is actually um oh sorry this is our"
+  },
+  {
+   "t": 1293.28,
+   "d": 2.6,
+   "text": "economy view I should say that um and"
+  },
+  {
+   "t": 1295.88,
+   "d": 1.28,
+   "text": "the screenshot we're looking at right"
+  },
+  {
+   "t": 1297.16,
+   "d": 2.44,
+   "text": "here is actually from a Google"
+  },
+  {
+   "t": 1299.6,
+   "d": 3.24,
+   "text": "spreadsheet that a Community member made"
+  },
+  {
+   "t": 1302.84,
+   "d": 2.8,
+   "text": "uh for cozy Grove 1 um and shared out"
+  },
+  {
+   "t": 1305.64,
+   "d": 2.16,
+   "text": "for everyone to use and basically what"
+  },
+  {
+   "t": 1307.8,
+   "d": 1.64,
+   "text": "they did is they manually entered all"
+  },
+  {
+   "t": 1309.44,
+   "d": 1.64,
+   "text": "this data about all our decorations in"
+  },
+  {
+   "t": 1311.08,
+   "d": 2.32,
+   "text": "the game and they calculated based on"
+  },
+  {
+   "t": 1313.4,
+   "d": 2.8,
+   "text": "the ingredient cost of the decorations"
+  },
+  {
+   "t": 1316.2,
+   "d": 2.24,
+   "text": "and the sell price of The Craft crafted"
+  },
+  {
+   "t": 1318.44,
+   "d": 2.52,
+   "text": "decoration the profitability of"
+  },
+  {
+   "t": 1320.96,
+   "d": 1.64,
+   "text": "everything in the game and that's what"
+  },
+  {
+   "t": 1322.6,
+   "d": 2.84,
+   "text": "that color-coded column is on the"
+  },
+  {
+   "t": 1325.44,
+   "d": 3.72,
+   "text": "side um and uh so when they released"
+  },
+  {
+   "t": 1329.16,
+   "d": 1.48,
+   "text": "this to the community and everyone"
+  },
+  {
+   "t": 1330.64,
+   "d": 1.64,
+   "text": "started using it you know our design"
+  },
+  {
+   "t": 1332.28,
+   "d": 2.28,
+   "text": "team was first of all impressed and"
+  },
+  {
+   "t": 1334.56,
+   "d": 1.6,
+   "text": "were're like oh wow that's so cool how"
+  },
+  {
+   "t": 1336.16,
+   "d": 2.04,
+   "text": "how into the gameing they are um and"
+  },
+  {
+   "t": 1338.2,
+   "d": 2.4,
+   "text": "then also mildly embarrassed because"
+  },
+  {
+   "t": 1340.6,
+   "d": 2.4,
+   "text": "they had exposed some clear balancing"
+  },
+  {
+   "t": 1343.0,
+   "d": 2.84,
+   "text": "issues where we had uh you know like op"
+  },
+  {
+   "t": 1345.84,
+   "d": 1.6,
+   "text": "decorations where like everyone was"
+  },
+  {
+   "t": 1347.44,
+   "d": 2.56,
+   "text": "crafting this one uncommon chair because"
+  },
+  {
+   "t": 1350.0,
+   "d": 2.12,
+   "text": "was the best financially is the best way"
+  },
+  {
+   "t": 1352.12,
+   "d": 1.4,
+   "text": "to do it and you just craft that chair"
+  },
+  {
+   "t": 1353.52,
+   "d": 1.8,
+   "text": "over and over and sell it make tons of"
+  },
+  {
+   "t": 1355.32,
+   "d": 2.28,
+   "text": "money um and we had missed the stuff"
+  },
+  {
+   "t": 1357.6,
+   "d": 2.16,
+   "text": "because no one was we weren't manually"
+  },
+  {
+   "t": 1359.76,
+   "d": 1.6,
+   "text": "setting the prices of these things we"
+  },
+  {
+   "t": 1361.36,
+   "d": 1.6,
+   "text": "were again we were using all that those"
+  },
+  {
+   "t": 1362.96,
+   "d": 3.12,
+   "text": "procedural patterns so the the eventual"
+  },
+  {
+   "t": 1366.08,
+   "d": 2.48,
+   "text": "prices and stuff kind of fell out of the"
+  },
+  {
+   "t": 1368.56,
+   "d": 2.12,
+   "text": "the mods and variants and all that stuff"
+  },
+  {
+   "t": 1370.68,
+   "d": 2.68,
+   "text": "um and so you know again one of the"
+  },
+  {
+   "t": 1373.36,
+   "d": 2.52,
+   "text": "downsides of using the patterns we use"
+  },
+  {
+   "t": 1375.88,
+   "d": 2.24,
+   "text": "is we kind of me it's easy to miss those"
+  },
+  {
+   "t": 1378.12,
+   "d": 4.12,
+   "text": "patterns and um so in the moment when"
+  },
+  {
+   "t": 1382.24,
+   "d": 1.76,
+   "text": "when this happened we kind of used the"
+  },
+  {
+   "t": 1384.0,
+   "d": 3.64,
+   "text": "community's own spreadsheet to uh Nerf"
+  },
+  {
+   "t": 1387.64,
+   "d": 2.76,
+   "text": "the the worse offenders um but you know"
+  },
+  {
+   "t": 1390.4,
+   "d": 1.52,
+   "text": "our plan going forward is basically"
+  },
+  {
+   "t": 1391.92,
+   "d": 1.2,
+   "text": "replicate something like this in the"
+  },
+  {
+   "t": 1393.12,
+   "d": 1.8,
+   "text": "design dashboard which should be very"
+  },
+  {
+   "t": 1394.92,
+   "d": 2.96,
+   "text": "easy to do so that we can um see these"
+  },
+  {
+   "t": 1397.88,
+   "d": 2.36,
+   "text": "kind of higher level patterns um that"
+  },
+  {
+   "t": 1400.24,
+   "d": 2.76,
+   "text": "are you know that come out of the data"
+  },
+  {
+   "t": 1403.0,
+   "d": 1.76,
+   "text": "um the result out of the data that's"
+  },
+  {
+   "t": 1404.76,
+   "d": 1.36,
+   "text": "hard to see when you're just editing"
+  },
+  {
+   "t": 1406.12,
+   "d": 3.6,
+   "text": "like a single config file"
+  },
+  {
+   "t": 1409.72,
+   "d": 2.32,
+   "text": "um another one I hope we get to this one"
+  },
+  {
+   "t": 1412.04,
+   "d": 1.68,
+   "text": "but um we so we're using a lot of"
+  },
+  {
+   "t": 1413.72,
+   "d": 2.28,
+   "text": "procedural uh terrain generation for"
+  },
+  {
+   "t": 1416.0,
+   "d": 2.52,
+   "text": "parts of our game and I would love to"
+  },
+  {
+   "t": 1418.52,
+   "d": 3.32,
+   "text": "have uh a view dedicated to basically"
+  },
+  {
+   "t": 1421.84,
+   "d": 2.08,
+   "text": "statistical analysis of our generated"
+  },
+  {
+   "t": 1423.92,
+   "d": 2.48,
+   "text": "terrain so you could generate a bunch"
+  },
+  {
+   "t": 1426.4,
+   "d": 3.76,
+   "text": "and then get dat like stats on what uh"
+  },
+  {
+   "t": 1430.16,
+   "d": 2.44,
+   "text": "pieces of content are being under under"
+  },
+  {
+   "t": 1432.6,
+   "d": 2.64,
+   "text": "or over utilized um in the generated"
+  },
+  {
+   "t": 1435.24,
+   "d": 2.96,
+   "text": "terrain or how often a gener ated"
+  },
+  {
+   "t": 1438.2,
+   "d": 3.56,
+   "text": "terrain like meets the specs required by"
+  },
+  {
+   "t": 1441.76,
+   "d": 1.88,
+   "text": "gameplay"
+  },
+  {
+   "t": 1443.64,
+   "d": 3.24,
+   "text": "um and um so okay so why do we like this"
+  },
+  {
+   "t": 1446.88,
+   "d": 2.44,
+   "text": "stuff why do we like the uh the design"
+  },
+  {
+   "t": 1449.32,
+   "d": 2.76,
+   "text": "dashboard so much um it's easy to add"
+  },
+  {
+   "t": 1452.08,
+   "d": 2.16,
+   "text": "these new views because it's HTML"
+  },
+  {
+   "t": 1454.24,
+   "d": 3.04,
+   "text": "parsing you know yaml or technically"
+  },
+  {
+   "t": 1457.28,
+   "d": 3.56,
+   "text": "Json um it's uh we have local and remote"
+  },
+  {
+   "t": 1460.84,
+   "d": 1.56,
+   "text": "versions of the dashboard so the"
+  },
+  {
+   "t": 1462.4,
+   "d": 1.52,
+   "text": "designers when they're iterating use a"
+  },
+  {
+   "t": 1463.92,
+   "d": 2.52,
+   "text": "local version that just displays um the"
+  },
+  {
+   "t": 1466.44,
+   "d": 2.04,
+   "text": "data on their local machine so they can"
+  },
+  {
+   "t": 1468.48,
+   "d": 2.16,
+   "text": "edit the configs and refresh the dash"
+  },
+  {
+   "t": 1470.64,
+   "d": 1.92,
+   "text": "dashboard and see the changes and then"
+  },
+  {
+   "t": 1472.56,
+   "d": 1.48,
+   "text": "we also have a remote version which"
+  },
+  {
+   "t": 1474.04,
+   "d": 2.48,
+   "text": "represents the data on Source control"
+  },
+  {
+   "t": 1476.52,
+   "d": 3.0,
+   "text": "the the most latest the most recent data"
+  },
+  {
+   "t": 1479.52,
+   "d": 1.2,
+   "text": "and that one is really useful for"
+  },
+  {
+   "t": 1480.72,
+   "d": 2.84,
+   "text": "non-designers to reference the game data"
+  },
+  {
+   "t": 1483.56,
+   "d": 2.84,
+   "text": "um or like perform QA investigations"
+  },
+  {
+   "t": 1486.4,
+   "d": 2.84,
+   "text": "basically by just going to this website"
+  },
+  {
+   "t": 1489.24,
+   "d": 1.72,
+   "text": "um and again because this is built off"
+  },
+  {
+   "t": 1490.96,
+   "d": 1.52,
+   "text": "of dark config it's portable to our"
+  },
+  {
+   "t": 1492.48,
+   "d": 1.96,
+   "text": "other dark and fade"
+  },
+  {
+   "t": 1494.44,
+   "d": 2.52,
+   "text": "projects um but philosophically why do"
+  },
+  {
+   "t": 1496.96,
+   "d": 1.6,
+   "text": "we like this so much I mean the main"
+  },
+  {
+   "t": 1498.56,
+   "d": 3.28,
+   "text": "thing is we get to keep doing you know"
+  },
+  {
+   "t": 1501.84,
+   "d": 1.48,
+   "text": "building games the way we like to build"
+  },
+  {
+   "t": 1503.32,
+   "d": 2.4,
+   "text": "them with a bunch of our our text files"
+  },
+  {
+   "t": 1505.72,
+   "d": 1.64,
+   "text": "with wacky procedural patterns that let"
+  },
+  {
+   "t": 1507.36,
+   "d": 2.64,
+   "text": "us do all this wild expressive stuff"
+  },
+  {
+   "t": 1510.0,
+   "d": 1.48,
+   "text": "that sometimes gets us in trouble but"
+  },
+  {
+   "t": 1511.48,
+   "d": 1.52,
+   "text": "the design dashboard gives us a way to"
+  },
+  {
+   "t": 1513.0,
+   "d": 3.28,
+   "text": "get a little less in trouble um and"
+  },
+  {
+   "t": 1516.28,
+   "d": 1.84,
+   "text": "ultimately What it lets us do is get"
+  },
+  {
+   "t": 1518.12,
+   "d": 3.04,
+   "text": "kind of this spreadsheet style"
+  },
+  {
+   "t": 1521.16,
+   "d": 3.16,
+   "text": "visualization of uh of what's going on"
+  },
+  {
+   "t": 1524.32,
+   "d": 1.24,
+   "text": "like the higher level patterns and"
+  },
+  {
+   "t": 1525.56,
+   "d": 1.4,
+   "text": "connections of our game without having"
+  },
+  {
+   "t": 1526.96,
+   "d": 1.72,
+   "text": "to build and make maintain a spreadsheet"
+  },
+  {
+   "t": 1528.68,
+   "d": 1.76,
+   "text": "which we have done many for many"
+  },
+  {
+   "t": 1530.44,
+   "d": 3.16,
+   "text": "projects for many years and for me"
+  },
+  {
+   "t": 1533.6,
+   "d": 2.48,
+   "text": "frankly it's it's too much work um doing"
+  },
+  {
+   "t": 1536.08,
+   "d": 1.52,
+   "text": "it the oldfashioned way with with"
+  },
+  {
+   "t": 1537.6,
+   "d": 1.88,
+   "text": "spreadsheets um the spreadsheet the"
+  },
+  {
+   "t": 1539.48,
+   "d": 2.0,
+   "text": "spreadsheets you see right here is from"
+  },
+  {
+   "t": 1541.48,
+   "d": 2.96,
+   "text": "cozy Grove 1 um it was this is the"
+  },
+  {
+   "t": 1544.44,
+   "d": 1.6,
+   "text": "progression road map of like all the"
+  },
+  {
+   "t": 1546.04,
+   "d": 3.12,
+   "text": "unlocks and the the econ for like the"
+  },
+  {
+   "t": 1549.16,
+   "d": 2.56,
+   "text": "the the narrative econ and when the"
+  },
+  {
+   "t": 1551.72,
+   "d": 1.52,
+   "text": "different quests come in and all this"
+  },
+  {
+   "t": 1553.24,
+   "d": 2.32,
+   "text": "stuff and it was hugely useful and"
+  },
+  {
+   "t": 1555.56,
+   "d": 2.56,
+   "text": "allowed us to fix a lot of issues that"
+  },
+  {
+   "t": 1558.12,
+   "d": 2.04,
+   "text": "came out of these kind of like emergent"
+  },
+  {
+   "t": 1560.16,
+   "d": 2.32,
+   "text": "connections and stuff but it was just a"
+  },
+  {
+   "t": 1562.48,
+   "d": 1.84,
+   "text": "ton of work and once you kind of Take"
+  },
+  {
+   "t": 1564.32,
+   "d": 1.92,
+   "text": "Your Eye Off of it it sort of desynced"
+  },
+  {
+   "t": 1566.24,
+   "d": 2.24,
+   "text": "from the game data and it's just this"
+  },
+  {
+   "t": 1568.48,
+   "d": 4.24,
+   "text": "this ongoing up up uh upkeep cost um and"
+  },
+  {
+   "t": 1572.72,
+   "d": 2.12,
+   "text": "so with the design dashboard there's"
+  },
+  {
+   "t": 1574.84,
+   "d": 1.72,
+   "text": "there's always a single source of truth"
+  },
+  {
+   "t": 1576.56,
+   "d": 1.92,
+   "text": "it's the game data the configs are the"
+  },
+  {
+   "t": 1578.48,
+   "d": 2.12,
+   "text": "truth and the game the design dashboard"
+  },
+  {
+   "t": 1580.6,
+   "d": 1.96,
+   "text": "gives us this kind of high level view"
+  },
+  {
+   "t": 1582.56,
+   "d": 1.6,
+   "text": "but it's derived from the game data so"
+  },
+  {
+   "t": 1584.16,
+   "d": 2.32,
+   "text": "we never have to it's just it updates"
+  },
+  {
+   "t": 1586.48,
+   "d": 3.12,
+   "text": "automatically and we can customize it a"
+  },
+  {
+   "t": 1589.6,
+   "d": 4.84,
+   "text": "lot um and so yeah uh if you have a a"
+  },
+  {
+   "t": 1594.44,
+   "d": 2.28,
+   "text": "heavy content game with a lot of uh"
+  },
+  {
+   "t": 1596.72,
+   "d": 1.96,
+   "text": "intertwining economies or procedurally"
+  },
+  {
+   "t": 1598.68,
+   "d": 1.92,
+   "text": "generated content maybe consider"
+  },
+  {
+   "t": 1600.6,
+   "d": 2.16,
+   "text": "building something like the design"
+  },
+  {
+   "t": 1602.76,
+   "d": 3.04,
+   "text": "dashboard uh thank you for your"
+  },
+  {
+   "t": 1605.8,
+   "d": 2.6,
+   "text": "time excellent thank you so much Patrick"
+  },
+  {
+   "t": 1608.4,
+   "d": 2.64,
+   "text": "and thank you for being uh understanding"
+  },
+  {
+   "t": 1611.04,
+   "d": 1.68,
+   "text": "with us starting a little bit later I do"
+  },
+  {
+   "t": 1612.72,
+   "d": 2.04,
+   "text": "want to take the time for at least one"
+  },
+  {
+   "t": 1614.76,
+   "d": 2.44,
+   "text": "question given that we started late um"
+  },
+  {
+   "t": 1617.2,
+   "d": 2.16,
+   "text": "this is one one from Dash clever which"
+  },
+  {
+   "t": 1619.36,
+   "d": 1.88,
+   "text": "is just asking is there a team member"
+  },
+  {
+   "t": 1621.24,
+   "d": 1.84,
+   "text": "who's focused on building this tooling"
+  },
+  {
+   "t": 1623.08,
+   "d": 1.72,
+   "text": "or is it something that the devs produce"
+  },
+  {
+   "t": 1624.8,
+   "d": 1.96,
+   "text": "in between other game"
+  },
+  {
+   "t": 1626.76,
+   "d": 3.44,
+   "text": "tasks um we do have um it's uh we don't"
+  },
+  {
+   "t": 1630.2,
+   "d": 1.36,
+   "text": "have a lot of Engineers who are like"
+  },
+  {
+   "t": 1631.56,
+   "d": 1.84,
+   "text": "dedicated to a single thing at spray Fox"
+  },
+  {
+   "t": 1633.4,
+   "d": 2.72,
+   "text": "we tend to uh reallocate people all the"
+  },
+  {
+   "t": 1636.12,
+   "d": 2.36,
+   "text": "time um but we do have a engineer who"
+  },
+  {
+   "t": 1638.48,
+   "d": 2.88,
+   "text": "this is uh their kind of pet project and"
+  },
+  {
+   "t": 1641.36,
+   "d": 2.8,
+   "text": "so he and I sort of like uh he'll come"
+  },
+  {
+   "t": 1644.16,
+   "d": 1.84,
+   "text": "back on to it and add new views to it"
+  },
+  {
+   "t": 1646.0,
+   "d": 2.52,
+   "text": "and iterate on it cool which I guess"
+  },
+  {
+   "t": 1648.52,
+   "d": 4.52,
+   "text": "maybe related to that um from barer d uh"
+  },
+  {
+   "t": 1653.04,
+   "d": 1.64,
+   "text": "how long has it taken to get the"
+  },
+  {
+   "t": 1654.68,
+   "d": 2.36,
+   "text": "dashboard up and running and what are"
+  },
+  {
+   "t": 1657.04,
+   "d": 1.68,
+   "text": "the estimates on getting that economy"
+  },
+  {
+   "t": 1658.72,
+   "d": 2.8,
+   "text": "part up and running um it has been"
+  },
+  {
+   "t": 1661.52,
+   "d": 2.36,
+   "text": "surprisingly quick I think the um it's"
+  },
+  {
+   "t": 1663.88,
+   "d": 2.64,
+   "text": "this is a thing that we've done um it's"
+  },
+  {
+   "t": 1666.52,
+   "d": 1.52,
+   "text": "it's always a little hard to make a case"
+  },
+  {
+   "t": 1668.04,
+   "d": 2.2,
+   "text": "for this kind of tooling where it's like"
+  },
+  {
+   "t": 1670.24,
+   "d": 2.64,
+   "text": "it's really gonna hit its stride later"
+  },
+  {
+   "t": 1672.88,
+   "d": 3.12,
+   "text": "in production um and it's competing with"
+  },
+  {
+   "t": 1676.0,
+   "d": 1.36,
+   "text": "all this other feature work building you"
+  },
+  {
+   "t": 1677.36,
+   "d": 1.6,
+   "text": "know standing up new systems and stuff"
+  },
+  {
+   "t": 1678.96,
+   "d": 2.32,
+   "text": "but it it it was not too hard to set up"
+  },
+  {
+   "t": 1681.28,
+   "d": 2.4,
+   "text": "because again it's HTML Pages parsing"
+  },
+  {
+   "t": 1683.68,
+   "d": 1.84,
+   "text": "Json like those are both that's a match"
+  },
+  {
+   "t": 1685.52,
+   "d": 2.48,
+   "text": "made in heaven and uh and then making"
+  },
+  {
+   "t": 1688.0,
+   "d": 2.76,
+   "text": "subsequent views is also typically like"
+  },
+  {
+   "t": 1690.76,
+   "d": 2.36,
+   "text": "a day or two um to stand up a new view"
+  },
+  {
+   "t": 1693.12,
+   "d": 2.16,
+   "text": "so I I suspect the econ one will be a"
+  },
+  {
+   "t": 1695.28,
+   "d": 2.64,
+   "text": "few days not a big deal yeah that's"
+  },
+  {
+   "t": 1697.92,
+   "d": 1.64,
+   "text": "wonderful I mean we were appreciating in"
+  },
+  {
+   "t": 1699.56,
+   "d": 1.08,
+   "text": "the chat that there's been kind of"
+  },
+  {
+   "t": 1700.64,
+   "d": 1.6,
+   "text": "through line this weekend of a lot of"
+  },
+  {
+   "t": 1702.24,
+   "d": 1.8,
+   "text": "these you know make these domain"
+  },
+  {
+   "t": 1704.04,
+   "d": 1.56,
+   "text": "specific tools make them quickly and"
+  },
+  {
+   "t": 1705.6,
+   "d": 2.16,
+   "text": "even stuff like yeah using text using"
+  },
+  {
+   "t": 1707.76,
+   "d": 1.8,
+   "text": "these common kind of data types that are"
+  },
+  {
+   "t": 1709.56,
+   "d": 2.44,
+   "text": "easy to parse easy to do things"
+  },
+  {
+   "t": 1712.0,
+   "d": 4.28,
+   "text": "with yeah excellent um let's see one one"
+  },
+  {
+   "t": 1716.28,
+   "d": 2.6,
+   "text": "last Quick one from hyper Gardens how"
+  },
+  {
+   "t": 1718.88,
+   "d": 2.08,
+   "text": "often do you change the data in content"
+  },
+  {
+   "t": 1720.96,
+   "d": 2.88,
+   "text": "formats and how hard is it to"
+  },
+  {
+   "t": 1723.84,
+   "d": 5.4,
+   "text": "adapt um the formats change um I mean a"
+  },
+  {
+   "t": 1729.24,
+   "d": 2.36,
+   "text": "lot of the stuff is kind of uh changes"
+  },
+  {
+   "t": 1731.6,
+   "d": 1.4,
+   "text": "pretty slowly like those procedural"
+  },
+  {
+   "t": 1733.0,
+   "d": 1.68,
+   "text": "patterns have been built up and like"
+  },
+  {
+   "t": 1734.68,
+   "d": 1.28,
+   "text": "they're kind of assumed every time we"
+  },
+  {
+   "t": 1735.96,
+   "d": 1.2,
+   "text": "start up a new project we're just going"
+  },
+  {
+   "t": 1737.16,
+   "d": 2.72,
+   "text": "to use use those again um but uh formats"
+  },
+  {
+   "t": 1739.88,
+   "d": 2.28,
+   "text": "do change especially when we're building"
+  },
+  {
+   "t": 1742.16,
+   "d": 1.48,
+   "text": "a new system from scratch and we're like"
+  },
+  {
+   "t": 1743.64,
+   "d": 1.24,
+   "text": "What are the configs for this system"
+  },
+  {
+   "t": 1744.88,
+   "d": 1.4,
+   "text": "going to look like maybe it should be"
+  },
+  {
+   "t": 1746.28,
+   "d": 1.88,
+   "text": "this would be a a big array no that's"
+  },
+  {
+   "t": 1748.16,
+   "d": 2.28,
+   "text": "not that's not right let's change it um"
+  },
+  {
+   "t": 1750.44,
+   "d": 1.28,
+   "text": "so I I think it happens pretty"
+  },
+  {
+   "t": 1751.72,
+   "d": 3.44,
+   "text": "frequently um and at least the the"
+  },
+  {
+   "t": 1755.16,
+   "d": 1.68,
+   "text": "dashboard so far has been pretty"
+  },
+  {
+   "t": 1756.84,
+   "d": 1.72,
+   "text": "resilient to that especially you know"
+  },
+  {
+   "t": 1758.56,
+   "d": 2.56,
+   "text": "that item view which like what an item"
+  },
+  {
+   "t": 1761.12,
+   "d": 2.56,
+   "text": "is it hasn't changed a whole lot so that"
+  },
+  {
+   "t": 1763.68,
+   "d": 2.56,
+   "text": "that has been pretty stable cool"
+  },
+  {
+   "t": 1766.24,
+   "d": 1.72,
+   "text": "excellent well thank you so much"
+  },
+  {
+   "t": 1767.96,
+   "d": 2.32,
+   "text": "and uh yeah like thanks for for coming"
+  },
+  {
+   "t": 1770.28,
+   "d": 1.32,
+   "text": "and and for sharing it's really"
+  },
+  {
+   "t": 1771.6,
+   "d": 2.44,
+   "text": "wonderful um for especially kind of like"
+  },
+  {
+   "t": 1774.04,
+   "d": 1.64,
+   "text": "shipped games to be able to talk about"
+  },
+  {
+   "t": 1775.68,
+   "d": 1.16,
+   "text": "their tools and things that have"
+  },
+  {
+   "t": 1776.84,
+   "d": 1.52,
+   "text": "developed over time that this is going"
+  },
+  {
+   "t": 1778.36,
+   "d": 2.16,
+   "text": "to be a really useful resource for a lot"
+  },
+  {
+   "t": 1780.52,
+   "d": 2.44,
+   "text": "of people I think so thank you so much"
+  },
+  {
+   "t": 1782.96,
+   "d": 3.68,
+   "text": "my pleasure thanks"
+  }
+ ]
+}

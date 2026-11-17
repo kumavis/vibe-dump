@@ -1,0 +1,96 @@
+{
+  "id": "cGvig1f68Tg",
+  "title": "Adrian Herbez - Let's get Physical: 3d Printing for Roguelikes",
+  "speaker": "Adrian Herbez",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=cGvig1f68Tg",
+  "talk_type": "technical",
+  "summary": "Adrian Herbez asks what a 3D-printed roguelike would actually be, distinguishing it from 3D-printed tabletop terrain and board games. He presents Plarl, a single-player, procedurally generated dungeon printed as one object whose doors physically snap off to reveal room contents (damage or healing pips), giving physical hidden information. He explains the pipeline: JavaScript maze generation based on 'Mazes for Programmers', bit-encoded exits and room contents fed into OpenSCAD to produce STL files, and careful FDM print design (nozzle-width tabs and short bridging) so doors break off in exactly the right place.",
+  "games": [
+    "Plarl",
+    "Pocket Tactics"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "3d printing",
+      "kind": "principle",
+      "claim": "Herbez argues 3D-printed tabletop terrain and 3D-printed board games such as Pocket Tactics are only thematically related to roguelikes, not roguelikes themselves.",
+      "detail": "Printed dungeon tiles share roguelike themes, and Pocket Tactics even has players procedurally construct the level from hex tiles, but he still classes it as a printed board game. His bar for a physical roguelike was something more.",
+      "t": 63,
+      "quote": "There is a ton of talented people making great stuff but definitely not a roguelike. It is just thematically related",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "3d printing",
+      "kind": "principle",
+      "claim": "Herbez's design goals for a physical roguelike were single-player play, procedural generation, hidden information, and 3D printing being integral rather than a stand-in for mass manufacturing.",
+      "detail": "Hidden information is taken for granted digitally but is harder physically. He wanted gameplay tied to the object's physicality and wanted the generated artifact to be something that genuinely needed a 3D printer, not injection molding.",
+      "t": 127,
+      "quote": "I wanted hidden information -- which is harder to do. It is something you take for granted with digital systems",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "physical hidden information",
+      "kind": "example",
+      "claim": "Plarl prints a whole dungeon level as one object with a maze base, an icon layer of damage or healing pips per room, and breakable doors the player pops off to reveal each room.",
+      "detail": "The red base layer encodes exits as a maze, the green layer carries 1-6 pips of one of two icons (damage or regain health), and the blue layer is the door. Rooms are kept to one centimeter, and the icons had to be simple because of that size.",
+      "t": 246,
+      "quote": "Above that is the green layers and the blue layers. And both of these are things you can physically pop off",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "theater of the mind",
+      "kind": "example",
+      "claim": "Plarl's minimal room contents leave a theater-of-the-mind element where players imagine the monster behind the damage they take.",
+      "detail": "In the playthrough Herbez kicks down doors, takes four damage, and jokes that the audience should imagine their favourite level 1 monster. He admits damage and health icons are hard to tell apart, which is room for improvement.",
+      "t": 328,
+      "quote": "There is still a theater of the mind aspect to this, right?",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "maze generation",
+      "kind": "technique",
+      "claim": "Plarl's maze generator fills the whole rectangular grid so the printed object's shape gives nothing away and wastes no plastic, and encodes each cell's exits as bit flags.",
+      "detail": "Based on the book 'Mazes for Programmers', exits are 1 north, 2 east, 4 south, 8 west, giving 0-15 per cell. Filling the full rectangle avoids revealing the layout through the artifact's silhouette and saves print time.",
+      "t": 512,
+      "quote": "I didn't want anything to be given away by the shape of the 3D printed artifact",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty curve",
+      "kind": "technique",
+      "claim": "Plarl splits rooms into thirds (empty, helpful, harmful) with 1-6 points of effect, and raises the maximum random value as the player moves north toward the exit.",
+      "detail": "Start is on the bottom row and the exit on the top, so moving north means progress. Early rooms deal one or two damage while rooms near the exit can deal up to six.",
+      "t": 592,
+      "quote": "I tweak the generation a little bit so the maximum range or the random value goes up as you go north",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "openscad",
+      "kind": "technique",
+      "claim": "OpenSCAD generates 3D-printable STL models directly from code in millimetre units, but its constant-only variables make substantial logic painful, so Herbez generates data in JavaScript and feeds it in.",
+      "detail": "He calls OpenSCAD the programmer's (and so the roguelike developer's) CAD modeller. Because the language is odd, he uses a two-step process and mentions Python bindings and OpenJSCAD as ways to improve it later.",
+      "t": 468,
+      "quote": "One of the things that's strange about it is that variables are all constant. If you want to do anything substantial it is quite a headache",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "3d printing",
+      "kind": "technique",
+      "claim": "Making Plarl's doors pop off satisfyingly requires designing for failure: printing exactly two-nozzle-width support tabs and using short bridging spans tuned to the printer.",
+      "detail": "On FDM printers resolution is set by nozzle width (typically 0.4mm) and layer height. You cannot print in midair except by short bridging, which is why rooms are one centimeter; the thin bridged lines give the door something to print on while staying fragile in exactly the right place.",
+      "t": 648,
+      "quote": "It is important to design for failure",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

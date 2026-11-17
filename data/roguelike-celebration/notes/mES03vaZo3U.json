@@ -1,0 +1,158 @@
+{
+  "id": "mES03vaZo3U",
+  "title": "George Moromisato: Creating a Modding System for Roguelikes",
+  "speaker": "George Moromisato",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=mES03vaZo3U",
+  "talk_type": "technical",
+  "summary": "George Moromisato, creator of Transcendence, shares lessons from building its modding system. He argues combinatorial complexity (items, monsters and effects interacting) is central to roguelikes and is exactly what makes them hard to mod, then compares three approaches: forking the code, a Dwarf Fortress-style simulation of forces and materials moddable by data files, and event-hook scripting systems as in Caves of Qud and Transcendence. He recommends multiple modding layers, designing for mods from the start, dogfooding the mod system for first-party content, leaving 'whitespace' in the world for modders, and treating modders as fellow developers. Q&A covers versioning for backwards compatibility and documentation embedded in code.",
+  "games": [
+    "Transcendence",
+    "NetHack",
+    "Dwarf Fortress",
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "combinatorial complexity",
+      "kind": "principle",
+      "claim": "Combinatorial complexity, where items, monsters, effects and special attacks interact so that mixing them produces new outcomes, is a critical feature of roguelikes that any modding system must support.",
+      "detail": "Moromisato asks what makes a good roguelike before asking what makes a good modding system, and singles out combinatorial complexity as the feature everyone would agree is critical.",
+      "t": 132,
+      "quote": "I want to focus on one specific feature of roguelikes that I think we would all agree is critical and that's combinatorial complexity",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "modding",
+      "kind": "warning",
+      "claim": "Hand-coded interaction matrices (if-statements per weapon-creature pair) break down under modding, because independently made mods cannot coordinate on what a new weapon does to a new creature.",
+      "detail": "Three swords times three creatures gives nine cases to program, e.g. a flaming sword doing extra damage to a yeti but something different to a dragon. If one mod adds a fireball and another adds a magic creature, nobody decides what the fireball does to that creature.",
+      "t": 326,
+      "quote": "If they come from different mods they can't coordinate so it is hard to figure out what the effect is",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "modding",
+      "kind": "history",
+      "claim": "Roguelikes have traditionally been modded by forking the source code, which works but limits modding to expert programmers and prevents users from combining mods.",
+      "detail": "NetHack and many variants came about through forking, adding new creatures and items with brand new code. It is easy for the developer (just open-source the code) but gets harder as games grow, excludes non-programmers, and forks cannot be freely combined.",
+      "t": 356,
+      "quote": "Roguelikes have rich history of creating new versions effectively mods I guess, total conversion pods, by forking the code",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "simulation",
+      "kind": "technique",
+      "claim": "Defining interactions in an engine as forces (piercing, bludgeoning, heat) acting on materials, and then defining items and monsters in those terms, solves combinatorial complexity and lets content be added via data files.",
+      "detail": "Moromisato offers this as an illustration of how Dwarf Fortress might work, not its literal implementation. A fireball just does heat damage and a magic creature has some material, and the engine decides the result; modders need no C++, and very sophisticated Dwarf Fortress mods exist purely through data files.",
+      "t": 483,
+      "quote": "the simulation engine, decides what happens when a certain force hits a certain material",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent bugs",
+      "kind": "warning",
+      "claim": "Simulation-based modding needs a complex engine that may take years to build, and the more complex the simulation the harder it is to predict outcomes, producing emergent bugs like Dwarf Fortress's drunk cats.",
+      "detail": "Moromisato notes even simpler simulations can get the data-driven benefits, but warns that with so many combinations you cannot always predict what inputs will do.",
+      "t": 686,
+      "quote": "You get emergent behavior but also emergent bugs",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "scripting events",
+      "kind": "technique",
+      "claim": "A scripting-based mod system can call mod hooks such as onAttack and onDefend between rolling damage and applying it, so independently written mods (a fireball, a magic creature) combine without coordinating.",
+      "detail": "In the attack code, after damage is rolled and before hit points are decremented, the engine calls mods that can inspect attacker, defender and damage and change it. The fireball mod handles onAttack and the creature mod handles onDefend; both are called when both mods are loaded. Caves of Qud (C#) and Transcendence use scripting like this.",
+      "t": 911,
+      "quote": "If they are both in the same game we call both events and it work and neither mod/programmer has to worry about them being combined",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "scripting events",
+      "kind": "warning",
+      "claim": "Scripting mod systems grow complicated as more hook points are added, and because mods run code they exercise the engine hard and surface engine bugs that crash the game.",
+      "detail": "In Transcendence, player requests led to buff events not just on the attacker but on the attacker's items, allies, and allies' items. Moromisato gets many crash reports that turn out to be mods doing unexpected things, making quality control a challenge.",
+      "t": 1013,
+      "quote": "if there are any bugs in the engine guarantee the mods will find it and you will crash the game",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "principle",
+      "claim": "Supporting multiple modding methods (data files plus scripting) widens the modding community beyond programmers to people contributing flavor text and graphics.",
+      "detail": "Dwarf Fortress pairs its simulation with a runtime way to modify game state; Caves of Qud and Transcendence also offer several ways to mod.",
+      "t": 1111,
+      "quote": "It helps to get a larger community. You don't just get programmers. You get people doing flavor text and graphics",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "modding",
+      "kind": "principle",
+      "claim": "Plan for modding from the start: it is much harder to retrofit, so at least put in some hooks and understand the basic architecture early.",
+      "detail": "Moromisato reports hearing this from Brian (Bucklew) of Caves of Qud and from Dwarf Fortress. You need not have everything worked out, only know you will do it.",
+      "t": 1128,
+      "quote": "you have to do at the start if you can. It is harder to retrofit",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "dogfooding",
+      "kind": "technique",
+      "claim": "Build your own first-party content with your modding system; it speeds content creation, exercises the system so modders hit fewer gaps, and modder-requested features often enable new official content.",
+      "detail": "Transcendence's content is all implemented in its modding system. Features modders ask for frequently turn out useful for adding new weapons or content to the base game.",
+      "t": 1185,
+      "quote": "If you are building a modding system in your roguelike use for your own first party content",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "technique",
+      "claim": "Leave deliberate 'whitespace' in the game world, such as unimplemented map regions or missing item tiers with only a hint of flavor, to entice modders to fill it in.",
+      "detail": "Transcendence's map has only central areas implemented in the base game, with other regions left for modders, perhaps labelled with a hint like 'the pirate realm'. It also skips some item marks (e.g. a Mark IV or VI) so players can imagine and mod them.",
+      "t": 1309,
+      "quote": "I love this concept of whitespace as a way of enticing players to do things",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "principle",
+      "claim": "Treat modders as equal co-developers and share as much as possible, including background on the setting and characters, so their content fits the world.",
+      "detail": "Moromisato says modding breaks the usual asymmetric developer-player relationship and teaches real-world skills (programming, design, writing, art). Brian Bucklew told him Caves of Qud hired one of its modders onto the development team.",
+      "t": 1371,
+      "quote": "treating those modders as equal and part of the development can play dividends",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "mod versioning",
+      "kind": "technique",
+      "claim": "Require mods to declare the API version they were built against from day one, so the engine can switch to old behaviors for compatibility when updates change things.",
+      "detail": "In Q&A, Moromisato says versioning must exist from the beginning because you cannot go back in time once you rev it; Transcendence modifies behavior based on a mod's version, which is expensive but sometimes worth it.",
+      "t": 1549,
+      "quote": "At least you need to know the version of the API that a particular mod was kind of built on",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "mod documentation",
+      "kind": "technique",
+      "claim": "Embed mod API documentation in the code that registers each script function, make it required to compile, and generate docs programmatically.",
+      "detail": "Moromisato wishes Transcendence had started this way. Its players also diff the generated function lists between versions to update a community wiki.",
+      "t": 1641,
+      "quote": "make sure that the documentation is embedded in the code",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

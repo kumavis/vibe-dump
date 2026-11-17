@@ -1,0 +1,139 @@
+{
+  "id": "jhcHlg7YhPg",
+  "title": "Brian Cronin: Black Box Sim for Roguelikes",
+  "speaker": "Brian Cronin",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=jhcHlg7YhPg",
+  "talk_type": "technical",
+  "summary": "Brian Cronin, engineer on Monster Train and Inkbound, presents the 'black box sim' gameplay architecture for roguelikes. Built on four principles — avoid reentrant code, avoid global state and singletons, strictly separate data, state, logic and presentation, and enforce top-down control — it isolates all game state in a single serializable world state, modified only by self-contained world commands that emit world state changes for the presentation layer to animate. He argues this structure makes determinism, save/load, networking, replays, undo/redo, accurate previews and testing far easier, citing Inkbound's headless server and replay-based bug reproduction. He notes it is overkill for jams and throwaway prototypes.",
+  "games": [
+    "Monster Train",
+    "Inkbound",
+    "Slumber Realm",
+    "Everseed",
+    "Wonderbelly"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "gameplay architecture",
+      "kind": "principle",
+      "claim": "Solid gameplay architecture is what makes determinism, save/load, networking, replays, undo/redo, effect previews and testing achievable in a roguelike.",
+      "detail": "Cronin lists these benefits up front. On Inkbound players could send (often automatically) replay files to reproduce bugs; Monster Train had a card-outcome preview that was difficult to implement because it lacked solid architecture.",
+      "t": 183,
+      "quote": "If you have great solid architecture you can achieve determinism",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "prototyping",
+      "kind": "warning",
+      "claim": "Throwaway prototypes and game jams don't need careful gameplay architecture, but even small roguelikes with multi-month schedules benefit from planning it.",
+      "detail": "For a few days of work Cronin doesn't think architecture is worth the time, but on a longer schedule, even for smallish roguelikes, it really pays off.",
+      "t": 297,
+      "quote": "Throw away prototypes and game jams all have something in common",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "reentrant code",
+      "kind": "warning",
+      "claim": "Manager classes that call back into each other (card manager to damage manager to upgrade manager and back) create reentrant spaghetti code with no ownership, making replays and networking hard.",
+      "detail": "His example: an upgrade 'when taking damage, discard the top card' causes the upgrade manager to call back into the card manager mid-play. Similarly an RTS barracks telling a unit manager to add a unit loses control of what happens next. He is strict about avoiding global state and singletons.",
+      "t": 481,
+      "quote": "The code is able to reenter. No concept of ownership. Avoid global state and singletons almost always",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data state separation",
+      "kind": "principle",
+      "claim": "The most important principle of the black box sim is strict separation of static data, mutable state, the logic that operates on state, and presentation.",
+      "detail": "Data (e.g. a tank definition) doesn't change and is loaded from disk or network; state (ten tank instances with different HP) lives in RAM; logic is player- or system-driven and acts on state; presentation (UI, animation, sound) tells the player what happened. Interfaces between them should be strict and clear.",
+      "t": 534,
+      "quote": "Strict separation of data from state, logic, and presentation",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "top-down control",
+      "kind": "principle",
+      "claim": "Control in the black box sim flows only one way: input and UI tell the sim what the player wants, and the sim never calls back up into them.",
+      "detail": "Cronin says the principles come from 16 years of building shoddy gameplay architecture. The sim is like an API with strictly formatted inputs and outputs in a predefined structure, not something poked at from every direction.",
+      "t": 631,
+      "quote": "There is never a case where we will callback up so the black box never needs community with them and it all flows in one direction",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "headless simulation",
+      "kind": "example",
+      "claim": "Because Inkbound's black box sim was isolated, its game server ran the simulation as a pure C# program without Unity, efficiently on Amazon EC2.",
+      "detail": "Cronin adds that an isolated sim could even be written in a different language than the engine, though usually you'd use the same one.",
+      "t": 738,
+      "quote": "the game server ran that black box sim without unity at all",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "world state",
+      "kind": "technique",
+      "claim": "The black box sim keeps all simulation state, including the RNG, in a single highly serializable world state structure, mostly integers keyed by entity.",
+      "detail": "His example holds player and enemy HP; his current game stores RNG, equipment, and per-unit stats like HP and defense as integers keyed by entity, with optional accessors and a read-only interface. He avoids floating point himself.",
+      "t": 811,
+      "quote": "World state I am talking about this orange box is a single structure containing all state and variables for your entire game simulation",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "command pattern",
+      "kind": "technique",
+      "claim": "In the black box sim, every state change goes through a self-contained, serializable world command whose resolve function takes a world state, and commands never create or call other commands.",
+      "detail": "A heal-once-per-turn command takes a target team and amount and is resolved against whatever world state is passed in, avoiding global state. Shared logic goes in static helper functions. Serialized commands are how Inkbound's networking worked.",
+      "t": 996,
+      "quote": "You will never create a world command inside another world command. Top-down control",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "event output",
+      "kind": "technique",
+      "claim": "World commands emit 'world state change' records containing everything presentation needs (e.g. unit healed, previous and new HP), and presentation learns about the world only through them.",
+      "detail": "They drive VFX, animation and sound and are never read inside the sim. Because commands resolve instantly, any change that needs animating must be fully encapsulated in a state change. Cronin displays them with a big switch statement.",
+      "t": 1211,
+      "quote": "the presentation can only know about the world from the world state changes",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "animation sequencing",
+      "kind": "technique",
+      "claim": "The black box sim has no concept of time; the presentation layer sequences animations from the emitted state changes after the simulation has already finished.",
+      "detail": "Players need animation to comprehend what happened, so the card play, unit move and sword swing are sequenced over time, unidirectionally; by the time animations play the commands and changes are gone and the animations are self-sufficient. Cronin admits he isn't fully happy with his animation side.",
+      "t": 1336,
+      "quote": "There is no concept of time or animation in the black box. It is a computing machine",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "save and replay",
+      "kind": "technique",
+      "claim": "With centralized world state, save/load is serializing one structure, networking syncs world commands, and replays store the initial state plus commands (or just the state changes).",
+      "detail": "Animation and player input usually break determinism, but they are outputs or inputs outside the sim. Inkbound synchronized world commands with very low bandwidth. Bugs can be reproduced by checking out a git commit and running the sim until the same error appears.",
+      "t": 1533,
+      "quote": "You can serialize the world commands and the initial world state to regenerate the replay",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "effect preview",
+      "kind": "technique",
+      "claim": "A black box sim makes accurate action previews easy: copy the world state, run the command on the copy, and read the resulting state changes to show e.g. total damage.",
+      "detail": "Because it runs the normal code, the preview accounts for all effects including passive relic-style effects. Undo works similarly by saving the world state at turn start and copying it back. Custom world states also allow tests that run commands and verify emitted changes.",
+      "t": 1624,
+      "quote": "It would be entirely accurate considering all game effects. You might have passive relic style effects",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

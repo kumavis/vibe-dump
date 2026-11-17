@@ -1,0 +1,187 @@
+{
+  "id": "E5-3Ui7oO8U",
+  "title": "Kate Compton- Polite Programming Languages: Designing a Generative Language without a PL Degree",
+  "speaker": "Kate Compton",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=E5-3Ui7oO8U",
+  "talk_type": "technical",
+  "summary": "Kate Compton, creator of Tracery, argues that roguelike developers are often already writing domain-specific programming languages (data files, save formats, content grammars) and that designing such languages is a way of thinking deeply about what a game is. She gives a fast 'raw certificate course' on what a language is: programs, parsers, compilers, engines, IDEs, specifications and tools, forming an ecosystem rather than a single artifact. She proposes 'Compton completeness' (can you make something meaningful in an hour on hand devices and share it on a platform) and properties of 'polite' language ecosystems: scaffolding, structure editors, unfoldable syntax, embeddability and safety. She ends with Tracery's journey toward modularity, including over-engineered detours, Artbot Club, the chatbot language Chancery, and blackboards as glue.",
+  "games": [
+    "The Sims",
+    "Caves of Qud",
+    "Stardew Valley"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "domain-specific languages",
+      "kind": "principle",
+      "claim": "Designing a domain-specific language is a way to think deeply about a game genre, by asking what its unit operations are and what should be first-class words.",
+      "detail": "Compton describes her languages Tracery, Tracery 2, Chancery and the speculative Greenery (for idle games): working on them means asking what an idle game or roguelike is and which operations you cannot express well in Python.",
+      "t": 504,
+      "quote": "what are the unit operations of an idle game or a Roguelike that I can't",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "advertisement ai",
+      "kind": "example",
+      "claim": "The Sims stored object behaviour in an editable language where objects advertise what they will provide separately from what they actually provide, which let fans make a cigarette table that lured Sims to smoke forever.",
+      "detail": "Compton notes The Sims kept UI and AI in external files that players hacked and reuploaded even in Sims 1, getting people editing tiny programlets at a time when live editing was hard. The fan-made cigarette table advertised reducing loneliness but didn't deliver.",
+      "t": 453,
+      "quote": "The Sim language object had a whole thing about what it was advertising versus what it would provide",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "example",
+      "claim": "Because The Sims kept much of its UI and AI in accessible external files, players could hack and reupload these small programs, opening up modding.",
+      "detail": "Compton contrasts this with how hard it was around 2000 to edit a program on the fly; Sims hacking got people writing tiny programlets.",
+      "t": 406,
+      "quote": "It turns out the Sims had a bunch of their UI and a bunch of their AI stored in external files or files you could get access to",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven design",
+      "kind": "principle",
+      "claim": "Any file a roguelike uses to control program flow, including a homemade save or data format, is a programming language, and it reflects what the game needs and is about.",
+      "detail": "Compton tells roguelike developers they have probably already written one: it may have first-class constructs for things only your game has, such as the number of eggs you have, or macros that make things easier.",
+      "t": 531,
+      "quote": "If a computer uses a file to control program flow that file is a programming language",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "learning",
+      "kind": "principle",
+      "claim": "Aim for the 95% of the fun reachable with 5% of the required knowledge, and offer a 'takeout' model where people grab what they need from AI or computer science and return to their lives.",
+      "detail": "Compton contrasts this with 'unlocking the clubhouse' and bringing everyone into CS; many people are happy where they are. Knowledge is fractal and there is too much to learn, so getting most of the fun without a PhD is the goal.",
+      "t": 241,
+      "quote": "figuring out the 95% of the fun you can do with only 5% of the required knowledge",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "language ecosystems",
+      "kind": "principle",
+      "claim": "A programming language is not just syntax but an ecosystem of programs, parsers, compilers, engines, IDEs, specifications, tools and the people controlling them.",
+      "detail": "Compton walks through each part: Tracery grammars and Stardew Valley config files are programs; parsers produce syntax trees; engines run them; IDEs add linting, autocompletion and social sharing. Who controls each part varies (authors, corporations, volunteers).",
+      "t": 1091,
+      "quote": "it is made out of a bunch of stuff because it is an ecosystem of connected components. A language is all this stuff",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "language design",
+      "kind": "principle",
+      "claim": "Beyond formal properties, the informal properties of a language matter most to creators: is it easy to write, can you remember what a program does, can it be used in strange places, does it run on your device.",
+      "detail": "Compton gives Lua as an example of a language usable in many places, originally made for Brazilian power plants and now in Roblox. Running on your machine is not obvious if you only have a bad cellphone.",
+      "t": 1140,
+      "quote": "I remember what my program does after I have written it. I can use the language in strange places",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "tracery",
+      "kind": "principle",
+      "claim": "Compton completeness asks whether someone can make something in an hour with devices on hand and connect it to a platform with meaning; Tracery alone isn't, but with editors and bot-hosting sites it is.",
+      "detail": "Tracery with artbot.club or the spiral editor, Twitter and Cheap Bots Done Quick together complete the ecosystem. Compton stresses always considering the environment in which programs are written.",
+      "t": 1178,
+      "quote": "Tracery is not complete. However, tracery with artbot.club or the spiral editor and with Twitter and with cheap bots done quick all those help complete the ecosystem",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "scaffolding",
+      "kind": "technique",
+      "claim": "Polite language ecosystems scaffold the user, showing available parts, code completion, coloring and auto-indent so they know what to do and when they've done it right.",
+      "detail": "Compton contrasts this with opening a blank editor like vi where nothing tells you what to do or whether you're wrong.",
+      "t": 1249,
+      "quote": "Scaffolding can be showing you all of the parts and code completion or code coloring",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "structure editors",
+      "kind": "technique",
+      "claim": "Structure editors like Scratch only offer pieces that snap together validly, so beginners literally cannot produce an error.",
+      "detail": "Compton calls this a great entry level for people who don't want to deal with errors yet; they can deal with errors later.",
+      "t": 1272,
+      "quote": "You cannot in fact make a scratch that doesn't compile because not only do you only have access to the pieces that will work",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "unfoldable syntax",
+      "kind": "technique",
+      "claim": "Unfoldable languages like HTML and Tracery let beginners start with plain text and progressively unfold more complex syntax, each step taking minutes or years to learn.",
+      "detail": "In HTML you can type plaintext, then add bold, then links. Many Tracery users only write hashtags while others reach complicated syntax. Compton says Caves of Qud's data is not currently very unfolded.",
+      "t": 1305,
+      "quote": "An unfoldable language you might recognize as in HTML you can type plaintext and say this is my web page",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "embeddable languages",
+      "kind": "principle",
+      "claim": "Little languages are polite when they can squeeze in anywhere and safely run user-provided code; Cheap Bots Done Quick relies on Tracery being mostly safe.",
+      "detail": "Compton notes base Tracery is small enough that students port it to C as an intro assignment, and asks whether a language can be called asynchronously and whether it can run untrusted user code.",
+      "t": 1401,
+      "quote": "Can you run user provided code safely? Tracery is mostly safe. Cheap bots done quick relies on that",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "modularity",
+      "kind": "example",
+      "claim": "Separating Tracery's engine from its parser and tools let others build on it, notably George Buckingham's Cheap Bots Done Quick.",
+      "detail": "Tracery began as JavaScript with grammars stored as JSON; breaking out an engine made it reusable. Compton also built many tools, most of which she says were never that useful.",
+      "t": 1466,
+      "quote": "I broke things out into an engine. George buckingham could use it to make cheap bots done quick",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "syntax specification",
+      "kind": "technique",
+      "claim": "Railroad diagrams explicitly model a language's syntax and are a step toward a specification.",
+      "detail": "Compton used them toward a Tracery specification, which is not done because she keeps iterating on the diagrams.",
+      "t": 1495,
+      "quote": "they are ways to explicitly model what your program syntax is",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "overengineering",
+      "kind": "warning",
+      "claim": "Compton's specification-driven parser for any Tracery-like language, which could generate programs and auto-build editors, was overly complicated and probably not useful.",
+      "detail": "The idea was to write tools for all theoretical Tracery-like languages rather than Tracery itself. She changed direction after it, and admits to doing 'too much parsing' because parse visualizations are fun.",
+      "t": 1557,
+      "quote": "This was way overly complicated and probably not that useful until I changed directions after this",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "modularity",
+      "kind": "warning",
+      "claim": "Compton's chatbot language Chancery initially bundled IDE, simulator and visualizations too tightly for anyone to reuse parts, so she split it so the engine can be used on its own.",
+      "detail": "Chancery's IDE was open-sourced by Google while she worked on the Google Assistant and has a simulator and state-map diagram; it was later broken into sections so you can get the engine that simulates a chat.",
+      "t": 1643,
+      "quote": "It was too smashed for anybody to pull anything out saying I just want the simulator",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "blackboards",
+      "kind": "technique",
+      "claim": "Blackboards, a shared space every program reads and writes in its own way, let Chancery, Tracery and even a MIDI controller jointly drive a virtual character.",
+      "detail": "Compton used this for a virtual character for a Swedish ambient album: Chancery handles dialogue, Tracery generates text, and a MIDI controller can also control the puppet through the blackboard.",
+      "t": 1738,
+      "quote": "Blackboards which are a concept of AI which mean a space that every program can read from and write to in their own way",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

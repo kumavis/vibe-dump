@@ -1,0 +1,4091 @@
+{
+ "id": "5y_IAdOwaYs",
+ "url": "https://www.youtube.com/watch?v=5y_IAdOwaYs",
+ "title": "Alexei Pepers - Nethack: Tech Tourist Mode",
+ "speaker": "Alexei Pepers",
+ "talk_title": "Nethack: Tech Tourist Mode",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-10",
+ "duration_s": 1811,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - http://roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 136,
+   "title": "String Concatenation"
+  },
+  {
+   "start": 185,
+   "title": "String Kitten"
+  },
+  {
+   "start": 203,
+   "title": "Tack Type Hug"
+  },
+  {
+   "start": 261,
+   "title": "Dogs"
+  },
+  {
+   "start": 272,
+   "title": "Make Dog"
+  },
+  {
+   "start": 301,
+   "title": "Evolution of Nethack"
+  },
+  {
+   "start": 355,
+   "title": "Hmong spaces"
+  },
+  {
+   "start": 380,
+   "title": "Community references"
+  },
+  {
+   "start": 413,
+   "title": "Junior PacMan"
+  },
+  {
+   "start": 436,
+   "title": "Trident"
+  },
+  {
+   "start": 458,
+   "title": "Learning from the Masters"
+  },
+  {
+   "start": 525,
+   "title": "Nethacks Comments"
+  },
+  {
+   "start": 567,
+   "title": "Game Design Considerations"
+  },
+  {
+   "start": 636,
+   "title": "Narrative Considerations"
+  },
+  {
+   "start": 697,
+   "title": "Sacrifices"
+  },
+  {
+   "start": 716,
+   "title": "Comments"
+  },
+  {
+   "start": 745,
+   "title": "Body Parts"
+  },
+  {
+   "start": 844,
+   "title": "Exceptions"
+  },
+  {
+   "start": 861,
+   "title": "Function naming"
+  },
+  {
+   "start": 913,
+   "title": "ASCII diagrams"
+  },
+  {
+   "start": 964,
+   "title": "Other examples"
+  },
+  {
+   "start": 1011,
+   "title": "Code is flexible"
+  },
+  {
+   "start": 1138,
+   "title": "Dev wisdom"
+  },
+  {
+   "start": 1203,
+   "title": "Dev frustration"
+  },
+  {
+   "start": 1247,
+   "title": "Looking through the code"
+  },
+  {
+   "start": 1281,
+   "title": "Popeye"
+  },
+  {
+   "start": 1339,
+   "title": "Nethack Wiki"
+  },
+  {
+   "start": 1384,
+   "title": "Nethack Source Code"
+  },
+  {
+   "start": 1440,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5763,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.55,
+   "d": 3.19,
+   "text": "all right thank you so this is my tech"
+  },
+  {
+   "t": 4.74,
+   "d": 2.55,
+   "text": "tourist mode a guide to the net hack"
+  },
+  {
+   "t": 7.29,
+   "d": 2.46,
+   "text": "codebase aka I learned see so you don't"
+  },
+  {
+   "t": 9.75,
+   "d": 3.96,
+   "text": "have to so your tour guide today my name"
+  },
+  {
+   "t": 13.71,
+   "d": 2.4,
+   "text": "is Alexi peppers or at am peppers on"
+  },
+  {
+   "t": 16.11,
+   "d": 2.13,
+   "text": "Twitter I am a technical designer at"
+  },
+  {
+   "t": 18.24,
+   "d": 1.5,
+   "text": "improbable Canada and I've been"
+  },
+  {
+   "t": 19.74,
+   "d": 1.74,
+   "text": "realizing no one knows what that is to"
+  },
+  {
+   "t": 21.48,
+   "d": 2.79,
+   "text": "be fair it's a new studio short short"
+  },
+  {
+   "t": 24.27,
+   "d": 1.92,
+   "text": "elevator pitch improbable makes facial"
+  },
+  {
+   "t": 26.19,
+   "d": 1.71,
+   "text": "OS which is this cloud-based platform"
+  },
+  {
+   "t": 27.9,
+   "d": 2.52,
+   "text": "for like massively persistent scalable"
+  },
+  {
+   "t": 30.42,
+   "d": 2.19,
+   "text": "online games I mentioned this because"
+  },
+  {
+   "t": 32.61,
+   "d": 3.09,
+   "text": "like a were hiring being I would love to"
+  },
+  {
+   "t": 35.7,
+   "d": 1.98,
+   "text": "see a roguelike on special OS man"
+  },
+  {
+   "t": 37.68,
+   "d": 2.1,
+   "text": "someone look into it this is just a"
+  },
+  {
+   "t": 39.78,
+   "d": 3.0,
+   "text": "personal thing I want and more important"
+  },
+  {
+   "t": 42.78,
+   "d": 1.26,
+   "text": "to this talk is that I am a lifelong"
+  },
+  {
+   "t": 44.04,
+   "d": 4.68,
+   "text": "nethack fan so despite my age which is"
+  },
+  {
+   "t": 48.72,
+   "d": 1.32,
+   "text": "the hack was a little bit before my time"
+  },
+  {
+   "t": 50.04,
+   "d": 3.42,
+   "text": "but my mom loves nethack and she played"
+  },
+  {
+   "t": 53.46,
+   "d": 2.67,
+   "text": "it when it was newer and so when I was"
+  },
+  {
+   "t": 56.13,
+   "d": 2.28,
+   "text": "just a little child I could talk to her"
+  },
+  {
+   "t": 58.41,
+   "d": 2.13,
+   "text": "about net hack and then you know long"
+  },
+  {
+   "t": 60.54,
+   "d": 1.83,
+   "text": "before I had access to the net hack wiki"
+  },
+  {
+   "t": 62.37,
+   "d": 2.1,
+   "text": "if I was having trouble I could go pull"
+  },
+  {
+   "t": 64.47,
+   "d": 2.22,
+   "text": "on her apron strings and say hey mom I"
+  },
+  {
+   "t": 66.69,
+   "d": 1.83,
+   "text": "keep dying of starvation what should I"
+  },
+  {
+   "t": 68.52,
+   "d": 1.56,
+   "text": "do and she'd say well darling have you"
+  },
+  {
+   "t": 70.08,
+   "d": 4.83,
+   "text": "tried eating corpses I was also a"
+  },
+  {
+   "t": 74.91,
+   "d": 2.31,
+   "text": "speaker at roguelike celebration 2016 or"
+  },
+  {
+   "t": 77.22,
+   "d": 1.95,
+   "text": "I've met some of you I was talking about"
+  },
+  {
+   "t": 79.17,
+   "d": 2.22,
+   "text": "making roguelike games in particularly"
+  },
+  {
+   "t": 81.39,
+   "d": 1.77,
+   "text": "nethack more accessible for visually"
+  },
+  {
+   "t": 83.16,
+   "d": 3.18,
+   "text": "impaired players which was a great talk"
+  },
+  {
+   "t": 86.34,
+   "d": 3.84,
+   "text": "and in the process of that I was looking"
+  },
+  {
+   "t": 90.18,
+   "d": 2.04,
+   "text": "into making changes to the net Hawk"
+  },
+  {
+   "t": 92.22,
+   "d": 2.79,
+   "text": "codebase to make it more accessible you"
+  },
+  {
+   "t": 95.01,
+   "d": 2.49,
+   "text": "can find that talk online on the"
+  },
+  {
+   "t": 97.5,
+   "d": 1.2,
+   "text": "roguelike youtube channel and things"
+  },
+  {
+   "t": 98.7,
+   "d": 1.8,
+   "text": "like that but the point was that I went"
+  },
+  {
+   "t": 100.5,
+   "d": 2.91,
+   "text": "through the net Hawk codebase which was"
+  },
+  {
+   "t": 103.41,
+   "d": 1.32,
+   "text": "a really interesting experience for me"
+  },
+  {
+   "t": 104.73,
+   "d": 1.26,
+   "text": "as someone who'd always been a fan of"
+  },
+  {
+   "t": 105.99,
+   "d": 2.31,
+   "text": "nethack and I noticed so many"
+  },
+  {
+   "t": 108.3,
+   "d": 1.62,
+   "text": "interesting things that that was kind of"
+  },
+  {
+   "t": 109.92,
+   "d": 1.92,
+   "text": "where I started wanting to do this talk"
+  },
+  {
+   "t": 111.84,
+   "d": 1.35,
+   "text": "and I'm glad to finally get the chance"
+  },
+  {
+   "t": 113.19,
+   "d": 2.94,
+   "text": "to because the codebase is actually"
+  },
+  {
+   "t": 116.13,
+   "d": 1.35,
+   "text": "fairly accessible which I'll be talking"
+  },
+  {
+   "t": 117.48,
+   "d": 2.34,
+   "text": "about but it's kind of intimidating and"
+  },
+  {
+   "t": 119.82,
+   "d": 2.22,
+   "text": "it takes a certain amount of confidence"
+  },
+  {
+   "t": 122.04,
+   "d": 2.16,
+   "text": "in your technical abilities to say I'm"
+  },
+  {
+   "t": 124.2,
+   "d": 1.35,
+   "text": "gonna pull down the source code and have"
+  },
+  {
+   "t": 125.55,
+   "d": 2.52,
+   "text": "a look so I'm gonna show off the things"
+  },
+  {
+   "t": 128.07,
+   "d": 1.35,
+   "text": "that I found that we're particularly"
+  },
+  {
+   "t": 129.42,
+   "d": 2.91,
+   "text": "funny or interesting to highlight it's"
+  },
+  {
+   "t": 132.33,
+   "d": 1.17,
+   "text": "in case you don't have the"
+  },
+  {
+   "t": 133.5,
+   "d": 1.17,
+   "text": "to go through the source code yourself"
+  },
+  {
+   "t": 134.67,
+   "d": 2.61,
+   "text": "even though I encourage you to and the"
+  },
+  {
+   "t": 137.28,
+   "d": 1.38,
+   "text": "start of all of this and this is one of"
+  },
+  {
+   "t": 138.66,
+   "d": 1.26,
+   "text": "the only ones that involve some"
+  },
+  {
+   "t": 139.92,
+   "d": 1.62,
+   "text": "technical background because mostly I'm"
+  },
+  {
+   "t": 141.54,
+   "d": 2.67,
+   "text": "keeping it very tech light but there's a"
+  },
+  {
+   "t": 144.21,
+   "d": 2.16,
+   "text": "concept called string concatenation and"
+  },
+  {
+   "t": 146.37,
+   "d": 3.48,
+   "text": "it's very simple you have strings which"
+  },
+  {
+   "t": 149.85,
+   "d": 2.52,
+   "text": "are like text and concatenating is"
+  },
+  {
+   "t": 152.37,
+   "d": 1.62,
+   "text": "sticking two of them together to make a"
+  },
+  {
+   "t": 153.99,
+   "d": 2.61,
+   "text": "new string so you take net and hack you"
+  },
+  {
+   "t": 156.6,
+   "d": 2.4,
+   "text": "making that hack and because programmers"
+  },
+  {
+   "t": 159.0,
+   "d": 1.83,
+   "text": "love to take all the vowels out of"
+  },
+  {
+   "t": 160.83,
+   "d": 2.25,
+   "text": "things so that they have as much screen"
+  },
+  {
+   "t": 163.08,
+   "d": 2.25,
+   "text": "space as possible this is usually"
+  },
+  {
+   "t": 165.33,
+   "d": 3.27,
+   "text": "shortened to string cat or STR cat and"
+  },
+  {
+   "t": 168.6,
+   "d": 2.31,
+   "text": "now in nethack they have a little"
+  },
+  {
+   "t": 170.91,
+   "d": 2.52,
+   "text": "optimization which is that if instead of"
+  },
+  {
+   "t": 173.43,
+   "d": 2.64,
+   "text": "concatenating two full strings you just"
+  },
+  {
+   "t": 176.07,
+   "d": 2.01,
+   "text": "have a string and a single character you"
+  },
+  {
+   "t": 178.08,
+   "d": 2.16,
+   "text": "can do that in an optimized way relying"
+  },
+  {
+   "t": 180.24,
+   "d": 1.38,
+   "text": "on the fact that one of them is shorter"
+  },
+  {
+   "t": 181.62,
+   "d": 2.46,
+   "text": "so this is a special optimized function"
+  },
+  {
+   "t": 184.08,
+   "d": 3.23,
+   "text": "and what is it called string kitten"
+  },
+  {
+   "t": 187.31,
+   "d": 4.21,
+   "text": "because it's a little string cat this is"
+  },
+  {
+   "t": 191.52,
+   "d": 1.98,
+   "text": "the cutest function name I've ever seen"
+  },
+  {
+   "t": 193.5,
+   "d": 2.55,
+   "text": "in my life and when I saw this in the"
+  },
+  {
+   "t": 196.05,
+   "d": 1.8,
+   "text": "code I thought I have to give a talk and"
+  },
+  {
+   "t": 197.85,
+   "d": 1.26,
+   "text": "make sure that as many people as"
+  },
+  {
+   "t": 199.11,
+   "d": 1.5,
+   "text": "possible know that the string kitten"
+  },
+  {
+   "t": 200.61,
+   "d": 4.08,
+   "text": "function exists and so along that vein"
+  },
+  {
+   "t": 204.69,
+   "d": 1.59,
+   "text": "if you've ever been playing that hawk"
+  },
+  {
+   "t": 206.28,
+   "d": 1.68,
+   "text": "and you were crushed to death by an al"
+  },
+  {
+   "t": 207.96,
+   "d": 1.77,
+   "text": "bear or a snake I have good news you"
+  },
+  {
+   "t": 209.73,
+   "d": 3.27,
+   "text": "weren't crushed you were hugged hugged"
+  },
+  {
+   "t": 213.0,
+   "d": 3.95,
+   "text": "to death because it is a tack type hug"
+  },
+  {
+   "t": 216.95,
+   "d": 2.29,
+   "text": "do you need to know if you're engraving"
+  },
+  {
+   "t": 219.24,
+   "d": 2.22,
+   "text": "in slime just check if the jello boolean"
+  },
+  {
+   "t": 221.46,
+   "d": 3.75,
+   "text": "has been set to true and along that line"
+  },
+  {
+   "t": 225.21,
+   "d": 1.59,
+   "text": "if you want to know how an animal grows"
+  },
+  {
+   "t": 226.8,
+   "d": 2.37,
+   "text": "up if a little dog comes a big big dog"
+  },
+  {
+   "t": 229.17,
+   "d": 3.15,
+   "text": "check the grown-ups array make sure to"
+  },
+  {
+   "t": 232.32,
+   "d": 2.01,
+   "text": "reference cuddly to know if it's an item"
+  },
+  {
+   "t": 234.33,
+   "d": 4.2,
+   "text": "that you can use the rub action on don't"
+  },
+  {
+   "t": 238.53,
+   "d": 3.21,
+   "text": "forget to rename disco and don't get"
+  },
+  {
+   "t": 241.74,
+   "d": 2.76,
+   "text": "confused between kick object and really"
+  },
+  {
+   "t": 244.5,
+   "d": 2.51,
+   "text": "kick objects"
+  },
+  {
+   "t": 247.01,
+   "d": 2.77,
+   "text": "now I will say nethack dev team if"
+  },
+  {
+   "t": 249.78,
+   "d": 1.77,
+   "text": "you're watching I'm not putting you on"
+  },
+  {
+   "t": 251.55,
+   "d": 2.16,
+   "text": "blast I swear I just like this is really"
+  },
+  {
+   "t": 253.71,
+   "d": 3.66,
+   "text": "fun nethack also has an interesting"
+  },
+  {
+   "t": 257.37,
+   "d": 3.63,
+   "text": "relationship with the concept of dogs if"
+  },
+  {
+   "t": 261.0,
+   "d": 2.88,
+   "text": "you have any type of pet their behavior"
+  },
+  {
+   "t": 263.88,
+   "d": 1.83,
+   "text": "is handled in one of two files dogs"
+  },
+  {
+   "t": 265.71,
+   "d": 1.12,
+   "text": "Eeyore"
+  },
+  {
+   "t": 266.83,
+   "d": 3.24,
+   "text": "mooove dot c so if you want to have a"
+  },
+  {
+   "t": 270.07,
+   "d": 3.33,
+   "text": "new pet you have to call make dog if you"
+  },
+  {
+   "t": 273.4,
+   "d": 1.35,
+   "text": "want to make sure they stay with you and"
+  },
+  {
+   "t": 274.75,
+   "d": 1.47,
+   "text": "your transition levels you called keep"
+  },
+  {
+   "t": 276.22,
+   "d": 3.12,
+   "text": "dog you need to know if you have the"
+  },
+  {
+   "t": 279.34,
+   "d": 2.16,
+   "text": "right kind of dog food which you know if"
+  },
+  {
+   "t": 281.5,
+   "d": 3.48,
+   "text": "your pet is a a white or a gold dog food"
+  },
+  {
+   "t": 284.98,
+   "d": 3.06,
+   "text": "is corpses or rotten eggs you have an"
+  },
+  {
+   "t": 288.04,
+   "d": 2.85,
+   "text": "array of my dogs again this can be you"
+  },
+  {
+   "t": 290.89,
+   "d": 4.46,
+   "text": "know dragons elves and don't tell PETA"
+  },
+  {
+   "t": 295.35,
+   "d": 2.98,
+   "text": "but an arrant kick results in a call to"
+  },
+  {
+   "t": 298.33,
+   "d": 5.04,
+   "text": "the abused dog function now something I"
+  },
+  {
+   "t": 303.37,
+   "d": 1.86,
+   "text": "also find interesting about the nethack"
+  },
+  {
+   "t": 305.23,
+   "d": 2.22,
+   "text": "code base and this is a really like"
+  },
+  {
+   "t": 307.45,
+   "d": 4.2,
+   "text": "mileage may vary one in that it is you"
+  },
+  {
+   "t": 311.65,
+   "d": 1.89,
+   "text": "know been in development for a very long"
+  },
+  {
+   "t": 313.54,
+   "d": 2.61,
+   "text": "time it was originally from back in the"
+  },
+  {
+   "t": 316.15,
+   "d": 2.91,
+   "text": "eighties and so you can see the"
+  },
+  {
+   "t": 319.06,
+   "d": 2.07,
+   "text": "evolution of not just the code but of"
+  },
+  {
+   "t": 321.13,
+   "d": 2.49,
+   "text": "time passing as you look at the source"
+  },
+  {
+   "t": 323.62,
+   "d": 3.03,
+   "text": "code one of the more clear examples"
+  },
+  {
+   "t": 326.65,
+   "d": 2.31,
+   "text": "being that the original year-month-day"
+  },
+  {
+   "t": 328.96,
+   "d": 3.06,
+   "text": "function could not handle dates in the"
+  },
+  {
+   "t": 332.02,
+   "d": 3.3,
+   "text": "21st century it was hard-coded in to"
+  },
+  {
+   "t": 335.32,
+   "d": 2.7,
+   "text": "start with nineteen and that has now"
+  },
+  {
+   "t": 338.02,
+   "d": 2.13,
+   "text": "just been commented out because you know"
+  },
+  {
+   "t": 340.15,
+   "d": 1.29,
+   "text": "who would have thought that nethack"
+  },
+  {
+   "t": 341.44,
+   "d": 1.95,
+   "text": "would still be played in the 21st"
+  },
+  {
+   "t": 343.39,
+   "d": 2.34,
+   "text": "century I mean I think that we knew but"
+  },
+  {
+   "t": 345.73,
+   "d": 2.67,
+   "text": "and you might also find other cultural"
+  },
+  {
+   "t": 348.4,
+   "d": 1.68,
+   "text": "references and you know for some people"
+  },
+  {
+   "t": 350.08,
+   "d": 2.88,
+   "text": "maybe this is like a reminder back of"
+  },
+  {
+   "t": 352.96,
+   "d": 1.44,
+   "text": "the good old days and for people like me"
+  },
+  {
+   "t": 354.4,
+   "d": 2.55,
+   "text": "you learn something new for example I"
+  },
+  {
+   "t": 356.95,
+   "d": 2.37,
+   "text": "found a function called Hmong spaces and"
+  },
+  {
+   "t": 359.32,
+   "d": 3.03,
+   "text": "I thought what the hell is a Hmong turns"
+  },
+  {
+   "t": 362.35,
+   "d": 1.59,
+   "text": "out it's a terminology from the tech"
+  },
+  {
+   "t": 363.94,
+   "d": 2.79,
+   "text": "Model Railroad Club at MIT standing for"
+  },
+  {
+   "t": 366.73,
+   "d": 2.49,
+   "text": "mash until no good or Hmong until no"
+  },
+  {
+   "t": 369.22,
+   "d": 1.98,
+   "text": "good and typical programmer recursive"
+  },
+  {
+   "t": 371.2,
+   "d": 2.91,
+   "text": "humor and so that's like a new hacker"
+  },
+  {
+   "t": 374.11,
+   "d": 2.55,
+   "text": "vocabulary I'm gonna start using to be"
+  },
+  {
+   "t": 376.66,
+   "d": 5.64,
+   "text": "cool like the eighties there's also some"
+  },
+  {
+   "t": 382.3,
+   "d": 2.34,
+   "text": "cool community references like who here"
+  },
+  {
+   "t": 384.64,
+   "d": 2.91,
+   "text": "has participated in the Devon all that"
+  },
+  {
+   "t": 387.55,
+   "d": 1.41,
+   "text": "hack tournament at some point in their"
+  },
+  {
+   "t": 388.96,
+   "d": 0.57,
+   "text": "lives"
+  },
+  {
+   "t": 389.53,
+   "d": 2.7,
+   "text": "maybe some people no one was indefinite"
+  },
+  {
+   "t": 392.23,
+   "d": 2.31,
+   "text": "okay a few hands did you know that"
+  },
+  {
+   "t": 394.54,
+   "d": 2.58,
+   "text": "there's special code to handle the most"
+  },
+  {
+   "t": 397.12,
+   "d": 2.42,
+   "text": "unique deaths competition at Devon all"
+  },
+  {
+   "t": 399.54,
+   "d": 1.07,
+   "text": "specifically"
+  },
+  {
+   "t": 400.61,
+   "d": 2.25,
+   "text": "not letting you spoof slime mold fruit"
+  },
+  {
+   "t": 402.86,
+   "d": 2.22,
+   "text": "names in order to fake more interesting"
+  },
+  {
+   "t": 405.08,
+   "d": 3.26,
+   "text": "deaths so it's neat to see evolution of"
+  },
+  {
+   "t": 408.34,
+   "d": 3.04,
+   "text": "community integrated into the source"
+  },
+  {
+   "t": 411.38,
+   "d": 3.24,
+   "text": "code itself and there's interesting"
+  },
+  {
+   "t": 414.62,
+   "d": 3.18,
+   "text": "cultural references such as this very"
+  },
+  {
+   "t": 417.8,
+   "d": 2.01,
+   "text": "accessible reference to Junior pac-man"
+  },
+  {
+   "t": 419.81,
+   "d": 2.73,
+   "text": "in terms of being able to see pellets"
+  },
+  {
+   "t": 422.54,
+   "d": 1.56,
+   "text": "being eaten when they're on screen for"
+  },
+  {
+   "t": 424.1,
+   "d": 1.44,
+   "text": "one thing I thought pac-man was always"
+  },
+  {
+   "t": 425.54,
+   "d": 2.97,
+   "text": "only one screen and pac-man yes Mik miss"
+  },
+  {
+   "t": 428.51,
+   "d": 2.28,
+   "text": "pac-man also yes but I didn't know there"
+  },
+  {
+   "t": 430.79,
+   "d": 2.13,
+   "text": "was a junior pac-man maybe that just"
+  },
+  {
+   "t": 432.92,
+   "d": 2.07,
+   "text": "says more about me then about anything"
+  },
+  {
+   "t": 434.99,
+   "d": 2.76,
+   "text": "else but sometimes there's also the"
+  },
+  {
+   "t": 437.75,
+   "d": 2.16,
+   "text": "opposite such as this comment explaining"
+  },
+  {
+   "t": 439.91,
+   "d": 3.0,
+   "text": "a joke about Trident chewing gum saying"
+  },
+  {
+   "t": 442.91,
+   "d": 1.65,
+   "text": "it was a sugarless chewing gum which"
+  },
+  {
+   "t": 444.56,
+   "d": 2.52,
+   "text": "used to be heavily advertised on TV I"
+  },
+  {
+   "t": 447.08,
+   "d": 2.67,
+   "text": "think fair to say we still know what"
+  },
+  {
+   "t": 449.75,
+   "d": 2.19,
+   "text": "Trident is though I did a little bit of"
+  },
+  {
+   "t": 451.94,
+   "d": 2.58,
+   "text": "looking and the old commercials are a"
+  },
+  {
+   "t": 454.52,
+   "d": 1.95,
+   "text": "little bit more frightening than I"
+  },
+  {
+   "t": 456.47,
+   "d": 5.04,
+   "text": "remembered but it's not all just fun and"
+  },
+  {
+   "t": 461.51,
+   "d": 1.95,
+   "text": "games so I will emphasize that it's just"
+  },
+  {
+   "t": 463.46,
+   "d": 2.46,
+   "text": "a small slice of all of the kind of"
+  },
+  {
+   "t": 465.92,
+   "d": 1.77,
+   "text": "amusing references and jokes you can"
+  },
+  {
+   "t": 467.69,
+   "d": 2.76,
+   "text": "find in the code but it's also a chance"
+  },
+  {
+   "t": 470.45,
+   "d": 1.77,
+   "text": "to kind of learn from the Masters"
+  },
+  {
+   "t": 472.22,
+   "d": 2.94,
+   "text": "nethack is you know one of the core"
+  },
+  {
+   "t": 475.16,
+   "d": 3.21,
+   "text": "Canon kind of roguelike games and if"
+  },
+  {
+   "t": 478.37,
+   "d": 1.44,
+   "text": "you're one of the many people here"
+  },
+  {
+   "t": 479.81,
+   "d": 2.25,
+   "text": "interested in making your own roguelikes"
+  },
+  {
+   "t": 482.06,
+   "d": 2.4,
+   "text": "having a chance to look at that source"
+  },
+  {
+   "t": 484.46,
+   "d": 2.52,
+   "text": "code and see not just where it is now"
+  },
+  {
+   "t": 486.98,
+   "d": 2.7,
+   "text": "but you can see through the history of"
+  },
+  {
+   "t": 489.68,
+   "d": 1.53,
+   "text": "it and through the comments what kind of"
+  },
+  {
+   "t": 491.21,
+   "d": 2.31,
+   "text": "process led them to the net hack of"
+  },
+  {
+   "t": 493.52,
+   "d": 2.58,
+   "text": "today it reminded me that I saw on"
+  },
+  {
+   "t": 496.1,
+   "d": 1.92,
+   "text": "Twitter a while ago that the great wave"
+  },
+  {
+   "t": 498.02,
+   "d": 2.52,
+   "text": "which is a very well-known painting the"
+  },
+  {
+   "t": 500.54,
+   "d": 1.89,
+   "text": "painter actually created it multiple"
+  },
+  {
+   "t": 502.43,
+   "d": 2.73,
+   "text": "times in his life iterating on the idea"
+  },
+  {
+   "t": 505.16,
+   "d": 3.9,
+   "text": "until finally in his 80s creating the"
+  },
+  {
+   "t": 509.06,
+   "d": 1.83,
+   "text": "painting that's so well known today"
+  },
+  {
+   "t": 510.89,
+   "d": 1.8,
+   "text": "so new hack has gone through this"
+  },
+  {
+   "t": 512.69,
+   "d": 2.04,
+   "text": "iterative process and you can look at"
+  },
+  {
+   "t": 514.73,
+   "d": 2.16,
+   "text": "the final product but also look back and"
+  },
+  {
+   "t": 516.89,
+   "d": 2.07,
+   "text": "you can learn from all of these lessons"
+  },
+  {
+   "t": 518.96,
+   "d": 3.42,
+   "text": "that the new hack team accumulated over"
+  },
+  {
+   "t": 522.38,
+   "d": 4.65,
+   "text": "many many many years and the reason why"
+  },
+  {
+   "t": 527.03,
+   "d": 2.04,
+   "text": "you can do this even if you don't know C"
+  },
+  {
+   "t": 529.07,
+   "d": 1.59,
+   "text": "is because new hack is actually"
+  },
+  {
+   "t": 530.66,
+   "d": 2.55,
+   "text": "extremely well commented I found this"
+  },
+  {
+   "t": 533.21,
+   "d": 3.93,
+   "text": "shocking not as a slam on net hug but"
+  },
+  {
+   "t": 537.14,
+   "d": 1.74,
+   "text": "jessica's code in general commenting"
+  },
+  {
+   "t": 538.88,
+   "d": 2.97,
+   "text": "it's not you know code comments itself"
+  },
+  {
+   "t": 541.85,
+   "d": 4.83,
+   "text": "right but net hack has entire paragraphs"
+  },
+  {
+   "t": 546.68,
+   "d": 1.77,
+   "text": "and paragraphs of description of how the"
+  },
+  {
+   "t": 548.45,
+   "d": 2.58,
+   "text": "code works in plain English so that even"
+  },
+  {
+   "t": 551.03,
+   "d": 1.5,
+   "text": "without a see kind of technical"
+  },
+  {
+   "t": 552.53,
+   "d": 1.44,
+   "text": "background you could read this and learn"
+  },
+  {
+   "t": 553.97,
+   "d": 2.28,
+   "text": "something from it so in this example the"
+  },
+  {
+   "t": 556.25,
+   "d": 1.92,
+   "text": "display dot C file which handles"
+  },
+  {
+   "t": 558.17,
+   "d": 1.86,
+   "text": "displaying you know ASCII and everything"
+  },
+  {
+   "t": 560.03,
+   "d": 2.01,
+   "text": "like that to the screen starts with a"
+  },
+  {
+   "t": 562.04,
+   "d": 2.37,
+   "text": "very long description of exactly what"
+  },
+  {
+   "t": 564.41,
+   "d": 2.66,
+   "text": "the net hoc display code is doing"
+  },
+  {
+   "t": 567.07,
+   "d": 3.13,
+   "text": "there's also a small segments that are"
+  },
+  {
+   "t": 570.2,
+   "d": 1.17,
+   "text": "more to do with game design"
+  },
+  {
+   "t": 571.37,
+   "d": 2.28,
+   "text": "considerations for example if you look"
+  },
+  {
+   "t": 573.65,
+   "d": 1.74,
+   "text": "at the code for eating you'll find that"
+  },
+  {
+   "t": 575.39,
+   "d": 2.4,
+   "text": "it explains that the reason why any kind"
+  },
+  {
+   "t": 577.79,
+   "d": 2.55,
+   "text": "of non-food item like if you're a rust"
+  },
+  {
+   "t": 580.34,
+   "d": 1.89,
+   "text": "monsters I mean it's a can eat metal and"
+  },
+  {
+   "t": 582.23,
+   "d": 2.16,
+   "text": "you're eating metal objects it always"
+  },
+  {
+   "t": 584.39,
+   "d": 2.19,
+   "text": "takes only one move to eat even though"
+  },
+  {
+   "t": 586.58,
+   "d": 2.1,
+   "text": "other types of normal food objects and"
+  },
+  {
+   "t": 588.68,
+   "d": 2.07,
+   "text": "take longer and the reason that they"
+  },
+  {
+   "t": 590.75,
+   "d": 1.38,
+   "text": "explain is because they didn't want to"
+  },
+  {
+   "t": 592.13,
+   "d": 1.92,
+   "text": "have code dealing with what happens if"
+  },
+  {
+   "t": 594.05,
+   "d": 1.59,
+   "text": "you eat half of a piece of plate mail"
+  },
+  {
+   "t": 595.64,
+   "d": 3.18,
+   "text": "and you can find these little tidbits or"
+  },
+  {
+   "t": 598.82,
+   "d": 1.82,
+   "text": "how the code for using a stethoscope"
+  },
+  {
+   "t": 600.64,
+   "d": 2.41,
+   "text": "notes that it doesn't really make sense"
+  },
+  {
+   "t": 603.05,
+   "d": 2.25,
+   "text": "for stethoscope usage to not take any"
+  },
+  {
+   "t": 605.3,
+   "d": 2.43,
+   "text": "amount of time but they were worried"
+  },
+  {
+   "t": 607.73,
+   "d": 1.41,
+   "text": "that if it took time then it becomes"
+  },
+  {
+   "t": 609.14,
+   "d": 2.64,
+   "text": "quite useless and flus they can have the"
+  },
+  {
+   "t": 611.78,
+   "d": 3.48,
+   "text": "curse be more of a negative if it starts"
+  },
+  {
+   "t": 615.26,
+   "d": 1.41,
+   "text": "out taking no time at all"
+  },
+  {
+   "t": 616.67,
+   "d": 1.77,
+   "text": "and there's lots of these little nuggets"
+  },
+  {
+   "t": 618.44,
+   "d": 2.16,
+   "text": "of design wisdom that you can learn from"
+  },
+  {
+   "t": 620.6,
+   "d": 1.8,
+   "text": "as you go through the code you can go to"
+  },
+  {
+   "t": 622.4,
+   "d": 1.89,
+   "text": "an area that relates like you know maybe"
+  },
+  {
+   "t": 624.29,
+   "d": 2.13,
+   "text": "your game does a lot of stuff with"
+  },
+  {
+   "t": 626.42,
+   "d": 1.65,
+   "text": "different types of monsters if you go to"
+  },
+  {
+   "t": 628.07,
+   "d": 1.89,
+   "text": "the code dealing with monsters you'll"
+  },
+  {
+   "t": 629.96,
+   "d": 2.07,
+   "text": "find these little pieces of wisdom in"
+  },
+  {
+   "t": 632.03,
+   "d": 1.53,
+   "text": "terms of what kind of things did they"
+  },
+  {
+   "t": 633.56,
+   "d": 1.74,
+   "text": "consider to arrive at the design that"
+  },
+  {
+   "t": 635.3,
+   "d": 3.63,
+   "text": "they have today and these can be quite"
+  },
+  {
+   "t": 638.93,
+   "d": 1.59,
+   "text": "long in the same way that the technical"
+  },
+  {
+   "t": 640.52,
+   "d": 1.74,
+   "text": "description can be quite long even"
+  },
+  {
+   "t": 642.26,
+   "d": 3.06,
+   "text": "involving almost narrative concerns like"
+  },
+  {
+   "t": 645.32,
+   "d": 1.74,
+   "text": "you might notice that I think this might"
+  },
+  {
+   "t": 647.06,
+   "d": 1.44,
+   "text": "have come in in newer versions of hack"
+  },
+  {
+   "t": 648.5,
+   "d": 3.33,
+   "text": "but uh nethack hack is different usually"
+  },
+  {
+   "t": 651.83,
+   "d": 1.38,
+   "text": "I can get away with that but you guys"
+  },
+  {
+   "t": 653.21,
+   "d": 3.27,
+   "text": "know better but you can find in the"
+  },
+  {
+   "t": 656.48,
+   "d": 2.01,
+   "text": "early levels of the dungeon other dead"
+  },
+  {
+   "t": 658.49,
+   "d": 2.58,
+   "text": "adventurers who are killed by traps and"
+  },
+  {
+   "t": 661.07,
+   "d": 2.19,
+   "text": "they have certain useful items on them"
+  },
+  {
+   "t": 663.26,
+   "d": 1.74,
+   "text": "and there's a very long comment"
+  },
+  {
+   "t": 665.0,
+   "d": 1.47,
+   "text": "explaining exactly"
+  },
+  {
+   "t": 666.47,
+   "d": 2.73,
+   "text": "thought process led to that feature what"
+  },
+  {
+   "t": 669.2,
+   "d": 2.01,
+   "text": "decisions went into what kind of items"
+  },
+  {
+   "t": 671.21,
+   "d": 1.89,
+   "text": "you could find on them what kind of"
+  },
+  {
+   "t": 673.1,
+   "d": 1.89,
+   "text": "traps they decide to include and which"
+  },
+  {
+   "t": 674.99,
+   "d": 2.85,
+   "text": "ones not to include from a game balance"
+  },
+  {
+   "t": 677.84,
+   "d": 1.59,
+   "text": "perspective from a narrative perspective"
+  },
+  {
+   "t": 679.43,
+   "d": 3.63,
+   "text": "and it's just a goldmine in terms of"
+  },
+  {
+   "t": 683.06,
+   "d": 2.52,
+   "text": "lessons to apply to your own roguelikes"
+  },
+  {
+   "t": 685.58,
+   "d": 2.34,
+   "text": "or just a deeper understanding if you're"
+  },
+  {
+   "t": 687.92,
+   "d": 2.13,
+   "text": "a fan of nethack you can learn why is"
+  },
+  {
+   "t": 690.05,
+   "d": 2.85,
+   "text": "nethack this way kind of straight out of"
+  },
+  {
+   "t": 692.9,
+   "d": 2.07,
+   "text": "the mouths of the dev team by reading"
+  },
+  {
+   "t": 694.97,
+   "d": 4.02,
+   "text": "their comments and even when it comes to"
+  },
+  {
+   "t": 698.99,
+   "d": 2.07,
+   "text": "the individual code so something like"
+  },
+  {
+   "t": 701.06,
+   "d": 2.13,
+   "text": "this this is some code dealing with what"
+  },
+  {
+   "t": 703.19,
+   "d": 2.73,
+   "text": "kind of things you get when you offer a"
+  },
+  {
+   "t": 705.92,
+   "d": 1.77,
+   "text": "sacrifice and can get an artifact in"
+  },
+  {
+   "t": 707.69,
+   "d": 1.65,
+   "text": "return and if you're not super"
+  },
+  {
+   "t": 709.34,
+   "d": 2.16,
+   "text": "comfortable with C this is probably not"
+  },
+  {
+   "t": 711.5,
+   "d": 2.04,
+   "text": "particularly readable unlike the Python"
+  },
+  {
+   "t": 713.54,
+   "d": 1.44,
+   "text": "that we saw this morning which was much"
+  },
+  {
+   "t": 714.98,
+   "d": 2.49,
+   "text": "easier to read but the good news in the"
+  },
+  {
+   "t": 717.47,
+   "d": 2.01,
+   "text": "actual code this is what it looks like"
+  },
+  {
+   "t": 719.48,
+   "d": 2.22,
+   "text": "there are comments not just at the"
+  },
+  {
+   "t": 721.7,
+   "d": 2.07,
+   "text": "beginning of functions or the top of"
+  },
+  {
+   "t": 723.77,
+   "d": 1.74,
+   "text": "files but there are often in line"
+  },
+  {
+   "t": 725.51,
+   "d": 1.89,
+   "text": "comments throughout an entire piece of"
+  },
+  {
+   "t": 727.4,
+   "d": 2.58,
+   "text": "functionality describing in flame text"
+  },
+  {
+   "t": 729.98,
+   "d": 2.7,
+   "text": "what that code is doing so even if"
+  },
+  {
+   "t": 732.68,
+   "d": 1.89,
+   "text": "you're using a different language even"
+  },
+  {
+   "t": 734.57,
+   "d": 2.28,
+   "text": "if you're not familiar with C you can go"
+  },
+  {
+   "t": 736.85,
+   "d": 1.14,
+   "text": "through that and you can read the"
+  },
+  {
+   "t": 737.99,
+   "d": 1.53,
+   "text": "comments and you can explain and"
+  },
+  {
+   "t": 739.52,
+   "d": 1.86,
+   "text": "understand what's going on and learn"
+  },
+  {
+   "t": 741.38,
+   "d": 4.77,
+   "text": "some lessons for your own game there's"
+  },
+  {
+   "t": 746.15,
+   "d": 1.86,
+   "text": "also I want to highlight some of my"
+  },
+  {
+   "t": 748.01,
+   "d": 2.52,
+   "text": "favorite kind of tricks that the nethack"
+  },
+  {
+   "t": 750.53,
+   "d": 2.43,
+   "text": "code uses that I want to steal from my"
+  },
+  {
+   "t": 752.96,
+   "d": 3.03,
+   "text": "own games basically one of it is that"
+  },
+  {
+   "t": 755.99,
+   "d": 2.28,
+   "text": "there's an idea of different kinds of"
+  },
+  {
+   "t": 758.27,
+   "d": 2.43,
+   "text": "body parts so it starts out with a"
+  },
+  {
+   "t": 760.7,
+   "d": 1.41,
+   "text": "definition of the humanoid which is"
+  },
+  {
+   "t": 762.11,
+   "d": 2.13,
+   "text": "easiest to relate to so humanoid"
+  },
+  {
+   "t": 764.24,
+   "d": 2.28,
+   "text": "creatures have arms and eyes and faces"
+  },
+  {
+   "t": 766.52,
+   "d": 1.83,
+   "text": "but then what they do is that they have"
+  },
+  {
+   "t": 768.35,
+   "d": 2.76,
+   "text": "another list that matches and has the"
+  },
+  {
+   "t": 771.11,
+   "d": 1.98,
+   "text": "equivalent body part for another type of"
+  },
+  {
+   "t": 773.09,
+   "d": 3.21,
+   "text": "creature so a jelly type creature will"
+  },
+  {
+   "t": 776.3,
+   "d": 2.19,
+   "text": "instead have a pseudo pod where an arm"
+  },
+  {
+   "t": 778.49,
+   "d": 3.77,
+   "text": "would be a dark spot for an eye etc and"
+  },
+  {
+   "t": 782.26,
+   "d": 3.1,
+   "text": "animals can have four limbs instead of"
+  },
+  {
+   "t": 785.36,
+   "d": 3.03,
+   "text": "arms four claws and instead of hands and"
+  },
+  {
+   "t": 788.39,
+   "d": 2.55,
+   "text": "things like that and they have this"
+  },
+  {
+   "t": 790.94,
+   "d": 1.95,
+   "text": "simple kind of setup @array it's quite"
+  },
+  {
+   "t": 792.89,
+   "d": 2.04,
+   "text": "readable and then when you have an"
+  },
+  {
+   "t": 794.93,
+   "d": 2.22,
+   "text": "actual place in the code where it needs"
+  },
+  {
+   "t": 797.15,
+   "d": 2.01,
+   "text": "to use that for example if you step on a"
+  },
+  {
+   "t": 799.16,
+   "d": 0.66,
+   "text": "bear trap"
+  },
+  {
+   "t": 799.82,
+   "d": 2.16,
+   "text": "it wants to say since you know nethack"
+  },
+  {
+   "t": 801.98,
+   "d": 2.1,
+   "text": "uses a lot of text output like most"
+  },
+  {
+   "t": 804.08,
+   "d": 2.13,
+   "text": "roguelikes it wants to say the bear trap"
+  },
+  {
+   "t": 806.21,
+   "d": 2.7,
+   "text": "closes on your foot now if that was kind"
+  },
+  {
+   "t": 808.91,
+   "d": 2.04,
+   "text": "of hard coded to say foot then if you"
+  },
+  {
+   "t": 810.95,
+   "d": 2.19,
+   "text": "were polymorphed into an acid blob that"
+  },
+  {
+   "t": 813.14,
+   "d": 1.92,
+   "text": "wouldn't make a lot of sense but because"
+  },
+  {
+   "t": 815.06,
+   "d": 1.83,
+   "text": "they have this array they have a very"
+  },
+  {
+   "t": 816.89,
+   "d": 2.49,
+   "text": "simple body part function where you put"
+  },
+  {
+   "t": 819.38,
+   "d": 1.56,
+   "text": "in what the humanoid equivalent would be"
+  },
+  {
+   "t": 820.94,
+   "d": 1.98,
+   "text": "and then you pass in an actual reference"
+  },
+  {
+   "t": 822.92,
+   "d": 3.15,
+   "text": "to the person the character the creature"
+  },
+  {
+   "t": 826.07,
+   "d": 1.89,
+   "text": "that is having this action happened to"
+  },
+  {
+   "t": 827.96,
+   "d": 2.19,
+   "text": "them and it will deal with going through"
+  },
+  {
+   "t": 830.15,
+   "d": 2.04,
+   "text": "those arrays that I showed you to figure"
+  },
+  {
+   "t": 832.19,
+   "d": 2.91,
+   "text": "out Oh foot in this case means pseudopod"
+  },
+  {
+   "t": 835.1,
+   "d": 2.16,
+   "text": "or you know in this case this is the"
+  },
+  {
+   "t": 837.26,
+   "d": 2.1,
+   "text": "code for if it's your steed who stands"
+  },
+  {
+   "t": 839.36,
+   "d": 1.98,
+   "text": "on the bear trap so likely most of the"
+  },
+  {
+   "t": 841.34,
+   "d": 3.87,
+   "text": "time foot gets turned into hoof and of"
+  },
+  {
+   "t": 845.21,
+   "d": 1.89,
+   "text": "course since this is nethack it's not"
+  },
+  {
+   "t": 847.1,
+   "d": 1.53,
+   "text": "just that there is these arrays but"
+  },
+  {
+   "t": 848.63,
+   "d": 1.98,
+   "text": "there's also a whole bunch of exceptions"
+  },
+  {
+   "t": 850.61,
+   "d": 3.6,
+   "text": "where of course sharks as we know do not"
+  },
+  {
+   "t": 854.21,
+   "d": 1.86,
+   "text": "actually have scales they have skin and"
+  },
+  {
+   "t": 856.07,
+   "d": 1.5,
+   "text": "it's very important that we have this"
+  },
+  {
+   "t": 857.57,
+   "d": 5.07,
+   "text": "distinction in the code they also do"
+  },
+  {
+   "t": 862.64,
+   "d": 1.65,
+   "text": "some clever things with function naming"
+  },
+  {
+   "t": 864.29,
+   "d": 2.31,
+   "text": "other than just making adorable string"
+  },
+  {
+   "t": 866.6,
+   "d": 2.55,
+   "text": "kitten names since there is a lot of"
+  },
+  {
+   "t": 869.15,
+   "d": 2.4,
+   "text": "text output and a lot of it is phrased"
+  },
+  {
+   "t": 871.55,
+   "d": 2.73,
+   "text": "as you know you feel hungry you have a"
+  },
+  {
+   "t": 874.28,
+   "d": 2.07,
+   "text": "sad feeling for a moment and it passes"
+  },
+  {
+   "t": 876.35,
+   "d": 2.94,
+   "text": "they have a function called you that"
+  },
+  {
+   "t": 879.29,
+   "d": 2.85,
+   "text": "handles that type of output and so when"
+  },
+  {
+   "t": 882.14,
+   "d": 1.65,
+   "text": "you're reading it in the code you read"
+  },
+  {
+   "t": 883.79,
+   "d": 3.09,
+   "text": "you move very quietly or you float"
+  },
+  {
+   "t": 886.88,
+   "d": 1.83,
+   "text": "imperceptibly and you don't have to"
+  },
+  {
+   "t": 888.71,
+   "d": 1.14,
+   "text": "think about the fact that that's"
+  },
+  {
+   "t": 889.85,
+   "d": 2.37,
+   "text": "actually like a pee line function with"
+  },
+  {
+   "t": 892.22,
+   "d": 2.64,
+   "text": "some extra you know stuff around it to"
+  },
+  {
+   "t": 894.86,
+   "d": 2.04,
+   "text": "make sure it outputs correctly you just"
+  },
+  {
+   "t": 896.9,
+   "d": 2.52,
+   "text": "read it and play in English and it"
+  },
+  {
+   "t": 899.42,
+   "d": 2.64,
+   "text": "actually is a function call and we'll"
+  },
+  {
+   "t": 902.06,
+   "d": 1.56,
+   "text": "handle all that extra cruft so I think"
+  },
+  {
+   "t": 903.62,
+   "d": 1.92,
+   "text": "that that's some really clever function"
+  },
+  {
+   "t": 905.54,
+   "d": 1.68,
+   "text": "naming they have other equivalents that"
+  },
+  {
+   "t": 907.22,
+   "d": 2.7,
+   "text": "make it very very readable and kind of"
+  },
+  {
+   "t": 909.92,
+   "d": 1.74,
+   "text": "abstracts away some of the stuff you"
+  },
+  {
+   "t": 911.66,
+   "d": 3.15,
+   "text": "wouldn't have to worry about they also"
+  },
+  {
+   "t": 914.81,
+   "d": 1.74,
+   "text": "have these ASCII diagrams and they're"
+  },
+  {
+   "t": 916.55,
+   "d": 2.73,
+   "text": "the coolest thing ever so this is the"
+  },
+  {
+   "t": 919.28,
+   "d": 3.47,
+   "text": "code for handling throwing a boomerang"
+  },
+  {
+   "t": 923.08,
+   "d": 3.37,
+   "text": "and it describes all the traversal"
+  },
+  {
+   "t": 926.45,
+   "d": 2.19,
+   "text": "patterns that a boomerang might have in"
+  },
+  {
+   "t": 928.64,
+   "d": 2.22,
+   "text": "counter clockwise or as it notes"
+  },
+  {
+   "t": 930.86,
+   "d": 1.65,
+   "text": "clockwise if you just reverse the rows"
+  },
+  {
+   "t": 932.51,
+   "d": 4.23,
+   "text": "and it's so nice because you look at it"
+  },
+  {
+   "t": 936.74,
+   "d": 2.01,
+   "text": "and you know you can see that that's"
+  },
+  {
+   "t": 938.75,
+   "d": 1.41,
+   "text": "what it is that it's a boomerang and you"
+  },
+  {
+   "t": 940.16,
+   "d": 2.04,
+   "text": "can see how it would work and it's so"
+  },
+  {
+   "t": 942.2,
+   "d": 1.68,
+   "text": "much more readable than if there was a"
+  },
+  {
+   "t": 943.88,
+   "d": 2.49,
+   "text": "bunch of like English texts trying to"
+  },
+  {
+   "t": 946.37,
+   "d": 1.86,
+   "text": "explain like well if you're standing in"
+  },
+  {
+   "t": 948.23,
+   "d": 1.35,
+   "text": "this square it should travel one"
+  },
+  {
+   "t": 949.58,
+   "d": 1.95,
+   "text": "diagonal and then two to the north's"
+  },
+  {
+   "t": 951.53,
+   "d": 2.4,
+   "text": "like it's taking advantage of the fact"
+  },
+  {
+   "t": 953.93,
+   "d": 1.95,
+   "text": "that the game itself is using an ASCII"
+  },
+  {
+   "t": 955.88,
+   "d": 2.31,
+   "text": "grid to have that in the comments and"
+  },
+  {
+   "t": 958.19,
+   "d": 2.04,
+   "text": "have a very visual representation of how"
+  },
+  {
+   "t": 960.23,
+   "d": 1.56,
+   "text": "the code is gonna behave which i think"
+  },
+  {
+   "t": 961.79,
+   "d": 1.68,
+   "text": "is just really brilliant and readable"
+  },
+  {
+   "t": 963.47,
+   "d": 2.34,
+   "text": "and this comes up in other cases the"
+  },
+  {
+   "t": 965.81,
+   "d": 1.95,
+   "text": "boomerang is my favorite but in terms of"
+  },
+  {
+   "t": 967.76,
+   "d": 1.89,
+   "text": "figuring out the range of a polearm they"
+  },
+  {
+   "t": 969.65,
+   "d": 1.5,
+   "text": "have a nice little grid showing in"
+  },
+  {
+   "t": 971.15,
+   "d": 1.41,
+   "text": "numbers how many squares away"
+  },
+  {
+   "t": 972.56,
+   "d": 2.43,
+   "text": "something's consider to be or there's an"
+  },
+  {
+   "t": 974.99,
+   "d": 3.09,
+   "text": "entire file dealing with the code"
+  },
+  {
+   "t": 978.08,
+   "d": 1.59,
+   "text": "associated with that ball and chain you"
+  },
+  {
+   "t": 979.67,
+   "d": 1.83,
+   "text": "can get an a hack of your curse that's"
+  },
+  {
+   "t": 981.5,
+   "d": 1.74,
+   "text": "actually it's it's complicated it's got"
+  },
+  {
+   "t": 983.24,
+   "d": 4.53,
+   "text": "a whole file to itself ball dot C and it"
+  },
+  {
+   "t": 987.77,
+   "d": 1.59,
+   "text": "has lots of these little diagrams"
+  },
+  {
+   "t": 989.36,
+   "d": 1.68,
+   "text": "showing that like if I'm standing here"
+  },
+  {
+   "t": 991.04,
+   "d": 1.62,
+   "text": "and the chain is here and the ball is"
+  },
+  {
+   "t": 992.66,
+   "d": 2.4,
+   "text": "here and I move this way how should it"
+  },
+  {
+   "t": 995.06,
+   "d": 2.88,
+   "text": "move and all of these are very easy to"
+  },
+  {
+   "t": 997.94,
+   "d": 1.65,
+   "text": "understand because they have little"
+  },
+  {
+   "t": 999.59,
+   "d": 2.55,
+   "text": "ASCII diagrams showing what that looks"
+  },
+  {
+   "t": 1002.14,
+   "d": 1.86,
+   "text": "like instead of trying to describe it so"
+  },
+  {
+   "t": 1004.0,
+   "d": 2.04,
+   "text": "as long as your game is also using that"
+  },
+  {
+   "t": 1006.04,
+   "d": 1.68,
+   "text": "kind of ASCII thing you can steal this"
+  },
+  {
+   "t": 1007.72,
+   "d": 1.68,
+   "text": "technique and have much more readable"
+  },
+  {
+   "t": 1009.4,
+   "d": 4.74,
+   "text": "comments there's also some crazy level"
+  },
+  {
+   "t": 1014.14,
+   "d": 1.92,
+   "text": "of thinking in the code as really"
+  },
+  {
+   "t": 1016.06,
+   "d": 1.23,
+   "text": "developers we know that we probably"
+  },
+  {
+   "t": 1017.29,
+   "d": 1.71,
+   "text": "shouldn't handle a single case we should"
+  },
+  {
+   "t": 1019.0,
+   "d": 2.46,
+   "text": "handle a generic case and if we're you"
+  },
+  {
+   "t": 1021.46,
+   "d": 1.86,
+   "text": "know clever roguelike developers house"
+  },
+  {
+   "t": 1023.32,
+   "d": 1.71,
+   "text": "we all are we know to handle edge cases"
+  },
+  {
+   "t": 1025.03,
+   "d": 1.77,
+   "text": "but nethack handles things that can't"
+  },
+  {
+   "t": 1026.8,
+   "d": 2.91,
+   "text": "even happen there's code that explicitly"
+  },
+  {
+   "t": 1029.71,
+   "d": 1.95,
+   "text": "says in the comments that this you know"
+  },
+  {
+   "t": 1031.66,
+   "d": 2.64,
+   "text": "this could ever happen so for example to"
+  },
+  {
+   "t": 1034.3,
+   "d": 2.85,
+   "text": "weapon if you have a two weapon that's a"
+  },
+  {
+   "t": 1037.15,
+   "d": 0.48,
+   "text": "corpse"
+  },
+  {
+   "t": 1037.63,
+   "d": 1.59,
+   "text": "that can't happen you're not allowed to"
+  },
+  {
+   "t": 1039.22,
+   "d": 1.71,
+   "text": "up and if you're wielding a corpse but"
+  },
+  {
+   "t": 1040.93,
+   "d": 2.28,
+   "text": "if you did the code is already there to"
+  },
+  {
+   "t": 1043.21,
+   "d": 3.42,
+   "text": "handle it and this explains a lot about"
+  },
+  {
+   "t": 1046.63,
+   "d": 2.43,
+   "text": "net hack is as flexible it is as it is"
+  },
+  {
+   "t": 1049.06,
+   "d": 1.53,
+   "text": "and doesn't crash too often even when"
+  },
+  {
+   "t": 1050.59,
+   "d": 1.89,
+   "text": "you do crazy things because even if you"
+  },
+  {
+   "t": 1052.48,
+   "d": 1.41,
+   "text": "did something the developers thought you"
+  },
+  {
+   "t": 1053.89,
+   "d": 1.8,
+   "text": "could never do they still wrote code"
+  },
+  {
+   "t": 1055.69,
+   "d": 3.0,
+   "text": "for it this partly is you know a matter"
+  },
+  {
+   "t": 1058.69,
+   "d": 2.25,
+   "text": "of making it you know safer easier to"
+  },
+  {
+   "t": 1060.94,
+   "d": 1.89,
+   "text": "run code where you know even though the"
+  },
+  {
+   "t": 1062.83,
+   "d": 2.25,
+   "text": "dev team thinks of everything maybe they"
+  },
+  {
+   "t": 1065.08,
+   "d": 1.92,
+   "text": "didn't think of something that you just"
+  },
+  {
+   "t": 1067.0,
+   "d": 1.86,
+   "text": "did except gotcha they did and real code"
+  },
+  {
+   "t": 1068.86,
+   "d": 4.17,
+   "text": "for it but they also it's therefore easy"
+  },
+  {
+   "t": 1073.03,
+   "d": 1.95,
+   "text": "expandability as they add new features"
+  },
+  {
+   "t": 1074.98,
+   "d": 2.52,
+   "text": "or as someone wants to kind of mod it"
+  },
+  {
+   "t": 1077.5,
+   "d": 2.4,
+   "text": "into their own version so an example is"
+  },
+  {
+   "t": 1079.9,
+   "d": 2.22,
+   "text": "that when you are equipping different"
+  },
+  {
+   "t": 1082.12,
+   "d": 1.77,
+   "text": "types of you know armor and things like"
+  },
+  {
+   "t": 1083.89,
+   "d": 2.25,
+   "text": "that there are functions that run when"
+  },
+  {
+   "t": 1086.14,
+   "d": 1.56,
+   "text": "you do that equip action that can handle"
+  },
+  {
+   "t": 1087.7,
+   "d": 2.22,
+   "text": "any special behavior so say you put on"
+  },
+  {
+   "t": 1089.92,
+   "d": 2.28,
+   "text": "some boots of levitation and you need to"
+  },
+  {
+   "t": 1092.2,
+   "d": 1.26,
+   "text": "run some special code to start"
+  },
+  {
+   "t": 1093.46,
+   "d": 3.0,
+   "text": "levitating there's a function for each"
+  },
+  {
+   "t": 1096.46,
+   "d": 2.76,
+   "text": "type of kind of armor or clothing that"
+  },
+  {
+   "t": 1099.22,
+   "d": 1.95,
+   "text": "you put on and this includes there's a"
+  },
+  {
+   "t": 1101.17,
+   "d": 1.38,
+   "text": "function for when you equip a shield"
+  },
+  {
+   "t": 1102.55,
+   "d": 2.16,
+   "text": "even though as the comment notes there"
+  },
+  {
+   "t": 1104.71,
+   "d": 2.22,
+   "text": "are currently no shields that have this"
+  },
+  {
+   "t": 1106.93,
+   "d": 2.4,
+   "text": "type of special handling code but in"
+  },
+  {
+   "t": 1109.33,
+   "d": 2.28,
+   "text": "case anyone ever wants to add one that"
+  },
+  {
+   "t": 1111.61,
+   "d": 2.46,
+   "text": "does they've put the function in there"
+  },
+  {
+   "t": 1114.07,
+   "d": 1.65,
+   "text": "so that it's following the same kind of"
+  },
+  {
+   "t": 1115.72,
+   "d": 1.95,
+   "text": "format as all the similar functions and"
+  },
+  {
+   "t": 1117.67,
+   "d": 2.49,
+   "text": "it's just waiting for someone to have a"
+  },
+  {
+   "t": 1120.16,
+   "d": 1.41,
+   "text": "need to put the functionality in it"
+  },
+  {
+   "t": 1121.57,
+   "d": 1.86,
+   "text": "which i think is a really brilliant way"
+  },
+  {
+   "t": 1123.43,
+   "d": 2.97,
+   "text": "of having a it's saving yourself"
+  },
+  {
+   "t": 1126.4,
+   "d": 1.74,
+   "text": "problems in the future that at the point"
+  },
+  {
+   "t": 1128.14,
+   "d": 1.56,
+   "text": "they were writing this code they wrote"
+  },
+  {
+   "t": 1129.7,
+   "d": 2.43,
+   "text": "it further than it had to be so that if"
+  },
+  {
+   "t": 1132.13,
+   "d": 2.46,
+   "text": "later on someone wants to go down that"
+  },
+  {
+   "t": 1134.59,
+   "d": 2.76,
+   "text": "last few you know miles it's already set"
+  },
+  {
+   "t": 1137.35,
+   "d": 3.03,
+   "text": "up for them there's also some general"
+  },
+  {
+   "t": 1140.38,
+   "d": 3.57,
+   "text": "dev wisdom that is not particular to"
+  },
+  {
+   "t": 1143.95,
+   "d": 2.82,
+   "text": "rogue lights or technical things but it"
+  },
+  {
+   "t": 1146.77,
+   "d": 1.59,
+   "text": "was fun to find you can learn a lot"
+  },
+  {
+   "t": 1148.36,
+   "d": 1.68,
+   "text": "philosophically from the new hack code"
+  },
+  {
+   "t": 1150.04,
+   "d": 2.4,
+   "text": "for example a lock is made only for the"
+  },
+  {
+   "t": 1152.44,
+   "d": 2.87,
+   "text": "honest man the thief will break it a"
+  },
+  {
+   "t": 1155.31,
+   "d": 2.62,
+   "text": "comment in the code for unlocking things"
+  },
+  {
+   "t": 1157.93,
+   "d": 1.32,
+   "text": "which has nothing to do with the"
+  },
+  {
+   "t": 1159.25,
+   "d": 3.36,
+   "text": "technical implementation or the gameplay"
+  },
+  {
+   "t": 1162.61,
+   "d": 4.92,
+   "text": "just there for you to ruminate on or the"
+  },
+  {
+   "t": 1167.53,
+   "d": 2.19,
+   "text": "rhetorical question in the tool"
+  },
+  {
+   "t": 1169.72,
+   "d": 2.7,
+   "text": "definition if tin whistles are made of"
+  },
+  {
+   "t": 1172.42,
+   "d": 2.36,
+   "text": "tin what do they make foghorns out of"
+  },
+  {
+   "t": 1174.78,
+   "d": 2.35,
+   "text": "it's a good question"
+  },
+  {
+   "t": 1177.13,
+   "d": 3.0,
+   "text": "I don't know why it's in the definition"
+  },
+  {
+   "t": 1180.13,
+   "d": 2.88,
+   "text": "of the tools you can have a net hack but"
+  },
+  {
+   "t": 1183.01,
+   "d": 2.64,
+   "text": "it's there and that's not all there's"
+  },
+  {
+   "t": 1185.65,
+   "d": 2.47,
+   "text": "lots of others this is why this is I"
+  },
+  {
+   "t": 1188.12,
+   "d": 3.03,
+   "text": "four pages of notes of fun things I"
+  },
+  {
+   "t": 1191.15,
+   "d": 1.92,
+   "text": "found in the net hack code and that was"
+  },
+  {
+   "t": 1193.07,
+   "d": 1.77,
+   "text": "not with me having enough time to go"
+  },
+  {
+   "t": 1194.84,
+   "d": 1.05,
+   "text": "through like everything with a"
+  },
+  {
+   "t": 1195.89,
+   "d": 3.15,
+   "text": "fine-tooth comb so really if you go"
+  },
+  {
+   "t": 1199.04,
+   "d": 1.77,
+   "text": "looking yourself I know you'll find even"
+  },
+  {
+   "t": 1200.81,
+   "d": 5.16,
+   "text": "more of these and sometimes the devs are"
+  },
+  {
+   "t": 1205.97,
+   "d": 3.33,
+   "text": "also frustrated in the same way that any"
+  },
+  {
+   "t": 1209.3,
+   "d": 2.43,
+   "text": "of us are frustrated for example there's"
+  },
+  {
+   "t": 1211.73,
+   "d": 2.22,
+   "text": "a boolean parameter and the comment is"
+  },
+  {
+   "t": 1213.95,
+   "d": 1.74,
+   "text": "so I can't think of a good name"
+  },
+  {
+   "t": 1215.69,
+   "d": 3.75,
+   "text": "soomi I love the comment that the duplex"
+  },
+  {
+   "t": 1219.44,
+   "d": 1.86,
+   "text": "level does not have moats but it does"
+  },
+  {
+   "t": 1221.3,
+   "d": 2.91,
+   "text": "have moats there's probably a better way"
+  },
+  {
+   "t": 1224.21,
+   "d": 3.81,
+   "text": "to express this or in the case where the"
+  },
+  {
+   "t": 1228.02,
+   "d": 1.77,
+   "text": "devs are in the right but obviously have"
+  },
+  {
+   "t": 1229.79,
+   "d": 1.17,
+   "text": "dealt with people who think they're in"
+  },
+  {
+   "t": 1230.96,
+   "d": 2.01,
+   "text": "the wrong the cloak of magic resistance"
+  },
+  {
+   "t": 1232.97,
+   "d": 1.56,
+   "text": "can be described as an ornamental cope"
+  },
+  {
+   "t": 1234.53,
+   "d": 2.64,
+   "text": "and as the comment says cope is not a"
+  },
+  {
+   "t": 1237.17,
+   "d": 2.63,
+   "text": "spelling mistake leave it be"
+  },
+  {
+   "t": 1239.8,
+   "d": 2.53,
+   "text": "if you didn't know it's like a priests"
+  },
+  {
+   "t": 1242.33,
+   "d": 2.07,
+   "text": "robe I didn't know until I googled it so"
+  },
+  {
+   "t": 1244.4,
+   "d": 1.23,
+   "text": "I would have been one of the ignorant"
+  },
+  {
+   "t": 1245.63,
+   "d": 5.22,
+   "text": "people thinking mistake but I want to"
+  },
+  {
+   "t": 1250.85,
+   "d": 1.76,
+   "text": "just try and have a bit of a"
+  },
+  {
+   "t": 1252.61,
+   "d": 2.56,
+   "text": "demonstration of the joy that I felt"
+  },
+  {
+   "t": 1255.17,
+   "d": 1.58,
+   "text": "when I was going through the code"
+  },
+  {
+   "t": 1256.75,
+   "d": 2.14,
+   "text": "because the way that I discovered this"
+  },
+  {
+   "t": 1258.89,
+   "d": 1.11,
+   "text": "is that I'm looking through the code and"
+  },
+  {
+   "t": 1260.0,
+   "d": 1.62,
+   "text": "I'm scrolling and I'm scrolling and I'm"
+  },
+  {
+   "t": 1261.62,
+   "d": 1.5,
+   "text": "trying to keep an eye out you know"
+  },
+  {
+   "t": 1263.12,
+   "d": 1.44,
+   "text": "originally what I was doing was trying"
+  },
+  {
+   "t": 1264.56,
+   "d": 2.13,
+   "text": "to implement things in this case I was"
+  },
+  {
+   "t": 1266.69,
+   "d": 1.56,
+   "text": "doing some look just for like what's"
+  },
+  {
+   "t": 1268.25,
+   "d": 2.25,
+   "text": "interesting and there's a special"
+  },
+  {
+   "t": 1270.5,
+   "d": 1.5,
+   "text": "feeling when you're scrolling around and"
+  },
+  {
+   "t": 1272.0,
+   "d": 3.0,
+   "text": "you see if not pop eyes stoned and you"
+  },
+  {
+   "t": 1275.0,
+   "d": 1.71,
+   "text": "have to wonder what does that do and why"
+  },
+  {
+   "t": 1276.71,
+   "d": 2.58,
+   "text": "is it in this area of code and you do a"
+  },
+  {
+   "t": 1279.29,
+   "d": 1.38,
+   "text": "quick fine and you look through the"
+  },
+  {
+   "t": 1280.67,
+   "d": 2.04,
+   "text": "source code and discover the function"
+  },
+  {
+   "t": 1282.71,
+   "d": 3.24,
+   "text": "Popeye which checks if the tin that"
+  },
+  {
+   "t": 1285.95,
+   "d": 1.71,
+   "text": "you're currently eating could possibly"
+  },
+  {
+   "t": 1287.66,
+   "d": 3.33,
+   "text": "save your life so that if it could you"
+  },
+  {
+   "t": 1290.99,
+   "d": 1.8,
+   "text": "continue eating it"
+  },
+  {
+   "t": 1292.79,
+   "d": 2.07,
+   "text": "instead of being interrupted to try and"
+  },
+  {
+   "t": 1294.86,
+   "d": 1.41,
+   "text": "have another chance to save your life"
+  },
+  {
+   "t": 1296.27,
+   "d": 1.86,
+   "text": "but if it can't help you it'll let you"
+  },
+  {
+   "t": 1298.13,
+   "d": 1.5,
+   "text": "stop so that you can try and pray or"
+  },
+  {
+   "t": 1299.63,
+   "d": 1.65,
+   "text": "something like that and it is so named"
+  },
+  {
+   "t": 1301.28,
+   "d": 1.56,
+   "text": "as the comment says because Popeye the"
+  },
+  {
+   "t": 1302.84,
+   "d": 1.41,
+   "text": "Sailor gets out of trouble by eating"
+  },
+  {
+   "t": 1304.25,
+   "d": 2.25,
+   "text": "tins of spinach I think this is funny"
+  },
+  {
+   "t": 1306.5,
+   "d": 1.47,
+   "text": "since the tin of spinach will never save"
+  },
+  {
+   "t": 1307.97,
+   "d": 3.6,
+   "text": "your life but there's there's a kind of"
+  },
+  {
+   "t": 1311.57,
+   "d": 2.91,
+   "text": "joy to being someone looking through the"
+  },
+  {
+   "t": 1314.48,
+   "d": 2.1,
+   "text": "code base without knowing I mean if you"
+  },
+  {
+   "t": 1316.58,
+   "d": 1.38,
+   "text": "read the new hack wiki and things like"
+  },
+  {
+   "t": 1317.96,
+   "d": 1.59,
+   "text": "that you might be familiar with a lot of"
+  },
+  {
+   "t": 1319.55,
+   "d": 1.26,
+   "text": "the spoilers in terms"
+  },
+  {
+   "t": 1320.81,
+   "d": 1.47,
+   "text": "of the funny kind of things that the"
+  },
+  {
+   "t": 1322.28,
+   "d": 1.86,
+   "text": "game will handle special messages that"
+  },
+  {
+   "t": 1324.14,
+   "d": 2.49,
+   "text": "you can get but there's a whole nother"
+  },
+  {
+   "t": 1326.63,
+   "d": 2.61,
+   "text": "level to that same feeling that you get"
+  },
+  {
+   "t": 1329.24,
+   "d": 1.05,
+   "text": "when you're looking through the source"
+  },
+  {
+   "t": 1330.29,
+   "d": 1.59,
+   "text": "code even if you're not trying to"
+  },
+  {
+   "t": 1331.88,
+   "d": 2.25,
+   "text": "understand it in a technical sense you"
+  },
+  {
+   "t": 1334.13,
+   "d": 2.01,
+   "text": "can be understanding it in a learning"
+  },
+  {
+   "t": 1336.14,
+   "d": 1.56,
+   "text": "more about nethack sense and it really"
+  },
+  {
+   "t": 1337.7,
+   "d": 2.94,
+   "text": "is very fun and fulfilling and in terms"
+  },
+  {
+   "t": 1340.64,
+   "d": 1.74,
+   "text": "of the nethack wiki something that's"
+  },
+  {
+   "t": 1342.38,
+   "d": 1.5,
+   "text": "really cool in terms of getting into"
+  },
+  {
+   "t": 1343.88,
+   "d": 1.62,
+   "text": "looking at the code is that if you're on"
+  },
+  {
+   "t": 1345.5,
+   "d": 1.32,
+   "text": "the wiki and you're looking at a"
+  },
+  {
+   "t": 1346.82,
+   "d": 2.01,
+   "text": "particular you know type of object or"
+  },
+  {
+   "t": 1348.83,
+   "d": 0.54,
+   "text": "something like that"
+  },
+  {
+   "t": 1349.37,
+   "d": 2.25,
+   "text": "you'll see these footnotes and there are"
+  },
+  {
+   "t": 1351.62,
+   "d": 1.65,
+   "text": "actually footnotes directly into the"
+  },
+  {
+   "t": 1353.27,
+   "d": 2.49,
+   "text": "source code so that can be a cool area"
+  },
+  {
+   "t": 1355.76,
+   "d": 1.65,
+   "text": "of entry of if you're looking at all"
+  },
+  {
+   "t": 1357.41,
+   "d": 1.8,
+   "text": "these C files you don't know where to"
+  },
+  {
+   "t": 1359.21,
+   "d": 0.69,
+   "text": "get started"
+  },
+  {
+   "t": 1359.9,
+   "d": 2.25,
+   "text": "well you can follow this as a place to"
+  },
+  {
+   "t": 1362.15,
+   "d": 1.77,
+   "text": "start and that'll get you into the code"
+  },
+  {
+   "t": 1363.92,
+   "d": 1.02,
+   "text": "and you can start you know looking"
+  },
+  {
+   "t": 1364.94,
+   "d": 2.16,
+   "text": "through and I think you can very"
+  },
+  {
+   "t": 1367.1,
+   "d": 1.44,
+   "text": "naturally if you find something that"
+  },
+  {
+   "t": 1368.54,
+   "d": 1.92,
+   "text": "looks interesting you know have it open"
+  },
+  {
+   "t": 1370.46,
+   "d": 1.8,
+   "text": "in whatever is your favorite code editor"
+  },
+  {
+   "t": 1372.26,
+   "d": 3.27,
+   "text": "do a like ctrl F find you know follow it"
+  },
+  {
+   "t": 1375.53,
+   "d": 2.04,
+   "text": "through and you can easily lose several"
+  },
+  {
+   "t": 1377.57,
+   "d": 1.76,
+   "text": "hours or days of your life just"
+  },
+  {
+   "t": 1379.33,
+   "d": 2.23,
+   "text": "following all of the interesting little"
+  },
+  {
+   "t": 1381.56,
+   "d": 4.29,
+   "text": "threads in what the code is doing and so"
+  },
+  {
+   "t": 1385.85,
+   "d": 1.47,
+   "text": "I want to encourage everyone that you"
+  },
+  {
+   "t": 1387.32,
+   "d": 1.32,
+   "text": "know if you ever find yourself with the"
+  },
+  {
+   "t": 1388.64,
+   "d": 2.19,
+   "text": "time you should go check out the net"
+  },
+  {
+   "t": 1390.83,
+   "d": 1.89,
+   "text": "hack source code it's easily accessible"
+  },
+  {
+   "t": 1392.72,
+   "d": 4.26,
+   "text": "now on git and you know I only went into"
+  },
+  {
+   "t": 1396.98,
+   "d": 1.32,
+   "text": "the net hack source code because it's"
+  },
+  {
+   "t": 1398.3,
+   "d": 2.88,
+   "text": "what I was familiar with but I know that"
+  },
+  {
+   "t": 1401.18,
+   "d": 1.5,
+   "text": "dungeon crawl Stone Soup I'm pretty sure"
+  },
+  {
+   "t": 1402.68,
+   "d": 3.78,
+   "text": "is source code is accessible Eggman the"
+  },
+  {
+   "t": 1406.46,
+   "d": 2.37,
+   "text": "source code is accessible I'm sure many"
+  },
+  {
+   "t": 1408.83,
+   "d": 2.58,
+   "text": "many others so you know take your"
+  },
+  {
+   "t": 1411.41,
+   "d": 2.04,
+   "text": "favorite roguelikes look around see if"
+  },
+  {
+   "t": 1413.45,
+   "d": 2.79,
+   "text": "the source code is out there and give"
+  },
+  {
+   "t": 1416.24,
+   "d": 1.44,
+   "text": "them a look cuz even if it's in a"
+  },
+  {
+   "t": 1417.68,
+   "d": 1.59,
+   "text": "language that you don't know even if"
+  },
+  {
+   "t": 1419.27,
+   "d": 1.26,
+   "text": "you're not someone who considers"
+  },
+  {
+   "t": 1420.53,
+   "d": 3.18,
+   "text": "yourself extremely technically you know"
+  },
+  {
+   "t": 1423.71,
+   "d": 2.31,
+   "text": "strong or confident you can learn a lot"
+  },
+  {
+   "t": 1426.02,
+   "d": 1.14,
+   "text": "just through comments you can learn a"
+  },
+  {
+   "t": 1427.16,
+   "d": 1.44,
+   "text": "lot more about your favorite roguelike"
+  },
+  {
+   "t": 1428.6,
+   "d": 1.92,
+   "text": "and you can learn a lot of techniques"
+  },
+  {
+   "t": 1430.52,
+   "d": 0.96,
+   "text": "that will help you in your later"
+  },
+  {
+   "t": 1431.48,
+   "d": 0.57,
+   "text": "roguelikes"
+  },
+  {
+   "t": 1432.05,
+   "d": 4.17,
+   "text": "so thank you I have no idea what time it"
+  },
+  {
+   "t": 1436.22,
+   "d": 1.12,
+   "text": "is"
+  },
+  {
+   "t": 1437.34,
+   "d": 6.33,
+   "text": "I go overtime or under time under time"
+  },
+  {
+   "t": 1443.67,
+   "d": 3.27,
+   "text": "whoa oh yeah I can take questions okay"
+  },
+  {
+   "t": 1446.94,
+   "d": 3.38,
+   "text": "we have time for a few questions"
+  },
+  {
+   "t": 1451.86,
+   "d": 1.71,
+   "text": "so you mentioned stir cat and stir"
+  },
+  {
+   "t": 1453.57,
+   "d": 3.03,
+   "text": "kitten do you know about stir fry it"
+  },
+  {
+   "t": 1456.6,
+   "d": 7.29,
+   "text": "randomizes the string thank you any"
+  },
+  {
+   "t": 1463.89,
+   "d": 4.37,
+   "text": "other questions or jokes I'll take that"
+  },
+  {
+   "t": 1468.47,
+   "d": 2.59,
+   "text": "you said you started to be longing in"
+  },
+  {
+   "t": 1471.06,
+   "d": 2.04,
+   "text": "here to make your make changes to the"
+  },
+  {
+   "t": 1473.1,
+   "d": 1.08,
+   "text": "game what kind of changes have you tried"
+  },
+  {
+   "t": 1474.18,
+   "d": 2.91,
+   "text": "to do ever have you done I guess sure so"
+  },
+  {
+   "t": 1477.09,
+   "d": 2.73,
+   "text": "I was doing a honours thesis kind of"
+  },
+  {
+   "t": 1479.82,
+   "d": 2.25,
+   "text": "research project for my bachelor Comp"
+  },
+  {
+   "t": 1482.07,
+   "d": 2.37,
+   "text": "Sci degree and I was looking at how to"
+  },
+  {
+   "t": 1484.44,
+   "d": 2.13,
+   "text": "make roguelike games but specifically"
+  },
+  {
+   "t": 1486.57,
+   "d": 1.89,
+   "text": "nethack more accessible for visually"
+  },
+  {
+   "t": 1488.46,
+   "d": 2.22,
+   "text": "impaired players and kind of the basic"
+  },
+  {
+   "t": 1490.68,
+   "d": 2.28,
+   "text": "idea of that is just that since it is a"
+  },
+  {
+   "t": 1492.96,
+   "d": 2.79,
+   "text": "ASCII text display screen reading"
+  },
+  {
+   "t": 1495.75,
+   "d": 2.43,
+   "text": "software is able to read those"
+  },
+  {
+   "t": 1498.18,
+   "d": 1.89,
+   "text": "characters aloud and make it a game you"
+  },
+  {
+   "t": 1500.07,
+   "d": 1.8,
+   "text": "can listen to instead of having to see"
+  },
+  {
+   "t": 1501.87,
+   "d": 1.98,
+   "text": "so even someone who's totally blind"
+  },
+  {
+   "t": 1503.85,
+   "d": 2.25,
+   "text": "could listen to the dungeon there's a"
+  },
+  {
+   "t": 1506.1,
+   "d": 1.8,
+   "text": "great episode of roguelike radio that"
+  },
+  {
+   "t": 1507.9,
+   "d": 3.78,
+   "text": "covers this and because of that they're"
+  },
+  {
+   "t": 1511.68,
+   "d": 2.37,
+   "text": "at a baseline level accessible but it's"
+  },
+  {
+   "t": 1514.05,
+   "d": 1.95,
+   "text": "also kind of awful to have to listen to"
+  },
+  {
+   "t": 1516.0,
+   "d": 3.72,
+   "text": "like dot dot dot dot dot hash and so I"
+  },
+  {
+   "t": 1519.72,
+   "d": 1.86,
+   "text": "was looking at implementing some simple"
+  },
+  {
+   "t": 1521.58,
+   "d": 1.47,
+   "text": "functionality that can make that better"
+  },
+  {
+   "t": 1523.05,
+   "d": 2.91,
+   "text": "so dungeon crawl Stone Soup already is a"
+  },
+  {
+   "t": 1525.96,
+   "d": 1.41,
+   "text": "lot better in this regard that new hack"
+  },
+  {
+   "t": 1527.37,
+   "d": 2.73,
+   "text": "was in that there were time-saving"
+  },
+  {
+   "t": 1530.1,
+   "d": 2.13,
+   "text": "functions that would let you auto path"
+  },
+  {
+   "t": 1532.23,
+   "d": 1.65,
+   "text": "to a feature that you'd seen in the"
+  },
+  {
+   "t": 1533.88,
+   "d": 2.16,
+   "text": "dungeon so what I was looking at was"
+  },
+  {
+   "t": 1536.04,
+   "d": 2.4,
+   "text": "adding similar functions tuna hack that"
+  },
+  {
+   "t": 1538.44,
+   "d": 1.71,
+   "text": "would let you get a list of notable"
+  },
+  {
+   "t": 1540.15,
+   "d": 1.41,
+   "text": "features in the dungeon that you've seen"
+  },
+  {
+   "t": 1541.56,
+   "d": 2.43,
+   "text": "already ways to path to those because"
+  },
+  {
+   "t": 1543.99,
+   "d": 1.83,
+   "text": "the main thing that was frustrating for"
+  },
+  {
+   "t": 1545.82,
+   "d": 2.22,
+   "text": "visually impaired players was the"
+  },
+  {
+   "t": 1548.04,
+   "d": 1.62,
+   "text": "movement around the dungeon once you get"
+  },
+  {
+   "t": 1549.66,
+   "d": 2.37,
+   "text": "into a fight you know a lot of the text"
+  },
+  {
+   "t": 1552.03,
+   "d": 2.07,
+   "text": "is already displayed to you in a text"
+  },
+  {
+   "t": 1554.1,
+   "d": 1.71,
+   "text": "way that's easy to read but positional"
+  },
+  {
+   "t": 1555.81,
+   "d": 1.95,
+   "text": "stuff was difficult so I was adding"
+  },
+  {
+   "t": 1557.76,
+   "d": 2.31,
+   "text": "functionality to do that through text"
+  },
+  {
+   "t": 1560.07,
+   "d": 4.08,
+   "text": "and my source codes kind of out there in"
+  },
+  {
+   "t": 1564.15,
+   "d": 1.62,
+   "text": "the wild and it didn't get directly"
+  },
+  {
+   "t": 1565.77,
+   "d": 1.77,
+   "text": "merged in but the net Hawk dev team did"
+  },
+  {
+   "t": 1567.54,
+   "d": 2.75,
+   "text": "actually look at the work I had done and"
+  },
+  {
+   "t": 1570.29,
+   "d": 1.59,
+   "text": "at some of those changes implemented"
+  },
+  {
+   "t": 1571.88,
+   "d": 1.98,
+   "text": "kind of their own way to the latest"
+  },
+  {
+   "t": 1573.86,
+   "d": 2.19,
+   "text": "releases of nethack so that's like a"
+  },
+  {
+   "t": 1576.05,
+   "d": 8.46,
+   "text": "life accomplishment for me okay cool so"
+  },
+  {
+   "t": 1584.51,
+   "d": 1.26,
+   "text": "they're swapping the computer but I'm"
+  },
+  {
+   "t": 1585.77,
+   "d": 2.85,
+   "text": "still taking questions so someone have"
+  },
+  {
+   "t": 1588.62,
+   "d": 3.15,
+   "text": "the microphone someone have to play one"
+  },
+  {
+   "t": 1591.77,
+   "d": 1.62,
+   "text": "other silly one from the code I haven't"
+  },
+  {
+   "t": 1593.39,
+   "d": 1.74,
+   "text": "done as deep a dive into it as you have"
+  },
+  {
+   "t": 1595.13,
+   "d": 2.49,
+   "text": "but the contents of the box that you get"
+  },
+  {
+   "t": 1597.62,
+   "d": 3.51,
+   "text": "from from the quantum mechanic aren't"
+  },
+  {
+   "t": 1601.13,
+   "d": 2.28,
+   "text": "decided until you open the box just for"
+  },
+  {
+   "t": 1603.41,
+   "d": 3.27,
+   "text": "the shirt of yours cat joke I did see"
+  },
+  {
+   "t": 1606.68,
+   "d": 1.68,
+   "text": "that and I think that a lot of the"
+  },
+  {
+   "t": 1608.36,
+   "d": 1.41,
+   "text": "variable names and function names"
+  },
+  {
+   "t": 1609.77,
+   "d": 1.62,
+   "text": "dealing with Schrodinger's cat are also"
+  },
+  {
+   "t": 1611.39,
+   "d": 4.35,
+   "text": "pretty pretty amusing yes I had a"
+  },
+  {
+   "t": 1615.74,
+   "d": 1.29,
+   "text": "question yeah now that you've been"
+  },
+  {
+   "t": 1617.03,
+   "d": 1.86,
+   "text": "staring at this code for so long do you"
+  },
+  {
+   "t": 1618.89,
+   "d": 1.32,
+   "text": "have any impression about the"
+  },
+  {
+   "t": 1620.21,
+   "d": 7.02,
+   "text": "personalities or philosophy of the so"
+  },
+  {
+   "t": 1627.23,
+   "d": 3.03,
+   "text": "about the personalities and things uh if"
+  },
+  {
+   "t": 1630.26,
+   "d": 2.07,
+   "text": "anything I'm surprised by how consistent"
+  },
+  {
+   "t": 1632.33,
+   "d": 1.8,
+   "text": "it is I would have expected that given"
+  },
+  {
+   "t": 1634.13,
+   "d": 2.1,
+   "text": "that you know several people over time"
+  },
+  {
+   "t": 1636.23,
+   "d": 2.4,
+   "text": "have worked on the nethack code that you"
+  },
+  {
+   "t": 1638.63,
+   "d": 2.07,
+   "text": "would get a sense of individual"
+  },
+  {
+   "t": 1640.7,
+   "d": 1.89,
+   "text": "personalities I do think it's"
+  },
+  {
+   "t": 1642.59,
+   "d": 2.06,
+   "text": "interesting that because some of the"
+  },
+  {
+   "t": 1644.65,
+   "d": 2.23,
+   "text": "comments and things like that are signed"
+  },
+  {
+   "t": 1646.88,
+   "d": 4.2,
+   "text": "with initials but I don't know like who"
+  },
+  {
+   "t": 1651.08,
+   "d": 2.19,
+   "text": "belongs to those initials and so there"
+  },
+  {
+   "t": 1653.27,
+   "d": 2.55,
+   "text": "is there's one source of the K that like"
+  },
+  {
+   "t": 1655.82,
+   "d": 1.98,
+   "text": "is with the funny comments half of the"
+  },
+  {
+   "t": 1657.8,
+   "d": 3.72,
+   "text": "time so they're my favorite and yeah I"
+  },
+  {
+   "t": 1661.52,
+   "d": 3.09,
+   "text": "think that you can see the humor of"
+  },
+  {
+   "t": 1664.61,
+   "d": 2.94,
+   "text": "nethack reflected in the code because I"
+  },
+  {
+   "t": 1667.55,
+   "d": 1.17,
+   "text": "think that you know I think it was"
+  },
+  {
+   "t": 1668.72,
+   "d": 1.68,
+   "text": "mentioned earlier today in terms of"
+  },
+  {
+   "t": 1670.4,
+   "d": 2.7,
+   "text": "nethack was too crazy and you know"
+  },
+  {
+   "t": 1673.1,
+   "d": 1.83,
+   "text": "you've got your truest class you've got"
+  },
+  {
+   "t": 1674.93,
+   "d": 2.58,
+   "text": "all these kinds of things and I think"
+  },
+  {
+   "t": 1677.51,
+   "d": 1.23,
+   "text": "you see that in the code and that you"
+  },
+  {
+   "t": 1678.74,
+   "d": 1.59,
+   "text": "see these comments that have nothing to"
+  },
+  {
+   "t": 1680.33,
+   "d": 1.83,
+   "text": "do with the actual implementation you"
+  },
+  {
+   "t": 1682.16,
+   "d": 2.1,
+   "text": "see jokes and references that are in the"
+  },
+  {
+   "t": 1684.26,
+   "d": 1.47,
+   "text": "comments in the same way you see jokes"
+  },
+  {
+   "t": 1685.73,
+   "d": 1.92,
+   "text": "and references in the game so I think"
+  },
+  {
+   "t": 1687.65,
+   "d": 2.28,
+   "text": "it's cool how much there's a personality"
+  },
+  {
+   "t": 1689.93,
+   "d": 1.5,
+   "text": "that comes across in the code in the"
+  },
+  {
+   "t": 1691.43,
+   "d": 2.97,
+   "text": "comments and you can see sensibilities"
+  },
+  {
+   "t": 1694.4,
+   "d": 1.59,
+   "text": "of the time like I think actually the"
+  },
+  {
+   "t": 1695.99,
+   "d": 1.35,
+   "text": "hardest thing about reading the nethack"
+  },
+  {
+   "t": 1697.34,
+   "d": 1.98,
+   "text": "source code when you start is that they"
+  },
+  {
+   "t": 1699.32,
+   "d": 2.52,
+   "text": "do have variable names that are as short"
+  },
+  {
+   "t": 1701.84,
+   "d": 2.22,
+   "text": "as possible so you get really used"
+  },
+  {
+   "t": 1704.06,
+   "d": 2.1,
+   "text": "so thinking of monster is just maan and"
+  },
+  {
+   "t": 1706.16,
+   "d": 2.55,
+   "text": "object is like obj and and stuff like"
+  },
+  {
+   "t": 1708.71,
+   "d": 2.37,
+   "text": "that like I had the joke of rename disco"
+  },
+  {
+   "t": 1711.08,
+   "d": 2.64,
+   "text": "is a variable name disco is short for"
+  },
+  {
+   "t": 1713.72,
+   "d": 2.01,
+   "text": "discovery so everything is shortened in"
+  },
+  {
+   "t": 1715.73,
+   "d": 1.5,
+   "text": "that way which makes it hard to read it"
+  },
+  {
+   "t": 1717.23,
+   "d": 1.53,
+   "text": "first but I thought it was funny that"
+  },
+  {
+   "t": 1718.76,
+   "d": 2.49,
+   "text": "the recent changes to support having sir"
+  },
+  {
+   "t": 1721.25,
+   "d": 0.87,
+   "text": "Terry Pratchett's"
+  },
+  {
+   "t": 1722.12,
+   "d": 2.79,
+   "text": "novels show up the function is actually"
+  },
+  {
+   "t": 1724.91,
+   "d": 2.31,
+   "text": "called like Sir Terry novels and I was"
+  },
+  {
+   "t": 1727.22,
+   "d": 1.35,
+   "text": "like that would never fly back in the"
+  },
+  {
+   "t": 1728.57,
+   "d": 2.46,
+   "text": "old day ma'am that's too many characters"
+  },
+  {
+   "t": 1731.03,
+   "d": 6.33,
+   "text": "you can tell this is new hey did you"
+  },
+  {
+   "t": 1737.36,
+   "d": 1.86,
+   "text": "find anything that you were like oh wow"
+  },
+  {
+   "t": 1739.22,
+   "d": 1.98,
+   "text": "I should I should try this did you find"
+  },
+  {
+   "t": 1741.2,
+   "d": 1.11,
+   "text": "anything that you felt like you wanted"
+  },
+  {
+   "t": 1742.31,
+   "d": 2.19,
+   "text": "to maybe use for your own projects or"
+  },
+  {
+   "t": 1744.5,
+   "d": 1.71,
+   "text": "that really like inspired you like did"
+  },
+  {
+   "t": 1746.21,
+   "d": 1.32,
+   "text": "you like there's a lot of funny stuff"
+  },
+  {
+   "t": 1747.53,
+   "d": 1.17,
+   "text": "but did you find stuff that you're like"
+  },
+  {
+   "t": 1748.7,
+   "d": 2.88,
+   "text": "oh I should give this a shot myself yeah"
+  },
+  {
+   "t": 1751.58,
+   "d": 1.38,
+   "text": "so in terms of things that inspired me"
+  },
+  {
+   "t": 1752.96,
+   "d": 1.71,
+   "text": "to give it a shot myself really like my"
+  },
+  {
+   "t": 1754.67,
+   "d": 2.34,
+   "text": "favorite thing as random as it is was"
+  },
+  {
+   "t": 1757.01,
+   "d": 2.61,
+   "text": "that body parts system and it just"
+  },
+  {
+   "t": 1759.62,
+   "d": 1.53,
+   "text": "seemed to me like such an elegant way"
+  },
+  {
+   "t": 1761.15,
+   "d": 1.77,
+   "text": "that when you look at the code that you"
+  },
+  {
+   "t": 1762.92,
+   "d": 1.5,
+   "text": "get displayed to you and nethack it"
+  },
+  {
+   "t": 1764.42,
+   "d": 2.46,
+   "text": "seems like in the mention of it being"
+  },
+  {
+   "t": 1766.88,
+   "d": 1.53,
+   "text": "like an artificial dungeon master it"
+  },
+  {
+   "t": 1768.41,
+   "d": 1.68,
+   "text": "seems so smart and that it seems like it"
+  },
+  {
+   "t": 1770.09,
+   "d": 1.38,
+   "text": "always knows what you're doing you know"
+  },
+  {
+   "t": 1771.47,
+   "d": 1.65,
+   "text": "no matter what kind of creature you've"
+  },
+  {
+   "t": 1773.12,
+   "d": 1.59,
+   "text": "been turned into no matter what action"
+  },
+  {
+   "t": 1774.71,
+   "d": 2.1,
+   "text": "you're taking like if something if a"
+  },
+  {
+   "t": 1776.81,
+   "d": 1.89,
+   "text": "cream pie gets launched at you and"
+  },
+  {
+   "t": 1778.7,
+   "d": 1.47,
+   "text": "you're a floating eye it'll say that"
+  },
+  {
+   "t": 1780.17,
+   "d": 1.86,
+   "text": "like you get cream pie in your eye and"
+  },
+  {
+   "t": 1782.03,
+   "d": 2.73,
+   "text": "I'm like how does it handle all of these"
+  },
+  {
+   "t": 1784.76,
+   "d": 1.53,
+   "text": "cases and seeing that it's such an"
+  },
+  {
+   "t": 1786.29,
+   "d": 1.95,
+   "text": "elegant solution where every type of"
+  },
+  {
+   "t": 1788.24,
+   "d": 3.24,
+   "text": "body part is just in this very one-off"
+  },
+  {
+   "t": 1791.48,
+   "d": 1.71,
+   "text": "function that's implemented in such a"
+  },
+  {
+   "t": 1793.19,
+   "d": 2.37,
+   "text": "easy-to-read way I found that really"
+  },
+  {
+   "t": 1795.56,
+   "d": 3.9,
+   "text": "inspiring in terms of ways to have very"
+  },
+  {
+   "t": 1799.46,
+   "d": 3.33,
+   "text": "specific output that's handled in a very"
+  },
+  {
+   "t": 1802.79,
+   "d": 4.26,
+   "text": "generic way cool thank you so much"
+  },
+  {
+   "t": 1807.05,
+   "d": 1.07,
+   "text": "thanks"
+  },
+  {
+   "t": 1808.12,
+   "d": 4.91,
+   "text": "[Applause]"
+  }
+ ]
+}

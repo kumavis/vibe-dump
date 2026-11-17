@@ -1,0 +1,5182 @@
+{
+ "id": "KWBpQz1mHcA",
+ "url": "https://www.youtube.com/watch?v=KWBpQz1mHcA",
+ "title": "Emily Halina: New Levels from a Single Example via Tree-based Reconstructive Partitioning (TRP)",
+ "speaker": "Emily Halina",
+ "talk_title": "New Levels from a Single Example via Tree-based Reconstructive Partitioning (TRP)",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 2191,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "This talk is on Tree-based Reconstructive Partitioning (TRP), a level generation approach which can generate a suite of diverse, structurally sound levels based on a single example level. On a high level, TRP leverages a general game playing agent (Monte Carlo Tree Search) to create a representation of a level in terms of playable and unplayable areas, then recombines playable and unplayable areas from the input level to make new ones. TRP outperforms popular approaches like WaveFunctionCollapse in terms of plagiarism and playability. In this talk, I’ll showcase the TRP approach. I’ll delve into how the algorithm itself works, show several examples across multiple game domains, and provide comparisons against several other popular low-data level generation approaches. The talk will end with a description of how to implement TRP via an example Godot implementation, along with exploring the challenges and issues with the algorithm and the future work that aims to address these concerns. I’m particularly excited about this approach because of both the coherency of the output levels in comparison to other low data level generation approaches and the overall elegance of the algorithm. I hope to see you there!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to the speaker"
+  },
+  {
+   "start": 96,
+   "title": "PCG and the TRP approach"
+  },
+  {
+   "start": 334,
+   "title": "How the algorithm works"
+  },
+  {
+   "start": 643,
+   "title": "Step-by-step implementation"
+  },
+  {
+   "start": 864,
+   "title": "Tuning TRP parameters"
+  },
+  {
+   "start": 994,
+   "title": "Comparative analysis"
+  },
+  {
+   "start": 1395,
+   "title": "Future work and challenges"
+  },
+  {
+   "start": 1634,
+   "title": "The TRP tool for Godot"
+  },
+  {
+   "start": 1784,
+   "title": "Summary and Q&A"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 7250,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.2,
+   "d": 2.0,
+   "text": "uh and without further Ado let me"
+  },
+  {
+   "t": 5.2,
+   "d": 3.56,
+   "text": "introduce Emily Pina Emily is a PhD"
+  },
+  {
+   "t": 8.76,
+   "d": 1.8,
+   "text": "student of the University of Alberta"
+  },
+  {
+   "t": 10.56,
+   "d": 1.84,
+   "text": "researching human centered artificial"
+  },
+  {
+   "t": 12.4,
+   "d": 1.96,
+   "text": "intelligence she's interested in"
+  },
+  {
+   "t": 14.36,
+   "d": 2.0,
+   "text": "procedural content generation helping"
+  },
+  {
+   "t": 16.36,
+   "d": 2.4,
+   "text": "designers make games and her cat Ruka"
+  },
+  {
+   "t": 18.76,
+   "d": 2.36,
+   "text": "she's published Work featuring almost"
+  },
+  {
+   "t": 21.12,
+   "d": 2.0,
+   "text": "all of these interests in multiple top"
+  },
+  {
+   "t": 23.12,
+   "d": 3.88,
+   "text": "Ai and games Venus like I JC Ai and Aid"
+  },
+  {
+   "t": 27.0,
+   "d": 2.04,
+   "text": "before Academia Emily worked as an indie"
+  },
+  {
+   "t": 29.04,
+   "d": 1.68,
+   "text": "game developer and as as a result she is"
+  },
+  {
+   "t": 30.72,
+   "d": 1.6,
+   "text": "particularly interested in helping Indie"
+  },
+  {
+   "t": 32.32,
+   "d": 2.2,
+   "text": "devs make weird cool games with her"
+  },
+  {
+   "t": 34.52,
+   "d": 1.96,
+   "text": "research I think those are interests"
+  },
+  {
+   "t": 36.48,
+   "d": 4.88,
+   "text": "that a lot of us here share Emily"
+  },
+  {
+   "t": 41.64,
+   "d": 1.84,
+   "text": "fantastic great thank you so much for"
+  },
+  {
+   "t": 43.48,
+   "d": 1.88,
+   "text": "the lovely introduction uh hello"
+  },
+  {
+   "t": 45.36,
+   "d": 2.48,
+   "text": "everybody my name uh as R said is Emily"
+  },
+  {
+   "t": 47.84,
+   "d": 1.84,
+   "text": "helina uh and I'm here to talk to you"
+  },
+  {
+   "t": 49.68,
+   "d": 1.48,
+   "text": "today about tree based reconstructive"
+  },
+  {
+   "t": 51.16,
+   "d": 2.48,
+   "text": "partitioning uh or trp for short and"
+  },
+  {
+   "t": 53.64,
+   "d": 1.32,
+   "text": "this is a really exciting new level"
+  },
+  {
+   "t": 54.96,
+   "d": 1.2,
+   "text": "generation approach where you can"
+  },
+  {
+   "t": 56.16,
+   "d": 1.6,
+   "text": "generate new levels from a single"
+  },
+  {
+   "t": 57.76,
+   "d": 2.36,
+   "text": "example so a little bit already covered"
+  },
+  {
+   "t": 60.12,
+   "d": 2.4,
+   "text": "in the intro my name is Emily I am a PhD"
+  },
+  {
+   "t": 62.52,
+   "d": 1.48,
+   "text": "student at the University of Alberta"
+  },
+  {
+   "t": 64.0,
+   "d": 2.2,
+   "text": "working with Matthew gzd in the gr lab"
+  },
+  {
+   "t": 66.2,
+   "d": 1.32,
+   "text": "if you see Matthew in the chat please"
+  },
+  {
+   "t": 67.52,
+   "d": 2.76,
+   "text": "say hi to him um my main research"
+  },
+  {
+   "t": 70.28,
+   "d": 2.16,
+   "text": "interest is to help people make games"
+  },
+  {
+   "t": 72.44,
+   "d": 1.36,
+   "text": "and the way that I want to help people"
+  },
+  {
+   "t": 73.8,
+   "d": 1.76,
+   "text": "make games is through procedural content"
+  },
+  {
+   "t": 75.56,
+   "d": 1.84,
+   "text": "generation and the way that I want to do"
+  },
+  {
+   "t": 77.4,
+   "d": 1.68,
+   "text": "that procedural content generation is"
+  },
+  {
+   "t": 79.08,
+   "d": 1.84,
+   "text": "with machine learning more on that on"
+  },
+  {
+   "t": 80.92,
+   "d": 2.4,
+   "text": "the next slide now previously I was an"
+  },
+  {
+   "t": 83.32,
+   "d": 1.64,
+   "text": "independent game developer and this sort"
+  },
+  {
+   "t": 84.96,
+   "d": 2.2,
+   "text": "of informs my position as a researcher"
+  },
+  {
+   "t": 87.16,
+   "d": 2.2,
+   "text": "as well I want people to make cool and"
+  },
+  {
+   "t": 89.36,
+   "d": 2.04,
+   "text": "weird things with my research and I want"
+  },
+  {
+   "t": 91.4,
+   "d": 1.96,
+   "text": "to make uh my research accessible to"
+  },
+  {
+   "t": 93.36,
+   "d": 1.52,
+   "text": "people who are making games especially"
+  },
+  {
+   "t": 94.88,
+   "d": 1.24,
+   "text": "Indie"
+  },
+  {
+   "t": 96.12,
+   "d": 2.28,
+   "text": "devs now all of us have heard of"
+  },
+  {
+   "t": 98.4,
+   "d": 1.68,
+   "text": "procedural content generation seeing as"
+  },
+  {
+   "t": 100.08,
+   "d": 1.92,
+   "text": "we are at Rog like celebration which is"
+  },
+  {
+   "t": 102.0,
+   "d": 1.76,
+   "text": "a celebration of a genre which is"
+  },
+  {
+   "t": 103.76,
+   "d": 3.04,
+   "text": "entrenched in PCG stuff however I'm"
+  },
+  {
+   "t": 106.8,
+   "d": 1.04,
+   "text": "going to talk about a couple of"
+  },
+  {
+   "t": 107.84,
+   "d": 2.72,
+   "text": "different families of PCG today the"
+  },
+  {
+   "t": 110.56,
+   "d": 1.4,
+   "text": "first family of PCG that I want to"
+  },
+  {
+   "t": 111.96,
+   "d": 2.28,
+   "text": "introduce is constructive PCG and this"
+  },
+  {
+   "t": 114.24,
+   "d": 1.84,
+   "text": "is the PCG that we're all very very"
+  },
+  {
+   "t": 116.08,
+   "d": 1.44,
+   "text": "familiar with and is featured in a lot"
+  },
+  {
+   "t": 117.52,
+   "d": 2.04,
+   "text": "of games essentially what this looks"
+  },
+  {
+   "t": 119.56,
+   "d": 2.08,
+   "text": "like is a human designer is going to"
+  },
+  {
+   "t": 121.64,
+   "d": 2.48,
+   "text": "make a whole bunch of Lego pieces that a"
+  },
+  {
+   "t": 124.12,
+   "d": 1.8,
+   "text": "generator which is also authored by a"
+  },
+  {
+   "t": 125.92,
+   "d": 1.48,
+   "text": "human designer is going to stick"
+  },
+  {
+   "t": 127.4,
+   "d": 1.44,
+   "text": "together in various ways in order to"
+  },
+  {
+   "t": 128.84,
+   "d": 2.76,
+   "text": "build a level or a creature or an art"
+  },
+  {
+   "t": 131.6,
+   "d": 2.12,
+   "text": "asset or anything else today we're going"
+  },
+  {
+   "t": 133.72,
+   "d": 1.56,
+   "text": "to be talking about level generation"
+  },
+  {
+   "t": 135.28,
+   "d": 3.08,
+   "text": "since trp is a level generation approach"
+  },
+  {
+   "t": 138.36,
+   "d": 1.92,
+   "text": "now we've seen constructive PCG in games"
+  },
+  {
+   "t": 140.28,
+   "d": 2.8,
+   "text": "like enter the gungeon Hades Binding of"
+  },
+  {
+   "t": 143.08,
+   "d": 3.04,
+   "text": "Isaac slay the Spire boyfriend dungeon"
+  },
+  {
+   "t": 146.12,
+   "d": 1.56,
+   "text": "and I could list on and on and on I"
+  },
+  {
+   "t": 147.68,
+   "d": 1.6,
+   "text": "could list 20 or 30 games that use"
+  },
+  {
+   "t": 149.28,
+   "d": 1.6,
+   "text": "constructive"
+  },
+  {
+   "t": 150.88,
+   "d": 3.56,
+   "text": "PCG however um there are a couple of"
+  },
+  {
+   "t": 154.44,
+   "d": 2.0,
+   "text": "issues with constructive PCG it's not"
+  },
+  {
+   "t": 156.44,
+   "d": 3.4,
+   "text": "exactly the the the best system uh for"
+  },
+  {
+   "t": 159.84,
+   "d": 1.64,
+   "text": "everything while it can be super"
+  },
+  {
+   "t": 161.48,
+   "d": 1.88,
+   "text": "expressive and it can be super lovely"
+  },
+  {
+   "t": 163.36,
+   "d": 1.8,
+   "text": "and make really beautiful content"
+  },
+  {
+   "t": 165.16,
+   "d": 1.72,
+   "text": "somebody has to go and author all of"
+  },
+  {
+   "t": 166.88,
+   "d": 1.64,
+   "text": "these different Lego pieces and that can"
+  },
+  {
+   "t": 168.52,
+   "d": 2.88,
+   "text": "be really intensive furthermore somebody"
+  },
+  {
+   "t": 171.4,
+   "d": 1.64,
+   "text": "has to author the generator that sticks"
+  },
+  {
+   "t": 173.04,
+   "d": 1.72,
+   "text": "them together and maybe you have to add"
+  },
+  {
+   "t": 174.76,
+   "d": 1.28,
+   "text": "additional information such as"
+  },
+  {
+   "t": 176.04,
+   "d": 1.2,
+   "text": "constraint information on these"
+  },
+  {
+   "t": 177.24,
+   "d": 2.0,
+   "text": "different pieces maybe one room can only"
+  },
+  {
+   "t": 179.24,
+   "d": 2.0,
+   "text": "go in the corner cor of a dungeon or one"
+  },
+  {
+   "t": 181.24,
+   "d": 1.64,
+   "text": "room has to be accompanied by another"
+  },
+  {
+   "t": 182.88,
+   "d": 1.6,
+   "text": "room uh and this can get really"
+  },
+  {
+   "t": 184.48,
+   "d": 2.6,
+   "text": "complicated really fast wouldn't it be"
+  },
+  {
+   "t": 187.08,
+   "d": 1.72,
+   "text": "great if instead of authoring these"
+  },
+  {
+   "t": 188.8,
+   "d": 2.36,
+   "text": "pieces we'd be able to somehow learn"
+  },
+  {
+   "t": 191.16,
+   "d": 2.12,
+   "text": "from previous levels that a human has"
+  },
+  {
+   "t": 193.28,
+   "d": 2.56,
+   "text": "made and use that information in order"
+  },
+  {
+   "t": 195.84,
+   "d": 2.76,
+   "text": "to make new levels and this is the high"
+  },
+  {
+   "t": 198.6,
+   "d": 2.12,
+   "text": "level idea behind PCG via machine"
+  },
+  {
+   "t": 200.72,
+   "d": 2.24,
+   "text": "learning here by Machine learning what I"
+  },
+  {
+   "t": 202.96,
+   "d": 1.52,
+   "text": "mean is that we're just going to learn"
+  },
+  {
+   "t": 204.48,
+   "d": 1.88,
+   "text": "patterns from data in order to learn"
+  },
+  {
+   "t": 206.36,
+   "d": 2.32,
+   "text": "some sort of function on screen is"
+  },
+  {
+   "t": 208.68,
+   "d": 1.64,
+   "text": "townscaper which uses wave function"
+  },
+  {
+   "t": 210.32,
+   "d": 2.24,
+   "text": "collapse which is a pcgl algorithm in"
+  },
+  {
+   "t": 212.56,
+   "d": 1.84,
+   "text": "order to generate its uh"
+  },
+  {
+   "t": 214.4,
+   "d": 2.32,
+   "text": "townscapes uh another example of a game"
+  },
+  {
+   "t": 216.72,
+   "d": 2.68,
+   "text": "that uses pcgl is queso cud it's so I'm"
+  },
+  {
+   "t": 219.4,
+   "d": 2.24,
+   "text": "sure that many of you are familiar with"
+  },
+  {
+   "t": 221.64,
+   "d": 2.0,
+   "text": "um but I want to go into a brief aside"
+  },
+  {
+   "t": 223.64,
+   "d": 1.44,
+   "text": "here because many of you might have"
+  },
+  {
+   "t": 225.08,
+   "d": 1.64,
+   "text": "heard machine learning and said wait a"
+  },
+  {
+   "t": 226.72,
+   "d": 3.08,
+   "text": "minute isn't machine learning bad well"
+  },
+  {
+   "t": 229.8,
+   "d": 2.0,
+   "text": "today we're talking about small models"
+  },
+  {
+   "t": 231.8,
+   "d": 2.2,
+   "text": "which just learn patterns from data they"
+  },
+  {
+   "t": 234.0,
+   "d": 1.36,
+   "text": "don't require any more power than"
+  },
+  {
+   "t": 235.36,
+   "d": 1.8,
+   "text": "developing a game normally and there's"
+  },
+  {
+   "t": 237.16,
+   "d": 2.96,
+   "text": "full consensual use of data here maybe"
+  },
+  {
+   "t": 240.12,
+   "d": 1.64,
+   "text": "one or two levels that we're taking from"
+  },
+  {
+   "t": 241.76,
+   "d": 1.84,
+   "text": "a human designer who's given us explicit"
+  },
+  {
+   "t": 243.6,
+   "d": 1.84,
+   "text": "permission to do so there's no web"
+  },
+  {
+   "t": 245.44,
+   "d": 2.0,
+   "text": "scraping going on there's no evil stuff"
+  },
+  {
+   "t": 247.44,
+   "d": 1.56,
+   "text": "like that as you can see by this evil"
+  },
+  {
+   "t": 249.0,
+   "d": 3.32,
+   "text": "neural network on the side here so if"
+  },
+  {
+   "t": 252.32,
+   "d": 3.16,
+   "text": "machine learning isn't evil and it's so"
+  },
+  {
+   "t": 255.48,
+   "d": 1.96,
+   "text": "good uh like you know we can learn"
+  },
+  {
+   "t": 257.44,
+   "d": 2.24,
+   "text": "things you know that sounds pretty good"
+  },
+  {
+   "t": 259.68,
+   "d": 2.32,
+   "text": "um how come on this slide I didn't have"
+  },
+  {
+   "t": 262.0,
+   "d": 2.44,
+   "text": "a lot of examples of games that use PCG"
+  },
+  {
+   "t": 264.44,
+   "d": 2.84,
+   "text": "ml or in other words why is PCG via"
+  },
+  {
+   "t": 267.28,
+   "d": 1.88,
+   "text": "machine learning why isn't it more"
+  },
+  {
+   "t": 269.16,
+   "d": 1.6,
+   "text": "popular"
+  },
+  {
+   "t": 270.76,
+   "d": 1.84,
+   "text": "well a major problem that we've run into"
+  },
+  {
+   "t": 272.6,
+   "d": 2.16,
+   "text": "is a lack of data within the domain of"
+  },
+  {
+   "t": 274.76,
+   "d": 1.96,
+   "text": "games um most machine learning"
+  },
+  {
+   "t": 276.72,
+   "d": 1.8,
+   "text": "approaches require a ton of training"
+  },
+  {
+   "t": 278.52,
+   "d": 2.32,
+   "text": "data in order to work on the left here"
+  },
+  {
+   "t": 280.84,
+   "d": 1.64,
+   "text": "we see a neural network based approach"
+  },
+  {
+   "t": 282.48,
+   "d": 2.2,
+   "text": "called an auto encoder when given only"
+  },
+  {
+   "t": 284.68,
+   "d": 2.12,
+   "text": "two Mario levels it ends up spending out"
+  },
+  {
+   "t": 286.8,
+   "d": 1.72,
+   "text": "content that looks like this which isn't"
+  },
+  {
+   "t": 288.52,
+   "d": 1.72,
+   "text": "going to be too helpful for either a"
+  },
+  {
+   "t": 290.24,
+   "d": 1.56,
+   "text": "designer or a player who wants to play"
+  },
+  {
+   "t": 291.8,
+   "d": 2.96,
+   "text": "an exciting new level now there are"
+  },
+  {
+   "t": 294.76,
+   "d": 1.36,
+   "text": "other machine learning approaches that"
+  },
+  {
+   "t": 296.12,
+   "d": 1.76,
+   "text": "require only a single example like wave"
+  },
+  {
+   "t": 297.88,
+   "d": 1.56,
+   "text": "function collapse but these can have"
+  },
+  {
+   "t": 299.44,
+   "d": 2.8,
+   "text": "pretty major drawbacks in this example"
+  },
+  {
+   "t": 302.24,
+   "d": 2.0,
+   "text": "we see a dungeon like game where there"
+  },
+  {
+   "t": 304.24,
+   "d": 1.72,
+   "text": "are keys and doors that you have to"
+  },
+  {
+   "t": 305.96,
+   "d": 1.48,
+   "text": "reach so you've got to get the key and"
+  },
+  {
+   "t": 307.44,
+   "d": 2.56,
+   "text": "then get to the door well there's no"
+  },
+  {
+   "t": 310.0,
+   "d": 2.16,
+   "text": "door in this image and also these"
+  },
+  {
+   "t": 312.16,
+   "d": 1.72,
+   "text": "spiders are kind of off in their own"
+  },
+  {
+   "t": 313.88,
+   "d": 2.36,
+   "text": "Chambers you know sectioned off no"
+  },
+  {
+   "t": 316.24,
+   "d": 1.56,
+   "text": "matter where we put link or another"
+  },
+  {
+   "t": 317.8,
+   "d": 1.52,
+   "text": "protagonist in this space it doesn't"
+  },
+  {
+   "t": 319.32,
+   "d": 1.84,
+   "text": "really make any sense to navigate"
+  },
+  {
+   "t": 321.16,
+   "d": 1.92,
+   "text": "there's no respect for the global"
+  },
+  {
+   "t": 323.08,
+   "d": 2.44,
+   "text": "constraint of needing to get to a key"
+  },
+  {
+   "t": 325.52,
+   "d": 2.68,
+   "text": "and then get to a door well wouldn't it"
+  },
+  {
+   "t": 328.2,
+   "d": 2.08,
+   "text": "be nice if there was an approach that"
+  },
+  {
+   "t": 330.28,
+   "d": 1.24,
+   "text": "uh was able to get around these"
+  },
+  {
+   "t": 331.52,
+   "d": 1.48,
+   "text": "drawbacks and can work with a single"
+  },
+  {
+   "t": 333.0,
+   "d": 3.0,
+   "text": "example well luckily for us we have tree"
+  },
+  {
+   "t": 336.0,
+   "d": 2.64,
+   "text": "based reconstructive partitioning or trp"
+  },
+  {
+   "t": 338.64,
+   "d": 1.48,
+   "text": "I'm going to be calling it trp for the"
+  },
+  {
+   "t": 340.12,
+   "d": 1.6,
+   "text": "rest of this presentation because tree"
+  },
+  {
+   "t": 341.72,
+   "d": 1.64,
+   "text": "based reconstructed partitioning is a"
+  },
+  {
+   "t": 343.36,
+   "d": 2.6,
+   "text": "bit of a mouthful the high level idea"
+  },
+  {
+   "t": 345.96,
+   "d": 1.36,
+   "text": "behind this approach is that we're going"
+  },
+  {
+   "t": 347.32,
+   "d": 2.12,
+   "text": "to use playthrough data of an AI agent"
+  },
+  {
+   "t": 349.44,
+   "d": 1.32,
+   "text": "it's going to play through a level"
+  },
+  {
+   "t": 350.76,
+   "d": 1.88,
+   "text": "that's been authored by a human we're"
+  },
+  {
+   "t": 352.64,
+   "d": 1.52,
+   "text": "going to use that data that that"
+  },
+  {
+   "t": 354.16,
+   "d": 1.4,
+   "text": "playthrough generates in order to"
+  },
+  {
+   "t": 355.56,
+   "d": 2.8,
+   "text": "generate new levels the results here are"
+  },
+  {
+   "t": 358.36,
+   "d": 1.76,
+   "text": "that we get better coherence of the"
+  },
+  {
+   "t": 360.12,
+   "d": 2.04,
+   "text": "output levels without strenuous input"
+  },
+  {
+   "t": 362.16,
+   "d": 2.32,
+   "text": "from the designers so we aren't asking"
+  },
+  {
+   "t": 364.48,
+   "d": 1.88,
+   "text": "the designers to author a whole bunch of"
+  },
+  {
+   "t": 366.36,
+   "d": 2.24,
+   "text": "constraints or specific examples that"
+  },
+  {
+   "t": 368.6,
+   "d": 1.48,
+   "text": "require you to know how the algorithm"
+  },
+  {
+   "t": 370.08,
+   "d": 3.0,
+   "text": "Works in order to make the most of we're"
+  },
+  {
+   "t": 373.08,
+   "d": 1.36,
+   "text": "just asking them to tweak a couple of"
+  },
+  {
+   "t": 374.44,
+   "d": 1.48,
+   "text": "parameters which we'll talk about in a"
+  },
+  {
+   "t": 375.92,
+   "d": 2.28,
+   "text": "little bit so that's what the today's"
+  },
+  {
+   "t": 378.2,
+   "d": 1.52,
+   "text": "talk is all about it's all about tree"
+  },
+  {
+   "t": 379.72,
+   "d": 2.2,
+   "text": "based reconstructive partitioning and U"
+  },
+  {
+   "t": 381.92,
+   "d": 1.04,
+   "text": "we're going to talk about how the"
+  },
+  {
+   "t": 382.96,
+   "d": 1.64,
+   "text": "algorithm Works we're going to do some"
+  },
+  {
+   "t": 384.6,
+   "d": 2.0,
+   "text": "comparisons against other methods and"
+  },
+  {
+   "t": 386.6,
+   "d": 1.4,
+   "text": "most importantly we're going to talk"
+  },
+  {
+   "t": 388.0,
+   "d": 1.64,
+   "text": "about how you can use trp in your"
+  },
+  {
+   "t": 389.64,
+   "d": 1.2,
+   "text": "projects and what the future of the"
+  },
+  {
+   "t": 390.84,
+   "d": 2.76,
+   "text": "algorithm looks like so let's go ahead"
+  },
+  {
+   "t": 393.6,
+   "d": 1.24,
+   "text": "and start by talking about how the"
+  },
+  {
+   "t": 394.84,
+   "d": 2.48,
+   "text": "algorithm works but first we need a"
+  },
+  {
+   "t": 397.32,
+   "d": 2.52,
+   "text": "little aide the side is about the"
+  },
+  {
+   "t": 399.84,
+   "d": 2.4,
+   "text": "domains that we're talking about today"
+  },
+  {
+   "t": 402.24,
+   "d": 1.36,
+   "text": "uh so the two games that we're going to"
+  },
+  {
+   "t": 403.6,
+   "d": 1.64,
+   "text": "be showing examples from today are Super"
+  },
+  {
+   "t": 405.24,
+   "d": 3.76,
+   "text": "Mario Bros for the NES and gbg AI Zelda"
+  },
+  {
+   "t": 409.0,
+   "d": 1.84,
+   "text": "which I know are equally popular games"
+  },
+  {
+   "t": 410.84,
+   "d": 2.64,
+   "text": "both are gargantuan in the gaming world"
+  },
+  {
+   "t": 413.48,
+   "d": 2.44,
+   "text": "uh gbg Zelda for context obviously is"
+  },
+  {
+   "t": 415.92,
+   "d": 1.68,
+   "text": "not the most popular game in the world"
+  },
+  {
+   "t": 417.6,
+   "d": 2.12,
+   "text": "but is a research test bed game so it's"
+  },
+  {
+   "t": 419.72,
+   "d": 1.4,
+   "text": "a game that was invented in order to do"
+  },
+  {
+   "t": 421.12,
+   "d": 2.16,
+   "text": "research with uh and in the game as I"
+  },
+  {
+   "t": 423.28,
+   "d": 1.76,
+   "text": "gested at earlier you control this"
+  },
+  {
+   "t": 425.04,
+   "d": 1.68,
+   "text": "player character you're trying to reach"
+  },
+  {
+   "t": 426.72,
+   "d": 2.4,
+   "text": "a key and then reach a door uh and you"
+  },
+  {
+   "t": 429.12,
+   "d": 1.28,
+   "text": "have a little attack that you could do"
+  },
+  {
+   "t": 430.4,
+   "d": 2.36,
+   "text": "to kill this Lobster guy or this Spider"
+  },
+  {
+   "t": 432.76,
+   "d": 2.52,
+   "text": "Guy now some notes about the domains the"
+  },
+  {
+   "t": 435.28,
+   "d": 1.84,
+   "text": "domains need to be navigational meaning"
+  },
+  {
+   "t": 437.12,
+   "d": 2.48,
+   "text": "that there's a 2d space uh that we are"
+  },
+  {
+   "t": 439.6,
+   "d": 2.68,
+   "text": "walking through uh more about 3D towards"
+  },
+  {
+   "t": 442.28,
+   "d": 1.64,
+   "text": "the end of the presentation and there"
+  },
+  {
+   "t": 443.92,
+   "d": 2.56,
+   "text": "has to be a specified goal so this might"
+  },
+  {
+   "t": 446.48,
+   "d": 1.88,
+   "text": "look like Mario Reaching the flag pole"
+  },
+  {
+   "t": 448.36,
+   "d": 2.36,
+   "text": "in Super Mario Bros or reaching the door"
+  },
+  {
+   "t": 450.72,
+   "d": 2.4,
+   "text": "with the key in gvg"
+  },
+  {
+   "t": 453.12,
+   "d": 2.24,
+   "text": "zilda now with that out of the way let's"
+  },
+  {
+   "t": 455.36,
+   "d": 2.36,
+   "text": "talk about how trp works I'm going to go"
+  },
+  {
+   "t": 457.72,
+   "d": 1.92,
+   "text": "through each of the steps of how trp is"
+  },
+  {
+   "t": 459.64,
+   "d": 2.08,
+   "text": "implemented on a high level and then"
+  },
+  {
+   "t": 461.72,
+   "d": 2.08,
+   "text": "we'll go into more detail on later"
+  },
+  {
+   "t": 463.8,
+   "d": 2.52,
+   "text": "slides the first step of trp is we're"
+  },
+  {
+   "t": 466.32,
+   "d": 1.72,
+   "text": "going to play through a source level"
+  },
+  {
+   "t": 468.04,
+   "d": 2.72,
+   "text": "this is an level that's made by a human"
+  },
+  {
+   "t": 470.76,
+   "d": 1.04,
+   "text": "uh and we're going to play through it"
+  },
+  {
+   "t": 471.8,
+   "d": 1.68,
+   "text": "with an algorithm called Monte Carlo"
+  },
+  {
+   "t": 473.48,
+   "d": 2.12,
+   "text": "treesearch another brief aside about how"
+  },
+  {
+   "t": 475.6,
+   "d": 2.0,
+   "text": "Monte Carlo research works I'm not going"
+  },
+  {
+   "t": 477.6,
+   "d": 1.24,
+   "text": "to get into the Weeds about how this"
+  },
+  {
+   "t": 478.84,
+   "d": 1.16,
+   "text": "algorithm works"
+  },
+  {
+   "t": 480.0,
+   "d": 1.8,
+   "text": "but the important thing to understand is"
+  },
+  {
+   "t": 481.8,
+   "d": 1.96,
+   "text": "that it generates a search tree as it"
+  },
+  {
+   "t": 483.76,
+   "d": 1.88,
+   "text": "plays through the level of a whole bunch"
+  },
+  {
+   "t": 485.64,
+   "d": 1.84,
+   "text": "of possibilities so a whole bunch of"
+  },
+  {
+   "t": 487.48,
+   "d": 2.6,
+   "text": "possible Futures that MCTS looks at and"
+  },
+  {
+   "t": 490.08,
+   "d": 1.76,
+   "text": "it uses this information to decide what"
+  },
+  {
+   "t": 491.84,
+   "d": 2.36,
+   "text": "best to do and we could use this search"
+  },
+  {
+   "t": 494.2,
+   "d": 1.56,
+   "text": "tree information in order to generate a"
+  },
+  {
+   "t": 495.76,
+   "d": 1.84,
+   "text": "new level that's sort of the high level"
+  },
+  {
+   "t": 497.6,
+   "d": 1.52,
+   "text": "idea behind"
+  },
+  {
+   "t": 499.12,
+   "d": 2.28,
+   "text": "trp so once we play through the source"
+  },
+  {
+   "t": 501.4,
+   "d": 2.16,
+   "text": "level using MCTS the next step is we're"
+  },
+  {
+   "t": 503.56,
+   "d": 2.24,
+   "text": "going to do a binary reconstruction of"
+  },
+  {
+   "t": 505.8,
+   "d": 2.16,
+   "text": "the original Source level using the MCTS"
+  },
+  {
+   "t": 507.96,
+   "d": 3.0,
+   "text": "search tree data so what this looks like"
+  },
+  {
+   "t": 510.96,
+   "d": 1.92,
+   "text": "is everywhere where Mario has been is"
+  },
+  {
+   "t": 512.88,
+   "d": 1.64,
+   "text": "going to be empty and everywhere where"
+  },
+  {
+   "t": 514.52,
+   "d": 2.84,
+   "text": "Mario hasn't been is going to be block"
+  },
+  {
+   "t": 517.36,
+   "d": 1.44,
+   "text": "uh in the case of"
+  },
+  {
+   "t": 518.8,
+   "d": 2.04,
+   "text": "Mario the next thing that we do is we"
+  },
+  {
+   "t": 520.84,
+   "d": 2.12,
+   "text": "fill in the details of this binary"
+  },
+  {
+   "t": 522.96,
+   "d": 1.88,
+   "text": "reconstruction I'm going to handwave a"
+  },
+  {
+   "t": 524.84,
+   "d": 1.04,
+   "text": "little bit here because there's an"
+  },
+  {
+   "t": 525.88,
+   "d": 1.48,
+   "text": "explanation about how this detail"
+  },
+  {
+   "t": 527.36,
+   "d": 2.28,
+   "text": "filling in works on a later slide but"
+  },
+  {
+   "t": 529.64,
+   "d": 1.48,
+   "text": "essentially the idea is we're going to"
+  },
+  {
+   "t": 531.12,
+   "d": 1.92,
+   "text": "copy and paste segments of the original"
+  },
+  {
+   "t": 533.04,
+   "d": 2.8,
+   "text": "level into the binary reconstruction uh"
+  },
+  {
+   "t": 535.84,
+   "d": 1.64,
+   "text": "based on some"
+  },
+  {
+   "t": 537.48,
+   "d": 2.04,
+   "text": "matching and the last thing that we do"
+  },
+  {
+   "t": 539.52,
+   "d": 2.08,
+   "text": "is a probabilistic threat placement"
+  },
+  {
+   "t": 541.6,
+   "d": 1.56,
+   "text": "normally it says enemy on the slide but"
+  },
+  {
+   "t": 543.16,
+   "d": 1.4,
+   "text": "it doesn't have to be enemies it could"
+  },
+  {
+   "t": 544.56,
+   "d": 2.4,
+   "text": "be anything that threatens to end a"
+  },
+  {
+   "t": 546.96,
+   "d": 2.24,
+   "text": "playthrough of a game so in sobon a"
+  },
+  {
+   "t": 549.2,
+   "d": 3.48,
+   "text": "threat might be having the boxes all in"
+  },
+  {
+   "t": 552.68,
+   "d": 2.56,
+   "text": "the wrong position uh like one's pushed"
+  },
+  {
+   "t": 555.24,
+   "d": 1.16,
+   "text": "up against the wall and you can't access"
+  },
+  {
+   "t": 556.4,
+   "d": 1.24,
+   "text": "it"
+  },
+  {
+   "t": 557.64,
+   "d": 2.76,
+   "text": "anymore so uh with these four steps in"
+  },
+  {
+   "t": 560.4,
+   "d": 1.32,
+   "text": "mind let's go ahead and look at a"
+  },
+  {
+   "t": 561.72,
+   "d": 1.8,
+   "text": "visualized example of how trp can"
+  },
+  {
+   "t": 563.52,
+   "d": 2.64,
+   "text": "generate a level so here's our original"
+  },
+  {
+   "t": 566.16,
+   "d": 2.56,
+   "text": "level this is the second half of 1 one"
+  },
+  {
+   "t": 568.72,
+   "d": 1.12,
+   "text": "uh I'm showing you this second half"
+  },
+  {
+   "t": 569.84,
+   "d": 1.2,
+   "text": "instead of the first half just because"
+  },
+  {
+   "t": 571.04,
+   "d": 1.76,
+   "text": "it generates a more interesting"
+  },
+  {
+   "t": 572.8,
+   "d": 2.08,
+   "text": "level uh the first thing that we do is"
+  },
+  {
+   "t": 574.88,
+   "d": 1.76,
+   "text": "we play through that level with MCTS and"
+  },
+  {
+   "t": 576.64,
+   "d": 1.0,
+   "text": "we're going to get a cavness"
+  },
+  {
+   "t": 577.64,
+   "d": 2.0,
+   "text": "representation of the level so if I"
+  },
+  {
+   "t": 579.64,
+   "d": 2.0,
+   "text": "flick back and forth between these two"
+  },
+  {
+   "t": 581.64,
+   "d": 1.64,
+   "text": "you can kind of see that it's the path"
+  },
+  {
+   "t": 583.28,
+   "d": 2.56,
+   "text": "through the level right so Mario is"
+  },
+  {
+   "t": 585.84,
+   "d": 2.92,
+   "text": "jumping over these stairs here and then"
+  },
+  {
+   "t": 588.76,
+   "d": 2.16,
+   "text": "over these stairs here and Etc and you"
+  },
+  {
+   "t": 590.92,
+   "d": 2.28,
+   "text": "can see that there's even a pitch"
+  },
+  {
+   "t": 593.2,
+   "d": 2.44,
+   "text": "there now after we've gotten this"
+  },
+  {
+   "t": 595.64,
+   "d": 1.96,
+   "text": "cavernous representation we're going to"
+  },
+  {
+   "t": 597.6,
+   "d": 1.92,
+   "text": "split that into different segments this"
+  },
+  {
+   "t": 599.52,
+   "d": 1.8,
+   "text": "is split into different size segments at"
+  },
+  {
+   "t": 601.32,
+   "d": 2.4,
+   "text": "random so here they all happen to be"
+  },
+  {
+   "t": 603.72,
+   "d": 2.48,
+   "text": "column big they don't have to be uh a"
+  },
+  {
+   "t": 606.2,
+   "d": 2.16,
+   "text": "column tall they could be you know uh"
+  },
+  {
+   "t": 608.36,
+   "d": 1.6,
+   "text": "there could be a line here for example"
+  },
+  {
+   "t": 609.96,
+   "d": 1.52,
+   "text": "but this is just a simple"
+  },
+  {
+   "t": 611.48,
+   "d": 2.32,
+   "text": "example then we're going to use binary"
+  },
+  {
+   "t": 613.8,
+   "d": 1.84,
+   "text": "space partitioning in order to fill in"
+  },
+  {
+   "t": 615.64,
+   "d": 2.56,
+   "text": "the details of the level so these are"
+  },
+  {
+   "t": 618.2,
+   "d": 1.2,
+   "text": "segments that were taken from the"
+  },
+  {
+   "t": 619.4,
+   "d": 1.52,
+   "text": "original level that we're going to copy"
+  },
+  {
+   "t": 620.92,
+   "d": 2.6,
+   "text": "and paste into the new level using a"
+  },
+  {
+   "t": 623.52,
+   "d": 1.4,
+   "text": "specific mashing"
+  },
+  {
+   "t": 624.92,
+   "d": 2.44,
+   "text": "algorithm the last thing we do is a bit"
+  },
+  {
+   "t": 627.36,
+   "d": 2.08,
+   "text": "of probabilistic enemy placement based"
+  },
+  {
+   "t": 629.44,
+   "d": 2.36,
+   "text": "on that MCTS data and also a bit of"
+  },
+  {
+   "t": 631.8,
+   "d": 2.28,
+   "text": "cleanup so we're going to place down the"
+  },
+  {
+   "t": 634.08,
+   "d": 2.8,
+   "text": "flag pole uh in the right place make"
+  },
+  {
+   "t": 636.88,
+   "d": 1.76,
+   "text": "sure that Mario's at the started level"
+  },
+  {
+   "t": 638.64,
+   "d": 2.36,
+   "text": "Etc you know make sure that the level um"
+  },
+  {
+   "t": 641.0,
+   "d": 1.76,
+   "text": "is"
+  },
+  {
+   "t": 642.76,
+   "d": 2.04,
+   "text": "coherent so to go through these steps"
+  },
+  {
+   "t": 644.8,
+   "d": 2.16,
+   "text": "and a bit of additional detail uh the"
+  },
+  {
+   "t": 646.96,
+   "d": 1.68,
+   "text": "first step is that we use MCTS to play"
+  },
+  {
+   "t": 648.64,
+   "d": 1.8,
+   "text": "through the level and when we do this we"
+  },
+  {
+   "t": 650.44,
+   "d": 2.36,
+   "text": "collect data from the MCTS search tree"
+  },
+  {
+   "t": 652.8,
+   "d": 1.52,
+   "text": "the two things that we care about here"
+  },
+  {
+   "t": 654.32,
+   "d": 1.48,
+   "text": "are what path the player took through"
+  },
+  {
+   "t": 655.8,
+   "d": 2.76,
+   "text": "the level this is marked in purple and"
+  },
+  {
+   "t": 658.56,
+   "d": 2.44,
+   "text": "where the player died or wherever the"
+  },
+  {
+   "t": 661.0,
+   "d": 2.24,
+   "text": "the game is no longer completable so"
+  },
+  {
+   "t": 663.24,
+   "d": 1.44,
+   "text": "that might mean falling in a pit or"
+  },
+  {
+   "t": 664.68,
+   "d": 2.72,
+   "text": "running into a glomba so we're tracking"
+  },
+  {
+   "t": 667.4,
+   "d": 2.08,
+   "text": "all this information as MCTS plays"
+  },
+  {
+   "t": 669.48,
+   "d": 2.52,
+   "text": "through the level the next step is that"
+  },
+  {
+   "t": 672.0,
+   "d": 2.04,
+   "text": "we reconstruct the original level using"
+  },
+  {
+   "t": 674.04,
+   "d": 1.16,
+   "text": "this path"
+  },
+  {
+   "t": 675.2,
+   "d": 2.84,
+   "text": "information so where the player has been"
+  },
+  {
+   "t": 678.04,
+   "d": 1.92,
+   "text": "is going to be empty and where the"
+  },
+  {
+   "t": 679.96,
+   "d": 1.96,
+   "text": "player hasn't been is going to be full"
+  },
+  {
+   "t": 681.92,
+   "d": 1.8,
+   "text": "it's called the binary representation"
+  },
+  {
+   "t": 683.72,
+   "d": 1.76,
+   "text": "because there's two options here either"
+  },
+  {
+   "t": 685.48,
+   "d": 2.96,
+   "text": "zero or one now notably the designer has"
+  },
+  {
+   "t": 688.44,
+   "d": 2.28,
+   "text": "to say what empty and full are so they"
+  },
+  {
+   "t": 690.72,
+   "d": 2.32,
+   "text": "have to say all right this tile uh of"
+  },
+  {
+   "t": 693.04,
+   "d": 3.16,
+   "text": "like empty space or no tile at all is uh"
+  },
+  {
+   "t": 696.2,
+   "d": 2.72,
+   "text": "empty and this tile is"
+  },
+  {
+   "t": 698.92,
+   "d": 2.48,
+   "text": "full doing this creates a cavernous"
+  },
+  {
+   "t": 701.4,
+   "d": 1.92,
+   "text": "outline of the level to come so it's"
+  },
+  {
+   "t": 703.32,
+   "d": 2.08,
+   "text": "sketching out a path for the binary"
+  },
+  {
+   "t": 705.4,
+   "d": 2.64,
+   "text": "space partition to use uh in filling in"
+  },
+  {
+   "t": 708.04,
+   "d": 2.4,
+   "text": "the details speaking of which the next"
+  },
+  {
+   "t": 710.44,
+   "d": 2.28,
+   "text": "step is to fill in the details we fill"
+  },
+  {
+   "t": 712.72,
+   "d": 1.48,
+   "text": "in the details of our new level using"
+  },
+  {
+   "t": 714.2,
+   "d": 2.68,
+   "text": "binary space partitioning uh here is a"
+  },
+  {
+   "t": 716.88,
+   "d": 1.84,
+   "text": "worked example here we have the original"
+  },
+  {
+   "t": 718.72,
+   "d": 3.28,
+   "text": "level right up top here and a uh work in"
+  },
+  {
+   "t": 722.0,
+   "d": 2.2,
+   "text": "progress level that is at the bottom and"
+  },
+  {
+   "t": 724.2,
+   "d": 1.24,
+   "text": "this is a segment that hasn't been"
+  },
+  {
+   "t": 725.44,
+   "d": 2.04,
+   "text": "filled in yet all these other segments"
+  },
+  {
+   "t": 727.48,
+   "d": 1.6,
+   "text": "have been filled in we just have this"
+  },
+  {
+   "t": 729.08,
+   "d": 2.68,
+   "text": "one cavernous section remaining how it"
+  },
+  {
+   "t": 731.76,
+   "d": 1.92,
+   "text": "works is we're going to take the size of"
+  },
+  {
+   "t": 733.68,
+   "d": 1.56,
+   "text": "the section that's remaining after"
+  },
+  {
+   "t": 735.24,
+   "d": 1.28,
+   "text": "dividing up the level into a bunch of"
+  },
+  {
+   "t": 736.52,
+   "d": 2.08,
+   "text": "small little boxes and we're going to do"
+  },
+  {
+   "t": 738.6,
+   "d": 3.68,
+   "text": "a scan of the original level like this"
+  },
+  {
+   "t": 742.28,
+   "d": 2.76,
+   "text": "until we find uh the most appropriate"
+  },
+  {
+   "t": 745.04,
+   "d": 2.2,
+   "text": "thing to match this with this is based"
+  },
+  {
+   "t": 747.24,
+   "d": 2.24,
+   "text": "on edit distance uh based on what tiles"
+  },
+  {
+   "t": 749.48,
+   "d": 1.52,
+   "text": "are considered solid and which ones are"
+  },
+  {
+   "t": 751.0,
+   "d": 2.64,
+   "text": "considered empty so here we see that"
+  },
+  {
+   "t": 753.64,
+   "d": 2.48,
+   "text": "we're matching with uh this two this"
+  },
+  {
+   "t": 756.12,
+   "d": 1.96,
+   "text": "like structure with two pipes and you"
+  },
+  {
+   "t": 758.08,
+   "d": 2.12,
+   "text": "can see this sort of structure mirrored"
+  },
+  {
+   "t": 760.2,
+   "d": 2.32,
+   "text": "in the uh cavernous representation so"
+  },
+  {
+   "t": 762.52,
+   "d": 1.56,
+   "text": "you can imagine that maybe the path that"
+  },
+  {
+   "t": 764.08,
+   "d": 2.0,
+   "text": "we've taken to get here is Mario has"
+  },
+  {
+   "t": 766.08,
+   "d": 1.76,
+   "text": "jumped off of a pipe here and then"
+  },
+  {
+   "t": 767.84,
+   "d": 1.92,
+   "text": "jumped onto a new pipe and that's sort"
+  },
+  {
+   "t": 769.76,
+   "d": 1.96,
+   "text": "of the the matching that's going on here"
+  },
+  {
+   "t": 771.72,
+   "d": 2.56,
+   "text": "via edit distance once we have the"
+  },
+  {
+   "t": 774.28,
+   "d": 2.24,
+   "text": "closest match or if there's a bunch of"
+  },
+  {
+   "t": 776.52,
+   "d": 1.24,
+   "text": "different matches we just pick one at"
+  },
+  {
+   "t": 777.76,
+   "d": 1.76,
+   "text": "random we're just going to cut copy and"
+  },
+  {
+   "t": 779.52,
+   "d": 3.12,
+   "text": "paste this information onto the new uh"
+  },
+  {
+   "t": 782.64,
+   "d": 1.68,
+   "text": "into the new"
+  },
+  {
+   "t": 784.32,
+   "d": 2.24,
+   "text": "level the last step and probably the"
+  },
+  {
+   "t": 786.56,
+   "d": 2.84,
+   "text": "most uh unnecessary step of trp so you"
+  },
+  {
+   "t": 789.4,
+   "d": 1.52,
+   "text": "don't necessarily need to do this for it"
+  },
+  {
+   "t": 790.92,
+   "d": 2.16,
+   "text": "to be trp is to populate the level with"
+  },
+  {
+   "t": 793.08,
+   "d": 2.0,
+   "text": "threats and the idea behind this is"
+  },
+  {
+   "t": 795.08,
+   "d": 0.96,
+   "text": "we're going to use the threat"
+  },
+  {
+   "t": 796.04,
+   "d": 3.4,
+   "text": "information from MCTS uh in order to uh"
+  },
+  {
+   "t": 799.44,
+   "d": 2.24,
+   "text": "populate the level so since we have all"
+  },
+  {
+   "t": 801.68,
+   "d": 1.32,
+   "text": "that death information we might as well"
+  },
+  {
+   "t": 803.0,
+   "d": 2.28,
+   "text": "use it for something right so how it"
+  },
+  {
+   "t": 805.28,
+   "d": 2.52,
+   "text": "works is uh until a threshold is reached"
+  },
+  {
+   "t": 807.8,
+   "d": 2.0,
+   "text": "this threshold is set by the designer"
+  },
+  {
+   "t": 809.8,
+   "d": 2.44,
+   "text": "we add the most impactful threat and"
+  },
+  {
+   "t": 812.24,
+   "d": 2.0,
+   "text": "here what I mean by impact is the amount"
+  },
+  {
+   "t": 814.24,
+   "d": 2.24,
+   "text": "of deaths that a threat has caused"
+  },
+  {
+   "t": 816.48,
+   "d": 1.96,
+   "text": "deaths again in air quotes"
+  },
+  {
+   "t": 818.44,
+   "d": 2.72,
+   "text": "here now an example of this might be if"
+  },
+  {
+   "t": 821.16,
+   "d": 2.24,
+   "text": "there's two Goombas in a Mario level"
+  },
+  {
+   "t": 823.4,
+   "d": 2.28,
+   "text": "maybe one of them is responsible for 75%"
+  },
+  {
+   "t": 825.68,
+   "d": 1.8,
+   "text": "of the deaths and the other one is"
+  },
+  {
+   "t": 827.48,
+   "d": 2.04,
+   "text": "responsible for 25% of the deaths a"
+  },
+  {
+   "t": 829.52,
+   "d": 1.92,
+   "text": "total across all the deaths that happen"
+  },
+  {
+   "t": 831.44,
+   "d": 1.0,
+   "text": "during the"
+  },
+  {
+   "t": 832.44,
+   "d": 2.64,
+   "text": "simulation uh so if this is the case"
+  },
+  {
+   "t": 835.08,
+   "d": 2.6,
+   "text": "then um we're more likely to place this"
+  },
+  {
+   "t": 837.68,
+   "d": 2.8,
+   "text": "one that has 75% of the deaths than this"
+  },
+  {
+   "t": 840.48,
+   "d": 2.2,
+   "text": "one which is more uh which is only"
+  },
+  {
+   "t": 842.68,
+   "d": 2.36,
+   "text": "responsible for 25% so we'll place this"
+  },
+  {
+   "t": 845.04,
+   "d": 1.8,
+   "text": "one first and this sort of comes from"
+  },
+  {
+   "t": 846.84,
+   "d": 2.72,
+   "text": "the notion from game design of uh"
+  },
+  {
+   "t": 849.56,
+   "d": 1.52,
+   "text": "placing the most impactful threats in"
+  },
+  {
+   "t": 851.08,
+   "d": 1.96,
+   "text": "the level while having as little threats"
+  },
+  {
+   "t": 853.04,
+   "d": 1.6,
+   "text": "as"
+  },
+  {
+   "t": 854.64,
+   "d": 3.04,
+   "text": "possible so those are the four steps of"
+  },
+  {
+   "t": 857.68,
+   "d": 2.28,
+   "text": "uh trp but there are also a couple of"
+  },
+  {
+   "t": 859.96,
+   "d": 1.64,
+   "text": "parameters that we can change with trp"
+  },
+  {
+   "t": 861.6,
+   "d": 2.44,
+   "text": "in order to affect the generated levels"
+  },
+  {
+   "t": 864.04,
+   "d": 1.48,
+   "text": "the first of these parameters is how"
+  },
+  {
+   "t": 865.52,
+   "d": 1.84,
+   "text": "many MCTS playthroughs worth of data"
+  },
+  {
+   "t": 867.36,
+   "d": 2.16,
+   "text": "that we use so we don't to just play"
+  },
+  {
+   "t": 869.52,
+   "d": 1.48,
+   "text": "through the level once we could play"
+  },
+  {
+   "t": 871.0,
+   "d": 2.0,
+   "text": "through the level multiple times using"
+  },
+  {
+   "t": 873.0,
+   "d": 2.16,
+   "text": "MCTS generally if we have more"
+  },
+  {
+   "t": 875.16,
+   "d": 1.28,
+   "text": "playthroughs it's going to lead to a"
+  },
+  {
+   "t": 876.44,
+   "d": 1.84,
+   "text": "less restricted level and the easiest"
+  },
+  {
+   "t": 878.28,
+   "d": 1.96,
+   "text": "way to see this is in the binary"
+  },
+  {
+   "t": 880.24,
+   "d": 2.0,
+   "text": "representation with one playthrough it"
+  },
+  {
+   "t": 882.24,
+   "d": 1.52,
+   "text": "looks like this and with five"
+  },
+  {
+   "t": 883.76,
+   "d": 2.48,
+   "text": "playthroughs it looks like this uh"
+  },
+  {
+   "t": 886.24,
+   "d": 2.56,
+   "text": "notably MCTS is is a stochastic"
+  },
+  {
+   "t": 888.8,
+   "d": 1.56,
+   "text": "algorithm meaning that it's random so"
+  },
+  {
+   "t": 890.36,
+   "d": 2.2,
+   "text": "it'll do something different every time"
+  },
+  {
+   "t": 892.56,
+   "d": 2.04,
+   "text": "so that's why we end up taking different"
+  },
+  {
+   "t": 894.6,
+   "d": 2.12,
+   "text": "paths over different playthroughs and"
+  },
+  {
+   "t": 896.72,
+   "d": 1.32,
+   "text": "this might work well if your game has"
+  },
+  {
+   "t": 898.04,
+   "d": 1.84,
+   "text": "multiple branching paths paths or things"
+  },
+  {
+   "t": 899.88,
+   "d": 2.52,
+   "text": "like that that you want to account"
+  },
+  {
+   "t": 902.4,
+   "d": 2.56,
+   "text": "for the next parameter is what the"
+  },
+  {
+   "t": 904.96,
+   "d": 1.6,
+   "text": "minimum size of the segments that we"
+  },
+  {
+   "t": 906.56,
+   "d": 3.28,
+   "text": "take from the original level are so here"
+  },
+  {
+   "t": 909.84,
+   "d": 1.56,
+   "text": "we see that if we're taking bigger"
+  },
+  {
+   "t": 911.4,
+   "d": 1.96,
+   "text": "segments it's going to result in more"
+  },
+  {
+   "t": 913.36,
+   "d": 2.52,
+   "text": "plagiarism now plagiarism is a bad thing"
+  },
+  {
+   "t": 915.88,
+   "d": 2.16,
+   "text": "in Academia but it might not be the"
+  },
+  {
+   "t": 918.04,
+   "d": 1.24,
+   "text": "worst thing when it comes to level"
+  },
+  {
+   "t": 919.28,
+   "d": 2.72,
+   "text": "design for example if we look at this"
+  },
+  {
+   "t": 922.0,
+   "d": 2.88,
+   "text": "staircase here most Mario levels uh end"
+  },
+  {
+   "t": 924.88,
+   "d": 2.2,
+   "text": "with a giant staircase and it might be"
+  },
+  {
+   "t": 927.08,
+   "d": 1.48,
+   "text": "weird if our generated level didn't end"
+  },
+  {
+   "t": 928.56,
+   "d": 2.24,
+   "text": "with one so in this case taking a large"
+  },
+  {
+   "t": 930.8,
+   "d": 1.68,
+   "text": "amount of structure might be a good"
+  },
+  {
+   "t": 932.48,
+   "d": 2.48,
+   "text": "thing however if we go to the opposite"
+  },
+  {
+   "t": 934.96,
+   "d": 1.56,
+   "text": "side of the coin and we take smaller"
+  },
+  {
+   "t": 936.52,
+   "d": 1.76,
+   "text": "segments from the original level this is"
+  },
+  {
+   "t": 938.28,
+   "d": 2.84,
+   "text": "going to result in more chaos now the"
+  },
+  {
+   "t": 941.12,
+   "d": 1.56,
+   "text": "image on screen might not be the most"
+  },
+  {
+   "t": 942.68,
+   "d": 2.52,
+   "text": "useful Mario level you've ever seen but"
+  },
+  {
+   "t": 945.2,
+   "d": 2.16,
+   "text": "that's still kind of interesting and it"
+  },
+  {
+   "t": 947.36,
+   "d": 1.84,
+   "text": "might be useful for a designer"
+  },
+  {
+   "t": 949.2,
+   "d": 2.16,
+   "text": "especially if uh your game for example"
+  },
+  {
+   "t": 951.36,
+   "d": 2.16,
+   "text": "might have more vertical movement so"
+  },
+  {
+   "t": 953.52,
+   "d": 1.2,
+   "text": "here we can see that we've taken"
+  },
+  {
+   "t": 954.72,
+   "d": 2.8,
+   "text": "sections that are not just a column tll"
+  },
+  {
+   "t": 957.52,
+   "d": 1.56,
+   "text": "and uh We've placed some sort of"
+  },
+  {
+   "t": 959.08,
+   "d": 2.88,
+   "text": "floating air in the sky here so kind of"
+  },
+  {
+   "t": 961.96,
+   "d": 1.96,
+   "text": "interesting output that we can"
+  },
+  {
+   "t": 963.92,
+   "d": 2.32,
+   "text": "get as well the last parameter is what"
+  },
+  {
+   "t": 966.24,
+   "d": 1.32,
+   "text": "percentage of threats that we placed in"
+  },
+  {
+   "t": 967.56,
+   "d": 1.96,
+   "text": "the original level this could be none at"
+  },
+  {
+   "t": 969.52,
+   "d": 1.56,
+   "text": "all or it could be all of the threats"
+  },
+  {
+   "t": 971.08,
+   "d": 2.12,
+   "text": "that we encountered at all the points"
+  },
+  {
+   "t": 973.2,
+   "d": 1.48,
+   "text": "and this of course is a spectrum so we"
+  },
+  {
+   "t": 974.68,
+   "d": 2.8,
+   "text": "could do it uh you know 25% of the"
+  },
+  {
+   "t": 977.48,
+   "d": 3.28,
+   "text": "threats or 85 whatever is suitable and"
+  },
+  {
+   "t": 980.76,
+   "d": 2.0,
+   "text": "all these parameters it's really easy to"
+  },
+  {
+   "t": 982.76,
+   "d": 1.32,
+   "text": "just guess and check and mess around"
+  },
+  {
+   "t": 984.08,
+   "d": 2.12,
+   "text": "with trp because the generation process"
+  },
+  {
+   "t": 986.2,
+   "d": 2.32,
+   "text": "is instant it is so fast so you can"
+  },
+  {
+   "t": 988.52,
+   "d": 2.12,
+   "text": "generate hundreds and hundreds of levels"
+  },
+  {
+   "t": 990.64,
+   "d": 1.6,
+   "text": "uh with different parameters and you"
+  },
+  {
+   "t": 992.24,
+   "d": 2.32,
+   "text": "know see which ones are best for"
+  },
+  {
+   "t": 994.56,
+   "d": 3.36,
+   "text": "you now that we've gone uh the algorithm"
+  },
+  {
+   "t": 997.92,
+   "d": 1.92,
+   "text": "working Section out of the way let's"
+  },
+  {
+   "t": 999.84,
+   "d": 1.96,
+   "text": "talk about some comparisons with other"
+  },
+  {
+   "t": 1001.8,
+   "d": 2.4,
+   "text": "methods now in order to do comparisons"
+  },
+  {
+   "t": 1004.2,
+   "d": 1.16,
+   "text": "with other methods we're going to have"
+  },
+  {
+   "t": 1005.36,
+   "d": 1.88,
+   "text": "to talk about other methods and you'll"
+  },
+  {
+   "t": 1007.24,
+   "d": 1.24,
+   "text": "notice that I'm going to kind of Blitz"
+  },
+  {
+   "t": 1008.48,
+   "d": 1.64,
+   "text": "through this part but if you are"
+  },
+  {
+   "t": 1010.12,
+   "d": 3.32,
+   "text": "interested in learning more uh about uh"
+  },
+  {
+   "t": 1013.44,
+   "d": 2.04,
+   "text": "or uh hearing more about these other"
+  },
+  {
+   "t": 1015.48,
+   "d": 2.16,
+   "text": "methods or hearing more about some"
+  },
+  {
+   "t": 1017.64,
+   "d": 1.76,
+   "text": "comparisons with them we have a paper"
+  },
+  {
+   "t": 1019.4,
+   "d": 2.12,
+   "text": "about trp that I've got a QR code uh"
+  },
+  {
+   "t": 1021.52,
+   "d": 2.28,
+   "text": "linking to uh later in the"
+  },
+  {
+   "t": 1023.8,
+   "d": 1.88,
+   "text": "presentation so let's talk about some"
+  },
+  {
+   "t": 1025.68,
+   "d": 2.2,
+   "text": "other methods the first one I mentioned"
+  },
+  {
+   "t": 1027.88,
+   "d": 1.92,
+   "text": "in the introduction is wave function"
+  },
+  {
+   "t": 1029.8,
+   "d": 2.08,
+   "text": "collapse uh notice that I also have"
+  },
+  {
+   "t": 1031.88,
+   "d": 2.64,
+   "text": "sturgeon mentioned here um wave function"
+  },
+  {
+   "t": 1034.52,
+   "d": 1.88,
+   "text": "collapse is a constraint based solver"
+  },
+  {
+   "t": 1036.4,
+   "d": 2.16,
+   "text": "that takes in an example image and uses"
+  },
+  {
+   "t": 1038.56,
+   "d": 2.12,
+   "text": "it to make bigger examples so this small"
+  },
+  {
+   "t": 1040.68,
+   "d": 2.28,
+   "text": "plant has become big plant uh by"
+  },
+  {
+   "t": 1042.96,
+   "d": 1.44,
+   "text": "following the same rules that are"
+  },
+  {
+   "t": 1044.4,
+   "d": 2.4,
+   "text": "present in this image this is used in"
+  },
+  {
+   "t": 1046.8,
+   "d": 2.32,
+   "text": "multiple uh indie games like bad nor"
+  },
+  {
+   "t": 1049.12,
+   "d": 2.88,
+   "text": "here uses wave function collapse notably"
+  },
+  {
+   "t": 1052.0,
+   "d": 1.76,
+   "text": "in the domain of Mario we compare"
+  },
+  {
+   "t": 1053.76,
+   "d": 2.04,
+   "text": "against sturgeon uh which is a level"
+  },
+  {
+   "t": 1055.8,
+   "d": 1.52,
+   "text": "generation approach out of Professor"
+  },
+  {
+   "t": 1057.32,
+   "d": 2.96,
+   "text": "Seth Cooper from nor Eastern's lab um we"
+  },
+  {
+   "t": 1060.28,
+   "d": 1.52,
+   "text": "compare against that for Mario because"
+  },
+  {
+   "t": 1061.8,
+   "d": 2.04,
+   "text": "it generated levels faster and it ended"
+  },
+  {
+   "t": 1063.84,
+   "d": 1.6,
+   "text": "up having a higher quality product to"
+  },
+  {
+   "t": 1065.44,
+   "d": 1.84,
+   "text": "compare against but it is also a"
+  },
+  {
+   "t": 1067.28,
+   "d": 1.84,
+   "text": "constraint based solver so the important"
+  },
+  {
+   "t": 1069.12,
+   "d": 2.08,
+   "text": "thing here is that it's constraint"
+  },
+  {
+   "t": 1071.2,
+   "d": 3.24,
+   "text": "based the next approach is Markov chains"
+  },
+  {
+   "t": 1074.44,
+   "d": 2.04,
+   "text": "this is a probabilistic approach I"
+  },
+  {
+   "t": 1076.48,
+   "d": 1.48,
+   "text": "thought this figure looked kind of scary"
+  },
+  {
+   "t": 1077.96,
+   "d": 2.12,
+   "text": "so I put chains and flames on the slide"
+  },
+  {
+   "t": 1080.08,
+   "d": 1.48,
+   "text": "to make it a little bit"
+  },
+  {
+   "t": 1081.56,
+   "d": 2.0,
+   "text": "worse essentially how this approach"
+  },
+  {
+   "t": 1083.56,
+   "d": 3.0,
+   "text": "works is we have uh a filter that we're"
+  },
+  {
+   "t": 1086.56,
+   "d": 1.4,
+   "text": "going to look over the level with in"
+  },
+  {
+   "t": 1087.96,
+   "d": 2.36,
+   "text": "this case it's an L-shaped filter and"
+  },
+  {
+   "t": 1090.32,
+   "d": 2.28,
+   "text": "we're going to see if these three blocks"
+  },
+  {
+   "t": 1092.6,
+   "d": 2.24,
+   "text": "are in these positions uh what is the"
+  },
+  {
+   "t": 1094.84,
+   "d": 3.64,
+   "text": "likelihood of a block being in the uh"
+  },
+  {
+   "t": 1098.48,
+   "d": 2.12,
+   "text": "top right position here or a coin being"
+  },
+  {
+   "t": 1100.6,
+   "d": 2.8,
+   "text": "in that position or a Goomba being there"
+  },
+  {
+   "t": 1103.4,
+   "d": 1.68,
+   "text": "and we add up all those probabilities"
+  },
+  {
+   "t": 1105.08,
+   "d": 2.0,
+   "text": "after sweeping the entire level and we"
+  },
+  {
+   "t": 1107.08,
+   "d": 2.0,
+   "text": "use that uh we sample that probability"
+  },
+  {
+   "t": 1109.08,
+   "d": 1.8,
+   "text": "distribution in order to generate new"
+  },
+  {
+   "t": 1110.88,
+   "d": 1.84,
+   "text": "levels the next two approaches are"
+  },
+  {
+   "t": 1112.72,
+   "d": 2.28,
+   "text": "neural network approaches uh and I want"
+  },
+  {
+   "t": 1115.0,
+   "d": 1.8,
+   "text": "to stress that it's not important to"
+  },
+  {
+   "t": 1116.8,
+   "d": 0.84,
+   "text": "understand how the neural network"
+  },
+  {
+   "t": 1117.64,
+   "d": 2.12,
+   "text": "approaches work here uh so the first is"
+  },
+  {
+   "t": 1119.76,
+   "d": 2.48,
+   "text": "an autoencoder um essentially how this"
+  },
+  {
+   "t": 1122.24,
+   "d": 1.6,
+   "text": "works is we have an encoder and a"
+  },
+  {
+   "t": 1123.84,
+   "d": 2.72,
+   "text": "decoder uh that are trained to"
+  },
+  {
+   "t": 1126.56,
+   "d": 2.6,
+   "text": "reconstruct input and we can feed in"
+  },
+  {
+   "t": 1129.16,
+   "d": 3.08,
+   "text": "either noise or um uh the original level"
+  },
+  {
+   "t": 1132.24,
+   "d": 1.68,
+   "text": "into the decoder and that will hopefully"
+  },
+  {
+   "t": 1133.92,
+   "d": 2.56,
+   "text": "spit out some new levels the last"
+  },
+  {
+   "t": 1136.48,
+   "d": 0.92,
+   "text": "approach we're going to talk about in"
+  },
+  {
+   "t": 1137.4,
+   "d": 2.12,
+   "text": "today's presentation is called to to Gan"
+  },
+  {
+   "t": 1139.52,
+   "d": 1.56,
+   "text": "I don't have a great image of toad Gan"
+  },
+  {
+   "t": 1141.08,
+   "d": 2.28,
+   "text": "so we've got a toad plus a gan which is"
+  },
+  {
+   "t": 1143.36,
+   "d": 2.72,
+   "text": "a type of neural network and again not"
+  },
+  {
+   "t": 1146.08,
+   "d": 1.72,
+   "text": "important uh the specifics about how"
+  },
+  {
+   "t": 1147.8,
+   "d": 1.76,
+   "text": "Gans work but I'm happy to answer"
+  },
+  {
+   "t": 1149.56,
+   "d": 1.44,
+   "text": "questions about it obviously if it comes"
+  },
+  {
+   "t": 1151.0,
+   "d": 1.0,
+   "text": "up during"
+  },
+  {
+   "t": 1152.0,
+   "d": 3.08,
+   "text": "that so in terms of comparison let's do"
+  },
+  {
+   "t": 1155.08,
+   "d": 1.72,
+   "text": "a comparison of some generated levels"
+  },
+  {
+   "t": 1156.8,
+   "d": 3.84,
+   "text": "for both Mario and gbg Zelda now these"
+  },
+  {
+   "t": 1160.64,
+   "d": 1.6,
+   "text": "levels were chosen randomly from a"
+  },
+  {
+   "t": 1162.24,
+   "d": 1.92,
+   "text": "population of 100 generated levels of"
+  },
+  {
+   "t": 1164.16,
+   "d": 1.76,
+   "text": "all the approaches so we aren't just"
+  },
+  {
+   "t": 1165.92,
+   "d": 1.88,
+   "text": "cherry-picking examples here to say all"
+  },
+  {
+   "t": 1167.8,
+   "d": 1.56,
+   "text": "right trp looks better better because we"
+  },
+  {
+   "t": 1169.36,
+   "d": 2.08,
+   "text": "picked the best trp level and the worst"
+  },
+  {
+   "t": 1171.44,
+   "d": 1.52,
+   "text": "surgeon level for"
+  },
+  {
+   "t": 1172.96,
+   "d": 2.16,
+   "text": "example so up top here we have the"
+  },
+  {
+   "t": 1175.12,
+   "d": 2.2,
+   "text": "original one for reference we've got a"
+  },
+  {
+   "t": 1177.32,
+   "d": 3.16,
+   "text": "trp level uh generated level uh for uh"
+  },
+  {
+   "t": 1180.48,
+   "d": 1.68,
+   "text": "comparison and these two are going to"
+  },
+  {
+   "t": 1182.16,
+   "d": 1.36,
+   "text": "stay the same between the next couple"
+  },
+  {
+   "t": 1183.52,
+   "d": 1.64,
+   "text": "slides and the Baseline at the bottom is"
+  },
+  {
+   "t": 1185.16,
+   "d": 1.6,
+   "text": "going to change so we'll talk about each"
+  },
+  {
+   "t": 1186.76,
+   "d": 1.72,
+   "text": "of the possible issues with the"
+  },
+  {
+   "t": 1188.48,
+   "d": 2.36,
+   "text": "baselines so the first Baseline here is"
+  },
+  {
+   "t": 1190.84,
+   "d": 2.2,
+   "text": "sturgeon uh we see that there are these"
+  },
+  {
+   "t": 1193.04,
+   "d": 1.88,
+   "text": "giant gaps in the level which end up"
+  },
+  {
+   "t": 1194.92,
+   "d": 2.64,
+   "text": "making it unplayable sturgeon does have"
+  },
+  {
+   "t": 1197.56,
+   "d": 2.48,
+   "text": "a playability constraint built into it"
+  },
+  {
+   "t": 1200.04,
+   "d": 1.68,
+   "text": "um but we ended up turning that off for"
+  },
+  {
+   "t": 1201.72,
+   "d": 2.2,
+   "text": "Our Generations because trp does not"
+  },
+  {
+   "t": 1203.92,
+   "d": 1.8,
+   "text": "have a playability guarantee so we"
+  },
+  {
+   "t": 1205.72,
+   "d": 1.68,
+   "text": "figured it would be an unfair comparison"
+  },
+  {
+   "t": 1207.4,
+   "d": 2.08,
+   "text": "to compare surgeon with the playability"
+  },
+  {
+   "t": 1209.48,
+   "d": 2.88,
+   "text": "constraint on however even if we did"
+  },
+  {
+   "t": 1212.36,
+   "d": 2.0,
+   "text": "turn that playability constraint on we"
+  },
+  {
+   "t": 1214.36,
+   "d": 1.32,
+   "text": "notice that there's a bunch of sort of"
+  },
+  {
+   "t": 1215.68,
+   "d": 2.32,
+   "text": "noisy blocks that are placed all around"
+  },
+  {
+   "t": 1218.0,
+   "d": 2.16,
+   "text": "here and it looks a little bit unmar"
+  },
+  {
+   "t": 1220.16,
+   "d": 3.0,
+   "text": "likee it's very uh sort of scattered and"
+  },
+  {
+   "t": 1223.16,
+   "d": 1.48,
+   "text": "we don't see the same kind of structures"
+  },
+  {
+   "t": 1224.64,
+   "d": 2.16,
+   "text": "in trp we see much more definite"
+  },
+  {
+   "t": 1226.8,
+   "d": 1.88,
+   "text": "structures like the staircases or the"
+  },
+  {
+   "t": 1228.68,
+   "d": 3.16,
+   "text": "complete pipes or this like sequence of"
+  },
+  {
+   "t": 1231.84,
+   "d": 2.36,
+   "text": "blocks the next approach is Markoff"
+  },
+  {
+   "t": 1234.2,
+   "d": 1.76,
+   "text": "chains so we'll see that there's some"
+  },
+  {
+   "t": 1235.96,
+   "d": 1.96,
+   "text": "weird stuff going on here so there's"
+  },
+  {
+   "t": 1237.92,
+   "d": 2.56,
+   "text": "like a half formed pipe uh all over the"
+  },
+  {
+   "t": 1240.48,
+   "d": 1.92,
+   "text": "place there's this weird stair thing"
+  },
+  {
+   "t": 1242.4,
+   "d": 2.4,
+   "text": "going on uh the ground is doing weird"
+  },
+  {
+   "t": 1244.8,
+   "d": 2.84,
+   "text": "things which we don't really see in in"
+  },
+  {
+   "t": 1247.64,
+   "d": 2.84,
+   "text": "Mario um and overall things are just a"
+  },
+  {
+   "t": 1250.48,
+   "d": 2.4,
+   "text": "bit noisier compared to the trp"
+  },
+  {
+   "t": 1252.88,
+   "d": 2.4,
+   "text": "level for the autoencoder I sort of"
+  },
+  {
+   "t": 1255.28,
+   "d": 2.12,
+   "text": "spoiled this one in the introduction but"
+  },
+  {
+   "t": 1257.4,
+   "d": 1.84,
+   "text": "what the auto encoder tries to do is"
+  },
+  {
+   "t": 1259.24,
+   "d": 2.44,
+   "text": "it's trying to optimize towards the best"
+  },
+  {
+   "t": 1261.68,
+   "d": 2.84,
+   "text": "possible uh fitting output and what it"
+  },
+  {
+   "t": 1264.52,
+   "d": 2.36,
+   "text": "ends up optimizing towards is Sky on the"
+  },
+  {
+   "t": 1266.88,
+   "d": 2.04,
+   "text": "top and ground on the bottom for Mario"
+  },
+  {
+   "t": 1268.92,
+   "d": 1.2,
+   "text": "because that's the most common thing"
+  },
+  {
+   "t": 1270.12,
+   "d": 1.72,
+   "text": "that it's seen you know this is the most"
+  },
+  {
+   "t": 1271.84,
+   "d": 2.76,
+   "text": "common like chunk of Mario level is Sky"
+  },
+  {
+   "t": 1274.6,
+   "d": 1.92,
+   "text": "on top ground on bottom so we"
+  },
+  {
+   "t": 1276.52,
+   "d": 1.28,
+   "text": "essentially see that but with a little"
+  },
+  {
+   "t": 1277.8,
+   "d": 0.92,
+   "text": "bit of"
+  },
+  {
+   "t": 1278.72,
+   "d": 3.0,
+   "text": "noise now lastly we have toad Gan and we"
+  },
+  {
+   "t": 1281.72,
+   "d": 1.64,
+   "text": "see that toad Gan does do a bit of a"
+  },
+  {
+   "t": 1283.36,
+   "d": 1.76,
+   "text": "better job than the other approaches but"
+  },
+  {
+   "t": 1285.12,
+   "d": 1.76,
+   "text": "there still is some weirdness going on"
+  },
+  {
+   "t": 1286.88,
+   "d": 2.48,
+   "text": "here like we have this weird half form"
+  },
+  {
+   "t": 1289.36,
+   "d": 1.84,
+   "text": "staircase we've got a pipe in the sky"
+  },
+  {
+   "t": 1291.2,
+   "d": 2.2,
+   "text": "and half a pipe here and we just aren't"
+  },
+  {
+   "t": 1293.4,
+   "d": 1.68,
+   "text": "seeing those artifacts from the trp"
+  },
+  {
+   "t": 1295.08,
+   "d": 1.8,
+   "text": "levels and you'll have to take my word"
+  },
+  {
+   "t": 1296.88,
+   "d": 1.8,
+   "text": "for it or go look on the GitHub or at"
+  },
+  {
+   "t": 1298.68,
+   "d": 2.32,
+   "text": "the paper yourself but most of the trp"
+  },
+  {
+   "t": 1301.0,
+   "d": 2.08,
+   "text": "levels don't have weird artifacts like"
+  },
+  {
+   "t": 1303.08,
+   "d": 1.8,
+   "text": "this so with the binary space"
+  },
+  {
+   "t": 1304.88,
+   "d": 2.68,
+   "text": "partitioning we're able to take um the"
+  },
+  {
+   "t": 1307.56,
+   "d": 1.92,
+   "text": "correct amount of size chunks from the"
+  },
+  {
+   "t": 1309.48,
+   "d": 1.4,
+   "text": "level in order to make sure that things"
+  },
+  {
+   "t": 1310.88,
+   "d": 3.76,
+   "text": "are coherent so that's really cool so"
+  },
+  {
+   "t": 1314.64,
+   "d": 1.72,
+   "text": "next let's look at a trickier domain"
+  },
+  {
+   "t": 1316.36,
+   "d": 3.16,
+   "text": "which is gbg AI Zelda"
+  },
+  {
+   "t": 1319.52,
+   "d": 2.4,
+   "text": "so here we have uh the original level on"
+  },
+  {
+   "t": 1321.92,
+   "d": 2.04,
+   "text": "the left and we have the trp level which"
+  },
+  {
+   "t": 1323.96,
+   "d": 1.44,
+   "text": "looks pretty similar to the original"
+  },
+  {
+   "t": 1325.4,
+   "d": 1.56,
+   "text": "level it's a little bit different like"
+  },
+  {
+   "t": 1326.96,
+   "d": 2.36,
+   "text": "this wall has moved and is now sort of"
+  },
+  {
+   "t": 1329.32,
+   "d": 1.88,
+   "text": "the entrance is here and the enemies are"
+  },
+  {
+   "t": 1331.2,
+   "d": 3.84,
+   "text": "in different places um however the wave"
+  },
+  {
+   "t": 1335.04,
+   "d": 2.16,
+   "text": "function collapse level uh is kind of"
+  },
+  {
+   "t": 1337.2,
+   "d": 1.92,
+   "text": "incoherent it's the same one that we saw"
+  },
+  {
+   "t": 1339.12,
+   "d": 2.16,
+   "text": "in the introduction so there's no door"
+  },
+  {
+   "t": 1341.28,
+   "d": 2.08,
+   "text": "to go along with these Keys no matter"
+  },
+  {
+   "t": 1343.36,
+   "d": 1.64,
+   "text": "where you flood Filled from with these"
+  },
+  {
+   "t": 1345.0,
+   "d": 1.64,
+   "text": "keys there would be no way to reach the"
+  },
+  {
+   "t": 1346.64,
+   "d": 1.96,
+   "text": "goal and that's because wave function"
+  },
+  {
+   "t": 1348.6,
+   "d": 2.4,
+   "text": "collapse has no respect for Global"
+  },
+  {
+   "t": 1351.0,
+   "d": 2.84,
+   "text": "constraints um so what that means is"
+  },
+  {
+   "t": 1353.84,
+   "d": 1.44,
+   "text": "since it only cares about local"
+  },
+  {
+   "t": 1355.28,
+   "d": 1.96,
+   "text": "constraints in the example image it"
+  },
+  {
+   "t": 1357.24,
+   "d": 2.64,
+   "text": "doesn't care that like oh there should"
+  },
+  {
+   "t": 1359.88,
+   "d": 1.76,
+   "text": "be a key and a door in this level for"
+  },
+  {
+   "t": 1361.64,
+   "d": 3.24,
+   "text": "example whereas trp sort of encodes this"
+  },
+  {
+   "t": 1364.88,
+   "d": 2.04,
+   "text": "necessity through its"
+  },
+  {
+   "t": 1366.92,
+   "d": 2.4,
+   "text": "design similarly Markoff chains are"
+  },
+  {
+   "t": 1369.32,
+   "d": 1.8,
+   "text": "probabilistic so they also don't care"
+  },
+  {
+   "t": 1371.12,
+   "d": 2.4,
+   "text": "about global constraints uh and they"
+  },
+  {
+   "t": 1373.52,
+   "d": 2.88,
+   "text": "also generated mostly unplayable"
+  },
+  {
+   "t": 1376.4,
+   "d": 2.56,
+   "text": "levels lastly we have the auto"
+  },
+  {
+   "t": 1378.96,
+   "d": 1.8,
+   "text": "and with the auto encoder it's very very"
+  },
+  {
+   "t": 1380.76,
+   "d": 2.16,
+   "text": "similar to the auto encoder example from"
+  },
+  {
+   "t": 1382.92,
+   "d": 2.68,
+   "text": "Super Mario Bros where we have uh sort"
+  },
+  {
+   "t": 1385.6,
+   "d": 2.96,
+   "text": "of walls on the sides and empty space in"
+  },
+  {
+   "t": 1388.56,
+   "d": 1.76,
+   "text": "the middle this is the most common thing"
+  },
+  {
+   "t": 1390.32,
+   "d": 1.68,
+   "text": "that it sees uh when it's trying to"
+  },
+  {
+   "t": 1392.0,
+   "d": 2.44,
+   "text": "generate a"
+  },
+  {
+   "t": 1394.96,
+   "d": 3.84,
+   "text": "level so some takeaways from these uh"
+  },
+  {
+   "t": 1398.8,
+   "d": 2.16,
+   "text": "from these this comparison is that trp"
+  },
+  {
+   "t": 1400.96,
+   "d": 1.72,
+   "text": "balances playability and allows for"
+  },
+  {
+   "t": 1402.68,
+   "d": 1.6,
+   "text": "differences from the original level"
+  },
+  {
+   "t": 1404.28,
+   "d": 1.52,
+   "text": "while still allowing for the level to"
+  },
+  {
+   "t": 1405.8,
+   "d": 2.24,
+   "text": "actually be playable trp generates"
+  },
+  {
+   "t": 1408.04,
+   "d": 2.2,
+   "text": "levels with more logical consistency"
+  },
+  {
+   "t": 1410.24,
+   "d": 2.08,
+   "text": "especially when it's required for there"
+  },
+  {
+   "t": 1412.32,
+   "d": 1.72,
+   "text": "to be logical consistency in the level"
+  },
+  {
+   "t": 1414.04,
+   "d": 3.52,
+   "text": "like with uh the gbg Zelda domain and if"
+  },
+  {
+   "t": 1417.56,
+   "d": 1.36,
+   "text": "you want to see a more empirical"
+  },
+  {
+   "t": 1418.92,
+   "d": 1.6,
+   "text": "analysis where we compare the"
+  },
+  {
+   "t": 1420.52,
+   "d": 2.8,
+   "text": "playability amount of plagiarism"
+  },
+  {
+   "t": 1423.32,
+   "d": 3.8,
+   "text": "self-similarity you know uh analyzing uh"
+  },
+  {
+   "t": 1427.12,
+   "d": 3.28,
+   "text": "how the uh generated population is uh is"
+  },
+  {
+   "t": 1430.4,
+   "d": 2.32,
+   "text": "shaping up shout outs to alli's talk uh"
+  },
+  {
+   "t": 1432.72,
+   "d": 1.84,
+   "text": "earlier then please do check out the"
+  },
+  {
+   "t": 1434.56,
+   "d": 1.88,
+   "text": "paper and there'll be a URL for this at"
+  },
+  {
+   "t": 1436.44,
+   "d": 1.6,
+   "text": "the end too so don't worry about"
+  },
+  {
+   "t": 1438.04,
+   "d": 2.56,
+   "text": "scrambling to uh scan"
+  },
+  {
+   "t": 1440.6,
+   "d": 2.6,
+   "text": "this so the last part and the most"
+  },
+  {
+   "t": 1443.2,
+   "d": 2.12,
+   "text": "important part in my opinion is how can"
+  },
+  {
+   "t": 1445.32,
+   "d": 2.48,
+   "text": "you use trp in your projects and what is"
+  },
+  {
+   "t": 1447.8,
+   "d": 1.44,
+   "text": "the future of the"
+  },
+  {
+   "t": 1449.24,
+   "d": 2.44,
+   "text": "algorithm well in terms of next steps"
+  },
+  {
+   "t": 1451.68,
+   "d": 2.96,
+   "text": "for trp more domains is an immediate uh"
+  },
+  {
+   "t": 1454.64,
+   "d": 2.88,
+   "text": "First Option a great question is could"
+  },
+  {
+   "t": 1457.52,
+   "d": 1.68,
+   "text": "trp work for a more abstract"
+  },
+  {
+   "t": 1459.2,
+   "d": 1.92,
+   "text": "navigational game like soab Bon where"
+  },
+  {
+   "t": 1461.12,
+   "d": 1.92,
+   "text": "the goal is to push the boxes onto the"
+  },
+  {
+   "t": 1463.04,
+   "d": 3.88,
+   "text": "goals my answer to this is maybe MCTS"
+  },
+  {
+   "t": 1466.92,
+   "d": 1.96,
+   "text": "certainly works for stabond but I think"
+  },
+  {
+   "t": 1468.88,
+   "d": 1.24,
+   "text": "that we'd run into issues with the"
+  },
+  {
+   "t": 1470.12,
+   "d": 1.8,
+   "text": "binary space partition in a domain like"
+  },
+  {
+   "t": 1471.92,
+   "d": 1.6,
+   "text": "this where there has to be some sort of"
+  },
+  {
+   "t": 1473.52,
+   "d": 3.0,
+   "text": "logic because binary space partition uh"
+  },
+  {
+   "t": 1476.52,
+   "d": 1.96,
+   "text": "in the end only cares about those local"
+  },
+  {
+   "t": 1478.48,
+   "d": 2.28,
+   "text": "sections of level so it doesn't care"
+  },
+  {
+   "t": 1480.76,
+   "d": 2.52,
+   "text": "about the global solvability constraint"
+  },
+  {
+   "t": 1483.28,
+   "d": 1.52,
+   "text": "so we might find that levels generated"
+  },
+  {
+   "t": 1484.8,
+   "d": 1.6,
+   "text": "with trp for a domain like this would"
+  },
+  {
+   "t": 1486.4,
+   "d": 2.16,
+   "text": "not be playable or worse they wouldn't"
+  },
+  {
+   "t": 1488.56,
+   "d": 1.0,
+   "text": "be"
+  },
+  {
+   "t": 1489.56,
+   "d": 3.0,
+   "text": "interesting what about in 3D now there"
+  },
+  {
+   "t": 1492.56,
+   "d": 1.48,
+   "text": "was somebody working on a 3D"
+  },
+  {
+   "t": 1494.04,
+   "d": 2.2,
+   "text": "implementation of trp shout outs to Adam"
+  },
+  {
+   "t": 1496.24,
+   "d": 1.88,
+   "text": "riddle um lots of shout outs in this"
+  },
+  {
+   "t": 1498.12,
+   "d": 2.76,
+   "text": "Pres presentation um so it definitely is"
+  },
+  {
+   "t": 1500.88,
+   "d": 2.32,
+   "text": "possible that it could work in trp or"
+  },
+  {
+   "t": 1503.2,
+   "d": 2.28,
+   "text": "that it could work in 3D rather um"
+  },
+  {
+   "t": 1505.48,
+   "d": 2.36,
+   "text": "there's lots of different algorithms for"
+  },
+  {
+   "t": 1507.84,
+   "d": 2.28,
+   "text": "dividing Up 3D space that we could use"
+  },
+  {
+   "t": 1510.12,
+   "d": 2.52,
+   "text": "in place of binary space partition or we"
+  },
+  {
+   "t": 1512.64,
+   "d": 2.48,
+   "text": "could just tokenize the 3D level into a"
+  },
+  {
+   "t": 1515.12,
+   "d": 2.76,
+   "text": "discrete space and then apply bsp in 3D"
+  },
+  {
+   "t": 1517.88,
+   "d": 3.04,
+   "text": "to that so it's definitely"
+  },
+  {
+   "t": 1520.92,
+   "d": 2.28,
+   "text": "possible however in order to get more"
+  },
+  {
+   "t": 1523.2,
+   "d": 2.0,
+   "text": "domains for trp it would be great if we"
+  },
+  {
+   "t": 1525.2,
+   "d": 1.28,
+   "text": "had better ease of use for this"
+  },
+  {
+   "t": 1526.48,
+   "d": 1.64,
+   "text": "algorithm because then people could"
+  },
+  {
+   "t": 1528.12,
+   "d": 1.48,
+   "text": "actually use it and they could actually"
+  },
+  {
+   "t": 1529.6,
+   "d": 2.64,
+   "text": "implement it themselves now if you're"
+  },
+  {
+   "t": 1532.24,
+   "d": 2.2,
+   "text": "interested there's a GitHub that has all"
+  },
+  {
+   "t": 1534.44,
+   "d": 3.04,
+   "text": "of my code for the Mario example as well"
+  },
+  {
+   "t": 1537.48,
+   "d": 2.96,
+   "text": "as the gpg Zelda example but if you want"
+  },
+  {
+   "t": 1540.44,
+   "d": 2.28,
+   "text": "to implement trp for your own game let's"
+  },
+  {
+   "t": 1542.72,
+   "d": 1.2,
+   "text": "take a look at what that development"
+  },
+  {
+   "t": 1543.92,
+   "d": 2.56,
+   "text": "process might look like so here's how"
+  },
+  {
+   "t": 1546.48,
+   "d": 2.04,
+   "text": "you get trp working by yourself it's as"
+  },
+  {
+   "t": 1548.52,
+   "d": 2.32,
+   "text": "simple as four steps the first is to"
+  },
+  {
+   "t": 1550.84,
+   "d": 2.52,
+   "text": "implement MCTS for your game the second"
+  },
+  {
+   "t": 1553.36,
+   "d": 2.12,
+   "text": "is to implement the trp generation"
+  },
+  {
+   "t": 1555.48,
+   "d": 2.0,
+   "text": "process the third is to collect some"
+  },
+  {
+   "t": 1557.48,
+   "d": 2.2,
+   "text": "MCTS data by allowing ncts to play"
+  },
+  {
+   "t": 1559.68,
+   "d": 1.88,
+   "text": "through an example level and then you"
+  },
+  {
+   "t": 1561.56,
+   "d": 1.52,
+   "text": "can just generate as many levels as you"
+  },
+  {
+   "t": 1563.08,
+   "d": 2.92,
+   "text": "like it's really as simple as that right"
+  },
+  {
+   "t": 1566.0,
+   "d": 2.04,
+   "text": "well unfortunately because of all these"
+  },
+  {
+   "t": 1568.04,
+   "d": 3.16,
+   "text": "asterisks I have to say that trp has a"
+  },
+  {
+   "t": 1571.2,
+   "d": 2.48,
+   "text": "lot of problems making it uh making it"
+  },
+  {
+   "t": 1573.68,
+   "d": 2.4,
+   "text": "inaccessible implementing MCTS for a new"
+  },
+  {
+   "t": 1576.08,
+   "d": 2.2,
+   "text": "game is very difficult you have to"
+  },
+  {
+   "t": 1578.28,
+   "d": 1.64,
+   "text": "define a reward function to guide the"
+  },
+  {
+   "t": 1579.92,
+   "d": 1.92,
+   "text": "tree search so saying which states are"
+  },
+  {
+   "t": 1581.84,
+   "d": 2.0,
+   "text": "good and which ones are bad and that can"
+  },
+  {
+   "t": 1583.84,
+   "d": 1.64,
+   "text": "take expert knowledge in order to design"
+  },
+  {
+   "t": 1585.48,
+   "d": 3.0,
+   "text": "properly and a lot of trial and error we"
+  },
+  {
+   "t": 1588.48,
+   "d": 1.88,
+   "text": "have to create a forward model for your"
+  },
+  {
+   "t": 1590.36,
+   "d": 2.24,
+   "text": "game or just in simple words a simulator"
+  },
+  {
+   "t": 1592.6,
+   "d": 2.32,
+   "text": "for your game uh because Monti carot"
+  },
+  {
+   "t": 1594.92,
+   "d": 1.52,
+   "text": "research requires looking into the"
+  },
+  {
+   "t": 1596.44,
+   "d": 2.04,
+   "text": "future to see what's going to happen and"
+  },
+  {
+   "t": 1598.48,
+   "d": 2.72,
+   "text": "simulating out possible things this is"
+  },
+  {
+   "t": 1601.2,
+   "d": 1.84,
+   "text": "possible to make for an arbitrary game"
+  },
+  {
+   "t": 1603.04,
+   "d": 1.48,
+   "text": "but it can be very difficult if your"
+  },
+  {
+   "t": 1604.52,
+   "d": 2.08,
+   "text": "game is not designed for a"
+  },
+  {
+   "t": 1606.6,
+   "d": 2.6,
+   "text": "simulator as well running MCTS can take"
+  },
+  {
+   "t": 1609.2,
+   "d": 1.96,
+   "text": "a considerable amount of time and"
+  },
+  {
+   "t": 1611.16,
+   "d": 2.64,
+   "text": "optimizing MCTS is quite a"
+  },
+  {
+   "t": 1613.8,
+   "d": 2.56,
+   "text": "challenge uh as well as well the"
+  },
+  {
+   "t": 1616.36,
+   "d": 3.04,
+   "text": "generation process itself is complicated"
+  },
+  {
+   "t": 1619.4,
+   "d": 1.6,
+   "text": "it's not a walk in the park to implement"
+  },
+  {
+   "t": 1621.0,
+   "d": 2.16,
+   "text": "binary space partition even if it is a"
+  },
+  {
+   "t": 1623.16,
+   "d": 1.36,
+   "text": "somewhat simple algorithm when you write"
+  },
+  {
+   "t": 1624.52,
+   "d": 2.12,
+   "text": "it out uh and there's designer"
+  },
+  {
+   "t": 1626.64,
+   "d": 1.4,
+   "text": "information that you have to encode into"
+  },
+  {
+   "t": 1628.04,
+   "d": 2.08,
+   "text": "the algorithm things like what's an"
+  },
+  {
+   "t": 1630.12,
+   "d": 3.28,
+   "text": "enemy uh what the goal state is"
+  },
+  {
+   "t": 1633.4,
+   "d": 2.68,
+   "text": "ETC so wouldn't it be nice if there was"
+  },
+  {
+   "t": 1636.08,
+   "d": 2.76,
+   "text": "a tool that made trp more accessible"
+  },
+  {
+   "t": 1638.84,
+   "d": 2.28,
+   "text": "well luckily for us there's a work in"
+  },
+  {
+   "t": 1641.12,
+   "d": 2.32,
+   "text": "progress Tool uh called the trp tool for"
+  },
+  {
+   "t": 1643.44,
+   "d": 2.56,
+   "text": "gdau which is a work in progress title"
+  },
+  {
+   "t": 1646.0,
+   "d": 1.8,
+   "text": "uh the trp tool for gdau is a tool for"
+  },
+  {
+   "t": 1647.8,
+   "d": 2.76,
+   "text": "gdau no way uh that implements MCTS to"
+  },
+  {
+   "t": 1650.56,
+   "d": 2.64,
+   "text": "play any game uh given uh the list of"
+  },
+  {
+   "t": 1653.2,
+   "d": 2.6,
+   "text": "inputs as well as a reward function and"
+  },
+  {
+   "t": 1655.8,
+   "d": 1.6,
+   "text": "we're going to provide a reward function"
+  },
+  {
+   "t": 1657.4,
+   "d": 1.76,
+   "text": "so that uh will hopefully work for most"
+  },
+  {
+   "t": 1659.16,
+   "d": 2.12,
+   "text": "games uh it implements the trp"
+  },
+  {
+   "t": 1661.28,
+   "d": 2.16,
+   "text": "generation process and allows users to"
+  },
+  {
+   "t": 1663.44,
+   "d": 1.68,
+   "text": "generate levels as they develop their"
+  },
+  {
+   "t": 1665.12,
+   "d": 1.68,
+   "text": "games which is my goal here if we"
+  },
+  {
+   "t": 1666.8,
+   "d": 0.96,
+   "text": "remember at the start of the"
+  },
+  {
+   "t": 1667.76,
+   "d": 2.36,
+   "text": "presentation I want to help people make"
+  },
+  {
+   "t": 1670.12,
+   "d": 2.56,
+   "text": "games with procedural content generation"
+  },
+  {
+   "t": 1672.68,
+   "d": 3.44,
+   "text": "and I want PCG to help people uh expand"
+  },
+  {
+   "t": 1676.12,
+   "d": 1.68,
+   "text": "New Horizons when it comes to game"
+  },
+  {
+   "t": 1677.8,
+   "d": 1.6,
+   "text": "development"
+  },
+  {
+   "t": 1679.4,
+   "d": 1.76,
+   "text": "now this work was done in collaboration"
+  },
+  {
+   "t": 1681.16,
+   "d": 2.8,
+   "text": "with FAS f is a student working with uh"
+  },
+  {
+   "t": 1683.96,
+   "d": 2.8,
+   "text": "both me and Matthew on this project and"
+  },
+  {
+   "t": 1686.76,
+   "d": 1.6,
+   "text": "his help has been invaluable in putting"
+  },
+  {
+   "t": 1688.36,
+   "d": 2.2,
+   "text": "this together so let's go ahead and"
+  },
+  {
+   "t": 1690.56,
+   "d": 2.08,
+   "text": "showcase uh what the trp tool looks like"
+  },
+  {
+   "t": 1692.64,
+   "d": 1.88,
+   "text": "right now and bear in mind that it is in"
+  },
+  {
+   "t": 1694.52,
+   "d": 1.72,
+   "text": "fact a work in progress and especially"
+  },
+  {
+   "t": 1696.24,
+   "d": 1.68,
+   "text": "the UI is a work in"
+  },
+  {
+   "t": 1697.92,
+   "d": 2.84,
+   "text": "progress so as an example we built this"
+  },
+  {
+   "t": 1700.76,
+   "d": 2.56,
+   "text": "little platformer in gdau um you can see"
+  },
+  {
+   "t": 1703.32,
+   "d": 2.04,
+   "text": "the character down here is the gdau logo"
+  },
+  {
+   "t": 1705.36,
+   "d": 1.32,
+   "text": "and it's going to move and jump through"
+  },
+  {
+   "t": 1706.68,
+   "d": 2.96,
+   "text": "this scene now we see that there are"
+  },
+  {
+   "t": 1709.64,
+   "d": 2.04,
+   "text": "pits in the scene uh and there are these"
+  },
+  {
+   "t": 1711.68,
+   "d": 1.96,
+   "text": "weird staircase structures so we'd"
+  },
+  {
+   "t": 1713.64,
+   "d": 1.68,
+   "text": "expect that generated levels using this"
+  },
+  {
+   "t": 1715.32,
+   "d": 2.08,
+   "text": "example should have some pits should"
+  },
+  {
+   "t": 1717.4,
+   "d": 1.76,
+   "text": "have some stretches of flat ground like"
+  },
+  {
+   "t": 1719.16,
+   "d": 1.36,
+   "text": "this and should have some weird"
+  },
+  {
+   "t": 1720.52,
+   "d": 1.12,
+   "text": "staircase"
+  },
+  {
+   "t": 1721.64,
+   "d": 2.28,
+   "text": "structures so if we take a look at the"
+  },
+  {
+   "t": 1723.92,
+   "d": 1.72,
+   "text": "generated levels here with the original"
+  },
+  {
+   "t": 1725.64,
+   "d": 2.68,
+   "text": "level in the top right corner we'll see"
+  },
+  {
+   "t": 1728.32,
+   "d": 1.48,
+   "text": "that after we hit this perform trp"
+  },
+  {
+   "t": 1729.8,
+   "d": 3.16,
+   "text": "button we see that here's a"
+  },
+  {
+   "t": 1732.96,
+   "d": 3.0,
+   "text": "level here's another"
+  },
+  {
+   "t": 1735.96,
+   "d": 2.64,
+   "text": "level I'll just let it play here's"
+  },
+  {
+   "t": 1738.6,
+   "d": 1.76,
+   "text": "another"
+  },
+  {
+   "t": 1740.36,
+   "d": 2.12,
+   "text": "level and all these kind of different"
+  },
+  {
+   "t": 1742.48,
+   "d": 1.88,
+   "text": "levels that we can get using"
+  },
+  {
+   "t": 1744.36,
+   "d": 2.48,
+   "text": "trp now especially because this example"
+  },
+  {
+   "t": 1746.84,
+   "d": 1.8,
+   "text": "is small the levels are going to look"
+  },
+  {
+   "t": 1748.64,
+   "d": 1.92,
+   "text": "very similar to one another but it's"
+  },
+  {
+   "t": 1750.56,
+   "d": 2.24,
+   "text": "still enough for ideation hopefully is"
+  },
+  {
+   "t": 1752.8,
+   "d": 1.84,
+   "text": "what we're hoping and we want to see"
+  },
+  {
+   "t": 1754.64,
+   "d": 2.08,
+   "text": "what cool and weird ways people use this"
+  },
+  {
+   "t": 1756.72,
+   "d": 3.2,
+   "text": "tool so if you would like to be informed"
+  },
+  {
+   "t": 1759.92,
+   "d": 1.44,
+   "text": "when we are running a human symex study"
+  },
+  {
+   "t": 1761.36,
+   "d": 2.4,
+   "text": "using this tool please scan this QR code"
+  },
+  {
+   "t": 1763.76,
+   "d": 2.04,
+   "text": "and I will linger here for a moment uh"
+  },
+  {
+   "t": 1765.8,
+   "d": 3.2,
+   "text": "to say please please please um it is a"
+  },
+  {
+   "t": 1769.0,
+   "d": 2.56,
+   "text": "uh really small Google form it is one"
+  },
+  {
+   "t": 1771.56,
+   "d": 2.08,
+   "text": "question and the question is optional uh"
+  },
+  {
+   "t": 1773.64,
+   "d": 2.44,
+   "text": "literally just uh we will email you and"
+  },
+  {
+   "t": 1776.08,
+   "d": 1.4,
+   "text": "we're running a human subject study so"
+  },
+  {
+   "t": 1777.48,
+   "d": 1.6,
+   "text": "if you'd like to see where this goes"
+  },
+  {
+   "t": 1779.08,
+   "d": 2.08,
+   "text": "it'd be super super helpful to explore"
+  },
+  {
+   "t": 1781.16,
+   "d": 2.24,
+   "text": "the future of this"
+  },
+  {
+   "t": 1783.4,
+   "d": 3.16,
+   "text": "algorithm so in summary trp is a cool"
+  },
+  {
+   "t": 1786.56,
+   "d": 1.36,
+   "text": "approach for generating levels using a"
+  },
+  {
+   "t": 1787.92,
+   "d": 2.12,
+   "text": "single example it generates more"
+  },
+  {
+   "t": 1790.04,
+   "d": 1.8,
+   "text": "coherent levels without sacrificing"
+  },
+  {
+   "t": 1791.84,
+   "d": 1.84,
+   "text": "playability and if you're interested in"
+  },
+  {
+   "t": 1793.68,
+   "d": 1.64,
+   "text": "the approach you can check out our paper"
+  },
+  {
+   "t": 1795.32,
+   "d": 2.72,
+   "text": "where we uh uh compare against even more"
+  },
+  {
+   "t": 1798.04,
+   "d": 1.4,
+   "text": "more approaches than I talked about in"
+  },
+  {
+   "t": 1799.44,
+   "d": 2.32,
+   "text": "this uh presentation along with an"
+  },
+  {
+   "t": 1801.76,
+   "d": 1.96,
+   "text": "appical analysis or you can check out"
+  },
+  {
+   "t": 1803.72,
+   "d": 2.36,
+   "text": "the GitHub uh to dive into the code of"
+  },
+  {
+   "t": 1806.08,
+   "d": 1.16,
+   "text": "how this actually"
+  },
+  {
+   "t": 1807.24,
+   "d": 2.6,
+   "text": "works thank you so so much I have been"
+  },
+  {
+   "t": 1809.84,
+   "d": 1.88,
+   "text": "Emily helina and I'm happy to take any"
+  },
+  {
+   "t": 1811.72,
+   "d": 1.44,
+   "text": "questions at this"
+  },
+  {
+   "t": 1813.16,
+   "d": 3.08,
+   "text": "time awesome thank you so much Emily"
+  },
+  {
+   "t": 1816.24,
+   "d": 2.16,
+   "text": "that was fascinating um I loved all the"
+  },
+  {
+   "t": 1818.4,
+   "d": 2.32,
+   "text": "shout outs especially Seth Cooper um"
+  },
+  {
+   "t": 1820.72,
+   "d": 2.0,
+   "text": "some of my friends are in set lab so"
+  },
+  {
+   "t": 1822.72,
+   "d": 3.0,
+   "text": "that was an lovely surprise fantastic"
+  },
+  {
+   "t": 1825.72,
+   "d": 2.8,
+   "text": "yeah um we definitely have questions"
+  },
+  {
+   "t": 1828.52,
+   "d": 3.32,
+   "text": "uh I have some questions to start with"
+  },
+  {
+   "t": 1831.84,
+   "d": 3.56,
+   "text": "um do you have to use MCTS or can you"
+  },
+  {
+   "t": 1835.4,
+   "d": 1.72,
+   "text": "use a different type of virtual player"
+  },
+  {
+   "t": 1837.12,
+   "d": 3.0,
+   "text": "or even human playthroughs for the like"
+  },
+  {
+   "t": 1840.12,
+   "d": 3.28,
+   "text": "um play path fantastic question uh no"
+  },
+  {
+   "t": 1843.4,
+   "d": 2.44,
+   "text": "you don't have to use MCTS uh you do not"
+  },
+  {
+   "t": 1845.84,
+   "d": 2.68,
+   "text": "need to you could use human playthroughs"
+  },
+  {
+   "t": 1848.52,
+   "d": 1.24,
+   "text": "uh you just have to make sure that you"
+  },
+  {
+   "t": 1849.76,
+   "d": 1.4,
+   "text": "were recording the playthroughs in the"
+  },
+  {
+   "t": 1851.16,
+   "d": 1.36,
+   "text": "same way and you're getting the same"
+  },
+  {
+   "t": 1852.52,
+   "d": 2.68,
+   "text": "amount of data from those playthroughs"
+  },
+  {
+   "t": 1855.2,
+   "d": 1.68,
+   "text": "it might be a little bit more limiting"
+  },
+  {
+   "t": 1856.88,
+   "d": 2.96,
+   "text": "because MCTS a whole tree of"
+  },
+  {
+   "t": 1859.84,
+   "d": 3.68,
+   "text": "possibilities right so uh the different"
+  },
+  {
+   "t": 1863.52,
+   "d": 1.64,
+   "text": "paths that we've taken might not be as"
+  },
+  {
+   "t": 1865.16,
+   "d": 1.72,
+   "text": "well expressed so like if there's a"
+  },
+  {
+   "t": 1866.88,
+   "d": 2.44,
+   "text": "level that has two possible paths maybe"
+  },
+  {
+   "t": 1869.32,
+   "d": 3.64,
+   "text": "those wouldn't be uh uh shown as well"
+  },
+  {
+   "t": 1872.96,
+   "d": 1.68,
+   "text": "with just one human playr if the human"
+  },
+  {
+   "t": 1874.64,
+   "d": 1.76,
+   "text": "just took one path but you could"
+  },
+  {
+   "t": 1876.4,
+   "d": 2.12,
+   "text": "definitely use like Asar for this you"
+  },
+  {
+   "t": 1878.52,
+   "d": 2.16,
+   "text": "could use other treesearch algorithms we"
+  },
+  {
+   "t": 1880.68,
+   "d": 1.48,
+   "text": "just chose to use MCTS because we"
+  },
+  {
+   "t": 1882.16,
+   "d": 2.8,
+   "text": "thought it was a good fit awesome thank"
+  },
+  {
+   "t": 1884.96,
+   "d": 2.36,
+   "text": "you cool we have some chat questions"
+  },
+  {
+   "t": 1887.32,
+   "d": 3.08,
+   "text": "from G pepper tea what sort of Hardware"
+  },
+  {
+   "t": 1890.4,
+   "d": 2.24,
+   "text": "does this work on uh what sort of"
+  },
+  {
+   "t": 1892.64,
+   "d": 2.32,
+   "text": "Hardware does this work on uh it is"
+  },
+  {
+   "t": 1894.96,
+   "d": 2.52,
+   "text": "really light computationally so the most"
+  },
+  {
+   "t": 1897.48,
+   "d": 1.64,
+   "text": "computationally intensive part here is"
+  },
+  {
+   "t": 1899.12,
+   "d": 2.72,
+   "text": "running MCTS and that can be about as"
+  },
+  {
+   "t": 1901.84,
+   "d": 1.64,
+   "text": "computationally expensive as you want it"
+  },
+  {
+   "t": 1903.48,
+   "d": 2.48,
+   "text": "to be but the actual generation process"
+  },
+  {
+   "t": 1905.96,
+   "d": 1.72,
+   "text": "happens in an instant and you can"
+  },
+  {
+   "t": 1907.68,
+   "d": 2.72,
+   "text": "generate 100 levels in like a second uh"
+  },
+  {
+   "t": 1910.4,
+   "d": 2.76,
+   "text": "on like an average PC I had this working"
+  },
+  {
+   "t": 1913.16,
+   "d": 3.92,
+   "text": "on a very uh old outdated MacBook that"
+  },
+  {
+   "t": 1917.08,
+   "d": 2.2,
+   "text": "was uh falling part and it never had any"
+  },
+  {
+   "t": 1919.28,
+   "d": 1.72,
+   "text": "issues with running the"
+  },
+  {
+   "t": 1921.0,
+   "d": 3.12,
+   "text": "algorithm awesome so most modern systems"
+  },
+  {
+   "t": 1924.12,
+   "d": 2.32,
+   "text": "I would say uh more constrain systems"
+  },
+  {
+   "t": 1926.44,
+   "d": 1.04,
+   "text": "like the ones that we talked about"
+  },
+  {
+   "t": 1927.48,
+   "d": 1.8,
+   "text": "earlier might be more of a challenge for"
+  },
+  {
+   "t": 1929.28,
+   "d": 2.28,
+   "text": "this because implementing MCTS in those"
+  },
+  {
+   "t": 1931.56,
+   "d": 2.6,
+   "text": "systems might be a challenge but I would"
+  },
+  {
+   "t": 1934.16,
+   "d": 1.48,
+   "text": "imagine the generation process shouldn't"
+  },
+  {
+   "t": 1935.64,
+   "d": 0.92,
+   "text": "be that"
+  },
+  {
+   "t": 1936.56,
+   "d": 2.92,
+   "text": "bad gotcha and going kind of back to the"
+  },
+  {
+   "t": 1939.48,
+   "d": 2.48,
+   "text": "MTS uh does this generalized using"
+  },
+  {
+   "t": 1941.96,
+   "d": 3.0,
+   "text": "multiple sorts examples yes it does and"
+  },
+  {
+   "t": 1944.96,
+   "d": 3.76,
+   "text": "it's really cool so you can use multiple"
+  },
+  {
+   "t": 1948.72,
+   "d": 1.6,
+   "text": "source examples for the binary space"
+  },
+  {
+   "t": 1950.32,
+   "d": 1.88,
+   "text": "partition so we could have a population"
+  },
+  {
+   "t": 1952.2,
+   "d": 1.8,
+   "text": "of levels that we are taking segments"
+  },
+  {
+   "t": 1954.0,
+   "d": 2.96,
+   "text": "from uh in order to make a new level or"
+  },
+  {
+   "t": 1956.96,
+   "d": 1.48,
+   "text": "you could use playthroughs from multiple"
+  },
+  {
+   "t": 1958.44,
+   "d": 1.72,
+   "text": "different levels for the same game so if"
+  },
+  {
+   "t": 1960.16,
+   "d": 2.28,
+   "text": "you want to blend one one and one two we"
+  },
+  {
+   "t": 1962.44,
+   "d": 2.04,
+   "text": "can see what happens and when I've tried"
+  },
+  {
+   "t": 1964.48,
+   "d": 1.48,
+   "text": "it it's been really really"
+  },
+  {
+   "t": 1965.96,
+   "d": 3.32,
+   "text": "cool that sounds really cool um that"
+  },
+  {
+   "t": 1969.28,
+   "d": 3.4,
+   "text": "question was from ubor and uh from Mark"
+  },
+  {
+   "t": 1972.68,
+   "d": 2.24,
+   "text": "gritter how much tuning is needed to get"
+  },
+  {
+   "t": 1974.92,
+   "d": 1.8,
+   "text": "the segment size to a range that gives a"
+  },
+  {
+   "t": 1976.72,
+   "d": 2.16,
+   "text": "good result is it like very sensitive to"
+  },
+  {
+   "t": 1978.88,
+   "d": 2.64,
+   "text": "different size ranges I would say that"
+  },
+  {
+   "t": 1981.52,
+   "d": 3.0,
+   "text": "it depends on the game domain so for the"
+  },
+  {
+   "t": 1984.52,
+   "d": 3.0,
+   "text": "gbg Zelda domain a smaller section size"
+  },
+  {
+   "t": 1987.52,
+   "d": 3.88,
+   "text": "worked a lot better um and for Mario the"
+  },
+  {
+   "t": 1991.4,
+   "d": 2.32,
+   "text": "column length size worked a lot better"
+  },
+  {
+   "t": 1993.72,
+   "d": 1.16,
+   "text": "because then you wouldn't see the"
+  },
+  {
+   "t": 1994.88,
+   "d": 2.12,
+   "text": "weirdness with the like stacked chaotic"
+  },
+  {
+   "t": 1997.0,
+   "d": 1.68,
+   "text": "level where there's almost two levels on"
+  },
+  {
+   "t": 1998.68,
+   "d": 2.6,
+   "text": "top of each other um so I would say it"
+  },
+  {
+   "t": 2001.28,
+   "d": 1.88,
+   "text": "is a little bit sensitive but it is"
+  },
+  {
+   "t": 2003.16,
+   "d": 3.28,
+   "text": "really really quick to tune so you can"
+  },
+  {
+   "t": 2006.44,
+   "d": 2.52,
+   "text": "um you can generate a couple of levels"
+  },
+  {
+   "t": 2008.96,
+   "d": 2.36,
+   "text": "uh in like a second uh with one section"
+  },
+  {
+   "t": 2011.32,
+   "d": 1.32,
+   "text": "size and if it doesn't work you go"
+  },
+  {
+   "t": 2012.64,
+   "d": 1.68,
+   "text": "bigger and then you can just do like a"
+  },
+  {
+   "t": 2014.32,
+   "d": 3.04,
+   "text": "binary search to like find which one is"
+  },
+  {
+   "t": 2017.36,
+   "d": 2.88,
+   "text": "best I love hearing that a technique is"
+  },
+  {
+   "t": 2020.24,
+   "d": 2.28,
+   "text": "quick to tune um and that kind of leads"
+  },
+  {
+   "t": 2022.52,
+   "d": 3.12,
+   "text": "into one of my other personal questions"
+  },
+  {
+   "t": 2025.64,
+   "d": 3.6,
+   "text": "uh how did you choose the specific"
+  },
+  {
+   "t": 2029.24,
+   "d": 2.64,
+   "text": "domains to uh use this on I know like"
+  },
+  {
+   "t": 2031.88,
+   "d": 2.36,
+   "text": "Mario is a classic example um it was"
+  },
+  {
+   "t": 2034.24,
+   "d": 3.2,
+   "text": "really cool to see more than just Mario"
+  },
+  {
+   "t": 2037.44,
+   "d": 0.88,
+   "text": "mhm"
+  },
+  {
+   "t": 2038.32,
+   "d": 2.76,
+   "text": "absolutely so uh we started off with"
+  },
+  {
+   "t": 2041.08,
+   "d": 1.96,
+   "text": "Mario because it's sort of like the"
+  },
+  {
+   "t": 2043.04,
+   "d": 2.72,
+   "text": "classic test fed for game AI research"
+  },
+  {
+   "t": 2045.76,
+   "d": 2.4,
+   "text": "that was like sort of a a good starting"
+  },
+  {
+   "t": 2048.16,
+   "d": 1.36,
+   "text": "point and because a lot of the"
+  },
+  {
+   "t": 2049.52,
+   "d": 1.16,
+   "text": "approaches that we were comparing"
+  },
+  {
+   "t": 2050.68,
+   "d": 1.72,
+   "text": "against were implemented in Mario so it"
+  },
+  {
+   "t": 2052.4,
+   "d": 2.68,
+   "text": "was like ah yes we will do Mario 2"
+  },
+  {
+   "t": 2055.08,
+   "d": 3.04,
+   "text": "however Mario isn't a perfect domain"
+  },
+  {
+   "t": 2058.12,
+   "d": 3.2,
+   "text": "like so for example in gbg AI Zelda one"
+  },
+  {
+   "t": 2061.32,
+   "d": 1.52,
+   "text": "of the reasons we picked it is because"
+  },
+  {
+   "t": 2062.84,
+   "d": 2.2,
+   "text": "it has that weird constraint of like"
+  },
+  {
+   "t": 2065.04,
+   "d": 2.08,
+   "text": "there's a sub goal of getting to the key"
+  },
+  {
+   "t": 2067.12,
+   "d": 1.88,
+   "text": "and then getting to the door and that"
+  },
+  {
+   "t": 2069.0,
+   "d": 1.68,
+   "text": "could have been a challenge for MCTS"
+  },
+  {
+   "t": 2070.68,
+   "d": 1.4,
+   "text": "turns out it wasn't a challenge at all"
+  },
+  {
+   "t": 2072.08,
+   "d": 1.04,
+   "text": "because you could just Implement sub"
+  },
+  {
+   "t": 2073.12,
+   "d": 0.96,
+   "text": "goals for"
+  },
+  {
+   "t": 2074.08,
+   "d": 2.76,
+   "text": "MCTS um but we wanted to see in more of"
+  },
+  {
+   "t": 2076.84,
+   "d": 1.84,
+   "text": "like a puzzling domain like this where"
+  },
+  {
+   "t": 2078.68,
+   "d": 2.08,
+   "text": "there's multiple goals and also where"
+  },
+  {
+   "t": 2080.76,
+   "d": 2.44,
+   "text": "you retread your steps because if we"
+  },
+  {
+   "t": 2083.2,
+   "d": 2.12,
+   "text": "look at that level again if we recall it"
+  },
+  {
+   "t": 2085.32,
+   "d": 1.88,
+   "text": "it kind of looks like the background of"
+  },
+  {
+   "t": 2087.2,
+   "d": 2.92,
+   "text": "the Rog celebration uh thing that we're"
+  },
+  {
+   "t": 2090.12,
+   "d": 2.44,
+   "text": "we're talking on but uh you've got to"
+  },
+  {
+   "t": 2092.56,
+   "d": 1.96,
+   "text": "walk to the key and then walk back over"
+  },
+  {
+   "t": 2094.52,
+   "d": 2.56,
+   "text": "that same space so we wanted to see if"
+  },
+  {
+   "t": 2097.08,
+   "d": 1.72,
+   "text": "the binary space predition would break"
+  },
+  {
+   "t": 2098.8,
+   "d": 2.28,
+   "text": "in any way uh if this"
+  },
+  {
+   "t": 2101.08,
+   "d": 3.04,
+   "text": "happened gotcha yeah I know I personally"
+  },
+  {
+   "t": 2104.12,
+   "d": 2.6,
+   "text": "would love to see um more generation"
+  },
+  {
+   "t": 2106.72,
+   "d": 3.52,
+   "text": "techniques tested in uh less linear and"
+  },
+  {
+   "t": 2110.24,
+   "d": 3.88,
+   "text": "blocky things like Sonic I I wonder how"
+  },
+  {
+   "t": 2114.12,
+   "d": 3.56,
+   "text": "the binary space partition um would deal"
+  },
+  {
+   "t": 2117.68,
+   "d": 2.52,
+   "text": "with more like flowy environments like"
+  },
+  {
+   "t": 2120.2,
+   "d": 2.48,
+   "text": "that for sure yeah it might need"
+  },
+  {
+   "t": 2122.68,
+   "d": 3.2,
+   "text": "changing but also there might be there"
+  },
+  {
+   "t": 2125.88,
+   "d": 2.72,
+   "text": "is work oh there name is escaping me"
+  },
+  {
+   "t": 2128.6,
+   "d": 1.92,
+   "text": "right now but there was work uh out of"
+  },
+  {
+   "t": 2130.52,
+   "d": 2.8,
+   "text": "Aid last year of somebody who had like"
+  },
+  {
+   "t": 2133.32,
+   "d": 2.4,
+   "text": "an arbitrary way to make a discret"
+  },
+  {
+   "t": 2135.72,
+   "d": 2.64,
+   "text": "representation of a 2d level so we could"
+  },
+  {
+   "t": 2138.36,
+   "d": 4.52,
+   "text": "just use that and then do bsp on"
+  },
+  {
+   "t": 2142.88,
+   "d": 4.48,
+   "text": "that awesome um that was so cool Emily I"
+  },
+  {
+   "t": 2147.36,
+   "d": 2.2,
+   "text": "really appreciate it uh do you want to"
+  },
+  {
+   "t": 2149.56,
+   "d": 5.56,
+   "text": "put that um human subject study"
+  },
+  {
+   "t": 2155.2,
+   "d": 3.12,
+   "text": "uh what's the word for it the code on"
+  },
+  {
+   "t": 2158.32,
+   "d": 2.2,
+   "text": "the screen one more time absolutely yeah"
+  },
+  {
+   "t": 2160.52,
+   "d": 1.44,
+   "text": "I will go ahead and share that really"
+  },
+  {
+   "t": 2161.96,
+   "d": 1.72,
+   "text": "quick so that everyone can use it I"
+  },
+  {
+   "t": 2163.68,
+   "d": 1.28,
+   "text": "should have lingered there for even"
+  },
+  {
+   "t": 2164.96,
+   "d": 5.88,
+   "text": "longer but uh uh here we go"
+  },
+  {
+   "t": 2170.84,
+   "d": 2.2,
+   "text": "bam"
+  },
+  {
+   "t": 2173.04,
+   "d": 2.36,
+   "text": "awesome uh and I'll post this in the"
+  },
+  {
+   "t": 2175.4,
+   "d": 1.52,
+   "text": "obisk as well I'll probably post my"
+  },
+  {
+   "t": 2176.92,
+   "d": 1.04,
+   "text": "entire"
+  },
+  {
+   "t": 2177.96,
+   "d": 2.76,
+   "text": "slides well thank you so much Emily that"
+  },
+  {
+   "t": 2180.72,
+   "d": 2.6,
+   "text": "was very very cool um I appreciate your"
+  },
+  {
+   "t": 2183.32,
+   "d": 2.28,
+   "text": "time I'll definitely be taking a look at"
+  },
+  {
+   "t": 2185.6,
+   "d": 2.04,
+   "text": "using this it sounds fun to play with"
+  },
+  {
+   "t": 2187.64,
+   "d": 1.36,
+   "text": "great thank you so so much I really"
+  },
+  {
+   "t": 2189.0,
+   "d": 1.12,
+   "text": "appreciate it and this has been an"
+  },
+  {
+   "t": 2190.12,
+   "d": 3.24,
+   "text": "awesome event"
+  }
+ ]
+}

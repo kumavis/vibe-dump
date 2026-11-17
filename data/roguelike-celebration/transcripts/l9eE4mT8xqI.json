@@ -1,0 +1,1708 @@
+{
+ "id": "l9eE4mT8xqI",
+ "url": "https://www.youtube.com/watch?v=l9eE4mT8xqI",
+ "title": "Todd Furmanski - Making \"Dragon's Descent,\" a Roguelike Action Game for the Atari 2600",
+ "speaker": "Todd Furmanski",
+ "talk_title": "Making \"Dragon's Descent,\" a Roguelike Action Game for the Atari 2600",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-22",
+ "duration_s": 797,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nTodd Furmanski is a researcher with a focus in interactive digital environments and procedural content generation. Todd has a PhD in Media Arts and Practice, as well as an MFA in Interactive Media, both from the University of Southern California School of Cinematic Arts. His focuses include emergent algorithms as applied to interactivity, as well as the developing history of games and virtual spaces. While acting as the lead programmer on projects like \"The Night Journey\" and \"Walden, a game,\" he has developed several other experimental works, such as \"Forska\" and \"Dragon's Descent.\" Todd works with several platforms, from old consoles like the Atari 2600 to current Virtual and Augmented Reality devices.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 41,
+   "title": "Procedural Content Generation often used because_"
+  },
+  {
+   "start": 130,
+   "title": "About the Atari 2600"
+  },
+  {
+   "start": 220,
+   "title": "What's crucial for a \"Roguelike\" on this Platform?"
+  },
+  {
+   "start": 347,
+   "title": "making a maze using less memory than this slide requires"
+  },
+  {
+   "start": 438,
+   "title": "Paths, Noise, and Indices"
+  },
+  {
+   "start": 515,
+   "title": "Carving the level"
+  },
+  {
+   "start": 592,
+   "title": "Other Design Choices"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2450,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.03,
+   "d": 2.22,
+   "text": "thank you I'm gonna be talking about"
+  },
+  {
+   "t": 2.25,
+   "d": 4.11,
+   "text": "dragons two cents and a 2600 game how I"
+  },
+  {
+   "t": 6.36,
+   "d": 7.74,
+   "text": "made it and a little bit of why my job"
+  },
+  {
+   "t": 14.1,
+   "d": 1.32,
+   "text": "I've done a lot of different projects"
+  },
+  {
+   "t": 15.42,
+   "d": 2.67,
+   "text": "I'm very proud of they're not a non"
+  },
+  {
+   "t": 18.09,
+   "d": 1.98,
+   "text": "serial procedural content generated"
+  },
+  {
+   "t": 20.07,
+   "d": 1.26,
+   "text": "based even though that's have been the"
+  },
+  {
+   "t": 21.33,
+   "d": 2.55,
+   "text": "focus of my research but there there are"
+  },
+  {
+   "t": 23.88,
+   "d": 2.73,
+   "text": "largely open worlds games they're very"
+  },
+  {
+   "t": 26.61,
+   "d": 2.01,
+   "text": "large in scope we have teams they often"
+  },
+  {
+   "t": 28.62,
+   "d": 3.35,
+   "text": "take multiple years they're large and"
+  },
+  {
+   "t": 31.97,
+   "d": 1.99,
+   "text": "you know they're amazing but they take a"
+  },
+  {
+   "t": 33.96,
+   "d": 4.68,
+   "text": "lot out of you so I needed a break that"
+  },
+  {
+   "t": 38.64,
+   "d": 2.25,
+   "text": "said taking a side at the expense of"
+  },
+  {
+   "t": 40.89,
+   "d": 2.34,
+   "text": "being lived I often think of procedural"
+  },
+  {
+   "t": 43.23,
+   "d": 2.15,
+   "text": "punch generation it's often used because"
+  },
+  {
+   "t": 45.38,
+   "d": 2.11,
+   "text": "originally we didn't have enough"
+  },
+  {
+   "t": 47.49,
+   "d": 2.4,
+   "text": "computing power to use traditional"
+  },
+  {
+   "t": 49.89,
+   "d": 3.08,
+   "text": "watham or intuitive design paradigms"
+  },
+  {
+   "t": 52.97,
+   "d": 3.7,
+   "text": "this is the jungle in it fault"
+  },
+  {
+   "t": 56.67,
+   "d": 3.39,
+   "text": "was used a random number generator to"
+  },
+  {
+   "t": 60.06,
+   "d": 1.83,
+   "text": "basically save basically hundred and"
+  },
+  {
+   "t": 61.89,
+   "d": 2.58,
+   "text": "twenty eight bytes of memory but it"
+  },
+  {
+   "t": 64.47,
+   "d": 4.17,
+   "text": "allowed it to get 256 screens nowadays"
+  },
+  {
+   "t": 68.64,
+   "d": 1.23,
+   "text": "we use procedural content duration"
+  },
+  {
+   "t": 69.87,
+   "d": 1.92,
+   "text": "because we have way too much processing"
+  },
+  {
+   "t": 71.79,
+   "d": 3.84,
+   "text": "power to use intuitive design methods we"
+  },
+  {
+   "t": 75.63,
+   "d": 1.68,
+   "text": "I mean we can simulate a city we can"
+  },
+  {
+   "t": 77.31,
+   "d": 1.92,
+   "text": "submit a galaxy I am NOT going to place"
+  },
+  {
+   "t": 79.23,
+   "d": 1.41,
+   "text": "every single star the pair of tweezers"
+  },
+  {
+   "t": 80.64,
+   "d": 3.36,
+   "text": "I'm sorry I'm stop that's so I have to"
+  },
+  {
+   "t": 84.0,
+   "d": 3.42,
+   "text": "make machine do it that's a I've been a"
+  },
+  {
+   "t": 87.42,
+   "d": 2.49,
+   "text": "lot of I've been my space research-wise"
+  },
+  {
+   "t": 89.91,
+   "d": 2.04,
+   "text": "have been in this place and I kind of"
+  },
+  {
+   "t": 91.95,
+   "d": 3.09,
+   "text": "wanted to go to this space kind of get"
+  },
+  {
+   "t": 95.04,
+   "d": 3.9,
+   "text": "back to the roots of things dragons"
+  },
+  {
+   "t": 98.94,
+   "d": 2.91,
+   "text": "descent is basically a very stripped"
+  },
+  {
+   "t": 101.85,
+   "d": 1.98,
+   "text": "down roguelike you go screen by screen"
+  },
+  {
+   "t": 103.83,
+   "d": 2.55,
+   "text": "through procedurally generated maze one"
+  },
+  {
+   "t": 106.38,
+   "d": 4.08,
+   "text": "of potentially thousands there are eight"
+  },
+  {
+   "t": 110.46,
+   "d": 1.74,
+   "text": "kinds of enemies three bosses several"
+  },
+  {
+   "t": 112.2,
+   "d": 2.85,
+   "text": "secrets you have a choice there's"
+  },
+  {
+   "t": 115.05,
+   "d": 1.5,
+   "text": "treasure rooms you can find which allow"
+  },
+  {
+   "t": 116.55,
+   "d": 1.29,
+   "text": "you to boost your health boost your"
+  },
+  {
+   "t": 117.84,
+   "d": 2.64,
+   "text": "firepower or get points but you can only"
+  },
+  {
+   "t": 120.48,
+   "d": 1.86,
+   "text": "pick one per level so that keeps you"
+  },
+  {
+   "t": 122.34,
+   "d": 2.52,
+   "text": "moving forward again will be all you can"
+  },
+  {
+   "t": 124.86,
+   "d": 2.13,
+   "text": "play it after the talk so people have to"
+  },
+  {
+   "t": 126.99,
+   "d": 1.65,
+   "text": "talk tell you more about the details of"
+  },
+  {
+   "t": 128.64,
+   "d": 2.06,
+   "text": "that"
+  },
+  {
+   "t": 130.97,
+   "d": 3.12,
+   "text": "about the 2600 itself it's older than I"
+  },
+  {
+   "t": 134.09,
+   "d": 3.6,
+   "text": "am although not by much out of the box"
+  },
+  {
+   "t": 137.69,
+   "d": 1.14,
+   "text": "it was really designed to play pong"
+  },
+  {
+   "t": 138.83,
+   "d": 1.8,
+   "text": "there's a hardware there's a thing"
+  },
+  {
+   "t": 140.63,
+   "d": 2.01,
+   "text": "called a ball which is a dot that you"
+  },
+  {
+   "t": 142.64,
+   "d": 1.89,
+   "text": "can move but out of box you can have two"
+  },
+  {
+   "t": 144.53,
+   "d": 2.04,
+   "text": "sprites a very low res to color"
+  },
+  {
+   "t": 146.57,
+   "d": 3.03,
+   "text": "background two lines in a ball"
+  },
+  {
+   "t": 149.6,
+   "d": 1.89,
+   "text": "there are Hardware tricks to get more"
+  },
+  {
+   "t": 151.49,
+   "d": 1.92,
+   "text": "out of that but they're often at a cost"
+  },
+  {
+   "t": 153.41,
+   "d": 2.43,
+   "text": "and you have to be do some if you've"
+  },
+  {
+   "t": 155.84,
+   "d": 1.29,
+   "text": "read the book race in the bean they talk"
+  },
+  {
+   "t": 157.13,
+   "d": 2.28,
+   "text": "a lot about how they made this machine"
+  },
+  {
+   "t": 159.41,
+   "d": 1.41,
+   "text": "do much more than was originally a"
+  },
+  {
+   "t": 160.82,
+   "d": 5.73,
+   "text": "respect to do that said there's been 40"
+  },
+  {
+   "t": 166.55,
+   "d": 3.39,
+   "text": "years of of tricks development tools"
+  },
+  {
+   "t": 169.94,
+   "d": 1.47,
+   "text": "made actually wrote a lot of this in"
+  },
+  {
+   "t": 171.41,
+   "d": 3.27,
+   "text": "basic there's an active community that's"
+  },
+  {
+   "t": 174.68,
+   "d": 1.41,
+   "text": "been helped out and has also been"
+  },
+  {
+   "t": 176.09,
+   "d": 1.32,
+   "text": "offering these tools and kind of been"
+  },
+  {
+   "t": 177.41,
+   "d": 1.77,
+   "text": "kept up even more than a lot of other"
+  },
+  {
+   "t": 179.18,
+   "d": 6.12,
+   "text": "different old retro game consoles it's"
+  },
+  {
+   "t": 185.3,
+   "d": 1.56,
+   "text": "around the 26th and it's hard to get"
+  },
+  {
+   "t": 186.86,
+   "d": 1.68,
+   "text": "feature creep roguelikes are very"
+  },
+  {
+   "t": 188.54,
+   "d": 3.12,
+   "text": "susceptible to feature creep having four"
+  },
+  {
+   "t": 191.66,
+   "d": 3.54,
+   "text": "or five big giant University ones I can"
+  },
+  {
+   "t": 195.2,
+   "d": 2.67,
+   "text": "relate but here if you run out of memory"
+  },
+  {
+   "t": 197.87,
+   "d": 2.34,
+   "text": "recycles or ROM you kinda have to stop"
+  },
+  {
+   "t": 200.21,
+   "d": 2.22,
+   "text": "expanding the game and make a few hard"
+  },
+  {
+   "t": 202.43,
+   "d": 2.91,
+   "text": "choices like Ruth we're still often"
+  },
+  {
+   "t": 205.34,
+   "d": 1.43,
+   "text": "living with a lot of design decisions"
+  },
+  {
+   "t": 206.77,
+   "d": 2.86,
+   "text": "that often for good and bad or for just"
+  },
+  {
+   "t": 209.63,
+   "d": 2.64,
+   "text": "very strange reasons so it's interesting"
+  },
+  {
+   "t": 212.27,
+   "d": 1.56,
+   "text": "to go back to see kind of one of the"
+  },
+  {
+   "t": 213.83,
+   "d": 1.59,
+   "text": "first mainstream consoles and what how"
+  },
+  {
+   "t": 215.42,
+   "d": 2.1,
+   "text": "that's has shaped game design over the"
+  },
+  {
+   "t": 217.52,
+   "d": 3.96,
+   "text": "last forty years so I to make choices"
+  },
+  {
+   "t": 221.48,
+   "d": 1.26,
+   "text": "okay what is a roguelike"
+  },
+  {
+   "t": 222.74,
+   "d": 1.92,
+   "text": "on this platform what did I want to what"
+  },
+  {
+   "t": 224.66,
+   "d": 1.77,
+   "text": "did I think was a roguelike I loved"
+  },
+  {
+   "t": 226.43,
+   "d": 1.47,
+   "text": "generative environments I loved"
+  },
+  {
+   "t": 227.9,
+   "d": 2.34,
+   "text": "generating mazes and such I wanted to"
+  },
+  {
+   "t": 230.24,
+   "d": 1.26,
+   "text": "make sure that you could when you jump"
+  },
+  {
+   "t": 231.5,
+   "d": 1.11,
+   "text": "into a maze you wouldn't be able to play"
+  },
+  {
+   "t": 232.61,
+   "d": 1.86,
+   "text": "a blindfolded you wouldn't know you know"
+  },
+  {
+   "t": 234.47,
+   "d": 0.78,
+   "text": "you wouldn't know what you're getting"
+  },
+  {
+   "t": 235.25,
+   "d": 3.75,
+   "text": "into a lot of roguelikes have almost an"
+  },
+  {
+   "t": 239.0,
+   "d": 1.59,
+   "text": "improv sense they're not a scripted"
+  },
+  {
+   "t": 240.59,
+   "d": 1.32,
+   "text": "sequence you put a bunch of actors and"
+  },
+  {
+   "t": 241.91,
+   "d": 2.43,
+   "text": "items objects in a space and everybody"
+  },
+  {
+   "t": 244.34,
+   "d": 1.74,
+   "text": "kinda does their own thing and awesome"
+  },
+  {
+   "t": 246.08,
+   "d": 2.75,
+   "text": "things happen with that um well that"
+  },
+  {
+   "t": 248.83,
+   "d": 2.35,
+   "text": "might not be a sophisticated on the 2600"
+  },
+  {
+   "t": 251.18,
+   "d": 2.28,
+   "text": "I wanna have a little bit of that so"
+  },
+  {
+   "t": 253.46,
+   "d": 1.59,
+   "text": "some of the design was based on yeah I"
+  },
+  {
+   "t": 255.05,
+   "d": 2.25,
+   "text": "have a empty room I put stuff in and"
+  },
+  {
+   "t": 257.3,
+   "d": 4.59,
+   "text": "stuff happens I like to think that I"
+  },
+  {
+   "t": 261.89,
+   "d": 1.56,
+   "text": "mean most roguelikes have at least a"
+  },
+  {
+   "t": 263.45,
+   "d": 1.25,
+   "text": "couple valid strategies"
+  },
+  {
+   "t": 264.7,
+   "d": 2.0,
+   "text": "out of one tried-and-true way you can"
+  },
+  {
+   "t": 266.7,
+   "d": 2.65,
+   "text": "mess around with things like I said the"
+  },
+  {
+   "t": 269.35,
+   "d": 1.38,
+   "text": "treasure rooms often give you a choice"
+  },
+  {
+   "t": 270.73,
+   "d": 1.41,
+   "text": "if you want to be a tank the glass"
+  },
+  {
+   "t": 272.14,
+   "d": 2.34,
+   "text": "cannon or just a guy who collects all"
+  },
+  {
+   "t": 274.48,
+   "d": 2.4,
+   "text": "the gems of the expensive power and try"
+  },
+  {
+   "t": 276.88,
+   "d": 1.71,
+   "text": "to up your score that's really hard way"
+  },
+  {
+   "t": 278.59,
+   "d": 4.38,
+   "text": "to play it also moves into permadeath or"
+  },
+  {
+   "t": 282.97,
+   "d": 2.16,
+   "text": "rather this precarious narrative power"
+  },
+  {
+   "t": 285.13,
+   "d": 2.31,
+   "text": "you can claw your way up and get to be"
+  },
+  {
+   "t": 287.44,
+   "d": 2.91,
+   "text": "you almost have a demigod likability and"
+  },
+  {
+   "t": 290.35,
+   "d": 1.62,
+   "text": "then you step on a nail and get tetanus"
+  },
+  {
+   "t": 291.97,
+   "d": 3.72,
+   "text": "and diet but in fact that also feeds in"
+  },
+  {
+   "t": 295.69,
+   "d": 1.98,
+   "text": "very much with the arcade mentality that"
+  },
+  {
+   "t": 297.67,
+   "d": 1.74,
+   "text": "the Atari often half of which was you"
+  },
+  {
+   "t": 299.41,
+   "d": 1.23,
+   "text": "put in a quarter you play for two or"
+  },
+  {
+   "t": 300.64,
+   "d": 1.77,
+   "text": "three minutes or you can try to get high"
+  },
+  {
+   "t": 302.41,
+   "d": 1.26,
+   "text": "score you can hit a plane for half-hour"
+  },
+  {
+   "t": 303.67,
+   "d": 1.2,
+   "text": "and then suddenly you just make the"
+  },
+  {
+   "t": 304.87,
+   "d": 2.34,
+   "text": "wrong move so you have that sense of"
+  },
+  {
+   "t": 307.21,
+   "d": 2.25,
+   "text": "tension and that sense of having choice"
+  },
+  {
+   "t": 309.46,
+   "d": 1.53,
+   "text": "you don't try to click reload and save"
+  },
+  {
+   "t": 310.99,
+   "d": 2.19,
+   "text": "and click review mode kind of there is"
+  },
+  {
+   "t": 313.18,
+   "d": 5.67,
+   "text": "that ongoing sense of escalation what"
+  },
+  {
+   "t": 318.85,
+   "d": 2.52,
+   "text": "issue is I mean roguelikes use text"
+  },
+  {
+   "t": 321.37,
+   "d": 1.56,
+   "text": "originally that made computers that's"
+  },
+  {
+   "t": 322.93,
+   "d": 1.83,
+   "text": "what they had work graphically capable"
+  },
+  {
+   "t": 324.76,
+   "d": 1.71,
+   "text": "well you can't do many graphics on the"
+  },
+  {
+   "t": 326.47,
+   "d": 1.62,
+   "text": "Atari can you them fast and you can't"
+  },
+  {
+   "t": 328.09,
+   "d": 3.12,
+   "text": "really you text this is a bitmap that"
+  },
+  {
+   "t": 331.21,
+   "d": 2.01,
+   "text": "takes up a good sizeable chunk of the"
+  },
+  {
+   "t": 333.22,
+   "d": 4.47,
+   "text": "actual size of the cartridge so it was"
+  },
+  {
+   "t": 337.69,
+   "d": 1.53,
+   "text": "good I had to basically move into arcade"
+  },
+  {
+   "t": 339.22,
+   "d": 1.77,
+   "text": "action I think to make this experience"
+  },
+  {
+   "t": 340.99,
+   "d": 2.19,
+   "text": "and wouldn't be able to leverage the"
+  },
+  {
+   "t": 343.18,
+   "d": 5.67,
+   "text": "awesome things that text can do the key"
+  },
+  {
+   "t": 348.85,
+   "d": 1.74,
+   "text": "of them you know most procedural content"
+  },
+  {
+   "t": 350.59,
+   "d": 2.94,
+   "text": "generation is its random seed and and"
+  },
+  {
+   "t": 353.53,
+   "d": 1.26,
+   "text": "here the read see that kind of came with"
+  },
+  {
+   "t": 354.79,
+   "d": 3.27,
+   "text": "the kid I was using use to eight 8-bit"
+  },
+  {
+   "t": 358.06,
+   "d": 1.89,
+   "text": "values the cool thing is you could set"
+  },
+  {
+   "t": 359.95,
+   "d": 1.8,
+   "text": "them separately so I could set one and"
+  },
+  {
+   "t": 361.75,
+   "d": 2.19,
+   "text": "then have based combos to tracks of"
+  },
+  {
+   "t": 363.94,
+   "d": 1.38,
+   "text": "random seeds that I can keep track of"
+  },
+  {
+   "t": 365.32,
+   "d": 1.95,
+   "text": "but yeah this entirety that you know"
+  },
+  {
+   "t": 367.27,
+   "d": 2.28,
+   "text": "this is the cumin of look the grand"
+  },
+  {
+   "t": 369.55,
+   "d": 2.73,
+   "text": "unified field theory for this game if"
+  },
+  {
+   "t": 372.28,
+   "d": 1.38,
+   "text": "there were a little scientists and the"
+  },
+  {
+   "t": 373.66,
+   "d": 2.1,
+   "text": "Atari 2600 they'd find this and one of"
+  },
+  {
+   "t": 375.76,
+   "d": 2.31,
+   "text": "them gave nobel prize"
+  },
+  {
+   "t": 378.07,
+   "d": 4.71,
+   "text": "I only two sprites I mean I could get"
+  },
+  {
+   "t": 382.78,
+   "d": 1.32,
+   "text": "more but you get flicker or you'd have"
+  },
+  {
+   "t": 384.1,
+   "d": 2.19,
+   "text": "to I'd have to race the beam and it's"
+  },
+  {
+   "t": 386.29,
+   "d": 1.98,
+   "text": "okay no to two sprites the player and"
+  },
+  {
+   "t": 388.27,
+   "d": 2.64,
+   "text": "something else it the key beat a"
+  },
+  {
+   "t": 390.91,
+   "d": 1.79,
+   "text": "treasure beat the exit be it a monster"
+  },
+  {
+   "t": 392.7,
+   "d": 1.33,
+   "text": "[Music]"
+  },
+  {
+   "t": 394.03,
+   "d": 1.74,
+   "text": "I said make sure that they're relatively"
+  },
+  {
+   "t": 395.77,
+   "d": 5.73,
+   "text": "interesting when you do meet them rom is"
+  },
+  {
+   "t": 401.5,
+   "d": 1.83,
+   "text": "limited I was using 16 K which is even"
+  },
+  {
+   "t": 403.33,
+   "d": 1.41,
+   "text": "kind of big for an Atari cartridge"
+  },
+  {
+   "t": 404.74,
+   "d": 2.19,
+   "text": "although not a presidented Ram is"
+  },
+  {
+   "t": 406.93,
+   "d": 2.07,
+   "text": "precious I should a little more than"
+  },
+  {
+   "t": 409.0,
+   "d": 2.94,
+   "text": "usual but you had 128 bytes with your"
+  },
+  {
+   "t": 411.94,
+   "d": 2.52,
+   "text": "standard spec and you run through that"
+  },
+  {
+   "t": 414.46,
+   "d": 1.59,
+   "text": "very quickly cuz lot of that's used to"
+  },
+  {
+   "t": 416.05,
+   "d": 1.05,
+   "text": "handle graphics while that's he's"
+  },
+  {
+   "t": 417.1,
+   "d": 4.05,
+   "text": "handled input I stored in RAM the level"
+  },
+  {
+   "t": 421.15,
+   "d": 5.94,
+   "text": "was 12 bytes 8 were 64 bytes 64 64 bits"
+  },
+  {
+   "t": 427.09,
+   "d": 3.03,
+   "text": "for rooms and then 4 bytes for the the"
+  },
+  {
+   "t": 430.12,
+   "d": 2.79,
+   "text": "actual room for the important rooms the"
+  },
+  {
+   "t": 432.91,
+   "d": 1.71,
+   "text": "entry the exit the start area in the"
+  },
+  {
+   "t": 434.62,
+   "d": 6.78,
+   "text": "treasure room so this is level 1 from"
+  },
+  {
+   "t": 441.4,
+   "d": 4.53,
+   "text": "using random seed 0 0 1 1 from the 2 by"
+  },
+  {
+   "t": 445.93,
+   "d": 3.81,
+   "text": "random number generator so given that it"
+  },
+  {
+   "t": 449.74,
+   "d": 2.94,
+   "text": "didn't have that much RAM I put tables"
+  },
+  {
+   "t": 452.68,
+   "d": 1.98,
+   "text": "in ROM I had a noise function if you use"
+  },
+  {
+   "t": 454.66,
+   "d": 1.71,
+   "text": "Perlin noise class need often have just"
+  },
+  {
+   "t": 456.37,
+   "d": 2.4,
+   "text": "a set other noise texture values that"
+  },
+  {
+   "t": 458.77,
+   "d": 3.84,
+   "text": "are random but then I actually have 10"
+  },
+  {
+   "t": 462.61,
+   "d": 1.23,
+   "text": "different kinds of rooms plus the"
+  },
+  {
+   "t": 463.84,
+   "d": 1.32,
+   "text": "special rooms which are then further"
+  },
+  {
+   "t": 465.16,
+   "d": 1.83,
+   "text": "indexed so I almost had a noise set of"
+  },
+  {
+   "t": 466.99,
+   "d": 3.39,
+   "text": "noise functions and well if I worked at"
+  },
+  {
+   "t": 470.38,
+   "d": 1.77,
+   "text": "Activision in the early 80s I'd probably"
+  },
+  {
+   "t": 472.15,
+   "d": 2.97,
+   "text": "be fired for this this is isn't it being"
+  },
+  {
+   "t": 475.12,
+   "d": 1.5,
+   "text": "useful in that I could ramp up"
+  },
+  {
+   "t": 476.62,
+   "d": 2.58,
+   "text": "difficulty so this is this is these are"
+  },
+  {
+   "t": 479.2,
+   "d": 2.19,
+   "text": "the paths of level 1 out of a potential"
+  },
+  {
+   "t": 481.39,
+   "d": 3.12,
+   "text": "this is what the noise function would"
+  },
+  {
+   "t": 484.51,
+   "d": 1.26,
+   "text": "generate if you could go through every"
+  },
+  {
+   "t": 485.77,
+   "d": 3.57,
+   "text": "room in an 8x8 grid but using the"
+  },
+  {
+   "t": 489.34,
+   "d": 2.46,
+   "text": "indices I could actually increase how"
+  },
+  {
+   "t": 491.8,
+   "d": 1.89,
+   "text": "complicated the rooms are the walls are"
+  },
+  {
+   "t": 493.69,
+   "d": 1.53,
+   "text": "actually lethal to touch and in this"
+  },
+  {
+   "t": 495.22,
+   "d": 3.6,
+   "text": "version of the game so I could up the"
+  },
+  {
+   "t": 498.82,
+   "d": 3.83,
+   "text": "indices to end up getting more ornate"
+  },
+  {
+   "t": 502.65,
+   "d": 3.82,
+   "text": "rooms and more dangerous rooms and I can"
+  },
+  {
+   "t": 506.47,
+   "d": 1.59,
+   "text": "kind of test with you to index to have a"
+  },
+  {
+   "t": 508.06,
+   "d": 1.56,
+   "text": "fair amount of control as a designer"
+  },
+  {
+   "t": 509.62,
+   "d": 0.73,
+   "text": "how did"
+  },
+  {
+   "t": 510.35,
+   "d": 3.03,
+   "text": "you this but once you have the rooms you"
+  },
+  {
+   "t": 513.38,
+   "d": 1.58,
+   "text": "kind of need to connect them"
+  },
+  {
+   "t": 514.96,
+   "d": 3.49,
+   "text": "so given this potential space I end up"
+  },
+  {
+   "t": 518.45,
+   "d": 2.25,
+   "text": "adding in to make sure all the important"
+  },
+  {
+   "t": 520.7,
+   "d": 1.38,
+   "text": "rooms you don't have the entrance next"
+  },
+  {
+   "t": 522.08,
+   "d": 3.18,
+   "text": "to the exit usually I divide it into"
+  },
+  {
+   "t": 525.26,
+   "d": 1.86,
+   "text": "four quadrants to put each important"
+  },
+  {
+   "t": 527.12,
+   "d": 4.95,
+   "text": "room in one of each quadrant I then"
+  },
+  {
+   "t": 532.07,
+   "d": 2.16,
+   "text": "actually add a dummy room while it's"
+  },
+  {
+   "t": 534.23,
+   "d": 3.93,
+   "text": "generating to make sure that you do can"
+  },
+  {
+   "t": 538.16,
+   "d": 2.73,
+   "text": "either get dead ends or loops and then"
+  },
+  {
+   "t": 540.89,
+   "d": 1.05,
+   "text": "this is where the art is this is where"
+  },
+  {
+   "t": 541.94,
+   "d": 1.32,
+   "text": "it's arbitrary a little bit but then I"
+  },
+  {
+   "t": 543.26,
+   "d": 1.62,
+   "text": "connect not every room to every other"
+  },
+  {
+   "t": 544.88,
+   "d": 2.28,
+   "text": "room but certain rooms to other rooms I"
+  },
+  {
+   "t": 547.16,
+   "d": 1.59,
+   "text": "don't have a store connect directly to"
+  },
+  {
+   "t": 548.75,
+   "d": 1.2,
+   "text": "the exit I have it connect to the dummy"
+  },
+  {
+   "t": 549.95,
+   "d": 5.22,
+   "text": "room and then the exit and this also"
+  },
+  {
+   "t": 555.17,
+   "d": 1.44,
+   "text": "makes sure that the the maze is"
+  },
+  {
+   "t": 556.61,
+   "d": 1.41,
+   "text": "navigable you ever you kind of know you"
+  },
+  {
+   "t": 558.02,
+   "d": 1.74,
+   "text": "can get anywhere from anywhere else and"
+  },
+  {
+   "t": 559.76,
+   "d": 3.75,
+   "text": "it's so relatively simple that's it it's"
+  },
+  {
+   "t": 563.51,
+   "d": 1.74,
+   "text": "it's simple but then you can end up"
+  },
+  {
+   "t": 565.25,
+   "d": 2.16,
+   "text": "getting this is level one these are the"
+  },
+  {
+   "t": 567.41,
+   "d": 2.19,
+   "text": "first several levels you get loops you"
+  },
+  {
+   "t": 569.6,
+   "d": 1.86,
+   "text": "get dead ends you get clusters of rooms"
+  },
+  {
+   "t": 571.46,
+   "d": 2.25,
+   "text": "where you can easily get boss that's"
+  },
+  {
+   "t": 573.71,
+   "d": 1.05,
+   "text": "what the rooms are big enough you can"
+  },
+  {
+   "t": 574.76,
+   "d": 1.59,
+   "text": "finish they're big enough you can kind"
+  },
+  {
+   "t": 576.35,
+   "d": 1.26,
+   "text": "of get lost but small if you can finish"
+  },
+  {
+   "t": 577.61,
+   "d": 1.92,
+   "text": "them in a minute or two and if one is"
+  },
+  {
+   "t": 579.53,
+   "d": 1.8,
+   "text": "easy to to solve the next one will"
+  },
+  {
+   "t": 581.33,
+   "d": 2.46,
+   "text": "probably be a lot harder and you kind of"
+  },
+  {
+   "t": 583.79,
+   "d": 1.5,
+   "text": "have that potato chip type mentality"
+  },
+  {
+   "t": 585.29,
+   "d": 2.61,
+   "text": "kind of marrying the arcade design"
+  },
+  {
+   "t": 587.9,
+   "d": 4.16,
+   "text": "scheme with the roguelike design scheme"
+  },
+  {
+   "t": 592.9,
+   "d": 2.35,
+   "text": "part of this I added other elements in"
+  },
+  {
+   "t": 595.25,
+   "d": 1.53,
+   "text": "game design wise to keep the player"
+  },
+  {
+   "t": 596.78,
+   "d": 1.5,
+   "text": "moving you know simple carrots and"
+  },
+  {
+   "t": 598.28,
+   "d": 1.86,
+   "text": "sticks you get more points as you go"
+  },
+  {
+   "t": 600.14,
+   "d": 1.8,
+   "text": "deeper into the maze you only have one"
+  },
+  {
+   "t": 601.94,
+   "d": 1.74,
+   "text": "treasure per level that's often how you"
+  },
+  {
+   "t": 603.68,
+   "d": 1.74,
+   "text": "heal so you're running low on life you"
+  },
+  {
+   "t": 605.42,
+   "d": 3.63,
+   "text": "need to get to the new new level the"
+  },
+  {
+   "t": 609.05,
+   "d": 1.29,
+   "text": "base generation I had had a couple"
+  },
+  {
+   "t": 610.34,
+   "d": 1.95,
+   "text": "little quirks and bugs yeah it was an"
+  },
+  {
+   "t": 612.29,
+   "d": 2.04,
+   "text": "8x8 grid it was only a 7 by 8 grid due"
+  },
+  {
+   "t": 614.33,
+   "d": 2.55,
+   "text": "to me not enjoy something but I liked"
+  },
+  {
+   "t": 616.88,
+   "d": 2.49,
+   "text": "the bubbles that came out so well level"
+  },
+  {
+   "t": 619.37,
+   "d": 1.26,
+   "text": "1 is actually great because you stab the"
+  },
+  {
+   "t": 620.63,
+   "d": 1.29,
+   "text": "treasure first it's a great tutorial"
+  },
+  {
+   "t": 621.92,
+   "d": 1.62,
+   "text": "level didn't want to mess with that and"
+  },
+  {
+   "t": 623.54,
+   "d": 3.74,
+   "text": "it's all navigable so I went with it"
+  },
+  {
+   "t": 627.28,
+   "d": 3.22,
+   "text": "and ganz I have actually transplanted"
+  },
+  {
+   "t": 630.5,
+   "d": 2.88,
+   "text": "this random seed number two ported it as"
+  },
+  {
+   "t": 633.38,
+   "d": 1.68,
+   "text": "C in Java so I can port it to later"
+  },
+  {
+   "t": 635.06,
+   "d": 2.25,
+   "text": "levels second later platform so I can"
+  },
+  {
+   "t": 637.31,
+   "d": 5.31,
+   "text": "actually keep those levels again the"
+  },
+  {
+   "t": 642.62,
+   "d": 2.07,
+   "text": "enemy in room layout I have you know the"
+  },
+  {
+   "t": 644.69,
+   "d": 1.8,
+   "text": "mix and match of AI and the room that"
+  },
+  {
+   "t": 646.49,
+   "d": 1.35,
+   "text": "means you have different strategies per"
+  },
+  {
+   "t": 647.84,
+   "d": 1.62,
+   "text": "room instant to instant you just have to"
+  },
+  {
+   "t": 649.46,
+   "d": 2.58,
+   "text": "think tactically not hugely you know not"
+  },
+  {
+   "t": 652.04,
+   "d": 2.49,
+   "text": "even hugely sophisticated but honest on"
+  },
+  {
+   "t": 654.53,
+   "d": 2.27,
+   "text": "a machine like this I think it's enough"
+  },
+  {
+   "t": 656.8,
+   "d": 2.08,
+   "text": "the Malaysians were a lot of fun to work"
+  },
+  {
+   "t": 658.88,
+   "d": 2.64,
+   "text": "with I think if he gave 10 of you saving"
+  },
+  {
+   "t": 661.52,
+   "d": 2.13,
+   "text": "a game on the 2600 maker roguelike you"
+  },
+  {
+   "t": 663.65,
+   "d": 1.23,
+   "text": "could make 50 different games they're"
+  },
+  {
+   "t": 664.88,
+   "d": 2.64,
+   "text": "all different and all amazing and this"
+  },
+  {
+   "t": 667.52,
+   "d": 1.83,
+   "text": "was a really wonderful way to kind of"
+  },
+  {
+   "t": 669.35,
+   "d": 2.73,
+   "text": "learn a new system and look at the"
+  },
+  {
+   "t": 672.08,
+   "d": 1.47,
+   "text": "approach elegance and try to achieve"
+  },
+  {
+   "t": 673.55,
+   "d": 1.53,
+   "text": "perfection not by adding things but by"
+  },
+  {
+   "t": 675.08,
+   "d": 1.47,
+   "text": "taking them away until there's nothing"
+  },
+  {
+   "t": 676.55,
+   "d": 5.22,
+   "text": "left to remove and going forward"
+  },
+  {
+   "t": 681.77,
+   "d": 1.44,
+   "text": "actually have this is almost my hello"
+  },
+  {
+   "t": 683.21,
+   "d": 1.89,
+   "text": "world for putting a game on to a new"
+  },
+  {
+   "t": 685.1,
+   "d": 1.92,
+   "text": "platform if I can get it working on the"
+  },
+  {
+   "t": 687.02,
+   "d": 2.43,
+   "text": "2600 I can get it working just about"
+  },
+  {
+   "t": 689.45,
+   "d": 2.73,
+   "text": "anything I think I already had path"
+  },
+  {
+   "t": 692.18,
+   "d": 1.37,
+   "text": "according to the more graphically"
+  },
+  {
+   "t": 693.55,
+   "d": 3.49,
+   "text": "capable Atari 7800 I have a prototype"
+  },
+  {
+   "t": 697.04,
+   "d": 2.31,
+   "text": "and working on on the Gameboy I learned"
+  },
+  {
+   "t": 699.35,
+   "d": 1.59,
+   "text": "how to read on the Apple 2e it's blue"
+  },
+  {
+   "t": 700.94,
+   "d": 2.19,
+   "text": "computer I kind of grew up with very"
+  },
+  {
+   "t": 703.13,
+   "d": 1.11,
+   "text": "formative so I'm gonna see what's"
+  },
+  {
+   "t": 704.24,
+   "d": 3.57,
+   "text": "involved in using that yeah it's kind of"
+  },
+  {
+   "t": 707.81,
+   "d": 1.68,
+   "text": "its fisk eating enough that I kind of"
+  },
+  {
+   "t": 709.49,
+   "d": 2.01,
+   "text": "have to learn a good amount about the"
+  },
+  {
+   "t": 711.5,
+   "d": 2.13,
+   "text": "Betty given platform while porting it"
+  },
+  {
+   "t": 713.63,
+   "d": 1.8,
+   "text": "and then kind of embellishing it sounds"
+  },
+  {
+   "t": 715.43,
+   "d": 4.59,
+   "text": "like it's gonna be fun anyway thank you"
+  },
+  {
+   "t": 720.02,
+   "d": 1.42,
+   "text": "very much"
+  },
+  {
+   "t": 721.44,
+   "d": 4.75,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 729.29,
+   "d": 6.92,
+   "text": "I think we have time for a question I"
+  },
+  {
+   "t": 737.56,
+   "d": 3.52,
+   "text": "feel like this is a dumb question but do"
+  },
+  {
+   "t": 741.08,
+   "d": 1.56,
+   "text": "you develop a game like this on an"
+  },
+  {
+   "t": 742.64,
+   "d": 2.46,
+   "text": "emulator on an actual Atari 2600 both"
+  },
+  {
+   "t": 745.1,
+   "d": 5.97,
+   "text": "and 90% is on my laptop viewing using"
+  },
+  {
+   "t": 751.07,
+   "d": 2.34,
+   "text": "emulators again using kind of a version"
+  },
+  {
+   "t": 753.41,
+   "d": 2.25,
+   "text": "of basic that allows you to do a lot of"
+  },
+  {
+   "t": 755.66,
+   "d": 1.98,
+   "text": "stuff fairly easily you can hook it into"
+  },
+  {
+   "t": 757.64,
+   "d": 1.26,
+   "text": "visual studio if you want to for"
+  },
+  {
+   "t": 758.9,
+   "d": 2.22,
+   "text": "instance I build roms I test them and"
+  },
+  {
+   "t": 761.12,
+   "d": 2.13,
+   "text": "then I have almost a bridge tool a"
+  },
+  {
+   "t": 763.25,
+   "d": 1.68,
+   "text": "cartridge that can take an SD card so I"
+  },
+  {
+   "t": 764.93,
+   "d": 2.04,
+   "text": "can prototype it on I can test it on the"
+  },
+  {
+   "t": 766.97,
+   "d": 1.44,
+   "text": "original hardware and see how it works"
+  },
+  {
+   "t": 768.41,
+   "d": 2.49,
+   "text": "and I'm actually wanting it stuff this"
+  },
+  {
+   "t": 770.9,
+   "d": 1.89,
+   "text": "weekend but within a couple weeks I'll"
+  },
+  {
+   "t": 772.79,
+   "d": 1.26,
+   "text": "have physical cartridges through"
+  },
+  {
+   "t": 774.05,
+   "d": 4.01,
+   "text": "publisher so you might be able to get I"
+  },
+  {
+   "t": 780.64,
+   "d": 2.62,
+   "text": "think it's throughout the Atari H comm"
+  },
+  {
+   "t": 783.26,
+   "d": 1.35,
+   "text": "has a bunch of a bunch of good"
+  },
+  {
+   "t": 784.61,
+   "d": 1.35,
+   "text": "information and stuff and that'll be"
+  },
+  {
+   "t": 785.96,
+   "d": 1.08,
+   "text": "kind of whoo and working through"
+  },
+  {
+   "t": 787.04,
+   "d": 3.93,
+   "text": "together the physical copies cool thank"
+  },
+  {
+   "t": 790.97,
+   "d": 2.37,
+   "text": "you so much make sure to play the game"
+  },
+  {
+   "t": 793.34,
+   "d": 2.69,
+   "text": "during the arcade"
+  }
+ ]
+}

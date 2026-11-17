@@ -1,0 +1,1683 @@
+{
+ "id": "BDcZSWHu8RQ",
+ "url": "https://www.youtube.com/watch?v=BDcZSWHu8RQ",
+ "title": "Max Kreminski - Designing AI systems to support player storytelling",
+ "speaker": "Max Kreminski",
+ "talk_title": "Designing AI systems to support player storytelling",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-21",
+ "duration_s": 1699,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "Max Kreminski is a PhD student in the Expressive Intelligence Studio at UC Santa Cruz, studying how artificial intelligence and generative methods can be used to support human creativity.\n\nThis talk is from Roguelike Celebration 2019 - more info at roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 129,
+   "title": "Monologic vs dialogic retellings"
+  },
+  {
+   "start": 134,
+   "title": "Example dialogic retellings"
+  },
+  {
+   "start": 277,
+   "title": "Story construction as a primary motivation for play"
+  },
+  {
+   "start": 320,
+   "title": "What makes a game a good storytelling partner?"
+  },
+  {
+   "start": 346,
+   "title": "Barriers to creativity: fear of the blank canvas"
+  },
+  {
+   "start": 370,
+   "title": "Barriers to creativity: fear of judgment"
+  },
+  {
+   "start": 398,
+   "title": "Barriers to creativity: perfectionism"
+  },
+  {
+   "start": 426,
+   "title": "Design elements: generativity"
+  },
+  {
+   "start": 474,
+   "title": "Design elements: incrementality"
+  },
+  {
+   "start": 541,
+   "title": "Design elements: boundedness"
+  },
+  {
+   "start": 580,
+   "title": "Design elements: limited player control"
+  },
+  {
+   "start": 616,
+   "title": "Common design elements"
+  },
+  {
+   "start": 682,
+   "title": "The pain of simulationism"
+  },
+  {
+   "start": 745,
+   "title": "Story sifting"
+  },
+  {
+   "start": 851,
+   "title": "Sifting patterns"
+  },
+  {
+   "start": 955,
+   "title": "Simulation actions"
+  },
+  {
+   "start": 1055,
+   "title": "Current design direction"
+  },
+  {
+   "start": 1130,
+   "title": "Values-driven characters"
+  },
+  {
+   "start": 1166,
+   "title": "Character generation"
+  },
+  {
+   "start": 1181,
+   "title": "Transcripts"
+  },
+  {
+   "start": 1188,
+   "title": "Closing the loop"
+  },
+  {
+   "start": 1215,
+   "title": "Design patterns"
+  },
+  {
+   "start": 1247,
+   "title": "Design pattern: action generation"
+  },
+  {
+   "start": 1281,
+   "title": "Design pattern: two-level structure"
+  },
+  {
+   "start": 1307,
+   "title": "Design pattern: story sitting"
+  },
+  {
+   "start": 1316,
+   "title": "Diarytown"
+  },
+  {
+   "start": 1434,
+   "title": "Conclusions"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en-US",
+ "word_count": 5068,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.06,
+   "d": 3.56,
+   "text": "MAX KREMINSKI: So, hi, I am Max. I am a PhD student at UC Santa Cruz. I think some of"
+  },
+  {
+   "t": 3.62,
+   "d": 5.86,
+   "text": "you might know me, I've given talks here before. This is going to be an Artificer flavored"
+  },
+  {
+   "t": 9.48,
+   "d": 7.04,
+   "text": "talk, you can see the little badge at the top left of the slides. There is also some"
+  },
+  {
+   "t": 16.52,
+   "d": 2.77,
+   "text": "Druid philosophical tendencies, and a little bit of Wizard, a little bit of Sorcerer mixed"
+  },
+  {
+   "t": 19.29,
+   "d": 5.83,
+   "text": "in there, I'm kind of a cross class-y sort of person. I am going to talk about this idea"
+  },
+  {
+   "t": 25.12,
+   "d": 8.9,
+   "text": "of stories and the stories players tell themselves using these games that we're working on, using"
+  },
+  {
+   "t": 34.02,
+   "d": 5.68,
+   "text": "simulations as storytelling partners. What I am going to go sort of into is does anyone"
+  },
+  {
+   "t": 39.7,
+   "d": 15.7,
+   "text": "know Boatmurdered? [applause] Boatmurdered is sort of this famous Dwarf Fortress story"
+  },
+  {
+   "t": 55.4,
+   "d": 5.18,
+   "text": "that people have told using Dwarf Fortress. It was a game where a bunch of players passed"
+  },
+  {
+   "t": 60.58,
+   "d": 5.48,
+   "text": "the file around and told this ongoing story where dwarfs founded a fortress and it went"
+  },
+  {
+   "t": 66.06,
+   "d": 4.78,
+   "text": "poorly and things turned into this elephant war and everyone died. Dwarf Fortress stories"
+  },
+  {
+   "t": 70.84,
+   "d": 7.94,
+   "text": "tend to go this way. This is another Dwarf Fortress story, from a Tim Denee comic. This"
+  },
+  {
+   "t": 78.78,
+   "d": 4.29,
+   "text": "is called BronzeMurder. Again, dwarfs found a colony, it goes very poorly, everyone dies."
+  },
+  {
+   "t": 83.07,
+   "d": 5.24,
+   "text": "In this case, there's more monsters from the Deep involved. Dwarf Fortress stories have"
+  },
+  {
+   "t": 88.31,
+   "d": 5.35,
+   "text": "an arc to them. The thing I am going to talk about is generative games as storytelling"
+  },
+  {
+   "t": 93.66,
+   "d": 3.68,
+   "text": "partners. Why are players using Dwarf Fortress to tell stories? What kinds of stories are"
+  },
+  {
+   "t": 97.34,
+   "d": 4.64,
+   "text": "they using to tell it and why? There is an idea in the academic community of retellings"
+  },
+  {
+   "t": 101.98,
+   "d": 7.45,
+   "text": "and this is ideas they are telling and whether that is writing or talking about to or players.There's"
+  },
+  {
+   "t": 109.43,
+   "d": 8.46,
+   "text": "been some recent calling for a focus on retellings, that a gameplay system or a game or an interactive"
+  },
+  {
+   "t": 117.89,
+   "d": 5.77,
+   "text": "system is successful if players are driven by it to create stories about their experiences."
+  },
+  {
+   "t": 123.66,
+   "d": 5.38,
+   "text": "This sort of a useful perspective for looking at what players are doing in these contexts."
+  },
+  {
+   "t": 129.04,
+   "d": 4.7,
+   "text": "I will skip over that distinction - this is a big talk and I can't get through all of"
+  },
+  {
+   "t": 133.74,
+   "d": 5.53,
+   "text": "it. There are example retellings we will look at in more detail. Some are Dwarf Fortress"
+  },
+  {
+   "t": 139.27,
+   "d": 5.73,
+   "text": "and there are others things. There is Alice and Kev from The Sims 3. There is Pro Vercelli,"
+  },
+  {
+   "t": 145.0,
+   "d": 6.45,
+   "text": "a Football Manager 2009 story there and there are some specific games that have reputation"
+  },
+  {
+   "t": 151.45,
+   "d": 4.35,
+   "text": "for being super narrative heavy. There are things like The Sims series have a concept"
+  },
+  {
+   "t": 155.8,
+   "d": 4.4,
+   "text": "of SimLit around them where people have literary communities of writing stories about the things"
+  },
+  {
+   "t": 160.2,
+   "d": 5.35,
+   "text": "their Sims are doing and there is long running forum threads and blogs about Sims doing things"
+  },
+  {
+   "t": 165.55,
+   "d": 5.6,
+   "text": "in worlds. There is a Paradox style grand strategy games like Crusader Kings II and"
+  },
+  {
+   "t": 171.15,
+   "d": 4.22,
+   "text": "Stellaris are famous for this sort of thing. Again, something about these games draws players"
+  },
+  {
+   "t": 175.37,
+   "d": 3.47,
+   "text": "to the idea of telling stories with them. The other thing that is interesting is they"
+  },
+  {
+   "t": 178.84,
+   "d": 6.11,
+   "text": "have generative or simulationist or AI driven aspects so the systems in the game are doing"
+  },
+  {
+   "t": 184.95,
+   "d": 4.91,
+   "text": "pretty heavy computational work generally to somehow support whatever it is that the"
+  },
+  {
+   "t": 189.86,
+   "d": 3.63,
+   "text": "player is doing in building these stories. So Alice and Kev is a story about being homeless"
+  },
+  {
+   "t": 193.49,
+   "d": 6.36,
+   "text": "in The Sims 3. It's a story about a father, Kev, and a daughter Alice. The philosophical"
+  },
+  {
+   "t": 199.85,
+   "d": 5.71,
+   "text": "orientation of the creator, Robin Burkinshaw has, is that they want to let the Sims do"
+  },
+  {
+   "t": 205.56,
+   "d": 5.3,
+   "text": "as much as possible what they're going to do on their own. Avoid intervening and let"
+  },
+  {
+   "t": 210.86,
+   "d": 5.45,
+   "text": "them do what they would do even if that makes for a more painful story or more heartbreaking"
+  },
+  {
+   "t": 216.31,
+   "d": 5.83,
+   "text": "because the characters doing things that are impulsively against their best interest in"
+  },
+  {
+   "t": 222.14,
+   "d": 7.68,
+   "text": "a lot of context. There is Matul Remrit, which is a Dwarf Fortress story. It has a team of"
+  },
+  {
+   "t": 229.82,
+   "d": 3.87,
+   "text": "all-stars who collaborated to create it. Kevin Snow is the main writer, but there is also"
+  },
+  {
+   "t": 233.69,
+   "d": 7.33,
+   "text": "a team of artists and video segments with music. There is an editor who pieced it together"
+  },
+  {
+   "t": 241.02,
+   "d": 3.27,
+   "text": "and made it fit. This is a story that is told from the perspective of the dwarfs in the"
+  },
+  {
+   "t": 244.29,
+   "d": 4.48,
+   "text": "fortress through diary entries. You can go from year to year and see each year getting"
+  },
+  {
+   "t": 248.77,
+   "d": 8.03,
+   "text": "worse through these dwarfs writing diary entries. Then there is Football Manager. This is Pro"
+  },
+  {
+   "t": 256.8,
+   "d": 5.21,
+   "text": "Vercelli. This is a story by a professional sports writer. It is a long running episodic"
+  },
+  {
+   "t": 262.01,
+   "d": 6.74,
+   "text": "thing. It tells the story of this relatively trivial football team called Pro Vercelli"
+  },
+  {
+   "t": 268.75,
+   "d": 6.18,
+   "text": "from being nobodies to be the champions of the league, and a lot of interesting things"
+  },
+  {
+   "t": 274.93,
+   "d": 7.03,
+   "text": "happen in the course of this. One common element between all these stories is story construction"
+  },
+  {
+   "t": 281.96,
+   "d": 6.97,
+   "text": "each of these is a primary motivation for play. I think we talk them as storytelling"
+  },
+  {
+   "t": 288.93,
+   "d": 5.84,
+   "text": "engines incidentally or secondary where like this main sort of game focus that is the primary"
+  },
+  {
+   "t": 294.77,
+   "d": 3.15,
+   "text": "intent of players and in the process they might happen to create interesting stories"
+  },
+  {
+   "t": 297.92,
+   "d": 3.95,
+   "text": "some of the time. What we are seeing in these specific examples are the players are seeking"
+  },
+  {
+   "t": 301.87,
+   "d": 3.69,
+   "text": "out these games as primarily storytelling partners. They come in with the specific intent"
+  },
+  {
+   "t": 305.56,
+   "d": 14.27,
+   "text": "to write the story. They are seeking out some games over other games. Basically what is"
+  },
+  {
+   "t": 319.83,
+   "d": 4.2,
+   "text": "going on I think, is that the question of what makes a game a storytelling partner can"
+  },
+  {
+   "t": 324.03,
+   "d": 5.08,
+   "text": "be answered by this idea that games are providing players with creativity support by helping"
+  },
+  {
+   "t": 329.11,
+   "d": 5.33,
+   "text": "them get around common barriers to creativity including things like fear of the blank canvas,"
+  },
+  {
+   "t": 334.44,
+   "d": 3.68,
+   "text": "fear of judgement, writers block, and perfectionism. Things that come up frequently in the course"
+  },
+  {
+   "t": 338.12,
+   "d": 5.88,
+   "text": "of trying to create things, in the course of storytelling, but these games are helping"
+  },
+  {
+   "t": 344.0,
+   "d": 5.68,
+   "text": "players mitigate or get around. In the case of the fear of the blank canvas, if you are"
+  },
+  {
+   "t": 349.68,
+   "d": 5.52,
+   "text": "just starting out trying to make something, you have all these options in front of you."
+  },
+  {
+   "t": 355.2,
+   "d": 4.57,
+   "text": "You have a blank page you could do anything with. Because you could do anything, you don't"
+  },
+  {
+   "t": 359.77,
+   "d": 3.31,
+   "text": "necessarily know what you should do and you get struck by a paralysis and you don't want"
+  },
+  {
+   "t": 363.08,
+   "d": 4.5,
+   "text": "to do anything because it deviates from the blank state and what if it's the wrong place?"
+  },
+  {
+   "t": 367.58,
+   "d": 5.62,
+   "text": "You don't want to get it wrong. There is a fear of judgment where if you make something"
+  },
+  {
+   "t": 373.2,
+   "d": 7.93,
+   "text": "bad people will judge you. There is a writers block thing where you're going along smoothly,"
+  },
+  {
+   "t": 381.13,
+   "d": 5.33,
+   "text": "making things, telling stories, and suddenly you get struck by this uncertainty about what"
+  },
+  {
+   "t": 386.46,
+   "d": 5.61,
+   "text": "should happen next and that leaves you paralyzed. Even when you are doing well and moving forward"
+  },
+  {
+   "t": 392.07,
+   "d": 4.24,
+   "text": "with the creative process, you can suddenly be paralyzed by this unexpected sort of running"
+  },
+  {
+   "t": 396.31,
+   "d": 4.86,
+   "text": "out of ideas. And then perfectionism where if you are are not telling a good story, or"
+  },
+  {
+   "t": 401.17,
+   "d": 7.51,
+   "text": "the best story, why are you even bothering to tell a story at all? I mean, I have been"
+  },
+  {
+   "t": 408.68,
+   "d": 4.44,
+   "text": "there. One of the things that is common to these games we're looking at is they have"
+  },
+  {
+   "t": 413.12,
+   "d": 5.45,
+   "text": "common design elements that I think are helping players get over their fears and barriers"
+  },
+  {
+   "t": 418.57,
+   "d": 6.07,
+   "text": "to creativity and move forward with the creative process in a way that makes things they wouldn't"
+  },
+  {
+   "t": 424.64,
+   "d": 3.66,
+   "text": "be able to otherwise. There is this idea that generativity is helping them overcome the"
+  },
+  {
+   "t": 428.3,
+   "d": 4.09,
+   "text": "fear of the blank canvas by generating an initial scenario to work with, whether that"
+  },
+  {
+   "t": 432.39,
+   "d": 6.36,
+   "text": "is a cast of characters or a map, a state to react to, so they don't have to go from"
+  },
+  {
+   "t": 438.75,
+   "d": 4.51,
+   "text": "nothing. They can go from I don't like this thing. I will change this small thing about"
+  },
+  {
+   "t": 443.26,
+   "d": 4.93,
+   "text": "the world and see what happens. And this sort of takes this massive possibility space of"
+  },
+  {
+   "t": 448.19,
+   "d": 5.74,
+   "text": "all things you could do and reduces it down to a relatively limited number of options where there are small"
+  },
+  {
+   "t": 453.93,
+   "d": 5.35,
+   "text": "things I want to fix and change and I could make those changes instead of being paralyzed by all the things I possibly could do."
+  },
+  {
+   "t": 459.28,
+   "d": 2.47,
+   "text": "It also has the interesting side effect of helping the player overcome fear of"
+  },
+  {
+   "t": 461.75,
+   "d": 4.37,
+   "text": "judgment by giving them a way to declaim responsibility for what they are creating especially the"
+  },
+  {
+   "t": 466.12,
+   "d": 4.59,
+   "text": "bad parts by saying the game did that, not me, while claiming responsibility for the"
+  },
+  {
+   "t": 470.71,
+   "d": 7.38,
+   "text": "parts they are happy with still. There's a sense of incrementality, of increment games where as long as the"
+  },
+  {
+   "t": 478.09,
+   "d": 4.0,
+   "text": "game is doing interesting stuff and moving along, the player doesn't have to do"
+  },
+  {
+   "t": 482.09,
+   "d": 4.53,
+   "text": "anything and the story keeps moving forward. This is a good way of helping players overcome"
+  },
+  {
+   "t": 486.62,
+   "d": 5.44,
+   "text": "writers block. As long as you're always introducing new elements over time,"
+  },
+  {
+   "t": 492.06,
+   "d": 4.94,
+   "text": "You're always giving them something new to react and the story keeps on moving even if the player doesn't necessarily know what should happen next."
+  },
+  {
+   "t": 497.0,
+   "d": 6.7,
+   "text": "This sort of in line with the Raymond Chandler adage - he's an infamous detective fiction author of"
+  },
+  {
+   "t": 503.7,
+   "d": 3.82,
+   "text": "\"When in doubt, have a man come through the door with a gun in his hand.\" And every game"
+  },
+  {
+   "t": 507.52,
+   "d": 5.97,
+   "text": "we are looking at has some mechanism that is the equivalent of this."
+  },
+  {
+   "t": 513.49,
+   "d": 5.89,
+   "text": "Dwarf Fortress in the context of Matul Remnit has these elf raiding"
+  },
+  {
+   "t": 519.38,
+   "d": 5.94,
+   "text": "parties that show up and destabilize everything every time they show up and it happens over and"
+  },
+  {
+   "t": 525.32,
+   "d": 5.96,
+   "text": "over again. It's a way of resetting the creative state of the process."
+  },
+  {
+   "t": 531.28,
+   "d": 2.77,
+   "text": "In Football Manager there is a repeated draft of new procedurally generated characters into the"
+  },
+  {
+   "t": 534.05,
+   "d": 5.19,
+   "text": "game and that disrupts things. I think what was the other one? There is something else"
+  },
+  {
+   "t": 539.24,
+   "d": 6.82,
+   "text": "in the other one. There is this idea of boundedness where by sort of restricting the access to the generative system,"
+  },
+  {
+   "t": 546.06,
+   "d": 6.29,
+   "text": "so they can't keep rerolling indefinitely to get whatever result they want, they are forced to live with whatever"
+  },
+  {
+   "t": 552.35,
+   "d": 4.49,
+   "text": "mistakes they made and keep moving forward in a way that often makes for better stories."
+  },
+  {
+   "t": 556.84,
+   "d": 5.07,
+   "text": "In the Football Manager story, there is an instance where the player completely fat fingers"
+  },
+  {
+   "t": 561.91,
+   "d": 6.07,
+   "text": "a user interface decision, does exactly the wrong thing at the wrong moment, and not a thing that the character in game would ever do."
+  },
+  {
+   "t": 567.98,
+   "d": 3.14,
+   "text": "And then they have to live with it. They are forced to justify it"
+  },
+  {
+   "t": 571.12,
+   "d": 3.26,
+   "text": "narratively and it ends up making the story better because they have to explain why they"
+  },
+  {
+   "t": 574.38,
+   "d": 7.18,
+   "text": "traded away a star player at a crucial moment for the team. And finally, there is this idea"
+  },
+  {
+   "t": 581.56,
+   "d": 5.48,
+   "text": "of limited player control which is counter-intuitive. Normally with creative tools,"
+  },
+  {
+   "t": 587.04,
+   "d": 1.39,
+   "text": "You are going I want the user to control everything"
+  },
+  {
+   "t": 588.43,
+   "d": 2.9,
+   "text": "about this thing they are making but this is consistent with some of Kate's work on"
+  },
+  {
+   "t": 591.33,
+   "d": 4.38,
+   "text": "casual creators which is suggesting by limiting the number of options available to the player"
+  },
+  {
+   "t": 595.71,
+   "d": 4.56,
+   "text": "at any given point, especially when the player isn't sure what they are creating or are there"
+  },
+  {
+   "t": 600.27,
+   "d": 5.73,
+   "text": "to enjoy the process of creating than creating something in particular, this can help avoid"
+  },
+  {
+   "t": 606.0,
+   "d": 4.66,
+   "text": "that paralysis you get when there are too many actions at once. There is lack of the"
+  },
+  {
+   "t": 610.66,
+   "d": 3.63,
+   "text": "clean undo function that helps get rid of perfectionism as well in making sure the story"
+  },
+  {
+   "t": 614.29,
+   "d": 8.29,
+   "text": "goes exactly as planned. We see there's some common design elements; these overlap a bit what I've talked about as \"gardening games\" in previous years."
+  },
+  {
+   "t": 622.58,
+   "d": 5.34,
+   "text": "You might have seen my zine about that or one of my previous talks about that if you've been here in the past. And I think one"
+  },
+  {
+   "t": 627.92,
+   "d": 6.24,
+   "text": "reason there is so much overlap is when you give the non human participant in the co-creative process more agency,"
+  },
+  {
+   "t": 634.16,
+   "d": 4.09,
+   "text": "you take a lot of the burden of creating things off of the player. You sort of move creative"
+  },
+  {
+   "t": 638.25,
+   "d": 3.5,
+   "text": "agency on to the system in a way that let's the player focus on the parts they really"
+  },
+  {
+   "t": 641.75,
+   "d": 4.55,
+   "text": "care about whether they have specific opinions about and almost let the system smooth over"
+  },
+  {
+   "t": 646.3,
+   "d": 5.15,
+   "text": "the parts that they are uncertain about or less sure what should happen next basically."
+  },
+  {
+   "t": 651.45,
+   "d": 5.45,
+   "text": "I am going to skip over this slide. We are going to talk about sifting stories now. This"
+  },
+  {
+   "t": 656.9,
+   "d": 5.98,
+   "text": "is the idea that, well, I will let the examples speak for themselves. Have you seen this menu"
+  },
+  {
+   "t": 662.88,
+   "d": 2.54,
+   "text": "before? What game is this? [AUDIENCE:] Dwarf Fortress."
+  },
+  {
+   "t": 665.42,
+   "d": 6.75,
+   "text": "Yeah. What game is this one? [AUDIENCE:] Crusader Kings 2."
+  },
+  {
+   "t": 672.2,
+   "d": 3.92,
+   "text": "Which Roguelike is this? [Laughter]"
+  },
+  {
+   "t": 676.12,
+   "d": 6.52,
+   "text": "No one? Apparently kind of unfamiliar to this crowd. This is is Adobe PhotoShop CS5."
+  },
+  {
+   "t": 682.64,
+   "d": 13.76,
+   "text": "One thing common to all of these narratives, they're presenting complex simulations to the player as directly as possible and that"
+  },
+  {
+   "t": 696.4,
+   "d": 5.06,
+   "text": "often means notoriously complex, inscrutable UI that a lot of simulation driven games are known for."
+  },
+  {
+   "t": 701.46,
+   "d": 8.07,
+   "text": "Especially like CK2 and Dwarf Fortress, they are not known as being easy to approach or get into. Players can feel lost in the deluge of"
+  },
+  {
+   "t": 709.53,
+   "d": 4.98,
+   "text": "mostly insignificant simulated events. There is so much going on it is hard to know what you should"
+  },
+  {
+   "t": 714.51,
+   "d": 5.86,
+   "text": "focus on, what's important, and what you should you should build your story around. However,"
+  },
+  {
+   "t": 720.37,
+   "d": 3.41,
+   "text": "we really do want this complex simulation because it is super important these simulations"
+  },
+  {
+   "t": 723.78,
+   "d": 4.14,
+   "text": "are running in the background to take the creative burden off the players. There is"
+  },
+  {
+   "t": 727.92,
+   "d": 4.72,
+   "text": "a reason players are picking out these games in particular to keep on working with them as creative partners, even though they know they're hard to get into."
+  },
+  {
+   "t": 732.64,
+   "d": 2.89,
+   "text": "Instead of trying to reduce"
+  },
+  {
+   "t": 735.53,
+   "d": 4.91,
+   "text": "or dial back there complex simulation or the complexity of the games, what if we tried"
+  },
+  {
+   "t": 740.44,
+   "d": 3.9,
+   "text": "giving players tools to make sense of the complexity? That is where story sifting comes"
+  },
+  {
+   "t": 744.34,
+   "d": 4.96,
+   "text": "in. This is a piece of terminology from James Ryan who is another PhD student who recently"
+  },
+  {
+   "t": 749.3,
+   "d": 6.94,
+   "text": "graduated from my lab. His dissertation, \"Curating Simulated Storyworlds\", is a really great piece of writing about all the kinds of issues we face in the kinds of work that we do."
+  },
+  {
+   "t": 756.24,
+   "d": 4.23,
+   "text": "We are doing a reading group from his work some of the audience members"
+  },
+  {
+   "t": 760.47,
+   "d": 10.13,
+   "text": "happen to be in. You still let your simulation run and generate the profusions of random events and"
+  },
+  {
+   "t": 770.6,
+   "d": 6.69,
+   "text": "let whatever happen happen, but now in addition to letting the player view all of them as"
+  },
+  {
+   "t": 777.29,
+   "d": 6.5,
+   "text": "equally important, we prioritized or by curating the events we prioritize the super interesting or useful"
+  },
+  {
+   "t": 783.79,
+   "d": 9.97,
+   "text": "ones for story construction. We pull out the good narrative raw material, good things for players to shape stories around, and highlight them to show what they might"
+  },
+  {
+   "t": 793.76,
+   "d": 7.9,
+   "text": "want to prioritize or use as the skeleton were the story. This is a diagram from James' disseration. He talks about mental curation."
+  },
+  {
+   "t": 801.66,
+   "d": 7.81,
+   "text": "He stresses - In the bottom left we have the simulated storyworld. It's the generative system running in the background and running all the rules that"
+  },
+  {
+   "t": 809.47,
+   "d": 6.95,
+   "text": "make the simulation run and producing all these events. What he calls out here specifically is - That is not the emergent narrative."
+  },
+  {
+   "t": 816.42,
+   "d": 2.73,
+   "text": "Nothing that comes out of that directly is the emergent narrative."
+  },
+  {
+   "t": 819.15,
+   "d": 6.94,
+   "text": "Instead it is what passes through the process of being chronicled, turned into events, then story sifted by"
+  },
+  {
+   "t": 826.09,
+   "d": 6.17,
+   "text": "a story sifter pulling out events that are interesting and story-ful, imposing a perspective, and"
+  },
+  {
+   "t": 832.26,
+   "d": 3.28,
+   "text": "then there is a narrativizer that uses the raw material the story sifter finds to produce"
+  },
+  {
+   "t": 835.54,
+   "d": 6.96,
+   "text": "a particular story. That story, produced by the player in their head or by an AI system or something, is the emergent narrative."
+  },
+  {
+   "t": 842.5,
+   "d": 3.46,
+   "text": "It is derived from the complicated process"
+  },
+  {
+   "t": 845.96,
+   "d": 5.24,
+   "text": "of sifting and naratizing, it doesn't come from the simulated world directly."
+  },
+  {
+   "t": 851.2,
+   "d": 4.48,
+   "text": "One thing we need to do to be able to sift is specify the sifting"
+  },
+  {
+   "t": 855.68,
+   "d": 5.84,
+   "text": "patterns. These are groups of interrelated events that make good or compelling narrative building blocks. This can be things like I want to"
+  },
+  {
+   "t": 861.52,
+   "d": 5.56,
+   "text": "see every instance where a love triangle formed or every instance of a back and forth of revenge"
+  },
+  {
+   "t": 867.08,
+   "d": 6.68,
+   "text": "between two characters. Ideally, you want a bunch so you don't see repetition and you"
+  },
+  {
+   "t": 873.76,
+   "d": 5.48,
+   "text": "can have diversity in the stories being told. The idea is that you should make them as easy"
+  },
+  {
+   "t": 879.24,
+   "d": 5.26,
+   "text": "to author as possible. You want the people who are writing the simulation story world"
+  },
+  {
+   "t": 884.5,
+   "d": 4.9,
+   "text": "to be able to, like, just generate tons and tons of these very quickly so they can have"
+  },
+  {
+   "t": 889.4,
+   "d": 5.21,
+   "text": "diversity of possible sifting patterns that can be recognized. So we built a system to"
+  },
+  {
+   "t": 894.61,
+   "d": 5.13,
+   "text": "do this and call it Felt. I am going to be talking about Felt first and a couple playable"
+  },
+  {
+   "t": 899.74,
+   "d": 6.75,
+   "text": "experiences we built surrounding Felt in my lab. This is a Felt sifting pattern and moderately"
+  },
+  {
+   "t": 906.49,
+   "d": 8.15,
+   "text": "complicated one. You can see the event sequence, event A, event B. This says we will have two events that happened"
+  },
+  {
+   "t": 914.64,
+   "d": 5.82,
+   "text": "in order. Each of these have the event type \"betray\". They are perpetrated by the same character and the character has to have the"
+  },
+  {
+   "t": 920.46,
+   "d": 8.92,
+   "text": "impulsive trait. Then at the bottom, we have this \"not-join\" bit saying also, don't match this pattern if there happens to be other events the same character did in between."
+  },
+  {
+   "t": 929.38,
+   "d": 6.4,
+   "text": "We have the idea a single impulsive character perpetrated two betrayals and not done anything in between."
+  },
+  {
+   "t": 935.78,
+   "d": 2.92,
+   "text": "We can match that pattern, pull that out, and do stuff based on it."
+  },
+  {
+   "t": 938.7,
+   "d": 6.7,
+   "text": "This is using JavaScript and especially the DataScript library which implements this \"data log\" programming language."
+  },
+  {
+   "t": 945.48,
+   "d": 1.96,
+   "text": "This data log is a simplified logic"
+  },
+  {
+   "t": 947.44,
+   "d": 4.51,
+   "text": "programming language you can use to match patterns of state without the complexity of things like PerlLog"
+  },
+  {
+   "t": 951.95,
+   "d": 4.11,
+   "text": "that are more advanced."
+  },
+  {
+   "t": 956.06,
+   "d": 2.27,
+   "text": "We also have sort of the simulation action thing built"
+  },
+  {
+   "t": 958.33,
+   "d": 6.09,
+   "text": "into Felt where you can use sifting patterns as preconditions for simulation actions. What that means is you can build characters"
+  },
+  {
+   "t": 964.42,
+   "d": 3.52,
+   "text": "that are performing story sifting to subjectively naratize the world."
+  },
+  {
+   "t": 967.94,
+   "d": 2.27,
+   "text": "That means things like - we're separating"
+  },
+  {
+   "t": 970.21,
+   "d": 4.55,
+   "text": "the actions into two stages. One is introspection."
+  },
+  {
+   "t": 974.76,
+   "d": 6.82,
+   "text": "They look at the world, they pull out a pattern of narrative events and say, \"I think this is a story about X.\""
+  },
+  {
+   "t": 981.58,
+   "d": 2.58,
+   "text": "So they might look at a character who has been"
+  },
+  {
+   "t": 984.16,
+   "d": 4.68,
+   "text": "mean to them on 3 different occasions, and pull out those 3 events and produce a motivation token as we'll call it."
+  },
+  {
+   "t": 988.84,
+   "d": 3.43,
+   "text": "\"I want to get revenge on this character for being mean to me.\""
+  },
+  {
+   "t": 992.27,
+   "d": 6.26,
+   "text": "And then there's other actions that are more conventional, consume the motivation tokens produce by the introspective actions"
+  },
+  {
+   "t": 998.53,
+   "d": 6.24,
+   "text": "and allow the character to operate on the world. So in this case, this character has been mean and I"
+  },
+  {
+   "t": 1004.77,
+   "d": 1.93,
+   "text": "will get revenge because they're my enemy now."
+  },
+  {
+   "t": 1006.7,
+   "d": 3.4,
+   "text": "However, you could have a different character that is using different story sifting patterns"
+  },
+  {
+   "t": 1010.1,
+   "d": 3.7,
+   "text": "and that could enable them to be characterized differently."
+  },
+  {
+   "t": 1013.8,
+   "d": 3.91,
+   "text": "For instance, you could have a character have the same events happen, but this character has story sifting patterns that make them more"
+  },
+  {
+   "t": 1017.71,
+   "d": 5.64,
+   "text": "sympathetic to the person being mean and might look at other events that are adjacent and say \"this person was"
+  },
+  {
+   "t": 1023.35,
+   "d": 7.18,
+   "text": "mean to me on this occasion, but was having a bad day for X and Y reasons and therefore I am going to be nice instead of getting revenge"
+  },
+  {
+   "t": 1030.53,
+   "d": 4.43,
+   "text": "on them.\" Because there are differential interpretations resulting from the same events,"
+  },
+  {
+   "t": 1034.96,
+   "d": 5.9,
+   "text": "you get this interesting phenomenon of character subjectivity and character story sifting driving conflict between characters"
+  },
+  {
+   "t": 1040.86,
+   "d": 4.34,
+   "text": "or driving these differential interpretations of what's going on in the world."
+  },
+  {
+   "t": 1045.2,
+   "d": 2.46,
+   "text": "Okay, so very rapidly we'll go"
+  },
+  {
+   "t": 1047.66,
+   "d": 6.09,
+   "text": "through these two different examples of games we are building. One is called cozy mystery"
+  },
+  {
+   "t": 1053.75,
+   "d": 7.96,
+   "text": "construction kit. It's a cooperative storytelling game. If you are familiar with things like Microscope or The Quiet Year you"
+  },
+  {
+   "t": 1061.71,
+   "d": 4.93,
+   "text": "might think it is similar at first glance, and it's derived from that design-wise."
+  },
+  {
+   "t": 1066.64,
+   "d": 4.25,
+   "text": "However, in addition to the two human player roles we've created which are asymmetrical, there is a computer"
+  },
+  {
+   "t": 1070.89,
+   "d": 3.48,
+   "text": "that is sort of sitting there and running a simulation of the characters and what they"
+  },
+  {
+   "t": 1074.37,
+   "d": 3.92,
+   "text": "might want to do at any given point and tracking the decisions that players have made. It is"
+  },
+  {
+   "t": 1078.29,
+   "d": 5.02,
+   "text": "also making suggestions of what characters might want to do, so you can see what the character's motivations are, what actions"
+  },
+  {
+   "t": 1083.31,
+   "d": 5.95,
+   "text": "they're considering performing and tracking author goals which are the things the player"
+  },
+  {
+   "t": 1089.26,
+   "d": 5.06,
+   "text": "want to have happen in the story basically. Let's take a more look at the core loop of"
+  },
+  {
+   "t": 1094.32,
+   "d": 5.4,
+   "text": "this. You can see this is actually outdated but a diagram of the system and what it is"
+  },
+  {
+   "t": 1099.72,
+   "d": 5.28,
+   "text": "doing. We instantiate with a hook like maybe someone was murdered in the library."
+  },
+  {
+   "t": 1105.0,
+   "d": 3.58,
+   "text": "We have a player who's choosing actions for other characters in the story to do based on this"
+  },
+  {
+   "t": 1108.58,
+   "d": 3.3,
+   "text": "and based on the motivations from the initial simulation state."
+  },
+  {
+   "t": 1111.88,
+   "d": 3.98,
+   "text": "We query the knowledge base as what's going on in the simulated world"
+  },
+  {
+   "t": 1115.86,
+   "d": 4.83,
+   "text": "and have this loop of basically we find possible actions that characters might take in response"
+  },
+  {
+   "t": 1120.69,
+   "d": 4.07,
+   "text": "to things and this sort of back and forth goes on with different players integrating"
+  },
+  {
+   "t": 1124.76,
+   "d": 4.9,
+   "text": "different actions into the simulation and seeing how the world updates based on that."
+  },
+  {
+   "t": 1129.66,
+   "d": 3.3,
+   "text": "We have values driven characters in the process who are assigned values at random, like"
+  },
+  {
+   "t": 1132.96,
+   "d": 6.3,
+   "text": "science, survival or comfort, or order - science since they're all research scientists locked up in a snowed in observatory,"
+  },
+  {
+   "t": 1139.26,
+   "d": 6.71,
+   "text": "and these values are the things they use to evaluate if an action is a crime."
+  },
+  {
+   "t": 1145.97,
+   "d": 5.71,
+   "text": "Two people might have different responses to the same set of actions. For instance, leaving the"
+  },
+  {
+   "t": 1151.68,
+   "d": 8.5,
+   "text": "door to the break room unlocked depending on if they value security or comfort. This is"
+  },
+  {
+   "t": 1160.18,
+   "d": 6.58,
+   "text": "us prototyping with paper and index cards and having human players play the role of the AI temporarily."
+  },
+  {
+   "t": 1166.76,
+   "d": 4.55,
+   "text": "We have character generation where there is a cast of characters bound to one another"
+  },
+  {
+   "t": 1171.31,
+   "d": 5.44,
+   "text": "by relationships and also by their shared values or values they don't share. Some of"
+  },
+  {
+   "t": 1176.75,
+   "d": 4.72,
+   "text": "them have things like celebrity status or funding or are a secret expert in something."
+  },
+  {
+   "t": 1181.47,
+   "d": 5.24,
+   "text": "We have transcripts we are producing and these transcripts are running logs of what has happened"
+  },
+  {
+   "t": 1186.71,
+   "d": 4.89,
+   "text": "in the story so far. And then we have this thing where we close the loop saying we will"
+  },
+  {
+   "t": 1191.6,
+   "d": 4.88,
+   "text": "filter actions down to a reason subset of actions the characters might want to perform and players"
+  },
+  {
+   "t": 1196.48,
+   "d": 5.57,
+   "text": "can select which ones they want to happen and this updates the game state. and players can manually run sifting patterns"
+  },
+  {
+   "t": 1202.05,
+   "d": 3.07,
+   "text": "to look for situations that might be emergent in the world,"
+  },
+  {
+   "t": 1205.12,
+   "d": 5.3,
+   "text": "things like a love triangle or an asymmetric rivalry, one character is really strongly opposed to the existence of"
+  },
+  {
+   "t": 1210.42,
+   "d": 8.5,
+   "text": "the character and the other character doesn't know the first person exists. We have these design patterns, Whenever an"
+  },
+  {
+   "t": 1218.92,
+   "d": 3.74,
+   "text": "action is performed, we generate an automatic descripton of that action."
+  },
+  {
+   "t": 1222.66,
+   "d": 5.62,
+   "text": "Players can edit it Google Docs style, collaboratively to flesh it out, if they find something important or interesting"
+  },
+  {
+   "t": 1228.28,
+   "d": 7.04,
+   "text": "or flavorful. They can let this be if they don't want to, which is an important thing about allowing players"
+  },
+  {
+   "t": 1235.32,
+   "d": 6.9,
+   "text": "to not exert as much creative agency if they don't feel as strongly. This transcript is"
+  },
+  {
+   "t": 1242.22,
+   "d": 4.35,
+   "text": "an emergent written version, writing the story without people doing extra tracking."
+  },
+  {
+   "t": 1246.57,
+   "d": 1.89,
+   "text": "We have this action generating thing"
+  },
+  {
+   "t": 1248.46,
+   "d": 6.69,
+   "text": "and generate plausibly motivated actions. Things like what actions might this character want to play? Or what"
+  },
+  {
+   "t": 1255.15,
+   "d": 4.25,
+   "text": "might advance this author level goal? Get them to fight or get them in the same room,"
+  },
+  {
+   "t": 1259.4,
+   "d": 1.4,
+   "text": "or show them the value of science"
+  },
+  {
+   "t": 1260.8,
+   "d": 5.8,
+   "text": "is in conflict with the value of comfort. Stuff like that. What actions might be performed as revenge for this action that took place before?"
+  },
+  {
+   "t": 1266.6,
+   "d": 3.74,
+   "text": "This transforms this hugely open-ended question"
+  },
+  {
+   "t": 1270.34,
+   "d": 5.16,
+   "text": "of \"what should happen next\" into an operation of choosing a relatively low number of alternatives."
+  },
+  {
+   "t": 1275.5,
+   "d": 4.32,
+   "text": "That can be 5-7 of them. We've seen these be good numbers in testing."
+  },
+  {
+   "t": 1279.82,
+   "d": 10.01,
+   "text": "We've got this idea of this two level structure distinguishing between author goals, \"Illustrate there is a conflict between the two values\", \"raise the tension between these characters\""
+  },
+  {
+   "t": 1289.83,
+   "d": 5.51,
+   "text": "and things the character might want to do in the world, \"Perform my experiment\" or \"get revenge on Fred\". We found"
+  },
+  {
+   "t": 1295.34,
+   "d": 3.58,
+   "text": "you need both to make a good story. You need character-level goals make the scenes feel compelling,"
+  },
+  {
+   "t": 1298.92,
+   "d": 4.03,
+   "text": "and you need author-level goals to keep the story moving forward otherwise it turns into"
+  },
+  {
+   "t": 1302.95,
+   "d": 7.52,
+   "text": "a soup of characters doing things forever for no reason. And we have the story sifting thing going on, where players can manually invoke"
+  },
+  {
+   "t": 1310.47,
+   "d": 5.13,
+   "text": "the sifting like we talked about. And one more example, we have Diarytown."
+  },
+  {
+   "t": 1315.6,
+   "d": 9.02,
+   "text": "The lead designer is Melanie Dickinson. She's a friend and close collaborator of mine, she's in the audience right now. Ask her questions later."
+  },
+  {
+   "t": 1324.62,
+   "d": 5.16,
+   "text": "This is a game about creating all your friends in the Sims. What's going on here is that"
+  },
+  {
+   "t": 1329.78,
+   "d": 3.44,
+   "text": "you as the player are crafting these diary entries that are supposed to be things that"
+  },
+  {
+   "t": 1333.22,
+   "d": 6.4,
+   "text": "actually happened to you in your life. You can fictionalize them if you want, but that's a different way of playing. The game is interpreting"
+  },
+  {
+   "t": 1339.62,
+   "d": 4.75,
+   "text": "diary entries to build up a computational reflection of your life over time. There is"
+  },
+  {
+   "t": 1344.37,
+   "d": 6.13,
+   "text": "a model of your friends and family in the game and within running sifting patterns over"
+  },
+  {
+   "t": 1350.5,
+   "d": 7.32,
+   "text": "the things you are entered to try to renarrativize the player's life in playful, productive ways. Trying to reframe the events"
+  },
+  {
+   "t": 1357.82,
+   "d": 6.54,
+   "text": "that happened to you in a way that you might not expect and in a magical realist tone."
+  },
+  {
+   "t": 1364.36,
+   "d": 9.67,
+   "text": "This is not the screenshot I was hoping for, an older screen shot but illustrating the same thing is the diary entry editor."
+  },
+  {
+   "t": 1374.03,
+   "d": 6.59,
+   "text": "On the left, you have a bunch of actions you can perform and you can slot them together like LEGO bricks"
+  },
+  {
+   "t": 1380.62,
+   "d": 0.81,
+   "text": "And then on the right, you are building"
+  },
+  {
+   "t": 1381.43,
+   "d": 7.24,
+   "text": "up the diary entry that communicates to the system what you did today or most recently."
+  },
+  {
+   "t": 1388.67,
+   "d": 4.21,
+   "text": "This is interesting to us because it is taking the first steps toward what we think is a"
+  },
+  {
+   "t": 1392.88,
+   "d": 6.95,
+   "text": "malleable simulation which is a game where you shape your computational story partner through play to be"
+  },
+  {
+   "t": 1399.83,
+   "d": 8.71,
+   "text": "more in line with the stories you want to tell. We are pushing back on personalization, the one sided tacit inferences"
+  },
+  {
+   "t": 1408.54,
+   "d": 7.17,
+   "text": "about player behavior, and more towards a thing where you are co-constructing a persona in line with the game and shaping"
+  },
+  {
+   "t": 1415.71,
+   "d": 4.7,
+   "text": "the game to be something you would want to tell stories with yourself. We have this magic realist"
+  },
+  {
+   "t": 1420.41,
+   "d": 6.67,
+   "text": "aesthetic possibly, we are not totally sure about it yet. Melanie is the lead designer and knows"
+  },
+  {
+   "t": 1427.08,
+   "d": 9.65,
+   "text": "this better than I do, so you should ask her questions.Conclusions. One of the main things"
+  },
+  {
+   "t": 1436.73,
+   "d": 5.02,
+   "text": "I have learned from this research is these new kind of intelligent narrative technologies can enable new kinds"
+  },
+  {
+   "t": 1441.75,
+   "d": 7.29,
+   "text": "of story construction play experiences. This emerging genre where the whole goal is to"
+  },
+  {
+   "t": 1449.04,
+   "d": 5.24,
+   "text": "create stories. Players come in with the primary intent to create stories and not producing"
+  },
+  {
+   "t": 1454.28,
+   "d": 6.86,
+   "text": "stories only as the secondary artifact is this marginal pratice done by plaeyrs despite the game fighting them at times."
+  },
+  {
+   "t": 1461.14,
+   "d": 1.7,
+   "text": "Story sifting is a promising"
+  },
+  {
+   "t": 1462.84,
+   "d": 3.7,
+   "text": "direction for providing players with this kind of creativity support. We can look at"
+  },
+  {
+   "t": 1466.54,
+   "d": 7.28,
+   "text": "huge simulations and reduce them down to things that make sense. We should study how players"
+  },
+  {
+   "t": 1473.82,
+   "d": 5.24,
+   "text": "are using these games as storytelling partners already. Looking at the players using these games and talking"
+  },
+  {
+   "t": 1479.06,
+   "d": 5.03,
+   "text": "to them and saying what is interesting, what is hard, what are the problems you are running"
+  },
+  {
+   "t": 1484.09,
+   "d": 6.83,
+   "text": "into when you are telling this elaborate Dwarf Fortress story about how your civilzation has fallen? Do you need to look back at the logs"
+  },
+  {
+   "t": 1490.92,
+   "d": 5.91,
+   "text": "of what killed everything? Do you need to look at the logs of who the king was in 1955? All"
+  },
+  {
+   "t": 1496.83,
+   "d": 7.55,
+   "text": "this different stuff. Going back to the idea of genre, I talked about this a little bit last year."
+  },
+  {
+   "t": 1504.38,
+   "d": 6.5,
+   "text": "The idea that genre is a collection of mutually supportive design patterns, an attractor in design space. Whenever"
+  },
+  {
+   "t": 1510.88,
+   "d": 4.85,
+   "text": "you add one of these patterns, it makes sense to add more and more and until you have mutually enforcing"
+  },
+  {
+   "t": 1515.73,
+   "d": 11.92,
+   "text": "structures propping one another up. I think this story construction genre is a new genre that deeply relies on computation, engages with this simulated"
+  },
+  {
+   "t": 1527.65,
+   "d": 9.79,
+   "text": "worlds and almost represents a new type of creative activity that wasn't possible before. I think we ask try to pursue this and find"
+  },
+  {
+   "t": 1537.44,
+   "d": 7.48,
+   "text": "figure out what's going on in this direction, figure out how we can better support players and their experience in telling stories through their experiences in gameplay."
+  },
+  {
+   "t": 1544.92,
+   "d": 4.95,
+   "text": "I think that's everything. My website has all the papers I talked about in this talk, go to that and link to them directly."
+  },
+  {
+   "t": 1549.87,
+   "d": 5.33,
+   "text": "There's one about Felt, one about gardening games as storytelling partners, so on and so forth."
+  },
+  {
+   "t": 1555.2,
+   "d": 9.8,
+   "text": "Yeah, and thank you. Any questions? [Applause]"
+  },
+  {
+   "t": 1565.0,
+   "d": 3.68,
+   "text": ">> Cool. We have time for a few questions. I will start over on this side."
+  },
+  {
+   "t": 1568.68,
+   "d": 10.37,
+   "text": "AUDIENCE: Thank you. Hi. Great talk as ever. Thank you very much. The thing you said about"
+  },
+  {
+   "t": 1579.05,
+   "d": 5.54,
+   "text": "events creating inspiration tokens and other entities consuming them ruled, that fascinated me. Do you have a brief"
+  },
+  {
+   "t": 1584.59,
+   "d": 6.3,
+   "text": "example of how you would iterate through that through the storytelling process?"
+  },
+  {
+   "t": 1590.89,
+   "d": 5.32,
+   "text": "MAX KREMINSKI: We have done very little of this especially with that particular system."
+  },
+  {
+   "t": 1596.21,
+   "d": 7.43,
+   "text": "This is still very early days. Over the summer we built Diary Town and had interns coming"
+  },
+  {
+   "t": 1603.64,
+   "d": 5.98,
+   "text": "in to write a bunch of sifting patterns and produce content for it. One of the things"
+  },
+  {
+   "t": 1609.62,
+   "d": 5.57,
+   "text": "that was cool is they were able to produce a bunch of them. We saw the characters they"
+  },
+  {
+   "t": 1615.19,
+   "d": 6.34,
+   "text": "were creating were looking at events in pretty much the same way. I think what we are pushing"
+  },
+  {
+   "t": 1621.53,
+   "d": 4.34,
+   "text": "toward is characterizing characters through these different kinds of sifting patterns"
+  },
+  {
+   "t": 1625.87,
+   "d": 4.39,
+   "text": "and haven't done a lot of that yet. It is a neat idea we are trying to explore but isn't"
+  },
+  {
+   "t": 1630.26,
+   "d": 5.48,
+   "text": "quite there yet basically."
+  },
+  {
+   "t": 1635.74,
+   "d": 8.64,
+   "text": "AUDIENCE: It seems to me like the sifting"
+  },
+  {
+   "t": 1644.38,
+   "d": 7.14,
+   "text": "patterns encode some ideas about how those character -- or what is interesting from an"
+  },
+  {
+   "t": 1651.52,
+   "d": 4.51,
+   "text": "authorial perspective. Have you thought about generating them?"
+  },
+  {
+   "t": 1656.03,
+   "d": 5.94,
+   "text": "MAX KREMINSKI: That is a good question. No, we haven't. We probably should have. Beyond"
+  },
+  {
+   "t": 1661.97,
+   "d": 7.23,
+   "text": "Beyond these specific storytelling world patterns which I demonstrated, we have an idea from James"
+  },
+  {
+   "t": 1669.2,
+   "d": 5.01,
+   "text": "of sifting heuristics which are higher level more generic patterns that are looking for"
+  },
+  {
+   "t": 1674.21,
+   "d": 5.57,
+   "text": "what makes a good story in general. You can build on computational model of what events"
+  },
+  {
+   "t": 1679.78,
+   "d": 5.87,
+   "text": "when related are likely to read as stories. We haven't done any work in that direction"
+  },
+  {
+   "t": 1685.65,
+   "d": 5.91,
+   "text": "but it is something we are interested in exploring. Indexter is a technology we might build on"
+  },
+  {
+   "t": 1691.56,
+   "d": 2.98,
+   "text": "for that. >> OK. Thank you so much."
+  },
+  {
+   "t": 1694.54,
+   "d": 4.46,
+   "text": "[Applause]"
+  }
+ ]
+}

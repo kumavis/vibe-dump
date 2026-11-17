@@ -1,0 +1,76 @@
+{
+  "id": "DbZe8rWviS0",
+  "title": "Johnathon Pagnutti - Coin Flips, Violence and Spreadsheets: the Binomial Distribution in FE:3Houses",
+  "speaker": "Johnathon Pagnutti",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=DbZe8rWviS0",
+  "talk_type": "technical",
+  "summary": "A lightning talk using Fire Emblem: Three Houses' random level-up stat growths to introduce the binomial distribution and how to analyse it in a spreadsheet. Pagnutti shows growth-rate tables (character plus class), a conditional-formatting trick for making per-stat colour scales meaningful, the probability-mass and cumulative forms of the binomial distribution, and how combining them quantifies how lucky or unlucky a character's actual stats are. In Q&A he notes these stats barely matter to performance except at extreme difficulty, and that simple yes/no probabilities can drive compelling gameplay.",
+  "games": [
+    "Fire Emblem: Three Houses",
+    "XCOM"
+  ],
+  "insights": [
+    {
+      "topic": "character-and-builds",
+      "subtopic": "random level ups",
+      "kind": "example",
+      "claim": "Fire Emblem: Three Houses rolls level-ups randomly: each stat has its own percentage chance to increase, so a level-up can be good (many stats) or bad (one or two).",
+      "detail": "Growth rates come from the character (e.g. Edelgard strong in strength and charisma) combined with their class (Noble, Fighter, Myrmidon with higher speed growth, Monk). Pagnutti believes there is a minimum so a level-up cannot give zero increases, though he had not confirmed it.",
+      "t": 120,
+      "quote": "its level ups are not deterministic. They're rolled. They're random. Essentially, each stat has a",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "spreadsheet balancing",
+      "kind": "technique",
+      "claim": "When colour-scaling a stat table for balance analysis, apply conditional formatting per stat chunk and skip ranges whose values are all identical, so colours stay meaningful.",
+      "detail": "A single colour scale over the whole table shows overall standouts but loses per-stat definition, since stats like speed and skill are not compared directly. Pagnutti applies separate rules to sub-ranges with a check that leaves uniform rows uncoloured, and uses 'add another rule' to copy a rule quickly.",
+      "t": 380,
+      "quote": "if these values are all the same just don't color them because I don't want them to wash out the information",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "binomial distribution",
+      "kind": "technique",
+      "claim": "Repeated percentage rolls such as stat growths follow a binomial distribution, which can be read both as the probability of exactly n successes and as the cumulative probability of n or fewer.",
+      "detail": "Using 20 coin flips, Pagnutti shows the exact-count curve shifting as the coin is weighted (likening an unfair coin to an XCOM shot percentage). The cumulative curve is a sigmoid that flattens at the top, so for a favourable coin P(16 or fewer) and P(20 or fewer) are nearly equal.",
+      "t": 541,
+      "quote": "it's a sigmoid, not a line, which sort of shows that it flattens out at the top",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "example",
+      "claim": "With a 60% growth rate, Edelgard is far more likely to get every possible stat increase over six levels than to get none, because the best case outweighs the worst case when odds favour the player.",
+      "detail": "Plotting the distribution of strength gains as she levels as a Fighter shows mass shifting right with each level. Pagnutti highlights that the lucky extreme is always more likely than the unlucky extreme due to the weighting.",
+      "t": 609,
+      "quote": "the best case here is always more likely than the worst case",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "technique",
+      "claim": "Combining the exact and cumulative binomial distributions lets a designer quantify how lucky or unlucky a character's actual stat total is at a given level.",
+      "detail": "For Edelgard taking 10 levels each in Noble, Fighter and Monk, 16 strength after 10 Noble levels is well behind the curve while 20 is ahead. He admits the model is fudged: chaining classes assumes the median outcome from the previous class, which is not always a good model.",
+      "t": 640,
+      "quote": "we can flip it on its head and actually sort of quantify how lucky we're getting",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "mechanic complexity",
+      "kind": "principle",
+      "claim": "Detailed stat mathematics can exist in a game without mattering: in Fire Emblem: Three Houses stats barely drive character performance unless difficulty is cranked very high, so mechanics should be judged against the audience and intended experience.",
+      "detail": "Answering whether tabletop mechanics are over-engineered, Pagnutti says it depends on matching what mechanics are meant to do to what the audience wants. His personal preference is that simple yes/no probability distributions can produce very dynamic gameplay, while acknowledging a tradition of beautiful complex systems.",
+      "t": 798,
+      "quote": "pretty simple things like a probability distribution that is either yes or no um can be very compelling and lead to very dynamic and interesting gameplay",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

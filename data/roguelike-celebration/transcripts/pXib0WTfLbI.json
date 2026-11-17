@@ -1,0 +1,4526 @@
+{
+ "id": "pXib0WTfLbI",
+ "url": "https://www.youtube.com/watch?v=pXib0WTfLbI",
+ "title": "Alice Lai - All Together Now: Creating Multiplicative Power in Hades",
+ "speaker": "Alice Lai",
+ "talk_title": "All Together Now: Creating Multiplicative Power in Hades",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1852,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "I'll talk briefly about the design behind Hades' focus on creating upgrades and powers that build upon and interact with each other while also doing a technical dive into the engine and the various benefits and drawbacks of the programming techniques we used to achieve that in Hades.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 48,
+   "title": "Multiplicative Power Concept"
+  },
+  {
+   "start": 146,
+   "title": "Combos in Roguelikes"
+  },
+  {
+   "start": 373,
+   "title": "Hades Combos and Examples"
+  },
+  {
+   "start": 515,
+   "title": "Designing Game Systems"
+  },
+  {
+   "start": 728,
+   "title": "Forcing Player Choices"
+  },
+  {
+   "start": 913,
+   "title": "Trait Implementation"
+  },
+  {
+   "start": 1043,
+   "title": "Thematic Content Expansion"
+  },
+  {
+   "start": 1141,
+   "title": "Conclusion and Acknowledgements"
+  },
+  {
+   "start": 1275,
+   "title": "Q&A Session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5784,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 1.88,
+   "text": "Uh we're going to be starting out with"
+  },
+  {
+   "t": 5.48,
+   "d": 2.28,
+   "text": "Alice Li. Long time"
+  },
+  {
+   "t": 7.76,
+   "d": 1.96,
+   "text": "Bella Berg got started playing schmucks"
+  },
+  {
+   "t": 9.72,
+   "d": 2.88,
+   "text": "and roguelikes ever since she was a kid"
+  },
+  {
+   "t": 12.6,
+   "d": 1.36,
+   "text": "and has done some artistic and"
+  },
+  {
+   "t": 13.96,
+   "d": 1.48,
+   "text": "experimental work in the past and now is"
+  },
+  {
+   "t": 15.44,
+   "d": 1.8,
+   "text": "currently and happily making games at"
+  },
+  {
+   "t": 17.24,
+   "d": 2.84,
+   "text": "Supergiant and is here to talk about"
+  },
+  {
+   "t": 20.08,
+   "d": 2.04,
+   "text": "multiplicative power in Hades. We're so"
+  },
+  {
+   "t": 22.12,
+   "d": 1.8,
+   "text": "happy to have you, Alice."
+  },
+  {
+   "t": 23.92,
+   "d": 1.68,
+   "text": "Great. Thank you for that lovely intro."
+  },
+  {
+   "t": 25.6,
+   "d": 2.56,
+   "text": "I'm really happy to be here and I I just"
+  },
+  {
+   "t": 28.16,
+   "d": 2.96,
+   "text": "love this roguelike celebration as this"
+  },
+  {
+   "t": 31.12,
+   "d": 1.6,
+   "text": "conference has gone on for several years"
+  },
+  {
+   "t": 32.72,
+   "d": 1.72,
+   "text": "now. It's so great seeing this genre"
+  },
+  {
+   "t": 34.44,
+   "d": 2.68,
+   "text": "just like explode in popularity."
+  },
+  {
+   "t": 37.12,
+   "d": 1.76,
+   "text": "For sure. And I think I mean we were"
+  },
+  {
+   "t": 38.88,
+   "d": 1.68,
+   "text": "talking a lot last year about how Hades"
+  },
+  {
+   "t": 40.56,
+   "d": 1.52,
+   "text": "had a big part of"
+  },
+  {
+   "t": 42.08,
+   "d": 2.8,
+   "text": "an extra level of popular explosion. So"
+  },
+  {
+   "t": 44.88,
+   "d": 1.08,
+   "text": "wonderful to have you and I'll let you"
+  },
+  {
+   "t": 45.96,
+   "d": 1.0,
+   "text": "take it away."
+  },
+  {
+   "t": 46.96,
+   "d": 1.08,
+   "text": "Thank you."
+  },
+  {
+   "t": 48.04,
+   "d": 2.36,
+   "text": "Uh so I'm Alice Li and this is"
+  },
+  {
+   "t": 50.4,
+   "d": 2.16,
+   "text": "altogether now, a talk about building"
+  },
+  {
+   "t": 52.56,
+   "d": 2.48,
+   "text": "multiplicative power in Hades."
+  },
+  {
+   "t": 55.04,
+   "d": 2.32,
+   "text": "Uh first of all, I think just a quick"
+  },
+  {
+   "t": 57.36,
+   "d": 2.28,
+   "text": "introduction, who is Alice? I am a"
+  },
+  {
+   "t": 59.64,
+   "d": 1.68,
+   "text": "technical designer on the Supergiant"
+  },
+  {
+   "t": 61.32,
+   "d": 0.92,
+   "text": "team."
+  },
+  {
+   "t": 62.24,
+   "d": 2.12,
+   "text": "Um so technical designer is one of those"
+  },
+  {
+   "t": 64.36,
+   "d": 3.12,
+   "text": "like fabulously like mutable terms. It"
+  },
+  {
+   "t": 67.48,
+   "d": 1.6,
+   "text": "means a lot of different things in a lot"
+  },
+  {
+   "t": 69.08,
+   "d": 1.88,
+   "text": "of different studios. But for"
+  },
+  {
+   "t": 70.96,
+   "d": 1.88,
+   "text": "Supergiant, it means I'm part designer."
+  },
+  {
+   "t": 72.84,
+   "d": 1.76,
+   "text": "I um I primarily help with weapons and"
+  },
+  {
+   "t": 74.6,
+   "d": 1.68,
+   "text": "boons on Hades"
+  },
+  {
+   "t": 76.28,
+   "d": 2.96,
+   "text": "as well as other game design content. Um"
+  },
+  {
+   "t": 79.24,
+   "d": 2.32,
+   "text": "it also means that I help implement this"
+  },
+  {
+   "t": 81.56,
+   "d": 1.36,
+   "text": "the content that I come up with and"
+  },
+  {
+   "t": 82.92,
+   "d": 2.12,
+   "text": "other designers come up with. It also"
+  },
+  {
+   "t": 85.04,
+   "d": 2.08,
+   "text": "means that I fix the bugs that come out"
+  },
+  {
+   "t": 87.12,
+   "d": 1.88,
+   "text": "as a result of me implementing that"
+  },
+  {
+   "t": 89.0,
+   "d": 3.32,
+   "text": "content. Um I am a lifelong roguelike"
+  },
+  {
+   "t": 92.32,
+   "d": 2.0,
+   "text": "lighter, a roguelike lighter. I remember"
+  },
+  {
+   "t": 94.32,
+   "d": 1.8,
+   "text": "playing Dungeon Crawl Stone Soup at"
+  },
+  {
+   "t": 96.12,
+   "d": 2.32,
+   "text": "summer camp. And before Supergiant, I"
+  },
+  {
+   "t": 98.44,
+   "d": 1.72,
+   "text": "made a very small roguelike called"
+  },
+  {
+   "t": 100.16,
+   "d": 2.0,
+   "text": "Cosmic Crown, which is an experiment in"
+  },
+  {
+   "t": 102.16,
+   "d": 1.8,
+   "text": "making a roguelike that functioned on a"
+  },
+  {
+   "t": 103.96,
+   "d": 1.96,
+   "text": "one-dimensional axis. So it could only"
+  },
+  {
+   "t": 105.92,
+   "d": 2.04,
+   "text": "move up and down."
+  },
+  {
+   "t": 107.96,
+   "d": 1.2,
+   "text": "Um"
+  },
+  {
+   "t": 109.16,
+   "d": 2.48,
+   "text": "What is Hades? So Hades is a roguelike"
+  },
+  {
+   "t": 111.64,
+   "d": 2.52,
+   "text": "dungeon crawler where you play as"
+  },
+  {
+   "t": 114.16,
+   "d": 1.8,
+   "text": "Zagreus, the son of Hades, trying to"
+  },
+  {
+   "t": 115.96,
+   "d": 1.6,
+   "text": "fight his way to the surface with the"
+  },
+  {
+   "t": 117.56,
+   "d": 2.16,
+   "text": "help of his god-like"
+  },
+  {
+   "t": 119.72,
+   "d": 2.24,
+   "text": "relatives. Uh this talk will include a"
+  },
+  {
+   "t": 121.96,
+   "d": 2.24,
+   "text": "couple gameplay spoilers for Hades, but"
+  },
+  {
+   "t": 124.2,
+   "d": 2.0,
+   "text": "no content spoilers."
+  },
+  {
+   "t": 126.2,
+   "d": 2.04,
+   "text": "Um I've also just heard Hades described"
+  },
+  {
+   "t": 128.24,
+   "d": 2.76,
+   "text": "as a game where you are a kid stuck at"
+  },
+  {
+   "t": 131.0,
+   "d": 2.04,
+   "text": "home prevented by his father from going"
+  },
+  {
+   "t": 133.04,
+   "d": 1.84,
+   "text": "outside. Uh"
+  },
+  {
+   "t": 134.88,
+   "d": 2.0,
+   "text": "we are aware of the similarities to a"
+  },
+  {
+   "t": 136.88,
+   "d": 2.24,
+   "text": "popular webcomic, but we won't comment"
+  },
+  {
+   "t": 139.12,
+   "d": 1.52,
+   "text": "on the similarities to a popular"
+  },
+  {
+   "t": 140.64,
+   "d": 2.04,
+   "text": "webcomic. Uh credit for the fanart goes"
+  },
+  {
+   "t": 142.68,
+   "d": 3.92,
+   "text": "to TEE nicecream on Twitter."
+  },
+  {
+   "t": 146.6,
+   "d": 1.12,
+   "text": "So I think"
+  },
+  {
+   "t": 147.72,
+   "d": 2.24,
+   "text": "So that aside, I think I love to talk a"
+  },
+  {
+   "t": 149.96,
+   "d": 2.08,
+   "text": "little bit about multiplicative power."
+  },
+  {
+   "t": 152.04,
+   "d": 2.92,
+   "text": "Uh this is really just a seven-syllable"
+  },
+  {
+   "t": 154.96,
+   "d": 2.12,
+   "text": "way to say combos. I think is the term"
+  },
+  {
+   "t": 157.08,
+   "d": 2.48,
+   "text": "that we're most pop um"
+  },
+  {
+   "t": 159.56,
+   "d": 2.96,
+   "text": "uh that we're most pop popular with."
+  },
+  {
+   "t": 162.52,
+   "d": 1.92,
+   "text": "Uh one example is from Binding of Isaac,"
+  },
+  {
+   "t": 164.44,
+   "d": 2.12,
+   "text": "um just to take another action"
+  },
+  {
+   "t": 166.56,
+   "d": 2.64,
+   "text": "roguelike. Uh there's the swallowed"
+  },
+  {
+   "t": 169.2,
+   "d": 1.6,
+   "text": "penny, which drops coins when your"
+  },
+  {
+   "t": 170.8,
+   "d": 2.76,
+   "text": "character is damaged. There's the bloody"
+  },
+  {
+   "t": 173.56,
+   "d": 1.8,
+   "text": "penny, which drops health when you pick"
+  },
+  {
+   "t": 175.36,
+   "d": 2.04,
+   "text": "up those coins."
+  },
+  {
+   "t": 177.4,
+   "d": 1.72,
+   "text": "And there's money with equals power,"
+  },
+  {
+   "t": 179.12,
+   "d": 1.8,
+   "text": "which increases your damage based on how"
+  },
+  {
+   "t": 180.92,
+   "d": 2.32,
+   "text": "much money you've picked up. So I think"
+  },
+  {
+   "t": 183.24,
+   "d": 1.72,
+   "text": "individually each of these items are"
+  },
+  {
+   "t": 184.96,
+   "d": 2.08,
+   "text": "kind of like they're all right, they're"
+  },
+  {
+   "t": 187.04,
+   "d": 2.04,
+   "text": "not like game-changing. For example,"
+  },
+  {
+   "t": 189.08,
+   "d": 1.4,
+   "text": "dropping coins when you're damaged"
+  },
+  {
+   "t": 190.48,
+   "d": 1.76,
+   "text": "usually the amount of coins you get,"
+  },
+  {
+   "t": 192.24,
+   "d": 1.88,
+   "text": "like one or two, isn't enough to offset"
+  },
+  {
+   "t": 194.12,
+   "d": 2.4,
+   "text": "the potential of losing your run later"
+  },
+  {
+   "t": 196.52,
+   "d": 1.12,
+   "text": "on."
+  },
+  {
+   "t": 197.64,
+   "d": 1.2,
+   "text": "Dropping health when you pick up coins"
+  },
+  {
+   "t": 198.84,
+   "d": 2.44,
+   "text": "is okay, but overhealing goes to waste"
+  },
+  {
+   "t": 201.28,
+   "d": 1.36,
+   "text": "and it just sort of you end up with a"
+  },
+  {
+   "t": 202.64,
+   "d": 2.36,
+   "text": "lot of like health just lying around."
+  },
+  {
+   "t": 205.0,
+   "d": 3.0,
+   "text": "And money equals power is kind of nice,"
+  },
+  {
+   "t": 208.0,
+   "d": 1.88,
+   "text": "but um by the end of an average game in"
+  },
+  {
+   "t": 209.88,
+   "d": 1.68,
+   "text": "Binding of Isaac, for me I had like"
+  },
+  {
+   "t": 211.56,
+   "d": 3.6,
+   "text": "maybe 20 to 40 cents, which is like"
+  },
+  {
+   "t": 215.16,
+   "d": 1.68,
+   "text": "appreciative uh which is like"
+  },
+  {
+   "t": 216.84,
+   "d": 2.64,
+   "text": "appreciable, but not like game-changing."
+  },
+  {
+   "t": 219.48,
+   "d": 1.44,
+   "text": "However, if you combine all of these"
+  },
+  {
+   "t": 220.92,
+   "d": 1.6,
+   "text": "together, uh you kind of create this"
+  },
+  {
+   "t": 222.52,
+   "d": 1.6,
+   "text": "great engine if you find a blood"
+  },
+  {
+   "t": 224.12,
+   "d": 2.32,
+   "text": "donation machine to just get infinite"
+  },
+  {
+   "t": 226.44,
+   "d": 1.76,
+   "text": "coins and infinite health, letting you"
+  },
+  {
+   "t": 228.2,
+   "d": 1.96,
+   "text": "max out your money and your damage at"
+  },
+  {
+   "t": 230.16,
+   "d": 1.64,
+   "text": "the same time."
+  },
+  {
+   "t": 231.8,
+   "d": 1.72,
+   "text": "Uh so this is kind of neat. This is an"
+  },
+  {
+   "t": 233.52,
+   "d": 1.68,
+   "text": "example of combo where each of the"
+  },
+  {
+   "t": 235.2,
+   "d": 2.48,
+   "text": "individual items you kind of can intuit"
+  },
+  {
+   "t": 237.68,
+   "d": 1.88,
+   "text": "that they will go well together."
+  },
+  {
+   "t": 239.56,
+   "d": 2.6,
+   "text": "Uh but, another example comes from uh"
+  },
+  {
+   "t": 242.16,
+   "d": 1.88,
+   "text": "Enter the Gungeon. So, all of these are"
+  },
+  {
+   "t": 244.04,
+   "d": 2.52,
+   "text": "taken from um the fandom wikis of the"
+  },
+  {
+   "t": 246.56,
+   "d": 2.68,
+   "text": "respective games. Um"
+  },
+  {
+   "t": 249.24,
+   "d": 2.36,
+   "text": "much loved and loathed um popular"
+  },
+  {
+   "t": 251.6,
+   "d": 2.28,
+   "text": "dominator of search engine results."
+  },
+  {
+   "t": 253.88,
+   "d": 0.56,
+   "text": "Uh"
+  },
+  {
+   "t": 254.44,
+   "d": 2.04,
+   "text": "this is In Enter the Gungeon, we have"
+  },
+  {
+   "t": 256.48,
+   "d": 2.2,
+   "text": "these other combos kind of um In these"
+  },
+  {
+   "t": 258.68,
+   "d": 2.2,
+   "text": "two examples, I have the B plus and the"
+  },
+  {
+   "t": 260.88,
+   "d": 3.36,
+   "text": "bees combo. Uh here,"
+  },
+  {
+   "t": 264.24,
+   "d": 2.68,
+   "text": "the only thing that causes combo is kind"
+  },
+  {
+   "t": 266.92,
+   "d": 2.44,
+   "text": "of um work on the back end to make them"
+  },
+  {
+   "t": 269.36,
+   "d": 1.84,
+   "text": "combo. And for the player, the only"
+  },
+  {
+   "t": 271.2,
+   "d": 2.08,
+   "text": "thing that implies it is that they have"
+  },
+  {
+   "t": 273.28,
+   "d": 1.64,
+   "text": "the similar theming."
+  },
+  {
+   "t": 274.92,
+   "d": 2.24,
+   "text": "Uh they are all bee-related items. So, a"
+  },
+  {
+   "t": 277.16,
+   "d": 2.2,
+   "text": "player playing the game will say, \"Okay,"
+  },
+  {
+   "t": 279.36,
+   "d": 3.32,
+   "text": "so I I found that picking up like items"
+  },
+  {
+   "t": 282.68,
+   "d": 2.28,
+   "text": "gives me these combos. I bet if I pick"
+  },
+  {
+   "t": 284.96,
+   "d": 1.72,
+   "text": "up bee-related items, I will get bee"
+  },
+  {
+   "t": 286.68,
+   "d": 1.32,
+   "text": "combos.\""
+  },
+  {
+   "t": 288.0,
+   "d": 0.88,
+   "text": "Uh"
+  },
+  {
+   "t": 288.88,
+   "d": 1.8,
+   "text": "I think this is really great. I think"
+  },
+  {
+   "t": 290.68,
+   "d": 1.88,
+   "text": "like combos are anything anytime when"
+  },
+  {
+   "t": 292.56,
+   "d": 2.0,
+   "text": "two or more elements provide a new and"
+  },
+  {
+   "t": 294.56,
+   "d": 2.16,
+   "text": "unexpected result."
+  },
+  {
+   "t": 296.72,
+   "d": 2.04,
+   "text": "And the biggest uh thing that I love"
+  },
+  {
+   "t": 298.76,
+   "d": 2.0,
+   "text": "about combos, part of it is like from a"
+  },
+  {
+   "t": 300.76,
+   "d": 1.88,
+   "text": "designer point of view, it's just more"
+  },
+  {
+   "t": 302.64,
+   "d": 2.88,
+   "text": "content. Uh I think when you think of a"
+  },
+  {
+   "t": 305.52,
+   "d": 2.0,
+   "text": "game and you think of the content of a"
+  },
+  {
+   "t": 307.52,
+   "d": 1.96,
+   "text": "game, a lot of it is like areas and"
+  },
+  {
+   "t": 309.48,
+   "d": 2.36,
+   "text": "spells and monsters and biomes and stuff"
+  },
+  {
+   "t": 311.84,
+   "d": 3.04,
+   "text": "like that. But, I think combos and just"
+  },
+  {
+   "t": 314.88,
+   "d": 1.6,
+   "text": "like these kind of emergent gameplay"
+  },
+  {
+   "t": 316.48,
+   "d": 1.68,
+   "text": "properties is a really big part of it,"
+  },
+  {
+   "t": 318.16,
+   "d": 1.04,
+   "text": "too."
+  },
+  {
+   "t": 319.2,
+   "d": 0.6,
+   "text": "Uh"
+  },
+  {
+   "t": 319.8,
+   "d": 2.6,
+   "text": "part of it is as you learn combos, you"
+  },
+  {
+   "t": 322.4,
+   "d": 2.0,
+   "text": "kind of uh feel more mastery over the"
+  },
+  {
+   "t": 324.4,
+   "d": 2.16,
+   "text": "game. Uh maybe when playing Binding of"
+  },
+  {
+   "t": 326.56,
+   "d": 1.52,
+   "text": "Isaac, you're saying like I didn't"
+  },
+  {
+   "t": 328.08,
+   "d": 1.76,
+   "text": "really you can sort of say like, \"Oh,"
+  },
+  {
+   "t": 329.84,
+   "d": 2.48,
+   "text": "when I was a newbie at the game, I"
+  },
+  {
+   "t": 332.32,
+   "d": 1.32,
+   "text": "didn't know about the swallowed penny,"
+  },
+  {
+   "t": 333.64,
+   "d": 1.8,
+   "text": "bloody penny, money equals power combo."
+  },
+  {
+   "t": 335.44,
+   "d": 1.52,
+   "text": "But, now that I know about it, I can"
+  },
+  {
+   "t": 336.96,
+   "d": 2.76,
+   "text": "like go for it or decide deliberately to"
+  },
+  {
+   "t": 339.72,
+   "d": 2.56,
+   "text": "avoid it. Um and I also have this like I"
+  },
+  {
+   "t": 342.28,
+   "d": 1.76,
+   "text": "have this in my back pocket for how to"
+  },
+  {
+   "t": 344.04,
+   "d": 2.4,
+   "text": "play the game.\""
+  },
+  {
+   "t": 346.44,
+   "d": 1.6,
+   "text": "I think it's really cool because it also"
+  },
+  {
+   "t": 348.04,
+   "d": 2.28,
+   "text": "allows players to influence the power"
+  },
+  {
+   "t": 350.32,
+   "d": 1.88,
+   "text": "and difficulty curve in ways that let"
+  },
+  {
+   "t": 352.2,
+   "d": 2.68,
+   "text": "them feel a lot of mastery as well. Uh"
+  },
+  {
+   "t": 354.88,
+   "d": 2.72,
+   "text": "kind of like uh I can go for this combo"
+  },
+  {
+   "t": 357.6,
+   "d": 2.48,
+   "text": "and it'll get me uh let me breathe"
+  },
+  {
+   "t": 360.08,
+   "d": 1.52,
+   "text": "through these two areas, but I'll"
+  },
+  {
+   "t": 361.6,
+   "d": 2.2,
+   "text": "probably come get in trouble later. Or"
+  },
+  {
+   "t": 363.8,
+   "d": 1.44,
+   "text": "I'll probably have to suffer for these"
+  },
+  {
+   "t": 365.24,
+   "d": 2.32,
+   "text": "two areas, uh but I'll"
+  },
+  {
+   "t": 367.56,
+   "d": 1.84,
+   "text": "pick up the combo enabler in the last"
+  },
+  {
+   "t": 369.4,
+   "d": 1.76,
+   "text": "area and really um zoom ahead of"
+  },
+  {
+   "t": 371.16,
+   "d": 2.2,
+   "text": "difficulty curve."
+  },
+  {
+   "t": 373.36,
+   "d": 2.24,
+   "text": "So, in in Hades, we kind of have a"
+  },
+  {
+   "t": 375.6,
+   "d": 2.84,
+   "text": "couple of examples of this. Uh so, the"
+  },
+  {
+   "t": 378.44,
+   "d": 2.08,
+   "text": "first one I'm going to talk about is the"
+  },
+  {
+   "t": 380.52,
+   "d": 2.24,
+   "text": "gun secondary build. Uh the gun, which"
+  },
+  {
+   "t": 382.76,
+   "d": 2.4,
+   "text": "is a very popular uh ancient Greek"
+  },
+  {
+   "t": 385.16,
+   "d": 1.08,
+   "text": "weapon."
+  },
+  {
+   "t": 386.24,
+   "d": 2.36,
+   "text": "Uh we have It has a secondary attack"
+  },
+  {
+   "t": 388.6,
+   "d": 2.92,
+   "text": "that fires a arcane grenade."
+  },
+  {
+   "t": 391.52,
+   "d": 2.04,
+   "text": "Uh we have an ability called cluster"
+  },
+  {
+   "t": 393.56,
+   "d": 3.0,
+   "text": "bomb, which causes um you to fire five"
+  },
+  {
+   "t": 396.56,
+   "d": 3.08,
+   "text": "grenades instead of one."
+  },
+  {
+   "t": 399.64,
+   "d": 2.48,
+   "text": "Uh which is really really fun. Then,"
+  },
+  {
+   "t": 402.12,
+   "d": 1.52,
+   "text": "rocket bomb, which is another ability"
+  },
+  {
+   "t": 403.64,
+   "d": 2.36,
+   "text": "that changes those grenades into rocket"
+  },
+  {
+   "t": 406.0,
+   "d": 1.2,
+   "text": "launchers."
+  },
+  {
+   "t": 407.2,
+   "d": 1.84,
+   "text": "And then we also have god abilities, in"
+  },
+  {
+   "t": 409.04,
+   "d": 2.56,
+   "text": "this case Dionysus uh flourish, which"
+  },
+  {
+   "t": 411.6,
+   "d": 2.12,
+   "text": "causes your secondary attacks to inflict"
+  },
+  {
+   "t": 413.72,
+   "d": 2.2,
+   "text": "a stacking damage over time effect, like"
+  },
+  {
+   "t": 415.92,
+   "d": 1.2,
+   "text": "poison."
+  },
+  {
+   "t": 417.12,
+   "d": 2.2,
+   "text": "Um I think when you combine all of these"
+  },
+  {
+   "t": 419.32,
+   "d": 2.0,
+   "text": "abilities together, you kind of get this"
+  },
+  {
+   "t": 421.32,
+   "d": 3.44,
+   "text": "like rocket launching uh rocket shotgun"
+  },
+  {
+   "t": 424.76,
+   "d": 2.04,
+   "text": "ability that allows you to apply this"
+  },
+  {
+   "t": 426.8,
+   "d": 2.12,
+   "text": "damage over time effect really quickly,"
+  },
+  {
+   "t": 428.92,
+   "d": 2.76,
+   "text": "really effectively at like um at levels"
+  },
+  {
+   "t": 431.68,
+   "d": 1.44,
+   "text": "that you normally wouldn't be able to"
+  },
+  {
+   "t": 433.12,
+   "d": 1.64,
+   "text": "do."
+  },
+  {
+   "t": 434.76,
+   "d": 2.64,
+   "text": "We also have stuff like"
+  },
+  {
+   "t": 437.4,
+   "d": 1.68,
+   "text": "um and in in terms of like the second"
+  },
+  {
+   "t": 439.08,
+   "d": 1.56,
+   "text": "ability we're going to talking about"
+  },
+  {
+   "t": 440.64,
+   "d": 2.0,
+   "text": "Enter the Gungeon and this kind of um"
+  },
+  {
+   "t": 442.64,
+   "d": 2.76,
+   "text": "extensions, like flavor extensions. In"
+  },
+  {
+   "t": 445.4,
+   "d": 2.4,
+   "text": "Hades, we have an ability We have a god"
+  },
+  {
+   "t": 447.8,
+   "d": 1.52,
+   "text": "called Ares."
+  },
+  {
+   "t": 449.32,
+   "d": 3.68,
+   "text": "And Ares has Apologies. Um Ares has an"
+  },
+  {
+   "t": 453.0,
+   "d": 1.68,
+   "text": "ability that changes your ranged attack"
+  },
+  {
+   "t": 454.68,
+   "d": 2.64,
+   "text": "into like a spinning blade vortex."
+  },
+  {
+   "t": 457.32,
+   "d": 2.12,
+   "text": "Now, by default, this is this attack"
+  },
+  {
+   "t": 459.44,
+   "d": 2.24,
+   "text": "deals like a ton of damage, but it's"
+  },
+  {
+   "t": 461.68,
+   "d": 1.52,
+   "text": "really difficult to land on a target"
+  },
+  {
+   "t": 463.2,
+   "d": 2.6,
+   "text": "because it moves very slowly and can"
+  },
+  {
+   "t": 465.8,
+   "d": 1.64,
+   "text": "enemies can just like walk right out of"
+  },
+  {
+   "t": 467.44,
+   "d": 0.88,
+   "text": "it."
+  },
+  {
+   "t": 468.32,
+   "d": 1.92,
+   "text": "We have an ability called Engulfing"
+  },
+  {
+   "t": 470.24,
+   "d": 2.0,
+   "text": "Vortex, which allows the Blade Rift to"
+  },
+  {
+   "t": 472.24,
+   "d": 2.64,
+   "text": "kind of suck enemies in as it travels."
+  },
+  {
+   "t": 474.88,
+   "d": 1.52,
+   "text": "And then we have another ability that"
+  },
+  {
+   "t": 476.4,
+   "d": 1.84,
+   "text": "called Vicious Cycle, which increases"
+  },
+  {
+   "t": 478.24,
+   "d": 2.4,
+   "text": "the damage you deal enemies take the"
+  },
+  {
+   "t": 480.64,
+   "d": 2.44,
+   "text": "longer they're in a particular Vortex."
+  },
+  {
+   "t": 483.08,
+   "d": 1.72,
+   "text": "So, I think this is really neat"
+  },
+  {
+   "t": 484.8,
+   "d": 2.28,
+   "text": "because it takes an ability and either"
+  },
+  {
+   "t": 487.08,
+   "d": 2.88,
+   "text": "removes its downsides or extenuates"
+  },
+  {
+   "t": 489.96,
+   "d": 1.16,
+   "text": "upsides."
+  },
+  {
+   "t": 491.12,
+   "d": 2.08,
+   "text": "You kind of see like"
+  },
+  {
+   "t": 493.2,
+   "d": 2.8,
+   "text": "how both of them can be really effective"
+  },
+  {
+   "t": 496.0,
+   "d": 1.36,
+   "text": "and both of them can really change the"
+  },
+  {
+   "t": 497.36,
+   "d": 3.56,
+   "text": "way you interact with an ability."
+  },
+  {
+   "t": 503.08,
+   "d": 2.0,
+   "text": "Let me"
+  },
+  {
+   "t": 505.08,
+   "d": 1.64,
+   "text": "I think No, I think another thing that"
+  },
+  {
+   "t": 506.72,
+   "d": 2.16,
+   "text": "we found in Hades is that it's really"
+  },
+  {
+   "t": 508.88,
+   "d": 2.12,
+   "text": "important to look at these combos and"
+  },
+  {
+   "t": 511.0,
+   "d": 1.96,
+   "text": "look at power uh give it to the player"
+  },
+  {
+   "t": 512.96,
+   "d": 2.12,
+   "text": "and look at the goals of each system."
+  },
+  {
+   "t": 515.08,
+   "d": 2.24,
+   "text": "So, in the just now I was talking about"
+  },
+  {
+   "t": 517.32,
+   "d": 2.64,
+   "text": "the gun and Ares and those are two"
+  },
+  {
+   "t": 519.96,
+   "d": 2.2,
+   "text": "different systems pretty deliberately."
+  },
+  {
+   "t": 522.16,
+   "d": 1.96,
+   "text": "Uh in Hades we have weapons which kind"
+  },
+  {
+   "t": 524.12,
+   "d": 1.8,
+   "text": "of change your primary and secondary"
+  },
+  {
+   "t": 525.92,
+   "d": 2.0,
+   "text": "attacks. So, we have like the sword, the"
+  },
+  {
+   "t": 527.92,
+   "d": 3.56,
+   "text": "shield, the bow, and the gun, of course."
+  },
+  {
+   "t": 531.48,
+   "d": 2.32,
+   "text": "Uh we have these things called hammers"
+  },
+  {
+   "t": 533.8,
+   "d": 2.08,
+   "text": "which um upgrade your weapon and change"
+  },
+  {
+   "t": 535.88,
+   "d": 2.24,
+   "text": "their primary or secondary attack in one"
+  },
+  {
+   "t": 538.12,
+   "d": 2.56,
+   "text": "way or another. Um as well as later on"
+  },
+  {
+   "t": 540.68,
+   "d": 1.04,
+   "text": "in the game we introduce something"
+  },
+  {
+   "t": 541.72,
+   "d": 2.28,
+   "text": "called Aspects which further kind of um"
+  },
+  {
+   "t": 544.0,
+   "d": 2.28,
+   "text": "mold the way you approach weapon by"
+  },
+  {
+   "t": 546.28,
+   "d": 3.08,
+   "text": "introducing like um cross control"
+  },
+  {
+   "t": 549.36,
+   "d": 2.24,
+   "text": "synergies. So, like now your range"
+  },
+  {
+   "t": 551.6,
+   "d": 1.48,
+   "text": "attack will interact with your attack in"
+  },
+  {
+   "t": 553.08,
+   "d": 2.6,
+   "text": "a certain way. Or um your secondary and"
+  },
+  {
+   "t": 555.68,
+   "d": 1.48,
+   "text": "your primary attack will have some kind"
+  },
+  {
+   "t": 557.16,
+   "d": 2.08,
+   "text": "of interactions with each other just"
+  },
+  {
+   "t": 559.24,
+   "d": 2.76,
+   "text": "built in from the start."
+  },
+  {
+   "t": 562.0,
+   "d": 2.76,
+   "text": "We also have gods. Uh gods are kind of"
+  },
+  {
+   "t": 564.76,
+   "d": 2.4,
+   "text": "another system, but instead of um"
+  },
+  {
+   "t": 567.16,
+   "d": 1.72,
+   "text": "changing your primary or secondary"
+  },
+  {
+   "t": 568.88,
+   "d": 1.92,
+   "text": "attack the way weapons do,"
+  },
+  {
+   "t": 570.8,
+   "d": 2.6,
+   "text": "gods uh add special effects kind of more"
+  },
+  {
+   "t": 573.4,
+   "d": 2.36,
+   "text": "magical thematically like magical"
+  },
+  {
+   "t": 575.76,
+   "d": 2.68,
+   "text": "feeling abilities to your attacks, among"
+  },
+  {
+   "t": 578.44,
+   "d": 2.48,
+   "text": "those like status effects."
+  },
+  {
+   "t": 580.92,
+   "d": 2.08,
+   "text": "And in Hades you also have what we call"
+  },
+  {
+   "t": 583.0,
+   "d": 2.12,
+   "text": "duo boons, which are represented by two"
+  },
+  {
+   "t": 585.12,
+   "d": 3.32,
+   "text": "gods working together."
+  },
+  {
+   "t": 589.76,
+   "d": 2.08,
+   "text": "So, in each of these systems we kind of"
+  },
+  {
+   "t": 591.84,
+   "d": 2.04,
+   "text": "have our own goals, and I think it's"
+  },
+  {
+   "t": 593.88,
+   "d": 2.52,
+   "text": "really helpful um from both the designer"
+  },
+  {
+   "t": 596.4,
+   "d": 2.84,
+   "text": "and a player point of view to uh"
+  },
+  {
+   "t": 599.24,
+   "d": 2.32,
+   "text": "really define the boundaries and goals"
+  },
+  {
+   "t": 601.56,
+   "d": 2.08,
+   "text": "of each of these systems so it doesn't"
+  },
+  {
+   "t": 603.64,
+   "d": 1.88,
+   "text": "like overwhelm the player."
+  },
+  {
+   "t": 605.52,
+   "d": 1.76,
+   "text": "So, on the left you kind of see I have"
+  },
+  {
+   "t": 607.28,
+   "d": 2.4,
+   "text": "an image of a Hermes boon and something"
+  },
+  {
+   "t": 609.68,
+   "d": 2.04,
+   "text": "from the Mirror of Darkness, which is"
+  },
+  {
+   "t": 611.72,
+   "d": 2.76,
+   "text": "our meta progression system in Hades."
+  },
+  {
+   "t": 614.48,
+   "d": 1.64,
+   "text": "So, here we kind of um"
+  },
+  {
+   "t": 616.12,
+   "d": 1.76,
+   "text": "think of these systems as systems that"
+  },
+  {
+   "t": 617.88,
+   "d": 2.72,
+   "text": "just like make you better. Uh they just"
+  },
+  {
+   "t": 620.6,
+   "d": 1.92,
+   "text": "like allow you to attack faster, allow"
+  },
+  {
+   "t": 622.52,
+   "d": 1.84,
+   "text": "you to survive longer."
+  },
+  {
+   "t": 624.36,
+   "d": 1.72,
+   "text": "Uh there's always going to be kind of"
+  },
+  {
+   "t": 626.08,
+   "d": 3.4,
+   "text": "like fill-ups in there um to like uh"
+  },
+  {
+   "t": 629.48,
+   "d": 1.48,
+   "text": "kind of make things more interesting,"
+  },
+  {
+   "t": 630.96,
+   "d": 1.44,
+   "text": "but generally it's like when you see"
+  },
+  {
+   "t": 632.4,
+   "d": 1.32,
+   "text": "these things"
+  },
+  {
+   "t": 633.72,
+   "d": 1.16,
+   "text": "uh they'll just make you better in a"
+  },
+  {
+   "t": 634.88,
+   "d": 2.52,
+   "text": "very straightforward way."
+  },
+  {
+   "t": 637.4,
+   "d": 1.72,
+   "text": "In the middle we have um"
+  },
+  {
+   "t": 639.12,
+   "d": 2.84,
+   "text": "uh a hammer and the Chthonic Blood,"
+  },
+  {
+   "t": 641.96,
+   "d": 1.96,
+   "text": "which represents our aspects or weapon"
+  },
+  {
+   "t": 643.92,
+   "d": 1.16,
+   "text": "aspects."
+  },
+  {
+   "t": 645.08,
+   "d": 1.68,
+   "text": "So, these items are kind of like this"
+  },
+  {
+   "t": 646.76,
+   "d": 2.08,
+   "text": "will change your uh primary attack and"
+  },
+  {
+   "t": 648.84,
+   "d": 2.2,
+   "text": "secondary attack in a certain way,"
+  },
+  {
+   "t": 651.04,
+   "d": 3.08,
+   "text": "uh but it won't affect like your dash or"
+  },
+  {
+   "t": 654.12,
+   "d": 1.84,
+   "text": "your ranged abilities, with some"
+  },
+  {
+   "t": 655.96,
+   "d": 1.32,
+   "text": "exceptions."
+  },
+  {
+   "t": 657.28,
+   "d": 2.6,
+   "text": "Um and on the right you kind of have um"
+  },
+  {
+   "t": 659.88,
+   "d": 1.96,
+   "text": "a representation of an Aphrodite boon,"
+  },
+  {
+   "t": 661.84,
+   "d": 2.68,
+   "text": "an Ares boon, and an Aphrodite Ares duo"
+  },
+  {
+   "t": 664.52,
+   "d": 2.08,
+   "text": "boon. Uh and here it's kind of like"
+  },
+  {
+   "t": 666.6,
+   "d": 1.76,
+   "text": "we're going to change the status effects"
+  },
+  {
+   "t": 668.36,
+   "d": 2.76,
+   "text": "you apply or your ranged cast ability."
+  },
+  {
+   "t": 671.12,
+   "d": 1.48,
+   "text": "Uh I think it's really helpful in this"
+  },
+  {
+   "t": 672.6,
+   "d": 2.92,
+   "text": "case because when a player sees a reward"
+  },
+  {
+   "t": 675.52,
+   "d": 2.6,
+   "text": "door and says um"
+  },
+  {
+   "t": 678.12,
+   "d": 2.28,
+   "text": "sees a hammer, they can kind of mentally"
+  },
+  {
+   "t": 680.4,
+   "d": 2.8,
+   "text": "prepare themselves to be like, \"Okay, so"
+  },
+  {
+   "t": 683.2,
+   "d": 1.8,
+   "text": "the if I choose this door, what I'm"
+  },
+  {
+   "t": 685.0,
+   "d": 1.76,
+   "text": "likely going to be offered is an ability"
+  },
+  {
+   "t": 686.76,
+   "d": 2.8,
+   "text": "a way to enhance my attack or secondary"
+  },
+  {
+   "t": 689.56,
+   "d": 2.36,
+   "text": "attack.\" And kind of um already begin"
+  },
+  {
+   "t": 691.92,
+   "d": 2.0,
+   "text": "planning in that direction."
+  },
+  {
+   "t": 693.92,
+   "d": 1.92,
+   "text": "Or if they see an Ares boon, they can"
+  },
+  {
+   "t": 695.84,
+   "d": 2.56,
+   "text": "say, \"Okay, so here I am about to like"
+  },
+  {
+   "t": 698.4,
+   "d": 2.4,
+   "text": "upgrade either gain an Ares ability or"
+  },
+  {
+   "t": 700.8,
+   "d": 1.72,
+   "text": "upgrade of something that Ares already"
+  },
+  {
+   "t": 702.52,
+   "d": 2.76,
+   "text": "has already given such as um"
+  },
+  {
+   "t": 705.28,
+   "d": 3.28,
+   "text": "the curse of doom effect or the blade"
+  },
+  {
+   "t": 708.56,
+   "d": 2.0,
+   "text": "rift effect.\" It's really really helpful"
+  },
+  {
+   "t": 710.56,
+   "d": 1.76,
+   "text": "because it prevents the player from"
+  },
+  {
+   "t": 712.32,
+   "d": 2.48,
+   "text": "having to like hold in their brain the"
+  },
+  {
+   "t": 714.8,
+   "d": 2.36,
+   "text": "entire possibility space of everything"
+  },
+  {
+   "t": 717.16,
+   "d": 2.12,
+   "text": "they could possibly do to their build uh"
+  },
+  {
+   "t": 719.28,
+   "d": 2.8,
+   "text": "when they get a new item."
+  },
+  {
+   "t": 722.08,
+   "d": 1.28,
+   "text": "And this is like really really"
+  },
+  {
+   "t": 723.36,
+   "d": 1.84,
+   "text": "important. I think it's really important"
+  },
+  {
+   "t": 725.2,
+   "d": 2.32,
+   "text": "to force the player to choose. I think"
+  },
+  {
+   "t": 727.52,
+   "d": 2.88,
+   "text": "early on in Hades, which was in early"
+  },
+  {
+   "t": 730.4,
+   "d": 1.92,
+   "text": "access for a while, uh"
+  },
+  {
+   "t": 732.32,
+   "d": 2.56,
+   "text": "we were naturally constrained by how"
+  },
+  {
+   "t": 734.88,
+   "d": 2.08,
+   "text": "much content we could make um even"
+  },
+  {
+   "t": 736.96,
+   "d": 1.36,
+   "text": "though we wanted to give the player all"
+  },
+  {
+   "t": 738.32,
+   "d": 2.24,
+   "text": "the content our brains could hold,"
+  },
+  {
+   "t": 740.56,
+   "d": 2.08,
+   "text": "uh we found that with things like"
+  },
+  {
+   "t": 742.64,
+   "d": 2.0,
+   "text": "hammers, uh over the course of an"
+  },
+  {
+   "t": 744.64,
+   "d": 2.76,
+   "text": "average run, they might get two uh about"
+  },
+  {
+   "t": 747.4,
+   "d": 1.48,
+   "text": "hammers like twice."
+  },
+  {
+   "t": 748.88,
+   "d": 2.24,
+   "text": "And given these given the fact that they"
+  },
+  {
+   "t": 751.12,
+   "d": 3.04,
+   "text": "see a hammer twice, um we wanted to give"
+  },
+  {
+   "t": 754.16,
+   "d": 2.36,
+   "text": "about nine options so that on any"
+  },
+  {
+   "t": 756.52,
+   "d": 2.44,
+   "text": "successive run, uh any consecutive run"
+  },
+  {
+   "t": 758.96,
+   "d": 2.04,
+   "text": "with the same weapon, they wouldn't see"
+  },
+  {
+   "t": 761.0,
+   "d": 1.64,
+   "text": "the same options offered over and over"
+  },
+  {
+   "t": 762.64,
+   "d": 0.92,
+   "text": "again."
+  },
+  {
+   "t": 763.56,
+   "d": 1.76,
+   "text": "I think nine options was kind of our"
+  },
+  {
+   "t": 765.32,
+   "d": 2.32,
+   "text": "magic number because uh the first time"
+  },
+  {
+   "t": 767.64,
+   "d": 2.56,
+   "text": "you choose one, it naturally um"
+  },
+  {
+   "t": 770.2,
+   "d": 2.6,
+   "text": "cancel out or block some other options."
+  },
+  {
+   "t": 772.8,
+   "d": 1.88,
+   "text": "So, after you choose one of these"
+  },
+  {
+   "t": 774.68,
+   "d": 1.48,
+   "text": "options, you wouldn't have eight options"
+  },
+  {
+   "t": 776.16,
+   "d": 2.4,
+   "text": "left, you'd have maybe six uh just like"
+  },
+  {
+   "t": 778.56,
+   "d": 2.6,
+   "text": "to at the most conservative."
+  },
+  {
+   "t": 781.16,
+   "d": 1.6,
+   "text": "So, this is uh this is the number that"
+  },
+  {
+   "t": 782.76,
+   "d": 1.04,
+   "text": "we got."
+  },
+  {
+   "t": 783.8,
+   "d": 1.92,
+   "text": "Uh here's a quote from Kate Compton. I"
+  },
+  {
+   "t": 785.72,
+   "d": 2.8,
+   "text": "don't know if anyone has a oatmeal count"
+  },
+  {
+   "t": 788.52,
+   "d": 1.52,
+   "text": "um on their bingo board, but you can"
+  },
+  {
+   "t": 790.04,
+   "d": 1.68,
+   "text": "increment that by one."
+  },
+  {
+   "t": 791.72,
+   "d": 1.68,
+   "text": "Uh Kate Compton has kind of made this"
+  },
+  {
+   "t": 793.4,
+   "d": 3.2,
+   "text": "really uh really wonderful saying,"
+  },
+  {
+   "t": 796.6,
+   "d": 2.04,
+   "text": "\"I can easily generate 10,000 bowls of"
+  },
+  {
+   "t": 798.64,
+   "d": 1.8,
+   "text": "plain oatmeal with each oat being in a"
+  },
+  {
+   "t": 800.44,
+   "d": 1.28,
+   "text": "different position and different"
+  },
+  {
+   "t": 801.72,
+   "d": 1.52,
+   "text": "orientation, and mathematically"
+  },
+  {
+   "t": 803.24,
+   "d": 1.4,
+   "text": "speaking, they'll all be completely"
+  },
+  {
+   "t": 804.64,
+   "d": 2.24,
+   "text": "unique. But the user will likely just"
+  },
+  {
+   "t": 806.88,
+   "d": 1.8,
+   "text": "see a lot of oatmeal."
+  },
+  {
+   "t": 808.68,
+   "d": 1.88,
+   "text": "I think this comes back to kind of"
+  },
+  {
+   "t": 810.56,
+   "d": 1.96,
+   "text": "forcing the player to choose. I think we"
+  },
+  {
+   "t": 812.52,
+   "d": 1.8,
+   "text": "found that at a point we were given like"
+  },
+  {
+   "t": 814.32,
+   "d": 2.24,
+   "text": "three or even four hammers, and that"
+  },
+  {
+   "t": 816.56,
+   "d": 2.04,
+   "text": "issue was that all of the players"
+  },
+  {
+   "t": 818.6,
+   "d": 1.76,
+   "text": "attacks kind of like blended together"
+  },
+  {
+   "t": 820.36,
+   "d": 1.64,
+   "text": "into this um"
+  },
+  {
+   "t": 822.0,
+   "d": 3.24,
+   "text": "like powerful sludge, right? Like you're"
+  },
+  {
+   "t": 825.24,
+   "d": 1.84,
+   "text": "uh if you're playing with a gun, your"
+  },
+  {
+   "t": 827.08,
+   "d": 1.84,
+   "text": "weapon fire at the end was always like"
+  },
+  {
+   "t": 828.92,
+   "d": 1.04,
+   "text": "this"
+  },
+  {
+   "t": 829.96,
+   "d": 1.56,
+   "text": "um"
+  },
+  {
+   "t": 831.52,
+   "d": 2.64,
+   "text": "triple quintuple rocket launcher combo."
+  },
+  {
+   "t": 834.16,
+   "d": 1.4,
+   "text": "If you're playing the sword, you always"
+  },
+  {
+   "t": 835.56,
+   "d": 2.6,
+   "text": "had this like massive AOE swords um"
+  },
+  {
+   "t": 838.16,
+   "d": 2.44,
+   "text": "sword like sword parry attack."
+  },
+  {
+   "t": 840.6,
+   "d": 3.0,
+   "text": "Uh we really wanted to like limit this."
+  },
+  {
+   "t": 843.6,
+   "d": 3.28,
+   "text": "This is a image we I created for our Q&A"
+  },
+  {
+   "t": 846.88,
+   "d": 3.0,
+   "text": "department. Allison uh found a bug where"
+  },
+  {
+   "t": 849.88,
+   "d": 1.84,
+   "text": "or players found a bug and Allison"
+  },
+  {
+   "t": 851.72,
+   "d": 2.4,
+   "text": "reported it, where players could get um"
+  },
+  {
+   "t": 854.12,
+   "d": 1.96,
+   "text": "four hammers in one run, which caused"
+  },
+  {
+   "t": 856.08,
+   "d": 1.68,
+   "text": "this exact thing that we're trying to"
+  },
+  {
+   "t": 857.76,
+   "d": 1.04,
+   "text": "avoid."
+  },
+  {
+   "t": 858.8,
+   "d": 1.52,
+   "text": "I believe it was um"
+  },
+  {
+   "t": 860.32,
+   "d": 2.88,
+   "text": "you get two hammers naturally, uh but if"
+  },
+  {
+   "t": 863.2,
+   "d": 2.2,
+   "text": "you deliberately held off on getting a"
+  },
+  {
+   "t": 865.4,
+   "d": 1.96,
+   "text": "third hammer before the sticks region,"
+  },
+  {
+   "t": 867.36,
+   "d": 2.8,
+   "text": "you could um game the reward table to"
+  },
+  {
+   "t": 870.16,
+   "d": 3.56,
+   "text": "try to get another two."
+  },
+  {
+   "t": 873.8,
+   "d": 3.32,
+   "text": "So, I think combos that worked for us"
+  },
+  {
+   "t": 877.12,
+   "d": 1.88,
+   "text": "were combos that felt like really"
+  },
+  {
+   "t": 879.0,
+   "d": 2.4,
+   "text": "intentional, really player driven, and"
+  },
+  {
+   "t": 881.4,
+   "d": 1.8,
+   "text": "really weren't available every run. I"
+  },
+  {
+   "t": 883.2,
+   "d": 3.44,
+   "text": "think uh as as you play Hades more,"
+  },
+  {
+   "t": 886.64,
+   "d": 1.68,
+   "text": "you're able to kind of control for that"
+  },
+  {
+   "t": 888.32,
+   "d": 1.6,
+   "text": "as you learn the system more with"
+  },
+  {
+   "t": 889.92,
+   "d": 1.88,
+   "text": "keepsakes and ability to like guarantee"
+  },
+  {
+   "t": 891.8,
+   "d": 1.92,
+   "text": "that appearance of certain gods at"
+  },
+  {
+   "t": 893.72,
+   "d": 1.68,
+   "text": "certain points in the game."
+  },
+  {
+   "t": 895.4,
+   "d": 3.32,
+   "text": "But what we really liked was that um"
+  },
+  {
+   "t": 898.72,
+   "d": 1.76,
+   "text": "you couldn't If you want to do one"
+  },
+  {
+   "t": 900.48,
+   "d": 1.64,
+   "text": "particular combination, you couldn't"
+  },
+  {
+   "t": 902.12,
+   "d": 1.6,
+   "text": "just chase it down. You were kind of"
+  },
+  {
+   "t": 903.72,
+   "d": 1.24,
+   "text": "forced to"
+  },
+  {
+   "t": 904.96,
+   "d": 0.84,
+   "text": "uh"
+  },
+  {
+   "t": 905.8,
+   "d": 3.28,
+   "text": "innovate or improvise entering a run in"
+  },
+  {
+   "t": 909.08,
+   "d": 1.96,
+   "text": "a way that I think players really"
+  },
+  {
+   "t": 911.04,
+   "d": 2.76,
+   "text": "responded to."
+  },
+  {
+   "t": 913.88,
+   "d": 2.48,
+   "text": "Uh here I wanted to just give us uh take"
+  },
+  {
+   "t": 916.36,
+   "d": 2.08,
+   "text": "a short detour into talking about how"
+  },
+  {
+   "t": 918.44,
+   "d": 2.48,
+   "text": "traits work. So, traits and boons are"
+  },
+  {
+   "t": 920.92,
+   "d": 2.32,
+   "text": "traits are kind of like the uh game"
+  },
+  {
+   "t": 923.24,
+   "d": 2.68,
+   "text": "engine way that Supergiant refers to god"
+  },
+  {
+   "t": 925.92,
+   "d": 1.88,
+   "text": "boons and hammers and basically"
+  },
+  {
+   "t": 927.8,
+   "d": 1.24,
+   "text": "everything that affected the player in"
+  },
+  {
+   "t": 929.04,
+   "d": 2.6,
+   "text": "some way was a trait."
+  },
+  {
+   "t": 931.64,
+   "d": 3.56,
+   "text": "So, we had a system where it was like"
+  },
+  {
+   "t": 935.2,
+   "d": 4.36,
+   "text": "where we had just a bunch of numbers in"
+  },
+  {
+   "t": 939.56,
+   "d": 2.28,
+   "text": "I want to say JSON. Yes. A bunch of"
+  },
+  {
+   "t": 941.84,
+   "d": 2.12,
+   "text": "numbers in JSON that formed the basis of"
+  },
+  {
+   "t": 943.96,
+   "d": 1.88,
+   "text": "every ability. So, here this is like a"
+  },
+  {
+   "t": 945.84,
+   "d": 2.64,
+   "text": "small snippet from our Ares projectile"
+  },
+  {
+   "t": 948.48,
+   "d": 2.32,
+   "text": "earlier, the spinning rolling blade"
+  },
+  {
+   "t": 950.8,
+   "d": 2.2,
+   "text": "rift. And you can sort of see we have"
+  },
+  {
+   "t": 953.0,
+   "d": 1.68,
+   "text": "like all these attributes that we turn"
+  },
+  {
+   "t": 954.68,
+   "d": 2.24,
+   "text": "on, turn off, increase or decrease as we"
+  },
+  {
+   "t": 956.92,
+   "d": 2.92,
+   "text": "need. Uh here you'll see like it can go"
+  },
+  {
+   "t": 959.84,
+   "d": 1.8,
+   "text": "through as many units as it wants. It"
+  },
+  {
+   "t": 961.64,
+   "d": 3.0,
+   "text": "will um repeatedly hit an obstacle. It"
+  },
+  {
+   "t": 964.64,
+   "d": 2.12,
+   "text": "has a low low speed, relatively"
+  },
+  {
+   "t": 966.76,
+   "d": 2.68,
+   "text": "speaking, but a high range. Uh"
+  },
+  {
+   "t": 969.44,
+   "d": 2.52,
+   "text": "like damage rate is of 150 units uh"
+  },
+  {
+   "t": 971.96,
+   "d": 2.44,
+   "text": "magical units that Hades uses."
+  },
+  {
+   "t": 974.4,
+   "d": 0.72,
+   "text": "Uh"
+  },
+  {
+   "t": 975.12,
+   "d": 1.88,
+   "text": "no knockback because the impact velocity"
+  },
+  {
+   "t": 977.0,
+   "d": 2.48,
+   "text": "is set to zero. Damage range of six to"
+  },
+  {
+   "t": 979.48,
+   "d": 2.44,
+   "text": "six. It'll hit multiple times. And at"
+  },
+  {
+   "t": 981.92,
+   "d": 1.6,
+   "text": "the beginning it'll last for about 4"
+  },
+  {
+   "t": 983.52,
+   "d": 2.44,
+   "text": "seconds."
+  },
+  {
+   "t": 985.96,
+   "d": 3.52,
+   "text": "So, uh we're able to take this and we"
+  },
+  {
+   "t": 989.48,
+   "d": 2.28,
+   "text": "really found it helpful to be able to"
+  },
+  {
+   "t": 991.76,
+   "d": 1.56,
+   "text": "push the system in a lot of different"
+  },
+  {
+   "t": 993.32,
+   "d": 1.32,
+   "text": "ways. We could"
+  },
+  {
+   "t": 994.64,
+   "d": 2.08,
+   "text": "increase numbers, turn booleans on and"
+  },
+  {
+   "t": 996.72,
+   "d": 3.16,
+   "text": "off, um just like change the effect the"
+  },
+  {
+   "t": 999.88,
+   "d": 2.84,
+   "text": "way any projectile or ability worked by"
+  },
+  {
+   "t": 1002.72,
+   "d": 1.8,
+   "text": "adding or subtracting or multiplying"
+  },
+  {
+   "t": 1004.52,
+   "d": 1.24,
+   "text": "these numbers."
+  },
+  {
+   "t": 1005.76,
+   "d": 2.44,
+   "text": "Uh this also resulted in like a good"
+  },
+  {
+   "t": 1008.2,
+   "d": 1.8,
+   "text": "amount of bugs, too, I think. Uh"
+  },
+  {
+   "t": 1010.0,
+   "d": 1.44,
+   "text": "unsurprisingly when you're dealing with"
+  },
+  {
+   "t": 1011.44,
+   "d": 2.96,
+   "text": "systems that um are supposed to be order"
+  },
+  {
+   "t": 1014.4,
+   "d": 3.72,
+   "text": "agnostic but aren't actually."
+  },
+  {
+   "t": 1018.12,
+   "d": 2.24,
+   "text": "Uh so, this is um a bug that was"
+  },
+  {
+   "t": 1020.36,
+   "d": 2.36,
+   "text": "reported where Dionysus which usually"
+  },
+  {
+   "t": 1022.72,
+   "d": 3.44,
+   "text": "creates a lingering fog of poison, uh if"
+  },
+  {
+   "t": 1026.16,
+   "d": 1.72,
+   "text": "you had a certain uh combination of"
+  },
+  {
+   "t": 1027.88,
+   "d": 3.0,
+   "text": "abilities uh with the shield, it instead"
+  },
+  {
+   "t": 1030.88,
+   "d": 2.0,
+   "text": "um detonate over and over again in this"
+  },
+  {
+   "t": 1032.88,
+   "d": 2.72,
+   "text": "like very like a very visually arresting"
+  },
+  {
+   "t": 1035.6,
+   "d": 1.72,
+   "text": "bug."
+  },
+  {
+   "t": 1037.32,
+   "d": 1.88,
+   "text": "Uh because it wasn't ordered correctly"
+  },
+  {
+   "t": 1039.2,
+   "d": 4.24,
+   "text": "after a certain sequence of events."
+  },
+  {
+   "t": 1043.68,
+   "d": 4.16,
+   "text": "I think in Hades, we really I think it's"
+  },
+  {
+   "t": 1047.84,
+   "d": 1.76,
+   "text": "it was a really fun to work on Hades"
+  },
+  {
+   "t": 1049.6,
+   "d": 1.88,
+   "text": "because I think with something as rich"
+  },
+  {
+   "t": 1051.48,
+   "d": 1.16,
+   "text": "as"
+  },
+  {
+   "t": 1052.64,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1053.44,
+   "d": 2.52,
+   "text": "the Greeks Greek gods and the Olympian"
+  },
+  {
+   "t": 1055.96,
+   "d": 2.24,
+   "text": "gods as well as like the son of Hades"
+  },
+  {
+   "t": 1058.2,
+   "d": 2.12,
+   "text": "finding his way out of hell, I think"
+  },
+  {
+   "t": 1060.32,
+   "d": 2.36,
+   "text": "we're able to do a lot of things with"
+  },
+  {
+   "t": 1062.68,
+   "d": 0.72,
+   "text": "um"
+  },
+  {
+   "t": 1063.4,
+   "d": 1.28,
+   "text": "we're able to do a lot of things in"
+  },
+  {
+   "t": 1064.68,
+   "d": 2.28,
+   "text": "parallel. I think having"
+  },
+  {
+   "t": 1066.96,
+   "d": 2.76,
+   "text": "uh for example, Zeus as a as an idea for"
+  },
+  {
+   "t": 1069.72,
+   "d": 2.52,
+   "text": "a god allows us allows a lot of art to"
+  },
+  {
+   "t": 1072.24,
+   "d": 2.6,
+   "text": "be spun up. Um has us mentally kind of"
+  },
+  {
+   "t": 1074.84,
+   "d": 2.28,
+   "text": "imagining a lot of things like what can"
+  },
+  {
+   "t": 1077.12,
+   "d": 2.4,
+   "text": "what does when you think about Zeus and"
+  },
+  {
+   "t": 1079.52,
+   "d": 1.8,
+   "text": "when you think about the powers that"
+  },
+  {
+   "t": 1081.32,
+   "d": 2.48,
+   "text": "Zeus grants you, what do you think of?"
+  },
+  {
+   "t": 1083.8,
+   "d": 2.2,
+   "text": "Um and then in the process of creating"
+  },
+  {
+   "t": 1086.0,
+   "d": 2.36,
+   "text": "those uh and implementing into the game,"
+  },
+  {
+   "t": 1088.36,
+   "d": 1.96,
+   "text": "usually when we play through the game,"
+  },
+  {
+   "t": 1090.32,
+   "d": 1.36,
+   "text": "you can sort of"
+  },
+  {
+   "t": 1091.68,
+   "d": 2.28,
+   "text": "imagine other systems and other ways"
+  },
+  {
+   "t": 1093.96,
+   "d": 2.68,
+   "text": "that like Zeusy abilities could be"
+  },
+  {
+   "t": 1096.64,
+   "d": 1.2,
+   "text": "expressed."
+  },
+  {
+   "t": 1097.84,
+   "d": 2.6,
+   "text": "Um such as like we had later on in the"
+  },
+  {
+   "t": 1100.44,
+   "d": 1.76,
+   "text": "game, we added an ability called wrath,"
+  },
+  {
+   "t": 1102.2,
+   "d": 1.36,
+   "text": "which is um"
+  },
+  {
+   "t": 1103.56,
+   "d": 2.28,
+   "text": "you would build up charge over several"
+  },
+  {
+   "t": 1105.84,
+   "d": 2.28,
+   "text": "over a over one chamber and be able to"
+  },
+  {
+   "t": 1108.12,
+   "d": 1.64,
+   "text": "expend it to call upon the aid of the"
+  },
+  {
+   "t": 1109.76,
+   "d": 2.0,
+   "text": "god. And we felt like Zeus probably"
+  },
+  {
+   "t": 1111.76,
+   "d": 1.48,
+   "text": "should have like"
+  },
+  {
+   "t": 1113.24,
+   "d": 2.96,
+   "text": "uh some abilities where"
+  },
+  {
+   "t": 1116.2,
+   "d": 2.2,
+   "text": "um that reflects that because he is like"
+  },
+  {
+   "t": 1118.4,
+   "d": 3.72,
+   "text": "famously in myth a very vengeful god."
+  },
+  {
+   "t": 1122.12,
+   "d": 2.36,
+   "text": "So, that was really um"
+  },
+  {
+   "t": 1124.48,
+   "d": 1.88,
+   "text": "we really enjoyed that part and we"
+  },
+  {
+   "t": 1126.36,
+   "d": 2.32,
+   "text": "really enjoyed the way that like this"
+  },
+  {
+   "t": 1128.68,
+   "d": 1.44,
+   "text": "um endless"
+  },
+  {
+   "t": 1130.12,
+   "d": 2.48,
+   "text": "uh water endless mill of content water"
+  },
+  {
+   "t": 1132.6,
+   "d": 1.8,
+   "text": "wheel of content just continued to feed"
+  },
+  {
+   "t": 1134.4,
+   "d": 1.64,
+   "text": "itself."
+  },
+  {
+   "t": 1136.04,
+   "d": 2.92,
+   "text": "Um of course uh all good things I think"
+  },
+  {
+   "t": 1138.96,
+   "d": 2.6,
+   "text": "eventually had to come to an end. Uh I"
+  },
+  {
+   "t": 1141.56,
+   "d": 2.12,
+   "text": "think towards the end of Hades, towards"
+  },
+  {
+   "t": 1143.68,
+   "d": 1.64,
+   "text": "the end of early access, we had to kind"
+  },
+  {
+   "t": 1145.32,
+   "d": 1.88,
+   "text": "of become a lot more selective about"
+  },
+  {
+   "t": 1147.2,
+   "d": 2.0,
+   "text": "where to expand our game."
+  },
+  {
+   "t": 1149.2,
+   "d": 1.88,
+   "text": "So, Gavin"
+  },
+  {
+   "t": 1151.08,
+   "d": 2.44,
+   "text": "um the programming lead on Hades kind of"
+  },
+  {
+   "t": 1153.52,
+   "d": 2.56,
+   "text": "has this really apt analogy. He says"
+  },
+  {
+   "t": 1156.08,
+   "d": 3.2,
+   "text": "it's the house of cards analogy. Where"
+  },
+  {
+   "t": 1159.28,
+   "d": 1.52,
+   "text": "at the very beginning of a game, you"
+  },
+  {
+   "t": 1160.8,
+   "d": 1.96,
+   "text": "kind of try to build that base as wide"
+  },
+  {
+   "t": 1162.76,
+   "d": 2.24,
+   "text": "as you can, but as you add things onto"
+  },
+  {
+   "t": 1165.0,
+   "d": 1.6,
+   "text": "it, you're always kind of building up"
+  },
+  {
+   "t": 1166.6,
+   "d": 2.0,
+   "text": "towards uh the top of the house of"
+  },
+  {
+   "t": 1168.6,
+   "d": 2.04,
+   "text": "cards. Your entropy is always going to"
+  },
+  {
+   "t": 1170.64,
+   "d": 1.0,
+   "text": "win."
+  },
+  {
+   "t": 1171.64,
+   "d": 1.8,
+   "text": "Uh so, I know that like in the"
+  },
+  {
+   "t": 1173.44,
+   "d": 3.0,
+   "text": "hypothetically platonic perfect sphere"
+  },
+  {
+   "t": 1176.44,
+   "d": 1.56,
+   "text": "of a game engine,"
+  },
+  {
+   "t": 1178.0,
+   "d": 0.6,
+   "text": "uh"
+  },
+  {
+   "t": 1178.6,
+   "d": 1.6,
+   "text": "we'll create an attribute or create a"
+  },
+  {
+   "t": 1180.2,
+   "d": 2.36,
+   "text": "number, like anything that um they"
+  },
+  {
+   "t": 1182.56,
+   "d": 2.44,
+   "text": "should always work in a vacuum, but that"
+  },
+  {
+   "t": 1185.0,
+   "d": 2.24,
+   "text": "was so very rarely the case with Hades,"
+  },
+  {
+   "t": 1187.24,
+   "d": 2.0,
+   "text": "especially towards the end when we had"
+  },
+  {
+   "t": 1189.24,
+   "d": 0.6,
+   "text": "um"
+  },
+  {
+   "t": 1189.84,
+   "d": 1.96,
+   "text": "all these gods, aspects, weapons,"
+  },
+  {
+   "t": 1191.8,
+   "d": 2.04,
+   "text": "hammers, and constantly just like"
+  },
+  {
+   "t": 1193.84,
+   "d": 2.24,
+   "text": "putting more ideas and more um effects"
+  },
+  {
+   "t": 1196.08,
+   "d": 1.84,
+   "text": "into the game."
+  },
+  {
+   "t": 1197.92,
+   "d": 1.52,
+   "text": "I think um"
+  },
+  {
+   "t": 1199.44,
+   "d": 1.68,
+   "text": "we had for example, like we had an"
+  },
+  {
+   "t": 1201.12,
+   "d": 1.96,
+   "text": "ability where you could clear a debuff,"
+  },
+  {
+   "t": 1203.08,
+   "d": 2.24,
+   "text": "deal bonus damage, and that in and of"
+  },
+  {
+   "t": 1205.32,
+   "d": 1.96,
+   "text": "itself caused a couple of knock-on bugs"
+  },
+  {
+   "t": 1207.28,
+   "d": 2.08,
+   "text": "where we had to change how debuff system"
+  },
+  {
+   "t": 1209.36,
+   "d": 1.56,
+   "text": "worked because we had never uh"
+  },
+  {
+   "t": 1210.92,
+   "d": 2.4,
+   "text": "anticipated having to clear one"
+  },
+  {
+   "t": 1213.32,
+   "d": 2.64,
+   "text": "uh conditionally ahead of time."
+  },
+  {
+   "t": 1215.96,
+   "d": 3.12,
+   "text": "But overall, um it was really uh a joy"
+  },
+  {
+   "t": 1219.08,
+   "d": 2.56,
+   "text": "to work on, and I think just like"
+  },
+  {
+   "t": 1221.64,
+   "d": 1.56,
+   "text": "carried a lot of really cool learnings"
+  },
+  {
+   "t": 1223.2,
+   "d": 2.04,
+   "text": "about how power builds up over the"
+  },
+  {
+   "t": 1225.24,
+   "d": 1.72,
+   "text": "course of a game and how to structure"
+  },
+  {
+   "t": 1226.96,
+   "d": 1.36,
+   "text": "it."
+  },
+  {
+   "t": 1228.32,
+   "d": 2.68,
+   "text": "Uh I think I wanted to first um"
+  },
+  {
+   "t": 1231.0,
+   "d": 1.0,
+   "text": "this is"
+  },
+  {
+   "t": 1232.0,
+   "d": 2.04,
+   "text": "nearing the conclusion of my talk. Uh I"
+  },
+  {
+   "t": 1234.04,
+   "d": 2.2,
+   "text": "wanted to say thanks to Josh Barnett, uh"
+  },
+  {
+   "t": 1236.24,
+   "d": 2.6,
+   "text": "who created this template for me to use."
+  },
+  {
+   "t": 1238.84,
+   "d": 2.12,
+   "text": "Uh the very many Roguelike Celebration"
+  },
+  {
+   "t": 1240.96,
+   "d": 1.96,
+   "text": "organizers, uh I think it is just like"
+  },
+  {
+   "t": 1242.92,
+   "d": 2.2,
+   "text": "an incredible space, um an incredible"
+  },
+  {
+   "t": 1245.12,
+   "d": 1.48,
+   "text": "event that happens annually that I"
+  },
+  {
+   "t": 1246.6,
+   "d": 1.6,
+   "text": "always look forward to."
+  },
+  {
+   "t": 1248.2,
+   "d": 1.84,
+   "text": "And I want to extend a special thank you"
+  },
+  {
+   "t": 1250.04,
+   "d": 2.04,
+   "text": "to Noah Schwartz, who had um"
+  },
+  {
+   "t": 1252.08,
+   "d": 2.2,
+   "text": "sent an email to me saying that um it"
+  },
+  {
+   "t": 1254.28,
+   "d": 2.0,
+   "text": "would be he would love for me to give a"
+  },
+  {
+   "t": 1256.28,
+   "d": 1.56,
+   "text": "presentation at the Roguelike"
+  },
+  {
+   "t": 1257.84,
+   "d": 1.96,
+   "text": "Celebration, without which I probably"
+  },
+  {
+   "t": 1259.8,
+   "d": 1.6,
+   "text": "wouldn't be here today."
+  },
+  {
+   "t": 1261.4,
+   "d": 3.44,
+   "text": "Uh giving a talk, not physically alive."
+  },
+  {
+   "t": 1264.84,
+   "d": 3.16,
+   "text": "Um Anyways, uh you can reach me at uh"
+  },
+  {
+   "t": 1268.0,
+   "d": 2.48,
+   "text": "alice@supergiantgames.com"
+  },
+  {
+   "t": 1270.48,
+   "d": 2.2,
+   "text": "um or at alanquilous, which is my"
+  },
+  {
+   "t": 1272.68,
+   "d": 1.88,
+   "text": "Twitter handle."
+  },
+  {
+   "t": 1274.56,
+   "d": 3.32,
+   "text": "Perfect. Thank you. Hi, I'm back."
+  },
+  {
+   "t": 1277.88,
+   "d": 0.76,
+   "text": "Great."
+  },
+  {
+   "t": 1278.64,
+   "d": 2.0,
+   "text": "Exciting talk and I am actually I'm"
+  },
+  {
+   "t": 1280.64,
+   "d": 1.88,
+   "text": "really glad that this is one where we"
+  },
+  {
+   "t": 1282.52,
+   "d": 1.4,
+   "text": "have time for questions because we have"
+  },
+  {
+   "t": 1283.92,
+   "d": 1.36,
+   "text": "I think more questions in the notebook"
+  },
+  {
+   "t": 1285.28,
+   "d": 2.12,
+   "text": "than we've gotten yet this conference."
+  },
+  {
+   "t": 1287.4,
+   "d": 1.16,
+   "text": "Oh my goodness."
+  },
+  {
+   "t": 1288.56,
+   "d": 1.28,
+   "text": "Yeah, everyone's got lots of things they"
+  },
+  {
+   "t": 1289.84,
+   "d": 2.8,
+   "text": "want to know. Um, so kicking it off,"
+  },
+  {
+   "t": 1292.64,
+   "d": 1.48,
+   "text": "Tuckleberry asked I think something you"
+  },
+  {
+   "t": 1294.12,
+   "d": 2.28,
+   "text": "started to touch on at the end is what"
+  },
+  {
+   "t": 1296.4,
+   "d": 2.0,
+   "text": "if any limitations did you set in order"
+  },
+  {
+   "t": 1298.4,
+   "d": 2.2,
+   "text": "to avoid specific boon combinations that"
+  },
+  {
+   "t": 1300.6,
+   "d": 2.76,
+   "text": "might be too OP? Like was that a were"
+  },
+  {
+   "t": 1303.36,
+   "d": 2.12,
+   "text": "there technical restraints, were there"
+  },
+  {
+   "t": 1305.48,
+   "d": 2.16,
+   "text": "design kind of razors that helped you"
+  },
+  {
+   "t": 1307.64,
+   "d": 1.8,
+   "text": "avoid kind of"
+  },
+  {
+   "t": 1309.44,
+   "d": 2.48,
+   "text": "overly powerful combinations?"
+  },
+  {
+   "t": 1311.92,
+   "d": 2.08,
+   "text": "I think some of it was uh"
+  },
+  {
+   "t": 1314.0,
+   "d": 2.0,
+   "text": "I think we"
+  },
+  {
+   "t": 1316.0,
+   "d": 1.48,
+   "text": "we kind of let our imaginations run"
+  },
+  {
+   "t": 1317.48,
+   "d": 1.56,
+   "text": "wild. I think towards the end it was"
+  },
+  {
+   "t": 1319.04,
+   "d": 3.12,
+   "text": "maybe partially helped by just like"
+  },
+  {
+   "t": 1322.16,
+   "d": 2.12,
+   "text": "um the system was kind of bulging at the"
+  },
+  {
+   "t": 1324.28,
+   "d": 1.68,
+   "text": "seams. There weren't many things that we"
+  },
+  {
+   "t": 1325.96,
+   "d": 2.24,
+   "text": "could um add. But I remember there's a"
+  },
+  {
+   "t": 1328.2,
+   "d": 2.4,
+   "text": "point where like Dionysus and Athena had"
+  },
+  {
+   "t": 1330.6,
+   "d": 1.8,
+   "text": "an ability that could just like cancel"
+  },
+  {
+   "t": 1332.4,
+   "d": 2.68,
+   "text": "any projectile that entered um"
+  },
+  {
+   "t": 1335.08,
+   "d": 1.92,
+   "text": "the tip she shot ability and I think"
+  },
+  {
+   "t": 1337.0,
+   "d": 1.12,
+   "text": "that"
+  },
+  {
+   "t": 1338.12,
+   "d": 1.04,
+   "text": "hm"
+  },
+  {
+   "t": 1339.16,
+   "d": 1.44,
+   "text": "I think we found out that that was"
+  },
+  {
+   "t": 1340.6,
+   "d": 2.56,
+   "text": "extremely overpowered very quickly. Um"
+  },
+  {
+   "t": 1343.16,
+   "d": 2.28,
+   "text": "we had a lot of help from early access"
+  },
+  {
+   "t": 1345.44,
+   "d": 1.76,
+   "text": "players were really passionate about"
+  },
+  {
+   "t": 1347.2,
+   "d": 1.96,
+   "text": "diving through the game and"
+  },
+  {
+   "t": 1349.16,
+   "d": 2.68,
+   "text": "I think it's something that we can't um"
+  },
+  {
+   "t": 1351.84,
+   "d": 1.6,
+   "text": "underestimate or understate enough is"
+  },
+  {
+   "t": 1353.44,
+   "d": 2.36,
+   "text": "just like how much the speed running and"
+  },
+  {
+   "t": 1355.8,
+   "d": 1.88,
+   "text": "the early access community helped Hades"
+  },
+  {
+   "t": 1357.68,
+   "d": 2.24,
+   "text": "with the development of it and just like"
+  },
+  {
+   "t": 1359.92,
+   "d": 3.08,
+   "text": "finding design holes or leaks where"
+  },
+  {
+   "t": 1363.0,
+   "d": 2.04,
+   "text": "things just like got way too powerful"
+  },
+  {
+   "t": 1365.04,
+   "d": 2.04,
+   "text": "way too quickly."
+  },
+  {
+   "t": 1367.08,
+   "d": 2.6,
+   "text": "For sure. Uh yeah, that ties nicely."
+  },
+  {
+   "t": 1369.68,
+   "d": 2.08,
+   "text": "Christian Liu asked more from like a"
+  },
+  {
+   "t": 1371.76,
+   "d": 2.16,
+   "text": "designer perspective if did the design"
+  },
+  {
+   "t": 1373.92,
+   "d": 2.64,
+   "text": "space you created between these boons"
+  },
+  {
+   "t": 1376.56,
+   "d": 1.44,
+   "text": "and different sources of upgrades ever"
+  },
+  {
+   "t": 1378.0,
+   "d": 2.04,
+   "text": "become unmanageable? Were there any kind"
+  },
+  {
+   "t": 1380.04,
+   "d": 2.84,
+   "text": "of tricks for managing this increasingly"
+  },
+  {
+   "t": 1382.88,
+   "d": 2.04,
+   "text": "large design space of all the sources of"
+  },
+  {
+   "t": 1384.92,
+   "d": 1.36,
+   "text": "possible"
+  },
+  {
+   "t": 1386.28,
+   "d": 1.64,
+   "text": "um boons, all of the different kind of"
+  },
+  {
+   "t": 1387.92,
+   "d": 2.04,
+   "text": "things they would be able to do. Like"
+  },
+  {
+   "t": 1389.96,
+   "d": 1.56,
+   "text": "how to keep on effectively working in"
+  },
+  {
+   "t": 1391.52,
+   "d": 1.92,
+   "text": "the space when it got that big."
+  },
+  {
+   "t": 1393.44,
+   "d": 2.52,
+   "text": "Yeah, absolutely. I think um one part I"
+  },
+  {
+   "t": 1395.96,
+   "d": 2.44,
+   "text": "think was helpful was starting with the"
+  },
+  {
+   "t": 1398.4,
+   "d": 1.8,
+   "text": "silos that we kind of discussed earlier."
+  },
+  {
+   "t": 1400.2,
+   "d": 2.04,
+   "text": "Kind of like is this kind of a god boon?"
+  },
+  {
+   "t": 1402.24,
+   "d": 2.72,
+   "text": "Is this more of a hammer boon? Like uh"
+  },
+  {
+   "t": 1404.96,
+   "d": 1.84,
+   "text": "we can't have thing that does like"
+  },
+  {
+   "t": 1406.8,
+   "d": 1.8,
+   "text": "reaches across or breaks free of these"
+  },
+  {
+   "t": 1408.6,
+   "d": 2.52,
+   "text": "silos um because then it just become"
+  },
+  {
+   "t": 1411.12,
+   "d": 1.6,
+   "text": "unmanageable. Like we can't have a god"
+  },
+  {
+   "t": 1412.72,
+   "d": 1.84,
+   "text": "boon that changes your secondary attack"
+  },
+  {
+   "t": 1414.56,
+   "d": 3.32,
+   "text": "and adds like a special debuff to it. Uh"
+  },
+  {
+   "t": 1417.88,
+   "d": 1.36,
+   "text": "it's best to split that up into"
+  },
+  {
+   "t": 1419.24,
+   "d": 1.96,
+   "text": "something that adds uh a debuff that can"
+  },
+  {
+   "t": 1421.2,
+   "d": 2.32,
+   "text": "stand on its own and a special secondary"
+  },
+  {
+   "t": 1423.52,
+   "d": 1.76,
+   "text": "attack that can be slotted into a weapon"
+  },
+  {
+   "t": 1425.28,
+   "d": 1.92,
+   "text": "or an aspect or something."
+  },
+  {
+   "t": 1427.2,
+   "d": 1.88,
+   "text": "Uh we also had a pretty like strict"
+  },
+  {
+   "t": 1429.08,
+   "d": 2.24,
+   "text": "filtering system. We had a lot of like"
+  },
+  {
+   "t": 1431.32,
+   "d": 1.96,
+   "text": "brainstorming uh but after the"
+  },
+  {
+   "t": 1433.28,
+   "d": 1.88,
+   "text": "brainstorm we had to like really look at"
+  },
+  {
+   "t": 1435.16,
+   "d": 2.08,
+   "text": "an item and I think uh"
+  },
+  {
+   "t": 1437.24,
+   "d": 2.52,
+   "text": "I think when Amir, the uh design lead of"
+  },
+  {
+   "t": 1439.76,
+   "d": 2.16,
+   "text": "Supergiant, and I sat down to look at"
+  },
+  {
+   "t": 1441.92,
+   "d": 1.8,
+   "text": "these boons. We rated them on both like"
+  },
+  {
+   "t": 1443.72,
+   "d": 2.64,
+   "text": "a this will be really cool. Like um it"
+  },
+  {
+   "t": 1446.36,
+   "d": 1.68,
+   "text": "would be really cool to have like a"
+  },
+  {
+   "t": 1448.04,
+   "d": 1.72,
+   "text": "ability that like froze you in a block"
+  },
+  {
+   "t": 1449.76,
+   "d": 1.4,
+   "text": "of ice and made you invulnerable to"
+  },
+  {
+   "t": 1451.16,
+   "d": 3.52,
+   "text": "damage. Um but like how would that like"
+  },
+  {
+   "t": 1454.68,
+   "d": 2.12,
+   "text": "how effective how easy would that be to"
+  },
+  {
+   "t": 1456.8,
+   "d": 2.44,
+   "text": "implement? Like does that fit in with"
+  },
+  {
+   "t": 1459.24,
+   "d": 2.24,
+   "text": "like the gameplay of Hades? Like is it"
+  },
+  {
+   "t": 1461.48,
+   "d": 1.96,
+   "text": "okay to self-stun yourself for like 3"
+  },
+  {
+   "t": 1463.44,
+   "d": 1.16,
+   "text": "seconds?"
+  },
+  {
+   "t": 1464.6,
+   "d": 0.72,
+   "text": "Uh"
+  },
+  {
+   "t": 1465.32,
+   "d": 1.88,
+   "text": "and we ultimately was like we can't"
+  },
+  {
+   "t": 1467.2,
+   "d": 1.6,
+   "text": "really make this fit in like the"
+  },
+  {
+   "t": 1468.8,
+   "d": 1.88,
+   "text": "fast-paced gameplay for so we'll have to"
+  },
+  {
+   "t": 1470.68,
+   "d": 1.8,
+   "text": "discard it. But it's something that's"
+  },
+  {
+   "t": 1472.48,
+   "d": 2.52,
+   "text": "like we shelved and we come back to. I"
+  },
+  {
+   "t": 1475.0,
+   "d": 1.68,
+   "text": "think um"
+  },
+  {
+   "t": 1476.68,
+   "d": 1.4,
+   "text": "it's really funny you mentioned that"
+  },
+  {
+   "t": 1478.08,
+   "d": 1.16,
+   "text": "because I think something that we did in"
+  },
+  {
+   "t": 1479.24,
+   "d": 2.44,
+   "text": "Hades over and over again, we tried to"
+  },
+  {
+   "t": 1481.68,
+   "d": 2.48,
+   "text": "make an active parry system. Uh and I"
+  },
+  {
+   "t": 1484.16,
+   "d": 1.44,
+   "text": "think we we tried to make this active"
+  },
+  {
+   "t": 1485.6,
+   "d": 1.76,
+   "text": "parry system work like"
+  },
+  {
+   "t": 1487.36,
+   "d": 2.8,
+   "text": "so many times. We it was like okay, but"
+  },
+  {
+   "t": 1490.16,
+   "d": 2.52,
+   "text": "like what if this time uh instead of"
+  },
+  {
+   "t": 1492.68,
+   "d": 1.44,
+   "text": "having to do it at the right moment you"
+  },
+  {
+   "t": 1494.12,
+   "d": 1.92,
+   "text": "had like a a buff that lasted for a"
+  },
+  {
+   "t": 1496.04,
+   "d": 1.84,
+   "text": "quarter of a second during which like"
+  },
+  {
+   "t": 1497.88,
+   "d": 1.64,
+   "text": "you could deflect any damage. And it"
+  },
+  {
+   "t": 1499.52,
+   "d": 2.28,
+   "text": "just like we kept bouncing off of it. I"
+  },
+  {
+   "t": 1501.8,
+   "d": 1.04,
+   "text": "think at some point we're going to"
+  },
+  {
+   "t": 1502.84,
+   "d": 1.76,
+   "text": "figure it out, but um"
+  },
+  {
+   "t": 1504.6,
+   "d": 1.32,
+   "text": "just like a lot of like internal"
+  },
+  {
+   "t": 1505.92,
+   "d": 2.28,
+   "text": "playtesting and just like uh"
+  },
+  {
+   "t": 1508.2,
+   "d": 1.52,
+   "text": "and input from the design and"
+  },
+  {
+   "t": 1509.72,
+   "d": 2.04,
+   "text": "programming side of things uh helped"
+  },
+  {
+   "t": 1511.76,
+   "d": 2.76,
+   "text": "like uh trim things down."
+  },
+  {
+   "t": 1514.52,
+   "d": 1.52,
+   "text": "Yeah, that that's funny and I think"
+  },
+  {
+   "t": 1516.04,
+   "d": 2.68,
+   "text": "yeah, it probably is a a sign of design"
+  },
+  {
+   "t": 1518.72,
+   "d": 1.84,
+   "text": "maturity as a team to be able to like"
+  },
+  {
+   "t": 1520.56,
+   "d": 1.64,
+   "text": "admit when something's just not clicking"
+  },
+  {
+   "t": 1522.2,
+   "d": 1.88,
+   "text": "even if you keep coming back to it. Um"
+  },
+  {
+   "t": 1524.08,
+   "d": 0.64,
+   "text": "Mhm."
+  },
+  {
+   "t": 1524.72,
+   "d": 1.04,
+   "text": "I'm curious too, it sounds like there"
+  },
+  {
+   "t": 1525.76,
+   "d": 2.96,
+   "text": "was maybe a process as well where um"
+  },
+  {
+   "t": 1528.72,
+   "d": 1.76,
+   "text": "the process of kind of putting together"
+  },
+  {
+   "t": 1530.48,
+   "d": 1.84,
+   "text": "an idea for a new boon or pitching it"
+  },
+  {
+   "t": 1532.32,
+   "d": 1.48,
+   "text": "might be something that you know,"
+  },
+  {
+   "t": 1533.8,
+   "d": 1.2,
+   "text": "someone does as more of like an"
+  },
+  {
+   "t": 1535.0,
+   "d": 1.56,
+   "text": "individual or something like that, but"
+  },
+  {
+   "t": 1536.56,
+   "d": 1.68,
+   "text": "then there's a team-wide process to kind"
+  },
+  {
+   "t": 1538.24,
+   "d": 1.76,
+   "text": "of take that to the design lead and"
+  },
+  {
+   "t": 1540.0,
+   "d": 1.68,
+   "text": "evaluate that. Like is that accurate"
+  },
+  {
+   "t": 1541.68,
+   "d": 2.0,
+   "text": "that there was a bit too of like one"
+  },
+  {
+   "t": 1543.68,
+   "d": 1.44,
+   "text": "person doesn't necessarily have to have"
+  },
+  {
+   "t": 1545.12,
+   "d": 1.52,
+   "text": "everything in mind because there will be"
+  },
+  {
+   "t": 1546.64,
+   "d": 1.6,
+   "text": "a distinction between coming up with the"
+  },
+  {
+   "t": 1548.24,
+   "d": 2.24,
+   "text": "idea and then seeing if it fits into the"
+  },
+  {
+   "t": 1550.48,
+   "d": 1.36,
+   "text": "greater picture?"
+  },
+  {
+   "t": 1551.84,
+   "d": 2.6,
+   "text": "Mhm. Absolutely. I think um I think we"
+  },
+  {
+   "t": 1554.44,
+   "d": 1.76,
+   "text": "we have these things called like we had"
+  },
+  {
+   "t": 1556.2,
+   "d": 1.64,
+   "text": "these things called like boon storms"
+  },
+  {
+   "t": 1557.84,
+   "d": 2.4,
+   "text": "where like uh like the design team would"
+  },
+  {
+   "t": 1560.24,
+   "d": 1.48,
+   "text": "we'd have like this"
+  },
+  {
+   "t": 1561.72,
+   "d": 2.56,
+   "text": "um ex- not Excel, Google Sheets"
+  },
+  {
+   "t": 1564.28,
+   "d": 1.88,
+   "text": "spreadsheet and you just have like,"
+  },
+  {
+   "t": 1566.16,
+   "d": 2.2,
+   "text": "\"Okay, we want like a secondary uh"
+  },
+  {
+   "t": 1568.36,
+   "d": 3.52,
+   "text": "special modifier, a dash modifier, um"
+  },
+  {
+   "t": 1571.88,
+   "d": 2.0,
+   "text": "just like list anything and everything"
+  },
+  {
+   "t": 1573.88,
+   "d": 1.28,
+   "text": "that comes to mind when you would think"
+  },
+  {
+   "t": 1575.16,
+   "d": 2.44,
+   "text": "about Dionysus.\" And I think there'll be"
+  },
+  {
+   "t": 1577.6,
+   "d": 0.64,
+   "text": "um"
+  },
+  {
+   "t": 1578.24,
+   "d": 1.64,
+   "text": "a lot of spaghetti on the wall, so to"
+  },
+  {
+   "t": 1579.88,
+   "d": 2.68,
+   "text": "speak, uh that covered like every single"
+  },
+  {
+   "t": 1582.56,
+   "d": 2.6,
+   "text": "aspect of Dionysus from like the um from"
+  },
+  {
+   "t": 1585.16,
+   "d": 2.92,
+   "text": "like Bacchanals to like satyrs to like"
+  },
+  {
+   "t": 1588.08,
+   "d": 0.56,
+   "text": "um"
+  },
+  {
+   "t": 1588.64,
+   "d": 1.32,
+   "text": "uh like"
+  },
+  {
+   "t": 1589.96,
+   "d": 2.0,
+   "text": "uh to wine and I think we just like"
+  },
+  {
+   "t": 1591.96,
+   "d": 2.36,
+   "text": "filter that down over time to like what"
+  },
+  {
+   "t": 1594.32,
+   "d": 1.68,
+   "text": "we thought was a cool a really good"
+  },
+  {
+   "t": 1596.0,
+   "d": 2.16,
+   "text": "strong core identity while retaining"
+  },
+  {
+   "t": 1598.16,
+   "d": 2.48,
+   "text": "these like flourishes. I think for our"
+  },
+  {
+   "t": 1600.64,
+   "d": 3.12,
+   "text": "game, Poseidon, um Poseidon and Hades is"
+  },
+  {
+   "t": 1603.76,
+   "d": 1.8,
+   "text": "primarily a knockback-based god, like"
+  },
+  {
+   "t": 1605.56,
+   "d": 1.36,
+   "text": "all of his ability A lot of his"
+  },
+  {
+   "t": 1606.92,
+   "d": 2.2,
+   "text": "abilities interacts with like"
+  },
+  {
+   "t": 1609.12,
+   "d": 2.08,
+   "text": "um slamming people against walls or the"
+  },
+  {
+   "t": 1611.2,
+   "d": 2.44,
+   "text": "ocean, like kind of thematically. But, I"
+  },
+  {
+   "t": 1613.64,
+   "d": 1.36,
+   "text": "think something that was really funny"
+  },
+  {
+   "t": 1615.0,
+   "d": 3.12,
+   "text": "that arose out of this was also um"
+  },
+  {
+   "t": 1618.12,
+   "d": 1.88,
+   "text": "I think internally we call Poseidon like"
+  },
+  {
+   "t": 1620.0,
+   "d": 1.72,
+   "text": "the god of like giving you stuff he"
+  },
+  {
+   "t": 1621.72,
+   "d": 2.52,
+   "text": "found in his couch, uh because he's the"
+  },
+  {
+   "t": 1624.24,
+   "d": 1.64,
+   "text": "he's the god of the sea, so he's just"
+  },
+  {
+   "t": 1625.88,
+   "d": 1.52,
+   "text": "like, \"I found some stuff. Like, here"
+  },
+  {
+   "t": 1627.4,
+   "d": 3.28,
+   "text": "you go.\" Um so, an interesting like side"
+  },
+  {
+   "t": 1630.68,
+   "d": 2.16,
+   "text": "branch off of Poseidon, and that one"
+  },
+  {
+   "t": 1632.84,
+   "d": 1.68,
+   "text": "that we felt was like thematically and"
+  },
+  {
+   "t": 1634.52,
+   "d": 1.88,
+   "text": "like uh"
+  },
+  {
+   "t": 1636.4,
+   "d": 1.96,
+   "text": "narratively fun was that like he would"
+  },
+  {
+   "t": 1638.36,
+   "d": 2.36,
+   "text": "also just like give you random stuff um"
+  },
+  {
+   "t": 1640.72,
+   "d": 2.6,
+   "text": "as part of his like uh duo boons, or his"
+  },
+  {
+   "t": 1643.32,
+   "d": 1.84,
+   "text": "like primary boons."
+  },
+  {
+   "t": 1645.16,
+   "d": 1.64,
+   "text": "That's really fun. And yeah, the mix of"
+  },
+  {
+   "t": 1646.8,
+   "d": 2.04,
+   "text": "the narrative and the the gameplay. I I"
+  },
+  {
+   "t": 1648.84,
+   "d": 1.44,
+   "text": "want to sit in on a boon storm. That"
+  },
+  {
+   "t": 1650.28,
+   "d": 2.92,
+   "text": "sounds extremely fun."
+  },
+  {
+   "t": 1653.2,
+   "d": 0.76,
+   "text": "Uh"
+  },
+  {
+   "t": 1653.96,
+   "d": 1.8,
+   "text": "another question from Bolthazar, how did"
+  },
+  {
+   "t": 1655.76,
+   "d": 2.2,
+   "text": "you arrive at that magic number of nine"
+  },
+  {
+   "t": 1657.96,
+   "d": 3.16,
+   "text": "or or similar kind of values? And uh how"
+  },
+  {
+   "t": 1661.12,
+   "d": 1.64,
+   "text": "do you suggest avoiding having so many"
+  },
+  {
+   "t": 1662.76,
+   "d": 2.32,
+   "text": "abilities that end up having every run"
+  },
+  {
+   "t": 1665.08,
+   "d": 2.48,
+   "text": "just being chaotic?"
+  },
+  {
+   "t": 1667.56,
+   "d": 2.08,
+   "text": "Yeah, and I think um I think it's really"
+  },
+  {
+   "t": 1669.64,
+   "d": 1.12,
+   "text": "interesting because I think that's a"
+  },
+  {
+   "t": 1670.76,
+   "d": 1.88,
+   "text": "wonderful question. Um I think the magic"
+  },
+  {
+   "t": 1672.64,
+   "d": 1.92,
+   "text": "number nine is um internally we had a"
+  },
+  {
+   "t": 1674.56,
+   "d": 1.84,
+   "text": "couple play tests over and over again. I"
+  },
+  {
+   "t": 1676.4,
+   "d": 2.08,
+   "text": "think um I have to credit Amir with"
+  },
+  {
+   "t": 1678.48,
+   "d": 2.16,
+   "text": "discovering this magic number."
+  },
+  {
+   "t": 1680.64,
+   "d": 2.36,
+   "text": "Uh just like to see like how many like"
+  },
+  {
+   "t": 1683.0,
+   "d": 2.84,
+   "text": "what is the minimum amount minimum"
+  },
+  {
+   "t": 1685.84,
+   "d": 1.8,
+   "text": "number that we can offer to a player"
+  },
+  {
+   "t": 1687.64,
+   "d": 2.2,
+   "text": "that it doesn't feel like uh the same"
+  },
+  {
+   "t": 1689.84,
+   "d": 1.96,
+   "text": "over and over again. And I think what is"
+  },
+  {
+   "t": 1691.8,
+   "d": 2.2,
+   "text": "really important about um not"
+  },
+  {
+   "t": 1694.0,
+   "d": 2.12,
+   "text": "overwhelming the player is that we kind"
+  },
+  {
+   "t": 1696.12,
+   "d": 1.36,
+   "text": "of have these"
+  },
+  {
+   "t": 1697.48,
+   "d": 1.4,
+   "text": "um"
+  },
+  {
+   "t": 1698.88,
+   "d": 1.88,
+   "text": "we do have these like bumpers up in"
+  },
+  {
+   "t": 1700.76,
+   "d": 1.64,
+   "text": "terms of Hades. Like, you will you won't"
+  },
+  {
+   "t": 1702.4,
+   "d": 2.32,
+   "text": "see more than like two or three hammers"
+  },
+  {
+   "t": 1704.72,
+   "d": 1.12,
+   "text": "per game."
+  },
+  {
+   "t": 1705.84,
+   "d": 2.0,
+   "text": "Uh you won't see more than four gods per"
+  },
+  {
+   "t": 1707.84,
+   "d": 2.92,
+   "text": "game. Uh unless you like game the system"
+  },
+  {
+   "t": 1710.76,
+   "d": 2.2,
+   "text": "with keepsakes or something. Um and"
+  },
+  {
+   "t": 1712.96,
+   "d": 2.56,
+   "text": "you'll on average get like uh I don't"
+  },
+  {
+   "t": 1715.52,
+   "d": 1.4,
+   "text": "know the exact number, but you'll get"
+  },
+  {
+   "t": 1716.92,
+   "d": 1.92,
+   "text": "I'm just going to say X. Uh you'll get X"
+  },
+  {
+   "t": 1718.84,
+   "d": 1.68,
+   "text": "number of gods, you'll get at most two"
+  },
+  {
+   "t": 1720.52,
+   "d": 1.96,
+   "text": "or three hammers, um you'll get at most"
+  },
+  {
+   "t": 1722.48,
+   "d": 2.32,
+   "text": "two Hermes boons. And in this case,"
+  },
+  {
+   "t": 1724.8,
+   "d": 1.32,
+   "text": "because each of these we kind of"
+  },
+  {
+   "t": 1726.12,
+   "d": 1.6,
+   "text": "conceptualize as like"
+  },
+  {
+   "t": 1727.72,
+   "d": 2.28,
+   "text": "Hermes booms make your player better, uh"
+  },
+  {
+   "t": 1730.0,
+   "d": 1.88,
+   "text": "um hammers make your weapon better, gods"
+  },
+  {
+   "t": 1731.88,
+   "d": 1.12,
+   "text": "add like these like additional"
+  },
+  {
+   "t": 1733.0,
+   "d": 1.28,
+   "text": "abilities."
+  },
+  {
+   "t": 1734.28,
+   "d": 2.2,
+   "text": "Um we can get a pretty good slice of"
+  },
+  {
+   "t": 1736.48,
+   "d": 3.28,
+   "text": "like how how either wide or deep the"
+  },
+  {
+   "t": 1739.76,
+   "d": 2.68,
+   "text": "player can go by the end of the game. Um"
+  },
+  {
+   "t": 1742.44,
+   "d": 1.56,
+   "text": "so"
+  },
+  {
+   "t": 1744.0,
+   "d": 2.12,
+   "text": "I think this avoids some of the issues"
+  },
+  {
+   "t": 1746.12,
+   "d": 2.4,
+   "text": "um in other games where it's like"
+  },
+  {
+   "t": 1748.52,
+   "d": 1.84,
+   "text": "uh I mean and not perfectly. I think you"
+  },
+  {
+   "t": 1750.36,
+   "d": 1.64,
+   "text": "can still get the out with like a couple"
+  },
+  {
+   "t": 1752.0,
+   "d": 2.16,
+   "text": "of Zeus Zeus builds where like things"
+  },
+  {
+   "t": 1754.16,
+   "d": 1.64,
+   "text": "are just flashing exploding all over the"
+  },
+  {
+   "t": 1755.8,
+   "d": 1.28,
+   "text": "screen and you're not really sure what's"
+  },
+  {
+   "t": 1757.08,
+   "d": 3.4,
+   "text": "going on. Uh but it's a little bit um"
+  },
+  {
+   "t": 1760.48,
+   "d": 1.68,
+   "text": "less prevalent hopefully."
+  },
+  {
+   "t": 1762.16,
+   "d": 0.24,
+   "text": "Yeah."
+  },
+  {
+   "t": 1762.4,
+   "d": 2.0,
+   "text": "Uh than just like uh when I right click"
+  },
+  {
+   "t": 1764.4,
+   "d": 2.08,
+   "text": "a fire mortars that fire like homing"
+  },
+  {
+   "t": 1766.48,
+   "d": 1.72,
+   "text": "missiles when they hit a wall and those"
+  },
+  {
+   "t": 1768.2,
+   "d": 1.6,
+   "text": "homing missiles apply a damage over time"
+  },
+  {
+   "t": 1769.8,
+   "d": 1.72,
+   "text": "effect that causes enemies to explode"
+  },
+  {
+   "t": 1771.52,
+   "d": 1.96,
+   "text": "when they die into like goblins."
+  },
+  {
+   "t": 1773.48,
+   "d": 0.32,
+   "text": "Right."
+  },
+  {
+   "t": 1773.8,
+   "d": 2.12,
+   "text": "Uh"
+  },
+  {
+   "t": 1775.92,
+   "d": 2.2,
+   "text": "Yeah, fun fun but chaotic. Yeah, that's"
+  },
+  {
+   "t": 1778.12,
+   "d": 1.72,
+   "text": "excellent. Yeah, I think and I'll I'll"
+  },
+  {
+   "t": 1779.84,
+   "d": 1.84,
+   "text": "give one last um"
+  },
+  {
+   "t": 1781.68,
+   "d": 1.68,
+   "text": "kind of give me question. I think the"
+  },
+  {
+   "t": 1783.36,
+   "d": 2.2,
+   "text": "fact you mentioned being a DCS SS fan"
+  },
+  {
+   "t": 1785.56,
+   "d": 1.68,
+   "text": "was something that people were excited"
+  },
+  {
+   "t": 1787.24,
+   "d": 1.4,
+   "text": "about. Um"
+  },
+  {
+   "t": 1788.64,
+   "d": 2.4,
+   "text": "what's your favorite DCS SS god?"
+  },
+  {
+   "t": 1791.04,
+   "d": 1.72,
+   "text": "Oh my gosh. Uh"
+  },
+  {
+   "t": 1792.76,
+   "d": 2.84,
+   "text": "you know, it's"
+  },
+  {
+   "t": 1795.92,
+   "d": 1.6,
+   "text": "Uh I I think they're really cool. I"
+  },
+  {
+   "t": 1797.52,
+   "d": 1.84,
+   "text": "think I really like um"
+  },
+  {
+   "t": 1799.36,
+   "d": 3.4,
+   "text": "Sh- I don't Shedabro? Sheda- Sheda-"
+  },
+  {
+   "t": 1802.76,
+   "d": 0.24,
+   "text": "Shedabro?"
+  },
+  {
+   "t": 1803.0,
+   "d": 1.8,
+   "text": "Shedabro's like the"
+  },
+  {
+   "t": 1804.8,
+   "d": 2.4,
+   "text": "Yeah, Shedabro's or the um"
+  },
+  {
+   "t": 1807.2,
+   "d": 1.76,
+   "text": "uh the divination god that had forces"
+  },
+  {
+   "t": 1808.96,
+   "d": 2.48,
+   "text": "you to like curse your um"
+  },
+  {
+   "t": 1811.44,
+   "d": 1.28,
+   "text": "curse your item slots or the"
+  },
+  {
+   "t": 1812.72,
+   "d": 1.28,
+   "text": "Yeah, like the shattered? Is that the"
+  },
+  {
+   "t": 1814.0,
+   "d": 1.04,
+   "text": "shattered one?"
+  },
+  {
+   "t": 1815.04,
+   "d": 1.12,
+   "text": "I I don't think"
+  },
+  {
+   "t": 1816.16,
+   "d": 1.76,
+   "text": "so. There's I think it had a"
+  },
+  {
+   "t": 1817.92,
+   "d": 3.44,
+   "text": "Ashen sorry. Chaos in the back. Chaos"
+  },
+  {
+   "t": 1821.36,
+   "d": 2.04,
+   "text": "is the subject expert. Thank you, Chaos."
+  },
+  {
+   "t": 1823.4,
+   "d": 1.28,
+   "text": "Yes, Ashen sorry."
+  },
+  {
+   "t": 1824.68,
+   "d": 1.6,
+   "text": "I was very happy when Ashen sorry let"
+  },
+  {
+   "t": 1826.28,
+   "d": 2.92,
+   "text": "you um I think curse your your hands"
+  },
+  {
+   "t": 1829.2,
+   "d": 2.0,
+   "text": "just so um for unarmed cuz I think a"
+  },
+  {
+   "t": 1831.2,
+   "d": 2.72,
+   "text": "monk I really enjoyed unarmed play"
+  },
+  {
+   "t": 1833.92,
+   "d": 2.96,
+   "text": "unarmed games. Uh unarmed builds rather."
+  },
+  {
+   "t": 1836.88,
+   "d": 1.92,
+   "text": "So as a monk I was happy that I was able"
+  },
+  {
+   "t": 1838.8,
+   "d": 2.28,
+   "text": "to benefit from uh their abilities as"
+  },
+  {
+   "t": 1841.08,
+   "d": 0.52,
+   "text": "well."
+  },
+  {
+   "t": 1841.6,
+   "d": 1.84,
+   "text": "Excellent. All right. Well, thank you so"
+  },
+  {
+   "t": 1843.44,
+   "d": 1.88,
+   "text": "much, Alice. This is a wonderful talk"
+  },
+  {
+   "t": 1845.32,
+   "d": 2.0,
+   "text": "and yeah, wonderful to have you. I hope"
+  },
+  {
+   "t": 1847.32,
+   "d": 2.8,
+   "text": "that we'll see you at future events and"
+  },
+  {
+   "t": 1850.12,
+   "d": 3.92,
+   "text": "yeah, enjoy the rest of the conference."
+  }
+ ]
+}

@@ -1,0 +1,189 @@
+{
+  "id": "BjqZdMW8U9Q",
+  "title": "Professor \"Prof\" Brown - Why do I even like roguelikes? An exploration of player motivation",
+  "speaker": "Lisa Brown",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=BjqZdMW8U9Q",
+  "talk_type": "design",
+  "summary": "Game designer Lisa Brown (the transcript header labels the talk 'Professor \"Prof\" Brown', but she introduces herself as Lisa Brown) asks why roguelikes, described to her by their mechanics (hard, procedural, permadeath), sounded terrible yet became favourites. She analyses her own Quantic Foundry Gamer Motivation Profile scores against the roguelikes that stuck (Nuclear Throne, Slay the Spire, Loot Rascals) and those that bounced (Enter the Gungeon, FTL, Into the Breach, Rogue Legacy, original Rogue, Road Not Taken). Her argument is that player motivation, not genre features, explains which roguelikes click: for her that means drama, fast failure loops, visible outcomes, a few reactive choices, short time horizons, exposed rules and simple builds. She closes that disliking a well-designed game just means it serves a different motivation.",
+  "games": [
+    "Nuclear Throne",
+    "Slay the Spire",
+    "Loot Rascals",
+    "Enter the Gungeon",
+    "Celeste",
+    "Rogue",
+    "FTL: Faster Than Light",
+    "Into the Breach",
+    "Crusader Kings",
+    "The Story Goes On",
+    "Road Not Taken",
+    "Rogue Legacy",
+    "Hades",
+    "Dungeon Crawl Stone Soup",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "describing roguelikes",
+      "kind": "warning",
+      "claim": "Describing roguelikes by their mechanics (very hard, constant failure, procedural dungeons, permadeath) can repel the very players who would love them, because it says nothing about the experience.",
+      "detail": "Brown wrote off roguelikes for years after hearing them described this way, then found they became favourites. A Twitter poll showed players still describe the genre by features (run-based, randomness, permadeath, limited carryover, exploring the unknown), which she says wasn't enough for her past self.",
+      "t": 230,
+      "quote": "These descriptions were focusing on the mechanics and features of the game themselves but that wasn't enough for past Lisa",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player motivation",
+      "kind": "technique",
+      "claim": "The Quantic Foundry Gamer Motivation Profile, with six primary motivations each split into two secondaries, can be used to explain why particular roguelikes stick with a particular player.",
+      "detail": "The primaries are action, social, mastery, achievement, immersion and creativity. Scores are percentiles on a spectrum, so a very low score is as extreme a preference as a very high one; low action means any stress in a game puts you off.",
+      "t": 387,
+      "quote": "If you have a low score in something, it doesn't mean you lack that thing. It just means a different end of the spectrum motivates you",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "lethality",
+      "kind": "principle",
+      "claim": "Even turn-based roguelikes like Slay the Spire and Loot Rascals satisfy action-motivated players through drama: stakes stacked against you, high lethality and no free fights.",
+      "detail": "Brown says any enemy can be dangerous, even a humble maggot, and the feeling of being overwhelmed and on your toes is satisfying to her.",
+      "t": 540,
+      "quote": "the stakes are really against you. Lethality is really high. There is no freebies. Any enemy can be dangerous",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "failure loop",
+      "kind": "principle",
+      "claim": "A fast failure loop, the time from death back into play, makes a roguelike stickier; Nuclear Throne gets you back in about five seconds while Enter the Gungeon's longer death sequence made it less sticky for Brown.",
+      "detail": "She measured over ten seconds for Enter the Gungeon versus about five for Nuclear Throne, and compares this to Celeste, which gives just enough time to register the mistake before you are back in action.",
+      "t": 568,
+      "quote": "Slower failure loops make a game less sticky for me. I think this is one of the reasons enter the guneon didn't stick for me",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "feedback",
+      "kind": "principle",
+      "claim": "Intensity comes from seeing the outcome of your decisions immediately; original Rogue's text-only combat feedback forced players to watch their health to understand danger, which lacked intensity for Brown.",
+      "detail": "In Nuclear Throne outcomes are constantly visible; in Slay the Spire it is seeing your hand and registering trouble; in Loot Rascals watching a fight play out. Rogue's combat text didn't register quickly enough.",
+      "t": 683,
+      "quote": "When you are in combat, you have a text description of what's going on but you have to pay attention to your health",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "principle",
+      "claim": "Randomness satisfies the desire to be surprised and improvise, as when a mid-run relic in Slay the Spire forces a rethink of the whole build.",
+      "detail": "Brown lists improvisation and surprise as her final action-related motivation, served by random rewards that change plans.",
+      "t": 719,
+      "quote": "If I get a relic in the middle of my run that can make me rethink the entire build that's a satisfying experiment",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "reward choices",
+      "kind": "principle",
+      "claim": "Players with low strategy motivation prefer roguelikes offering a small number of meaningful, reactive decisions at regular points, such as Nuclear Throne's mutation pick or Slay the Spire's post-combat card choice.",
+      "detail": "In Loot Rascals it is arranging attack and defence cards with each drop. This gives a sense of strategy without heavy cognitive load; FTL bounced off Brown because its cognitive load was higher.",
+      "t": 820,
+      "quote": "I prefer Roguelikes that give me a small number of meaningful decisions to make",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "ascension",
+      "kind": "example",
+      "claim": "Difficulty modes that give no benefit, like Slay the Spire's higher Ascensions, don't motivate players whose challenge motivation only serves concrete goals.",
+      "detail": "Brown only did Ascension 1 because it gives more elites and therefore more helpful relics, and feels no loss in skipping Ascension 20. She dislikes difficulty for difficulty's sake.",
+      "t": 882,
+      "quote": "in slay the spire, I had zero interest in doing ascensions once I learned you don't get any benefit out of them",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "time horizons",
+      "kind": "principle",
+      "claim": "Short, clearly visible time horizons, where decision results arrive quickly and progress toward the end goal is legible, are key to roguelikes for low-strategy players.",
+      "detail": "Nuclear Throne shows how close you got to the throne on death, Slay the Spire lays out the map, and Loot Rascals has five clear sections. Long-horizon games like Crusader Kings or 4X games, and even Into the Breach's several-moves-ahead planning, bounced off Brown.",
+      "t": 912,
+      "quote": "A short time horizon means I don't have to wait too long to see the results of my decision and it means I can understand the end goal easily",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run length",
+      "kind": "principle",
+      "claim": "Players motivated by completing tasks rather than accumulating power enjoy short, frequent runs and frequent clean slates, so failure doesn't sting even when dying often.",
+      "detail": "Brown's low power score means she gets no intrinsic joy from levelling up; she gains power only to complete the task at hand, which is the run. She cites The Story Goes On, which strips many upgrades when you loop, creating frequent power resets not caused by death.",
+      "t": 1180,
+      "quote": "I think Roguelikes with shorter runs feel better even if that means you are dying a lot",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emotional attachment",
+      "kind": "example",
+      "claim": "Road Not Taken's strong emotional story made Brown so attached to her character that the first permadeath was traumatizing and she never played again, showing how narrative investment can clash with permadeath.",
+      "detail": "She describes it as Spry Fox's 'what if Triple Town were a roguelike', a metaphor for the creator's decision not to have children. For her low-immersion profile narrative is a wrapper; players with high immersion might love it.",
+      "t": 1334,
+      "quote": "The problem was that the first time I died I was done. I never played this game again because it was emotionally traumatizing",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "exposed rules",
+      "kind": "principle",
+      "claim": "Low-discovery players prefer fully exposed rulesets, like Slay the Spire showing enemy intent and Loot Rascals explaining combat math; randomness is acceptable if it sits inside rules they can learn up front.",
+      "detail": "Brown hypothesises that as a professional designer, exploring unknown rules feels like work. Her low discovery score means she wants minimal unknown variables so she can learn how to operate in the game space.",
+      "t": 1463,
+      "quote": "Things like showing intent. In loot rascals they explain the math behind the combat",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "meta-progression",
+      "kind": "example",
+      "claim": "Rogue Legacy's between-run skill tree decisions bounced Brown off the game because players with low design motivation want simple, practical builds with immediate strategic impact.",
+      "detail": "She acknowledges the tree is only about four layers but says anything beyond about four choices is too much for her; she builds to reach a goal, not to express herself.",
+      "t": 1490,
+      "quote": "One reason I bounced off Rogue legacy was at the end of a run before you start a new",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "example",
+      "claim": "Original Rogue's heavy exploration, with unidentified potions and scrolls and unknown enemy capabilities learned through combat, feels like tiring work to low-discovery players but may appeal to high-discovery players.",
+      "detail": "Brown says this is one reason she didn't enjoy original Rogue, and recommends it to players with high discovery scores. In Q&A an audience member suggests NetHack suits expressive, exploratory players.",
+      "t": 1537,
+      "quote": "Rogue is heavy on exploration. You get potions and scrolls and don't know what they do",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player motivation",
+      "kind": "technique",
+      "claim": "Players can use their own motivation profile to ask targeted questions (time horizon, failure loop speed, time between decisions, amount of exploration and unknowns) to predict whether a roguelike like Hades will click.",
+      "detail": "Brown would like games tagged by player motivation but doesn't expect the general audience to adopt it. She set up a survey asking Hades players these questions before trying it herself.",
+      "t": 1672,
+      "quote": "How short is are the time horizons? How fast is the failure loop? How fast is the time between decisions?",
+      "weight": 1
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "player motivation",
+      "kind": "principle",
+      "claim": "Disliking a critically acclaimed roguelike like FTL or Into the Breach doesn't mean it is badly designed; it serves a different player motivation, and fit is more about the player than the game.",
+      "detail": "Brown makes this point at the end of Q&A, warning against framing games as simply good or bad. She notes the motivation model is broad, so it helps to take it with a specific set of games in mind.",
+      "t": 2067,
+      "quote": "there are so many different reasons that people play games that, you know, it is more about the player than the game",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

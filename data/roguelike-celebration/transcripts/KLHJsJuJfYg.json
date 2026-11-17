@@ -1,0 +1,1955 @@
+{
+ "id": "KLHJsJuJfYg",
+ "url": "https://www.youtube.com/watch?v=KLHJsJuJfYg",
+ "title": "Kawa -  Yet Another Conduct Conversation: a history of conducts in roguelikes",
+ "speaker": "Kawa",
+ "talk_title": "Yet Another Conduct Conversation: a history of conducts in roguelikes",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1650,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nKawa is a roguelike expert and advocate who has been contributing analysis, rubber duck services, audiovisuals, the occasional convention-running, and general enthusiasm to the roguelike community since 2012. When not failing to ascend, they are crunching numbers, exploring cities, and making delicious food in New York City.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 19,
+   "title": "A Ranger of Meta-Bardness"
+  },
+  {
+   "start": 94,
+   "title": "I read lots of guidebooks!"
+  },
+  {
+   "start": 139,
+   "title": "I'd run into these crazy challenges!"
+  },
+  {
+   "start": 249,
+   "title": "XADOM: a long and complicated game!"
+  },
+  {
+   "start": 295,
+   "title": "XADOM: the trap of the small cave"
+  },
+  {
+   "start": 358,
+   "title": "ADOM: Eternium Man"
+  },
+  {
+   "start": 427,
+   "title": "A ADOM: Other Metals"
+  },
+  {
+   "start": 480,
+   "title": "X Nethack: Trash or treasure?"
+  },
+  {
+   "start": 526,
+   "title": "X Nethack: Polymorph your trash today!"
+  },
+  {
+   "start": 557,
+   "title": "Nethack: Delicious, terrible pudding"
+  },
+  {
+   "start": 614,
+   "title": "X Nethack \"Polypile-less\""
+  },
+  {
+   "start": 699,
+   "title": "X Nethack: developer tracking"
+  },
+  {
+   "start": 843,
+   "title": "Hoplite 0: Search for the Fleece"
+  },
+  {
+   "start": 882,
+   "title": "A Hoplite: Compare and Contrast"
+  },
+  {
+   "start": 961,
+   "title": "A Games vs toys: the difference"
+  },
+  {
+   "start": 988,
+   "title": "Using toys to test skills - a game"
+  },
+  {
+   "start": 1020,
+   "title": "A Rules get refined over time"
+  },
+  {
+   "start": 1060,
+   "title": "X Sandbox \"games\" are toys!"
+  },
+  {
+   "start": 1122,
+   "title": "What does this mean for conduct play?"
+  },
+  {
+   "start": 1178,
+   "title": "X Takeaways"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3807,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.51,
+   "d": 1.0,
+   "text": "KAWA: Hi, everyone."
+  },
+  {
+   "t": 1.51,
+   "d": 5.56,
+   "text": "I am Kawa and this is yet another conduct conversation."
+  },
+  {
+   "t": 7.07,
+   "d": 5.62,
+   "text": "To use Alexei's excellent model yesterday on what it means to be a person who cares"
+  },
+  {
+   "t": 12.69,
+   "d": 5.84,
+   "text": "about procedural generation, my personal identity is I am a ranger of meta-bardness."
+  },
+  {
+   "t": 18.53,
+   "d": 2.67,
+   "text": "What does this mean in practice?"
+  },
+  {
+   "t": 21.2,
+   "d": 5.78,
+   "text": "I understand the wild depths of the world and can help you navigate and make sense of"
+  },
+  {
+   "t": 26.98,
+   "d": 8.03,
+   "text": "it through the weirdness and creativity that you all create on a regular basis."
+  },
+  {
+   "t": 35.01,
+   "d": 6.97,
+   "text": "I have been the host of a podcast called Roguelike Radio about design, about proc gen, about"
+  },
+  {
+   "t": 41.98,
+   "d": 1.94,
+   "text": "developer interviews, about all sorts of stuff."
+  },
+  {
+   "t": 43.92,
+   "d": 6.62,
+   "text": "I used to do Let’s Play and streams about these games, most notably a series called"
+  },
+  {
+   "t": 50.54,
+   "d": 4.0,
+   "text": "Exploring the ASCII Dungeon about UI choices using ASCII games."
+  },
+  {
+   "t": 54.54,
+   "d": 6.83,
+   "text": "All of the past conversations you had this morning, feel free to compare and contrast."
+  },
+  {
+   "t": 61.37,
+   "d": 6.06,
+   "text": "As Noah mentioned, in 2016, I had a bunch of us in Brooklyn eating snacks and talking"
+  },
+  {
+   "t": 67.43,
+   "d": 2.83,
+   "text": "about Dijkstra maps."
+  },
+  {
+   "t": 70.26,
+   "d": 6.61,
+   "text": "When I make my own procedural generator, a lovely twitter bot @BotFinds, it is an homage"
+  },
+  {
+   "t": 76.87,
+   "d": 9.3,
+   "text": "to one of the best weird procedural generations out there, a lovely simulator called Robot"
+  },
+  {
+   "t": 86.17,
+   "d": 2.5,
+   "text": "Finds Kitten."
+  },
+  {
+   "t": 88.67,
+   "d": 5.46,
+   "text": "Clearly this is my home, my community, I love you all very much."
+  },
+  {
+   "t": 94.13,
+   "d": 4.63,
+   "text": "In light of that, well, what does a ranger have to do?"
+  },
+  {
+   "t": 98.76,
+   "d": 5.04,
+   "text": "A ranger has to know the world, know what's out there, gather all the information."
+  },
+  {
+   "t": 103.8,
+   "d": 6.11,
+   "text": "I have spent lots of time reading through guides other people have made for these games"
+  },
+  {
+   "t": 109.91,
+   "d": 4.32,
+   "text": "partly, okay, I am also bad at them."
+  },
+  {
+   "t": 114.23,
+   "d": 8.36,
+   "text": "You can watch my talk from last year about being so bad I talked about failure, but really"
+  },
+  {
+   "t": 122.59,
+   "d": 5.05,
+   "text": "I wanted to know more about the structures of these worlds, about how the mechanics all"
+  },
+  {
+   "t": 127.64,
+   "d": 6.58,
+   "text": "fit together so I would pick up all these different places, and besides the actual tips"
+  },
+  {
+   "t": 134.22,
+   "d": 6.13,
+   "text": "and tricks and how to create characters and all that useful stuff, I also ran into this"
+  },
+  {
+   "t": 140.35,
+   "d": 6.98,
+   "text": "really interesting sidebars about people who took these really hard games and then made"
+  },
+  {
+   "t": 147.33,
+   "d": 5.19,
+   "text": "them even harder by adding extra constraints on what they were doing in them."
+  },
+  {
+   "t": 152.52,
+   "d": 3.19,
+   "text": "That's what I want to talk about today."
+  },
+  {
+   "t": 155.71,
+   "d": 7.36,
+   "text": "Why those happen, show some history of what these have looked like in a couple different"
+  },
+  {
+   "t": 163.07,
+   "d": 4.86,
+   "text": "places in Roguelike culture, celebrate how creative you all have been developers and"
+  },
+  {
+   "t": 167.93,
+   "d": 6.68,
+   "text": "players alike, and give food for thought on what this kind of play means for mechanics"
+  },
+  {
+   "t": 174.61,
+   "d": 1.49,
+   "text": "and for balance."
+  },
+  {
+   "t": 176.1,
+   "d": 5.11,
+   "text": "Those are my goals."
+  },
+  {
+   "t": 181.21,
+   "d": 1.38,
+   "text": "This is how I plan to do it."
+  },
+  {
+   "t": 182.59,
+   "d": 6.0,
+   "text": "I am going to give you a starting definition of generally what I mean when I say conduct"
+  },
+  {
+   "t": 188.59,
+   "d": 1.0,
+   "text": "play."
+  },
+  {
+   "t": 189.59,
+   "d": 4.53,
+   "text": "Four examples from three games for some compare and contrast and history."
+  },
+  {
+   "t": 194.12,
+   "d": 7.55,
+   "text": "And a final thought, a little more philosophical on what games are, what toys are, and why"
+  },
+  {
+   "t": 201.67,
+   "d": 7.22,
+   "text": "that matters and a definition to end what conducts are based on those facts."
+  },
+  {
+   "t": 208.89,
+   "d": 4.97,
+   "text": "The first thing is a starting definition."
+  },
+  {
+   "t": 213.86,
+   "d": 5.48,
+   "text": "Conduct play in general, I am going to talk about as a style of playing a game that deliberately"
+  },
+  {
+   "t": 219.34,
+   "d": 3.9,
+   "text": "changes the rules of the game from what seems to be initially stated."
+  },
+  {
+   "t": 223.24,
+   "d": 4.59,
+   "text": "They are usually harder than the standard game, that’s what they’re generally here"
+  },
+  {
+   "t": 227.83,
+   "d": 6.42,
+   "text": "for, and some of these are things that players came up with, and some of these are tracked"
+  },
+  {
+   "t": 234.25,
+   "d": 2.71,
+   "text": "inside the game within the game."
+  },
+  {
+   "t": 236.96,
+   "d": 6.27,
+   "text": "Obviously, in our modern world, this is usually known as achievements but there are other"
+  },
+  {
+   "t": 243.23,
+   "d": 6.09,
+   "text": "ways too and we will get into that and interesting notes I found in that realm."
+  },
+  {
+   "t": 249.32,
+   "d": 4.54,
+   "text": "Let's start with Ancient Domains of Mystery."
+  },
+  {
+   "t": 253.86,
+   "d": 4.65,
+   "text": "The original ADOM is a long and complicated game."
+  },
+  {
+   "t": 258.51,
+   "d": 1.44,
+   "text": "It is one of my first loves."
+  },
+  {
+   "t": 259.95,
+   "d": 1.9,
+   "text": "I care about it so much."
+  },
+  {
+   "t": 261.85,
+   "d": 3.06,
+   "text": "This is a rendition of the original map."
+  },
+  {
+   "t": 264.91,
+   "d": 5.09,
+   "text": "There is, like, 20 locations on this thing and some of them have caves inside the caves"
+  },
+  {
+   "t": 270.0,
+   "d": 1.16,
+   "text": "inside areas."
+  },
+  {
+   "t": 271.16,
+   "d": 1.02,
+   "text": "It’s insane."
+  },
+  {
+   "t": 272.18,
+   "d": 1.02,
+   "text": "It’s wonderful."
+  },
+  {
+   "t": 273.2,
+   "d": 4.61,
+   "text": "So you have to explore through a lot of those places and, you know, some of them are more"
+  },
+  {
+   "t": 277.81,
+   "d": 6.78,
+   "text": "dangerous than others, some do more than others, but in general you are going to see most of"
+  },
+  {
+   "t": 284.59,
+   "d": 1.89,
+   "text": "this map over the course of the game."
+  },
+  {
+   "t": 286.48,
+   "d": 5.93,
+   "text": "That's a lot of time and energy to be putting into a run, to be putting into beating the"
+  },
+  {
+   "t": 292.41,
+   "d": 2.33,
+   "text": "game for whatever that means to you."
+  },
+  {
+   "t": 294.74,
+   "d": 3.84,
+   "text": "One of those locations is known as the small cave."
+  },
+  {
+   "t": 298.58,
+   "d": 1.54,
+   "text": "You can access it right away."
+  },
+  {
+   "t": 300.12,
+   "d": 2.58,
+   "text": "It is actually not hard to miss."
+  },
+  {
+   "t": 302.7,
+   "d": 6.89,
+   "text": "All you get with you start is a scroll that says time is working against you, another"
+  },
+  {
+   "t": 309.59,
+   "d": 5.52,
+   "text": "scroll with a little piece of information, and that's kind of it."
+  },
+  {
+   "t": 315.11,
+   "d": 5.98,
+   "text": "So what this really is, and I am sorry to spoil this slightly, the monsters in this"
+  },
+  {
+   "t": 321.09,
+   "d": 7.66,
+   "text": "particular setting grow more powerful - let me pull that back."
+  },
+  {
+   "t": 328.75,
+   "d": 4.93,
+   "text": "You kill monsters, new monsters appear, those new monsters are much more powerful than the"
+  },
+  {
+   "t": 333.68,
+   "d": 4.05,
+   "text": "ones you just killed and it grows at a rate that gets really out of control."
+  },
+  {
+   "t": 337.73,
+   "d": 5.11,
+   "text": "Now, there’s some useful things in this cave and it’s also a useful shortcut to"
+  },
+  {
+   "t": 342.84,
+   "d": 6.72,
+   "text": "other places so the usual way to do this is, you know, run in, kill as little as possible,"
+  },
+  {
+   "t": 349.56,
+   "d": 1.59,
+   "text": "get what you need and get out."
+  },
+  {
+   "t": 351.15,
+   "d": 4.32,
+   "text": "That's what you are kind of intended to do to prove to you you don't have to use combat"
+  },
+  {
+   "t": 355.47,
+   "d": 7.13,
+   "text": "to get what you need, yet some people do this anyway and not only do they do this anyway,"
+  },
+  {
+   "t": 362.6,
+   "d": 5.25,
+   "text": "they say go to the small cave, see if you can get maximum level and that's it."
+  },
+  {
+   "t": 367.85,
+   "d": 2.99,
+   "text": "That's the entire challenge."
+  },
+  {
+   "t": 370.84,
+   "d": 10.32,
+   "text": "This challenge is known as Eternium Man, eternium being a precious, rare and difficult to get"
+  },
+  {
+   "t": 381.16,
+   "d": 3.34,
+   "text": "strong metal within the realm of the game."
+  },
+  {
+   "t": 384.5,
+   "d": 6.96,
+   "text": "The fact that the challenge exists and the fact some people have done it implies some"
+  },
+  {
+   "t": 391.46,
+   "d": 1.71,
+   "text": "really strange things, doesn't it?"
+  },
+  {
+   "t": 393.17,
+   "d": 5.89,
+   "text": "What does it mean as a player to survive in a space you weren’t meant to try to survive"
+  },
+  {
+   "t": 399.06,
+   "d": 1.0,
+   "text": "in?"
+  },
+  {
+   "t": 400.06,
+   "d": 7.26,
+   "text": "And also, at the same time while this is really hard, it is also technically faster than the"
+  },
+  {
+   "t": 407.32,
+   "d": 1.0,
+   "text": "main game."
+  },
+  {
+   "t": 408.32,
+   "d": 4.96,
+   "text": "There’s only one place to go, there’s one goal, none of this running around helping"
+  },
+  {
+   "t": 413.28,
+   "d": 3.58,
+   "text": "unicorns and killing bandits and whatever."
+  },
+  {
+   "t": 416.86,
+   "d": 4.89,
+   "text": "It is all just one little place in one little cave cave the size of a terminal but it tests"
+  },
+  {
+   "t": 421.75,
+   "d": 4.99,
+   "text": "the limits of a player's combat knowledge."
+  },
+  {
+   "t": 426.74,
+   "d": 5.57,
+   "text": "This and other challenges were really common in the community."
+  },
+  {
+   "t": 432.31,
+   "d": 4.24,
+   "text": "The earliest reference I was able to find was around the year 2000, and there’s a"
+  },
+  {
+   "t": 436.55,
+   "d": 1.17,
+   "text": "couple from the late ‘90s."
+  },
+  {
+   "t": 437.72,
+   "d": 7.13,
+   "text": "I had a lot of trouble searching for why these things got named these ways, where these came"
+  },
+  {
+   "t": 444.85,
+   "d": 1.0,
+   "text": "from."
+  },
+  {
+   "t": 445.85,
+   "d": 3.5,
+   "text": "Please help me find this information out."
+  },
+  {
+   "t": 449.35,
+   "d": 6.23,
+   "text": "I want to know who thought these up, where they came from."
+  },
+  {
+   "t": 455.58,
+   "d": 4.59,
+   "text": "I found this old Angelfire site that tracked a bunch of those."
+  },
+  {
+   "t": 460.17,
+   "d": 7.96,
+   "text": "Yes, Angelfire, true '90s kids remember."
+  },
+  {
+   "t": 468.13,
+   "d": 1.66,
+   "text": "I don't know the story."
+  },
+  {
+   "t": 469.79,
+   "d": 3.83,
+   "text": "All of the email addresses linked to dead domains."
+  },
+  {
+   "t": 473.62,
+   "d": 1.82,
+   "text": "Help me out here."
+  },
+  {
+   "t": 475.44,
+   "d": 5.61,
+   "text": "Meanwhile, while that was happening on the Ancient Domains of Mystery side, let's talk"
+  },
+  {
+   "t": 481.05,
+   "d": 4.52,
+   "text": "about NetHack which was another one of the major Roguelikes of that time period."
+  },
+  {
+   "t": 485.57,
+   "d": 5.64,
+   "text": "This table, for those who can't read it is all of the scrolls you can get in NetHack."
+  },
+  {
+   "t": 491.21,
+   "d": 5.18,
+   "text": "Really, all you need to know is NetHack is filled to the brim with items."
+  },
+  {
+   "t": 496.39,
+   "d": 1.23,
+   "text": "Some are outright harmful."
+  },
+  {
+   "t": 497.62,
+   "d": 4.41,
+   "text": "There is a scroll of amnesia where if you read it you will forget the skills you worked"
+  },
+  {
+   "t": 502.03,
+   "d": 1.39,
+   "text": "so hard to learn."
+  },
+  {
+   "t": 503.42,
+   "d": 3.17,
+   "text": "Or they could be incredibly useful."
+  },
+  {
+   "t": 506.59,
+   "d": 4.71,
+   "text": "The scroll of genocide which helps get rid of mind flayers forever."
+  },
+  {
+   "t": 511.3,
+   "d": 9.14,
+   "text": "Since Nethack’s item generation is so random and so complex, you could easily see a scenario"
+  },
+  {
+   "t": 520.44,
+   "d": 5.75,
+   "text": "where you want to get rid of your bad items and get some good ones instead."
+  },
+  {
+   "t": 526.19,
+   "d": 2.4,
+   "text": "Luckily there is an item for that."
+  },
+  {
+   "t": 528.59,
+   "d": 1.04,
+   "text": "Polymorph your trash today!"
+  },
+  {
+   "t": 529.63,
+   "d": 6.32,
+   "text": "One of the wands has a chance to be a wand of polymorph and the wand of polymorph, when"
+  },
+  {
+   "t": 535.95,
+   "d": 4.79,
+   "text": "zapped on a bunch of items will turn those items into other items and maybe those items"
+  },
+  {
+   "t": 540.74,
+   "d": 1.0,
+   "text": "will be useful."
+  },
+  {
+   "t": 541.74,
+   "d": 4.74,
+   "text": "When you run out of charges on the wand of polymorph, maybe some of those items you got"
+  },
+  {
+   "t": 546.48,
+   "d": 4.64,
+   "text": "before will help you recharge the wand of polymorph, so you can do this over again."
+  },
+  {
+   "t": 551.12,
+   "d": 1.0,
+   "text": "Cool, right?"
+  },
+  {
+   "t": 552.12,
+   "d": 1.0,
+   "text": "Great."
+  },
+  {
+   "t": 553.12,
+   "d": 1.67,
+   "text": "Amazing Here is the thing."
+  },
+  {
+   "t": 554.79,
+   "d": 1.0,
+   "text": "How am I going to get lots of items?"
+  },
+  {
+   "t": 555.79,
+   "d": 1.7,
+   "text": "We can make lots of trash."
+  },
+  {
+   "t": 557.49,
+   "d": 3.85,
+   "text": "How can we make lots of trash?"
+  },
+  {
+   "t": 561.34,
+   "d": 1.72,
+   "text": "We can kill lots of monsters."
+  },
+  {
+   "t": 563.06,
+   "d": 7.31,
+   "text": "It would be great to have a monster we could kill but also have the choice of killing or"
+  },
+  {
+   "t": 570.37,
+   "d": 4.84,
+   "text": "making more of that would drop stuff, and make more, and drop some more, and make some"
+  },
+  {
+   "t": 575.21,
+   "d": 9.07,
+   "text": "more, and drop some more."
+  },
+  {
+   "t": 584.28,
+   "d": 1.97,
+   "text": "This is really tedious."
+  },
+  {
+   "t": 586.25,
+   "d": 5.27,
+   "text": "This is really terrible, but also like, technically if you did this long enough, if you cared"
+  },
+  {
+   "t": 591.52,
+   "d": 5.07,
+   "text": "to do this long enough, you could keep doing it over and over again into forever and maybe"
+  },
+  {
+   "t": 596.59,
+   "d": 2.93,
+   "text": "get an infinite wish engine or something out of it."
+  },
+  {
+   "t": 599.52,
+   "d": 5.81,
+   "text": "You could just keep doing this and get everything you need for your ascension kit, and then"
+  },
+  {
+   "t": 605.33,
+   "d": 4.85,
+   "text": "some, and completely break the game if you’re willing to sit through slashing through all"
+  },
+  {
+   "t": 610.18,
+   "d": 5.13,
+   "text": "these delicious terrible puddings."
+  },
+  {
+   "t": 615.31,
+   "d": 2.71,
+   "text": "Let's never do that again."
+  },
+  {
+   "t": 618.02,
+   "d": 7.9,
+   "text": "One of NetHack's conducts is called polypile-less, casually."
+  },
+  {
+   "t": 625.92,
+   "d": 3.36,
+   "text": "I think the official wording is “Never polymorphed an item”."
+  },
+  {
+   "t": 629.28,
+   "d": 4.17,
+   "text": "The thing is, this conduct is relatively easy."
+  },
+  {
+   "t": 633.45,
+   "d": 9.66,
+   "text": "Roughly 42% of everyone who has won on one of Nethack’s public servers hasn’t needed"
+  },
+  {
+   "t": 643.11,
+   "d": 3.85,
+   "text": "to bother with doing this at all."
+  },
+  {
+   "t": 646.96,
+   "d": 2.09,
+   "text": "Why is this mechanic in the game?"
+  },
+  {
+   "t": 649.05,
+   "d": 2.77,
+   "text": "Because NetHack, that’s why we love it."
+  },
+  {
+   "t": 651.82,
+   "d": 7.03,
+   "text": "But it has this implication that this horridly broken and tedious thing no one wants to bother"
+  },
+  {
+   "t": 658.85,
+   "d": 7.17,
+   "text": "with, and pudding itself has actually nerfed quite severely - split puddings no longer"
+  },
+  {
+   "t": 666.02,
+   "d": 3.68,
+   "text": "drop loot if I remember correctly, as of 2015."
+  },
+  {
+   "t": 669.7,
+   "d": 5.72,
+   "text": "By the way, I did just say 2015 and NetHack."
+  },
+  {
+   "t": 675.42,
+   "d": 4.88,
+   "text": "If someone tells you NetHack is an old game, you can tell them no, it was updated in the"
+  },
+  {
+   "t": 680.3,
+   "d": 4.35,
+   "text": "last few years, it is a modern game, because it is."
+  },
+  {
+   "t": 684.65,
+   "d": 12.29,
+   "text": "But, yeah, so speaking of this tracking, that 42% of all winning accounts on NetHack.org"
+  },
+  {
+   "t": 696.94,
+   "d": 10.6,
+   "text": "are polypile-less, way back in 1999, the extended command conduct was added to NetHack itself."
+  },
+  {
+   "t": 707.54,
+   "d": 5.45,
+   "text": "I would like to note this was in December 1999."
+  },
+  {
+   "t": 712.99,
+   "d": 7.0,
+   "text": "This is at least three years before Xbox tracked achievements on Xbox Live."
+  },
+  {
+   "t": 719.99,
+   "d": 6.98,
+   "text": "This is well before 2007 Orange Box on Steam when Steam added achievements."
+  },
+  {
+   "t": 726.97,
+   "d": 8.12,
+   "text": "Somewhere between Activision patches in the '80s for taking pictures of your screen and"
+  },
+  {
+   "t": 735.09,
+   "d": 7.17,
+   "text": "the modern achievement system as we know it, NetHack had an in-game way to track specific"
+  },
+  {
+   "t": 742.26,
+   "d": 1.76,
+   "text": "conducts."
+  },
+  {
+   "t": 744.02,
+   "d": 7.53,
+   "text": "This screen is actually not the NetHack screen it’s actually for a related game known as"
+  },
+  {
+   "t": 751.55,
+   "d": 1.42,
+   "text": "SLASH’EM."
+  },
+  {
+   "t": 752.97,
+   "d": 6.9,
+   "text": "Super Lotsa Added Stuff Hack with Extended Magic because NetHack didn't have enough going"
+  },
+  {
+   "t": 759.87,
+   "d": 2.63,
+   "text": "for it apparently."
+  },
+  {
+   "t": 762.5,
+   "d": 7.27,
+   "text": "This is terminal into a SLASH’EM server as of a few weeks ago."
+  },
+  {
+   "t": 769.77,
+   "d": 5.22,
+   "text": "There’s even more conducts in here than vanilla NetHack which has 10."
+  },
+  {
+   "t": 774.99,
+   "d": 9.37,
+   "text": "The thing I wasn't able to find, and again help me find this stuff, the history is important,"
+  },
+  {
+   "t": 784.36,
+   "d": 6.72,
+   "text": "is why those 10 conducts including polypile-less were considered the conducts to be tracked"
+  },
+  {
+   "t": 791.08,
+   "d": 1.53,
+   "text": "officially in-game."
+  },
+  {
+   "t": 792.61,
+   "d": 4.87,
+   "text": "We know there were other things were going on such as zen that were not officially tracked"
+  },
+  {
+   "t": 797.48,
+   "d": 7.57,
+   "text": "ingame and there were clearly other conducts that SLASH’EM chose and NetHack didn't."
+  },
+  {
+   "t": 805.05,
+   "d": 3.1,
+   "text": "What were the conversations around that, what was going on?"
+  },
+  {
+   "t": 808.15,
+   "d": 2.84,
+   "text": "I don't know why, I can't search Usenet like a power user."
+  },
+  {
+   "t": 810.99,
+   "d": 1.68,
+   "text": "Someone help me out."
+  },
+  {
+   "t": 812.67,
+   "d": 7.64,
+   "text": "I would like to also note this hilarious thing from the release notes of NetHack 3.3.0 from"
+  },
+  {
+   "t": 820.31,
+   "d": 3.37,
+   "text": "December ‘99 when they first released the conduct concept."
+  },
+  {
+   "t": 823.68,
+   "d": 3.48,
+   "text": "How about prompting the player before they break a conduct?"
+  },
+  {
+   "t": 827.16,
+   "d": 5.25,
+   "text": "No, the whole point of conduct is you are avoiding the actions that lead to violations."
+  },
+  {
+   "t": 832.41,
+   "d": 1.97,
+   "text": "The dev team are jerks sometimes."
+  },
+  {
+   "t": 834.38,
+   "d": 4.83,
+   "text": "They think of everything but also they consciously don't think of the things they consciously"
+  },
+  {
+   "t": 839.21,
+   "d": 2.71,
+   "text": "don't think of."
+  },
+  {
+   "t": 841.92,
+   "d": 10.3,
+   "text": "Let's fast forward many years later, Hoplite is a lovely, lovely mobile technical Roguelike."
+  },
+  {
+   "t": 852.22,
+   "d": 8.34,
+   "text": "It has this really cool concept where you start with three basic skills."
+  },
+  {
+   "t": 860.56,
+   "d": 2.5,
+   "text": "A lunge, jump and shield bash."
+  },
+  {
+   "t": 863.06,
+   "d": 5.19,
+   "text": "In its standard mode, in each level, you have the chance to go to an altar and you have"
+  },
+  {
+   "t": 868.25,
+   "d": 1.67,
+   "text": "the chance to get a gift."
+  },
+  {
+   "t": 869.92,
+   "d": 5.52,
+   "text": "You chose one of the gifts from the list the God is willing to give you and they increase"
+  },
+  {
+   "t": 875.44,
+   "d": 5.01,
+   "text": "the capability of the standard skills or give you more health as you can see here."
+  },
+  {
+   "t": 880.45,
+   "d": 8.61,
+   "text": "What Hoplite then does is pull that mechanic apart in two very separate ways for two very"
+  },
+  {
+   "t": 889.06,
+   "d": 2.09,
+   "text": "separate challenges."
+  },
+  {
+   "t": 891.15,
+   "d": 6.75,
+   "text": "On the one hand, it will track in that NetHack style conduct screen way, hey, you didn't"
+  },
+  {
+   "t": 897.9,
+   "d": 2.16,
+   "text": "actually touch any of those altars."
+  },
+  {
+   "t": 900.06,
+   "d": 2.61,
+   "text": "They are technically optional."
+  },
+  {
+   "t": 902.67,
+   "d": 3.53,
+   "text": "They don't feel like it because the game is that hard but they are."
+  },
+  {
+   "t": 906.2,
+   "d": 4.49,
+   "text": "There are people who have finished the game without touching them."
+  },
+  {
+   "t": 910.69,
+   "d": 5.6,
+   "text": "This is actually from a YouTube run that not only did that but never actually got hurt"
+  },
+  {
+   "t": 916.29,
+   "d": 2.37,
+   "text": "in the game which I don't understand it."
+  },
+  {
+   "t": 918.66,
+   "d": 2.38,
+   "text": "I watched this slack-jawed."
+  },
+  {
+   "t": 921.04,
+   "d": 1.22,
+   "text": "Incredible."
+  },
+  {
+   "t": 922.26,
+   "d": 3.69,
+   "text": "So there’s that."
+  },
+  {
+   "t": 925.95,
+   "d": 6.41,
+   "text": "On the other side there is also a daily challenge with three extremely difficult levels, an"
+  },
+  {
+   "t": 932.36,
+   "d": 3.39,
+   "text": "arbitrary set of skills and says can you survive."
+  },
+  {
+   "t": 935.75,
+   "d": 6.86,
+   "text": "It almost does the eternium man style where here’s hard combat, go for it."
+  },
+  {
+   "t": 942.61,
+   "d": 5.72,
+   "text": "It does this within a cute iOS Android game."
+  },
+  {
+   "t": 948.33,
+   "d": 6.95,
+   "text": "I think there is so much room within any given play space for people to examine their mechanics,"
+  },
+  {
+   "t": 955.28,
+   "d": 2.15,
+   "text": "pull them apart and create challenges from them."
+  },
+  {
+   "t": 957.43,
+   "d": 2.16,
+   "text": "I find that really inspiring."
+  },
+  {
+   "t": 959.59,
+   "d": 4.57,
+   "text": "This brings me to my bigger point."
+  },
+  {
+   "t": 964.16,
+   "d": 2.54,
+   "text": "I promised stuff about games and toys."
+  },
+  {
+   "t": 966.7,
+   "d": 2.12,
+   "text": "Toys, objects of play."
+  },
+  {
+   "t": 968.82,
+   "d": 3.86,
+   "text": "You can mess around with Lego, you can build stuff, you can knock them down."
+  },
+  {
+   "t": 972.68,
+   "d": 4.43,
+   "text": "There is not really a way to win or lose at Lego."
+  },
+  {
+   "t": 977.11,
+   "d": 1.0,
+   "text": "Maybe?"
+  },
+  {
+   "t": 978.11,
+   "d": 1.0,
+   "text": "But also no."
+  },
+  {
+   "t": 979.11,
+   "d": 1.0,
+   "text": "And games, well?"
+  },
+  {
+   "t": 980.11,
+   "d": 1.0,
+   "text": "Oh, good."
+  },
+  {
+   "t": 981.11,
+   "d": 1.0,
+   "text": "We won."
+  },
+  {
+   "t": 982.11,
+   "d": 4.95,
+   "text": "It would have been so awful if we had lost the game."
+  },
+  {
+   "t": 987.06,
+   "d": 6.56,
+   "text": "So here is the thing."
+  },
+  {
+   "t": 993.62,
+   "d": 2.88,
+   "text": "Games have win conditions and loss conditions."
+  },
+  {
+   "t": 996.5,
+   "d": 6.4,
+   "text": "We turn toys into games by asking can you do this skill with this toy?"
+  },
+  {
+   "t": 1002.9,
+   "d": 2.2,
+   "text": "If you succeed you are closer to winning."
+  },
+  {
+   "t": 1005.1,
+   "d": 3.79,
+   "text": "If you don't succeed, you are closer to losing."
+  },
+  {
+   "t": 1008.89,
+   "d": 2.19,
+   "text": "A ball is a toy."
+  },
+  {
+   "t": 1011.08,
+   "d": 1.86,
+   "text": "Being able to catch a ball?"
+  },
+  {
+   "t": 1012.94,
+   "d": 1.12,
+   "text": "Skill."
+  },
+  {
+   "t": 1014.06,
+   "d": 6.1,
+   "text": "Being able to catch a ball under certain circumstances and do certain things?"
+  },
+  {
+   "t": 1020.16,
+   "d": 1.28,
+   "text": "A game."
+  },
+  {
+   "t": 1021.44,
+   "d": 7.93,
+   "text": "Over time people get good at those basic things then they have to refine those rules and make"
+  },
+  {
+   "t": 1029.37,
+   "d": 3.85,
+   "text": "those rules more challenging and make those rules more interesting and define things more"
+  },
+  {
+   "t": 1033.22,
+   "d": 4.1,
+   "text": "clearly, I guess."
+  },
+  {
+   "t": 1037.32,
+   "d": 5.81,
+   "text": "This is completely unrelated to procedural generation except for the fact that it isn't."
+  },
+  {
+   "t": 1043.13,
+   "d": 5.02,
+   "text": "This is Jon Bois, who is your favorite sports writer even if you don’t know it yet writing"
+  },
+  {
+   "t": 1048.15,
+   "d": 2.99,
+   "text": "about what the heck is a catch in American football."
+  },
+  {
+   "t": 1051.14,
+   "d": 4.67,
+   "text": "It’s much more than it sounds like it is but I will not spoil it for you."
+  },
+  {
+   "t": 1055.81,
+   "d": 2.47,
+   "text": "Please just check it out."
+  },
+  {
+   "t": 1058.28,
+   "d": 6.26,
+   "text": "And so we see this all the time in games we call sandboxes."
+  },
+  {
+   "t": 1064.54,
+   "d": 5.82,
+   "text": "A literal sandbox is a literal toy, it is a box with sand in it you can make stuff in"
+  },
+  {
+   "t": 1070.36,
+   "d": 3.19,
+   "text": "it but there’s no win condition in a sandbox."
+  },
+  {
+   "t": 1073.55,
+   "d": 5.0,
+   "text": "The win condition in Dwarf Fortress is basically, can you make cool things happen and mostly"
+  },
+  {
+   "t": 1078.55,
+   "d": 5.4,
+   "text": "not have the dwarves die, unless you wanna watch the dwarves die I guess."
+  },
+  {
+   "t": 1083.95,
+   "d": 8.07,
+   "text": "Like this particular one is a player who decided to build a fort out in the middle of the ocean"
+  },
+  {
+   "t": 1092.02,
+   "d": 5.87,
+   "text": "by taking advantage of the ice physics of Dwarf Fortress."
+  },
+  {
+   "t": 1097.89,
+   "d": 1.93,
+   "text": "I don’t understand how people do it."
+  },
+  {
+   "t": 1099.82,
+   "d": 4.9,
+   "text": "I love this community, that’s really all I have to say about it."
+  },
+  {
+   "t": 1104.72,
+   "d": 9.15,
+   "text": "By creating that artificial constraint of can I build on the ice suddenly you have a"
+  },
+  {
+   "t": 1113.87,
+   "d": 5.2,
+   "text": "compelling victory condition and a really compelling game and a really compelling series"
+  },
+  {
+   "t": 1119.07,
+   "d": 4.19,
+   "text": "by Kruggsmash that's worth checking out too."
+  },
+  {
+   "t": 1123.26,
+   "d": 3.53,
+   "text": "To bring this back to the general idea of conducts."
+  },
+  {
+   "t": 1126.79,
+   "d": 5.55,
+   "text": "Being good at a game is a skill just as any of those other skills about throwing or catching"
+  },
+  {
+   "t": 1132.34,
+   "d": 1.99,
+   "text": "or building or knocking things."
+  },
+  {
+   "t": 1134.33,
+   "d": 5.9,
+   "text": "Once this skill is mastered enough, you add new rules to keep the game interesting and"
+  },
+  {
+   "t": 1140.23,
+   "d": 1.15,
+   "text": "exciting."
+  },
+  {
+   "t": 1141.38,
+   "d": 5.32,
+   "text": "Somehow Roguelike players are dedicated enough to be good at games that throw them randomness"
+  },
+  {
+   "t": 1146.7,
+   "d": 6.73,
+   "text": "all the time so creating conducts for the game is using the mechanics as its own toy"
+  },
+  {
+   "t": 1153.43,
+   "d": 3.6,
+   "text": "for refined and advanced gameplay."
+  },
+  {
+   "t": 1157.03,
+   "d": 5.01,
+   "text": "The whole idea of, what if I toss out this mechanic?"
+  },
+  {
+   "t": 1162.04,
+   "d": 2.06,
+   "text": "Is it easier or harder?"
+  },
+  {
+   "t": 1164.1,
+   "d": 1.67,
+   "text": "What if I try to do it in this way?"
+  },
+  {
+   "t": 1165.77,
+   "d": 1.03,
+   "text": "Is it easier or harder?"
+  },
+  {
+   "t": 1166.8,
+   "d": 1.17,
+   "text": "Does it make it more interesting?"
+  },
+  {
+   "t": 1167.97,
+   "d": 2.63,
+   "text": "Is it challenging my skills in different ways?"
+  },
+  {
+   "t": 1170.6,
+   "d": 8.0,
+   "text": "Those are the things players are examining when looking at what conducts are."
+  },
+  {
+   "t": 1178.6,
+   "d": 1.09,
+   "text": "Some final takeaways."
+  },
+  {
+   "t": 1179.69,
+   "d": 4.83,
+   "text": "First off, please help me preserve and celebrate Roguelike history."
+  },
+  {
+   "t": 1184.52,
+   "d": 5.16,
+   "text": "I mentioned the questions I have about Ancient Domains of Mystery and NetHack and SLASH’EM."
+  },
+  {
+   "t": 1189.68,
+   "d": 3.85,
+   "text": "If any of you in the audience know or have leads, let me know."
+  },
+  {
+   "t": 1193.53,
+   "d": 4.43,
+   "text": "If you know how to actually search Usenet like a power user instead of fumbling through"
+  },
+  {
+   "t": 1197.96,
+   "d": 10.94,
+   "text": "Google groups and sobbing because you can't get to before 1999 easily, please, tell me."
+  },
+  {
+   "t": 1208.9,
+   "d": 6.4,
+   "text": "And for developers, what mechanics in your games are easy to ignore or hard to ignore?"
+  },
+  {
+   "t": 1215.3,
+   "d": 6.43,
+   "text": "What do tweaking and changing those mechanics like a high level player imply for your game"
+  },
+  {
+   "t": 1221.73,
+   "d": 1.14,
+   "text": "as a whole?"
+  },
+  {
+   "t": 1222.87,
+   "d": 4.91,
+   "text": "And what skills are you asking for when you ask a player to be good at a game?"
+  },
+  {
+   "t": 1227.78,
+   "d": 6.58,
+   "text": "And as a player who interacts deeply with the mechanics of a game, how can you do that"
+  },
+  {
+   "t": 1234.36,
+   "d": 1.0,
+   "text": "further?"
+  },
+  {
+   "t": 1235.36,
+   "d": 7.26,
+   "text": "What more can you do to keep that game interesting and keep that game's culture alive?"
+  },
+  {
+   "t": 1242.62,
+   "d": 6.24,
+   "text": "Thank you."
+  },
+  {
+   "t": 1248.86,
+   "d": 6.25,
+   "text": "[Applause] >> OK."
+  },
+  {
+   "t": 1255.11,
+   "d": 4.44,
+   "text": "We have time for some questions if people have any."
+  },
+  {
+   "t": 1259.55,
+   "d": 2.69,
+   "text": "AUDIENCE: Hi."
+  },
+  {
+   "t": 1262.24,
+   "d": 2.7,
+   "text": "Good talk."
+  },
+  {
+   "t": 1264.94,
+   "d": 7.89,
+   "text": "It is kind of like a softball but what's your favorite conduct?"
+  },
+  {
+   "t": 1272.83,
+   "d": 1.0,
+   "text": "Any game?"
+  },
+  {
+   "t": 1273.83,
+   "d": 1.23,
+   "text": "Hard question."
+  },
+  {
+   "t": 1275.06,
+   "d": 7.87,
+   "text": "KAWA: My favorite conduct is related and unrelated to this general idea."
+  },
+  {
+   "t": 1282.93,
+   "d": 5.52,
+   "text": "In Dungeon Crawl Stone Soup every six months there is a tournament of players trying the"
+  },
+  {
+   "t": 1288.45,
+   "d": 1.22,
+   "text": "new build."
+  },
+  {
+   "t": 1289.67,
+   "d": 6.3,
+   "text": "Every time they randomly generate a species background combo, a race-class combo but for"
+  },
+  {
+   "t": 1295.97,
+   "d": 6.45,
+   "text": "Stone Soup, so it’s can you beat the game under these randomized constraints and the"
+  },
+  {
+   "t": 1302.42,
+   "d": 4.1,
+   "text": "first eight players to get it get the trophy, and then they switch to the next one and switch"
+  },
+  {
+   "t": 1306.52,
+   "d": 6.11,
+   "text": "to the next one to weird combinations no sane person should be combining but people do it"
+  },
+  {
+   "t": 1312.63,
+   "d": 1.0,
+   "text": "all the time."
+  },
+  {
+   "t": 1313.63,
+   "d": 1.0,
+   "text": "It’s insane."
+  },
+  {
+   "t": 1314.63,
+   "d": 1.0,
+   "text": "It’s ridiculous."
+  },
+  {
+   "t": 1315.63,
+   "d": 7.28,
+   "text": "There are also a handful of people who’ve beaten NetHack with all 10 standard conducts."
+  },
+  {
+   "t": 1322.91,
+   "d": 7.98,
+   "text": "I know of one person who, for like three months afterwards, was like you should do the thing."
+  },
+  {
+   "t": 1330.89,
+   "d": 1.0,
+   "text": "Can't."
+  },
+  {
+   "t": 1331.89,
+   "d": 2.37,
+   "text": "Just do the 10 conduct ascension."
+  },
+  {
+   "t": 1334.26,
+   "d": 2.73,
+   "text": "Just absolutely masterful."
+  },
+  {
+   "t": 1336.99,
+   "d": 4.5,
+   "text": "AUDIENCE: Great talk."
+  },
+  {
+   "t": 1341.49,
+   "d": 4.5,
+   "text": "KAWA: Thank you."
+  },
+  {
+   "t": 1345.99,
+   "d": 9.48,
+   "text": "AUDIENCE: Can you name some examples of conducts that feel the more perversely and possibly"
+  },
+  {
+   "t": 1355.47,
+   "d": 3.18,
+   "text": "humorously against the spirit of the game design?"
+  },
+  {
+   "t": 1358.65,
+   "d": 7.16,
+   "text": "I am thinking back to Doom's early history where people would do pacifist runs or minimally"
+  },
+  {
+   "t": 1365.81,
+   "d": 2.48,
+   "text": "trying to not harm the demons."
+  },
+  {
+   "t": 1368.29,
+   "d": 5.04,
+   "text": "It is just so clearly counter to the game."
+  },
+  {
+   "t": 1373.33,
+   "d": 6.24,
+   "text": "I am curious what you have run across."
+  },
+  {
+   "t": 1379.57,
+   "d": 6.59,
+   "text": "KAWA: Definitely pacifist in most traditional roguelikes is really, really absurd."
+  },
+  {
+   "t": 1386.16,
+   "d": 6.99,
+   "text": "There is an Ancient Domains of Mystery one where you have the chance of starting a character"
+  },
+  {
+   "t": 1393.15,
+   "d": 1.31,
+   "text": "with a certain kind of breath."
+  },
+  {
+   "t": 1394.46,
+   "d": 6.57,
+   "text": "You’re a drakeling, so you’re part dragon and have this auxiliary dragon breath and"
+  },
+  {
+   "t": 1401.03,
+   "d": 4.71,
+   "text": "there is one person who has beaten the game using only that."
+  },
+  {
+   "t": 1405.74,
+   "d": 1.01,
+   "text": "Why?"
+  },
+  {
+   "t": 1406.75,
+   "d": 7.04,
+   "text": "Why would you do that to yourself?"
+  },
+  {
+   "t": 1413.79,
+   "d": 1.0,
+   "text": "And yeah."
+  },
+  {
+   "t": 1414.79,
+   "d": 1.0,
+   "text": "AUDIENCE: Thanks."
+  },
+  {
+   "t": 1415.79,
+   "d": 1.0,
+   "text": "Great talk."
+  },
+  {
+   "t": 1416.79,
+   "d": 4.0,
+   "text": "I want to say my favorite in ADOM which I don't know how it was done is completing the"
+  },
+  {
+   "t": 1420.79,
+   "d": 4.14,
+   "text": "game only being able to carry 100 units worth of inventory."
+  },
+  {
+   "t": 1424.93,
+   "d": 2.6,
+   "text": "The chaos orbs weigh 100."
+  },
+  {
+   "t": 1427.53,
+   "d": 4.92,
+   "text": "You cannot have any food, you can't have any armor and can only carry one of them at a"
+  },
+  {
+   "t": 1432.45,
+   "d": 1.0,
+   "text": "time."
+  },
+  {
+   "t": 1433.45,
+   "d": 1.22,
+   "text": "It has been beaten."
+  },
+  {
+   "t": 1434.67,
+   "d": 5.9,
+   "text": "KAWA: And that means you have to get a whole bunch of things past a particularly evil miniboss"
+  },
+  {
+   "t": 1440.57,
+   "d": 3.38,
+   "text": "without anything at all ever."
+  },
+  {
+   "t": 1443.95,
+   "d": 1.0,
+   "text": "Or food."
+  },
+  {
+   "t": 1444.95,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 1445.95,
+   "d": 1.0,
+   "text": "No."
+  },
+  {
+   "t": 1446.95,
+   "d": 1.45,
+   "text": "Yes, the 100 stone."
+  },
+  {
+   "t": 1448.4,
+   "d": 2.7,
+   "text": "Yeah, that's correct."
+  },
+  {
+   "t": 1451.1,
+   "d": 1.0,
+   "text": "Wow."
+  },
+  {
+   "t": 1452.1,
+   "d": 5.43,
+   "text": "People are amazing."
+  },
+  {
+   "t": 1457.53,
+   "d": 10.43,
+   "text": "AUDIENCE: Hi, I was wondering if you find any other driving motivations for conducts"
+  },
+  {
+   "t": 1467.96,
+   "d": 1.96,
+   "text": "other than challenge?"
+  },
+  {
+   "t": 1469.92,
+   "d": 2.62,
+   "text": "Are they primary role-playing motivated?"
+  },
+  {
+   "t": 1472.54,
+   "d": 4.71,
+   "text": "Do those communities cohere around any of those, do you find?"
+  },
+  {
+   "t": 1477.25,
+   "d": 6.05,
+   "text": "KAWA: Definitely the Dwarf Fortress was very much a role-playing one almost."
+  },
+  {
+   "t": 1483.3,
+   "d": 4.98,
+   "text": "It wanted to tell a specific story about these specific dwarfs during a specific crazed quest"
+  },
+  {
+   "t": 1488.28,
+   "d": 2.35,
+   "text": "and leaned into that."
+  },
+  {
+   "t": 1490.63,
+   "d": 7.8,
+   "text": "There is a level of mainly removing tedium as I brought up with the polypile."
+  },
+  {
+   "t": 1498.43,
+   "d": 5.64,
+   "text": "It is a mechanic that exists and can help you win but you actually don't need it because"
+  },
+  {
+   "t": 1504.07,
+   "d": 2.08,
+   "text": "God it is awful."
+  },
+  {
+   "t": 1506.15,
+   "d": 1.0,
+   "text": "Seriously."
+  },
+  {
+   "t": 1507.15,
+   "d": 1.54,
+   "text": "Just say no to puddings."
+  },
+  {
+   "t": 1508.69,
+   "d": 10.75,
+   "text": ">> I will ask one as I walk over there."
+  },
+  {
+   "t": 1519.44,
+   "d": 4.57,
+   "text": "Any evidence for developers changing things about their game in response to conduct?"
+  },
+  {
+   "t": 1524.01,
+   "d": 4.52,
+   "text": "I’m thinking a lot about the Nethack vegetarian and vegan conducts."
+  },
+  {
+   "t": 1528.53,
+   "d": 4.97,
+   "text": "KAWA: I think there has been some."
+  },
+  {
+   "t": 1533.5,
+   "d": 6.05,
+   "text": "Certainly the whole removing pudding farming in NetHack was clearly a response to people"
+  },
+  {
+   "t": 1539.55,
+   "d": 3.78,
+   "text": "abusing mechanics in certain ways."
+  },
+  {
+   "t": 1543.33,
+   "d": 6.23,
+   "text": "And yes, things like food balance for, you know, vegetarian and vegan conducts."
+  },
+  {
+   "t": 1549.56,
+   "d": 6.25,
+   "text": "In the not-Roguelike community I do see people making games specifically to be speedrun which"
+  },
+  {
+   "t": 1555.81,
+   "d": 4.11,
+   "text": "I think is adjacent to but not exactly this."
+  },
+  {
+   "t": 1559.92,
+   "d": 4.28,
+   "text": "Things like Celeste making things very accessible in certain ways to make sure players can do"
+  },
+  {
+   "t": 1564.2,
+   "d": 2.83,
+   "text": "certain things to play the game faster."
+  },
+  {
+   "t": 1567.03,
+   "d": 6.87,
+   "text": "I would love more evidence on how conducts influence developer behavior so talk to me"
+  },
+  {
+   "t": 1573.9,
+   "d": 1.85,
+   "text": "after about that."
+  },
+  {
+   "t": 1575.75,
+   "d": 7.97,
+   "text": "AUDIENCE: You mentioned earlier that one of the things about conducts is that they are"
+  },
+  {
+   "t": 1583.72,
+   "d": 3.44,
+   "text": "almost always intended to make the game harder."
+  },
+  {
+   "t": 1587.16,
+   "d": 5.94,
+   "text": "Do you have any examples of conduct that makes the game easier?"
+  },
+  {
+   "t": 1593.1,
+   "d": 11.82,
+   "text": "KAWA: The clearest ones I can think of are sort of only sticking to a specific weapon"
+  },
+  {
+   "t": 1604.92,
+   "d": 7.37,
+   "text": "or subset of skills to sort of bring down the decision tree to something very specific"
+  },
+  {
+   "t": 1612.29,
+   "d": 8.5,
+   "text": "or, you know, like just plain ignoring mechanics that give you more choice."
+  },
+  {
+   "t": 1620.79,
+   "d": 7.37,
+   "text": "I think Crawl, Dungeon Crawl Stone Soup, never leaving one God for another."
+  },
+  {
+   "t": 1628.16,
+   "d": 5.21,
+   "text": "It’s a thing you can do and can be powerful for certain cases but most players aren't"
+  },
+  {
+   "t": 1633.37,
+   "d": 6.2,
+   "text": "going to bother with it because there is a sort of in the moment penalty for trying."
+  },
+  {
+   "t": 1639.57,
+   "d": 2.16,
+   "text": "Stuff like that, I think."
+  },
+  {
+   "t": 1641.73,
+   "d": 1.25,
+   "text": ">> OK."
+  },
+  {
+   "t": 1642.98,
+   "d": 1.89,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 1644.87,
+   "d": 0.49,
+   "text": "[Applause]"
+  }
+ ]
+}

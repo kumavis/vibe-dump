@@ -1,0 +1,1931 @@
+{
+ "id": "ujKlmvfpNMo",
+ "url": "https://www.youtube.com/watch?v=ujKlmvfpNMo",
+ "title": "James Cartlidge, Marc Dolgin, Christine Tomlinson - The Rise of the Roguelite",
+ "speaker": "James Cartlidge, Marc Dolgin, Christine Tomlinson",
+ "talk_title": "The Rise of the Roguelite",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-09-26",
+ "duration_s": 2749,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "A fireside chat with the editor and coauthors of the upcoming academic book ‘The Rise of the Roguelite: Inside a Gaming Phenomenon’, forthcoming with Taylor and Francis/CRC Press. \n\nThe book will be an edited collection of scholarly essays which explore roguelite games from a variety of disciplinary perspectives, including game design, narrative studies, philosophy, sociology, gender studies, and queer studies.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to the book"
+  },
+  {
+   "start": 126,
+   "title": "Research and collection scope"
+  },
+  {
+   "start": 491,
+   "title": "Contributor panel discussion"
+  },
+  {
+   "start": 1150,
+   "title": "Foucault and game mechanics"
+  },
+  {
+   "start": 1617,
+   "title": "Philosophy, death, and closing"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 6422,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.12,
+   "d": 0.42,
+   "text": "So with all of that covered, I am excited to just get into our lovely speakers. This is"
+  },
+  {
+   "t": 3.54,
+   "d": 1.9,
+   "text": "going to be fun. We have a fun set of talks for today. Without further ado,"
+  },
+  {
+   "t": 5.44,
+   "d": 5.92,
+   "text": "I would like to bring on James Cartlidge to talk about an upcoming book, The Rise of the"
+  },
+  {
+   "t": 11.36,
+   "d": 13.0,
+   "text": "Roguelite. It is an edited collection of scholarly essays exploring roguelite games from game design,"
+  },
+  {
+   "t": 24.36,
+   "d": 5.76,
+   "text": "narrative studies, sociology, gender and queer studies. It will come out around"
+  },
+  {
+   "t": 30.12,
+   "d": 6.76,
+   "text": "Christmas. I think it is right up the alley of the types of things we are interested in"
+  },
+  {
+   "t": 36.88,
+   "d": 8.24,
+   "text": "here. We thought the preview event would be a great chance to talk about it. James"
+  },
+  {
+   "t": 45.12,
+   "d": 5.56,
+   "text": "give you a chance to talk and we will bring on a couple coauthors in a bit."
+  },
+  {
+   "t": 50.68,
+   "d": 4.56,
+   "text": "JAMES: Thank you for the kind introduction and the opportunity. It is really nice to"
+  },
+  {
+   "t": 55.24,
+   "d": 8.44,
+   "text": "be with you all. I am pleased to be joined by a couple authors of the book. Yeah, I mean,"
+  },
+  {
+   "t": 63.68,
+   "d": 6.16,
+   "text": "you basically covered it all already. This is a book about roguelite video games. It is"
+  },
+  {
+   "t": 69.84,
+   "d": 7.64,
+   "text": "a multi-disciplinary collection of essays. We have philosophy, sociology essay, as you said"
+  },
+  {
+   "t": 77.48,
+   "d": 8.52,
+   "text": "one coming at it from narratology perspective, one about romance, and it is just a nice mix."
+  },
+  {
+   "t": 88.92,
+   "d": 6.68,
+   "text": "I think I can speak for fellow authors when I say we are quite excited to put this out there."
+  },
+  {
+   "t": 96.56,
+   "d": 6.44,
+   "text": "It is coming out on the CRC Press which is home to really good books about roguelikes. Exploring"
+  },
+  {
+   "t": 103.0,
+   "d": 8.0,
+   "text": "roguelike games and fantastic history called dudgeon hacks. I think we will be in good company."
+  },
+  {
+   "t": 112.4,
+   "d": 7.68,
+   "text": "I look forward to hearing and getting into this. ALEXEI: I understand you have a quick presentation"
+  },
+  {
+   "t": 120.08,
+   "d": 17.24,
+   "text": "to run us through what the book is about. JAMES: I am a postdoctoral researcher and"
+  },
+  {
+   "t": 137.32,
+   "d": 10.12,
+   "text": "have a PhD in history. I am not a game designer. I spend a lot of time analyzing games from the"
+  },
+  {
+   "t": 147.44,
+   "d": 7.16,
+   "text": "perspective of philosophy and psychology and what is called procedural rhetoric famously called. I"
+  },
+  {
+   "t": 154.6,
+   "d": 6.4,
+   "text": "am interested in what games tell us about what it means to be human in the modern digital age."
+  },
+  {
+   "t": 161.0,
+   "d": 7.32,
+   "text": "I have written about games like Dwarf Fortress, darkest dungeon, I have one coming out about"
+  },
+  {
+   "t": 168.32,
+   "d": 6.84,
+   "text": "the Berlin interpretation and genre and what cognitive scientists call prototype theory"
+  },
+  {
+   "t": 175.16,
+   "d": 7.04,
+   "text": "but the book I am here to discuss is about these types of games and what are referred to by fans,"
+  },
+  {
+   "t": 182.8,
+   "d": 13.4,
+   "text": "commentators and critics as roguelike. I t is due out in December. It is all a bit tense but"
+  },
+  {
+   "t": 196.2,
+   "d": 11.24,
+   "text": "I think we will get there. It should be out by December and certainly by Christmas. We"
+  },
+  {
+   "t": 207.44,
+   "d": 7.16,
+   "text": "start off with this nice chapter about the curious expedition talking about it from a purely design"
+  },
+  {
+   "t": 214.6,
+   "d": 7.32,
+   "text": "perspective and then move into a general chapter about the principles of roguelike like design. We"
+  },
+  {
+   "t": 221.92,
+   "d": 5.84,
+   "text": "kind of go from there. As you can see, it is a quite a good mix. I am happy to get straight on"
+  },
+  {
+   "t": 227.76,
+   "d": 7.16,
+   "text": "to the questions if that's what you would like to do. Thanks very much for the opportunity."
+  },
+  {
+   "t": 234.92,
+   "d": 5.2,
+   "text": "ALEXEI: No, it is exciting and a cool opportunity to talk about here. We bring on a lot of"
+  },
+  {
+   "t": 240.12,
+   "d": 4.6,
+   "text": "developers and academics but usually more like we have AI researchers and"
+  },
+  {
+   "t": 246.12,
+   "d": 4.44,
+   "text": "very conf science academics. We have people talking about theaters in the academic sense"
+  },
+  {
+   "t": 250.56,
+   "d": 5.48,
+   "text": "but I think the more game studies approach is something that we haven't had a lot of at"
+  },
+  {
+   "t": 256.04,
+   "d": 6.72,
+   "text": "roguelike cell celebration and I am not aware of a ton of that. I am curious. I know you mentioned"
+  },
+  {
+   "t": 262.76,
+   "d": 6.68,
+   "text": "a few things in this vain but bring n together the set of co-authors is pulling this together."
+  },
+  {
+   "t": 270.6,
+   "d": 6.76,
+   "text": "Is this an -- is there not a lot out there in terms of the roguelikes. How did you assembly this"
+  },
+  {
+   "t": 277.36,
+   "d": 6.32,
+   "text": "rogues gallery of people who were also willing to talk about game studies in roguelikes like this?"
+  },
+  {
+   "t": 283.68,
+   "d": 9.52,
+   "text": "JAMES: I kind of got into roguelikes about three years ago once I finished by PhD. I was trying"
+  },
+  {
+   "t": 293.2,
+   "d": 6.96,
+   "text": "to find stuff my PC would run because it is terrible. I kept getting pointed to roguelikes"
+  },
+  {
+   "t": 300.16,
+   "d": 7.16,
+   "text": "and got really fascinated by them. I started reading what research there was available about"
+  },
+  {
+   "t": 307.32,
+   "d": 6.48,
+   "text": "them. There is not a ton. There is not very much especially in like academic articles and stuff."
+  },
+  {
+   "t": 313.8,
+   "d": 5.36,
+   "text": "Academic journals. There is not a huge amount. There is the odd paper here and there. There is a"
+  },
+  {
+   "t": 319.16,
+   "d": 5.54,
+   "text": "really good one by one of the contributors to this volume, Marc Johnson, about ASCII graphics and the"
+  },
+  {
+   "t": 324.7,
+   "d": 11.94,
+   "text": "semi-otics of ASCII graphics. And terramanagement theory and permadeath and the idea roguelikes"
+  },
+  {
+   "t": 336.64,
+   "d": 5.68,
+   "text": "reflect the human confrontation with death authentically in comparison to a lot of triple"
+  },
+  {
+   "t": 342.32,
+   "d": 6.68,
+   "text": "A games where you die and restart. I thought there was interesting stuff but they are definitely"
+  },
+  {
+   "t": 349.0,
+   "d": 8.92,
+   "text": "underexplored in the academic literature. There is books on CRC press and another one I didn't"
+  },
+  {
+   "t": 357.92,
+   "d": 5.48,
+   "text": "mention about how roguelikes are designed. But there is not a huge amount in the academic"
+  },
+  {
+   "t": 363.4,
+   "d": 6.0,
+   "text": "literature so I think we are filling a gap or contributing to filling a bit of a gap here."
+  },
+  {
+   "t": 369.4,
+   "d": 6.08,
+   "text": "ALEXEI: That's interesting given roguelikes have a pretty long history within genres of games and"
+  },
+  {
+   "t": 375.48,
+   "d": 6.64,
+   "text": "also ties to academia in terms of games like rogues utilizing university computer resource"
+  },
+  {
+   "t": 382.12,
+   "d": 6.88,
+   "text": "do is create and distribute the early roguelikes. Yeah, it is kind of interesting there hasn't been"
+  },
+  {
+   "t": 389.0,
+   "d": 6.4,
+   "text": "more of a discussion there. Yeah, I am familiar too, I know retro game archeology is also a new"
+  },
+  {
+   "t": 395.4,
+   "d": 3.92,
+   "text": "discipline in the academic sense, and there is roguelike related stuff and"
+  },
+  {
+   "t": 399.32,
+   "d": 5.4,
+   "text": "Dwarf Fortress stuff in that field but not quite the same as what you have going on."
+  },
+  {
+   "t": 404.72,
+   "d": 10.36,
+   "text": "JAMES: No, I think there is games we have written about that have no academic dimension. The curious"
+  },
+  {
+   "t": 415.08,
+   "d": 10.48,
+   "text": "expedition and boyfriend dudgeon and norter has been mentioned a few times but not as a game. I"
+  },
+  {
+   "t": 425.56,
+   "d": 5.84,
+   "text": "think we have done quite well in that respect. There is some type about vampire survivor type"
+  },
+  {
+   "t": 431.4,
+   "d": 10.8,
+   "text": "games especially now because they kick started a whole subgenre of their own. Academia is always"
+  },
+  {
+   "t": 442.2,
+   "d": 6.72,
+   "text": "about 2-3 years behind the publications take so long to do from start to finish."
+  },
+  {
+   "t": 449.84,
+   "d": 5.4,
+   "text": "We are excited to get on with it so to speak. ALEXEI: Definitely hitting while the iron is hot"
+  },
+  {
+   "t": 455.24,
+   "d": 6.92,
+   "text": "in terms of vampire survivors. Every year of Roguelike Celebration organizer we have"
+  },
+  {
+   "t": 462.16,
+   "d": 6.68,
+   "text": "the discussion of is it a roguelike? A cousin genre? We are still not sure. Certainly there is"
+  },
+  {
+   "t": 468.84,
+   "d": 6.6,
+   "text": "something there. Yeah, that's really interesting and yeah. I will just remind the audience,"
+  },
+  {
+   "t": 475.44,
+   "d": 4.2,
+   "text": "I didn't spiel this before. If you are in the theater, you can click the write a question button"
+  },
+  {
+   "t": 479.64,
+   "d": 4.76,
+   "text": "and put questions there. I see some people have been doing it already which is fantastic. But"
+  },
+  {
+   "t": 487.0,
+   "d": 7.76,
+   "text": "we have some of the other co-authors here with us. You mentioned Boyfriend Dudgeon and we have"
+  },
+  {
+   "t": 494.76,
+   "d": 6.64,
+   "text": "Christine who is a contributor to that chapter who we can bring on. I think we will bring on"
+  },
+  {
+   "t": 501.4,
+   "d": 9.04,
+   "text": "everybody and do intros and this panel style. And bring on Marc Dolgin who is another contributor."
+  },
+  {
+   "t": 511.0,
+   "d": 3.76,
+   "text": "Yeah, if we go around, Christine, if you go want to go first and talk about yourself and"
+  },
+  {
+   "t": 514.76,
+   "d": 4.96,
+   "text": "your chapter, that would be great. >> Christine: Hello. I am Christine"
+  },
+  {
+   "t": 519.72,
+   "d": 12.92,
+   "text": "Tomlinsor. I am an assistant professor. I do a lot of research on different kinds of video games and"
+  },
+  {
+   "t": 532.64,
+   "d": 11.08,
+   "text": "worked in industry a bit. I was the UX/UI lead at Activision. I am excited to be here and talking a"
+  },
+  {
+   "t": 543.72,
+   "d": 8.44,
+   "text": "little about roguelikes and roguelites especially because there are so many debates on what counts"
+  },
+  {
+   "t": 552.16,
+   "d": 7.32,
+   "text": "as one of those. I think that's something that makes these kinds of games really exciting because"
+  },
+  {
+   "t": 559.48,
+   "d": 4.56,
+   "text": "you can do so much with them and open it up to so many different kinds of players and different"
+  },
+  {
+   "t": 564.04,
+   "d": 5.0,
+   "text": "kinds of experiences and stories. I think that's something that this book is really getting at."
+  },
+  {
+   "t": 570.12,
+   "d": 4.48,
+   "text": "Just how these games can be so different from each other and yet have some of"
+  },
+  {
+   "t": 574.6,
+   "d": 6.36,
+   "text": "these very core mechanic values to them. Thank you very much. Happy to be here."
+  },
+  {
+   "t": 582.28,
+   "d": 5.92,
+   "text": "ALEXEI: Familiar to us. Chat has been joking about the Berlin interpretation. Yes,"
+  },
+  {
+   "t": 588.2,
+   "d": 4.8,
+   "text": "the discussion of what is a roguelike is a big part of being a roguelike fan. How"
+  },
+  {
+   "t": 593.0,
+   "d": 6.16,
+   "text": "about you introduce yourself, Marc. >> Marc: Hello. I have been working"
+  },
+  {
+   "t": 599.16,
+   "d": 5.56,
+   "text": "in the video game industry for many years and specializing mostly in roguelikes and"
+  },
+  {
+   "t": 604.72,
+   "d": 9.96,
+   "text": "roguelites. I am a game designer as well as a video game consultant. I am also appear engineer"
+  },
+  {
+   "t": 614.68,
+   "d": 6.52,
+   "text": "for voice actors and I am a voice actor myself working with Triple-A companies such as Capcom."
+  },
+  {
+   "t": 621.2,
+   "d": 11.6,
+   "text": "But these days my focus is in the world of indie games where I help a lot of different double A or"
+  },
+  {
+   "t": 632.8,
+   "d": 8.6,
+   "text": "smaller independent developers make roguelikes and roguelites. So I decided to start making a"
+  },
+  {
+   "t": 641.4,
+   "d": 10.56,
+   "text": "YouTube channel to do video essays on roguelike design and talking about rise of popularity in the"
+  },
+  {
+   "t": 651.96,
+   "d": 7.12,
+   "text": "roguelike world and how it has been influencing the video game world more and more every year."
+  },
+  {
+   "t": 660.04,
+   "d": 6.24,
+   "text": "ALEXEI: I think we see that influence and working in Triple-A it has gone from being a roguelike"
+  },
+  {
+   "t": 666.28,
+   "d": 4.16,
+   "text": "person is like that's an interesting side hobby but no one is interested in that and now they are"
+  },
+  {
+   "t": 670.44,
+   "d": 10.0,
+   "text": "like that's a marketable skill now you reflect. Just to chat about the chapters on that topic,"
+  },
+  {
+   "t": 680.44,
+   "d": 10.92,
+   "text": "yours is what makes a good roguelite. Is there a quick elevator pitch of what it is."
+  },
+  {
+   "t": 691.36,
+   "d": 21.64,
+   "text": ">> I have spent time playing flash games and there is a lot of similarities and I have always wrote"
+  },
+  {
+   "t": 713.0,
+   "d": 5.88,
+   "text": "notes and tried to understand how a lot of these games worked. By playing a lot of smaller games,"
+  },
+  {
+   "t": 718.88,
+   "d": 7.76,
+   "text": "I was really focused on many different games as opposed to Triple-A games and having to spend"
+  },
+  {
+   "t": 726.64,
+   "d": 4.08,
+   "text": "sometimes hundreds of hours in just a single title that required a lot of grinding. I got"
+  },
+  {
+   "t": 730.72,
+   "d": 7.16,
+   "text": "to play a lot of different styles of games. With roguelikes, basically, being pretty much"
+  },
+  {
+   "t": 737.88,
+   "d": 11.44,
+   "text": "a subgenre, it gave the opportunity for developers to create games by adding the sub-genre and just"
+  },
+  {
+   "t": 749.32,
+   "d": 6.44,
+   "text": "placing any other genre on top of it allowing for endless possibilities in terms of new games"
+  },
+  {
+   "t": 755.76,
+   "d": 4.56,
+   "text": "we can find and different genres. Now you get to see pull table roguelikes,"
+  },
+  {
+   "t": 760.32,
+   "d": 11.64,
+   "text": "and pegal roguelikes and so many more that I thought it was pretty important to just"
+  },
+  {
+   "t": 771.96,
+   "d": 7.52,
+   "text": "distinguish and see what are roguelikes and how to make it interesting. Obviously, yes, the question"
+  },
+  {
+   "t": 779.48,
+   "d": 6.04,
+   "text": "of what makes a good roguelike is a big one which is why it was a pretty long chapter to write, and"
+  },
+  {
+   "t": 785.52,
+   "d": 7.28,
+   "text": "also it was part of the videos that did quite well on the channel that took me almost six months to"
+  },
+  {
+   "t": 792.8,
+   "d": 7.08,
+   "text": "do and it is almost an hour long. It is obviously a big topic of conversation and centered around"
+  },
+  {
+   "t": 799.88,
+   "d": 9.56,
+   "text": "what makes -- how to make a roguelike that is interesting, unique, and that people can just tend"
+  },
+  {
+   "t": 809.44,
+   "d": 6.52,
+   "text": "to enjoy. Why do people enjoy certain roguelikes and why are some more popular than others?"
+  },
+  {
+   "t": 815.96,
+   "d": 5.56,
+   "text": "ALEXEI: That's interesting. I saw, and I don't know who is putting the theory forward,"
+  },
+  {
+   "t": 822.24,
+   "d": 6.8,
+   "text": "but Brian and Jason talking about this on Twitter of the was discussion of is it better to think"
+  },
+  {
+   "t": 829.04,
+   "d": 5.64,
+   "text": "of roguelikes as a poetic form versus a genre in to itself because of the way it seems like"
+  },
+  {
+   "t": 834.68,
+   "d": 4.76,
+   "text": "many genres get placed into the framing of a roguelike while retaining their own"
+  },
+  {
+   "t": 839.44,
+   "d": 10.72,
+   "text": "genre-ness. At Roguelike Celebration, we are not interested in rehashing just the Berlin"
+  },
+  {
+   "t": 850.16,
+   "d": 5.44,
+   "text": "interpretation 2.0 but always interested in is there an extra level of discussion who what's"
+  },
+  {
+   "t": 855.6,
+   "d": 8.04,
+   "text": "a roguelike that's not trying to gatekeep and exclude but what is the essence of what we like"
+  },
+  {
+   "t": 863.64,
+   "d": 12.2,
+   "text": "why say we like roguelikes. Yeah. Excellent. We will go this like queue style. Christine,"
+  },
+  {
+   "t": 875.84,
+   "d": 5.16,
+   "text": "your chapter is about roguelites, romance, and the power of genre bending"
+  },
+  {
+   "t": 881.0,
+   "d": 9.12,
+   "text": "with boyfriend dungeon. Curious to hear more. >> Christine: I do research on romance and why"
+  },
+  {
+   "t": 890.12,
+   "d": 7.08,
+   "text": "players like it and how they engage with it mostly in role-playing games. But it was interesting to"
+  },
+  {
+   "t": 897.2,
+   "d": 6.44,
+   "text": "play Boyfriend Dudgeon because of the mash' up of roguelike games where you get dudgeon"
+  },
+  {
+   "t": 903.64,
+   "d": 10.52,
+   "text": "crawling and procedural generation of the levels but it has this cozier feel where you lack the"
+  },
+  {
+   "t": 915.68,
+   "d": 6.88,
+   "text": "almost permadeath punishment games have and there is this dating sim side to it where both things"
+  },
+  {
+   "t": 922.56,
+   "d": 5.96,
+   "text": "are interconnected and integrally related to one another. Leveling one up means leveling the other"
+  },
+  {
+   "t": 928.52,
+   "d": 6.4,
+   "text": "up as you date these characters or hangout with them your relationship increases but you use them"
+  },
+  {
+   "t": 934.92,
+   "d": 7.8,
+   "text": "as weapons when you are dungeon crawling which is a strange element of this game which means combat"
+  },
+  {
+   "t": 942.72,
+   "d": 4.56,
+   "text": "also levels up your relationship with them while your relationship leveling up makes you better at"
+  },
+  {
+   "t": 947.28,
+   "d": 6.48,
+   "text": "fighting. I thought it was an interesting way to go about game design and deserved"
+  },
+  {
+   "t": 954.28,
+   "d": 4.64,
+   "text": "attention was at times it feels like playing two totally separate games at the same time."
+  },
+  {
+   "t": 959.68,
+   "d": 7.72,
+   "text": "You have this disparate game design approach of dating sim and visual novel style experience"
+  },
+  {
+   "t": 967.4,
+   "d": 7.24,
+   "text": "alongside this combat that feels very familiar in terms of roguelike or roguelite while also opening"
+  },
+  {
+   "t": 974.64,
+   "d": 5.6,
+   "text": "this up for I think a broad audience particularly people that might be scared of something like"
+  },
+  {
+   "t": 980.24,
+   "d": 8.2,
+   "text": "permadeath who is that and look at roguelikes and roguelites and think not for me. Too challenging,"
+  },
+  {
+   "t": 988.44,
+   "d": 6.2,
+   "text": "too scary. But I think that this kind of genre mash up opens the door for more to"
+  },
+  {
+   "t": 994.64,
+   "d": 9.44,
+   "text": "explore. Being exposed to it and saying I might want to check out more games like this. I really"
+  },
+  {
+   "t": 1004.08,
+   "d": 5.32,
+   "text": "like this combat and I really like I get all these new experiences every time I go into the"
+  },
+  {
+   "t": 1009.4,
+   "d": 9.12,
+   "text": "dungeon. That's what my chapter focuses on. The intersection of two experiences that make it so"
+  },
+  {
+   "t": 1018.52,
+   "d": 7.8,
+   "text": "more people can enjoy roguelikes or roguelites. ALEXEI: That's interesting. I think about how"
+  },
+  {
+   "t": 1026.32,
+   "d": 7.0,
+   "text": "Hades was a big success and a big push on the whole tone of roguelikes and I think by pulling"
+  },
+  {
+   "t": 1033.32,
+   "d": 5.48,
+   "text": "in a lot more of the narrative and the characters and there world building and aesthetics and the"
+  },
+  {
+   "t": 1039.48,
+   "d": 6.44,
+   "text": "visuals are beautiful and everything is cohesive and it is character driven. There is romance."
+  },
+  {
+   "t": 1046.48,
+   "d": 6.0,
+   "text": "Feels like that did bring people in. Although that is a difficult roguelike. It has all the"
+  },
+  {
+   "t": 1052.48,
+   "d": 6.8,
+   "text": "combos and everything about the way the mechanical gameplay works feels like many other roguelikes at"
+  },
+  {
+   "t": 1059.28,
+   "d": 8.04,
+   "text": "the time. I think there is that extra expanding. I wonder too, you know, is that something that"
+  },
+  {
+   "t": 1067.32,
+   "d": 4.0,
+   "text": "you also think of and do you think it had that similar effect of bringing people in for those"
+  },
+  {
+   "t": 1071.32,
+   "d": 4.96,
+   "text": "elements and maybe they are like I should play dead cells or maybe I should, you know,"
+  },
+  {
+   "t": 1076.28,
+   "d": 4.12,
+   "text": "something else in that roguelike space. >> Christine: I think Hades definitely had a"
+  },
+  {
+   "t": 1080.4,
+   "d": 5.8,
+   "text": "huge impact as well. I think if we are thinking about tiered experiences. Boyfriend dungeon"
+  },
+  {
+   "t": 1086.2,
+   "d": 6.56,
+   "text": "is below Hades in terms of the challenges and reflecting what we think of as the core mechanics"
+  },
+  {
+   "t": 1092.76,
+   "d": 6.96,
+   "text": "in roguelikes. I think for more experienced players, Hades was probably more of a stepping"
+  },
+  {
+   "t": 1099.72,
+   "d": 5.76,
+   "text": "stone for that experience. With players that have way less experience with this type of game,"
+  },
+  {
+   "t": 1105.48,
+   "d": 8.16,
+   "text": "or games with combat in general, I think Boyfriend Dungeon is a good entry to this"
+  },
+  {
+   "t": 1113.64,
+   "d": 7.0,
+   "text": "kind of games and things with combat and to challenging ones self in ways that are less"
+  },
+  {
+   "t": 1120.64,
+   "d": 7.64,
+   "text": "intimidating initially. Hades had a huge impact on players as well. We obviously have a chapter"
+  },
+  {
+   "t": 1128.28,
+   "d": 6.6,
+   "text": "on Hades in the book which is very exciting. I think your point is an important one and we"
+  },
+  {
+   "t": 1134.88,
+   "d": 5.2,
+   "text": "do have more games emerging that are playing with the genres and mashing things together"
+  },
+  {
+   "t": 1140.08,
+   "d": 8.12,
+   "text": "in ways that are unique and interesting and do offer players new experiences."
+  },
+  {
+   "t": 1148.2,
+   "d": 6.6,
+   "text": "ALEXEI: Excellent. Hopping back around because James you are the organizer of this book,"
+  },
+  {
+   "t": 1154.8,
+   "d": 6.36,
+   "text": "the collector of this kind of anthology, but also have a chapter of your own about Fuco and"
+  },
+  {
+   "t": 1161.16,
+   "d": 6.96,
+   "text": "vampire survivors. Please tell me more. JAMES: With pleasure. My chapter is about"
+  },
+  {
+   "t": 1168.12,
+   "d": 8.92,
+   "text": "vampire survivors in Boruto. I take this as in my opinion two of the best examples because of"
+  },
+  {
+   "t": 1177.04,
+   "d": 8.08,
+   "text": "how they engage with powers. One of the best feelings in a roguelike is when you hit on a"
+  },
+  {
+   "t": 1185.12,
+   "d": 9.24,
+   "text": "powerful synergy and think is this thing going to work if I put this here? And it absolutely"
+  },
+  {
+   "t": 1194.36,
+   "d": 7.04,
+   "text": "comes off and you destroy everything and you feel you have broken the game how. I thought"
+  },
+  {
+   "t": 1201.4,
+   "d": 7.12,
+   "text": "that was reflective of something FUCO says in his philosophy. He was all about power and made"
+  },
+  {
+   "t": 1208.52,
+   "d": 4.56,
+   "text": "the argument that he is most well known for is that power is everywhere in the social field and"
+  },
+  {
+   "t": 1213.08,
+   "d": 5.92,
+   "text": "you can't escape it. It isn't just something the government or army has. It is every you go. One"
+  },
+  {
+   "t": 1219.0,
+   "d": 12.64,
+   "text": "of the lesser known things he said is the powerful elements between things can synergize and he makes"
+  },
+  {
+   "t": 1231.64,
+   "d": 7.08,
+   "text": "the point that different relations of power when they work together they can have a combined power"
+  },
+  {
+   "t": 1238.72,
+   "d": 5.6,
+   "text": "that's greater than the sum of their parts working separately. I think that's something those types"
+  },
+  {
+   "t": 1244.32,
+   "d": 8.64,
+   "text": "of game latch on to really forcefully and partly what makes them so exciting. Those exhilarating"
+  },
+  {
+   "t": 1252.96,
+   "d": 9.28,
+   "text": "moments. I kind of made the argument it is through procedural rhetoric if you like it kind of conveys"
+  },
+  {
+   "t": 1262.24,
+   "d": 6.4,
+   "text": "something about his philosophy to players even if that's not what it was intending to do."
+  },
+  {
+   "t": 1268.64,
+   "d": 4.2,
+   "text": "ALEXEI: I would love to find out if that's true both in the sense if he was thinking about epic"
+  },
+  {
+   "t": 1272.84,
+   "d": 12.56,
+   "text": "combos or vampire survivors. Yeah, that's really interesting. Do you think that there is, you know,"
+  },
+  {
+   "t": 1285.4,
+   "d": 6.56,
+   "text": "by making that connection an opportunity to bring some of the way that Fuco thinks about"
+  },
+  {
+   "t": 1291.96,
+   "d": 5.96,
+   "text": "those ideas into roguelike design? Or is it playing vampire survivors might give you a"
+  },
+  {
+   "t": 1299.24,
+   "d": 7.12,
+   "text": "analogy to understand that level? Is there crossover and next steps or talking about"
+  },
+  {
+   "t": 1306.36,
+   "d": 6.48,
+   "text": "this interesting convergent line of thought? >> I think that's a theme that runs through a lot"
+  },
+  {
+   "t": 1312.84,
+   "d": 5.68,
+   "text": "of philosophical work on gaming especially when you talk about things like ethics"
+  },
+  {
+   "t": 1320.04,
+   "d": 4.8,
+   "text": "and fields of philosophy like that. Whenever they do engage with games, one of the main things they"
+  },
+  {
+   "t": 1324.84,
+   "d": 5.16,
+   "text": "think about is their educational potential or potential to make us better people somehow. That's"
+  },
+  {
+   "t": 1330.0,
+   "d": 6.6,
+   "text": "one of the things art does and is a big conviction in a lot of philosophy. The main point of art is"
+  },
+  {
+   "t": 1336.6,
+   "d": 8.88,
+   "text": "to make us better people and to train us to live better lives. I think certainly until recently,"
+  },
+  {
+   "t": 1345.48,
+   "d": 5.8,
+   "text": "video games did not get that kind of attention from scholars and philosophers. I think I see that"
+  },
+  {
+   "t": 1351.28,
+   "d": 6.36,
+   "text": "analysis as being part of this wider argument that video games are not just an art form but"
+  },
+  {
+   "t": 1357.64,
+   "d": 7.12,
+   "text": "a very powerful one that has a lot of -- well, through its interactivity, lots of possibilities"
+  },
+  {
+   "t": 1364.76,
+   "d": 5.24,
+   "text": "for actually conveying ideas in ways we don't necessarily expect and in ways that aren't"
+  },
+  {
+   "t": 1370.0,
+   "d": 5.88,
+   "text": "intended. I think a lot of times like people think it is totally normal to watch a film and think"
+  },
+  {
+   "t": 1375.88,
+   "d": 8.72,
+   "text": "about the subliminal messages and the ideas that come through it despite the intention of authors."
+  },
+  {
+   "t": 1384.6,
+   "d": 5.24,
+   "text": "I like to do that kind of thing with games too. I think they offer such a rich potential"
+  },
+  {
+   "t": 1389.84,
+   "d": 7.08,
+   "text": "for conveying ideas and problematizing things and bringing out things you may not expect."
+  },
+  {
+   "t": 1396.92,
+   "d": 6.88,
+   "text": "ALEXEI: I specialized in moral philosophy and here I am accidentally bringing that in"
+  },
+  {
+   "t": 1403.8,
+   "d": 7.48,
+   "text": "but I think the majority of certainly popular discussion around kind of philosophy and games"
+  },
+  {
+   "t": 1411.28,
+   "d": 6.12,
+   "text": "does get really caught up in ethics and in a does violence in games make you bad? I think"
+  },
+  {
+   "t": 1417.4,
+   "d": 8.76,
+   "text": "it is use full to talk about is the relentless expansion of 4X reflect an ethically troubling"
+  },
+  {
+   "t": 1426.16,
+   "d": 10.6,
+   "text": "thing talking about gardening games and exploitive mechanics. I think what is really cool about what"
+  },
+  {
+   "t": 1436.76,
+   "d": 10.52,
+   "text": "you are talking about is it isn't just about their abilities to understand more ideas about the world"
+  },
+  {
+   "t": 1447.28,
+   "d": 4.8,
+   "text": "expands you as a person whether or not that makes you better but gives you new lenses to view the"
+  },
+  {
+   "t": 1452.08,
+   "d": 6.92,
+   "text": "world. Games help you understand ideas whether they are good or bad. They are just ideas. By"
+  },
+  {
+   "t": 1459.0,
+   "d": 4.8,
+   "text": "understanding them you have one more tool to try to think about the world. I think that is"
+  },
+  {
+   "t": 1463.8,
+   "d": 4.76,
+   "text": "really interesting and that is a lens that I see less often of being able to just discuss"
+  },
+  {
+   "t": 1468.56,
+   "d": 10.64,
+   "text": "that. I think I saw it might have been Everest pipkin but trying to use Snake the game to convey"
+  },
+  {
+   "t": 1479.2,
+   "d": 3.96,
+   "text": "Greek myth. People are nodding and know what I am talking about. Correct me if that's not who did"
+  },
+  {
+   "t": 1483.16,
+   "d": 7.88,
+   "text": "it. But conveying stories from different kind of Greek stuff through the mechanics of Snake"
+  },
+  {
+   "t": 1491.04,
+   "d": 5.51,
+   "text": "which is a cool idea. Like translation. >> I am not aware of that particularly."
+  },
+  {
+   "t": 1496.55,
+   "d": 2.75,
+   "text": "ALEXEI: Marc, did you know what I am talking about?"
+  },
+  {
+   "t": 1499.3,
+   "d": 6.58,
+   "text": ">> Marc: I have heard of it but I don't know the details. Was hoping to hear more."
+  },
+  {
+   "t": 1506.4,
+   "d": 9.2,
+   "text": "ALEXEI: I think I remember where it was mentioned so I will look it up. While I find that,"
+  },
+  {
+   "t": 1517.04,
+   "d": 7.8,
+   "text": "yeah. I think that's interesting. Is that kind of a correct, talking about it James, it is about the"
+  },
+  {
+   "t": 1524.84,
+   "d": 4.96,
+   "text": "fact it helps you understand an idea. You could have a different discussion about whether or not"
+  },
+  {
+   "t": 1530.44,
+   "d": 6.84,
+   "text": "delight and accumulation of power is a good thing but whether or not it is, understanding"
+  },
+  {
+   "t": 1537.28,
+   "d": 8.2,
+   "text": "methods of pow is its own separate discussion. JAMES: I think you are right when you say say a"
+  },
+  {
+   "t": 1545.48,
+   "d": 6.24,
+   "text": "lot of academic discussion about ethics in games tend to get focused on the violence question. That"
+  },
+  {
+   "t": 1551.72,
+   "d": 10.36,
+   "text": "obscures other ethical issues you could raise. On the point of 4X, I don't know if you are aware a"
+  },
+  {
+   "t": 1562.08,
+   "d": 14.56,
+   "text": "game came out called syphilization and you play as two students putting together a book report about"
+  },
+  {
+   "t": 1576.64,
+   "d": 5.64,
+   "text": "history. It gives you different ways to play out that history where you can focus on empathy rather"
+  },
+  {
+   "t": 1582.28,
+   "d": 5.96,
+   "text": "than conquest and about winning hearts and minds rather than winning wars. It seems fantastic."
+  },
+  {
+   "t": 1588.84,
+   "d": 5.24,
+   "text": "It is just another example of how much of a different direction you can push this kind"
+  },
+  {
+   "t": 1594.08,
+   "d": 8.28,
+   "text": "of thinking in when it comes to video games. ALEXEI: I found it. It was pippin bar who put"
+  },
+  {
+   "t": 1602.36,
+   "d": 8.2,
+   "text": "together a game. I will share a link in the chat and we can embed later. Tonya Short is the person"
+  },
+  {
+   "t": 1610.56,
+   "d": 9.08,
+   "text": "to told me about it. This is the small world of procgen games. I think opening up to audience"
+  },
+  {
+   "t": 1619.64,
+   "d": 5.8,
+   "text": "questions and roundtable discussion and everyone able to chip in. I will start with a super easy"
+  },
+  {
+   "t": 1625.44,
+   "d": 9.4,
+   "text": "question from chat which is your thoughts about what it means to be human? Maybe riffing off we"
+  },
+  {
+   "t": 1634.84,
+   "d": 6.8,
+   "text": "talked about thoughts of death and what roguelikes have to tell us about death. You know, thinking"
+  },
+  {
+   "t": 1641.64,
+   "d": 6.8,
+   "text": "about that, is there anything in that big realm of kind of the real big question pictures from"
+  },
+  {
+   "t": 1648.44,
+   "d": 4.24,
+   "text": "roguelikes and what they teach us? >> James: I almost wrote a chapter about"
+  },
+  {
+   "t": 1652.68,
+   "d": 5.24,
+   "text": "death for the book and ended up changing my behind for one reason or another. But the point because"
+  },
+  {
+   "t": 1657.92,
+   "d": 7.16,
+   "text": "going to be that basically in -- the majority of like Triple-A games death means nothing because it"
+  },
+  {
+   "t": 1665.08,
+   "d": 5.24,
+   "text": "hawse no consequence because you can keep trying and trying and repeat and restart at the next"
+  },
+  {
+   "t": 1670.32,
+   "d": 5.96,
+   "text": "checkpoint. It can take on a narrative sentence. If you talk about how it structures the gameplay"
+  },
+  {
+   "t": 1676.28,
+   "d": 7.64,
+   "text": "and reflective of the human experience, a lot of games don't approach death in a very deep way."
+  },
+  {
+   "t": 1685.52,
+   "d": 8.84,
+   "text": "The mechanic of permadeath brings games closer to an authentic confrontation with human morality."
+  },
+  {
+   "t": 1694.36,
+   "d": 6.12,
+   "text": "Everyone who has played a roguelike knows death is hanging over in a profound way and shapes how"
+  },
+  {
+   "t": 1700.48,
+   "d": 6.8,
+   "text": "you make your decisions and how you approach the tasks you are engaging with from moment"
+  },
+  {
+   "t": 1707.28,
+   "d": 6.84,
+   "text": "to moment. It this is a thread running through all existentialist philosophy and the idea death"
+  },
+  {
+   "t": 1714.12,
+   "d": 5.37,
+   "text": "isn't just what completes your existence and it isn't something that just happens at the end but"
+  },
+  {
+   "t": 1720.76,
+   "d": 8.16,
+   "text": "structures your being all the time. Roguelikes reflect that in a deep way. One of the deeper"
+  },
+  {
+   "t": 1728.92,
+   "d": 7.84,
+   "text": "points is not just about roguelikes. It is really good about talking about existential ank -- angst"
+  },
+  {
+   "t": 1736.76,
+   "d": 15.2,
+   "text": "and melancholy. One thing maybe isn't talked about enough in the history of philosophy is"
+  },
+  {
+   "t": 1751.96,
+   "d": 6.28,
+   "text": "what we do in response to this anxiety and boredom. One of the key answers is we play"
+  },
+  {
+   "t": 1758.24,
+   "d": 6.08,
+   "text": "and find meaning in playing and competing and things like that. There are people in game"
+  },
+  {
+   "t": 1764.32,
+   "d": 5.36,
+   "text": "studies who are making the argument that it should be renamed play studies because that's"
+  },
+  {
+   "t": 1769.68,
+   "d": 4.12,
+   "text": "really what is important about what we are studying rather than the fact this sometimes"
+  },
+  {
+   "t": 1773.8,
+   "d": 7.04,
+   "text": "happens in the form of games. It is the idea we play and this is a structural, really important"
+  },
+  {
+   "t": 1780.84,
+   "d": 5.28,
+   "text": "structural part of what it is to be human. It is not a secondary concern. Every culture plays"
+  },
+  {
+   "t": 1786.12,
+   "d": 7.72,
+   "text": "and has things they find meaningful about play whether it is games, sports, or anything that"
+  },
+  {
+   "t": 1793.84,
+   "d": 5.92,
+   "text": "revolves around the notion of play. I think that's the central concern when it comes to philosophy."
+  },
+  {
+   "t": 1799.76,
+   "d": 5.64,
+   "text": "ALEXEI: Yeah, I mean we were just talking about audible obviously roguelikes get focus on deaths"
+  },
+  {
+   "t": 1807.56,
+   "d": 11.36,
+   "text": "but how do we understand big ideas through art and games let you do that in a way you are also"
+  },
+  {
+   "t": 1818.92,
+   "d": 6.56,
+   "text": "engaged and interacting back and forth with it which I think is interesting. Marc, Christine,"
+  },
+  {
+   "t": 1825.48,
+   "d": 7.76,
+   "text": "any thoughts on existential roguelikes? >> Marc: In terms of the overarching question"
+  },
+  {
+   "t": 1833.24,
+   "d": 8.64,
+   "text": "outside video games I guess that is quite the conversation. One thing I will add I guess is"
+  },
+  {
+   "t": 1841.88,
+   "d": 6.16,
+   "text": "something that's quite interesting to look in terms of roguelikes in its developing years"
+  },
+  {
+   "t": 1848.04,
+   "d": 6.16,
+   "text": "is obviously originally there wasn't much of a reason for to start over. It was that's just how"
+  },
+  {
+   "t": 1854.2,
+   "d": 6.04,
+   "text": "the mechanics of the game are and wasn't too much thought put into it. We are seeing more roguelikes"
+  },
+  {
+   "t": 1860.24,
+   "d": 6.8,
+   "text": "and roguelites trying to put more focus on reasons behind the death and whether you look at cobalt"
+  },
+  {
+   "t": 1867.04,
+   "d": 11.08,
+   "text": "core or Hades. A lot of these games have reason as to why the player is restarting. What this"
+  },
+  {
+   "t": 1878.12,
+   "d": 7.92,
+   "text": "ends up happening is it makes a lot of roguelikes be more and more -- have more and more importance"
+  },
+  {
+   "t": 1886.04,
+   "d": 8.0,
+   "text": "within the lore and story which wasn't a focus a few years ago when Action Roguelikes were starting"
+  },
+  {
+   "t": 1894.04,
+   "d": 7.44,
+   "text": "to get more popular. There wasn't as much priority in making sure the game could be immersive. I am"
+  },
+  {
+   "t": 1901.48,
+   "d": 8.96,
+   "text": "feeling like this is happening more especially in response to Hades. There could be a great"
+  },
+  {
+   "t": 1910.44,
+   "d": 7.96,
+   "text": "story linked to the sub-genre of just having it be there for gameplay. From what I have seen,"
+  },
+  {
+   "t": 1919.6,
+   "d": 6.6,
+   "text": "I feel like developers are trying to push the idea that starting over is OK. Even if you end"
+  },
+  {
+   "t": 1926.2,
+   "d": 7.48,
+   "text": "up dying and have to lose everything. You just come back and try again. I think a game that"
+  },
+  {
+   "t": 1933.68,
+   "d": 7.88,
+   "text": "does that very well is a smaller roguelike I have been working very hard on currently called"
+  },
+  {
+   "t": 1941.56,
+   "d": 11.04,
+   "text": "the void reins upon her heart. This game tries to link to real life struggles such as anxiety"
+  },
+  {
+   "t": 1952.6,
+   "d": 7.64,
+   "text": "and depression. The whole story is linked behind the fact that even if you win a run,"
+  },
+  {
+   "t": 1960.24,
+   "d": 5.08,
+   "text": "or you lose, you have to start over and it might seen desperate and terrible but that's just part"
+  },
+  {
+   "t": 1965.32,
+   "d": 12.52,
+   "text": "of life. People just move on and just get better and that game connects with real life struggles"
+  },
+  {
+   "t": 1978.6,
+   "d": 4.92,
+   "text": "and uses roguelike elements to try to reflect that which I find very interesting."
+  },
+  {
+   "t": 1983.52,
+   "d": 5.24,
+   "text": "ALEXEI: That's interesting. To your point, all of the way back to the first Roguelike Celebration we"
+  },
+  {
+   "t": 1988.76,
+   "d": 6.96,
+   "text": "talked to the first developers of roguelikes and they didn't intend permadeath to become"
+  },
+  {
+   "t": 1995.72,
+   "d": 6.08,
+   "text": "the defining thing. It was a lot of technical constraints that have been embedded. Similar"
+  },
+  {
+   "t": 2001.8,
+   "d": 5.0,
+   "text": "with procedural generation and the randomness of levels and the idea it isn't the same was"
+  },
+  {
+   "t": 2006.8,
+   "d": 6.48,
+   "text": "more of a technical constraint of we can't store levels and have to hand generate them. Now it has"
+  },
+  {
+   "t": 2013.28,
+   "d": 6.52,
+   "text": "become common. I think to your your point too for a long time that is how it was and now there is"
+  },
+  {
+   "t": 2019.8,
+   "d": 5.76,
+   "text": "that urge to justify why in this game is this dungeon different every time. You have to come"
+  },
+  {
+   "t": 2025.56,
+   "d": 5.56,
+   "text": "up with like there is a mad Mage who is moving the dungeon around and that's why it is different. Or"
+  },
+  {
+   "t": 2031.12,
+   "d": 6.8,
+   "text": "there is a mist that is seeping through and the mist is restructuring thing. That puts more focus"
+  },
+  {
+   "t": 2037.92,
+   "d": 8.93,
+   "text": "on instead of now this hits on the same stuff as Borges by accident now it is like no, they"
+  },
+  {
+   "t": 2046.85,
+   "d": 6.19,
+   "text": "are literally talking about the same ideas in the world building because of this need to justify why"
+  },
+  {
+   "t": 2053.04,
+   "d": 5.68,
+   "text": "we have this infinite library of babble situation. I wonder if there is something to that too of now"
+  },
+  {
+   "t": 2058.72,
+   "d": 7.2,
+   "text": "these games, whether they mean to or not, having to think about the nature of like the monkeys on"
+  },
+  {
+   "t": 2065.92,
+   "d": 3.48,
+   "text": "the typewriter and all these questions that come from procedural generation and what does it mean"
+  },
+  {
+   "t": 2069.4,
+   "d": 8.31,
+   "text": "to get meaning from randomness, and confront infinity and that's also very interesting."
+  },
+  {
+   "t": 2077.71,
+   "d": 10.01,
+   "text": ">> Marc: I have realized more and more there is two very distinct vibes or styles to roguelikes"
+  },
+  {
+   "t": 2087.72,
+   "d": 6.52,
+   "text": "these days. The ones that are centered around comedy and ones that are a little more serious."
+  },
+  {
+   "t": 2094.24,
+   "d": 4.44,
+   "text": "The benefit of having a lot of comedic roguelikes is you don't have to worry too"
+  },
+  {
+   "t": 2098.68,
+   "d": 9.56,
+   "text": "much about explaining thing if everything isn't super serious. Even the biggest roguelikes ever"
+  },
+  {
+   "t": 2108.24,
+   "d": 6.28,
+   "text": "don't have the deepest lore or explanation as to what's going on but if there is humor put into it"
+  },
+  {
+   "t": 2114.52,
+   "d": 5.36,
+   "text": "and you don't take things seriously, plays don't have to worry too much. But the moment you make"
+  },
+  {
+   "t": 2119.88,
+   "d": 7.36,
+   "text": "the game a little more serious than people want to get immersed and have reasons and explain why"
+  },
+  {
+   "t": 2127.24,
+   "d": 6.15,
+   "text": "am I starting over. Is it just because it is a video game and I have to start over? I think it"
+  },
+  {
+   "t": 2133.39,
+   "d": 5.17,
+   "text": "is interesting to see both approaches because I think there really is two different clans"
+  },
+  {
+   "t": 2138.56,
+   "d": 6.56,
+   "text": "in terms of the immersion of a game whether they want to try to actually explain why everything is"
+  },
+  {
+   "t": 2145.12,
+   "d": 5.64,
+   "text": "occurring or it is just a video game have fun. I find that to be interesting to see it and progress"
+  },
+  {
+   "t": 2150.76,
+   "d": 3.88,
+   "text": "more and more. I think there is more and more serious roguelikes occurring now that people"
+  },
+  {
+   "t": 2154.64,
+   "d": 7.16,
+   "text": "realize they can make a good engaging interesting story within a game that was just kind of like,"
+  },
+  {
+   "t": 2161.8,
+   "d": 6.08,
+   "text": "you know, a random indie subgenre. ALEXEI: I think we see things that blend"
+  },
+  {
+   "t": 2167.88,
+   "d": 7.6,
+   "text": "a little bit. People in chat picking up on I got into dungeon meshy and I think there is a lot of"
+  },
+  {
+   "t": 2175.48,
+   "d": 6.6,
+   "text": "roguelike ties there. I think that's one that like, vague tonal spoilers, starts out funny"
+  },
+  {
+   "t": 2182.08,
+   "d": 5.6,
+   "text": "and gets quiet serious while still having the funny in there. I think it gets you into some"
+  },
+  {
+   "t": 2187.68,
+   "d": 4.2,
+   "text": "of these bigger questions about things like death by starting out by being a funny show"
+  },
+  {
+   "t": 2191.88,
+   "d": 7.44,
+   "text": "about people cooking monsters. Yeah. The tone does a lot there. Yeah. Christine, do you have anything"
+  },
+  {
+   "t": 2199.32,
+   "d": 6.88,
+   "text": "you want to contribute to the broad topic? >> Christine: I think my answer is at the"
+  },
+  {
+   "t": 2206.2,
+   "d": 6.44,
+   "text": "intersection of James and Marc. I was going to go through with the play thing and play make us"
+  },
+  {
+   "t": 2212.64,
+   "d": 9.76,
+   "text": "human but we also, and I know not every video game has this, but people love stories. We have been"
+  },
+  {
+   "t": 2222.4,
+   "d": 7.24,
+   "text": "telling stories forever. Having the opportunity to explore or experience and become part of a story"
+  },
+  {
+   "t": 2229.64,
+   "d": 6.72,
+   "text": "is alluring which might be part of the reason we are seeing more of these serious, as Marc said,"
+  },
+  {
+   "t": 2236.36,
+   "d": 7.32,
+   "text": "roguelikes and roguelites, to give people that kind of experience with their game. But I think"
+  },
+  {
+   "t": 2243.68,
+   "d": 6.08,
+   "text": "that it is also really individual. Everyone is going to be looking for a different type of"
+  },
+  {
+   "t": 2249.76,
+   "d": 5.28,
+   "text": "experience or a different thing that they can get out of a video game whether that's a roguelike or"
+  },
+  {
+   "t": 2255.04,
+   "d": 5.92,
+   "text": "another type of game. I think that's also why we are seeing such a proliferation in genre mash ups"
+  },
+  {
+   "t": 2260.96,
+   "d": 7.32,
+   "text": "or things people are doing with different kinds of games because some people do want the challenge"
+  },
+  {
+   "t": 2268.28,
+   "d": 4.6,
+   "text": "and some people don't really care about the story and they just want to increase their skills and"
+  },
+  {
+   "t": 2272.88,
+   "d": 7.16,
+   "text": "prove that they can overcome something or as I have had some players put it prove they can beat"
+  },
+  {
+   "t": 2280.04,
+   "d": 7.84,
+   "text": "the develop SKWR that are -- developer and that they are better than the developer. Whereas some"
+  },
+  {
+   "t": 2287.88,
+   "d": 8.44,
+   "text": "people want to relax, have fun, and experience different characters and stories, and how they"
+  },
+  {
+   "t": 2296.32,
+   "d": 8.92,
+   "text": "as a character can fit in and expand the worlds through whatever agency they have as players. I"
+  },
+  {
+   "t": 2305.24,
+   "d": 6.68,
+   "text": "think there is a lot of that. Part is wanting to play, wanting stories, wanting to be creative,"
+  },
+  {
+   "t": 2311.92,
+   "d": 6.76,
+   "text": "and wanting to prove ourselves in some way. ALEXEI: I think that's interesting. Something"
+  },
+  {
+   "t": 2318.68,
+   "d": 9.72,
+   "text": "you said about becoming part of the story. That's my history. Playing a game with romance,"
+  },
+  {
+   "t": 2331.12,
+   "d": 7.2,
+   "text": "being an avid reader, having the moment of romance and being caught up in this, and getting to a"
+  },
+  {
+   "t": 2338.32,
+   "d": 6.6,
+   "text": "moment where I had to betray my romance option or the values my character holds. I was like I"
+  },
+  {
+   "t": 2344.92,
+   "d": 9.56,
+   "text": "have to decide that sitting on this couch. I was like I have read so many novels and never felt"
+  },
+  {
+   "t": 2354.48,
+   "d": 12.44,
+   "text": "like this and I have to get in it and there goes my career trajectory. In roguelikes it is almost"
+  },
+  {
+   "t": 2367.56,
+   "d": 7.6,
+   "text": "a scaled out view because even a narrative game is mostly focused on where you have one run through"
+  },
+  {
+   "t": 2375.16,
+   "d": 7.4,
+   "text": "life and one set of choices you are going through continuously. Roguelikes lean into the try that"
+  },
+  {
+   "t": 2382.56,
+   "d": 7.28,
+   "text": "again and maybe make different choices or don't think so much of your one particular character."
+  },
+  {
+   "t": 2389.84,
+   "d": 5.42,
+   "text": "You are kind of zoomed and obviously have games that are thinking about a lineage of characters"
+  },
+  {
+   "t": 2395.26,
+   "d": 5.9,
+   "text": "and I think that's interesting as well. One of the ways to add narrative structure to the run-base"
+  },
+  {
+   "t": 2401.16,
+   "d": 5.88,
+   "text": "permadeath is to say these are going to be like generations of people and do a darkest dungeon"
+  },
+  {
+   "t": 2407.04,
+   "d": 10.72,
+   "text": "thing and make the recruitment of new characters to go permadie into a mechanic instead of you are"
+  },
+  {
+   "t": 2417.76,
+   "d": 7.36,
+   "text": "an at sign and next time don't think about it. I think that's interesting as well. It lets you"
+  },
+  {
+   "t": 2426.2,
+   "d": 4.0,
+   "text": "kind of examine many different perspectives or kind of put yourself into the head of a bunch"
+  },
+  {
+   "t": 2430.2,
+   "d": 6.84,
+   "text": "of different characters or think in a lineage and bigger way than a singular player going through a"
+  },
+  {
+   "t": 2437.04,
+   "d": 15.6,
+   "text": "story. All right. One, hopefully, shorter one, because we are heading up on time soon is just"
+  },
+  {
+   "t": 2452.64,
+   "d": 9.44,
+   "text": "a question about what mediums you your books and games cover? Are you just looking at digital? Is"
+  },
+  {
+   "t": 2462.08,
+   "d": 7.12,
+   "text": "there any inspiration from other things like board games? Interactive theater comes up on talking"
+  },
+  {
+   "t": 2469.2,
+   "d": 6.48,
+   "text": "about roguelikes because I think of the improv and systemic behavior. Any inspirations coming up?"
+  },
+  {
+   "t": 2475.68,
+   "d": 10.32,
+   "text": "JAMES: It is mainly digital games and roguelikes that you see most famously. One"
+  },
+  {
+   "t": 2488.28,
+   "d": 9.72,
+   "text": "chapter is potential for game design approaches the artsy ways. They are not strictly speaking"
+  },
+  {
+   "t": 2499.36,
+   "d": 7.44,
+   "text": "one chapter begins by discussing can we dwell in possibilities which is that kind of art house kind"
+  },
+  {
+   "t": 2506.8,
+   "d": 7.2,
+   "text": "of game which is all about queer possibility basically. That weaves in a few different"
+  },
+  {
+   "t": 2514.0,
+   "d": 7.92,
+   "text": "kinds of games. Mostly the book is focused on digital media and roguelikes in particular."
+  },
+  {
+   "t": 2523.44,
+   "d": 8.72,
+   "text": "ALEXEI: I guess one of the last questions is is there place people can subscribe to make"
+  },
+  {
+   "t": 2532.16,
+   "d": 8.04,
+   "text": "sure to get notice when the book is available to acquire? How do people actually read this?"
+  },
+  {
+   "t": 2540.2,
+   "d": 9.44,
+   "text": "JAMES: Good question. I don't know yet. I mean I am happy to share any details with you if you"
+  },
+  {
+   "t": 2549.64,
+   "d": 4.68,
+   "text": "would put it on your social media that would be wonderful or circulate it with the attendees."
+  },
+  {
+   "t": 2554.32,
+   "d": 7.28,
+   "text": "That would really appreciate that. But apart from that, it is coming out on CRC Press and announced"
+  },
+  {
+   "t": 2561.6,
+   "d": 5.68,
+   "text": "on there at some point but I don't know exactly when. I am a bit in the dark on that as well."
+  },
+  {
+   "t": 2567.28,
+   "d": 4.76,
+   "text": "ALEXEI: Very kind to come when you are two weeks out from the final draft deadline."
+  },
+  {
+   "t": 2572.04,
+   "d": 6.08,
+   "text": "JAMES: Not at all. It was an absolute pleasure. ALEXEI: You let us know and we will let people"
+  },
+  {
+   "t": 2578.12,
+   "d": 9.08,
+   "text": "know. Follow our newsletter and we will let you know when this book comes out. Yeah. I"
+  },
+  {
+   "t": 2587.2,
+   "d": 5.12,
+   "text": "guess going around, is there anywhere elsewhere people would like to check out your other work?"
+  },
+  {
+   "t": 2592.32,
+   "d": 7.76,
+   "text": "Marc sounds like you have a YouTube channel. >> Marc: Yes, I have a YouTube channel where I"
+  },
+  {
+   "t": 2600.08,
+   "d": 11.0,
+   "text": "play roguelikes and every now and then do a big video essays on video game design but I also"
+  },
+  {
+   "t": 2611.08,
+   "d": 6.28,
+   "text": "stream a lot where I play demos and early access games that have been sent to the channel where I"
+  },
+  {
+   "t": 2617.36,
+   "d": 6.28,
+   "text": "give my feedback. Not obviously just play testing but give my first impressions. That has been a"
+  },
+  {
+   "t": 2623.64,
+   "d": 8.36,
+   "text": "pretty successful and very enjoyable series for me to do. But I have been trying to share all my"
+  },
+  {
+   "t": 2632.0,
+   "d": 6.4,
+   "text": "knowledge of roguelikes on this channel and I have been getting a lot of video game consultant work"
+  },
+  {
+   "t": 2638.4,
+   "d": 7.76,
+   "text": "through it. If you are interested in roguelike design and also want to catch some streams of like"
+  },
+  {
+   "t": 2646.16,
+   "d": 7.44,
+   "text": "new or like demos and just like talk about design in that regard, feel free to follow my channel at"
+  },
+  {
+   "t": 2653.6,
+   "d": 11.04,
+   "text": "pepper head. Just pepper head-on YouTube. It is a channel I started recently. I am happy to share my"
+  },
+  {
+   "t": 2664.64,
+   "d": 6.72,
+   "text": "knowledge of video game design to the world. ALEXEI: Christine, anywhere else people can"
+  },
+  {
+   "t": 2671.36,
+   "d": 5.2,
+   "text": "check out some of your work? >> Christine: Not currently. I do"
+  },
+  {
+   "t": 2676.56,
+   "d": 3.88,
+   "text": "have a book on dragon age coming out in the couple months. I don't know if that"
+  },
+  {
+   "t": 2680.44,
+   "d": 3.4,
+   "text": "would be of interest to anyone. ALEXEI: Be of interest to me."
+  },
+  {
+   "t": 2683.84,
+   "d": 10.56,
+   "text": ">> Christine: That's through Zeitgeist of pop culture. I don't know. Maybe I need a YouTube"
+  },
+  {
+   "t": 2694.4,
+   "d": 4.24,
+   "text": "channel as well. Maybe I will follow Marc's lead on that because it sounds interesting"
+  },
+  {
+   "t": 2698.64,
+   "d": 7.72,
+   "text": "and pretty cool. Thank you for having me. ALEXEI: We appreciate you all taking part."
+  },
+  {
+   "t": 2707.48,
+   "d": 5.0,
+   "text": "That's one thing we like about Roguelike Celebration. It takes a lot of work to have a"
+  },
+  {
+   "t": 2712.48,
+   "d": 7.52,
+   "text": "YouTube channel or God forbid write and publish a book. We like to give you a chance to share"
+  },
+  {
+   "t": 2720.68,
+   "d": 8.02,
+   "text": "your knowledge with the bigger community. Thank you for coming to chat with us."
+  },
+  {
+   "t": 2728.7,
+   "d": 7.26,
+   "text": "JAMES: My pleasure. And nice to finally meet Christine and Marc even if not in person."
+  },
+  {
+   "t": 2736.52,
+   "d": 12.63,
+   "text": "ALEXEI: Excellent. Thank you, James, Marc, and Christine. All right."
+  }
+ ]
+}

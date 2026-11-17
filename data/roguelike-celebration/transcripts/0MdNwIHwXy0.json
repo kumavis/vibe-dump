@@ -1,0 +1,3810 @@
+{
+ "id": "0MdNwIHwXy0",
+ "url": "https://www.youtube.com/watch?v=0MdNwIHwXy0",
+ "title": "John Harris: A Trip Through The Mystery Dungeons",
+ "speaker": "John Harris",
+ "talk_title": "A Trip Through The Mystery Dungeons",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1873,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "An overview of Chunsoft's long-lived Mystery Dungeon series, including Torneko, Shiren, Chocobo, Pokemon and others",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5307,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.36,
+   "d": 1.8,
+   "text": "without further"
+  },
+  {
+   "t": 5.16,
+   "d": 2.44,
+   "text": "Ado I think that we"
+  },
+  {
+   "t": 7.6,
+   "d": 4.12,
+   "text": "will hand over to John who's just"
+  },
+  {
+   "t": 11.72,
+   "d": 2.84,
+   "text": "setting up their"
+  },
+  {
+   "t": 16.88,
+   "d": 2.2,
+   "text": "slides"
+  },
+  {
+   "t": 19.08,
+   "d": 3.28,
+   "text": "but here we are there we go hello can"
+  },
+  {
+   "t": 22.36,
+   "d": 2.16,
+   "text": "you hear me yes we can hear you you're a"
+  },
+  {
+   "t": 24.52,
+   "d": 1.8,
+   "text": "bit quiet but I think we can do that fix"
+  },
+  {
+   "t": 26.32,
+   "d": 3.64,
+   "text": "that on our end so oh that's good okay"
+  },
+  {
+   "t": 29.96,
+   "d": 1.68,
+   "text": "shall I just go ahead and get started"
+  },
+  {
+   "t": 31.64,
+   "d": 2.44,
+   "text": "yeah go for it okay we've been some"
+  },
+  {
+   "t": 34.08,
+   "d": 2.72,
+   "text": "excellent slides so far"
+  },
+  {
+   "t": 36.8,
+   "d": 3.4,
+   "text": "this uh this convention this conference"
+  },
+  {
+   "t": 40.2,
+   "d": 1.88,
+   "text": "I think conference is the best uh word"
+  },
+  {
+   "t": 42.08,
+   "d": 4.32,
+   "text": "uh and my slides are mostly just to uh"
+  },
+  {
+   "t": 46.4,
+   "d": 2.8,
+   "text": "keep me on track and make the things"
+  },
+  {
+   "t": 49.2,
+   "d": 1.08,
+   "text": "that I'm talking about seem a little"
+  },
+  {
+   "t": 50.28,
+   "d": 1.44,
+   "text": "more real I have lots of"
+  },
+  {
+   "t": 51.72,
+   "d": 2.8,
+   "text": "screenshots um my my purpose here to"
+  },
+  {
+   "t": 54.52,
+   "d": 1.68,
+   "text": "give you an overview of the Mystery"
+  },
+  {
+   "t": 56.2,
+   "d": 2.72,
+   "text": "Dungeon series of Rog likes from"
+  },
+  {
+   "t": 58.92,
+   "d": 1.8,
+   "text": "chunsoft in"
+  },
+  {
+   "t": 60.72,
+   "d": 3.68,
+   "text": "Japan uh there are many more of these"
+  },
+  {
+   "t": 64.4,
+   "d": 2.84,
+   "text": "than you might think there are I my"
+  },
+  {
+   "t": 67.24,
+   "d": 2.68,
+   "text": "count goes 31 maybe a little maybe plus"
+  },
+  {
+   "t": 69.92,
+   "d": 1.96,
+   "text": "or minus one or"
+  },
+  {
+   "t": 71.88,
+   "d": 2.88,
+   "text": "two um there there's just so many of"
+  },
+  {
+   "t": 74.76,
+   "d": 3.84,
+   "text": "them and uh my book a We Heart Mystery"
+  },
+  {
+   "t": 78.6,
+   "d": 3.08,
+   "text": "Dungeon on it iio hopefully a version"
+  },
+  {
+   "t": 81.68,
+   "d": 5.56,
+   "text": "from limited run games uh before long I"
+  },
+  {
+   "t": 87.24,
+   "d": 2.36,
+   "text": "I I go into excruciating detail about"
+  },
+  {
+   "t": 89.6,
+   "d": 2.6,
+   "text": "all of them them that I that I could but"
+  },
+  {
+   "t": 92.2,
+   "d": 1.08,
+   "text": "let's go ahead and get start because"
+  },
+  {
+   "t": 93.28,
+   "d": 1.52,
+   "text": "they have a lot to cover and only half"
+  },
+  {
+   "t": 94.8,
+   "d": 0.88,
+   "text": "an"
+  },
+  {
+   "t": 95.68,
+   "d": 4.96,
+   "text": "hour um so yes all right now the Mystery"
+  },
+  {
+   "t": 100.64,
+   "d": 2.64,
+   "text": "Dungeon games are a longlived series of"
+  },
+  {
+   "t": 103.28,
+   "d": 4.04,
+   "text": "Rog light games uh made by chunsoft uh"
+  },
+  {
+   "t": 107.32,
+   "d": 2.88,
+   "text": "they are heavily inspired by Rogue and"
+  },
+  {
+   "t": 110.2,
+   "d": 3.08,
+   "text": "hack and throughout the years they have"
+  },
+  {
+   "t": 113.28,
+   "d": 3.24,
+   "text": "kept that uh that"
+  },
+  {
+   "t": 116.52,
+   "d": 2.48,
+   "text": "inspiration uh so that now there's some"
+  },
+  {
+   "t": 119.0,
+   "d": 1.44,
+   "text": "of the most"
+  },
+  {
+   "t": 120.44,
+   "d": 2.12,
+   "text": "classical roog light games you can find"
+  },
+  {
+   "t": 122.56,
+   "d": 2.56,
+   "text": "that are still being developed and made"
+  },
+  {
+   "t": 125.12,
+   "d": 3.0,
+   "text": "besides things that you know individuals"
+  },
+  {
+   "t": 128.12,
+   "d": 2.72,
+   "text": "make on their own it's a classic star"
+  },
+  {
+   "t": 130.84,
+   "d": 2.08,
+   "text": "rug like it's a turn-based procedurally"
+  },
+  {
+   "t": 132.92,
+   "d": 2.4,
+   "text": "generated dungeon paration game with"
+  },
+  {
+   "t": 135.32,
+   "d": 1.56,
+   "text": "lots of tricky monsters lots of weird"
+  },
+  {
+   "t": 136.88,
+   "d": 3.32,
+   "text": "items to find uh item identification in"
+  },
+  {
+   "t": 140.2,
+   "d": 2.08,
+   "text": "many of them challenging gameplay and of"
+  },
+  {
+   "t": 142.28,
+   "d": 2.52,
+   "text": "course perade death which means"
+  },
+  {
+   "t": 144.8,
+   "d": 1.76,
+   "text": "something different in mystery n than it"
+  },
+  {
+   "t": 146.56,
+   "d": 4.04,
+   "text": "does in say Rogue or net hack uh anyway"
+  },
+  {
+   "t": 150.6,
+   "d": 1.96,
+   "text": "my worri is here I am hopelessly"
+  },
+  {
+   "t": 152.56,
+   "d": 1.76,
+   "text": "obsessed with mystery dungeon I have"
+  },
+  {
+   "t": 154.32,
+   "d": 2.12,
+   "text": "played most of these"
+  },
+  {
+   "t": 156.44,
+   "d": 4.2,
+   "text": "myself uh let's see uh uh and those that"
+  },
+  {
+   "t": 160.64,
+   "d": 1.8,
+   "text": "I couldn't play most ofly it's because"
+  },
+  {
+   "t": 162.44,
+   "d": 2.84,
+   "text": "they're lost uh there are two or three"
+  },
+  {
+   "t": 165.28,
+   "d": 1.84,
+   "text": "mystery dunging a few of them that"
+  },
+  {
+   "t": 167.12,
+   "d": 1.44,
+   "text": "apparently there are no there's no"
+  },
+  {
+   "t": 168.56,
+   "d": 2.04,
+   "text": "surviving copies of that or at least you"
+  },
+  {
+   "t": 170.6,
+   "d": 2.56,
+   "text": "can't find them on on anywhere uh I've"
+  },
+  {
+   "t": 173.16,
+   "d": 1.32,
+   "text": "tried to translate my obsession in such"
+  },
+  {
+   "t": 174.48,
+   "d": 1.36,
+   "text": "a way that you might find it interesting"
+  },
+  {
+   "t": 175.84,
+   "d": 1.68,
+   "text": "as well but I had to leave out a lot"
+  },
+  {
+   "t": 177.52,
+   "d": 3.48,
+   "text": "this is only a surface"
+  },
+  {
+   "t": 181.0,
+   "d": 4.2,
+   "text": "exploration okay so now"
+  },
+  {
+   "t": 185.28,
+   "d": 2.96,
+   "text": "chunsoft um they're the developers of"
+  },
+  {
+   "t": 188.24,
+   "d": 1.88,
+   "text": "the original Dragon Quest one through"
+  },
+  {
+   "t": 190.12,
+   "d": 3.72,
+   "text": "five on the NES and uh oh famicom really"
+  },
+  {
+   "t": 193.84,
+   "d": 2.8,
+   "text": "and super famicom they married to spike"
+  },
+  {
+   "t": 196.64,
+   "d": 2.56,
+   "text": "in 2012 and became Spike chunsoft"
+  },
+  {
+   "t": 199.2,
+   "d": 2.6,
+   "text": "chunsoft also makes believe the Dagan"
+  },
+  {
+   "t": 201.8,
+   "d": 3.36,
+   "text": "rampa games uh they make a lot of visual"
+  },
+  {
+   "t": 205.16,
+   "d": 2.64,
+   "text": "novels um and a few other little"
+  },
+  {
+   "t": 207.8,
+   "d": 2.6,
+   "text": "projects uh they they still sort of kept"
+  },
+  {
+   "t": 210.4,
+   "d": 2.36,
+   "text": "the soul of the company alive throughout"
+  },
+  {
+   "t": 212.76,
+   "d": 3.4,
+   "text": "all this time which is great considering"
+  },
+  {
+   "t": 216.16,
+   "d": 1.68,
+   "text": "how Square just seems like completely"
+  },
+  {
+   "t": 217.84,
+   "d": 2.36,
+   "text": "different people now early games are"
+  },
+  {
+   "t": 220.2,
+   "d": 2.64,
+   "text": "directed by Tadashi fukuzawa and they're"
+  },
+  {
+   "t": 222.84,
+   "d": 2.96,
+   "text": "produced by company founder kii Nakamura"
+  },
+  {
+   "t": 225.8,
+   "d": 1.4,
+   "text": "I think they're both still involved with"
+  },
+  {
+   "t": 227.2,
+   "d": 1.28,
+   "text": "today but I'm not"
+  },
+  {
+   "t": 228.48,
+   "d": 3.96,
+   "text": "sure um so the origins it was 1993 was"
+  },
+  {
+   "t": 232.44,
+   "d": 3.64,
+   "text": "Toro nookin F CG no dungeon super"
+  },
+  {
+   "t": 236.08,
+   "d": 2.04,
+   "text": "familyc by the way the images here are"
+  },
+  {
+   "t": 238.12,
+   "d": 3.88,
+   "text": "from a fan translation uh a hack and"
+  },
+  {
+   "t": 242.0,
+   "d": 2.16,
+   "text": "I've tried to use fan translation images"
+  },
+  {
+   "t": 244.16,
+   "d": 3.36,
+   "text": "when available if uh in my screenshots"
+  },
+  {
+   "t": 247.52,
+   "d": 2.6,
+   "text": "just so that they are comprehensible to"
+  },
+  {
+   "t": 250.12,
+   "d": 1.68,
+   "text": "an english- speaking"
+  },
+  {
+   "t": 251.8,
+   "d": 3.24,
+   "text": "audience uh yeah so there have been more"
+  },
+  {
+   "t": 255.04,
+   "d": 2.88,
+   "text": "than 30 Mystery Dungeon games which I'll"
+  },
+  {
+   "t": 257.92,
+   "d": 2.56,
+   "text": "just give them a quick my my uh"
+  },
+  {
+   "t": 260.48,
+   "d": 4.04,
+   "text": "rendering my listing of them is for iin"
+  },
+  {
+   "t": 264.52,
+   "d": 2.72,
+   "text": "1 to three uh which has different names"
+  },
+  {
+   "t": 267.24,
+   "d": 3.04,
+   "text": "shean 1 through six in their remakes"
+  },
+  {
+   "t": 270.28,
+   "d": 2.44,
+   "text": "she Force the t view which is very"
+  },
+  {
+   "t": 272.72,
+   "d": 2.6,
+   "text": "obscure now shean Game Boy and Game Boy"
+  },
+  {
+   "t": 275.32,
+   "d": 2.56,
+   "text": "2 Pokemon Mystery Dungeon 1 through six"
+  },
+  {
+   "t": 277.88,
+   "d": 1.72,
+   "text": "we'll get to that in a bit in their"
+  },
+  {
+   "t": 279.6,
+   "d": 2.6,
+   "text": "alternate versions Chocobo my dungeon 1"
+  },
+  {
+   "t": 282.2,
+   "d": 3.0,
+   "text": "to3 and its remake for the switch edry"
+  },
+  {
+   "t": 285.2,
+   "d": 2.16,
+   "text": "my dungeon one and two two never made it"
+  },
+  {
+   "t": 287.36,
+   "d": 2.36,
+   "text": "to the United States rainbow Labyrinth"
+  },
+  {
+   "t": 289.72,
+   "d": 1.96,
+   "text": "was a mobile version that never left"
+  },
+  {
+   "t": 291.68,
+   "d": 1.64,
+   "text": "beta and only after a few months they"
+  },
+  {
+   "t": 293.32,
+   "d": 3.52,
+   "text": "tried to free toplay experiment with it"
+  },
+  {
+   "t": 296.84,
+   "d": 2.92,
+   "text": "auka kinson is for the Dreamcast twin be"
+  },
+  {
+   "t": 299.76,
+   "d": 2.76,
+   "text": "dungeon and kosi Gundam I think were"
+  },
+  {
+   "t": 302.52,
+   "d": 2.8,
+   "text": "both mobile games and there no and"
+  },
+  {
+   "t": 305.32,
+   "d": 2.0,
+   "text": "apparently those are lost nightmare"
+  },
+  {
+   "t": 307.32,
+   "d": 2.92,
+   "text": "Drago for PS2 young yangus for PS2"
+  },
+  {
+   "t": 310.24,
+   "d": 3.0,
+   "text": "mystery Chronicle oneway heroics on"
+  },
+  {
+   "t": 313.24,
+   "d": 2.68,
+   "text": "Steam and second about two days our eras"
+  },
+  {
+   "t": 315.92,
+   "d": 3.08,
+   "text": "in which I know little about so"
+  },
+  {
+   "t": 319.0,
+   "d": 1.88,
+   "text": "crossovers you may have noticed that"
+  },
+  {
+   "t": 320.88,
+   "d": 2.64,
+   "text": "it's is very promiscuous you might say"
+  },
+  {
+   "t": 323.52,
+   "d": 2.12,
+   "text": "in Crossing it with other properties"
+  },
+  {
+   "t": 325.64,
+   "d": 1.48,
+   "text": "there have been Myst games the Dragon"
+  },
+  {
+   "t": 327.12,
+   "d": 1.64,
+   "text": "Quest Final Fantasy eding Odyssey twin"
+  },
+  {
+   "t": 328.76,
+   "d": 3.4,
+   "text": "be Gundam Tower especially Pokemon"
+  },
+  {
+   "t": 332.16,
+   "d": 3.08,
+   "text": "franchises where my there it"
+  },
+  {
+   "t": 335.24,
+   "d": 2.76,
+   "text": "is so your engine games especially the"
+  },
+  {
+   "t": 338.0,
+   "d": 1.8,
+   "text": "Sheeran games they give you lots of"
+  },
+  {
+   "t": 339.8,
+   "d": 1.64,
+   "text": "items they're basically about resource"
+  },
+  {
+   "t": 341.44,
+   "d": 2.32,
+   "text": "management and positioning it's up you"
+  },
+  {
+   "t": 343.76,
+   "d": 2.0,
+   "text": "to figure out how to use both of these"
+  },
+  {
+   "t": 345.76,
+   "d": 3.48,
+   "text": "uh resources to survive um like for"
+  },
+  {
+   "t": 349.24,
+   "d": 2.92,
+   "text": "items a knockback staff if you find one"
+  },
+  {
+   "t": 352.16,
+   "d": 1.84,
+   "text": "you can wave it at a monster and knock"
+  },
+  {
+   "t": 354.0,
+   "d": 2.16,
+   "text": "it backwards some distance to give you a"
+  },
+  {
+   "t": 356.16,
+   "d": 3.12,
+   "text": "little bit of escape room or to get time"
+  },
+  {
+   "t": 359.28,
+   "d": 2.72,
+   "text": "to use other items uh an herb you if you"
+  },
+  {
+   "t": 362.0,
+   "d": 1.84,
+   "text": "eat one to heal you but if you're at"
+  },
+  {
+   "t": 363.84,
+   "d": 2.04,
+   "text": "full health you can eat it to gain"
+  },
+  {
+   "t": 365.88,
+   "d": 2.04,
+   "text": "maximum hit points there's a lot of"
+  },
+  {
+   "t": 367.92,
+   "d": 3.0,
+   "text": "tradeoff like that use it now or you"
+  },
+  {
+   "t": 370.92,
+   "d": 1.88,
+   "text": "know for an immediate advantage against"
+  },
+  {
+   "t": 372.8,
+   "d": 2.84,
+   "text": "the monsters or use it later for a more"
+  },
+  {
+   "t": 375.64,
+   "d": 2.56,
+   "text": "longterm Advantage"
+  },
+  {
+   "t": 378.2,
+   "d": 2.52,
+   "text": "but uh School of confusion can typ"
+  },
+  {
+   "t": 380.72,
+   "d": 1.52,
+   "text": "incapacitate a whole room of Monsters"
+  },
+  {
+   "t": 382.24,
+   "d": 1.84,
+   "text": "the game is basically about using these"
+  },
+  {
+   "t": 384.08,
+   "d": 3.2,
+   "text": "items I sometimes refer it as uh being"
+  },
+  {
+   "t": 387.28,
+   "d": 3.84,
+   "text": "about the creative application of"
+  },
+  {
+   "t": 391.12,
+   "d": 2.6,
+   "text": "uh all the tricks that you can that you"
+  },
+  {
+   "t": 393.72,
+   "d": 1.84,
+   "text": "have up your sleeve that you can find to"
+  },
+  {
+   "t": 395.56,
+   "d": 1.56,
+   "text": "feel them against the monsters because"
+  },
+  {
+   "t": 397.12,
+   "d": 3.68,
+   "text": "you'll need them that's and but escaping"
+  },
+  {
+   "t": 400.8,
+   "d": 1.44,
+   "text": "by the skin of your teeth that's the"
+  },
+  {
+   "t": 402.24,
+   "d": 2.64,
+   "text": "essence of the of these games and once"
+  },
+  {
+   "t": 404.88,
+   "d": 2.24,
+   "text": "you're into it they can be lots of"
+  },
+  {
+   "t": 407.12,
+   "d": 3.04,
+   "text": "Thun so here are some example monsters"
+  },
+  {
+   "t": 410.16,
+   "d": 2.48,
+   "text": "from the shearing games the boy boy over"
+  },
+  {
+   "t": 412.64,
+   "d": 1.44,
+   "text": "there that's a missile user it just"
+  },
+  {
+   "t": 414.08,
+   "d": 2.48,
+   "text": "shoots arrows at you from a distance the"
+  },
+  {
+   "t": 416.56,
+   "d": 2.08,
+   "text": "ghost radish throws poison Grass at you"
+  },
+  {
+   "t": 418.64,
+   "d": 1.84,
+   "text": "that slows you down"
+  },
+  {
+   "t": 420.48,
+   "d": 2.24,
+   "text": "kakoy they're fast and they set traps to"
+  },
+  {
+   "t": 422.72,
+   "d": 3.24,
+   "text": "cause problems for you the rice changer"
+  },
+  {
+   "t": 425.96,
+   "d": 4.04,
+   "text": "over here this uh handsome red fellow uh"
+  },
+  {
+   "t": 430.0,
+   "d": 2.12,
+   "text": "can turn your items into rice balls"
+  },
+  {
+   "t": 432.12,
+   "d": 2.24,
+   "text": "whether you want them to or not"
+  },
+  {
+   "t": 434.36,
+   "d": 2.64,
+   "text": "sometimes you do often you don't and the"
+  },
+  {
+   "t": 437.0,
+   "d": 2.96,
+   "text": "thief wallrus over here steals items"
+  },
+  {
+   "t": 439.96,
+   "d": 1.96,
+   "text": "both from your inventory and right off"
+  },
+  {
+   "t": 441.92,
+   "d": 3.08,
+   "text": "the ground they're a bit Troublesome"
+  },
+  {
+   "t": 445.0,
+   "d": 0.76,
+   "text": "that"
+  },
+  {
+   "t": 445.76,
+   "d": 2.48,
+   "text": "way so there's some weird games there's"
+  },
+  {
+   "t": 448.24,
+   "d": 1.92,
+   "text": "a lot of weird games with my series"
+  },
+  {
+   "t": 450.16,
+   "d": 2.12,
+   "text": "befitting its its longevity and all the"
+  },
+  {
+   "t": 452.28,
+   "d": 2.76,
+   "text": "things it's crossed over with it mystery"
+  },
+  {
+   "t": 455.04,
+   "d": 2.88,
+   "text": "dungon has this interesting mechanic"
+  },
+  {
+   "t": 457.92,
+   "d": 2.56,
+   "text": "where there's a side view of the dungeon"
+  },
+  {
+   "t": 460.48,
+   "d": 2.4,
+   "text": "you're in and periodically tough"
+  },
+  {
+   "t": 462.88,
+   "d": 2.92,
+   "text": "monsters called do which doesn't sound"
+  },
+  {
+   "t": 465.8,
+   "d": 3.08,
+   "text": "like it would be a a dangerous monster"
+  },
+  {
+   "t": 468.88,
+   "d": 3.28,
+   "text": "but they are in this game uh and they"
+  },
+  {
+   "t": 472.16,
+   "d": 1.92,
+   "text": "have a position in the dungeon and"
+  },
+  {
+   "t": 474.08,
+   "d": 1.96,
+   "text": "they're climbing up to the dungeon as"
+  },
+  {
+   "t": 476.04,
+   "d": 2.28,
+   "text": "you're descending down through it and"
+  },
+  {
+   "t": 478.32,
+   "d": 1.84,
+   "text": "you have they're trying to attack a town"
+  },
+  {
+   "t": 480.16,
+   "d": 1.88,
+   "text": "if they manag to get to the top and you"
+  },
+  {
+   "t": 482.04,
+   "d": 1.56,
+   "text": "have to find various ways to turn the"
+  },
+  {
+   "t": 483.6,
+   "d": 4.24,
+   "text": "back which adds a a nice a nice danger"
+  },
+  {
+   "t": 487.84,
+   "d": 1.6,
+   "text": "uh management aspect of the game and you"
+  },
+  {
+   "t": 489.44,
+   "d": 2.52,
+   "text": "can build fortresses in the dungeons to"
+  },
+  {
+   "t": 491.96,
+   "d": 1.4,
+   "text": "defend against them it's it's an"
+  },
+  {
+   "t": 493.36,
+   "d": 1.04,
+   "text": "interesting"
+  },
+  {
+   "t": 494.4,
+   "d": 2.92,
+   "text": "idea uh Myster Chronicle oneway heroics"
+  },
+  {
+   "t": 497.32,
+   "d": 2.4,
+   "text": "is I think only on Steam it's a remake"
+  },
+  {
+   "t": 499.72,
+   "d": 3.36,
+   "text": "of another game I called oneway hero um"
+  },
+  {
+   "t": 503.08,
+   "d": 2.12,
+   "text": "it plays almost exactly the same as that"
+  },
+  {
+   "t": 505.2,
+   "d": 1.36,
+   "text": "game but it's got the Mystery Dungeon"
+  },
+  {
+   "t": 506.56,
+   "d": 1.68,
+   "text": "control scheme which is a lot easier to"
+  },
+  {
+   "t": 508.24,
+   "d": 2.16,
+   "text": "learn and that game you're running to"
+  },
+  {
+   "t": 510.4,
+   "d": 1.84,
+   "text": "the right on a single huge level"
+  },
+  {
+   "t": 512.24,
+   "d": 1.56,
+   "text": "throughout a landscape from a wall of"
+  },
+  {
+   "t": 513.8,
+   "d": 2.2,
+   "text": "Doom approaching from the"
+  },
+  {
+   "t": 516.0,
+   "d": 3.4,
+   "text": "left uh and let's see uh there are three"
+  },
+  {
+   "t": 519.4,
+   "d": 4.56,
+   "text": "Chocobo games uh for the PS1 and later"
+  },
+  {
+   "t": 523.96,
+   "d": 2.44,
+   "text": "for Wii and switch and they all have"
+  },
+  {
+   "t": 526.4,
+   "d": 1.44,
+   "text": "unique aspects to them like the first"
+  },
+  {
+   "t": 527.84,
+   "d": 2.8,
+   "text": "one tries to adapt final fantasy's"
+  },
+  {
+   "t": 530.64,
+   "d": 3.48,
+   "text": "active Time battle system to to the game"
+  },
+  {
+   "t": 534.12,
+   "d": 1.0,
+   "text": "and I don't think it's really a"
+  },
+  {
+   "t": 535.12,
+   "d": 2.52,
+   "text": "successful experiment but it's"
+  },
+  {
+   "t": 537.64,
+   "d": 2.6,
+   "text": "interesting uh it m treed games are"
+  },
+  {
+   "t": 540.24,
+   "d": 2.68,
+   "text": "always trying to do weird things and"
+  },
+  {
+   "t": 542.92,
+   "d": 1.44,
+   "text": "it's what makes part of what makes them"
+  },
+  {
+   "t": 544.36,
+   "d": 1.56,
+   "text": "so fascinating to me there's just so"
+  },
+  {
+   "t": 545.92,
+   "d": 2.08,
+   "text": "many interesting ideas"
+  },
+  {
+   "t": 548.0,
+   "d": 2.44,
+   "text": "there uh some more games Nightmare of"
+  },
+  {
+   "t": 550.44,
+   "d": 2.2,
+   "text": "daaga is very different in style I think"
+  },
+  {
+   "t": 552.64,
+   "d": 1.44,
+   "text": "it is is a completely different engine"
+  },
+  {
+   "t": 554.08,
+   "d": 2.56,
+   "text": "most of the B engine games control very"
+  },
+  {
+   "t": 556.64,
+   "d": 2.56,
+   "text": "similarly but not that one and it's got"
+  },
+  {
+   "t": 559.2,
+   "d": 3.56,
+   "text": "a weird uh system of Secrets where every"
+  },
+  {
+   "t": 562.76,
+   "d": 2.56,
+   "text": "level has a secret item on it if you do"
+  },
+  {
+   "t": 565.32,
+   "d": 2.16,
+   "text": "some mysterious"
+  },
+  {
+   "t": 567.48,
+   "d": 3.64,
+   "text": "thing and uh uh yeah I'm trying going my"
+  },
+  {
+   "t": 571.12,
+   "d": 2.12,
+   "text": "memory on a lot of these there's so much"
+  },
+  {
+   "t": 573.24,
+   "d": 2.2,
+   "text": "to remember uh and then of course"
+  },
+  {
+   "t": 575.44,
+   "d": 1.32,
+   "text": "there's the Pokemon Mystery Dungeon"
+  },
+  {
+   "t": 576.76,
+   "d": 3.08,
+   "text": "games which are unquestionably the best"
+  },
+  {
+   "t": 579.84,
+   "d": 3.0,
+   "text": "known oh the Pokemon Victory dungeon"
+  },
+  {
+   "t": 582.84,
+   "d": 3.84,
+   "text": "games they've so outsold the entire rest"
+  },
+  {
+   "t": 586.68,
+   "d": 1.76,
+   "text": "of the series"
+  },
+  {
+   "t": 588.44,
+   "d": 4.04,
+   "text": "combined it's difficult to overstate how"
+  },
+  {
+   "t": 592.48,
+   "d": 2.76,
+   "text": "much money this is made Nintendo and"
+  },
+  {
+   "t": 595.24,
+   "d": 2.56,
+   "text": "chunsoft no Pokemon Mystery Dungeon has"
+  },
+  {
+   "t": 597.8,
+   "d": 2.68,
+   "text": "sold less than a million units the"
+  },
+  {
+   "t": 600.48,
+   "d": 2.32,
+   "text": "Explorer series as explorers of Time"
+  },
+  {
+   "t": 602.8,
+   "d": 2.32,
+   "text": "explorers I forgot that way explorers of"
+  },
+  {
+   "t": 605.12,
+   "d": 3.6,
+   "text": "Sky uh they've sold 6 million that's a"
+  },
+  {
+   "t": 608.72,
+   "d": 1.96,
+   "text": "huge hit by any"
+  },
+  {
+   "t": 610.68,
+   "d": 2.88,
+   "text": "standards uh there's more people who"
+  },
+  {
+   "t": 613.56,
+   "d": 1.24,
+   "text": "many people have never heard of Rogue"
+  },
+  {
+   "t": 614.8,
+   "d": 1.48,
+   "text": "likes have enjoyed Pokemon Mystery"
+  },
+  {
+   "t": 616.28,
+   "d": 2.96,
+   "text": "Dungeon it's just the the sheer power of"
+  },
+  {
+   "t": 619.24,
+   "d": 4.76,
+   "text": "the brand of Pikachu the house the rat"
+  },
+  {
+   "t": 624.0,
+   "d": 3.64,
+   "text": "built um I was a Dragon Con one year and"
+  },
+  {
+   "t": 627.64,
+   "d": 1.68,
+   "text": "there was someone who was asking a year"
+  },
+  {
+   "t": 629.32,
+   "d": 3.88,
+   "text": "used game uh dealer about about trying"
+  },
+  {
+   "t": 633.2,
+   "d": 1.56,
+   "text": "to identify this game they heard of"
+  },
+  {
+   "t": 634.76,
+   "d": 1.52,
+   "text": "about we have a character in a dungeon"
+  },
+  {
+   "t": 636.28,
+   "d": 2.68,
+   "text": "that's randomly generated and having to"
+  },
+  {
+   "t": 638.96,
+   "d": 2.8,
+   "text": "fight monsters I told and I overheard I"
+  },
+  {
+   "t": 641.76,
+   "d": 2.36,
+   "text": "said that's obviously mystory dungeon I"
+  },
+  {
+   "t": 644.12,
+   "d": 2.2,
+   "text": "said no it doesn't to do with"
+  },
+  {
+   "t": 646.32,
+   "d": 3.92,
+   "text": "Pokemon had to roll my eyes at a bit"
+  },
+  {
+   "t": 650.24,
+   "d": 2.92,
+   "text": "um all we most you going to the rest of"
+  },
+  {
+   "t": 653.16,
+   "d": 1.92,
+   "text": "the talk to is sheir and The"
+  },
+  {
+   "t": 655.08,
+   "d": 2.32,
+   "text": "Wanderer which is sort of the home"
+  },
+  {
+   "t": 657.4,
+   "d": 3.4,
+   "text": "series of of Mystery Dungeon um the"
+  },
+  {
+   "t": 660.8,
+   "d": 2.36,
+   "text": "first game was a Dragon Quest"
+  },
+  {
+   "t": 663.16,
+   "d": 4.76,
+   "text": "crossover uh but the the the Rog like"
+  },
+  {
+   "t": 667.92,
+   "d": 2.56,
+   "text": "ideals uh the game Concepts get their"
+  },
+  {
+   "t": 670.48,
+   "d": 2.2,
+   "text": "clearest expression in the sheer and The"
+  },
+  {
+   "t": 672.68,
+   "d": 1.08,
+   "text": "Wanderer"
+  },
+  {
+   "t": 673.76,
+   "d": 2.28,
+   "text": "games which takes place in a fantasy"
+  },
+  {
+   "t": 676.04,
+   "d": 2.8,
+   "text": "version of feudal Japan and St Sheeran"
+  },
+  {
+   "t": 678.84,
+   "d": 3.2,
+   "text": "the uh the handsome guy in the rain hat"
+  },
+  {
+   "t": 682.04,
+   "d": 2.84,
+   "text": "there and his talking weasel companion"
+  },
+  {
+   "t": 684.88,
+   "d": 3.76,
+   "text": "Kaa who is uh in his first appearance on"
+  },
+  {
+   "t": 688.64,
+   "d": 1.44,
+   "text": "the right"
+  },
+  {
+   "t": 690.08,
+   "d": 2.44,
+   "text": "uh Kaa is a lot more cute in more recent"
+  },
+  {
+   "t": 692.52,
+   "d": 1.52,
+   "text": "games but he's adorable regardless of"
+  },
+  {
+   "t": 694.04,
+   "d": 1.4,
+   "text": "what he's"
+  },
+  {
+   "t": 695.44,
+   "d": 3.96,
+   "text": "in so uh classtic Rog likes present each"
+  },
+  {
+   "t": 699.4,
+   "d": 1.76,
+   "text": "game session of the self-contained unit"
+  },
+  {
+   "t": 701.16,
+   "d": 1.84,
+   "text": "when a character dies the next game"
+  },
+  {
+   "t": 703.0,
+   "d": 2.6,
+   "text": "starts for the most part from scratch"
+  },
+  {
+   "t": 705.6,
+   "d": 3.08,
+   "text": "you reinvoke the game program and then"
+  },
+  {
+   "t": 708.68,
+   "d": 1.28,
+   "text": "you create a new character and then you"
+  },
+  {
+   "t": 709.96,
+   "d": 1.48,
+   "text": "make another attempt and that character"
+  },
+  {
+   "t": 711.44,
+   "d": 3.0,
+   "text": "dies or wins the game uh the game exits"
+  },
+  {
+   "t": 714.44,
+   "d": 2.76,
+   "text": "Mystery Dungeon though poses each"
+  },
+  {
+   "t": 717.2,
+   "d": 2.16,
+   "text": "Adventure as one of the series if you're"
+  },
+  {
+   "t": 719.36,
+   "d": 2.0,
+   "text": "character your character doesn't die on"
+  },
+  {
+   "t": 721.36,
+   "d": 2.48,
+   "text": "failure but collapses and is kicked out"
+  },
+  {
+   "t": 723.84,
+   "d": 2.12,
+   "text": "of the dungeon without their stuff and"
+  },
+  {
+   "t": 725.96,
+   "d": 1.84,
+   "text": "usually you always start at level one"
+  },
+  {
+   "t": 727.8,
+   "d": 2.12,
+   "text": "regardless if you manage to complete the"
+  },
+  {
+   "t": 729.92,
+   "d": 1.8,
+   "text": "dungeon without collapsing you get to"
+  },
+  {
+   "t": 731.72,
+   "d": 2.16,
+   "text": "keep your stuff which usually makes"
+  },
+  {
+   "t": 733.88,
+   "d": 1.84,
+   "text": "later runs a lot"
+  },
+  {
+   "t": 735.72,
+   "d": 1.6,
+   "text": "easier"
+  },
+  {
+   "t": 737.32,
+   "d": 2.84,
+   "text": "um f dungeon gains of plot lines that"
+  },
+  {
+   "t": 740.16,
+   "d": 2.76,
+   "text": "can carry over from session to session"
+  },
+  {
+   "t": 742.92,
+   "d": 2.68,
+   "text": "like in the orig in the first game she"
+  },
+  {
+   "t": 745.6,
+   "d": 1.6,
+   "text": "there's one town that has a struggling"
+  },
+  {
+   "t": 747.2,
+   "d": 2.72,
+   "text": "restaurant in it and Sheeran can"
+  },
+  {
+   "t": 749.92,
+   "d": 3.88,
+   "text": "contribute money to get it on its feet"
+  },
+  {
+   "t": 753.8,
+   "d": 2.2,
+   "text": "and if you keep supporting this"
+  },
+  {
+   "t": 756.0,
+   "d": 2.84,
+   "text": "restaurant every time you traes through"
+  },
+  {
+   "t": 758.84,
+   "d": 2.08,
+   "text": "town uh it eventually becomes the"
+  },
+  {
+   "t": 760.92,
+   "d": 2.08,
+   "text": "resource that you can rely on when you"
+  },
+  {
+   "t": 763.0,
+   "d": 1.88,
+   "text": "pass through on later runs and"
+  },
+  {
+   "t": 764.88,
+   "d": 2.52,
+   "text": "eventually it unlocks a food based bonus"
+  },
+  {
+   "t": 767.4,
+   "d": 2.6,
+   "text": "dungeon like its own little special mini"
+  },
+  {
+   "t": 770.0,
+   "d": 1.6,
+   "text": "game to"
+  },
+  {
+   "t": 771.6,
+   "d": 3.04,
+   "text": "explore and the m games are full of"
+  },
+  {
+   "t": 774.64,
+   "d": 2.24,
+   "text": "sheing games are specialy those are the"
+  },
+  {
+   "t": 776.88,
+   "d": 2.32,
+   "text": "games where you find this type of thing"
+  },
+  {
+   "t": 779.2,
+   "d": 2.8,
+   "text": "most often so there are six of these and"
+  },
+  {
+   "t": 782.0,
+   "d": 1.96,
+   "text": "I see with about 13 minutes left with"
+  },
+  {
+   "t": 783.96,
+   "d": 2.92,
+   "text": "this good time so the first one fur no"
+  },
+  {
+   "t": 786.88,
+   "d": 4.08,
+   "text": "shiran um was for a super famicom 1993"
+  },
+  {
+   "t": 790.96,
+   "d": 2.16,
+   "text": "it got a somewhat different expanded"
+  },
+  {
+   "t": 793.12,
+   "d": 2.68,
+   "text": "Nintendo DS remake it got an English"
+  },
+  {
+   "t": 795.8,
+   "d": 1.44,
+   "text": "release and was actually released in the"
+  },
+  {
+   "t": 797.24,
+   "d": 1.52,
+   "text": "United States and it was published by"
+  },
+  {
+   "t": 798.76,
+   "d": 2.52,
+   "text": "Sega you can see the box art in the"
+  },
+  {
+   "t": 801.28,
+   "d": 3.92,
+   "text": "lower right corner and it is pretty ugly"
+  },
+  {
+   "t": 805.2,
+   "d": 3.44,
+   "text": "yeah I don't know what it is about"
+  },
+  {
+   "t": 808.64,
+   "d": 2.4,
+   "text": "Japanese games released in the United"
+  },
+  {
+   "t": 811.04,
+   "d": 1.64,
+   "text": "States that they always give them ugly"
+  },
+  {
+   "t": 812.68,
+   "d": 3.24,
+   "text": "box art well not always but it's like a"
+  },
+  {
+   "t": 815.92,
+   "d": 1.88,
+   "text": "worst version of The Angry of the"
+  },
+  {
+   "t": 817.8,
+   "d": 2.36,
+   "text": "American Kirby"
+  },
+  {
+   "t": 820.16,
+   "d": 2.76,
+   "text": "phenomenon um it's got very chaotic and"
+  },
+  {
+   "t": 822.92,
+   "d": 2.28,
+   "text": "challenging gameplay and it's a"
+  },
+  {
+   "t": 825.2,
+   "d": 1.6,
+   "text": "legendary fan translation that you can"
+  },
+  {
+   "t": 826.8,
+   "d": 3.04,
+   "text": "play uh byon Genesis I've got uh the URL"
+  },
+  {
+   "t": 829.84,
+   "d": 2.08,
+   "text": "for that at the end of the talk it's got"
+  },
+  {
+   "t": 831.92,
+   "d": 2.24,
+   "text": "tough monsters a game it's balanced very"
+  },
+  {
+   "t": 834.16,
+   "d": 2.2,
+   "text": "hard you will struggle with this or"
+  },
+  {
+   "t": 836.36,
+   "d": 2.24,
+   "text": "until you get good at it but you can"
+  },
+  {
+   "t": 838.6,
+   "d": 2.0,
+   "text": "complete it on your first try and I've"
+  },
+  {
+   "t": 840.6,
+   "d": 1.72,
+   "text": "done that a couple of times on a a new"
+  },
+  {
+   "t": 842.32,
+   "d": 0.92,
+   "text": "save"
+  },
+  {
+   "t": 843.24,
+   "d": 4.92,
+   "text": "file it's great to try it um uh a lot of"
+  },
+  {
+   "t": 848.16,
+   "d": 2.96,
+   "text": "Mystery Dungeon games try to wait the"
+  },
+  {
+   "t": 851.12,
+   "d": 3.12,
+   "text": "item generation I the more powerful more"
+  },
+  {
+   "t": 854.24,
+   "d": 1.48,
+   "text": "interesting items don't appear until"
+  },
+  {
+   "t": 855.72,
+   "d": 3.08,
+   "text": "later on but uh the first shiran game"
+  },
+  {
+   "t": 858.8,
+   "d": 2.4,
+   "text": "you can find great items early and it"
+  },
+  {
+   "t": 861.2,
+   "d": 2.12,
+   "text": "can just completely change the nature of"
+  },
+  {
+   "t": 863.32,
+   "d": 2.16,
+   "text": "your entire run that's like a bit like"
+  },
+  {
+   "t": 865.48,
+   "d": 2.04,
+   "text": "net hack in that regard and I think it's"
+  },
+  {
+   "t": 867.52,
+   "d": 2.16,
+   "text": "one of the the the best reason to play"
+  },
+  {
+   "t": 869.68,
+   "d": 1.28,
+   "text": "the first"
+  },
+  {
+   "t": 870.96,
+   "d": 2.92,
+   "text": "game uh there is a special tutorial in"
+  },
+  {
+   "t": 873.88,
+   "d": 3.04,
+   "text": "it called phase problems that you can"
+  },
+  {
+   "t": 876.92,
+   "d": 2.04,
+   "text": "like they're they're non-random"
+  },
+  {
+   "t": 878.96,
+   "d": 2.4,
+   "text": "situations that are like little puzzle"
+  },
+  {
+   "t": 881.36,
+   "d": 2.68,
+   "text": "games and those are fun to play just on"
+  },
+  {
+   "t": 884.04,
+   "d": 2.0,
+   "text": "their own and every time you begin a new"
+  },
+  {
+   "t": 886.04,
+   "d": 2.56,
+   "text": "run you get to try one of phe problems"
+  },
+  {
+   "t": 888.6,
+   "d": 1.76,
+   "text": "and you succeed at it you get a random"
+  },
+  {
+   "t": 890.36,
+   "d": 2.76,
+   "text": "item to help you on on that particular"
+  },
+  {
+   "t": 893.12,
+   "d": 1.76,
+   "text": "Journey it doesn't have any bonus"
+  },
+  {
+   "t": 894.88,
+   "d": 1.64,
+   "text": "dungeons but it's still a favorite the"
+  },
+  {
+   "t": 896.52,
+   "d": 1.56,
+   "text": "series and it's still one of the more"
+  },
+  {
+   "t": 898.08,
+   "d": 2.96,
+   "text": "popular one they were popular additions"
+  },
+  {
+   "t": 901.04,
+   "d": 2.2,
+   "text": "okay so there was a game boy version of"
+  },
+  {
+   "t": 903.24,
+   "d": 3.84,
+   "text": "shin now Mystery Dungeon has a set"
+  },
+  {
+   "t": 907.08,
+   "d": 2.64,
+   "text": "control scheme uh that really takes"
+  },
+  {
+   "t": 909.72,
+   "d": 2.32,
+   "text": "advantage of you know more modern"
+  },
+  {
+   "t": 912.04,
+   "d": 1.76,
+   "text": "controllers that have shoulder buttons"
+  },
+  {
+   "t": 913.8,
+   "d": 3.08,
+   "text": "and four buttons under uh the four face"
+  },
+  {
+   "t": 916.88,
+   "d": 1.88,
+   "text": "buttons and start select and other"
+  },
+  {
+   "t": 918.76,
+   "d": 1.8,
+   "text": "buttons they take advantage of all of"
+  },
+  {
+   "t": 920.56,
+   "d": 2.08,
+   "text": "them imagine trying to condense that"
+  },
+  {
+   "t": 922.64,
+   "d": 2.56,
+   "text": "down to a Game Boy control scheme with"
+  },
+  {
+   "t": 925.2,
+   "d": 3.88,
+   "text": "its four buttons period but they made a"
+  },
+  {
+   "t": 929.08,
+   "d": 3.52,
+   "text": "a a a a good a a good a a good had a"
+  },
+  {
+   "t": 932.6,
+   "d": 2.28,
+   "text": "good stab at"
+  },
+  {
+   "t": 934.88,
+   "d": 2.6,
+   "text": "it um there's no fan translation of this"
+  },
+  {
+   "t": 937.48,
+   "d": 2.0,
+   "text": "one you you'd have to really learn"
+  },
+  {
+   "t": 939.48,
+   "d": 2.44,
+   "text": "Japanese or use an item cheat sheet I"
+  },
+  {
+   "t": 941.92,
+   "d": 2.2,
+   "text": "provide one in my book actually but on"
+  },
+  {
+   "t": 944.12,
+   "d": 1.88,
+   "text": "this one all the text is kagana or"
+  },
+  {
+   "t": 946.0,
+   "d": 4.08,
+   "text": "Katakana there's no kanji so uh it's"
+  },
+  {
+   "t": 950.08,
+   "d": 2.32,
+   "text": "pretty it's relatively easy to"
+  },
+  {
+   "t": 952.4,
+   "d": 3.56,
+   "text": "read uh the same I can't say for uh the"
+  },
+  {
+   "t": 955.96,
+   "d": 3.04,
+   "text": "shean for Game Boy Color uh which does"
+  },
+  {
+   "t": 959.0,
+   "d": 2.6,
+   "text": "does use kanji and its item names and"
+  },
+  {
+   "t": 961.6,
+   "d": 1.84,
+   "text": "which makes it a bit more difficult not"
+  },
+  {
+   "t": 963.44,
+   "d": 3.16,
+   "text": "as much kanji as the games usually use"
+  },
+  {
+   "t": 966.6,
+   "d": 1.68,
+   "text": "this one also does not have a fan"
+  },
+  {
+   "t": 968.28,
+   "d": 2.0,
+   "text": "translation one interesting thing about"
+  },
+  {
+   "t": 970.28,
+   "d": 1.96,
+   "text": "you can vaguely see in the bottom right"
+  },
+  {
+   "t": 972.24,
+   "d": 2.8,
+   "text": "corner is when there are menus open the"
+  },
+  {
+   "t": 975.04,
+   "d": 2.64,
+   "text": "game tries to fake transparency it you"
+  },
+  {
+   "t": 977.68,
+   "d": 1.92,
+   "text": "can see like a transparent version of"
+  },
+  {
+   "t": 979.6,
+   "d": 1.84,
+   "text": "Sheeran there in the middle of the"
+  },
+  {
+   "t": 981.44,
+   "d": 2.16,
+   "text": "screen uh it's just one of the many"
+  },
+  {
+   "t": 983.6,
+   "d": 1.96,
+   "text": "little touches that that the Mystery"
+  },
+  {
+   "t": 985.56,
+   "d": 2.44,
+   "text": "Dungeon games get put into them it's"
+  },
+  {
+   "t": 988.0,
+   "d": 1.4,
+   "text": "there's no reason for them to to do it"
+  },
+  {
+   "t": 989.4,
+   "d": 3.36,
+   "text": "really it's just it's just just nice um"
+  },
+  {
+   "t": 992.76,
+   "d": 2.6,
+   "text": "sheirin 2 was released uh Japan only for"
+  },
+  {
+   "t": 995.36,
+   "d": 2.44,
+   "text": "the Nintendo 64 the focus on the child"
+  },
+  {
+   "t": 997.8,
+   "d": 2.52,
+   "text": "version of Sheeran This one is"
+  },
+  {
+   "t": 1000.32,
+   "d": 2.08,
+   "text": "specifically made to be played many"
+  },
+  {
+   "t": 1002.4,
+   "d": 2.84,
+   "text": "times instead of playing and dying and"
+  },
+  {
+   "t": 1005.24,
+   "d": 1.84,
+   "text": "playing and dying and then eventually"
+  },
+  {
+   "t": 1007.08,
+   "d": 2.4,
+   "text": "succeeding and then you win you're meant"
+  },
+  {
+   "t": 1009.48,
+   "d": 2.8,
+   "text": "to play its main dungeon many times and"
+  },
+  {
+   "t": 1012.28,
+   "d": 2.2,
+   "text": "you're doing this to pick up materials"
+  },
+  {
+   "t": 1014.48,
+   "d": 2.08,
+   "text": "that appear in the dungeon and use those"
+  },
+  {
+   "t": 1016.56,
+   "d": 2.4,
+   "text": "to construct parts of a castle to defend"
+  },
+  {
+   "t": 1018.96,
+   "d": 1.88,
+   "text": "into town from invading"
+  },
+  {
+   "t": 1020.84,
+   "d": 2.44,
+   "text": "Oni and the castle gets broken down as"
+  },
+  {
+   "t": 1023.28,
+   "d": 2.0,
+   "text": "they attack but eventually you complete"
+  },
+  {
+   "t": 1025.28,
+   "d": 1.44,
+   "text": "the castle and once you do that you can"
+  },
+  {
+   "t": 1026.72,
+   "d": 3.08,
+   "text": "take the fight to the O Oni in a an"
+  },
+  {
+   "t": 1029.8,
+   "d": 2.6,
+   "text": "ingame"
+  },
+  {
+   "t": 1032.88,
+   "d": 3.0,
+   "text": "dungeon uh oh okay there's a message"
+  },
+  {
+   "t": 1035.88,
+   "d": 0.92,
+   "text": "there"
+  },
+  {
+   "t": 1036.8,
+   "d": 2.8,
+   "text": "sorry um anyway it introduces mixers"
+  },
+  {
+   "t": 1039.6,
+   "d": 2.16,
+   "text": "which are an interesting kind of Monster"
+  },
+  {
+   "t": 1041.76,
+   "d": 2.4,
+   "text": "uh that's almost more of a resource than"
+  },
+  {
+   "t": 1044.16,
+   "d": 3.16,
+   "text": "a photo fight if you throw two swords at"
+  },
+  {
+   "t": 1047.32,
+   "d": 2.36,
+   "text": "a mix at a mixer monster"
+  },
+  {
+   "t": 1049.68,
+   "d": 2.6,
+   "text": "inside the the mixt the mixer will eat"
+  },
+  {
+   "t": 1052.28,
+   "d": 2.36,
+   "text": "them and their attributes will be"
+  },
+  {
+   "t": 1054.64,
+   "d": 2.4,
+   "text": "combined together and if you kill the"
+  },
+  {
+   "t": 1057.04,
+   "d": 2.92,
+   "text": "monster then the the the sword the"
+  },
+  {
+   "t": 1059.96,
+   "d": 1.32,
+   "text": "combined sword will be left on the"
+  },
+  {
+   "t": 1061.28,
+   "d": 1.68,
+   "text": "ground for you to pick up and you can"
+  },
+  {
+   "t": 1062.96,
+   "d": 2.32,
+   "text": "make super items this way you can do"
+  },
+  {
+   "t": 1065.28,
+   "d": 1.72,
+   "text": "swords or Shields or"
+  },
+  {
+   "t": 1067.0,
+   "d": 2.84,
+   "text": "wands and it's it's an important aspect"
+  },
+  {
+   "t": 1069.84,
+   "d": 2.6,
+   "text": "of the game to increase the number of"
+  },
+  {
+   "t": 1072.44,
+   "d": 2.04,
+   "text": "abilities that you can field and battle"
+  },
+  {
+   "t": 1074.48,
+   "d": 1.96,
+   "text": "at once the problem with mixers so is"
+  },
+  {
+   "t": 1076.44,
+   "d": 2.12,
+   "text": "every item they eat makes them stronger"
+  },
+  {
+   "t": 1078.56,
+   "d": 2.0,
+   "text": "so you have to be sure that you can"
+  },
+  {
+   "t": 1080.56,
+   "d": 3.2,
+   "text": "defeat the monster before you embark on"
+  },
+  {
+   "t": 1083.76,
+   "d": 3.04,
+   "text": "such a full hearty"
+  },
+  {
+   "t": 1087.36,
+   "d": 5.16,
+   "text": "plan uh unaa kinshi Azuka kinan uh for"
+  },
+  {
+   "t": 1092.52,
+   "d": 2.68,
+   "text": "the Dreamcast is uh one of the few"
+  },
+  {
+   "t": 1095.2,
+   "d": 1.24,
+   "text": "roleplaying get released in the"
+  },
+  {
+   "t": 1096.44,
+   "d": 3.04,
+   "text": "Dreamcast before it shut down and"
+  },
+  {
+   "t": 1099.48,
+   "d": 2.04,
+   "text": "annoyingly it never it's never reled up"
+  },
+  {
+   "t": 1101.52,
+   "d": 1.56,
+   "text": "ey of Japan where I'm sure it would have"
+  },
+  {
+   "t": 1103.08,
+   "d": 2.08,
+   "text": "sold well here because we only got like"
+  },
+  {
+   "t": 1105.16,
+   "d": 2.2,
+   "text": "three role playing games for the"
+  },
+  {
+   "t": 1107.36,
+   "d": 3.24,
+   "text": "Dreamcast during its enti short lifetime"
+  },
+  {
+   "t": 1110.6,
+   "d": 1.52,
+   "text": "I hereo has a PC version but I don't"
+  },
+  {
+   "t": 1112.12,
+   "d": 2.36,
+   "text": "know much about it it focuses on shean"
+  },
+  {
+   "t": 1114.48,
+   "d": 2.52,
+   "text": "sister like galp pal auku was introduced"
+  },
+  {
+   "t": 1117.0,
+   "d": 1.44,
+   "text": "in sheirin"
+  },
+  {
+   "t": 1118.44,
+   "d": 2.4,
+   "text": "2 uh he here fights against Ninja"
+  },
+  {
+   "t": 1120.84,
+   "d": 1.76,
+   "text": "addition to the standard Mystery Dungeon"
+  },
+  {
+   "t": 1122.6,
+   "d": 2.32,
+   "text": "monsters there's a translation patch"
+  },
+  {
+   "t": 1124.92,
+   "d": 2.92,
+   "text": "into works by a wonderful person named"
+  },
+  {
+   "t": 1127.84,
+   "d": 2.36,
+   "text": "shart snack who's made several or is"
+  },
+  {
+   "t": 1130.2,
+   "d": 1.52,
+   "text": "working on several translation patches"
+  },
+  {
+   "t": 1131.72,
+   "d": 1.68,
+   "text": "for these games has a link to his"
+  },
+  {
+   "t": 1133.4,
+   "d": 2.76,
+   "text": "Discord at the end of the presentation"
+  },
+  {
+   "t": 1136.16,
+   "d": 2.84,
+   "text": "where you can find them yourself I found"
+  },
+  {
+   "t": 1139.0,
+   "d": 2.08,
+   "text": "out to my display though that the game"
+  },
+  {
+   "t": 1141.08,
+   "d": 1.76,
+   "text": "doesn't fit completely on a burnt CD"
+  },
+  {
+   "t": 1142.84,
+   "d": 2.32,
+   "text": "many Dreamcast games can and you can"
+  },
+  {
+   "t": 1145.16,
+   "d": 2.4,
+   "text": "play them right off of a burnt CD but"
+  },
+  {
+   "t": 1147.56,
+   "d": 2.64,
+   "text": "not this one you'll get like half like"
+  },
+  {
+   "t": 1150.2,
+   "d": 1.52,
+   "text": "10 levels into the dungeon and the game"
+  },
+  {
+   "t": 1151.72,
+   "d": 2.52,
+   "text": "will crash which I discovered in my"
+  },
+  {
+   "t": 1154.24,
+   "d": 3.28,
+   "text": "dismay long ago so I still have never"
+  },
+  {
+   "t": 1157.52,
+   "d": 3.12,
+   "text": "played most of this game uh there's a"
+  },
+  {
+   "t": 1160.64,
+   "d": 1.68,
+   "text": "Shan C that looks really interesting and"
+  },
+  {
+   "t": 1162.32,
+   "d": 2.24,
+   "text": "it's got some items and monsters that"
+  },
+  {
+   "t": 1164.56,
+   "d": 2.16,
+   "text": "don't appear in other"
+  },
+  {
+   "t": 1166.72,
+   "d": 2.16,
+   "text": "games then there was the one for the the"
+  },
+  {
+   "t": 1168.88,
+   "d": 2.56,
+   "text": "Wei which is probably the worst one in"
+  },
+  {
+   "t": 1171.44,
+   "d": 3.64,
+   "text": "the series and sadly it was it was when"
+  },
+  {
+   "t": 1175.08,
+   "d": 2.68,
+   "text": "a Chun soft F decided to try to take a"
+  },
+  {
+   "t": 1177.76,
+   "d": 2.24,
+   "text": "stab at making the series popular in the"
+  },
+  {
+   "t": 1180.0,
+   "d": 1.04,
+   "text": "United"
+  },
+  {
+   "t": 1181.04,
+   "d": 3.52,
+   "text": "States um it it abandoned perida for"
+  },
+  {
+   "t": 1184.56,
+   "d": 2.0,
+   "text": "much of it I mean you still lose your"
+  },
+  {
+   "t": 1186.56,
+   "d": 1.8,
+   "text": "items if you die but your experience"
+  },
+  {
+   "t": 1188.36,
+   "d": 3.32,
+   "text": "level doesn't reset to one usually so it"
+  },
+  {
+   "t": 1191.68,
+   "d": 2.52,
+   "text": "encourages grinding playing levels over"
+  },
+  {
+   "t": 1194.2,
+   "d": 2.0,
+   "text": "and over again to gain an edge on the"
+  },
+  {
+   "t": 1196.2,
+   "d": 2.68,
+   "text": "dungeon instead of making do with what"
+  },
+  {
+   "t": 1198.88,
+   "d": 2.36,
+   "text": "you've got in trying to survive though"
+  },
+  {
+   "t": 1201.24,
+   "d": 1.76,
+   "text": "it's probably the weakest in the series"
+  },
+  {
+   "t": 1203.0,
+   "d": 2.12,
+   "text": "but it is the first one in full 3d the"
+  },
+  {
+   "t": 1205.12,
+   "d": 2.32,
+   "text": "graph uh the dungeons are completely 3D"
+  },
+  {
+   "t": 1207.44,
+   "d": 2.6,
+   "text": "modeled and aren't like Sprites that are"
+  },
+  {
+   "t": 1210.04,
+   "d": 2.36,
+   "text": "zoomed in like the n641 and the"
+  },
+  {
+   "t": 1212.4,
+   "d": 2.16,
+   "text": "Dreamcast ones"
+  },
+  {
+   "t": 1214.56,
+   "d": 3.68,
+   "text": "do um let's see uh yeah it had what I"
+  },
+  {
+   "t": 1218.24,
+   "d": 2.48,
+   "text": "thought was a very annoying story"
+  },
+  {
+   "t": 1220.72,
+   "d": 2.84,
+   "text": "there's uh there's like your standard"
+  },
+  {
+   "t": 1223.56,
+   "d": 4.88,
+   "text": "jrpg betrayals and uh party and fighting"
+  },
+  {
+   "t": 1228.44,
+   "d": 0.8,
+   "text": "and"
+  },
+  {
+   "t": 1229.24,
+   "d": 1.44,
+   "text": "sometimes difficult to like some of your"
+  },
+  {
+   "t": 1230.68,
+   "d": 3.08,
+   "text": "teammates but on the plus side this is"
+  },
+  {
+   "t": 1233.76,
+   "d": 2.44,
+   "text": "the only game in the series where if you"
+  },
+  {
+   "t": 1236.2,
+   "d": 2.96,
+   "text": "want you can completely control all of"
+  },
+  {
+   "t": 1239.16,
+   "d": 2.88,
+   "text": "your party members at once every turn it"
+  },
+  {
+   "t": 1242.04,
+   "d": 2.6,
+   "text": "makes the game much slower but during"
+  },
+  {
+   "t": 1244.64,
+   "d": 2.6,
+   "text": "boss fights it makes for a very"
+  },
+  {
+   "t": 1247.24,
+   "d": 3.44,
+   "text": "interesting challenge you can just each"
+  },
+  {
+   "t": 1250.68,
+   "d": 1.56,
+   "text": "of your characters you get to decide"
+  },
+  {
+   "t": 1252.24,
+   "d": 2.8,
+   "text": "what they do each turn they all share a"
+  },
+  {
+   "t": 1255.04,
+   "d": 2.92,
+   "text": "common inventory so you can adapt some"
+  },
+  {
+   "t": 1257.96,
+   "d": 2.68,
+   "text": "wonderful store uh wonderful strategies"
+  },
+  {
+   "t": 1260.64,
+   "d": 2.56,
+   "text": "to take out the boss fights which are"
+  },
+  {
+   "t": 1263.2,
+   "d": 1.36,
+   "text": "interesting but a bit gimick Ki I"
+  },
+  {
+   "t": 1264.56,
+   "d": 1.0,
+   "text": "thought"
+  },
+  {
+   "t": 1265.56,
+   "d": 2.2,
+   "text": "anyway I'm taking closer to the slides"
+  },
+  {
+   "t": 1267.76,
+   "d": 1.44,
+   "text": "because I don't want to run over I've"
+  },
+  {
+   "t": 1269.2,
+   "d": 2.28,
+   "text": "got five minutes left uh where there's"
+  },
+  {
+   "t": 1271.48,
+   "d": 1.32,
+   "text": "only three more games to talk about"
+  },
+  {
+   "t": 1272.8,
+   "d": 2.24,
+   "text": "shean 4 was released of Nintendo DS"
+  },
+  {
+   "t": 1275.04,
+   "d": 2.64,
+   "text": "there's another fan trans fan"
+  },
+  {
+   "t": 1277.68,
+   "d": 1.92,
+   "text": "translation of it by shark snack I'm"
+  },
+  {
+   "t": 1279.6,
+   "d": 1.88,
+   "text": "talking quickly try to get through this"
+  },
+  {
+   "t": 1281.48,
+   "d": 1.68,
+   "text": "shean four and five were originally"
+  },
+  {
+   "t": 1283.16,
+   "d": 1.36,
+   "text": "released within months of each other in"
+  },
+  {
+   "t": 1284.52,
+   "d": 2.36,
+   "text": "Japan and they used the same engine they"
+  },
+  {
+   "t": 1286.88,
+   "d": 2.16,
+   "text": "mostly have the same monsters and I they"
+  },
+  {
+   "t": 1289.04,
+   "d": 2.88,
+   "text": "feel like like the same game with a"
+  },
+  {
+   "t": 1291.92,
+   "d": 1.24,
+   "text": "different"
+  },
+  {
+   "t": 1293.16,
+   "d": 2.52,
+   "text": "scenario she in tapa vis a tropical"
+  },
+  {
+   "t": 1295.68,
+   "d": 1.52,
+   "text": "island who residents are beet by an"
+  },
+  {
+   "t": 1297.2,
+   "d": 3.28,
+   "text": "Awakening God those darn gods are always"
+  },
+  {
+   "t": 1300.48,
+   "d": 3.8,
+   "text": "causing trouble yeah it probably wasn't"
+  },
+  {
+   "t": 1304.28,
+   "d": 1.68,
+   "text": "released outside of Japan due to"
+  },
+  {
+   "t": 1305.96,
+   "d": 2.08,
+   "text": "questionable illustrations of native"
+  },
+  {
+   "t": 1308.04,
+   "d": 2.8,
+   "text": "Islanders which do make the game a"
+  },
+  {
+   "t": 1310.84,
+   "d": 3.0,
+   "text": "little icky to play I would have to"
+  },
+  {
+   "t": 1313.84,
+   "d": 2.32,
+   "text": "admit it also contains an American"
+  },
+  {
+   "t": 1316.16,
+   "d": 2.08,
+   "text": "character which sort of WS the whole"
+  },
+  {
+   "t": 1318.24,
+   "d": 1.68,
+   "text": "idea that this is the fantasy version of"
+  },
+  {
+   "t": 1319.92,
+   "d": 2.92,
+   "text": "feudal Japan uh that's Millie who"
+  },
+  {
+   "t": 1322.84,
+   "d": 2.6,
+   "text": "apparently uh hails from Texas and who"
+  },
+  {
+   "t": 1325.44,
+   "d": 1.08,
+   "text": "wields"
+  },
+  {
+   "t": 1326.52,
+   "d": 1.84,
+   "text": "revolvers there are a lot of fun"
+  },
+  {
+   "t": 1328.36,
+   "d": 1.32,
+   "text": "characters like that throughout the"
+  },
+  {
+   "t": 1329.68,
+   "d": 3.88,
+   "text": "series uh shiran four and five have a"
+  },
+  {
+   "t": 1333.56,
+   "d": 2.48,
+   "text": "day night system at a certain point in"
+  },
+  {
+   "t": 1336.04,
+   "d": 3.28,
+   "text": "the game it'll start a timer and after"
+  },
+  {
+   "t": 1339.32,
+   "d": 1.76,
+   "text": "certain time after that certain number"
+  },
+  {
+   "t": 1341.08,
+   "d": 3.56,
+   "text": "of moves Knight will fall and the the"
+  },
+  {
+   "t": 1344.64,
+   "d": 1.92,
+   "text": "game the game play will completely"
+  },
+  {
+   "t": 1346.56,
+   "d": 2.96,
+   "text": "change at night uh uh all the monsters"
+  },
+  {
+   "t": 1349.52,
+   "d": 1.56,
+   "text": "are taken out of the ddge and replaced"
+  },
+  {
+   "t": 1351.08,
+   "d": 2.32,
+   "text": "with different monsters that are much"
+  },
+  {
+   "t": 1353.4,
+   "d": 2.04,
+   "text": "stronger and can probably kill you in"
+  },
+  {
+   "t": 1355.44,
+   "d": 2.28,
+   "text": "one or two hits and the game becomes"
+  },
+  {
+   "t": 1357.72,
+   "d": 2.12,
+   "text": "much more of a stealth game and your"
+  },
+  {
+   "t": 1359.84,
+   "d": 3.08,
+   "text": "items stop working against them so well"
+  },
+  {
+   "t": 1362.92,
+   "d": 2.12,
+   "text": "and and because of that because mystory"
+  },
+  {
+   "t": 1365.04,
+   "d": 1.8,
+   "text": "dungeon is as I put before like the"
+  },
+  {
+   "t": 1366.84,
+   "d": 3.12,
+   "text": "creative application of uh"
+  },
+  {
+   "t": 1369.96,
+   "d": 2.88,
+   "text": "fewer strategies seem to work at at"
+  },
+  {
+   "t": 1372.84,
+   "d": 3.2,
+   "text": "night and if you like the daytime"
+  },
+  {
+   "t": 1376.04,
+   "d": 1.68,
+   "text": "gameplay then you're going to hate the"
+  },
+  {
+   "t": 1377.72,
+   "d": 2.08,
+   "text": "night game and if you end up liking the"
+  },
+  {
+   "t": 1379.8,
+   "d": 2.08,
+   "text": "nighttime gameplay you're going to hate"
+  },
+  {
+   "t": 1381.88,
+   "d": 1.16,
+   "text": "the Day"
+  },
+  {
+   "t": 1383.04,
+   "d": 2.68,
+   "text": "game um so it doesn't really fit"
+  },
+  {
+   "t": 1385.72,
+   "d": 2.6,
+   "text": "together I think but it was an"
+  },
+  {
+   "t": 1388.32,
+   "d": 3.16,
+   "text": "interesting experiment and as I said the"
+  },
+  {
+   "t": 1391.48,
+   "d": 1.12,
+   "text": "Mystery Dungeon games are full of"
+  },
+  {
+   "t": 1392.6,
+   "d": 2.0,
+   "text": "interesting experiments they always try"
+  },
+  {
+   "t": 1394.6,
+   "d": 3.2,
+   "text": "to shake the game up with each new Ed"
+  },
+  {
+   "t": 1397.8,
+   "d": 1.96,
+   "text": "addition I'm sorry to be tripping over"
+  },
+  {
+   "t": 1399.76,
+   "d": 2.72,
+   "text": "my tongue so much then we come this year"
+  },
+  {
+   "t": 1402.48,
+   "d": 1.68,
+   "text": "in five the tower for of the dice of"
+  },
+  {
+   "t": 1404.16,
+   "d": 3.08,
+   "text": "Fate which up to"
+  },
+  {
+   "t": 1407.24,
+   "d": 2.4,
+   "text": "2020 uh was the last of the Mystery"
+  },
+  {
+   "t": 1409.64,
+   "d": 1.92,
+   "text": "Dungeon games that we had seen actually"
+  },
+  {
+   "t": 1411.56,
+   "d": 1.28,
+   "text": "the last of the sheing games there were"
+  },
+  {
+   "t": 1412.84,
+   "d": 3.36,
+   "text": "a couple of others uh Pokemon Mystery"
+  },
+  {
+   "t": 1416.2,
+   "d": 2.56,
+   "text": "Dungeon DX for switch was released I"
+  },
+  {
+   "t": 1418.76,
+   "d": 1.92,
+   "text": "think in"
+  },
+  {
+   "t": 1420.68,
+   "d": 3.24,
+   "text": "2022 um uh it was the last new shearing"
+  },
+  {
+   "t": 1423.92,
+   "d": 1.8,
+   "text": "game uh it was originally released in"
+  },
+  {
+   "t": 1425.72,
+   "d": 3.32,
+   "text": "2010 which is a long time between new"
+  },
+  {
+   "t": 1429.04,
+   "d": 2.64,
+   "text": "installments he's trying to save the"
+  },
+  {
+   "t": 1431.68,
+   "d": 5.04,
+   "text": "life of his uh of the Beloved of a"
+  },
+  {
+   "t": 1436.72,
+   "d": 2.16,
+   "text": "friend of his by daring to to roll the"
+  },
+  {
+   "t": 1438.88,
+   "d": 3.48,
+   "text": "dice of Fate an artifact of the god Reva"
+  },
+  {
+   "t": 1442.36,
+   "d": 2.4,
+   "text": "it's another of those Troublesome Gods"
+  },
+  {
+   "t": 1444.76,
+   "d": 1.92,
+   "text": "yeah reva's ultimately turned up to be a"
+  },
+  {
+   "t": 1446.68,
+   "d": 2.52,
+   "text": "pretty good Beast"
+  },
+  {
+   "t": 1449.2,
+   "d": 2.8,
+   "text": "deity it was given a full English Rel on"
+  },
+  {
+   "t": 1452.0,
+   "d": 3.08,
+   "text": "Steam and switch and this is"
+  },
+  {
+   "t": 1455.08,
+   "d": 3.36,
+   "text": "where uh I think this was about the time"
+  },
+  {
+   "t": 1458.44,
+   "d": 2.52,
+   "text": "I think when people in the west really"
+  },
+  {
+   "t": 1460.96,
+   "d": 1.88,
+   "text": "started to notice the Mystery Dungeon"
+  },
+  {
+   "t": 1462.84,
+   "d": 3.52,
+   "text": "games because sheirin 5 actually sold a"
+  },
+  {
+   "t": 1466.36,
+   "d": 2.88,
+   "text": "good number of copies like 200,000"
+  },
+  {
+   "t": 1469.24,
+   "d": 2.2,
+   "text": "which is pretty good for Mystery Dungeon"
+  },
+  {
+   "t": 1471.44,
+   "d": 3.48,
+   "text": "game and on the switch it was fairly"
+  },
+  {
+   "t": 1474.92,
+   "d": 2.84,
+   "text": "popular uh it keeps the day night system"
+  },
+  {
+   "t": 1477.76,
+   "d": 2.92,
+   "text": "a shin 4 and it has a fairly long main"
+  },
+  {
+   "t": 1480.68,
+   "d": 2.52,
+   "text": "dungeon so it is a real CH and you have"
+  },
+  {
+   "t": 1483.2,
+   "d": 2.36,
+   "text": "to play through it longer and longer"
+  },
+  {
+   "t": 1485.56,
+   "d": 2.08,
+   "text": "versions of it until you get the full"
+  },
+  {
+   "t": 1487.64,
+   "d": 2.16,
+   "text": "version uh so it's a real challenge to"
+  },
+  {
+   "t": 1489.8,
+   "d": 1.52,
+   "text": "get through it and to win you not only"
+  },
+  {
+   "t": 1491.32,
+   "d": 1.76,
+   "text": "have to finish it you have to get your"
+  },
+  {
+   "t": 1493.08,
+   "d": 3.2,
+   "text": "friend through the whole thing too which"
+  },
+  {
+   "t": 1496.28,
+   "d": 3.36,
+   "text": "makes it uh uh quite the deal but it's"
+  },
+  {
+   "t": 1499.64,
+   "d": 4.24,
+   "text": "doable yeah you can do it I believe in"
+  },
+  {
+   "t": 1503.88,
+   "d": 2.52,
+   "text": "you it's got a huge number of bonus"
+  },
+  {
+   "t": 1506.4,
+   "d": 2.2,
+   "text": "dungeons the original they released is"
+  },
+  {
+   "t": 1508.6,
+   "d": 2.44,
+   "text": "paid DLC but the switch version they"
+  },
+  {
+   "t": 1511.04,
+   "d": 2.24,
+   "text": "just give them all to you for free"
+  },
+  {
+   "t": 1513.28,
+   "d": 2.64,
+   "text": "there's like T or 30 of them and lots of"
+  },
+  {
+   "t": 1515.92,
+   "d": 1.56,
+   "text": "them are tons of fun there's one that"
+  },
+  {
+   "t": 1517.48,
+   "d": 1.52,
+   "text": "plays like mind"
+  },
+  {
+   "t": 1519.0,
+   "d": 1.76,
+   "text": "sweeper uh there's another one that"
+  },
+  {
+   "t": 1520.76,
+   "d": 1.92,
+   "text": "plays like Soo ban but with monsters in"
+  },
+  {
+   "t": 1522.68,
+   "d": 2.16,
+   "text": "it uh I know that people who are"
+  },
+  {
+   "t": 1524.84,
+   "d": 1.72,
+   "text": "familiar with netch might be having a"
+  },
+  {
+   "t": 1526.56,
+   "d": 2.36,
+   "text": "panic reaction from me saying that it's"
+  },
+  {
+   "t": 1528.92,
+   "d": 2.04,
+   "text": "got a huge amount of replay value you"
+  },
+  {
+   "t": 1530.96,
+   "d": 2.92,
+   "text": "can play this game for for a dozens of"
+  },
+  {
+   "t": 1533.88,
+   "d": 2.28,
+   "text": "hours just even after you finish the"
+  },
+  {
+   "t": 1536.16,
+   "d": 2.12,
+   "text": "bonus dungeon there's a huge amount of"
+  },
+  {
+   "t": 1538.28,
+   "d": 4.08,
+   "text": "things to try and play around with oh"
+  },
+  {
+   "t": 1542.36,
+   "d": 1.92,
+   "text": "there's one dungeon where you never"
+  },
+  {
+   "t": 1544.28,
+   "d": 1.92,
+   "text": "advance past level one and it's a short"
+  },
+  {
+   "t": 1546.2,
+   "d": 1.64,
+   "text": "dungeon but you basically are running"
+  },
+  {
+   "t": 1547.84,
+   "d": 3.04,
+   "text": "from monsters the entire time uh and it"
+  },
+  {
+   "t": 1550.88,
+   "d": 1.76,
+   "text": "feels really great once you can pull it"
+  },
+  {
+   "t": 1552.64,
+   "d": 2.76,
+   "text": "off it has a system of new items where"
+  },
+  {
+   "t": 1555.4,
+   "d": 2.56,
+   "text": "you can create new items that appear in"
+  },
+  {
+   "t": 1557.96,
+   "d": 3.16,
+   "text": "the dungeons after you've created them"
+  },
+  {
+   "t": 1561.12,
+   "d": 2.76,
+   "text": "uh which subtly changes the whole game"
+  },
+  {
+   "t": 1563.88,
+   "d": 1.56,
+   "text": "from that point"
+  },
+  {
+   "t": 1565.44,
+   "d": 2.2,
+   "text": "on and your swords and shields have"
+  },
+  {
+   "t": 1567.64,
+   "d": 2.44,
+   "text": "their own experience totals and can gain"
+  },
+  {
+   "t": 1570.08,
+   "d": 2.52,
+   "text": "levels themselves become more"
+  },
+  {
+   "t": 1572.6,
+   "d": 5.28,
+   "text": "popular uh it's more popular I mean more"
+  },
+  {
+   "t": 1578.12,
+   "d": 3.64,
+   "text": "powerful and finally we're at 645 now"
+  },
+  {
+   "t": 1581.76,
+   "d": 4.12,
+   "text": "and I will finish up do sheim 6 until"
+  },
+  {
+   "t": 1585.88,
+   "d": 3.08,
+   "text": "January of this year that was the whole"
+  },
+  {
+   "t": 1588.96,
+   "d": 3.56,
+   "text": "story but then hearkened I guess by the"
+  },
+  {
+   "t": 1592.52,
+   "d": 3.64,
+   "text": "how well Sheeran 5 did but then went"
+  },
+  {
+   "t": 1596.16,
+   "d": 1.92,
+   "text": "with that 200,000 units figure I'm not"
+  },
+  {
+   "t": 1598.08,
+   "d": 1.68,
+   "text": "sure if we actually know how many shean"
+  },
+  {
+   "t": 1599.76,
+   "d": 2.24,
+   "text": "5 sold but we know that it did well"
+  },
+  {
+   "t": 1602.0,
+   "d": 2.56,
+   "text": "shean 6 sold 200,000 units and it's"
+  },
+  {
+   "t": 1604.56,
+   "d": 3.24,
+   "text": "first month in Japan Japan alone we"
+  },
+  {
+   "t": 1607.8,
+   "d": 2.68,
+   "text": "don't know apparently how well it's done"
+  },
+  {
+   "t": 1610.48,
+   "d": 3.56,
+   "text": "in other territories but the rumor is"
+  },
+  {
+   "t": 1614.04,
+   "d": 1.64,
+   "text": "that they're planning a seventh game in"
+  },
+  {
+   "t": 1615.68,
+   "d": 1.72,
+   "text": "the series now so it has to have done"
+  },
+  {
+   "t": 1617.4,
+   "d": 2.0,
+   "text": "pretty well"
+  },
+  {
+   "t": 1619.4,
+   "d": 2.2,
+   "text": "anyway it's the first games that sheirin"
+  },
+  {
+   "t": 1621.6,
+   "d": 3.04,
+   "text": "3 to be in full polygonal 3D and the"
+  },
+  {
+   "t": 1624.64,
+   "d": 1.44,
+   "text": "graphics are great in this one they"
+  },
+  {
+   "t": 1626.08,
+   "d": 1.68,
+   "text": "really did a good job of adapting that"
+  },
+  {
+   "t": 1627.76,
+   "d": 2.48,
+   "text": "2D Super Nintendo style that most of the"
+  },
+  {
+   "t": 1630.24,
+   "d": 3.88,
+   "text": "games have to the modern era at"
+  },
+  {
+   "t": 1634.12,
+   "d": 4.76,
+   "text": "last um yes see anyway shiran and Kaa"
+  },
+  {
+   "t": 1638.88,
+   "d": 1.28,
+   "text": "this time are investigating the cause of"
+  },
+  {
+   "t": 1640.16,
+   "d": 2.32,
+   "text": "the mysterious drought which of course"
+  },
+  {
+   "t": 1642.48,
+   "d": 1.48,
+   "text": "means competing a number of mystery"
+  },
+  {
+   "t": 1643.96,
+   "d": 1.76,
+   "text": "judgment to solve it and of course"
+  },
+  {
+   "t": 1645.72,
+   "d": 3.32,
+   "text": "there's weird Gods involved"
+  },
+  {
+   "t": 1649.04,
+   "d": 1.64,
+   "text": "uh it was intended to be a Back to"
+  },
+  {
+   "t": 1650.68,
+   "d": 2.28,
+   "text": "Basics game they cut the day and night"
+  },
+  {
+   "t": 1652.96,
+   "d": 1.92,
+   "text": "and the equipment experience systems"
+  },
+  {
+   "t": 1654.88,
+   "d": 2.16,
+   "text": "which I think is a positive"
+  },
+  {
+   "t": 1657.04,
+   "d": 2.52,
+   "text": "Choice uh so the game plays more like a"
+  },
+  {
+   "t": 1659.56,
+   "d": 1.96,
+   "text": "traditional Rog light"
+  },
+  {
+   "t": 1661.52,
+   "d": 2.68,
+   "text": "game but still has some interesting new"
+  },
+  {
+   "t": 1664.2,
+   "d": 2.04,
+   "text": "ideas in it and one of them are"
+  },
+  {
+   "t": 1666.24,
+   "d": 2.6,
+   "text": "behemoths which are huge monsters that"
+  },
+  {
+   "t": 1668.84,
+   "d": 2.16,
+   "text": "appear on certain levels you're properly"
+  },
+  {
+   "t": 1671.0,
+   "d": 1.32,
+   "text": "warned if you're aren't a level would"
+  },
+  {
+   "t": 1672.32,
+   "d": 3.08,
+   "text": "Behemoth on it and even if the level is"
+  },
+  {
+   "t": 1675.4,
+   "d": 3.44,
+   "text": "dark if you don't see further around you"
+  },
+  {
+   "t": 1678.84,
+   "d": 2.2,
+   "text": "than the room you're in you still get to"
+  },
+  {
+   "t": 1681.04,
+   "d": 2.8,
+   "text": "see Behemoth regardless of whether they"
+  },
+  {
+   "t": 1683.84,
+   "d": 2.4,
+   "text": "should be visible Behemoth can usually"
+  },
+  {
+   "t": 1686.24,
+   "d": 2.68,
+   "text": "kill you in one hit but they move"
+  },
+  {
+   "t": 1688.92,
+   "d": 3.48,
+   "text": "slowly and they uh and even though you"
+  },
+  {
+   "t": 1692.4,
+   "d": 2.16,
+   "text": "can only attack them if you can attack"
+  },
+  {
+   "t": 1694.56,
+   "d": 1.96,
+   "text": "them from behind or if you could throw"
+  },
+  {
+   "t": 1696.52,
+   "d": 2.96,
+   "text": "something like over the barrier in front"
+  },
+  {
+   "t": 1699.48,
+   "d": 1.84,
+   "text": "of them onto their heads they all have"
+  },
+  {
+   "t": 1701.32,
+   "d": 2.04,
+   "text": "like one hit point so it's an"
+  },
+  {
+   "t": 1703.36,
+   "d": 2.08,
+   "text": "interesting challenge uh and it's not"
+  },
+  {
+   "t": 1705.44,
+   "d": 1.56,
+   "text": "going be that hard once you learn how to"
+  },
+  {
+   "t": 1707.0,
+   "d": 1.92,
+   "text": "how to deal with them I hope this is"
+  },
+  {
+   "t": 1708.92,
+   "d": 1.84,
+   "text": "interesting I'm obsessed with these"
+  },
+  {
+   "t": 1710.76,
+   "d": 3.24,
+   "text": "games and I'm trying to to translate"
+  },
+  {
+   "t": 1714.0,
+   "d": 2.56,
+   "text": "that Obsession to you as best as I"
+  },
+  {
+   "t": 1716.56,
+   "d": 3.44,
+   "text": "can anyway it's still receiving updates"
+  },
+  {
+   "t": 1720.0,
+   "d": 2.76,
+   "text": "it's got It's already had one a couple"
+  },
+  {
+   "t": 1722.76,
+   "d": 3.72,
+   "text": "of DLC releases it's just had a paid DLC"
+  },
+  {
+   "t": 1726.48,
+   "d": 2.92,
+   "text": "with more dungeons in it and if you buy"
+  },
+  {
+   "t": 1729.4,
+   "d": 2.4,
+   "text": "it now there'll be more that you'll get"
+  },
+  {
+   "t": 1731.8,
+   "d": 6.6,
+   "text": "for free uh I think in a month or two"
+  },
+  {
+   "t": 1738.76,
+   "d": 2.96,
+   "text": "uh and Toft is sometimes now releasing"
+  },
+  {
+   "t": 1741.72,
+   "d": 3.08,
+   "text": "special event dungeons uh that you can"
+  },
+  {
+   "t": 1744.8,
+   "d": 3.04,
+   "text": "play and you can try to be try to finish"
+  },
+  {
+   "t": 1747.84,
+   "d": 2.6,
+   "text": "it in a limited time competing against"
+  },
+  {
+   "t": 1750.44,
+   "d": 1.68,
+   "text": "other players around the"
+  },
+  {
+   "t": 1752.12,
+   "d": 2.96,
+   "text": "world that's so much without uh hearing"
+  },
+  {
+   "t": 1755.08,
+   "d": 1.36,
+   "text": "from the Mystery Dungeon games it's"
+  },
+  {
+   "t": 1756.44,
+   "d": 1.2,
+   "text": "great to see more activity from it"
+  },
+  {
+   "t": 1757.64,
+   "d": 2.48,
+   "text": "because it's really an institution it's"
+  },
+  {
+   "t": 1760.12,
+   "d": 1.88,
+   "text": "it's lasted for so long at this point"
+  },
+  {
+   "t": 1762.0,
+   "d": 3.36,
+   "text": "and there are many game series that have"
+  },
+  {
+   "t": 1765.36,
+   "d": 2.88,
+   "text": "died out over the decades and yet this"
+  },
+  {
+   "t": 1768.24,
+   "d": 3.12,
+   "text": "one one of the most Niche and esoteric"
+  },
+  {
+   "t": 1771.36,
+   "d": 3.56,
+   "text": "of them all is still it's still going"
+  },
+  {
+   "t": 1774.92,
+   "d": 1.6,
+   "text": "and it looks like it will still be going"
+  },
+  {
+   "t": 1776.52,
+   "d": 2.16,
+   "text": "for some more time to"
+  },
+  {
+   "t": 1778.68,
+   "d": 3.56,
+   "text": "come yeah that's 4 those okay and that's"
+  },
+  {
+   "t": 1782.24,
+   "d": 2.16,
+   "text": "everything thanks for watching I hope"
+  },
+  {
+   "t": 1784.4,
+   "d": 1.84,
+   "text": "this has inspired you to look into these"
+  },
+  {
+   "t": 1786.24,
+   "d": 3.72,
+   "text": "weird games sheirin 6 is on on the"
+  },
+  {
+   "t": 1789.96,
+   "d": 2.64,
+   "text": "switch uh the system is out for right"
+  },
+  {
+   "t": 1792.6,
+   "d": 3.4,
+   "text": "now it's $59.99 but I think it's well"
+  },
+  {
+   "t": 1796.0,
+   "d": 2.44,
+   "text": "worth it yeah there there's so much"
+  },
+  {
+   "t": 1798.44,
+   "d": 1.64,
+   "text": "gameplay on this I played a ton of"
+  },
+  {
+   "t": 1800.08,
+   "d": 2.84,
+   "text": "Sheeran 5 but I have easily eclipsed"
+  },
+  {
+   "t": 1802.92,
+   "d": 2.96,
+   "text": "it in playing through Sheeran 6 even"
+  },
+  {
+   "t": 1805.88,
+   "d": 3.12,
+   "text": "though she RI us so much content in it"
+  },
+  {
+   "t": 1809.0,
+   "d": 3.32,
+   "text": "so here are the links to a Genesis uh"
+  },
+  {
+   "t": 1812.32,
+   "d": 3.0,
+   "text": "translation patch the shark snacks uh"
+  },
+  {
+   "t": 1815.32,
+   "d": 2.36,
+   "text": "patches in his Discord their"
+  },
+  {
+   "t": 1817.68,
+   "d": 2.56,
+   "text": "Discord uh the Grog pod Rog likee"
+  },
+  {
+   "t": 1820.24,
+   "d": 2.24,
+   "text": "podcast on the Sheeran games the is"
+  },
+  {
+   "t": 1822.48,
+   "d": 1.96,
+   "text": "episode of Rog light radio that we did"
+  },
+  {
+   "t": 1824.44,
+   "d": 3.04,
+   "text": "featuring me and Keith bergon back from"
+  },
+  {
+   "t": 1827.48,
+   "d": 1.12,
+   "text": "2011"
+  },
+  {
+   "t": 1828.6,
+   "d": 2.08,
+   "text": "and there's my I iio page where you can"
+  },
+  {
+   "t": 1830.68,
+   "d": 2.52,
+   "text": "get weart Mystery Dungeon which has all"
+  },
+  {
+   "t": 1833.2,
+   "d": 3.36,
+   "text": "of this in Greater detail and my book on"
+  },
+  {
+   "t": 1836.56,
+   "d": 2.84,
+   "text": "Amazon on FR road light games from my"
+  },
+  {
+   "t": 1839.4,
+   "d": 3.56,
+   "text": "old at play column from gam watch thanks"
+  },
+  {
+   "t": 1842.96,
+   "d": 1.32,
+   "text": "for having me I hope this was"
+  },
+  {
+   "t": 1844.28,
+   "d": 2.0,
+   "text": "entertaining for you and that's"
+  },
+  {
+   "t": 1846.28,
+   "d": 2.96,
+   "text": "everything yeah good night excellent"
+  },
+  {
+   "t": 1849.24,
+   "d": 2.72,
+   "text": "thank you so much John like yeah the"
+  },
+  {
+   "t": 1851.96,
+   "d": 2.52,
+   "text": "enthusiasm is infectious and I think"
+  },
+  {
+   "t": 1854.48,
+   "d": 1.88,
+   "text": "it's been a great I I don't know how"
+  },
+  {
+   "t": 1856.36,
+   "d": 1.68,
+   "text": "anyone could listen to that and not be"
+  },
+  {
+   "t": 1858.04,
+   "d": 1.68,
+   "text": "convinced to go pick up a mystery"
+  },
+  {
+   "t": 1859.72,
+   "d": 3.52,
+   "text": "dungeon game so thank uh wonderful and"
+  },
+  {
+   "t": 1863.24,
+   "d": 2.04,
+   "text": "yes your breakout room will be Goblin"
+  },
+  {
+   "t": 1865.28,
+   "d": 1.76,
+   "text": "singers so if people want to talk more"
+  },
+  {
+   "t": 1867.04,
+   "d": 2.64,
+   "text": "about the Mystery Dungeon franchise they"
+  },
+  {
+   "t": 1869.68,
+   "d": 3.0,
+   "text": "can do that after this next talk all"
+  },
+  {
+   "t": 1872.68,
+   "d": 2.32,
+   "text": "right"
+  }
+ ]
+}

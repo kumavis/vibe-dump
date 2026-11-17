@@ -1,0 +1,58 @@
+Lee Tusman - Lower Dimensional Dungeons
+Speaker: Lee Tusman
+https://www.youtube.com/watch?v=-e4gF_SKWPk
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] EMCEE: Cool. Thank you so much. Great. Our next set of talks is a long block of lightning talks and that's going to be our last block of talks for the day. Afterwards we will go into unconferencing. We have a lot of great talks. Feel free to grab a drink of water or something if you want. This has been a long block of talk but to get a little extra time for the lightning talks why don't we kick them off. I am going to follow Alexei's structure of having the speaker introduce themselves. Our first speaker is Lee Tusman. >> Hello.
+
+## Lee Tusman
+
+[0:00:50] Hope you can hear me and see me and my slides. My name is Lee Tusman. I am an artist and an educator, a programmer, I make games. I am involved in one of the co-organizers along with a team of other collective that organizers at baby castles, a video game art space in New York. And this is a lightning talk on lower-dimensional dungeons. This is a talk primarily dealing with Roguelikes and dungeon crawlers that are one dimensional. It is an overview of the field but it is not necessarily comprehensive. I will describe their mechanics and my other caveat is I love simplicity and that I can quickly understand the underlying structures and systems of lower dimensional dungeons.
+
+[0:01:54] I am an educator and a lot of what I do as an educator is try to break things down into their smaller parts. Thinking about one dimensional dungeons is one way I have been able to strip down the genre ge procedural generation into their innermost parts. I want to say about how I came upon the idea of the one dimensional dungeons.
+
+## Cosmic Crown
+
+[0:02:24] This is a came called cosmic crown. I originally found this on iOS though you can play it on the web on Itch and I think there is an Android package as well. This game as beautiful graphics. I am just going to move ahead and hit play so you can see a little bit of what the gameplay is like. In this one-dimensional game you can see you are at the bottom and you can move forward or one space at a time or two. There is a lightning bolt which disrupts and stops machinery from working and at the end is the crown which is basically how you descend. The way I got into this was I was looking to play Roguelikes and reading about them and not coming from a background in dungeons and dragons or RPG and I found the UI of memorizing a million keys as hard to wrap my mind around and inventory as well.
+
+[0:03:24] I was attracted to this game's simplicity where it was still surprising and emergent gameplay mechanics and yet I could focus on that alone and understanding the system and enjoying still like kind of the emergent gameplay that happens and really being able to focus on that and understand how that worked.
+
+## URL Hunter
+
+[0:03:53] Maybe you are thinking OK that's not ASCII. You know, I prefer a different kind of dungeon crawler so I am going to jump to something else. This is Corey Johnson's URL hunter. It might be difficult for you to see this on a small screen or on you be or however you are watching it if it is after the conference as well but in this game, you are an O and there is little As that you are hunting. It is in the URL bar and if you can peak your eyes in there are As returning around. This isn't turn-base. It isn't a Roguelike but it is one dimensional. This let's you upend some of the conventions of these kinds of genres and kind of try different kind of experiments and this is why I think I love it is in the Ural -- URL bar. It reminded me of my favorite game which is line wobbler.
+
+## Line Wobbler
+
+[0:04:58] Your controller is a spring you can move forward and backward and it is not procedurally generated or turn-based. Each level has been premade. You are controlling the green light and are trying to get to the flashing light at each level of the dungeon. You have different kinds of motion and ways to attack and get through different obstacles. It is a beautiful, fluid game and has been an inspiration for me when thinking through one dimensional dungeons and I love how it up ends conventions. I hope it inspires people to make hardware Roguelikes.
+
+## Rogue 280
+
+[0:05:40] This is going in another direction. This one is definitely an ASCII Roguelike. Santiago spoke three years ago talking about the conventions and challenging the conventions of Roguelikes. This is Rogue 280 which was written in 280 characters. Our familiar at symbol and you have hp and the level. You can see the stairs there. There are monsters though they are invisible and that's probably because he wrote the entire game in just 280 characters. He updated this and made a second version.
+
+## Rogue 280 v2
+
+[0:06:20] This is Rogue 280 V2 and now you can see more terrain. The monsters are invisible but maybe there is tall grass we are seeing. There is plus minus alters you can pray at by walking on to them which increases your HP. You can hit monsters still but they invisible. I love the constraint here. It is such a convention of working on games for years and years and working with these kinds of constraints let's you build something much more rapidly that can still delight and challenge you and let's you play with these ideas of emergence and procedural generation.
+
+## Stutterstep
+
+[0:07:07] This is stutter step. This was created for Lutem. He said it took him a day. Even though you are moving along a single horizontal dimension, when you pick up an item and we see the back splashes which are a staff and the brackets are a shield. You are moving along the two dimensions and you are picking up and attacking monsters for example but your UI is along this other dimension which I think is a really interesting approach. There is lava. And you have med packs. I think it was a smart way of dealing with this interface and with constraint.
+
+## OneDimensional Dungeon
+
+[0:08:02] This is my own one dimensional Roguelike. This is called one dimensional dungeon. The name says it all. It is inspired by Rogue and I was trying to collapse Rogue do you know a two dimensional minimal constraint system. You have the kinds of monsters and bats and rats and hobgoblins and snakes. And, you know, you are moving in the two dimensions. There is gold and potions that you can pick up. When you hit a toad for example, you hallucinate which you can see happening. If you get attacked by a floating eye it renders you blind for a few turns. This was really, you know, me trying to work within constraints. It is not just a coffee break Roguelike. It is an espresso Roguelike. This is a game you can play 2-3 minutes and try to get a high score and work out of the dungeon. It came with me building a game without using a library or other engine but building it
+
+[0:09:09] from scratch using my own know how and a lot of the fun for me was in building it this way still having a lot of delight I still play this game a lot but doing it with this kind of minimal constraints. One thing fun to build into this is I made it so you can play along the vertical orientation. For example, you can hit a button to switch to the vertical or choose flip-flop mode and each level it switches to a different orientation.
+
+## Hunt the Wimpy
+
+[0:09:42] The next one dimensional Roguelike I made is called hunt the whimpus. This is on a BBC micro bit controller. I programmed this in TypeScript but the micro bit can be programmed with a block like a block editor so it is exciting to dove tail with what Kate was saying about the different tools and different visual programming environments and different ways to program and make it work. I created these little not ASCII but icons to represent the player, the whimpus here as I call it and the slime pits. It is a one dimensional dungeon in a loop. Here is the code or part of the code.
+
+## Chess Variants
+
+[0:10:31] Before I go, I want to mention since a lot of people that are into the rested and Roguelikes are really interested in chess. Chess is obviously turn base as well. There is a history of chess variance and this is one of many one dimensional chess variations. There is one my Martin Gardner a puzzle designer. This is another way to explore constraint and not procedural generation so much as emergent gameplay with kind of minimal rule sets. I think that's it.
+
+## Outro
+
+[0:11:10] I am out of time. These slides and my notes are available at cutly/dungeon. You are welcome to message me either on the conference mud or here is my website/Twitter and Instagram. I would love to see further exploration of one dimensional Roguelikes and procedural generation. Thanks so much. EMCEE: That was wonderful. That was a whirlwind. I definitely want to go play the URL game because I have seen pictures of it but never got a chance to play it. Cool. We will be hanging out in the space. >> Definitely.

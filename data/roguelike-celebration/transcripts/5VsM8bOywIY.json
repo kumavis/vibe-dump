@@ -1,0 +1,2350 @@
+{
+ "id": "5VsM8bOywIY",
+ "url": "https://www.youtube.com/watch?v=5VsM8bOywIY",
+ "title": "Colin Liotta: Rogue Puzzles: A rundown of the roguelike puzzle in the 2017 MIT Mystery Hunt",
+ "speaker": "Colin Liotta",
+ "talk_title": "Rogue Puzzles: A rundown of the roguelike puzzle in the 2017 MIT Mystery Hunt",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-11",
+ "duration_s": 1016,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - http://roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to speaker"
+  },
+  {
+   "start": 53,
+   "title": "The MIT mystery hunt"
+  },
+  {
+   "start": 126,
+   "title": "Designing puzzle hunts"
+  },
+  {
+   "start": 208,
+   "title": "Inspiration from roguelikes"
+  },
+  {
+   "start": 355,
+   "title": "Technical implementation"
+  },
+  {
+   "start": 501,
+   "title": "Level editor and testing"
+  },
+  {
+   "start": 637,
+   "title": "Advanced puzzle mechanics"
+  },
+  {
+   "start": 793,
+   "title": "Final refinement"
+  },
+  {
+   "start": 837,
+   "title": "Hunt results and solution"
+  },
+  {
+   "start": 904,
+   "title": "Future iterations"
+  },
+  {
+   "start": 943,
+   "title": "Standalone application launch"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3279,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.46,
+   "text": "everyone thank you for having me at this"
+  },
+  {
+   "t": 2.46,
+   "d": 1.83,
+   "text": "wonderful celebration it's been super"
+  },
+  {
+   "t": 4.29,
+   "d": 1.43,
+   "text": "fun"
+  },
+  {
+   "t": 5.72,
+   "d": 3.88,
+   "text": "like I said my name is Colin Liotta on"
+  },
+  {
+   "t": 9.6,
+   "d": 2.73,
+   "text": "Twitter I'm at Viren I run a small game"
+  },
+  {
+   "t": 12.33,
+   "d": 1.44,
+   "text": "development studio called quick step"
+  },
+  {
+   "t": 13.77,
+   "d": 3.99,
+   "text": "labs in the past I've made a ton of"
+  },
+  {
+   "t": 17.76,
+   "d": 1.86,
+   "text": "different games I was responsible for"
+  },
+  {
+   "t": 19.62,
+   "d": 2.07,
+   "text": "the lifeline series of"
+  },
+  {
+   "t": 21.69,
+   "d": 1.86,
+   "text": "choose-your-own-adventure text-based"
+  },
+  {
+   "t": 23.55,
+   "d": 2.31,
+   "text": "real-time games which is quite a"
+  },
+  {
+   "t": 25.86,
+   "d": 1.8,
+   "text": "mouthful but there are a lot of fun and"
+  },
+  {
+   "t": 27.66,
+   "d": 2.43,
+   "text": "great stories also made a ton of other"
+  },
+  {
+   "t": 30.09,
+   "d": 3.39,
+   "text": "games many of them have been huge flops"
+  },
+  {
+   "t": 33.48,
+   "d": 2.16,
+   "text": "others have been big successes like"
+  },
+  {
+   "t": 35.64,
+   "d": 2.34,
+   "text": "Fairway Solitaire or a big fish casino"
+  },
+  {
+   "t": 37.98,
+   "d": 2.19,
+   "text": "or my personal favorite hybrid disc"
+  },
+  {
+   "t": 40.17,
+   "d": 2.31,
+   "text": "frenzy which is super awesome"
+  },
+  {
+   "t": 42.48,
+   "d": 1.14,
+   "text": "but I'm not going to talk about any of"
+  },
+  {
+   "t": 43.62,
+   "d": 2.22,
+   "text": "those games today instead I'm gonna talk"
+  },
+  {
+   "t": 45.84,
+   "d": 2.22,
+   "text": "about a very sort of funny and different"
+  },
+  {
+   "t": 48.06,
+   "d": 2.97,
+   "text": "way of applying a roguelike and some of"
+  },
+  {
+   "t": 51.03,
+   "d": 2.06,
+   "text": "the lessons I learned along the way so"
+  },
+  {
+   "t": 53.09,
+   "d": 3.13,
+   "text": "this story all starts with the MIT"
+  },
+  {
+   "t": 56.22,
+   "d": 2.25,
+   "text": "mystery hunt for those who are familiar"
+  },
+  {
+   "t": 58.47,
+   "d": 3.03,
+   "text": "it's a thing for those who aren't a"
+  },
+  {
+   "t": 61.5,
+   "d": 4.14,
+   "text": "brief summary it's a very very very very"
+  },
+  {
+   "t": 65.64,
+   "d": 2.28,
+   "text": "difficult puzzle hunt that happens over"
+  },
+  {
+   "t": 67.92,
+   "d": 2.91,
+   "text": "the course about three to four days the"
+  },
+  {
+   "t": 70.83,
+   "d": 3.09,
+   "text": "puzzles are very difficult they are"
+  },
+  {
+   "t": 73.92,
+   "d": 1.89,
+   "text": "designed to take between two to 20"
+  },
+  {
+   "t": 75.81,
+   "d": 2.55,
+   "text": "person hours to solve per puzzle they're"
+  },
+  {
+   "t": 78.36,
+   "d": 1.44,
+   "text": "usually several hundred of those puzzles"
+  },
+  {
+   "t": 79.8,
+   "d": 2.58,
+   "text": "and in order to solve them you will"
+  },
+  {
+   "t": 82.38,
+   "d": 2.61,
+   "text": "usually need a team of about like 30 to"
+  },
+  {
+   "t": 84.99,
+   "d": 2.52,
+   "text": "70 different people and the most"
+  },
+  {
+   "t": 87.51,
+   "d": 2.55,
+   "text": "important part of the rules of the hunt"
+  },
+  {
+   "t": 90.06,
+   "d": 3.36,
+   "text": "is that whichever team wins they get to"
+  },
+  {
+   "t": 93.42,
+   "d": 3.12,
+   "text": "write the next year's hunt and my team"
+  },
+  {
+   "t": 96.54,
+   "d": 1.65,
+   "text": "has been very very proud over the last"
+  },
+  {
+   "t": 98.19,
+   "d": 2.07,
+   "text": "20 years of always coming in second and"
+  },
+  {
+   "t": 100.26,
+   "d": 3.75,
+   "text": "it's been great until last year"
+  },
+  {
+   "t": 104.01,
+   "d": 4.14,
+   "text": "whoops we won so this is a picture of"
+  },
+  {
+   "t": 108.15,
+   "d": 2.25,
+   "text": "our team running around through the MIT"
+  },
+  {
+   "t": 110.4,
+   "d": 3.0,
+   "text": "campus the goal of the hunt each year is"
+  },
+  {
+   "t": 113.4,
+   "d": 2.4,
+   "text": "to find a coin this was the coin that we"
+  },
+  {
+   "t": 115.8,
+   "d": 2.94,
+   "text": "found it was a really cool D&D theme -"
+  },
+  {
+   "t": 118.74,
+   "d": 1.83,
+   "text": "mystery hunt that had this beautiful"
+  },
+  {
+   "t": 120.57,
+   "d": 4.13,
+   "text": "dragon coin that was very D&D styled so"
+  },
+  {
+   "t": 124.7,
+   "d": 3.85,
+   "text": "great we won we were super happy until"
+  },
+  {
+   "t": 128.55,
+   "d": 1.71,
+   "text": "the next day when we woke up and"
+  },
+  {
+   "t": 130.26,
+   "d": 3.02,
+   "text": "realized oh no we actually need to write"
+  },
+  {
+   "t": 133.28,
+   "d": 2.58,
+   "text": "40 different puzzles and with a team of"
+  },
+  {
+   "t": 135.86,
+   "d": 2.37,
+   "text": "70 people you might think 140 puzzles"
+  },
+  {
+   "t": 138.23,
+   "d": 0.63,
+   "text": "that's trivial"
+  },
+  {
+   "t": 138.86,
+   "d": 2.55,
+   "text": "it's not a problem but these puzzles are"
+  },
+  {
+   "t": 141.41,
+   "d": 3.54,
+   "text": "insane they are designed to be very deep"
+  },
+  {
+   "t": 144.95,
+   "d": 1.8,
+   "text": "with many different layers of stuff"
+  },
+  {
+   "t": 146.75,
+   "d": 1.41,
+   "text": "going on with them they're designed to"
+  },
+  {
+   "t": 148.16,
+   "d": 2.07,
+   "text": "be very clever they should be very fun"
+  },
+  {
+   "t": 150.23,
+   "d": 2.28,
+   "text": "and they should ultimately be very fair"
+  },
+  {
+   "t": 152.51,
+   "d": 3.93,
+   "text": "so we developed an entire process for"
+  },
+  {
+   "t": 156.44,
+   "d": 1.5,
+   "text": "writing a whole bunch of these things"
+  },
+  {
+   "t": 157.94,
+   "d": 2.28,
+   "text": "over the course of the year and I"
+  },
+  {
+   "t": 160.22,
+   "d": 1.94,
+   "text": "produced several of them along the way"
+  },
+  {
+   "t": 162.16,
+   "d": 3.4,
+   "text": "this was a fun puzzle called the next"
+  },
+  {
+   "t": 165.56,
+   "d": 1.95,
+   "text": "generation which was designed to trick"
+  },
+  {
+   "t": 167.51,
+   "d": 1.5,
+   "text": "people into thinking it was about Star"
+  },
+  {
+   "t": 169.01,
+   "d": 1.8,
+   "text": "Trek but the reality was there's"
+  },
+  {
+   "t": 170.81,
+   "d": 2.28,
+   "text": "actually about a 1 dimensional cellular"
+  },
+  {
+   "t": 173.09,
+   "d": 2.34,
+   "text": "automata that was evolving in different"
+  },
+  {
+   "t": 175.43,
+   "d": 1.89,
+   "text": "ways for each of the different rows so"
+  },
+  {
+   "t": 177.32,
+   "d": 1.53,
+   "text": "that was fun"
+  },
+  {
+   "t": 178.85,
+   "d": 2.07,
+   "text": "another one that I made it was called"
+  },
+  {
+   "t": 180.92,
+   "d": 3.24,
+   "text": "marked deck the players received a deck"
+  },
+  {
+   "t": 184.16,
+   "d": 2.37,
+   "text": "of cards that were shuffled that had all"
+  },
+  {
+   "t": 186.53,
+   "d": 1.47,
+   "text": "been laser-cut with a different pattern"
+  },
+  {
+   "t": 188.0,
+   "d": 2.01,
+   "text": "on them and you had to assemble the"
+  },
+  {
+   "t": 190.01,
+   "d": 1.62,
+   "text": "cards in the right order in order to"
+  },
+  {
+   "t": 191.63,
+   "d": 1.98,
+   "text": "form that different sort of like art"
+  },
+  {
+   "t": 193.61,
+   "d": 3.45,
+   "text": "there and on the side you saw a"
+  },
+  {
+   "t": 197.06,
+   "d": 2.82,
+   "text": "collection of letters and so that I"
+  },
+  {
+   "t": 199.88,
+   "d": 1.2,
+   "text": "won't spoil it I won't go further than"
+  },
+  {
+   "t": 201.08,
+   "d": 1.56,
+   "text": "that but there's a series of four"
+  },
+  {
+   "t": 202.64,
+   "d": 1.56,
+   "text": "additional steps after that in order to"
+  },
+  {
+   "t": 204.2,
+   "d": 1.92,
+   "text": "actually solve the full puzzle so that"
+  },
+  {
+   "t": 206.12,
+   "d": 2.73,
+   "text": "was super cool but there was a"
+  },
+  {
+   "t": 208.85,
+   "d": 1.77,
+   "text": "particular puzzle that I've been wanting"
+  },
+  {
+   "t": 210.62,
+   "d": 1.8,
+   "text": "to make from the very beginning and I"
+  },
+  {
+   "t": 212.42,
+   "d": 1.56,
+   "text": "think that the desire to make this"
+  },
+  {
+   "t": 213.98,
+   "d": 1.53,
+   "text": "puzzle was one of the main reasons that"
+  },
+  {
+   "t": 215.51,
+   "d": 1.29,
+   "text": "I actually wanted to win the mystery"
+  },
+  {
+   "t": 216.8,
+   "d": 2.58,
+   "text": "hunt in the first place and it all dates"
+  },
+  {
+   "t": 219.38,
+   "d": 2.37,
+   "text": "back to a puzzle was actually written in"
+  },
+  {
+   "t": 221.75,
+   "d": 3.51,
+   "text": "2014 by James Clark and it was called"
+  },
+  {
+   "t": 225.26,
+   "d": 3.36,
+   "text": "walk across some dungeons and before we"
+  },
+  {
+   "t": 228.62,
+   "d": 1.35,
+   "text": "could even see the puzzle we saw the"
+  },
+  {
+   "t": 229.97,
+   "d": 2.52,
+   "text": "title and as puzzle nerds we kind of"
+  },
+  {
+   "t": 232.49,
+   "d": 2.97,
+   "text": "immediately recognized Oh WASD this is"
+  },
+  {
+   "t": 235.46,
+   "d": 1.41,
+   "text": "going to be a roguelike puzzle and"
+  },
+  {
+   "t": 236.87,
+   "d": 3.45,
+   "text": "indeed it was so the way this puzzle"
+  },
+  {
+   "t": 240.32,
+   "d": 2.04,
+   "text": "worked was that you opened it up and"
+  },
+  {
+   "t": 242.36,
+   "d": 3.21,
+   "text": "each level was its own discrete dungeon"
+  },
+  {
+   "t": 245.57,
+   "d": 2.01,
+   "text": "and you can only do one of four things"
+  },
+  {
+   "t": 247.58,
+   "d": 1.23,
+   "text": "you'd only move in a particular"
+  },
+  {
+   "t": 248.81,
+   "d": 2.52,
+   "text": "direction on each turn and your goal was"
+  },
+  {
+   "t": 251.33,
+   "d": 1.86,
+   "text": "just get to the staircase without dying"
+  },
+  {
+   "t": 253.19,
+   "d": 2.43,
+   "text": "and so along the way you would encounter"
+  },
+  {
+   "t": 255.62,
+   "d": 1.29,
+   "text": "lots of different objects at different"
+  },
+  {
+   "t": 256.91,
+   "d": 1.68,
+   "text": "sorts that you would need to manipulate"
+  },
+  {
+   "t": 258.59,
+   "d": 1.47,
+   "text": "in order to make your way through the"
+  },
+  {
+   "t": 260.06,
+   "d": 2.85,
+   "text": "levels there would be enemies that would"
+  },
+  {
+   "t": 262.91,
+   "d": 1.62,
+   "text": "attack you in different ways and kill"
+  },
+  {
+   "t": 264.53,
+   "d": 1.05,
+   "text": "you"
+  },
+  {
+   "t": 265.58,
+   "d": 2.19,
+   "text": "and there was just lots and lots of"
+  },
+  {
+   "t": 267.77,
+   "d": 1.47,
+   "text": "different types of rhythm mechanics and"
+  },
+  {
+   "t": 269.24,
+   "d": 2.07,
+   "text": "other puzzle mechanics that got explored"
+  },
+  {
+   "t": 271.31,
+   "d": 1.98,
+   "text": "and it was brilliant it was super super"
+  },
+  {
+   "t": 273.29,
+   "d": 4.2,
+   "text": "fun to play we got a ton of fun out of"
+  },
+  {
+   "t": 277.49,
+   "d": 2.52,
+   "text": "solving it but it did have a few"
+  },
+  {
+   "t": 280.01,
+   "d": 2.78,
+   "text": "weaknesses so the first problem was that"
+  },
+  {
+   "t": 282.79,
+   "d": 3.34,
+   "text": "when playing it it was done in a"
+  },
+  {
+   "t": 286.13,
+   "d": 1.65,
+   "text": "traditional sort of telnet style where"
+  },
+  {
+   "t": 287.78,
+   "d": 2.13,
+   "text": "you sent a command off to the server the"
+  },
+  {
+   "t": 289.91,
+   "d": 1.2,
+   "text": "server then simulated what was gonna"
+  },
+  {
+   "t": 291.11,
+   "d": 1.8,
+   "text": "happen and send it back to you and I'm"
+  },
+  {
+   "t": 292.91,
+   "d": 1.86,
+   "text": "sure it worked absolutely wonderful and"
+  },
+  {
+   "t": 294.77,
+   "d": 2.01,
+   "text": "testing and then as soon as you had a"
+  },
+  {
+   "t": 296.78,
+   "d": 1.86,
+   "text": "hundred teams all trying to play this at"
+  },
+  {
+   "t": 298.64,
+   "d": 1.59,
+   "text": "the same time running off of a small box"
+  },
+  {
+   "t": 300.23,
+   "d": 1.98,
+   "text": "in a back room somewhere the whole thing"
+  },
+  {
+   "t": 302.21,
+   "d": 2.85,
+   "text": "ground to a staggering halt so you would"
+  },
+  {
+   "t": 305.06,
+   "d": 1.26,
+   "text": "send a key camed it would take you about"
+  },
+  {
+   "t": 306.32,
+   "d": 2.04,
+   "text": "ten seconds to find out where your"
+  },
+  {
+   "t": 308.36,
+   "d": 1.59,
+   "text": "character is moved then you could send"
+  },
+  {
+   "t": 309.95,
+   "d": 2.91,
+   "text": "another one and what made this agonizing"
+  },
+  {
+   "t": 312.86,
+   "d": 3.15,
+   "text": "was that there was no undo so as soon as"
+  },
+  {
+   "t": 316.01,
+   "d": 1.5,
+   "text": "you accidentally bumped into one of the"
+  },
+  {
+   "t": 317.51,
+   "d": 1.38,
+   "text": "enemies you died you had to start the"
+  },
+  {
+   "t": 318.89,
+   "d": 2.34,
+   "text": "whole thing all over again so that was"
+  },
+  {
+   "t": 321.23,
+   "d": 2.91,
+   "text": "rough but I loved the concept and I"
+  },
+  {
+   "t": 324.14,
+   "d": 1.5,
+   "text": "thought that it should be possible to"
+  },
+  {
+   "t": 325.64,
+   "d": 2.04,
+   "text": "build something that would be a tribute"
+  },
+  {
+   "t": 327.68,
+   "d": 3.18,
+   "text": "that would fix those problems and add a"
+  },
+  {
+   "t": 330.86,
+   "d": 1.92,
+   "text": "whole lot of other sort of new mechanics"
+  },
+  {
+   "t": 332.78,
+   "d": 1.5,
+   "text": "that I thought would be fun to play"
+  },
+  {
+   "t": 334.28,
+   "d": 0.75,
+   "text": "around with"
+  },
+  {
+   "t": 335.03,
+   "d": 4.38,
+   "text": "so first lesson from this talk it is"
+  },
+  {
+   "t": 339.41,
+   "d": 1.56,
+   "text": "totally okay to take something that"
+  },
+  {
+   "t": 340.97,
+   "d": 1.92,
+   "text": "someone else's built and build off of it"
+  },
+  {
+   "t": 342.89,
+   "d": 2.01,
+   "text": "and make it better or go in different"
+  },
+  {
+   "t": 344.9,
+   "d": 1.68,
+   "text": "directions or try different things and I"
+  },
+  {
+   "t": 346.58,
+   "d": 2.1,
+   "text": "think that that's the whole premise"
+  },
+  {
+   "t": 348.68,
+   "d": 1.53,
+   "text": "behind roguelike sense one of the things"
+  },
+  {
+   "t": 350.21,
+   "d": 1.26,
+   "text": "I love the most about them is the"
+  },
+  {
+   "t": 351.47,
+   "d": 3.57,
+   "text": "ever-evolving nature of them so going"
+  },
+  {
+   "t": 355.04,
+   "d": 3.3,
+   "text": "back to the technical problem so this is"
+  },
+  {
+   "t": 358.34,
+   "d": 1.26,
+   "text": "kind of an obvious question if the"
+  },
+  {
+   "t": 359.6,
+   "d": 2.13,
+   "text": "server is running slow then don't do it"
+  },
+  {
+   "t": 361.73,
+   "d": 2.15,
+   "text": "on the server run everything locally and"
+  },
+  {
+   "t": 363.88,
+   "d": 3.43,
+   "text": "that was sure no-brainer easy but"
+  },
+  {
+   "t": 367.31,
+   "d": 3.09,
+   "text": "there's a bigger problem the way the"
+  },
+  {
+   "t": 370.4,
+   "d": 2.88,
+   "text": "mystery hunt is built is on the"
+  },
+  {
+   "t": 373.28,
+   "d": 2.34,
+   "text": "assumption that anything and everything"
+  },
+  {
+   "t": 375.62,
+   "d": 2.01,
+   "text": "could be part of a puzzle so there are"
+  },
+  {
+   "t": 377.63,
+   "d": 1.98,
+   "text": "many puzzles where you have to go into"
+  },
+  {
+   "t": 379.61,
+   "d": 1.73,
+   "text": "the actual medic ode of a webpage"
+  },
+  {
+   "t": 381.34,
+   "d": 2.23,
+   "text": "identify the particular protocol that's"
+  },
+  {
+   "t": 383.57,
+   "d": 2.22,
+   "text": "being used decipher that protocol hack"
+  },
+  {
+   "t": 385.79,
+   "d": 1.65,
+   "text": "it in various ways in order to actually"
+  },
+  {
+   "t": 387.44,
+   "d": 2.55,
+   "text": "sort of like solve the real puzzle so if"
+  },
+  {
+   "t": 389.99,
+   "d": 2.49,
+   "text": "you just gave them basically the entire"
+  },
+  {
+   "t": 392.48,
+   "d": 1.74,
+   "text": "game and the entire puzzle as a client"
+  },
+  {
+   "t": 394.22,
+   "d": 1.5,
+   "text": "they would just immediately go into the"
+  },
+  {
+   "t": 395.72,
+   "d": 1.5,
+   "text": "source code and try to decipher it on"
+  },
+  {
+   "t": 397.22,
+   "d": 1.41,
+   "text": "the assumption that was the correct way"
+  },
+  {
+   "t": 398.63,
+   "d": 0.99,
+   "text": "to solve it"
+  },
+  {
+   "t": 399.62,
+   "d": 4.35,
+   "text": "so had to avoid that so what came up"
+  },
+  {
+   "t": 403.97,
+   "d": 2.94,
+   "text": "with is a big wall of text please don't"
+  },
+  {
+   "t": 406.91,
+   "d": 1.59,
+   "text": "bother reading that it's just there so"
+  },
+  {
+   "t": 408.5,
+   "d": 1.02,
+   "text": "that I can remember what I'm supposed to"
+  },
+  {
+   "t": 409.52,
+   "d": 3.42,
+   "text": "say so it's a really simple system when"
+  },
+  {
+   "t": 412.94,
+   "d": 1.62,
+   "text": "the client wants to connect to a level"
+  },
+  {
+   "t": 414.56,
+   "d": 2.19,
+   "text": "it's given a unique URL by the server"
+  },
+  {
+   "t": 416.75,
+   "d": 3.45,
+   "text": "the server that or the client then knows"
+  },
+  {
+   "t": 420.2,
+   "d": 2.61,
+   "text": "how to render that level and plays the"
+  },
+  {
+   "t": 422.81,
+   "d": 2.54,
+   "text": "entire sort of like game process and"
+  },
+  {
+   "t": 425.35,
+   "d": 2.68,
+   "text": "once the character actually succeeds in"
+  },
+  {
+   "t": 428.03,
+   "d": 2.1,
+   "text": "reaching the staircase the client then"
+  },
+  {
+   "t": 430.13,
+   "d": 1.92,
+   "text": "takes the exact series of key presses"
+  },
+  {
+   "t": 432.05,
+   "d": 2.34,
+   "text": "that achieved that result sent it to the"
+  },
+  {
+   "t": 434.39,
+   "d": 2.7,
+   "text": "server the server is running the exact"
+  },
+  {
+   "t": 437.09,
+   "d": 1.98,
+   "text": "same code simulates the same sequence"
+  },
+  {
+   "t": 439.07,
+   "d": 2.34,
+   "text": "forward and if it does in fact result in"
+  },
+  {
+   "t": 441.41,
+   "d": 2.49,
+   "text": "victory then it sends back a unique URL"
+  },
+  {
+   "t": 443.9,
+   "d": 2.31,
+   "text": "that takes you to the next level and if"
+  },
+  {
+   "t": 446.21,
+   "d": 2.04,
+   "text": "it is not correct it Institute's a"
+  },
+  {
+   "t": 448.25,
+   "d": 1.8,
+   "text": "penalty timeout where it will not listen"
+  },
+  {
+   "t": 450.05,
+   "d": 2.4,
+   "text": "to you for the next minute so in this"
+  },
+  {
+   "t": 452.45,
+   "d": 2.34,
+   "text": "way it avoided any possibility of people"
+  },
+  {
+   "t": 454.79,
+   "d": 3.24,
+   "text": "sort of like hacking the system and to"
+  },
+  {
+   "t": 458.03,
+   "d": 1.53,
+   "text": "the best of my knowledge no one managed"
+  },
+  {
+   "t": 459.56,
+   "d": 2.31,
+   "text": "to get around this and if they did they"
+  },
+  {
+   "t": 461.87,
+   "d": 1.32,
+   "text": "are too smart to actually tell me about"
+  },
+  {
+   "t": 463.19,
+   "d": 0.36,
+   "text": "it"
+  },
+  {
+   "t": 463.55,
+   "d": 4.53,
+   "text": "so what that solution meant is that if"
+  },
+  {
+   "t": 468.08,
+   "d": 1.41,
+   "text": "you want the same code running on both"
+  },
+  {
+   "t": 469.49,
+   "d": 1.32,
+   "text": "the client and the server the easy"
+  },
+  {
+   "t": 470.81,
+   "d": 1.95,
+   "text": "solution is to run this in JavaScript"
+  },
+  {
+   "t": 472.76,
+   "d": 3.57,
+   "text": "and I like JavaScript that's kind of"
+  },
+  {
+   "t": 476.33,
+   "d": 1.65,
+   "text": "weird but I think it's actually a really"
+  },
+  {
+   "t": 477.98,
+   "d": 2.94,
+   "text": "fun really fast language and so I was"
+  },
+  {
+   "t": 480.92,
+   "d": 1.77,
+   "text": "able to build prototype very quickly"
+  },
+  {
+   "t": 482.69,
+   "d": 2.7,
+   "text": "along with the help of the amazing Rott"
+  },
+  {
+   "t": 485.39,
+   "d": 3.12,
+   "text": "jeaious library which if you are ever"
+  },
+  {
+   "t": 488.51,
+   "d": 1.65,
+   "text": "trying to build a web-based roguelike"
+  },
+  {
+   "t": 490.16,
+   "d": 2.01,
+   "text": "this is indispensable it handles all the"
+  },
+  {
+   "t": 492.17,
+   "d": 1.53,
+   "text": "rendering and it can do all sorts of"
+  },
+  {
+   "t": 493.7,
+   "d": 2.58,
+   "text": "other cool stuff most of which I ended"
+  },
+  {
+   "t": 496.28,
+   "d": 1.89,
+   "text": "up not actually using but it is super"
+  },
+  {
+   "t": 498.17,
+   "d": 1.65,
+   "text": "powerful and awesome I highly recommend"
+  },
+  {
+   "t": 499.82,
+   "d": 4.2,
+   "text": "it so once you've got this sort of like"
+  },
+  {
+   "t": 504.02,
+   "d": 3.69,
+   "text": "system built one of the first things you"
+  },
+  {
+   "t": 507.71,
+   "d": 1.92,
+   "text": "need is an editor so I built something"
+  },
+  {
+   "t": 509.63,
+   "d": 2.1,
+   "text": "that would allow me to fairly quickly"
+  },
+  {
+   "t": 511.73,
+   "d": 2.82,
+   "text": "throw up together different levels I had"
+  },
+  {
+   "t": 514.55,
+   "d": 1.59,
+   "text": "lots of different types of objects that"
+  },
+  {
+   "t": 516.14,
+   "d": 2.19,
+   "text": "had created different entities lots of"
+  },
+  {
+   "t": 518.33,
+   "d": 3.5,
+   "text": "different components and systems and"
+  },
+  {
+   "t": 521.83,
+   "d": 2.53,
+   "text": "once you were in the process of building"
+  },
+  {
+   "t": 524.36,
+   "d": 1.53,
+   "text": "the level you can immediately jump"
+  },
+  {
+   "t": 525.89,
+   "d": 2.25,
+   "text": "between editing and playing it in order"
+  },
+  {
+   "t": 528.14,
+   "d": 1.86,
+   "text": "to sort of evaluate how well it's"
+  },
+  {
+   "t": 530.0,
+   "d": 1.92,
+   "text": "working and so this worked really well"
+  },
+  {
+   "t": 531.92,
+   "d": 1.44,
+   "text": "this allowed me to Purdue"
+  },
+  {
+   "t": 533.36,
+   "d": 2.04,
+   "text": "lots of sort of like quick ideas and"
+  },
+  {
+   "t": 535.4,
+   "d": 2.87,
+   "text": "play around with different concepts so"
+  },
+  {
+   "t": 538.27,
+   "d": 2.89,
+   "text": "once I had that then I wanted to"
+  },
+  {
+   "t": 541.16,
+   "d": 1.89,
+   "text": "actually do something with this content"
+  },
+  {
+   "t": 543.05,
+   "d": 2.55,
+   "text": "so I want a place to host it I found out"
+  },
+  {
+   "t": 545.6,
+   "d": 1.77,
+   "text": "that rogue puzzles comm is available"
+  },
+  {
+   "t": 547.37,
+   "d": 1.74,
+   "text": "which I was very surprised at so I went"
+  },
+  {
+   "t": 549.11,
+   "d": 1.88,
+   "text": "ahead and launched it is its own thing"
+  },
+  {
+   "t": 550.99,
+   "d": 2.5,
+   "text": "rather than building a menu system I had"
+  },
+  {
+   "t": 553.49,
+   "d": 1.68,
+   "text": "you actually navigate through a world"
+  },
+  {
+   "t": 555.17,
+   "d": 2.49,
+   "text": "which was the menu which took you into"
+  },
+  {
+   "t": 557.66,
+   "d": 1.83,
+   "text": "different types of puzzles and different"
+  },
+  {
+   "t": 559.49,
+   "d": 1.35,
+   "text": "concepts that I was playing around with"
+  },
+  {
+   "t": 560.84,
+   "d": 2.52,
+   "text": "and so once you're in a particular level"
+  },
+  {
+   "t": 563.36,
+   "d": 2.22,
+   "text": "you can basically play around and if you"
+  },
+  {
+   "t": 565.58,
+   "d": 2.94,
+   "text": "do badly then the Minotaur will come in"
+  },
+  {
+   "t": 568.52,
+   "d": 2.97,
+   "text": "each you which is a problem in general"
+  },
+  {
+   "t": 571.49,
+   "d": 1.68,
+   "text": "with all the videos in this talk I don't"
+  },
+  {
+   "t": 573.17,
+   "d": 1.53,
+   "text": "actually show solutions just in case"
+  },
+  {
+   "t": 574.7,
+   "d": 2.58,
+   "text": "anyone does want to go and play these so"
+  },
+  {
+   "t": 577.28,
+   "d": 3.68,
+   "text": "built a thing that would allow me to"
+  },
+  {
+   "t": 580.96,
+   "d": 2.98,
+   "text": "show these ideas to people and then I"
+  },
+  {
+   "t": 583.94,
+   "d": 1.98,
+   "text": "wanted to test and refine and iterate so"
+  },
+  {
+   "t": 585.92,
+   "d": 2.61,
+   "text": "I built new levels of different sorts so"
+  },
+  {
+   "t": 588.53,
+   "d": 1.71,
+   "text": "in this case I wanted to explore the"
+  },
+  {
+   "t": 590.24,
+   "d": 2.79,
+   "text": "idea of arrows and how do you navigate"
+  },
+  {
+   "t": 593.03,
+   "d": 2.04,
+   "text": "through a space with arrows and how do"
+  },
+  {
+   "t": 595.07,
+   "d": 1.86,
+   "text": "you die repeatedly over and over and"
+  },
+  {
+   "t": 596.93,
+   "d": 2.97,
+   "text": "over again and this wasn't just done for"
+  },
+  {
+   "t": 599.9,
+   "d": 2.82,
+   "text": "my own amusement on the back end I was"
+  },
+  {
+   "t": 602.72,
+   "d": 2.16,
+   "text": "collecting metrics and I managed to get"
+  },
+  {
+   "t": 604.88,
+   "d": 1.92,
+   "text": "a little bit of publicity or about rogue"
+  },
+  {
+   "t": 606.8,
+   "d": 1.56,
+   "text": "puzzles so that I had a few thousand"
+  },
+  {
+   "t": 608.36,
+   "d": 2.25,
+   "text": "people playing on the site and I was"
+  },
+  {
+   "t": 610.61,
+   "d": 2.28,
+   "text": "able to look at exactly how those people"
+  },
+  {
+   "t": 612.89,
+   "d": 1.65,
+   "text": "were playing like what levels were they"
+  },
+  {
+   "t": 614.54,
+   "d": 1.95,
+   "text": "having fun with what levels did they"
+  },
+  {
+   "t": 616.49,
+   "d": 2.61,
+   "text": "hate and where were the choke points and"
+  },
+  {
+   "t": 619.1,
+   "d": 1.59,
+   "text": "this allowed me to really quickly figure"
+  },
+  {
+   "t": 620.69,
+   "d": 2.19,
+   "text": "out like what made a good puzzle what"
+  },
+  {
+   "t": 622.88,
+   "d": 2.82,
+   "text": "did not make a good puzzle so lesson two"
+  },
+  {
+   "t": 625.7,
+   "d": 2.76,
+   "text": "if you can release early tests within"
+  },
+  {
+   "t": 628.46,
+   "d": 2.13,
+   "text": "the public and actually sort of like"
+  },
+  {
+   "t": 630.59,
+   "d": 1.95,
+   "text": "look closely at what real users are"
+  },
+  {
+   "t": 632.54,
+   "d": 0.99,
+   "text": "doing with your thing"
+  },
+  {
+   "t": 633.53,
+   "d": 2.34,
+   "text": "so that was in public in private though"
+  },
+  {
+   "t": 635.87,
+   "d": 2.22,
+   "text": "I was secretly working on much harder"
+  },
+  {
+   "t": 638.09,
+   "d": 3.33,
+   "text": "levels so it's everyone's favorite net"
+  },
+  {
+   "t": 641.42,
+   "d": 1.95,
+   "text": "hex tile puzzle it's ahsoka bond levels"
+  },
+  {
+   "t": 643.37,
+   "d": 2.01,
+   "text": "I know I did it"
+  },
+  {
+   "t": 645.38,
+   "d": 2.22,
+   "text": "I feel bad and dirty but whatever it's"
+  },
+  {
+   "t": 647.6,
+   "d": 3.36,
+   "text": "there so obviously more arrow levels but"
+  },
+  {
+   "t": 650.96,
+   "d": 1.68,
+   "text": "these ones getting much more complicated"
+  },
+  {
+   "t": 652.64,
+   "d": 1.44,
+   "text": "where you have to manipulate these"
+  },
+  {
+   "t": 654.08,
+   "d": 1.65,
+   "text": "boulders around in order to actually"
+  },
+  {
+   "t": 655.73,
+   "d": 1.32,
+   "text": "create a path that can get you through"
+  },
+  {
+   "t": 657.05,
+   "d": 2.04,
+   "text": "it and the path has to change as you go"
+  },
+  {
+   "t": 659.09,
+   "d": 3.21,
+   "text": "along and at these cool portals where"
+  },
+  {
+   "t": 662.3,
+   "d": 1.5,
+   "text": "you can basically navigate through the"
+  },
+  {
+   "t": 663.8,
+   "d": 2.04,
+   "text": "level and push objects around"
+  },
+  {
+   "t": 665.84,
+   "d": 4.56,
+   "text": "and die these enemies are pretty cool so"
+  },
+  {
+   "t": 670.4,
+   "d": 3.78,
+   "text": "the W's and the MS both will sit there"
+  },
+  {
+   "t": 674.18,
+   "d": 1.89,
+   "text": "or do their thing until they see you at"
+  },
+  {
+   "t": 676.07,
+   "d": 1.23,
+   "text": "which point they'll freak out and start"
+  },
+  {
+   "t": 677.3,
+   "d": 1.77,
+   "text": "chasing you so in this case you have to"
+  },
+  {
+   "t": 679.07,
+   "d": 2.31,
+   "text": "build a sort of like a little bridge out"
+  },
+  {
+   "t": 681.38,
+   "d": 1.89,
+   "text": "of the boulders and time it just right"
+  },
+  {
+   "t": 683.27,
+   "d": 1.41,
+   "text": "so you can actually get across without"
+  },
+  {
+   "t": 684.68,
+   "d": 2.46,
+   "text": "them ever seeing you added some smarter"
+  },
+  {
+   "t": 687.14,
+   "d": 1.89,
+   "text": "enemies so these are dragons that are"
+  },
+  {
+   "t": 689.03,
+   "d": 1.68,
+   "text": "actually doing pathfinding so they find"
+  },
+  {
+   "t": 690.71,
+   "d": 2.37,
+   "text": "the most efficient way to kill you"
+  },
+  {
+   "t": 693.08,
+   "d": 3.09,
+   "text": "lots of keys and locks and gnomes and"
+  },
+  {
+   "t": 696.17,
+   "d": 2.4,
+   "text": "basically just added a lot of different"
+  },
+  {
+   "t": 698.57,
+   "d": 1.35,
+   "text": "sort of fun mechanics that I thought"
+  },
+  {
+   "t": 699.92,
+   "d": 2.25,
+   "text": "would make good puzzles and but the"
+  },
+  {
+   "t": 702.17,
+   "d": 1.2,
+   "text": "thing is I really wanted something that"
+  },
+  {
+   "t": 703.37,
+   "d": 2.22,
+   "text": "was really unique really different and"
+  },
+  {
+   "t": 705.59,
+   "d": 2.46,
+   "text": "something that would build on the fact"
+  },
+  {
+   "t": 708.05,
+   "d": 1.59,
+   "text": "that this is the second walk across some"
+  },
+  {
+   "t": 709.64,
+   "d": 2.85,
+   "text": "dungeons so I made two of you so in"
+  },
+  {
+   "t": 712.49,
+   "d": 1.44,
+   "text": "these levels basically there are two"
+  },
+  {
+   "t": 713.93,
+   "d": 2.19,
+   "text": "characters but your key presses affect"
+  },
+  {
+   "t": 716.12,
+   "d": 2.46,
+   "text": "both of them equally and you have to try"
+  },
+  {
+   "t": 718.58,
+   "d": 1.41,
+   "text": "to actually navigate through without"
+  },
+  {
+   "t": 719.99,
+   "d": 2.25,
+   "text": "either of you killing or dying and both"
+  },
+  {
+   "t": 722.24,
+   "d": 3.09,
+   "text": "of you getting to the staircase it's not"
+  },
+  {
+   "t": 725.33,
+   "d": 1.68,
+   "text": "a totally novel idea there are lots of"
+  },
+  {
+   "t": 727.01,
+   "d": 1.59,
+   "text": "other puzzle games linked wind is a"
+  },
+  {
+   "t": 728.6,
+   "d": 1.65,
+   "text": "great one on mobile that does this"
+  },
+  {
+   "t": 730.25,
+   "d": 2.64,
+   "text": "concept really well but it works really"
+  },
+  {
+   "t": 732.89,
+   "d": 2.25,
+   "text": "well for a rogue format because again"
+  },
+  {
+   "t": 735.14,
+   "d": 1.77,
+   "text": "you're just moving things around and you"
+  },
+  {
+   "t": 736.91,
+   "d": 1.74,
+   "text": "can watch as people sort of like"
+  },
+  {
+   "t": 738.65,
+   "d": 2.49,
+   "text": "navigate through a space so this is one"
+  },
+  {
+   "t": 741.14,
+   "d": 1.62,
+   "text": "concept where you're navigating through"
+  },
+  {
+   "t": 742.76,
+   "d": 1.26,
+   "text": "a similar environment but you're"
+  },
+  {
+   "t": 744.02,
+   "d": 1.77,
+   "text": "separated and in this case it's sort of"
+  },
+  {
+   "t": 745.79,
+   "d": 1.29,
+   "text": "like a maze where you need to be paying"
+  },
+  {
+   "t": 747.08,
+   "d": 1.77,
+   "text": "attention to what's happening in both of"
+  },
+  {
+   "t": 748.85,
+   "d": 2.1,
+   "text": "those different levels otherwise you"
+  },
+  {
+   "t": 750.95,
+   "d": 2.25,
+   "text": "misstep and you die there are other"
+  },
+  {
+   "t": 753.2,
+   "d": 1.59,
+   "text": "times when you're actually together and"
+  },
+  {
+   "t": 754.79,
+   "d": 1.65,
+   "text": "you need to take advantage of the"
+  },
+  {
+   "t": 756.44,
+   "d": 1.92,
+   "text": "particular movement mechanics when"
+  },
+  {
+   "t": 758.36,
+   "d": 1.23,
+   "text": "you're interacting with things in order"
+  },
+  {
+   "t": 759.59,
+   "d": 1.65,
+   "text": "to get yourself positioned correctly in"
+  },
+  {
+   "t": 761.24,
+   "d": 1.38,
+   "text": "order to try to actually get to the"
+  },
+  {
+   "t": 762.62,
+   "d": 2.7,
+   "text": "staircases at the same time and then"
+  },
+  {
+   "t": 765.32,
+   "d": 2.27,
+   "text": "there are also the totally insane levels"
+  },
+  {
+   "t": 767.59,
+   "d": 2.02,
+   "text": "this doesn't show up super well on the"
+  },
+  {
+   "t": 769.61,
+   "d": 1.68,
+   "text": "projector but there are about six"
+  },
+  {
+   "t": 771.29,
+   "d": 2.1,
+   "text": "different types of switches and portals"
+  },
+  {
+   "t": 773.39,
+   "d": 2.28,
+   "text": "on this level there are a ton of"
+  },
+  {
+   "t": 775.67,
+   "d": 0.93,
+   "text": "different things that you need to"
+  },
+  {
+   "t": 776.6,
+   "d": 2.04,
+   "text": "actually achieve and there's lava"
+  },
+  {
+   "t": 778.64,
+   "d": 0.78,
+   "text": "everywhere"
+  },
+  {
+   "t": 779.42,
+   "d": 2.07,
+   "text": "so you're basically navigating around"
+  },
+  {
+   "t": 781.49,
+   "d": 2.16,
+   "text": "doing your best to trying not to die and"
+  },
+  {
+   "t": 783.65,
+   "d": 1.56,
+   "text": "this is actually one of the very last"
+  },
+  {
+   "t": 785.21,
+   "d": 1.77,
+   "text": "levels and something I'm very proud of"
+  },
+  {
+   "t": 786.98,
+   "d": 2.67,
+   "text": "because it is very complicated but when"
+  },
+  {
+   "t": 789.65,
+   "d": 1.94,
+   "text": "you solve it you feel really satisfied"
+  },
+  {
+   "t": 791.59,
+   "d": 3.04,
+   "text": "so in order to know that this all was"
+  },
+  {
+   "t": 794.63,
+   "d": 2.43,
+   "text": "working I had to test it extensively"
+  },
+  {
+   "t": 797.06,
+   "d": 1.83,
+   "text": "we have an internal system called"
+  },
+  {
+   "t": 798.89,
+   "d": 1.71,
+   "text": "Ultron that we use for evaluating the"
+  },
+  {
+   "t": 800.6,
+   "d": 1.98,
+   "text": "puzzles it's no longer up so I couldn't"
+  },
+  {
+   "t": 802.58,
+   "d": 1.86,
+   "text": "screenshot it but this is a collection"
+  },
+  {
+   "t": 804.44,
+   "d": 1.86,
+   "text": "of basically feedback that I was"
+  },
+  {
+   "t": 806.3,
+   "d": 1.2,
+   "text": "receiving over the course of about a"
+  },
+  {
+   "t": 807.5,
+   "d": 2.1,
+   "text": "2-day period about the game the actual"
+  },
+  {
+   "t": 809.6,
+   "d": 3.87,
+   "text": "list is huge so the main thing that we"
+  },
+  {
+   "t": 813.47,
+   "d": 1.98,
+   "text": "learned along the process is that you"
+  },
+  {
+   "t": 815.45,
+   "d": 2.34,
+   "text": "don't want to be too evil so I added one"
+  },
+  {
+   "t": 817.79,
+   "d": 1.62,
+   "text": "final feature that was not in the"
+  },
+  {
+   "t": 819.41,
+   "d": 1.32,
+   "text": "original and that is that you could"
+  },
+  {
+   "t": 820.73,
+   "d": 2.97,
+   "text": "press Z to undo and that made the"
+  },
+  {
+   "t": 823.7,
+   "d": 2.88,
+   "text": "puzzles into puzzles rather than just an"
+  },
+  {
+   "t": 826.58,
+   "d": 2.94,
+   "text": "endless pile of frustration so lesson 3"
+  },
+  {
+   "t": 829.52,
+   "d": 2.22,
+   "text": "it's definitely cool to be hard but"
+  },
+  {
+   "t": 831.74,
+   "d": 2.1,
+   "text": "don't be too evil and I know it's a"
+  },
+  {
+   "t": 833.84,
+   "d": 1.14,
+   "text": "roguelike that's a weird thing to say"
+  },
+  {
+   "t": 834.98,
+   "d": 2.34,
+   "text": "but I think it actually adds a lot so"
+  },
+  {
+   "t": 837.32,
+   "d": 2.46,
+   "text": "then we flew off to Boston when running"
+  },
+  {
+   "t": 839.78,
+   "d": 2.34,
+   "text": "a hunt there are about 3,000"
+  },
+  {
+   "t": 842.12,
+   "d": 1.86,
+   "text": "participants and there's a team of about"
+  },
+  {
+   "t": 843.98,
+   "d": 2.43,
+   "text": "70 people trying to run it we were in"
+  },
+  {
+   "t": 846.41,
+   "d": 2.66,
+   "text": "two shifts of about 15 hours each and"
+  },
+  {
+   "t": 849.07,
+   "d": 2.23,
+   "text": "did that for four days it was grueling"
+  },
+  {
+   "t": 851.3,
+   "d": 3.0,
+   "text": "and awesome and crazy but I had"
+  },
+  {
+   "t": 854.3,
+   "d": 1.65,
+   "text": "real-time data monitoring so I could"
+  },
+  {
+   "t": 855.95,
+   "d": 1.5,
+   "text": "watch as people actually started"
+  },
+  {
+   "t": 857.45,
+   "d": 1.89,
+   "text": "unlocking the puzzle and even better"
+  },
+  {
+   "t": 859.34,
+   "d": 3.66,
+   "text": "start solving it and in the end the"
+  },
+  {
+   "t": 863.0,
+   "d": 2.15,
+   "text": "stats were great we had about 32 teams"
+  },
+  {
+   "t": 865.15,
+   "d": 2.2,
+   "text": "unlock it naturally a bunch more"
+  },
+  {
+   "t": 867.35,
+   "d": 2.61,
+   "text": "unlocked it later 40 teams solved it the"
+  },
+  {
+   "t": 869.96,
+   "d": 1.26,
+   "text": "average solve time was right around 2"
+  },
+  {
+   "t": 871.22,
+   "d": 2.1,
+   "text": "hours which I was targeting because I"
+  },
+  {
+   "t": 873.32,
+   "d": 1.74,
+   "text": "wanted to be hard but not impossible"
+  },
+  {
+   "t": 875.06,
+   "d": 3.09,
+   "text": "and so the Robo chance so how do you"
+  },
+  {
+   "t": 878.15,
+   "d": 1.53,
+   "text": "actually solve this so you're just"
+  },
+  {
+   "t": 879.68,
+   "d": 1.8,
+   "text": "moving through levels but at the end of"
+  },
+  {
+   "t": 881.48,
+   "d": 1.89,
+   "text": "the whole thing you need a phrase you"
+  },
+  {
+   "t": 883.37,
+   "d": 1.59,
+   "text": "need a word there needs to be an answer"
+  },
+  {
+   "t": 884.96,
+   "d": 1.92,
+   "text": "so this was the final level that you got"
+  },
+  {
+   "t": 886.88,
+   "d": 1.5,
+   "text": "to where you saw all these weird"
+  },
+  {
+   "t": 888.38,
+   "d": 1.56,
+   "text": "characters that you've never seen before"
+  },
+  {
+   "t": 889.94,
+   "d": 1.53,
+   "text": "and you weren't sure quite how they were"
+  },
+  {
+   "t": 891.47,
+   "d": 2.19,
+   "text": "going to attack you but as you navigate"
+  },
+  {
+   "t": 893.66,
+   "d": 1.98,
+   "text": "through in the only way possible to"
+  },
+  {
+   "t": 895.64,
+   "d": 3.63,
+   "text": "avoid dying the letters spell out the"
+  },
+  {
+   "t": 899.27,
+   "d": 3.42,
+   "text": "answer so spoiler alert the answer is"
+  },
+  {
+   "t": 902.69,
+   "d": 3.09,
+   "text": "keyboard player and people really"
+  },
+  {
+   "t": 905.78,
+   "d": 2.73,
+   "text": "enjoyed it it was a big hit lots of"
+  },
+  {
+   "t": 908.51,
+   "d": 1.11,
+   "text": "great feedback from lots of different"
+  },
+  {
+   "t": 909.62,
+   "d": 4.38,
+   "text": "people and one of the big things that I"
+  },
+  {
+   "t": 914.0,
+   "d": 1.89,
+   "text": "took away that I was really thrilled"
+  },
+  {
+   "t": 915.89,
+   "d": 1.92,
+   "text": "with is that lots of people now are"
+  },
+  {
+   "t": 917.81,
+   "d": 1.53,
+   "text": "talking about making a walk across from"
+  },
+  {
+   "t": 919.34,
+   "d": 2.31,
+   "text": "dungeons 3 and some future hunt which I"
+  },
+  {
+   "t": 921.65,
+   "d": 2.52,
+   "text": "think will be awesome so fourth lesson"
+  },
+  {
+   "t": 924.17,
+   "d": 2.37,
+   "text": "find an audience build something that"
+  },
+  {
+   "t": 926.54,
+   "d": 1.32,
+   "text": "they'll love even if it's an ish"
+  },
+  {
+   "t": 927.86,
+   "d": 1.35,
+   "text": "especially within the context of the"
+  },
+  {
+   "t": 929.21,
+   "d": 1.92,
+   "text": "mystery hunt find something that people"
+  },
+  {
+   "t": 931.13,
+   "d": 1.62,
+   "text": "can latch on to"
+  },
+  {
+   "t": 932.75,
+   "d": 3.12,
+   "text": "after doing all of this I decide I need"
+  },
+  {
+   "t": 935.87,
+   "d": 4.08,
+   "text": "a break but after a while I decided like"
+  },
+  {
+   "t": 939.95,
+   "d": 1.95,
+   "text": "most roguelikes that you can't actually"
+  },
+  {
+   "t": 941.9,
+   "d": 2.91,
+   "text": "let them go that much so I decided to"
+  },
+  {
+   "t": 944.81,
+   "d": 3.24,
+   "text": "take this concept flush it out build a"
+  },
+  {
+   "t": 948.05,
+   "d": 1.89,
+   "text": "lot more and launched it as its own sort"
+  },
+  {
+   "t": 949.94,
+   "d": 2.31,
+   "text": "of stand-alone app so this is something"
+  },
+  {
+   "t": 952.25,
+   "d": 2.7,
+   "text": "that I three to go there over the course"
+  },
+  {
+   "t": 954.95,
+   "d": 1.41,
+   "text": "than the last month or so there's about"
+  },
+  {
+   "t": 956.36,
+   "d": 4.38,
+   "text": "120 levels six different dungeons I"
+  },
+  {
+   "t": 960.74,
+   "d": 2.25,
+   "text": "played around with some new mechanics so"
+  },
+  {
+   "t": 962.99,
+   "d": 2.85,
+   "text": "I added ice that allows you to score"
+  },
+  {
+   "t": 965.84,
+   "d": 2.82,
+   "text": "skate around and there's all those types"
+  },
+  {
+   "t": 968.66,
+   "d": 0.72,
+   "text": "of mechanics"
+  },
+  {
+   "t": 969.38,
+   "d": 2.55,
+   "text": "I added fire so that as you're moving"
+  },
+  {
+   "t": 971.93,
+   "d": 2.94,
+   "text": "through dungeon the level behind you"
+  },
+  {
+   "t": 974.87,
+   "d": 2.25,
+   "text": "decides to turn itself into lava for"
+  },
+  {
+   "t": 977.12,
+   "d": 1.71,
+   "text": "some reason and then my personal"
+  },
+  {
+   "t": 978.83,
+   "d": 3.86,
+   "text": "favorite I had an ice that is on fire so"
+  },
+  {
+   "t": 982.69,
+   "d": 2.53,
+   "text": "this is navigating through a series of"
+  },
+  {
+   "t": 985.22,
+   "d": 2.43,
+   "text": "levels that have portals and it's"
+  },
+  {
+   "t": 987.65,
+   "d": 1.23,
+   "text": "actually really fun and interesting"
+  },
+  {
+   "t": 988.88,
+   "d": 1.95,
+   "text": "mechanic and you can build lots of cool"
+  },
+  {
+   "t": 990.83,
+   "d": 3.66,
+   "text": "fun levels in this way so there are"
+  },
+  {
+   "t": 994.49,
+   "d": 2.07,
+   "text": "treasures to collect and it's available"
+  },
+  {
+   "t": 996.56,
+   "d": 3.12,
+   "text": "on the App Store and so my final lesson"
+  },
+  {
+   "t": 999.68,
+   "d": 2.19,
+   "text": "is that roguelikes art definitely never"
+  },
+  {
+   "t": 1001.87,
+   "d": 2.3,
+   "text": "finished and this has been a fun"
+  },
+  {
+   "t": 1004.17,
+   "d": 2.32,
+   "text": "platform for me to explore all these"
+  },
+  {
+   "t": 1006.49,
+   "d": 1.32,
+   "text": "different possible ideas that I really"
+  },
+  {
+   "t": 1007.81,
+   "d": 2.94,
+   "text": "enjoy so thank you everyone I really"
+  },
+  {
+   "t": 1010.75,
+   "d": 0.56,
+   "text": "appreciate it"
+  },
+  {
+   "t": 1011.31,
+   "d": 3.7,
+   "text": "[Applause]"
+  }
+ ]
+}

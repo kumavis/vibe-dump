@@ -1,0 +1,213 @@
+{
+  "id": "HgnvMBVKP0M",
+  "title": "Cole Wehrle - Play as Procedural Generation: Oath as a Roguelike Strategy Game",
+  "speaker": "Cole Wehrle",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=HgnvMBVKP0M",
+  "talk_type": "design",
+  "summary": "Cole Wehrle describes how his board game Oath, a grand strategy game with roguelike influences, uses its players as the procedural generator of its world. Using a reader-response framing, he argues that procedural generation expands the space of play but needs intention, and that players are the best source of intentional content. Oath makes every end state the next game's start state, has a deliberately selective memory (the winner's territory and a slowly changing 60-card deck persist), and frames choices as sharp either/or decisions to create regret. History-writing is left outside the game, in a journal players fill, and forgetting and gaps in the record are treated as part of the design.",
+  "games": [
+    "Oath",
+    "Tales of the Arabian Nights",
+    "Daggerfall",
+    "Ultima",
+    "Caves of Qud",
+    "Spelunky",
+    "Root",
+    "Arcs",
+    "Minecraft"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "board game design",
+      "kind": "history",
+      "claim": "Oath, a board grand strategy game, was shaped more by roguelikes and CRPGs than by Paradox or Civilization games.",
+      "detail": "Wehrle says the influences on Oath's build were roguelikes and CRPGs; the team was playing early Caves of Qud and Spelunky and thinking about how to adapt them to a strategic space.",
+      "t": 92,
+      "quote": "A lot of the games that influenced its build were not paradox or civilization games but roguelikes, CRPGs",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Games need places of reflection after play in order to generate meaning; Oath generates its stories in the post-game report rather than through written narrative.",
+      "detail": "Like a roguelike, where how the player won matters more than who won, Oath has no written narrative, character advancement or named protagonists. Its stories come into focus when players are not playing, which Wehrle argues is a fundamental property of all games, not just tabletop.",
+      "t": 214,
+      "quote": "It is a game that generates its meaning in the post-game report",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "A designer cannot experience the full range of players' experiences, so every player's experience, even a negative one, is valid information worth reading.",
+      "detail": "Using reader-response theory, Wehrle frames play as the overlap between game and player: a player sees only a slice of the game, and the designer is not every player. He reads every comment he can find about his games.",
+      "t": 348,
+      "quote": "Every experience of playing a game, even a really negative one, is a kind of valid experience",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "possibility space",
+      "kind": "principle",
+      "claim": "Procedural generation creates unseen possibilities (things the game could produce but did not) and imagined impossibilities (things players believe might happen but never can), and both are part of the game.",
+      "detail": "Wehrle extends the reader-response diagram: procgen expands the area of play. He gives the example of his kids playing Minecraft, inventing biomes they heard about on the playground. He also names unused model elements, relics of a dataset switched off during testing.",
+      "t": 418,
+      "quote": "These are the things a player can think might happen in a game but can never actually be produced in a game",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "random tables",
+      "kind": "warning",
+      "claim": "Random tables show the whole generative space transparently, but the more players understand how procedural generation works, the more it undoes itself.",
+      "detail": "Wehrle loves tabletop spark tables (roll two d12s to generate an NPC ailment) because the whole space fits on one screen. But about the third time players meet a lovesick turtle or irritable hermit, they recognise the adjectives propping up the story.",
+      "t": 527,
+      "quote": "The more a player understands how the procedural generation works it can undo itself",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "obfuscation",
+      "kind": "example",
+      "claim": "Tales of the Arabian Nights makes a simple choose-your-own-adventure structure feel like an open world by layering obscuring steps between the player's choice and the outcome.",
+      "detail": "Players draw an encounter card, consult a matrix, then look up the result in a binder. Wehrle compares it to riding a train through a foggy switchyard where you cannot see where the tracks lead.",
+      "t": 575,
+      "quote": "It is just a choose your adventure model but the layers of obscuring create this",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "intentional content",
+      "kind": "warning",
+      "claim": "Too much obfuscation turns procedural content into white noise, so the goal is generating content with intention that makes players feel they are in a lived world.",
+      "detail": "Wehrle cites early procedurally generated first-person games like Daggerfall, whose worlds felt empty and foggy. As a tabletop designer he often hand-designs each item (e.g. ten magic swords) rather than generating them, because players will not see everything.",
+      "t": 621,
+      "quote": "we aren't just trying to generate content but content with intention",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "players as generators",
+      "kind": "principle",
+      "claim": "Players themselves are the best generator of bespoke, intentional content, and a game can be designed to capture that ephemeral creativity and pipe it back into future play.",
+      "detail": "Players invent stories and explanations constantly, scribbling notes or making fan variants, but most of it is lost. Wehrle asks whether that intentional world-play can be fed back into a board game, not only a role-playing game; Oath is his answer.",
+      "t": 701,
+      "quote": "Is there a way we can capture the ephemeral play? If the this intentional world play is happening is it possible to pipe it back into the game",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "persistent world",
+      "kind": "technique",
+      "claim": "In Oath every in-game state is also a valid start state, so each game's ending becomes the next game's beginning and the world accumulates history without pre-written plot.",
+      "detail": "Wehrle compares it to painting layers over a picture. The game can always be reset to factory default and nothing is destroyed, players can drop out or join, and a rich backstory emerges with no proper nouns in the game.",
+      "t": 735,
+      "quote": "Specifically every in-game state in Oath is also a start state",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "selective memory",
+      "kind": "principle",
+      "claim": "Oath deliberately has a selective memory, fully remembering some things, partially remembering others and forgetting the rest, because a faulty memory plus regret is the essence of good history-telling.",
+      "detail": "Wehrle names Oath's two central strategies: selective memory and a simple decision framework that sharpens regret. Some player decisions are simply not recorded in any meaningful way.",
+      "t": 878,
+      "quote": "the game has a faulty memory and fills players with regret. These are the essential characteristics of good history telling",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "persistent map",
+      "kind": "technique",
+      "claim": "Oath keeps the winner's territory as the next game's starting map and fills the rest from a frontier deck, and its expansion preserves unused sites in an atlas stack so each copy develops its own geography.",
+      "detail": "Reshuffling unused sites destroyed the geography players had built, since one random deck feels like any other. With the atlas stack, players choose whether to build from the past, and one copy can grow a mountain range while another has islands and steppes.",
+      "t": 894,
+      "quote": "it remembers the territory of its winner",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "shuffling",
+      "kind": "warning",
+      "claim": "A fully random shuffle produces a unique arrangement each time yet feels identical to every other random arrangement, like one frame of static versus another.",
+      "detail": "Wehrle notes every well-shuffled deck is a unique seed, but one random deck feels like another. This motivated Oath's expansion to keep unused sites ordered rather than reshuffled.",
+      "t": 961,
+      "quote": "one random deck feels like another random deck so it is like saying any frame of static different from any frame of static",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "cards as rules",
+      "kind": "technique",
+      "claim": "In Oath, sites hold cards whose special powers paint rules onto that location, so the cards left on surviving sites carry the previous game's rule logic into the next game.",
+      "detail": "Every card is unique and usable via its suit (muster, trade) plus a special power, e.g. a hospital that responds when your army is defeated. An empire with secret police and a hospital becomes a bureaucratic state whose rules colour the next game.",
+      "t": 1109,
+      "quote": "When you put a card at a site it sort of paints that rules logic on that card",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "content volume",
+      "kind": "warning",
+      "claim": "Too much content works against intention and makes a game feel arbitrary, so Oath keeps a small active deck that players can form affinity with across games.",
+      "detail": "Oath has about 260 cards per suit, but the play deck is only about 60 and largely persists between games. The hated Favorite Son card, which instantly wins the people's favor, stays in the deck so players plan around it next game, forming multi-game relationships with cards.",
+      "t": 1171,
+      "quote": "If you have too much content it can work against the feeling of intention and the game starts to feel arbitrary",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "rate of change",
+      "kind": "technique",
+      "claim": "Oath's deck changes by about 10% per game (six cards out, six in) to give the world a gradual, generational sensibility rather than civilizational leaps.",
+      "detail": "Wehrle did not want a stone-age-to-spaceship arc; the team imagined a span of about 300 years in the Middle Ages where structures and culture hold from game to game.",
+      "t": 1271,
+      "quote": "It changes at a rate of about 10%. Six cards leave the deck every game, six cards enter",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "binary choices",
+      "kind": "principle",
+      "claim": "Oath frames even big sandbox decisions as near-binary either/or choices so players know the path not taken could haunt them, creating regret that makes history feel consequential.",
+      "detail": "Wehrle was inspired by Ultima's character creation. At game end the people's-favor holder makes three piles of three cards and keeps one, banishing cards (including Favorite Son) to a dispossessed pile for perhaps 10-20 generations. Players are dealt two legacies but keep one, and must weigh a legacy against trying to win.",
+      "t": 1341,
+      "quote": "I really tried hard to make the decisions either or. Very simple almost binary decisions",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player journals",
+      "kind": "technique",
+      "claim": "Oath deliberately offers no in-game view of the past and instead ships a journal so players do the work of history-writing outside play.",
+      "detail": "The game only moves from one present state to another; Wehrle did not want to gamify history-writing. Players drew comics, kept per-player records, wrote as a jilted historian, made a cookbook from food cards, and one wrote fold-out poetry.",
+      "t": 1547,
+      "quote": "I want players to do the work of history when they are not playing the game",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "forgetting",
+      "kind": "principle",
+      "claim": "Oath makes room for forgetting, because gaps in the record are what make a history feel real.",
+      "detail": "Players who abandon Oath leave a copy that still remembers how it was played; if someone finds it years later they must make sense of an incomplete record. Wehrle calls forgetting probably the most central part of history.",
+      "t": 1773,
+      "quote": "The gaps in the record are the thing that makes the record feel so real",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "narrative structure",
+      "kind": "example",
+      "claim": "Wehrle's Arcs uses a three-act structure for storytelling, whereas Oath has no narrative framing and relies on remembering, forgetting and assembling stories afterwards.",
+      "detail": "In Q&A he explains Root did not handle political stakes, Oath addressed stakes but cannot have a beginning, middle and end, and Arcs was built as a three-act story. He presents these as two different approaches rather than fixes for each other.",
+      "t": 1873,
+      "quote": "Oath is about remembering, for getting, and assembly stories afterwards",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,1765 @@
+{
+ "id": "50u5_hXZkv4",
+ "url": "https://www.youtube.com/watch?v=50u5_hXZkv4",
+ "title": "Dennis Greger - The Procedurality of Reality TV Design - An Overview",
+ "speaker": "Dennis Greger",
+ "talk_title": "The Procedurality of Reality TV Design - An Overview",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-02-15",
+ "duration_s": 934,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Earlier speakers have already established that Reality TV is a roguelike, now to the question of how to make your roguelike more like Reality TV. A few simple techniques combine to infinitely interesting emergent situations depending on the players input. But for Reality TV designers, that�s only half of the job, you also have to take those situations and turn into meaningful tv entertainment. Prepare to be challenged to add social and narrative systems design to your projects.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2378,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.76,
+   "d": 1.76,
+   "text": "But without further ado, let me"
+  },
+  {
+   "t": 9.52,
+   "d": 3.12,
+   "text": "introduce uh Dennis Grener. U Dennis is"
+  },
+  {
+   "t": 12.64,
+   "d": 1.6,
+   "text": "a game designer and producer who"
+  },
+  {
+   "t": 14.24,
+   "d": 2.32,
+   "text": "specializes in titles relying heavily on"
+  },
+  {
+   "t": 16.56,
+   "d": 1.68,
+   "text": "procedural systems, especially"
+  },
+  {
+   "t": 18.24,
+   "d": 1.84,
+   "text": "procedural narrative and live service"
+  },
+  {
+   "t": 20.08,
+   "d": 2.24,
+   "text": "events. And they are going to be talking"
+  },
+  {
+   "t": 22.32,
+   "d": 2.24,
+   "text": "with us about the procedurality of"
+  },
+  {
+   "t": 24.56,
+   "d": 2.4,
+   "text": "reality TV design principles and how it"
+  },
+  {
+   "t": 26.96,
+   "d": 2.8,
+   "text": "can be useful for your rogike. Uh, take"
+  },
+  {
+   "t": 29.76,
+   "d": 2.16,
+   "text": "it away, Dennis."
+  },
+  {
+   "t": 31.92,
+   "d": 2.08,
+   "text": ">> All right. Am I coming through clear and"
+  },
+  {
+   "t": 34.0,
+   "d": 4.08,
+   "text": "loud? Awesome. Good. I've written five"
+  },
+  {
+   "t": 38.08,
+   "d": 2.4,
+   "text": "versions of this talk. Uh, there is"
+  },
+  {
+   "t": 40.48,
+   "d": 2.24,
+   "text": "simply too much to say. This last"
+  },
+  {
+   "t": 42.72,
+   "d": 2.4,
+   "text": "version is on the minute, so excuse me"
+  },
+  {
+   "t": 45.12,
+   "d": 4.0,
+   "text": "if I go fast, but uh, it's really only"
+  },
+  {
+   "t": 49.12,
+   "d": 2.32,
+   "text": "going to focus on reality TV design. Uh,"
+  },
+  {
+   "t": 51.44,
+   "d": 1.84,
+   "text": "I want to draw more parallels to games,"
+  },
+  {
+   "t": 53.28,
+   "d": 1.84,
+   "text": "but there simply isn't enough time. I'll"
+  },
+  {
+   "t": 55.12,
+   "d": 1.92,
+   "text": "give you an overview. I hope that"
+  },
+  {
+   "t": 57.04,
+   "d": 2.72,
+   "text": "inspires uh and is understandable. If"
+  },
+  {
+   "t": 59.76,
+   "d": 2.16,
+   "text": "not, I hope uh and might be back next"
+  },
+  {
+   "t": 61.92,
+   "d": 2.56,
+   "text": "year to show examples from my own game."
+  },
+  {
+   "t": 64.48,
+   "d": 3.2,
+   "text": "Anyways, so I made a lot of re reality"
+  },
+  {
+   "t": 67.68,
+   "d": 2.56,
+   "text": "TV formats, 24 seasons in total, a"
+  },
+  {
+   "t": 70.24,
+   "d": 2.16,
+   "text": "couple of hundred episodes. Uh I worked"
+  },
+  {
+   "t": 72.4,
+   "d": 2.4,
+   "text": "on most kinds of formats from really"
+  },
+  {
+   "t": 74.8,
+   "d": 2.56,
+   "text": "horny 20somes trying to just hang out"
+  },
+  {
+   "t": 77.36,
+   "d": 2.16,
+   "text": "without killing each other to hunting"
+  },
+  {
+   "t": 79.52,
+   "d": 2.24,
+   "text": "ghosts to following people working in"
+  },
+  {
+   "t": 81.76,
+   "d": 2.24,
+   "text": "the shampoo aisle in Sweden's largest"
+  },
+  {
+   "t": 84.0,
+   "d": 2.4,
+   "text": "department store. Yes, that's a comedy"
+  },
+  {
+   "t": 86.4,
+   "d": 2.88,
+   "text": "format. Uh, check it out. Uh, and you"
+  },
+  {
+   "t": 89.28,
+   "d": 3.76,
+   "text": "might ask yourself, what is a TV format?"
+  },
+  {
+   "t": 93.04,
+   "d": 3.04,
+   "text": "So, there they're uh containers. Uh,"
+  },
+  {
+   "t": 96.08,
+   "d": 2.08,
+   "text": "look at Survivor where you most of the"
+  },
+  {
+   "t": 98.16,
+   "d": 2.0,
+   "text": "time follow a very rigid structure of"
+  },
+  {
+   "t": 100.16,
+   "d": 2.24,
+   "text": "people hanging around on the island,"
+  },
+  {
+   "t": 102.4,
+   "d": 2.96,
+   "text": "scheming uh or just getting to know each"
+  },
+  {
+   "t": 105.36,
+   "d": 3.36,
+   "text": "other. Then they compete uh in really"
+  },
+  {
+   "t": 108.72,
+   "d": 2.56,
+   "text": "clear competitions for benefits and then"
+  },
+  {
+   "t": 111.28,
+   "d": 4.16,
+   "text": "you have the voting uh phase. thing is"
+  },
+  {
+   "t": 115.44,
+   "d": 1.76,
+   "text": "between these competitions and the"
+  },
+  {
+   "t": 117.2,
+   "d": 2.96,
+   "text": "voting, you're free to fill the show"
+  },
+  {
+   "t": 120.16,
+   "d": 2.88,
+   "text": "with whatever content you want and"
+  },
+  {
+   "t": 123.04,
+   "d": 3.76,
+   "text": "people are free to to uh to uh be uh"
+  },
+  {
+   "t": 126.8,
+   "d": 1.84,
+   "text": "whoever they want there. There's a lot"
+  },
+  {
+   "t": 128.64,
+   "d": 1.68,
+   "text": "of space and that's the that's the good"
+  },
+  {
+   "t": 130.32,
+   "d": 2.08,
+   "text": "thing with that format. It sets a goal."
+  },
+  {
+   "t": 132.4,
+   "d": 3.2,
+   "text": "It gives you a bit of stakes uh and uh"
+  },
+  {
+   "t": 135.6,
+   "d": 3.52,
+   "text": "lets you rely uh no lets you go"
+  },
+  {
+   "t": 139.12,
+   "d": 2.64,
+   "text": "searching for the emotions"
+  },
+  {
+   "t": 141.76,
+   "d": 2.96,
+   "text": "and emotions is what I'm mostly here to"
+  },
+  {
+   "t": 144.72,
+   "d": 2.88,
+   "text": "talk about today. So the content"
+  },
+  {
+   "t": 147.6,
+   "d": 3.44,
+   "text": "hierarchy this just points out what you"
+  },
+  {
+   "t": 151.04,
+   "d": 1.6,
+   "text": "are mainly looking for when you're"
+  },
+  {
+   "t": 152.64,
+   "d": 2.48,
+   "text": "making reality TV."
+  },
+  {
+   "t": 155.12,
+   "d": 3.6,
+   "text": "You really want to find raw emotion. You"
+  },
+  {
+   "t": 158.72,
+   "d": 2.4,
+   "text": "want to have these moments that are"
+  },
+  {
+   "t": 161.12,
+   "d": 2.88,
+   "text": "really few and far between uh where"
+  },
+  {
+   "t": 164.0,
+   "d": 4.4,
+   "text": "someone is unfiltered and relatable. And"
+  },
+  {
+   "t": 168.4,
+   "d": 2.72,
+   "text": "for a good episode of any show, if you"
+  },
+  {
+   "t": 171.12,
+   "d": 2.8,
+   "text": "have two of these, then then that's a"
+  },
+  {
+   "t": 173.92,
+   "d": 1.92,
+   "text": "really strong episode. If you have more"
+  },
+  {
+   "t": 175.84,
+   "d": 4.0,
+   "text": "uh it might go iconic or in the Tyra"
+  },
+  {
+   "t": 179.84,
+   "d": 2.0,
+   "text": "Banks example you see on screen here,"
+  },
+  {
+   "t": 181.84,
+   "d": 2.16,
+   "text": "like if it's really unexpected or just"
+  },
+  {
+   "t": 184.0,
+   "d": 2.4,
+   "text": "does isn't necessarily a part of the"
+  },
+  {
+   "t": 186.4,
+   "d": 2.64,
+   "text": "format, usually that's also glorious."
+  },
+  {
+   "t": 189.04,
+   "d": 1.68,
+   "text": "Um,"
+  },
+  {
+   "t": 190.72,
+   "d": 2.32,
+   "text": "and if you can't have emotion, if you"
+  },
+  {
+   "t": 193.04,
+   "d": 2.72,
+   "text": "don't uh if you don't have enough raw"
+  },
+  {
+   "t": 195.76,
+   "d": 2.0,
+   "text": "emotion or like you can't basically show"
+  },
+  {
+   "t": 197.76,
+   "d": 1.6,
+   "text": "raw emotion all the time because it's so"
+  },
+  {
+   "t": 199.36,
+   "d": 3.6,
+   "text": "hard to find, uh, break taboos."
+  },
+  {
+   "t": 202.96,
+   "d": 2.16,
+   "text": "And I know, uh, I've been hearing for"
+  },
+  {
+   "t": 205.12,
+   "d": 1.92,
+   "text": "most of my career how reality TV is"
+  },
+  {
+   "t": 207.04,
+   "d": 2.64,
+   "text": "mostly about sex. Uh, and that's, uh,"
+  },
+  {
+   "t": 209.68,
+   "d": 3.28,
+   "text": "uh, frankly not true. Uh, people aren't"
+  },
+  {
+   "t": 212.96,
+   "d": 2.64,
+   "text": "that interested. Uh I know at least one"
+  },
+  {
+   "t": 215.6,
+   "d": 2.08,
+   "text": "show out there that promises that peop"
+  },
+  {
+   "t": 217.68,
+   "d": 2.48,
+   "text": "participants have sex in the show and"
+  },
+  {
+   "t": 220.16,
+   "d": 3.2,
+   "text": "sure that sells but uh what really gets"
+  },
+  {
+   "t": 223.36,
+   "d": 2.08,
+   "text": "people going in my experience is uh"
+  },
+  {
+   "t": 225.44,
+   "d": 2.96,
+   "text": "social norms u someone lying to another"
+  },
+  {
+   "t": 228.4,
+   "d": 3.04,
+   "text": "person's face that starts conversations"
+  },
+  {
+   "t": 231.44,
+   "d": 2.32,
+   "text": "or god I've heard people being very"
+  },
+  {
+   "t": 233.76,
+   "d": 3.52,
+   "text": "engaged in who pays the bill. Um it uh"
+  },
+  {
+   "t": 237.28,
+   "d": 3.76,
+   "text": "it's it's basically good content. Um"
+  },
+  {
+   "t": 241.04,
+   "d": 2.8,
+   "text": "after that we turn to characterization."
+  },
+  {
+   "t": 243.84,
+   "d": 4.4,
+   "text": "Uh we love mirroring us in other people."
+  },
+  {
+   "t": 248.24,
+   "d": 3.28,
+   "text": "So showing who a person is, what they"
+  },
+  {
+   "t": 251.52,
+   "d": 2.56,
+   "text": "do, why they do it. Uh that's good"
+  },
+  {
+   "t": 254.08,
+   "d": 3.04,
+   "text": "content. Then you have everything else."
+  },
+  {
+   "t": 257.12,
+   "d": 3.6,
+   "text": "Juice in TV terms is like a music"
+  },
+  {
+   "t": 260.72,
+   "d": 3.44,
+   "text": "collage or you have a fast-paced edit uh"
+  },
+  {
+   "t": 264.16,
+   "d": 4.64,
+   "text": "strong colors uh uh quick movement or uh"
+  },
+  {
+   "t": 268.8,
+   "d": 3.6,
+   "text": "loud noises just something that pumps up"
+  },
+  {
+   "t": 272.4,
+   "d": 3.36,
+   "text": "the adrenaline for a little while. Um"
+  },
+  {
+   "t": 275.76,
+   "d": 1.76,
+   "text": "story"
+  },
+  {
+   "t": 277.52,
+   "d": 1.6,
+   "text": "not that interesting especially"
+  },
+  {
+   "t": 279.12,
+   "d": 2.4,
+   "text": "especially not traditional uh narrative"
+  },
+  {
+   "t": 281.52,
+   "d": 2.48,
+   "text": "structure. You have that format backbone"
+  },
+  {
+   "t": 284.0,
+   "d": 2.96,
+   "text": "to lean on. So you don't really need to"
+  },
+  {
+   "t": 286.96,
+   "d": 3.28,
+   "text": "uh explain every part of a uh"
+  },
+  {
+   "t": 290.24,
+   "d": 1.6,
+   "text": "character's emotional journey for"
+  },
+  {
+   "t": 291.84,
+   "d": 2.24,
+   "text": "example."
+  },
+  {
+   "t": 294.08,
+   "d": 2.64,
+   "text": "Uh this is how you traditionally get"
+  },
+  {
+   "t": 296.72,
+   "d": 3.12,
+   "text": "content. Um so I think that fly on the"
+  },
+  {
+   "t": 299.84,
+   "d": 4.08,
+   "text": "wall u saying comes from a documentarian"
+  },
+  {
+   "t": 303.92,
+   "d": 3.2,
+   "text": "named DA PenBBaker 80 years ago and his"
+  },
+  {
+   "t": 307.12,
+   "d": 2.4,
+   "text": "whole take was you're just a camera."
+  },
+  {
+   "t": 309.52,
+   "d": 1.68,
+   "text": "Watch what's going on. Capture"
+  },
+  {
+   "t": 311.2,
+   "d": 2.48,
+   "text": "everything. And that's how you get"
+  },
+  {
+   "t": 313.68,
+   "d": 4.32,
+   "text": "truth. Um so traditionally you go step"
+  },
+  {
+   "t": 318.0,
+   "d": 3.12,
+   "text": "by step from casting uh where you try"
+  },
+  {
+   "t": 321.12,
+   "d": 3.68,
+   "text": "and uh ascribe people functions or type"
+  },
+  {
+   "t": 324.8,
+   "d": 4.8,
+   "text": "cast them um and capture as much content"
+  },
+  {
+   "t": 329.6,
+   "d": 1.76,
+   "text": "you can all the cameras all the"
+  },
+  {
+   "t": 331.36,
+   "d": 2.4,
+   "text": "interviews asking all the questions uh"
+  },
+  {
+   "t": 333.76,
+   "d": 2.64,
+   "text": "and spend a lot of time in editing to"
+  },
+  {
+   "t": 336.4,
+   "d": 3.36,
+   "text": "find the good stuff. It's it's expensive"
+  },
+  {
+   "t": 339.76,
+   "d": 3.2,
+   "text": "uh and it uh doesn't necessarily give"
+  },
+  {
+   "t": 342.96,
+   "d": 5.28,
+   "text": "you the uh high value content you want."
+  },
+  {
+   "t": 348.24,
+   "d": 3.6,
+   "text": "The method I rely on uh I like to call a"
+  },
+  {
+   "t": 351.84,
+   "d": 1.76,
+   "text": "fly in the soup because you're often in"
+  },
+  {
+   "t": 353.6,
+   "d": 2.64,
+   "text": "the middle of it. Uh it being everything"
+  },
+  {
+   "t": 356.24,
+   "d": 1.76,
+   "text": "and sometimes it feels like you are"
+  },
+  {
+   "t": 358.0,
+   "d": 2.96,
+   "text": "absolutely drowning in crap."
+  },
+  {
+   "t": 360.96,
+   "d": 2.4,
+   "text": "You still have the same casting phase"
+  },
+  {
+   "t": 363.36,
+   "d": 2.48,
+   "text": "and a similar editing phase though it's"
+  },
+  {
+   "t": 365.84,
+   "d": 2.4,
+   "text": "faster shorter. you have better material"
+  },
+  {
+   "t": 368.24,
+   "d": 2.56,
+   "text": "so you don't need as much time. Then you"
+  },
+  {
+   "t": 370.8,
+   "d": 1.6,
+   "text": "between those you switch between"
+  },
+  {
+   "t": 372.4,
+   "d": 2.64,
+   "text": "actively looking for content uh as in"
+  },
+  {
+   "t": 375.04,
+   "d": 2.56,
+   "text": "sifting all the reality around you and"
+  },
+  {
+   "t": 377.6,
+   "d": 1.52,
+   "text": "refining"
+  },
+  {
+   "t": 379.12,
+   "d": 2.64,
+   "text": "enabling even empowering participants to"
+  },
+  {
+   "t": 381.76,
+   "d": 2.8,
+   "text": "take up space and do things feel things"
+  },
+  {
+   "t": 384.56,
+   "d": 1.84,
+   "text": "and be the most of themselves they can"
+  },
+  {
+   "t": 386.4,
+   "d": 3.36,
+   "text": "be. Um then I take that info from those"
+  },
+  {
+   "t": 389.76,
+   "d": 2.48,
+   "text": "situations I just refined and use it to"
+  },
+  {
+   "t": 392.24,
+   "d": 2.64,
+   "text": "sift more reality. This process led to a"
+  },
+  {
+   "t": 394.88,
+   "d": 1.68,
+   "text": "lot better content, but it also happens"
+  },
+  {
+   "t": 396.56,
+   "d": 2.32,
+   "text": "to be a lot closer to systems to design"
+  },
+  {
+   "t": 398.88,
+   "d": 3.36,
+   "text": "and a more defined replicable procedural"
+  },
+  {
+   "t": 402.24,
+   "d": 1.52,
+   "text": "approach."
+  },
+  {
+   "t": 403.76,
+   "d": 2.24,
+   "text": "Um, which meant better content and"
+  },
+  {
+   "t": 406.0,
+   "d": 3.0,
+   "text": "cheaper."
+  },
+  {
+   "t": 409.68,
+   "d": 4.8,
+   "text": "The way you find content is well, first"
+  },
+  {
+   "t": 414.48,
+   "d": 1.6,
+   "text": "of all, you need to do your homework."
+  },
+  {
+   "t": 416.08,
+   "d": 2.8,
+   "text": "Uh, that means when communicating with"
+  },
+  {
+   "t": 418.88,
+   "d": 1.68,
+   "text": "uh participants and you want to do that"
+  },
+  {
+   "t": 420.56,
+   "d": 4.56,
+   "text": "sooner rather than later. uh look out"
+  },
+  {
+   "t": 425.12,
+   "d": 2.88,
+   "text": "for things they're saying that are"
+  },
+  {
+   "t": 428.0,
+   "d": 2.32,
+   "text": "signaling that they have emotions uh or"
+  },
+  {
+   "t": 430.32,
+   "d": 1.92,
+   "text": "feelings around the topic. Are they"
+  },
+  {
+   "t": 432.24,
+   "d": 1.68,
+   "text": "avoiding to talk about something? Then"
+  },
+  {
+   "t": 433.92,
+   "d": 2.8,
+   "text": "that's probably interesting to bring up"
+  },
+  {
+   "t": 436.72,
+   "d": 1.92,
+   "text": "in some shape or form. That's the stuff"
+  },
+  {
+   "t": 438.64,
+   "d": 2.48,
+   "text": "you want to dig into is where there's"
+  },
+  {
+   "t": 441.12,
+   "d": 1.76,
+   "text": "feelings"
+  },
+  {
+   "t": 442.88,
+   "d": 3.12,
+   "text": "and a magical circle."
+  },
+  {
+   "t": 446.0,
+   "d": 3.84,
+   "text": "uh that that is maybe well"
+  },
+  {
+   "t": 449.84,
+   "d": 4.0,
+   "text": "sorry it's maybe the the core reason why"
+  },
+  {
+   "t": 453.84,
+   "d": 2.16,
+   "text": "uh all the weird stuff that happens on a"
+  },
+  {
+   "t": 456.0,
+   "d": 2.8,
+   "text": "reality TV set happens. A magical circle"
+  },
+  {
+   "t": 458.8,
+   "d": 2.64,
+   "text": "is a bubble wherein normal rules do not"
+  },
+  {
+   "t": 461.44,
+   "d": 3.36,
+   "text": "apply. Uh a game uh should be a magical"
+  },
+  {
+   "t": 464.8,
+   "d": 3.36,
+   "text": "circle. Uh play often happens within a"
+  },
+  {
+   "t": 468.16,
+   "d": 2.16,
+   "text": "magical circle storytelling whatever."
+  },
+  {
+   "t": 470.32,
+   "d": 4.08,
+   "text": "Um, in reality TV that circle is uh"
+  },
+  {
+   "t": 474.4,
+   "d": 1.68,
+   "text": "created by a number of factors but"
+  },
+  {
+   "t": 476.08,
+   "d": 2.72,
+   "text": "primarily that there's cameras there and"
+  },
+  {
+   "t": 478.8,
+   "d": 1.84,
+   "text": "you know you will be shown to others and"
+  },
+  {
+   "t": 480.64,
+   "d": 1.44,
+   "text": "what would they think of me and will"
+  },
+  {
+   "t": 482.08,
+   "d": 1.92,
+   "text": "they think I'm as glorious as I think I"
+  },
+  {
+   "t": 484.0,
+   "d": 2.72,
+   "text": "am etc. Um,"
+  },
+  {
+   "t": 486.72,
+   "d": 2.0,
+   "text": "and"
+  },
+  {
+   "t": 488.72,
+   "d": 3.44,
+   "text": "as long as you maintain tone, create"
+  },
+  {
+   "t": 492.16,
+   "d": 3.6,
+   "text": "trust, uh, but treat the game as serious"
+  },
+  {
+   "t": 495.76,
+   "d": 2.24,
+   "text": "as the rest of the people in the circle"
+  },
+  {
+   "t": 498.0,
+   "d": 3.92,
+   "text": "do when you are the the u, uh, reality"
+  },
+  {
+   "t": 501.92,
+   "d": 2.72,
+   "text": "TV content producer. You're kind of uh,"
+  },
+  {
+   "t": 504.64,
+   "d": 1.6,
+   "text": "in between. You're not entirely in the"
+  },
+  {
+   "t": 506.24,
+   "d": 2.32,
+   "text": "circle, but you should pretend you are"
+  },
+  {
+   "t": 508.56,
+   "d": 2.56,
+   "text": "um, as creators should pretend that they"
+  },
+  {
+   "t": 511.12,
+   "d": 2.88,
+   "text": "are in the middle of that fiction."
+  },
+  {
+   "t": 514.0,
+   "d": 2.08,
+   "text": "uh don't don't mirror and enh and and"
+  },
+  {
+   "t": 516.08,
+   "d": 1.28,
+   "text": "enhance the emotions of the"
+  },
+  {
+   "t": 517.36,
+   "d": 1.52,
+   "text": "participants."
+  },
+  {
+   "t": 518.88,
+   "d": 2.88,
+   "text": "Uh if they're uh angry, be angry with"
+  },
+  {
+   "t": 521.76,
+   "d": 3.84,
+   "text": "them, etc. And we are social beings that"
+  },
+  {
+   "t": 525.6,
+   "d": 2.88,
+   "text": "want to fit in and have a a role in the"
+  },
+  {
+   "t": 528.48,
+   "d": 2.08,
+   "text": "group. Uh even if that role is opposed"
+  },
+  {
+   "t": 530.56,
+   "d": 4.72,
+   "text": "to the group. Um keeping roles in motion"
+  },
+  {
+   "t": 535.28,
+   "d": 3.04,
+   "text": "is really key to good drama. And this"
+  },
+  {
+   "t": 538.32,
+   "d": 2.8,
+   "text": "can be concrete like your role is the"
+  },
+  {
+   "t": 541.12,
+   "d": 2.8,
+   "text": "one that decides who gets to eat uh this"
+  },
+  {
+   "t": 543.92,
+   "d": 3.12,
+   "text": "evening and eat what. Uh but it's even"
+  },
+  {
+   "t": 547.04,
+   "d": 2.08,
+   "text": "more efficient when it's when you move"
+  },
+  {
+   "t": 549.12,
+   "d": 2.64,
+   "text": "around uh roles like aren't you the the"
+  },
+  {
+   "t": 551.76,
+   "d": 3.12,
+   "text": "the boy that's interested in Albert."
+  },
+  {
+   "t": 554.88,
+   "d": 4.0,
+   "text": "Huh. Oh, okay. Cool. Uh I heard you"
+  },
+  {
+   "t": 558.88,
+   "d": 2.8,
+   "text": "might also be interested in uh Rosanna."
+  },
+  {
+   "t": 561.68,
+   "d": 4.96,
+   "text": "uh just switch stuff up regularly."
+  },
+  {
+   "t": 566.64,
+   "d": 2.8,
+   "text": "And being present"
+  },
+  {
+   "t": 569.44,
+   "d": 3.68,
+   "text": "is about well"
+  },
+  {
+   "t": 573.12,
+   "d": 2.56,
+   "text": "allowing yourself to be uncomfortable."
+  },
+  {
+   "t": 575.68,
+   "d": 3.44,
+   "text": "Uh is a pretty big part of being present"
+  },
+  {
+   "t": 579.12,
+   "d": 3.84,
+   "text": "and enabling participant. uh they might"
+  },
+  {
+   "t": 582.96,
+   "d": 2.96,
+   "text": "want to do something that's not uh"
+  },
+  {
+   "t": 585.92,
+   "d": 1.6,
+   "text": "entirely comfortable for them to talk"
+  },
+  {
+   "t": 587.52,
+   "d": 3.68,
+   "text": "about uh that you still need to ask for"
+  },
+  {
+   "t": 591.2,
+   "d": 3.28,
+   "text": "and see if they can tell you about."
+  },
+  {
+   "t": 594.48,
+   "d": 2.64,
+   "text": "Bluntness isn't comfortable, but can be"
+  },
+  {
+   "t": 597.12,
+   "d": 3.2,
+   "text": "a really handy tool in these things. Uh"
+  },
+  {
+   "t": 600.32,
+   "d": 1.92,
+   "text": "and it can also be uncomfortable giving"
+  },
+  {
+   "t": 602.24,
+   "d": 2.24,
+   "text": "people what they didn't know they wanted"
+  },
+  {
+   "t": 604.48,
+   "d": 3.84,
+   "text": "or trying something that uh they didn't"
+  },
+  {
+   "t": 608.32,
+   "d": 2.0,
+   "text": "know they wanted."
+  },
+  {
+   "t": 610.32,
+   "d": 2.08,
+   "text": "Um, would you be interested in going on"
+  },
+  {
+   "t": 612.4,
+   "d": 2.16,
+   "text": "a date with Ham and Ham or like have you"
+  },
+  {
+   "t": 614.56,
+   "d": 2.32,
+   "text": "considered talking to them about uh this"
+  },
+  {
+   "t": 616.88,
+   "d": 1.84,
+   "text": "and that? No, I I never want to be in"
+  },
+  {
+   "t": 618.72,
+   "d": 2.16,
+   "text": "the same room as them. Okay, fine. Then"
+  },
+  {
+   "t": 620.88,
+   "d": 3.68,
+   "text": "I know I call reality TV narrative"
+  },
+  {
+   "t": 624.56,
+   "d": 4.08,
+   "text": "structure a party. So you have these"
+  },
+  {
+   "t": 628.64,
+   "d": 2.4,
+   "text": "different rooms, virtual or not, with"
+  },
+  {
+   "t": 631.04,
+   "d": 2.0,
+   "text": "different vibes and people of very"
+  },
+  {
+   "t": 633.04,
+   "d": 2.56,
+   "text": "different moods that are all heightened."
+  },
+  {
+   "t": 635.6,
+   "d": 3.2,
+   "text": "Um, and you don't have to show or"
+  },
+  {
+   "t": 638.8,
+   "d": 2.16,
+   "text": "explain everything. You You shouldn't"
+  },
+  {
+   "t": 640.96,
+   "d": 3.04,
+   "text": "even really try, but"
+  },
+  {
+   "t": 644.0,
+   "d": 3.68,
+   "text": "you got to explain who we're looking at"
+  },
+  {
+   "t": 647.68,
+   "d": 1.68,
+   "text": "and give us a clue of what they're"
+  },
+  {
+   "t": 649.36,
+   "d": 2.16,
+   "text": "doing. Just let me understand the pure"
+  },
+  {
+   "t": 651.52,
+   "d": 2.64,
+   "text": "basics. And if there's uh good stuff"
+  },
+  {
+   "t": 654.16,
+   "d": 2.0,
+   "text": "from the content hierarchy, then I'm"
+  },
+  {
+   "t": 656.16,
+   "d": 2.4,
+   "text": "good. Then I'm going to love the the uh"
+  },
+  {
+   "t": 658.56,
+   "d": 4.12,
+   "text": "the content I'm watching."
+  },
+  {
+   "t": 662.88,
+   "d": 1.92,
+   "text": "And refinement"
+  },
+  {
+   "t": 664.8,
+   "d": 3.36,
+   "text": "goes in a similar vein. So, uh, showing"
+  },
+  {
+   "t": 668.16,
+   "d": 1.92,
+   "text": "homework is asking about things you"
+  },
+  {
+   "t": 670.08,
+   "d": 2.96,
+   "text": "already know people care about. Um, it"
+  },
+  {
+   "t": 673.04,
+   "d": 1.36,
+   "text": "makes the conversation with them feel"
+  },
+  {
+   "t": 674.4,
+   "d": 2.24,
+   "text": "fluent. Uh, and like there's chemistry."
+  },
+  {
+   "t": 676.64,
+   "d": 1.6,
+   "text": "It's good for building trust and getting"
+  },
+  {
+   "t": 678.24,
+   "d": 3.04,
+   "text": "more information. Uh, and just listening"
+  },
+  {
+   "t": 681.28,
+   "d": 1.92,
+   "text": "to people and caring about what they"
+  },
+  {
+   "t": 683.2,
+   "d": 2.8,
+   "text": "think."
+  },
+  {
+   "t": 686.0,
+   "d": 2.48,
+   "text": "People react emotionally to being seen."
+  },
+  {
+   "t": 688.48,
+   "d": 2.32,
+   "text": "I've had plenty of people start crying"
+  },
+  {
+   "t": 690.8,
+   "d": 3.2,
+   "text": "because I've been listening to them. uh"
+  },
+  {
+   "t": 694.0,
+   "d": 2.56,
+   "text": "about nothing special. Uh that's how"
+  },
+  {
+   "t": 696.56,
+   "d": 4.64,
+   "text": "unusual it is. Um and that information,"
+  },
+  {
+   "t": 701.2,
+   "d": 2.0,
+   "text": "the reactions you get from uh from them,"
+  },
+  {
+   "t": 703.2,
+   "d": 2.0,
+   "text": "that's more that's information you'll"
+  },
+  {
+   "t": 705.2,
+   "d": 3.76,
+   "text": "need uh for refining for looking for"
+  },
+  {
+   "t": 708.96,
+   "d": 2.0,
+   "text": "other content."
+  },
+  {
+   "t": 710.96,
+   "d": 1.52,
+   "text": "Uh you need to understand the"
+  },
+  {
+   "t": 712.48,
+   "d": 2.16,
+   "text": "participants wants, expectations and"
+  },
+  {
+   "t": 714.64,
+   "d": 2.72,
+   "text": "what could enable them."
+  },
+  {
+   "t": 717.36,
+   "d": 3.44,
+   "text": "So varying the tone of the audience uh"
+  },
+  {
+   "t": 720.8,
+   "d": 3.28,
+   "text": "and the audience here is the TV team uh"
+  },
+  {
+   "t": 724.08,
+   "d": 2.16,
+   "text": "is using the fact that you've created"
+  },
+  {
+   "t": 726.24,
+   "d": 1.68,
+   "text": "trust with mag within the magical"
+  },
+  {
+   "t": 727.92,
+   "d": 2.08,
+   "text": "circle. You've established a tone. That"
+  },
+  {
+   "t": 730.0,
+   "d": 2.72,
+   "text": "means you now get to play with it. Um"
+  },
+  {
+   "t": 732.72,
+   "d": 2.24,
+   "text": "switch up the tone, change your mood,"
+  },
+  {
+   "t": 734.96,
+   "d": 2.24,
+   "text": "see what happens. Uh and spotlighting is"
+  },
+  {
+   "t": 737.2,
+   "d": 1.76,
+   "text": "something I hardly recommend you to try"
+  },
+  {
+   "t": 738.96,
+   "d": 3.28,
+   "text": "and use at home. Uh at home it could be"
+  },
+  {
+   "t": 742.24,
+   "d": 2.0,
+   "text": "uh just asking I want to know what Laura"
+  },
+  {
+   "t": 744.24,
+   "d": 3.12,
+   "text": "is thinking about. Uh uh but in reality"
+  },
+  {
+   "t": 747.36,
+   "d": 2.88,
+   "text": "TV we have the powerful weapon of like"
+  },
+  {
+   "t": 750.24,
+   "d": 2.56,
+   "text": "pointing the camera at someone and just"
+  },
+  {
+   "t": 752.8,
+   "d": 3.04,
+   "text": "waiting. Now what uh it makes stuff"
+  },
+  {
+   "t": 755.84,
+   "d": 2.16,
+   "text": "happen. Giving people a voice, giving"
+  },
+  {
+   "t": 758.0,
+   "d": 4.24,
+   "text": "them a space to speak or do um and"
+  },
+  {
+   "t": 762.24,
+   "d": 3.84,
+   "text": "enabling people is uh either asking for"
+  },
+  {
+   "t": 766.08,
+   "d": 2.24,
+   "text": "expectations. Uh that's an inwards"
+  },
+  {
+   "t": 768.32,
+   "d": 2.4,
+   "text": "process uh"
+  },
+  {
+   "t": 770.72,
+   "d": 2.88,
+   "text": "forces them enables them to look inwards"
+  },
+  {
+   "t": 773.6,
+   "d": 2.32,
+   "text": "uh which might lead to them doing"
+  },
+  {
+   "t": 775.92,
+   "d": 1.92,
+   "text": "something about their feelings. or"
+  },
+  {
+   "t": 777.84,
+   "d": 2.0,
+   "text": "directing their attention is an outwards"
+  },
+  {
+   "t": 779.84,
+   "d": 1.92,
+   "text": "process where you try and make them"
+  },
+  {
+   "t": 781.76,
+   "d": 2.56,
+   "text": "aware of uh others and what others are"
+  },
+  {
+   "t": 784.32,
+   "d": 2.24,
+   "text": "thinking or doing. Uh and there's some"
+  },
+  {
+   "t": 786.56,
+   "d": 1.92,
+   "text": "sub subtle stuff you can do here like"
+  },
+  {
+   "t": 788.48,
+   "d": 4.08,
+   "text": "being uh weirdly transparent like uh uh"
+  },
+  {
+   "t": 792.56,
+   "d": 1.68,
+   "text": "bluntly stating I think there's"
+  },
+  {
+   "t": 794.24,
+   "d": 1.6,
+   "text": "something about the way Albert is"
+  },
+  {
+   "t": 795.84,
+   "d": 3.76,
+   "text": "looking at you um uh and their instinct"
+  },
+  {
+   "t": 799.6,
+   "d": 1.52,
+   "text": "might be to check that out and see if"
+  },
+  {
+   "t": 801.12,
+   "d": 3.12,
+   "text": "you're right. Uh even the mechanic of"
+  },
+  {
+   "t": 804.24,
+   "d": 1.92,
+   "text": "kind of telling people that you know a"
+  },
+  {
+   "t": 806.16,
+   "d": 2.0,
+   "text": "secret and therefore can't share the"
+  },
+  {
+   "t": 808.16,
+   "d": 2.48,
+   "text": "secret is really helpful. Uh I know a"
+  },
+  {
+   "t": 810.64,
+   "d": 1.92,
+   "text": "secret about that group over there but"
+  },
+  {
+   "t": 812.56,
+   "d": 2.16,
+   "text": "sorry I can't tell you more. Excellent"
+  },
+  {
+   "t": 814.72,
+   "d": 2.16,
+   "text": "way to have them go over and check stuff"
+  },
+  {
+   "t": 816.88,
+   "d": 3.28,
+   "text": "out. Fundamentally if people are stuck,"
+  },
+  {
+   "t": 820.16,
+   "d": 3.76,
+   "text": "if participants are stuck, they want to"
+  },
+  {
+   "t": 823.92,
+   "d": 2.56,
+   "text": "have fun. They need to show they're good"
+  },
+  {
+   "t": 826.48,
+   "d": 2.0,
+   "text": "and what they're good for. Give them an"
+  },
+  {
+   "t": 828.48,
+   "d": 2.56,
+   "text": "alibi. give them an an excuse, a thumbs"
+  },
+  {
+   "t": 831.04,
+   "d": 4.16,
+   "text": "up to go do whatever it was. Um,"
+  },
+  {
+   "t": 835.2,
+   "d": 2.32,
+   "text": "and worst case, sometimes they're stuck"
+  },
+  {
+   "t": 837.52,
+   "d": 1.28,
+   "text": "because they just don't understand"
+  },
+  {
+   "t": 838.8,
+   "d": 3.36,
+   "text": "what's going on. Then just be clear."
+  },
+  {
+   "t": 842.16,
+   "d": 1.52,
+   "text": "Don't be dramatic about it. Don't be"
+  },
+  {
+   "t": 843.68,
+   "d": 1.68,
+   "text": "subtle."
+  },
+  {
+   "t": 845.36,
+   "d": 1.36,
+   "text": "This is where we're at. This is what you"
+  },
+  {
+   "t": 846.72,
+   "d": 1.84,
+   "text": "should be doing. There you go. And then"
+  },
+  {
+   "t": 848.56,
+   "d": 1.68,
+   "text": "you go through this loop. You gather"
+  },
+  {
+   "t": 850.24,
+   "d": 3.28,
+   "text": "info. You use the info. You make space"
+  },
+  {
+   "t": 853.52,
+   "d": 2.0,
+   "text": "for participants to act. You enable them"
+  },
+  {
+   "t": 855.52,
+   "d": 3.12,
+   "text": "if need be. You use what they just did."
+  },
+  {
+   "t": 858.64,
+   "d": 3.36,
+   "text": "and said uh as info that you use for new"
+  },
+  {
+   "t": 862.0,
+   "d": 2.24,
+   "text": "making new space and enabling them for"
+  },
+  {
+   "t": 864.24,
+   "d": 4.32,
+   "text": "new actions that turns into a a spiral"
+  },
+  {
+   "t": 868.56,
+   "d": 2.4,
+   "text": "that can result in utter mayhem of"
+  },
+  {
+   "t": 870.96,
+   "d": 2.64,
+   "text": "emotions. I hardly recommend using it in"
+  },
+  {
+   "t": 873.6,
+   "d": 3.28,
+   "text": "parties. Uh it's going to be real fun."
+  },
+  {
+   "t": 876.88,
+   "d": 1.76,
+   "text": "Um"
+  },
+  {
+   "t": 878.64,
+   "d": 5.2,
+   "text": "and as I said, I think uh emotions is"
+  },
+  {
+   "t": 883.84,
+   "d": 2.24,
+   "text": "why we keep coming back to reality TV."
+  },
+  {
+   "t": 886.08,
+   "d": 1.76,
+   "text": "emotions is what we're here to talk"
+  },
+  {
+   "t": 887.84,
+   "d": 3.12,
+   "text": "about. It's so difficult to not be"
+  },
+  {
+   "t": 890.96,
+   "d": 2.24,
+   "text": "mesmerized by someone feeling something"
+  },
+  {
+   "t": 893.2,
+   "d": 2.72,
+   "text": "genuine because there's I guess just too"
+  },
+  {
+   "t": 895.92,
+   "d": 3.68,
+   "text": "little of that uh to go around. Um um"
+  },
+  {
+   "t": 899.6,
+   "d": 2.72,
+   "text": "and I don't have time to talk about"
+  },
+  {
+   "t": 902.32,
+   "d": 3.28,
+   "text": "games, but yeah uh we tend to struggle"
+  },
+  {
+   "t": 905.6,
+   "d": 1.84,
+   "text": "with this sometimes in reality TV,"
+  },
+  {
+   "t": 907.44,
+   "d": 1.92,
+   "text": "forgetting what we're there for, but in"
+  },
+  {
+   "t": 909.36,
+   "d": 2.16,
+   "text": "games that conversation is hardly even"
+  },
+  {
+   "t": 911.52,
+   "d": 2.48,
+   "text": "happening. Uh let's make that happen"
+  },
+  {
+   "t": 914.0,
+   "d": 3.68,
+   "text": "more often. Uh narrative is everything."
+  },
+  {
+   "t": 917.68,
+   "d": 3.6,
+   "text": "Uh and thank you. That's my talk. I feel"
+  },
+  {
+   "t": 921.28,
+   "d": 1.92,
+   "text": "like I forgot to say that it is such a"
+  },
+  {
+   "t": 923.2,
+   "d": 2.4,
+   "text": "tremendous pleasure to talk at Rogike."
+  },
+  {
+   "t": 925.6,
+   "d": 2.8,
+   "text": "Uh this is my favorite event and I'm uh"
+  },
+  {
+   "t": 928.4,
+   "d": 3.36,
+   "text": "uh silly hyped uh about having this"
+  },
+  {
+   "t": 931.76,
+   "d": 4.32,
+   "text": "opportunity. Uh see y'all."
+  }
+ ]
+}

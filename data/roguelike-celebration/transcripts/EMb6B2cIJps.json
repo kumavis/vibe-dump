@@ -1,0 +1,1154 @@
+{
+ "id": "EMb6B2cIJps",
+ "url": "https://www.youtube.com/watch?v=EMb6B2cIJps",
+ "title": "Martin Pichlmair - Ancient Roguelikes: The Pre-History of Roguelike Games",
+ "speaker": "Martin Pichlmair",
+ "talk_title": "Ancient Roguelikes: The Pre-History of Roguelike Games",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-10-03",
+ "duration_s": 1852,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "Roguelikes existed before Rogue. How can that be? You see, all inventions are just manifestations of ideas that are already in the room. Rogue was the culmination of a lot of previous ideas in the shape of a digital artifact. This talk takes you on a worldwide journey back in time to ancient forms of procedurally generation, tracing some roots of the games we play nowadays.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and history"
+  },
+  {
+   "start": 615,
+   "title": "Culinary connections"
+  },
+  {
+   "start": 659,
+   "title": "Procedural text generation"
+  },
+  {
+   "start": 947,
+   "title": "Grid movement and maps"
+  },
+  {
+   "start": 1021,
+   "title": "Aleatoric music composition"
+  },
+  {
+   "start": 1270,
+   "title": "Lessons for game design"
+  },
+  {
+   "start": 1611,
+   "title": "Q&A and closing thoughts"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3907,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.04,
+   "d": 8.16,
+   "text": "Without further ado, I am going to introduce Martin who is a game developer, researcher,"
+  },
+  {
+   "t": 11.2,
+   "d": 4.32,
+   "text": "founder and forma media artist. He founded three game studios and worked on a dozen"
+  },
+  {
+   "t": 15.52,
+   "d": 7.36,
+   "text": "games. Designed a university degree and has the academic title of Dr. Of technology."
+  },
+  {
+   "t": 22.88,
+   "d": 7.68,
+   "text": "He has exhibited heart in Hong Kong, and designed Indie games, and loves to cook hot food and his"
+  },
+  {
+   "t": 30.56,
+   "d": 6.64,
+   "text": "research is referenced in the Wikipedia page for the Legend of Zelda. What a flex."
+  },
+  {
+   "t": 37.2,
+   "d": 4.24,
+   "text": "MARTIN: I hope that is still there. I keep checking it every two years to make sure I"
+  },
+  {
+   "t": 41.44,
+   "d": 8.72,
+   "text": "am still there. You are here to talk about ancient roguelikes. So I will let you go"
+  },
+  {
+   "t": 50.16,
+   "d": 5.04,
+   "text": "ahead and take it away, Martin. Thank you. >> Thank you very much. And great to be here."
+  },
+  {
+   "t": 55.2,
+   "d": 6.56,
+   "text": "This is really, I was like, always in awe of this event. So it is really an honor to speak here. So,"
+  },
+  {
+   "t": 61.76,
+   "d": 6.08,
+   "text": "yeah, as already said, my name is Martin and internationally it is a PhD in computer science."
+  },
+  {
+   "t": 71.36,
+   "d": 11.52,
+   "text": "I am from Austria and I am living in Denmark. It is just after 11 and evening here. I made my"
+  },
+  {
+   "t": 82.88,
+   "d": 14.32,
+   "text": "first indie game in 2008, an IOS game completely written from scratch. It actually had procedurally"
+  },
+  {
+   "t": 97.2,
+   "d": 7.92,
+   "text": "music and procedurally level designs so a lot of procedural stuff. Then I cofounded three game"
+  },
+  {
+   "t": 105.12,
+   "d": 10.72,
+   "text": "studios and in between, because, life is full of interesting turns, I ran a game study for a"
+  },
+  {
+   "t": 115.84,
+   "d": 6.48,
+   "text": "couple years and worked in academia for 12 years or so all and in all. My current company is called"
+  },
+  {
+   "t": 122.32,
+   "d": 19.68,
+   "text": "Neon Aurelius. We are making tiny games with high replay value. Systemic games fit very well. I have"
+  },
+  {
+   "t": 142.0,
+   "d": 8.88,
+   "text": "to look up the canonical list of roguelikess and it seems like this kind of covers it."
+  },
+  {
+   "t": 154.16,
+   "d": 7.6,
+   "text": "You need controlled randomness. It can't be all over the random but has to be some random."
+  },
+  {
+   "t": 164.08,
+   "d": 7.76,
+   "text": "Grid based movement, turn based play, and permadeath which implies automatically that"
+  },
+  {
+   "t": 171.84,
+   "d": 7.68,
+   "text": "you have no meta progression because how would you if the death is permanent. And that also implies"
+  },
+  {
+   "t": 179.52,
+   "d": 4.4,
+   "text": "of course that you have to be able to beat the game in one run which is interesting you"
+  },
+  {
+   "t": 183.92,
+   "d": 9.44,
+   "text": "can't. Some people maybe can but it usually takes a lot of learning. Quite interesting constraints."
+  },
+  {
+   "t": 193.36,
+   "d": 6.32,
+   "text": "I will not look at the last three of them which is permadeath, because I am going to talk about"
+  },
+  {
+   "t": 199.68,
+   "d": 8.24,
+   "text": "pre-digital games. A few digital games are mentioned but permadeath until legacy and"
+  },
+  {
+   "t": 208.88,
+   "d": 6.08,
+   "text": "table top roll playing games that is just how games were played. You had permadeath. And there"
+  },
+  {
+   "t": 214.96,
+   "d": 6.32,
+   "text": "is leagues and sports structures that have been around and embedding and so on that have been"
+  },
+  {
+   "t": 221.28,
+   "d": 8.32,
+   "text": "longer. Like meta game has been a thing but it is really outside the core of the game. I am just"
+  },
+  {
+   "t": 229.6,
+   "d": 6.08,
+   "text": "going to ignore that for now. My goal for this is the preview event. I am a computer scientist"
+  },
+  {
+   "t": 235.68,
+   "d": 11.68,
+   "text": "but I like to attach things to humanity, culture, whatever, history. I will, of course, focus on the"
+  },
+  {
+   "t": 247.36,
+   "d": 5.12,
+   "text": "things I have been doing in my games which is more procedural stuff than anything else but bear with"
+  },
+  {
+   "t": 252.48,
+   "d": 6.32,
+   "text": "me. My goal is to show everything is connected and I also want to be in -- a little entertaining"
+  },
+  {
+   "t": 258.8,
+   "d": 11.04,
+   "text": "while I do it. Everybody is connected. It makes it interesting to me if I am standing"
+  },
+  {
+   "t": 269.84,
+   "d": 15.2,
+   "text": "on the shoulders of the triumph. And I like to explore historical things. For example, with my"
+  },
+  {
+   "t": 285.04,
+   "d": 6.72,
+   "text": "partner, Shar, we play a lot of old card games and I mean like medieval to nineteenth-century"
+  },
+  {
+   "t": 291.76,
+   "d": 13.44,
+   "text": "mostly. A lot of Austria games, French, a tarot version from the nineteenth-century and this is"
+  },
+  {
+   "t": 305.2,
+   "d": 4.88,
+   "text": "a late one. It is one of the few two player tarot games. That is why I like playing it."
+  },
+  {
+   "t": 310.08,
+   "d": 7.44,
+   "text": "It is similar to bridge or these high level card games. You can play this game for 20"
+  },
+  {
+   "t": 317.52,
+   "d": 11.2,
+   "text": "years and still feel like you are learning something. Another game I learned about is"
+  },
+  {
+   "t": 331.2,
+   "d": 11.2,
+   "text": "Mahjong this old Chinese game. It is like a tile game. But rule wise it feels like a card game. The"
+  },
+  {
+   "t": 342.4,
+   "d": 9.04,
+   "text": "friend of us who had spent a couple years in Hong Kong introduced us to this. And we tried it and it"
+  },
+  {
+   "t": 351.44,
+   "d": 8.0,
+   "text": "looked very, very familiar. And I, of course, got curious, why it would look so familiar."
+  },
+  {
+   "t": 359.44,
+   "d": 4.16,
+   "text": "I also got curious why no one has made a tech build out of this so this is what I am working"
+  },
+  {
+   "t": 363.6,
+   "d": 17.44,
+   "text": "on at the moment. I traced the history of Mahjong and I will show how everything is connected. Last"
+  },
+  {
+   "t": 381.04,
+   "d": 9.92,
+   "text": "week we got a new world map but I will talk more about that later. Mahjong was invented in 1850"
+  },
+  {
+   "t": 390.96,
+   "d": 13.44,
+   "text": "in China. There were different stories about the origin but it is this 150-year old Chinese, well,"
+  },
+  {
+   "t": 404.96,
+   "d": 6.96,
+   "text": "170 year old Chinese game that we know. We know one of the most important ancestors of Mahjong"
+  },
+  {
+   "t": 411.92,
+   "d": 12.48,
+   "text": "is Kanhu and sorry about the pronunciation. This was around in the 1600s. We don't have the"
+  },
+  {
+   "t": 424.4,
+   "d": 12.56,
+   "text": "original rules but we know it had similarities to Mahjong already. It spawned a lot of other"
+  },
+  {
+   "t": 436.96,
+   "d": 9.04,
+   "text": "games. It traveled to the Philippines where it was turned into Kuwaho. I would assume it is sounding"
+  },
+  {
+   "t": 446.0,
+   "d": 9.68,
+   "text": "similar but I don't know. From there it traveled over the ocean to middle America and in Mexico"
+  },
+  {
+   "t": 455.68,
+   "d": 13.52,
+   "text": "became Conqulan, and then Rummy which is a familiar game and it is about getting rid"
+  },
+  {
+   "t": 469.2,
+   "d": 9.12,
+   "text": "of the tiles and cards and a shedding game. That is the shared DNA between them. And then refined"
+  },
+  {
+   "t": 478.32,
+   "d": 17.68,
+   "text": "in 1935 in Uruguay with Canasta. And interesting thing about that is my grandparents were playing"
+  },
+  {
+   "t": 496.0,
+   "d": 7.92,
+   "text": "it. They kept the habit of once a week meeting up with the people the same week and playing Canasta"
+  },
+  {
+   "t": 503.92,
+   "d": 9.28,
+   "text": "all evening which means I learned it as a kid because they played it with us. So there is a"
+  },
+  {
+   "t": 513.2,
+   "d": 8.8,
+   "text": "little personal connection with that. Canasta and Rummy traveled back to America to informed"
+  },
+  {
+   "t": 522.0,
+   "d": 14.48,
+   "text": "American Mahjong which has little Bingo in it. And in 1994 it was picked up in Japan officially. It"
+  },
+  {
+   "t": 538.8,
+   "d": 9.84,
+   "text": "took a little while to get an official version. And rummy traveled over to Europe and was mixed"
+  },
+  {
+   "t": 548.64,
+   "d": 17.04,
+   "text": "with a game called Machiavelli and that became a game made in Israel Rumijkub. Someone took"
+  },
+  {
+   "t": 565.68,
+   "d": 7.6,
+   "text": "the numbers from the cards and put them back on the tile. Things go full circle basically."
+  },
+  {
+   "t": 574.88,
+   "d": 4.48,
+   "text": "And then the computer game along. With the computer game digital Mahjong and that started"
+  },
+  {
+   "t": 580.0,
+   "d": 16.72,
+   "text": "Mahjong solitaire by Brody lock art in 1981 with as an open source game first. It was beautiful."
+  },
+  {
+   "t": 596.72,
+   "d": 11.36,
+   "text": "Then as a commercial game for activation. That is the Mahjong I grew up. It has very little"
+  },
+  {
+   "t": 608.08,
+   "d": 4.64,
+   "text": "to do with the original game. It is impossible to find out where it comes from. Supposedly a"
+  },
+  {
+   "t": 612.72,
+   "d": 15.28,
+   "text": "game called Turtle. You could draw the same a map with food. This is a local specialty from"
+  },
+  {
+   "t": 628.0,
+   "d": 4.8,
+   "text": "the area where my grandparents came from. This is something my grandmother would cook maybe on the"
+  },
+  {
+   "t": 632.8,
+   "d": 10.88,
+   "text": "same day we are playing Canasta. You find stuffed dumplings and related recipes over all Eurasia"
+  },
+  {
+   "t": 643.68,
+   "d": 8.08,
+   "text": "mostly where the Mongols were active because they transported food that way sometimes. Everything is"
+  },
+  {
+   "t": 651.76,
+   "d": 3.92,
+   "text": "connected. I hope I have made that point. Generating recipes. Recipes and food are"
+  },
+  {
+   "t": 655.68,
+   "d": 8.32,
+   "text": "interesting. One of my first is for procedural text was making a recipe bot for Twitter. That"
+  },
+  {
+   "t": 664.0,
+   "d": 6.08,
+   "text": "was when Twitter was around now and before it became what it is now. It was a nice place in some"
+  },
+  {
+   "t": 670.08,
+   "d": 9.44,
+   "text": "corners. Kate Compton made a tool called sorcery where we could splice things and make new letters."
+  },
+  {
+   "t": 680.64,
+   "d": 8.48,
+   "text": "And we made a hosting tool for that. And using those tools we could make this weird little recipe"
+  },
+  {
+   "t": 689.12,
+   "d": 8.64,
+   "text": "bot and named five sparrows on a vampire which is an unbeatable name. It tells you how to cook, what"
+  },
+  {
+   "t": 697.76,
+   "d": 11.44,
+   "text": "to cook, and sometimes how to eat it even which is a little weird. Tracery is a tool that lets"
+  },
+  {
+   "t": 709.2,
+   "d": 6.8,
+   "text": "you recombine words and has little operations on them sometimes. I made a little tool to make"
+  },
+  {
+   "t": 716.0,
+   "d": 5.04,
+   "text": "it more accessible at some point. It is more or less front end. It is used in video games. Caves"
+  },
+  {
+   "t": 721.04,
+   "d": 8.32,
+   "text": "of Qud is doing this and I wonder how they do this because it is a problem when you create sentences"
+  },
+  {
+   "t": 729.36,
+   "d": 10.08,
+   "text": "but they somehow manage. It is a nice tool for writing procedural text and recombines words to"
+  },
+  {
+   "t": 739.44,
+   "d": 7.44,
+   "text": "make new words or sentences so it is a grammar. Interesting thing is that there is something that"
+  },
+  {
+   "t": 746.88,
+   "d": 7.92,
+   "text": "is also not new at all. A famous older example of Tracery implementation before it was made"
+  },
+  {
+   "t": 754.8,
+   "d": 10.96,
+   "text": "is The fivefold codering of the German language. A stack of round disks made of paper with a pen"
+  },
+  {
+   "t": 765.76,
+   "d": 5.52,
+   "text": "in the middle so you can rotate them like copy protection in the '80s if some of you remember."
+  },
+  {
+   "t": 773.12,
+   "d": 6.72,
+   "text": "You can use that specific one to make new German words. Or those existing German words. Most of the"
+  },
+  {
+   "t": 779.84,
+   "d": 6.96,
+   "text": "words you would come up with my rotating the disk. And what most people don't remember about that is"
+  },
+  {
+   "t": 786.8,
+   "d": 5.76,
+   "text": "that supposedly this was not meant as a research tool or a descriptive tool of the language. It"
+  },
+  {
+   "t": 792.56,
+   "d": 10.48,
+   "text": "was meant as a toy or social game. You would make a word and have to come up with the meaning. You"
+  },
+  {
+   "t": 803.04,
+   "d": 10.24,
+   "text": "would use your body to create the words. There was a theatrical element of it. The activity of using"
+  },
+  {
+   "t": 813.28,
+   "d": 9.2,
+   "text": "it was the interesting part. A similar activity of using text is found in a cut-up technique and"
+  },
+  {
+   "t": 822.48,
+   "d": 9.6,
+   "text": "it was popularized in the '60s. It was older and invented in the '20s it seems. What you do here is"
+  },
+  {
+   "t": 832.08,
+   "d": 6.08,
+   "text": "you cut out different pieces of text from a book or from a newspaper, Burroughs was into newspaper."
+  },
+  {
+   "t": 839.84,
+   "d": 12.48,
+   "text": "And you reassemble them and read that text as if that was the actual meaning of the text. It can,"
+  },
+  {
+   "t": 852.32,
+   "d": 5.76,
+   "text": "I think, in many cases tell you about the straight of the world if you use a newspaper that you"
+  },
+  {
+   "t": 858.08,
+   "d": 6.64,
+   "text": "cannot read if you read the newspaper as it is. It is an interesting technique and the activity"
+  },
+  {
+   "t": 864.72,
+   "d": 17.44,
+   "text": "is a key part of it. That is why I find neural languages find of boring. You can see into the"
+  },
+  {
+   "t": 882.16,
+   "d": 4.56,
+   "text": "black box and there are many more problems but one of it activities is the activity is boring and you"
+  },
+  {
+   "t": 886.72,
+   "d": 7.44,
+   "text": "just get the results and who is interested in that. The principle that is interesting is you"
+  },
+  {
+   "t": 894.16,
+   "d": 8.48,
+   "text": "take a couple rules, how do I sort the strips and cut them out, and you take some kind of controlled"
+  },
+  {
+   "t": 902.64,
+   "d": 6.88,
+   "text": "random and then had human comes into the picture and selects something, and you get something"
+  },
+  {
+   "t": 909.52,
+   "d": 8.08,
+   "text": "delightful. And you can find that in other areas, too. And why it is delightful, I think one of the"
+  },
+  {
+   "t": 917.6,
+   "d": 7.2,
+   "text": "reasons for that is by having the random not being completely random, and having rules around it, and"
+  },
+  {
+   "t": 924.8,
+   "d": 4.4,
+   "text": "having an activity, you build up an expectation for what you will get and then you have the"
+  },
+  {
+   "t": 929.2,
+   "d": 6.64,
+   "text": "actual outcome that happens that you cannot fully predict. The connection and difference between"
+  },
+  {
+   "t": 935.84,
+   "d": 7.12,
+   "text": "those two is where the surprise and delight comes from. I know a little about that because that's"
+  },
+  {
+   "t": 942.96,
+   "d": 5.92,
+   "text": "the topic of my pH d. I know it is much more complicated too because it was the topic of my"
+  },
+  {
+   "t": 948.88,
+   "d": 8.16,
+   "text": "PhD. Grid based movement -- let's go to something much more simple, you think. An old example of"
+  },
+  {
+   "t": 957.04,
+   "d": 15.52,
+   "text": "grid-based movement, of course you find a lot of board games. Nine Men's Morris. Senet was invented"
+  },
+  {
+   "t": 972.56,
+   "d": 6.88,
+   "text": "in ancient Egypt most likely before that it seems like the first pieces of boards are found from to"
+  },
+  {
+   "t": 979.44,
+   "d": 11.76,
+   "text": "be 2006 BCE, let's say a 5,000 year old board game. The rules, they have some fragments they"
+  },
+  {
+   "t": 991.2,
+   "d": 9.52,
+   "text": "put together. They really don't know the rules. But it looks like a kind of racing game. A two"
+  },
+  {
+   "t": 1000.72,
+   "d": 5.76,
+   "text": "player game. You have two kinds of tokens. It is very clear it is grid based movement because the"
+  },
+  {
+   "t": 1006.48,
+   "d": 10.08,
+   "text": "tokens fit nicely in the grid that is on the box. It could be there was a religious purpose. It is"
+  },
+  {
+   "t": 1016.56,
+   "d": 5.36,
+   "text": "all a little bit lost to time. It is an example of grid-based movement. It has been around for at"
+  },
+  {
+   "t": 1021.92,
+   "d": 9.6,
+   "text": "least 5,000 years. What do you move on? You move on the map. Sometimes maps change. From one week"
+  },
+  {
+   "t": 1031.52,
+   "d": 6.96,
+   "text": "to the next. Sometimes you think there is always a political side to what map gets chosen and what"
+  },
+  {
+   "t": 1038.48,
+   "d": 6.8,
+   "text": "a map is because it is not the territory. It is a map. And someone decides how it map things."
+  },
+  {
+   "t": 1045.28,
+   "d": 5.76,
+   "text": "That is an interesting dimension of maps. Another interesting dimensions of maps is much like tug of"
+  },
+  {
+   "t": 1051.04,
+   "d": 7.36,
+   "text": "war in games, the map can only show what you know. This is a famous old globe, the Behaim globe from"
+  },
+  {
+   "t": 1058.4,
+   "d": 11.92,
+   "text": "1490 and that means a huge part of the world was not discovered yet. The people that knew the globe"
+  },
+  {
+   "t": 1070.32,
+   "d": 6.32,
+   "text": "could only put on it what they knew. They knew the world was round and had to fill it with whatever"
+  },
+  {
+   "t": 1076.64,
+   "d": 6.72,
+   "text": "they had. Things are completely out of proportion because of lack of knowledge or this distribution"
+  },
+  {
+   "t": 1083.36,
+   "d": 8.08,
+   "text": "of knowledge. At the same time roughly it was also very invoked to make fantasy maps like made up"
+  },
+  {
+   "t": 1092.08,
+   "d": 13.12,
+   "text": "hypothetical maps like this map that Holbein made. It is a place that doesn't exist. A utopian place."
+  },
+  {
+   "t": 1106.08,
+   "d": 8.64,
+   "text": "Another famous example is this map of Dante's hell in the divine comedy. People back then"
+  },
+  {
+   "t": 1114.72,
+   "d": 7.76,
+   "text": "new assuming hell exists it will not be exactly like it is in literature. This is not a map of"
+  },
+  {
+   "t": 1122.48,
+   "d": 5.84,
+   "text": "hell as it is. It is a map of a depicts of hell that has a specific storytelling purpose in that"
+  },
+  {
+   "t": 1128.32,
+   "d": 6.32,
+   "text": "case. And storytelling in maps is interesting if you look at other cultures of map making. This is"
+  },
+  {
+   "t": 1134.64,
+   "d": 16.24,
+   "text": "a map from Tenochtitlan that shows how the river crosses and the channels and it gives you a little"
+  },
+  {
+   "t": 1150.88,
+   "d": 5.84,
+   "text": "help in orienting yourself. But it is mostly a rhetorical map. It shows you that a thing is"
+  },
+  {
+   "t": 1156.72,
+   "d": 7.12,
+   "text": "behind a thing and what different places mean much more than where they are. This isn't geography."
+  },
+  {
+   "t": 1163.84,
+   "d": 7.52,
+   "text": "Very little it involved but it is a map and helps you find a place. This kind of rhetorical map"
+  },
+  {
+   "t": 1172.48,
+   "d": 5.84,
+   "text": "is the basis of a lot of games like the quite year, a fantastic map drawing"
+  },
+  {
+   "t": 1178.32,
+   "d": 6.24,
+   "text": "game wfhere you make the map together. High stake activity again and that's the"
+  },
+  {
+   "t": 1184.56,
+   "d": 11.28,
+   "text": "main gameplay. This taps into an old tradition of the use of maps. And speaking of randomness,"
+  },
+  {
+   "t": 1195.84,
+   "d": 6.8,
+   "text": "I want to take a quick detour around things of music, because a lot of games that rely"
+  },
+  {
+   "t": 1202.64,
+   "d": 8.64,
+   "text": "on procedural generation can be roguelikes or not, rely on some kind of controlled random"
+  },
+  {
+   "t": 1211.28,
+   "d": 10.48,
+   "text": "composition. An ancient example of that is assuming Mozart's musical dice game which"
+  },
+  {
+   "t": 1221.76,
+   "d": 4.8,
+   "text": "is funny. They used the name for branding but Mozart didn't have any hand in it and didn't"
+  },
+  {
+   "t": 1226.56,
+   "d": 10.0,
+   "text": "get any cut. It was just woke during that time. Music and dice was a thing. It was very playful."
+  },
+  {
+   "t": 1241.12,
+   "d": 6.48,
+   "text": "You would use two dice, roll them, and look up a number, and a number would reference a piece of"
+  },
+  {
+   "t": 1247.6,
+   "d": 11.36,
+   "text": "existing composition and then you put it in a role and interpret it. It was meant to be done live."
+  },
+  {
+   "t": 1258.96,
+   "d": 5.44,
+   "text": "Not real-time. Make a little composition and play it and then someone would make a composition and"
+  },
+  {
+   "t": 1264.4,
+   "d": 22.24,
+   "text": "that would get played and so on. You could even use Tracery which puts together musical pieces"
+  },
+  {
+   "t": 1286.64,
+   "d": 6.64,
+   "text": "and uses technology for writing text you could actually write music too. And this is something"
+  },
+  {
+   "t": 1293.28,
+   "d": 8.56,
+   "text": "that is the reason why I am on the Wikipedia page of Zelda if I am still there. Zelda is"
+  },
+  {
+   "t": 1301.84,
+   "d": 7.68,
+   "text": "one of the prime examples of using procedural audio. It does that for mostly two reasons."
+  },
+  {
+   "t": 1309.52,
+   "d": 5.36,
+   "text": "One of the reasons is it is just sometimes easier to time things with audio if you have that level"
+  },
+  {
+   "t": 1314.88,
+   "d": 7.44,
+   "text": "of control, of really using media in that case to playback the music instead of having prerecorded"
+  },
+  {
+   "t": 1322.32,
+   "d": 21.28,
+   "text": "orchestral soundtrack. This is a 13th describes what instrument plays what note and that means"
+  },
+  {
+   "t": 1343.6,
+   "d": 8.88,
+   "text": "you can transition from one melody to another. We have rules for that so you know how to do it so it"
+  },
+  {
+   "t": 1352.48,
+   "d": 11.12,
+   "text": "sounds nice to the ear. You can increase intensity just by actually adding more structure to the"
+  },
+  {
+   "t": 1363.6,
+   "d": 6.8,
+   "text": "music and things like that or more instruments. It is very powerful, of course, but it never sounds"
+  },
+  {
+   "t": 1370.4,
+   "d": 10.96,
+   "text": "as big and complete and perfect as an orchestral sound. The human action can be incorporated far"
+  },
+  {
+   "t": 1381.36,
+   "d": 5.12,
+   "text": "more because you have to have rules about how things transition to what. You don't"
+  },
+  {
+   "t": 1386.48,
+   "d": 5.36,
+   "text": "really have randomization most likely in this case of working with music. Like when you have"
+  },
+  {
+   "t": 1393.52,
+   "d": 6.88,
+   "text": "a video game very often to the human, to the player, the interaction with the system still"
+  },
+  {
+   "t": 1400.4,
+   "d": 7.92,
+   "text": "feels like random even if it might be so that it is not random at all because it is just so"
+  },
+  {
+   "t": 1408.32,
+   "d": 11.44,
+   "text": "indirect in how they interface with the music. So, yeah. This rather random walk through history"
+  },
+  {
+   "t": 1419.76,
+   "d": 6.96,
+   "text": "of things that have to do with maybe roguelikes. I wonder can we learn something from history in this"
+  },
+  {
+   "t": 1427.28,
+   "d": 4.88,
+   "text": "context? And of course, I think, yes, because I think it is interesting. And if you want,"
+  },
+  {
+   "t": 1432.16,
+   "d": 8.64,
+   "text": "we can; trust me. So one thing that is, of course, very clear is this rolling dice and moving little"
+  },
+  {
+   "t": 1440.8,
+   "d": 5.76,
+   "text": "piece around. This is all very lightweight. All the procedural systems like the turning of wells"
+  },
+  {
+   "t": 1446.56,
+   "d": 6.08,
+   "text": "and so on are very, very crude and lightweight patience and simple necessarily because the"
+  },
+  {
+   "t": 1452.64,
+   "d": 4.72,
+   "text": "computer made it possible to make things too complicated. Sometimes I think the computer made"
+  },
+  {
+   "t": 1457.36,
+   "d": 6.56,
+   "text": "it easy to make things complicated. We lost the habit of making things straightforward."
+  },
+  {
+   "t": 1465.6,
+   "d": 7.52,
+   "text": "Delight comes from surprise. That is the expectation of outcome. This is how effective"
+  },
+  {
+   "t": 1473.12,
+   "d": 8.0,
+   "text": "reactions work and a lot comes from comparing to what we expect to what actually happens and then"
+  },
+  {
+   "t": 1481.12,
+   "d": 6.08,
+   "text": "biases come in and everything gets complicated. But this is an interesting thing to keep in mind"
+  },
+  {
+   "t": 1487.2,
+   "d": 5.6,
+   "text": "because this is for a game designer very useful thing to think about. Then games have always"
+  },
+  {
+   "t": 1492.8,
+   "d": 4.88,
+   "text": "enjoyed revolutionary development. This means they have always been connected. It is not just"
+  },
+  {
+   "t": 1497.68,
+   "d": 7.2,
+   "text": "now we see games coming as versions of others and referencing other games. This is something that"
+  },
+  {
+   "t": 1504.88,
+   "d": 8.32,
+   "text": "has always happened and much more worldwide than we sometimes thing. Mahjong traveling all of the"
+  },
+  {
+   "t": 1513.2,
+   "d": 6.8,
+   "text": "way to South America to become a game that my European grandparents would play is just crazy if"
+  },
+  {
+   "t": 1520.0,
+   "d": 6.48,
+   "text": "you think about it. And then, I am quite sure that this whole recipe of constraints and randomness"
+  },
+  {
+   "t": 1526.48,
+   "d": 11.04,
+   "text": "and actions and a lot of making and playing video games, a lot of our lives get richer from this"
+  },
+  {
+   "t": 1538.16,
+   "d": 8.64,
+   "text": "three-part setup. And I have been referencing the activity, the act of doing something is important,"
+  },
+  {
+   "t": 1546.8,
+   "d": 6.56,
+   "text": "that is like the body being involved is important, I think with a lot of these techniques they show"
+  },
+  {
+   "t": 1553.36,
+   "d": 7.12,
+   "text": "that the creative act, they feel structured, maybe helpfully, is is a very interest thing"
+  },
+  {
+   "t": 1560.48,
+   "d": 5.76,
+   "text": "to do. I think that is why we are all here because this event is of course more for developers than"
+  },
+  {
+   "t": 1566.24,
+   "d": 4.08,
+   "text": "for players. It is because we enjoy making things. And it also makes a lot of sense that"
+  },
+  {
+   "t": 1570.32,
+   "d": 6.32,
+   "text": "making things is very often more interesting than consuming things. Doesn't mean that's not fun too."
+  },
+  {
+   "t": 1576.64,
+   "d": 8.56,
+   "text": "OK. That was actually it for me. I will be in the -- wherever I am supposed to be."
+  },
+  {
+   "t": 1585.2,
+   "d": 6.4,
+   "text": "I am join the main event to look at the obelisk and be a little around. I hope I"
+  },
+  {
+   "t": 1591.6,
+   "d": 9.6,
+   "text": "am awake for the actual breakout rooms. You can find me on Bluesky, Disorder, and all"
+  },
+  {
+   "t": 1601.2,
+   "d": 13.92,
+   "text": "other places usually under the same moniker. ALEXEI: Thank so much. Thank you for staying"
+  },
+  {
+   "t": 1615.12,
+   "d": 4.88,
+   "text": "up so late. We moved the event up but it is still European time zones are tricky."
+  },
+  {
+   "t": 1620.0,
+   "d": 5.92,
+   "text": "MARTIN: I didn't want to sound like I am complaining. I am a night owl."
+  },
+  {
+   "t": 1625.92,
+   "d": 4.72,
+   "text": "ALEXEI: We probably have time if anyone wants to quickly put up a question. We have a few minutes"
+  },
+  {
+   "t": 1630.64,
+   "d": 7.76,
+   "text": "here. I really love what you said about the activity. I am curious what you think,"
+  },
+  {
+   "t": 1639.12,
+   "d": 7.12,
+   "text": "even I find, my family plays a lot of card games, and stuff like cribbage, and I find that even the"
+  },
+  {
+   "t": 1646.24,
+   "d": 5.12,
+   "text": "act of playing some things like physical board games and card games, feels like it is at this"
+  },
+  {
+   "t": 1651.36,
+   "d": 10.08,
+   "text": "intersection of it is definitely this activity, and the process of cribbage, or sometimes board"
+  },
+  {
+   "t": 1661.44,
+   "d": 6.64,
+   "text": "games are literally constructing a map. Sometimes that even feels like a collaborative creative"
+  },
+  {
+   "t": 1668.08,
+   "d": 5.36,
+   "text": "process even if is not the same as being the one to do d -- design the board game. I think"
+  },
+  {
+   "t": 1673.44,
+   "d": 13.52,
+   "text": "there is something to the physicality. >> Martin: Yeah, I think there is so many"
+  },
+  {
+   "t": 1686.96,
+   "d": 6.64,
+   "text": "interesting aspects. There is a ritualistic side to it. Especially with family games. We played"
+  },
+  {
+   "t": 1693.6,
+   "d": 10.4,
+   "text": "the same game at Christmas for many years. It was just part of the whole festivity. And rituals are"
+  },
+  {
+   "t": 1704.0,
+   "d": 9.44,
+   "text": "like social bonding things that is not about what you do at all. Yeah. So there are really, many,"
+  },
+  {
+   "t": 1713.44,
+   "d": 8.8,
+   "text": "many, facets to that. I think really very often with video games you forget how much the body is"
+  },
+  {
+   "t": 1722.24,
+   "d": 5.28,
+   "text": "involved in the activity because we think it is such a brain thing to play, for example, a game."
+  },
+  {
+   "t": 1727.52,
+   "d": 6.64,
+   "text": "But actually, there is like in the interaction design there is a word for this when the thing you"
+  },
+  {
+   "t": 1734.16,
+   "d": 5.84,
+   "text": "do with your mouse button, like holding something down, happens in the video game. These things show"
+  },
+  {
+   "t": 1740.0,
+   "d": 7.68,
+   "text": "us there is a much closer connection to what we do with our physical activity in the game to the"
+  },
+  {
+   "t": 1747.68,
+   "d": 6.8,
+   "text": "intellectual part of the game than we sometimes like to take into account or sometimes just think."
+  },
+  {
+   "t": 1754.48,
+   "d": 5.92,
+   "text": "ALEXEI: That makes me think of -- because, yeah, you know, I have played plenty of traditional"
+  },
+  {
+   "t": 1760.4,
+   "d": 8.0,
+   "text": "roguelikes and NetHack and there is a talk about player mythology and he talked about how in"
+  },
+  {
+   "t": 1768.4,
+   "d": 5.12,
+   "text": "fighting games the process of needing to memorize all of these combos in fighting games and hit"
+  },
+  {
+   "t": 1773.52,
+   "d": 5.6,
+   "text": "all these buttons in a specific way is kind of modeling this fantasy of like the traditional"
+  },
+  {
+   "t": 1779.12,
+   "d": 6.72,
+   "text": "martial arts journey in kind of narrative of like training to know all of these special techniques"
+  },
+  {
+   "t": 1785.84,
+   "d": 4.88,
+   "text": "and so there is this binding together. And I think even with NetHack where it is all"
+  },
+  {
+   "t": 1790.72,
+   "d": 4.72,
+   "text": "keyboard keys but needing to memorize all of the different keys because it uses everything on the"
+  },
+  {
+   "t": 1795.44,
+   "d": 9.04,
+   "text": "keyboard kind of makes me feel wizard-ish and like I have this knowledge to know q is quaff and even"
+  },
+  {
+   "t": 1804.48,
+   "d": 5.8,
+   "text": "hitting the keys I feel like there is a physical connection between the brain and the fingers."
+  },
+  {
+   "t": 1810.28,
+   "d": 8.6,
+   "text": ">> Martin: Absolutely. That brings you closer to the game and the activity and just"
+  },
+  {
+   "t": 1819.6,
+   "d": 5.84,
+   "text": "automating that by getting more and more of your body to doing the work to opening up the"
+  },
+  {
+   "t": 1825.44,
+   "d": 6.48,
+   "text": "inventory instead of having to think about it. ALEXEI: Well, excellent. We are up on time."
+  },
+  {
+   "t": 1831.92,
+   "d": 5.6,
+   "text": "Thank you so much. Yes, hopefully people see you in chat. If you are able to stick around until the"
+  },
+  {
+   "t": 1837.52,
+   "d": 4.08,
+   "text": "end, then I guess the Dugout will be the room. >> I will because I really want to"
+  },
+  {
+   "t": 1841.6,
+   "d": 3.28,
+   "text": "see the other talks. ALEXEI: I will remind"
+  },
+  {
+   "t": 1844.88,
+   "d": 5.2,
+   "text": "people at the end which rooms are for which talks. Thank you so much, Martin."
+  }
+ ]
+}

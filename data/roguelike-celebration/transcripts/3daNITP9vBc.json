@@ -1,0 +1,2208 @@
+{
+ "id": "3daNITP9vBc",
+ "url": "https://www.youtube.com/watch?v=3daNITP9vBc",
+ "title": "Mike Cook- Generating Procedures:Rule & System Generation for Roguelikes",
+ "speaker": "Mike Cook",
+ "talk_title": "Generating Procedures:Rule & System Generation for Roguelikes",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 1760,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Roguelikes generate items, stories, worlds and names - but rarely rules. There's lots of good reasons not to do it - it feels weird, for one thing, and it's technically complex and unpredictable. But it can also be exciting, surprising and funny, and can lead to some amazing new challenges for players and designers alike. It's exactly the blend of generative chaos and technical creativity that people love about roguelikes. So how do you get started? Join me for a look into how generative design shapes rules, how AI can help, and why your next roguelike should design itself.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 45,
+   "title": "Presentation"
+  },
+  {
+   "start": 160,
+   "title": "Procedural Generation"
+  },
+  {
+   "start": 253,
+   "title": "Generating Rules"
+  },
+  {
+   "start": 350,
+   "title": "Game Design is generative"
+  },
+  {
+   "start": 630,
+   "title": "Reorganizing Content"
+  },
+  {
+   "start": 782,
+   "title": "Custom Design Languages"
+  },
+  {
+   "start": 891,
+   "title": "Puzzle Script Effect"
+  },
+  {
+   "start": 1242,
+   "title": "Solutions"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4859,
+ "trimmed": {
+  "segments": 13,
+  "words": 138
+ },
+ "segments": [
+  {
+   "t": 5.65,
+   "d": 1.41,
+   "text": "Let's get into it."
+  },
+  {
+   "t": 7.06,
+   "d": 3.87,
+   "text": "Mike Cook very exciting to have you here."
+  },
+  {
+   "t": 10.93,
+   "d": 1.87,
+   "text": "Mike is an AI researcher and game designer based in London,"
+  },
+  {
+   "t": 12.8,
+   "d": 1.0,
+   "text": "UK."
+  },
+  {
+   "t": 13.8,
+   "d": 1.93,
+   "text": "He works as a Senior Lecturer at King's College"
+  },
+  {
+   "t": 15.73,
+   "d": 5.89,
+   "text": "London where he researches how AI can model and support game"
+  },
+  {
+   "t": 21.62,
+   "d": 5.23,
+   "text": "design processes, and he makes weird games and digital art"
+  },
+  {
+   "t": 26.85,
+   "d": 3.14,
+   "text": "using generative processes and creative AI."
+  },
+  {
+   "t": 29.99,
+   "d": 1.0,
+   "text": "In the past he founded PROCJAM and developers"
+  },
+  {
+   "t": 30.99,
+   "d": 1.0,
+   "text": "game-designing AI like ANGELINA and Puck."
+  },
+  {
+   "t": 31.99,
+   "d": 1.36,
+   "text": "He has never beaten a roguelike, but he has thought"
+  },
+  {
+   "t": 33.35,
+   "d": 2.08,
+   "text": "really hard about what it would feel like."
+  },
+  {
+   "t": 35.43,
+   "d": 6.48,
+   "text": "Yeah, I always thought you had spoken at this conference because you are such a good match"
+  },
+  {
+   "t": 41.91,
+   "d": 3.33,
+   "text": "but somehow you haven't."
+  },
+  {
+   "t": 45.24,
+   "d": 1.0,
+   "text": "Welcome."
+  },
+  {
+   "t": 46.24,
+   "d": 1.0,
+   "text": "MIKE: Thank you."
+  },
+  {
+   "t": 47.24,
+   "d": 1.0,
+   "text": "It is wonderful to be here."
+  },
+  {
+   "t": 48.24,
+   "d": 1.0,
+   "text": "Shall I kickoff?"
+  },
+  {
+   "t": 49.24,
+   "d": 1.0,
+   "text": "Thank you for the introduction."
+  },
+  {
+   "t": 50.24,
+   "d": 1.0,
+   "text": "Perfect."
+  },
+  {
+   "t": 51.24,
+   "d": 1.0,
+   "text": "Hello, everyone."
+  },
+  {
+   "t": 52.24,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 53.24,
+   "d": 2.09,
+   "text": "Alexei has kind of given the first few slides."
+  },
+  {
+   "t": 55.33,
+   "d": 4.08,
+   "text": "My name is Mike and I am here to talk to you about Generating Procedures: Rule and System"
+  },
+  {
+   "t": 59.41,
+   "d": 4.23,
+   "text": "Generation for Roguelikes and I also have a lot of slides so we will kickoff."
+  },
+  {
+   "t": 63.64,
+   "d": 7.54,
+   "text": "I am an AI researcher in my day job and specifically I do research into how we can build AI systems"
+  },
+  {
+   "t": 71.18,
+   "d": 5.88,
+   "text": "that support or model game design or autonomously design games themselves."
+  },
+  {
+   "t": 77.06,
+   "d": 4.57,
+   "text": "Outside of that, yeah, I founded the procedural generation jam which some of you may have"
+  },
+  {
+   "t": 81.63,
+   "d": 4.47,
+   "text": "entered and build systems like Angelina."
+  },
+  {
+   "t": 86.1,
+   "d": 9.34,
+   "text": "When I spare time, I like to make games and weird things as well."
+  },
+  {
+   "t": 95.44,
+   "d": 7.08,
+   "text": "I have spent over a decade, the last 13 years, building AI design games in various forms."
+  },
+  {
+   "t": 102.52,
+   "d": 1.92,
+   "text": "It has been a lot of fun."
+  },
+  {
+   "t": 104.44,
+   "d": 3.89,
+   "text": "And one of the things about it is that it has taught me a lot about how and why people"
+  },
+  {
+   "t": 108.33,
+   "d": 4.65,
+   "text": "make games and I get to reflect on that and bring that back to my own process of making"
+  },
+  {
+   "t": 112.98,
+   "d": 5.92,
+   "text": "games and that feeds back into my research and really, you know, don't tell anyone this,"
+  },
+  {
+   "t": 118.9,
+   "d": 4.96,
+   "text": "but you know, AI research is a part of what I do but what I do doesn't have a definition"
+  },
+  {
+   "t": 123.86,
+   "d": 2.87,
+   "text": "which I think lots of us in this community feel like."
+  },
+  {
+   "t": 126.73,
+   "d": 1.87,
+   "text": "That's my convenient label."
+  },
+  {
+   "t": 128.6,
+   "d": 3.25,
+   "text": "You know, you probably have your own labels for your work."
+  },
+  {
+   "t": 131.85,
+   "d": 3.66,
+   "text": "But underneath AI is a lot of thinking about what it means to design games."
+  },
+  {
+   "t": 135.51,
+   "d": 5.69,
+   "text": "In my spare time I have made a lot of weird experiments which as a result between the"
+  },
+  {
+   "t": 141.2,
+   "d": 2.31,
+   "text": "boundaries of these areas."
+  },
+  {
+   "t": 143.51,
+   "d": 1.82,
+   "text": "You can find some on Itch."
+  },
+  {
+   "t": 145.33,
+   "d": 7.64,
+   "text": "This one nothing beside remains is a collaborative project with Florence Smith Nicholls who is"
+  },
+  {
+   "t": 152.97,
+   "d": 5.1,
+   "text": "doing their PhD work on this among other things."
+  },
+  {
+   "t": 158.07,
+   "d": 5.56,
+   "text": "So the thing I want to talk to you about today is linked to some of these things but I want"
+  },
+  {
+   "t": 163.63,
+   "d": 3.49,
+   "text": "to start with this controversial statement that I think roguelikes should start using"
+  },
+  {
+   "t": 167.12,
+   "d": 1.75,
+   "text": "procedural generation."
+  },
+  {
+   "t": 168.87,
+   "d": 6.83,
+   "text": "That might seem like an odd statement played certain roguelikes you are like they already"
+  },
+  {
+   "t": 175.7,
+   "d": 1.0,
+   "text": "do."
+  },
+  {
+   "t": 176.7,
+   "d": 2.62,
+   "text": "Brogue is a procedurally generated level."
+  },
+  {
+   "t": 179.32,
+   "d": 3.81,
+   "text": "But a lot of things in this level I have seen before."
+  },
+  {
+   "t": 183.13,
+   "d": 3.58,
+   "text": "I am tired of using doors to move between rooms."
+  },
+  {
+   "t": 186.71,
+   "d": 1.06,
+   "text": "You know?"
+  },
+  {
+   "t": 187.77,
+   "d": 3.3,
+   "text": "So many times, every solution is a door in this room."
+  },
+  {
+   "t": 191.07,
+   "d": 1.29,
+   "text": "I use a door every day."
+  },
+  {
+   "t": 192.36,
+   "d": 1.31,
+   "text": "I don't want doors any more."
+  },
+  {
+   "t": 193.67,
+   "d": 5.64,
+   "text": "I want exciting new ways to engage with the world."
+  },
+  {
+   "t": 199.31,
+   "d": 5.28,
+   "text": "You know, procedural generation is OK but we only tend to use it for things that we"
+  },
+  {
+   "t": 204.59,
+   "d": 1.53,
+   "text": "are comfortable using it for."
+  },
+  {
+   "t": 206.12,
+   "d": 4.49,
+   "text": "You might not be comfortable using it for all these things but maybe you built a level"
+  },
+  {
+   "t": 210.61,
+   "d": 4.05,
+   "text": "generator or maybe used it for something like puzzle."
+  },
+  {
+   "t": 214.66,
+   "d": 10.53,
+   "text": "I am not talking about ChatGPT or big language models but generators you craft yourself,"
+  },
+  {
+   "t": 225.19,
+   "d": 2.15,
+   "text": "craft by hand, you know?"
+  },
+  {
+   "t": 227.34,
+   "d": 4.49,
+   "text": "So we are comfortable with some things but there are other things which we are less comfortable"
+  },
+  {
+   "t": 231.83,
+   "d": 4.58,
+   "text": "using procedural generation for and today I am going to use some of these words interchangeably"
+  },
+  {
+   "t": 236.41,
+   "d": 3.25,
+   "text": "if you are a game study scholar @ me later."
+  },
+  {
+   "t": 239.66,
+   "d": 1.08,
+   "text": "Much later."
+  },
+  {
+   "t": 240.74,
+   "d": 3.89,
+   "text": "We will assume these words mean the same thing."
+  },
+  {
+   "t": 244.63,
+   "d": 4.66,
+   "text": "Game logic, anything that affects the way things interact with one another in the game"
+  },
+  {
+   "t": 249.29,
+   "d": 3.73,
+   "text": "world whatever that game might be."
+  },
+  {
+   "t": 253.02,
+   "d": 5.56,
+   "text": "What would it look like if we were generating game mechanics and game systems and generating"
+  },
+  {
+   "t": 258.58,
+   "d": 1.38,
+   "text": "the rules of our game?"
+  },
+  {
+   "t": 259.96,
+   "d": 1.77,
+   "text": "Well, let me give you a couple examples."
+  },
+  {
+   "t": 261.73,
+   "d": 4.97,
+   "text": "Let's say you are playing a match three game and swipe a couple of tiles and instead of"
+  },
+  {
+   "t": 266.7,
+   "d": 6.41,
+   "text": "like swapping location instead the number on the tile gets subtracted so the six has"
+  },
+  {
+   "t": 273.11,
+   "d": 5.21,
+   "text": "a one subtracted from it and turns into a five and three fives in a row and they disappear"
+  },
+  {
+   "t": 278.32,
+   "d": 5.14,
+   "text": "like a standard match three and instead of it being a swapping game like bejeweled it"
+  },
+  {
+   "t": 283.46,
+   "d": 1.0,
+   "text": "is a math game."
+  },
+  {
+   "t": 284.46,
+   "d": 7.12,
+   "text": "Or maybe let's say you are playing breakout and when the bull hits the brick, the brick"
+  },
+  {
+   "t": 291.58,
+   "d": 3.65,
+   "text": "gets destroyed, of course, but something unexpected happens every time."
+  },
+  {
+   "t": 295.23,
+   "d": 3.02,
+   "text": "Like every time you play breakout there is a new rule triggering."
+  },
+  {
+   "t": 298.25,
+   "d": 5.06,
+   "text": "Maybe this time the bull gets bigger every time it destroys a block so the level gets"
+  },
+  {
+   "t": 303.31,
+   "d": 5.17,
+   "text": "easier because it is easier to get the last blocks because the bull is now massive."
+  },
+  {
+   "t": 308.48,
+   "d": 4.49,
+   "text": "What would it be like to play games where you don't know what's going to happen when"
+  },
+  {
+   "t": 312.97,
+   "d": 2.62,
+   "text": "you are interacting with the game, right?"
+  },
+  {
+   "t": 315.59,
+   "d": 5.16,
+   "text": "So at this point, you might be thinking, 25 minutes of this?"
+  },
+  {
+   "t": 320.75,
+   "d": 2.25,
+   "text": "Maybe I will take the social break a little early."
+  },
+  {
+   "t": 323.0,
+   "d": 4.1,
+   "text": "Or you might be thinking, well, you can't do that."
+  },
+  {
+   "t": 327.1,
+   "d": 1.32,
+   "text": "That's not how game design works."
+  },
+  {
+   "t": 328.42,
+   "d": 2.98,
+   "text": "How am I going to know what the generated rules do?"
+  },
+  {
+   "t": 331.4,
+   "d": 2.02,
+   "text": "It will break there game design."
+  },
+  {
+   "t": 333.42,
+   "d": 2.68,
+   "text": "What do you mean generator rule?"
+  },
+  {
+   "t": 336.1,
+   "d": 5.12,
+   "text": "You are giving badly constructed PowerPoint animations and what are you talking about?"
+  },
+  {
+   "t": 341.22,
+   "d": 4.95,
+   "text": "I don't have time to answer most of these questions but we will gently gloss over them"
+  },
+  {
+   "t": 346.17,
+   "d": 4.6,
+   "text": "in a very academic way and hopefully entertain you."
+  },
+  {
+   "t": 350.77,
+   "d": 3.72,
+   "text": "You might also be thinking like I don't want to randomize my game design."
+  },
+  {
+   "t": 354.49,
+   "d": 2.19,
+   "text": "I like designing games."
+  },
+  {
+   "t": 356.68,
+   "d": 2.83,
+   "text": "Roguelikes are procedural enough already."
+  },
+  {
+   "t": 359.51,
+   "d": 2.02,
+   "text": "This is the one thing you haven't taken from me."
+  },
+  {
+   "t": 361.53,
+   "d": 3.51,
+   "text": "I can't procedurally generate the core as well."
+  },
+  {
+   "t": 365.04,
+   "d": 4.63,
+   "text": "What I want to start off is taking about this idea and that is that game design is generative"
+  },
+  {
+   "t": 369.67,
+   "d": 1.0,
+   "text": "design."
+  },
+  {
+   "t": 370.67,
+   "d": 4.05,
+   "text": "I wrote a paper about this that I am hoping to publish next year and there gist is all"
+  },
+  {
+   "t": 374.72,
+   "d": 7.07,
+   "text": "of us are generative designers whether or not we are building procedural generators."
+  },
+  {
+   "t": 381.79,
+   "d": 3.05,
+   "text": "This a great time to go put the kettle on and make a cup of tea if you don't want pea"
+  },
+  {
+   "t": 384.84,
+   "d": 1.04,
+   "text": "to go off a tangent."
+  },
+  {
+   "t": 385.88,
+   "d": 1.0,
+   "text": "-- me."
+  },
+  {
+   "t": 386.88,
+   "d": 7.5,
+   "text": "What do I mean when I say game design is generative design?"
+  },
+  {
+   "t": 394.38,
+   "d": 2.11,
+   "text": "You might have heard this quote."
+  },
+  {
+   "t": 396.49,
+   "d": 5.79,
+   "text": "A game is a series of interesting decisions."
+  },
+  {
+   "t": 402.28,
+   "d": 3.72,
+   "text": "Lots of reasons why people don't like this quote but the reason I am bringing it today"
+  },
+  {
+   "t": 406.0,
+   "d": 6.17,
+   "text": "is a game isn't a series but it is a wide space."
+  },
+  {
+   "t": 412.17,
+   "d": 6.69,
+   "text": "It is mind-boggling huge as a space and I don't think we appreciate how wild these spaces"
+  },
+  {
+   "t": 418.86,
+   "d": 2.09,
+   "text": "are sometimes."
+  },
+  {
+   "t": 420.95,
+   "d": 2.57,
+   "text": "In AI we talk about action spaces quite often."
+  },
+  {
+   "t": 423.52,
+   "d": 5.04,
+   "text": "If you are building an AI that wants to play a game we think about what is every decision,"
+  },
+  {
+   "t": 428.56,
+   "d": 5.66,
+   "text": "every action that the AI could take right now, so if you look at this fake roguelike"
+  },
+  {
+   "t": 434.22,
+   "d": 5.49,
+   "text": "I have on the right-hand side here, the action space includes like moving in every cardinal"
+  },
+  {
+   "t": 439.71,
+   "d": 6.13,
+   "text": "direction, it could involve casting a fireball at the skeleton, it involves casting a fireball"
+  },
+  {
+   "t": 445.84,
+   "d": 4.55,
+   "text": "at a load of other places and we may not think of them as actions."
+  },
+  {
+   "t": 450.39,
+   "d": 1.0,
+   "text": "But they are actions."
+  },
+  {
+   "t": 451.39,
+   "d": 3.21,
+   "text": "It is game design as we can shape the action space."
+  },
+  {
+   "t": 454.6,
+   "d": 4.13,
+   "text": "We can add objects in that change the options available to the player."
+  },
+  {
+   "t": 458.73,
+   "d": 4.86,
+   "text": "So maybe if I put a campfire in between the player can't move east any more and I have"
+  },
+  {
+   "t": 463.59,
+   "d": 2.48,
+   "text": "removed that option from the action space."
+  },
+  {
+   "t": 466.07,
+   "d": 3.37,
+   "text": "We can also modify people's decisions as well."
+  },
+  {
+   "t": 469.44,
+   "d": 3.94,
+   "text": "By putting the campfire there, maybe I make casting a fireball more attractive because"
+  },
+  {
+   "t": 473.38,
+   "d": 2.14,
+   "text": "it is going to enhance the fireball."
+  },
+  {
+   "t": 475.52,
+   "d": 4.65,
+   "text": "As game designer we are always thinking about the ways we can change the way our players"
+  },
+  {
+   "t": 480.17,
+   "d": 1.11,
+   "text": "behave."
+  },
+  {
+   "t": 481.28,
+   "d": 4.99,
+   "text": "You can imagine this as like a big network of possibilities where the player takes an"
+  },
+  {
+   "t": 486.27,
+   "d": 5.56,
+   "text": "action, they decide what to do, maybe they decide to move next to the skeleton, and then"
+  },
+  {
+   "t": 491.83,
+   "d": 5.98,
+   "text": "our game responds and some of the response is very predictable and some is probabilistic."
+  },
+  {
+   "t": 497.81,
+   "d": 7.4,
+   "text": "Your skeleton may have a number of things to do and we are constantly exploring this"
+  },
+  {
+   "t": 505.21,
+   "d": 1.74,
+   "text": "massive web of possibilities."
+  },
+  {
+   "t": 506.95,
+   "d": 8.33,
+   "text": "One way of thinking about it is it is like a loop with systems at the top and they define"
+  },
+  {
+   "t": 515.28,
+   "d": 2.4,
+   "text": "the actions the player can take."
+  },
+  {
+   "t": 517.68,
+   "d": 4.57,
+   "text": "The actions available inform the player's decision making and they make an action which"
+  },
+  {
+   "t": 522.25,
+   "d": 2.42,
+   "text": "affects the systems and rules again."
+  },
+  {
+   "t": 524.67,
+   "d": 3.93,
+   "text": "As game designers we often talk as if we have control over the action space."
+  },
+  {
+   "t": 528.6,
+   "d": 5.57,
+   "text": "We might say I have added fireballs into my game and the player can cast fireballs now"
+  },
+  {
+   "t": 534.17,
+   "d": 2.72,
+   "text": "but actually we are controlling the systems and rules."
+  },
+  {
+   "t": 536.89,
+   "d": 1.93,
+   "text": "We are not controlling the action space."
+  },
+  {
+   "t": 538.82,
+   "d": 4.55,
+   "text": "You can't imagine every single possible situation in which the player can cast a fireball and"
+  },
+  {
+   "t": 543.37,
+   "d": 4.03,
+   "text": "that's why edge cases and glitches appear and why these games surprising."
+  },
+  {
+   "t": 547.4,
+   "d": 6.32,
+   "text": "We are controlling the systems and that's important because that's true of every game"
+  },
+  {
+   "t": 553.72,
+   "d": 3.43,
+   "text": "designer no matter what they design even SFOU if you design puzzle games."
+  },
+  {
+   "t": 557.15,
+   "d": 10.36,
+   "text": "In the next session we will hear about hand designed Sudoku and that's not the case that"
+  },
+  {
+   "t": 567.51,
+   "d": 2.41,
+   "text": "every number can be in every one of these squares."
+  },
+  {
+   "t": 569.92,
+   "d": 7.15,
+   "text": "As the player solved the Sudoku the landscape has more or less information in different"
+  },
+  {
+   "t": 577.07,
+   "d": 1.0,
+   "text": "areas."
+  },
+  {
+   "t": 578.07,
+   "d": 2.81,
+   "text": "Sudoku have pacing and a difficulty curve."
+  },
+  {
+   "t": 580.88,
+   "d": 3.86,
+   "text": "If the designer may not think about it but it is always there."
+  },
+  {
+   "t": 584.74,
+   "d": 3.97,
+   "text": "We are always building a space of possibilities."
+  },
+  {
+   "t": 588.71,
+   "d": 5.02,
+   "text": "If I think about generating rules that are going to reshape the player's space of actions,"
+  },
+  {
+   "t": 593.73,
+   "d": 5.86,
+   "text": "you know, is that really that much different to writing a generator that reshapes the navigable"
+  },
+  {
+   "t": 599.59,
+   "d": 2.93,
+   "text": "and physical space of the world?"
+  },
+  {
+   "t": 602.52,
+   "d": 6.5,
+   "text": "Roguelikes have examples of cases where we have procedurally generated rules except they"
+  },
+  {
+   "t": 609.02,
+   "d": 1.25,
+   "text": "don't last very long."
+  },
+  {
+   "t": 610.27,
+   "d": 4.45,
+   "text": "So unidentified potions, if you play enough of a roguelike, you will learn what the potions"
+  },
+  {
+   "t": 614.72,
+   "d": 4.27,
+   "text": "do and develop a technique for detecting them."
+  },
+  {
+   "t": 618.99,
+   "d": 6.54,
+   "text": "What I am suggesting is we take the potion idea and supercharge it with new techniques"
+  },
+  {
+   "t": 625.53,
+   "d": 5.85,
+   "text": "so the potions are always fresh and exciting."
+  },
+  {
+   "t": 631.38,
+   "d": 1.49,
+   "text": "How do we do that?"
+  },
+  {
+   "t": 632.87,
+   "d": 5.7,
+   "text": "Today I want to give you three ideas and three possibilities and they are kind of escalate"
+  },
+  {
+   "t": 638.57,
+   "d": 1.0,
+   "text": "in risk."
+  },
+  {
+   "t": 639.57,
+   "d": 5.55,
+   "text": "But they also escalate in reward and get spicier and more exciting as it goes on."
+  },
+  {
+   "t": 645.12,
+   "d": 5.08,
+   "text": "I wanted to start off with something accessible and sort of sensible so that you feel you"
+  },
+  {
+   "t": 650.2,
+   "d": 2.8,
+   "text": "go away from this talk and yeah, I can go and do that."
+  },
+  {
+   "t": 653.0,
+   "d": 3.74,
+   "text": "Let's talk about rearranging content first."
+  },
+  {
+   "t": 656.74,
+   "d": 3.37,
+   "text": "This is a screenshot from invisible inc one of the best games ever made."
+  },
+  {
+   "t": 660.11,
+   "d": 1.99,
+   "text": "I think."
+  },
+  {
+   "t": 662.1,
+   "d": 5.7,
+   "text": "At the start of the campaign you can turn on and off all sorts of settings if the game"
+  },
+  {
+   "t": 667.8,
+   "d": 5.64,
+   "text": "and one setting I turned off every campaign and decided I didn't want this."
+  },
+  {
+   "t": 673.44,
+   "d": 2.94,
+   "text": "I loved the rest of that game."
+  },
+  {
+   "t": 676.38,
+   "d": 6.03,
+   "text": "So we often actually build our games to be modular and this allows us to build generative"
+  },
+  {
+   "t": 682.41,
+   "d": 6.17,
+   "text": "systems that turn on and off various things and just shuffle around options that already"
+  },
+  {
+   "t": 688.58,
+   "d": 8.97,
+   "text": "exist and create campaign variance and level variance and a related example is Slay the"
+  },
+  {
+   "t": 697.55,
+   "d": 13.11,
+   "text": "Spire and this has about 20 modifiable and sometimes they have a compounding effect."
+  },
+  {
+   "t": 710.66,
+   "d": 7.54,
+   "text": "If you have the green card modifier that means this blue hero can also find green cards and"
+  },
+  {
+   "t": 718.2,
+   "d": 5.24,
+   "text": "the specialized modifier says you start with five copies of a random card which means on"
+  },
+  {
+   "t": 723.44,
+   "d": 4.05,
+   "text": "this daily challenge you could, there is a chance, that you could start with five copies"
+  },
+  {
+   "t": 727.49,
+   "d": 1.36,
+   "text": "of a green card."
+  },
+  {
+   "t": 728.85,
+   "d": 3.98,
+   "text": "So those two things combined together and that creates really interesting challenges"
+  },
+  {
+   "t": 732.83,
+   "d": 1.3,
+   "text": "sometimes."
+  },
+  {
+   "t": 734.13,
+   "d": 5.03,
+   "text": "The difficulty with Slay the Spire's daily challenge is it isn't necessarily communicated"
+  },
+  {
+   "t": 739.16,
+   "d": 3.74,
+   "text": "super well to the players and players have a certain expectation coming into the game"
+  },
+  {
+   "t": 742.9,
+   "d": 1.66,
+   "text": "because of how the main game is."
+  },
+  {
+   "t": 744.56,
+   "d": 2.68,
+   "text": "This kind of a side game."
+  },
+  {
+   "t": 747.24,
+   "d": 3.37,
+   "text": "I was looking for an example online about this and wanted to talk about certain future"
+  },
+  {
+   "t": 750.61,
+   "d": 5.46,
+   "text": "which is a modifier that removes all decisions from the map and instead of a screenshot of"
+  },
+  {
+   "t": 756.07,
+   "d": 5.1,
+   "text": "what this looks like I found this meme summarizing the point I want to make."
+  },
+  {
+   "t": 761.17,
+   "d": 5.43,
+   "text": "Lots of players check the daily challenge and if they see this modifier they won't play"
+  },
+  {
+   "t": 766.6,
+   "d": 2.76,
+   "text": "it."
+  },
+  {
+   "t": 769.36,
+   "d": 1.86,
+   "text": "Players aren't prepared to experience this in this case."
+  },
+  {
+   "t": 771.22,
+   "d": 5.95,
+   "text": "We will talk before the end of the talk of how you prepare players for this experience"
+  },
+  {
+   "t": 777.17,
+   "d": 5.87,
+   "text": "and make sure they don't have this reaction when they see that modifier."
+  },
+  {
+   "t": 783.04,
+   "d": 4.18,
+   "text": "The second technique you can use is custom design languages."
+  },
+  {
+   "t": 787.22,
+   "d": 4.14,
+   "text": "When we rearrange existing content we are just turning on and off things already in"
+  },
+  {
+   "t": 791.36,
+   "d": 6.26,
+   "text": "the game but we can have special language that let's us describe things in a different"
+  },
+  {
+   "t": 797.62,
+   "d": 1.1,
+   "text": "form."
+  },
+  {
+   "t": 798.72,
+   "d": 3.57,
+   "text": "Some games have this built into it."
+  },
+  {
+   "t": 802.29,
+   "d": 7.01,
+   "text": "Nolta has a wand programming system where you can slot modules into wands and they will"
+  },
+  {
+   "t": 809.3,
+   "d": 4.63,
+   "text": "get executed one after another and that includes things like modifiers and that means you can"
+  },
+  {
+   "t": 813.93,
+   "d": 2.33,
+   "text": "build wands that do unusual things."
+  },
+  {
+   "t": 816.26,
+   "d": 2.34,
+   "text": "Some people describe it as programming walls."
+  },
+  {
+   "t": 818.6,
+   "d": 5.32,
+   "text": "In the bottom right we have baba is you which is a game where you push objects around the"
+  },
+  {
+   "t": 823.92,
+   "d": 7.4,
+   "text": "world to make sentences and those sentences are embedded as real rules in the game's logic."
+  },
+  {
+   "t": 831.32,
+   "d": 7.3,
+   "text": "These are allowing the player's to modify some aspect of the game's system or rules."
+  },
+  {
+   "t": 838.62,
+   "d": 2.07,
+   "text": "We don't just give it to there players."
+  },
+  {
+   "t": 840.69,
+   "d": 6.47,
+   "text": "It is common for us to build these tools for other people and those people are modders."
+  },
+  {
+   "t": 847.16,
+   "d": 8.66,
+   "text": "This is an excerpt from a mod of Caves of Qud and if you look at the line you can guess"
+  },
+  {
+   "t": 855.82,
+   "d": 2.9,
+   "text": "what it is describing."
+  },
+  {
+   "t": 858.72,
+   "d": 5.15,
+   "text": "It says there is something called a hit point value 100."
+  },
+  {
+   "t": 863.87,
+   "d": 2.91,
+   "text": "We can guess what that is even if we have never played this."
+  },
+  {
+   "t": 866.78,
+   "d": 4.57,
+   "text": "Electric resistance value minus 50."
+  },
+  {
+   "t": 871.35,
+   "d": 5.43,
+   "text": "We already build special design language for other things to use and those are people not"
+  },
+  {
+   "t": 876.78,
+   "d": 2.58,
+   "text": "AI."
+  },
+  {
+   "t": 879.36,
+   "d": 2.61,
+   "text": "We could randomly generate one of these right now."
+  },
+  {
+   "t": 881.97,
+   "d": 13.55,
+   "text": "We could go to the social break and write a Cave of Qud --"
+  },
+  {
+   "t": 895.52,
+   "d": 5.93,
+   "text": "Something I call the puzzle script effect are the things that tend to become the most"
+  },
+  {
+   "t": 901.45,
+   "d": 6.48,
+   "text": "memorable about the tool are the things that pushed the limits of what that tool could"
+  },
+  {
+   "t": 907.93,
+   "d": 6.73,
+   "text": "do which can be really exciting and really good but when you come to kind of think of"
+  },
+  {
+   "t": 914.66,
+   "d": 3.79,
+   "text": "that tool you often thing think about the most complicated things built with it which"
+  },
+  {
+   "t": 918.45,
+   "d": 2.37,
+   "text": "isn't necessarily what the tool is designed to do."
+  },
+  {
+   "t": 920.82,
+   "d": 5.5,
+   "text": "That is not so much a problem with humans but it is AI."
+  },
+  {
+   "t": 926.32,
+   "d": 5.16,
+   "text": "AI won't be able to use puzzle script in a complex way."
+  },
+  {
+   "t": 931.48,
+   "d": 5.12,
+   "text": "They will be using more of the centered intended use of it."
+  },
+  {
+   "t": 936.6,
+   "d": 5.03,
+   "text": "I could talk for at least two hours about designing design languages for AI to use."
+  },
+  {
+   "t": 941.63,
+   "d": 5.38,
+   "text": "I have done a lot of it and there is lots of things you have to think about."
+  },
+  {
+   "t": 947.01,
+   "d": 3.71,
+   "text": "How easy is to write a statement that's illegal?"
+  },
+  {
+   "t": 950.72,
+   "d": 6.05,
+   "text": "When I told you just now the Caves of Qud has a 100 hit points, probably none of you"
+  },
+  {
+   "t": 956.77,
+   "d": 6.11,
+   "text": "thought what if I gave it negative hit point?"
+  },
+  {
+   "t": 962.88,
+   "d": 6.06,
+   "text": "If we tell a generative system this hit point thing just put a number in there, depending"
+  },
+  {
+   "t": 968.94,
+   "d": 6.09,
+   "text": "on how we code that it might give a number between minus and plus infinity or a floating"
+  },
+  {
+   "t": 975.03,
+   "d": 1.0,
+   "text": "point number."
+  },
+  {
+   "t": 976.03,
+   "d": 4.28,
+   "text": "It could do all sorts of things we might not have thought to be clear about."
+  },
+  {
+   "t": 980.31,
+   "d": 4.46,
+   "text": "That could result in interesting glitches or it could crash our game."
+  },
+  {
+   "t": 984.77,
+   "d": 3.96,
+   "text": "We have to think about like what kind of common sense am I not including here?"
+  },
+  {
+   "t": 988.73,
+   "d": 3.66,
+   "text": "When you release modding tools the players are going to play around and learn what the"
+  },
+  {
+   "t": 992.39,
+   "d": 2.95,
+   "text": "limits are but your procedural generator doesn't."
+  },
+  {
+   "t": 995.34,
+   "d": 5.74,
+   "text": "If we have a text generator we may not have told it this common sense stuff we expect"
+  },
+  {
+   "t": 1001.08,
+   "d": 3.18,
+   "text": "it to know."
+  },
+  {
+   "t": 1004.26,
+   "d": 4.61,
+   "text": "I think custom design languages are really good because they're a nice tradeoff between"
+  },
+  {
+   "t": 1008.87,
+   "d": 4.97,
+   "text": "allowing some expressivity and to talk about things in a focus way."
+  },
+  {
+   "t": 1013.84,
+   "d": 5.72,
+   "text": "You can design a design language for a particular domain like spells or potions and then you"
+  },
+  {
+   "t": 1019.56,
+   "d": 3.52,
+   "text": "don't have to worry about the whole world of generative possibilities."
+  },
+  {
+   "t": 1023.08,
+   "d": 2.45,
+   "text": "You can kind of constrain it a little bit."
+  },
+  {
+   "t": 1025.53,
+   "d": 5.01,
+   "text": "So if you look up some of my talks about puck or Angelina you will see I have used design"
+  },
+  {
+   "t": 1030.54,
+   "d": 5.36,
+   "text": "languages to help these systems describe games and define their rules and I think it a really"
+  },
+  {
+   "t": 1035.9,
+   "d": 1.78,
+   "text": "great approach to use."
+  },
+  {
+   "t": 1037.68,
+   "d": 4.25,
+   "text": "But we could take it one step further and get even spicier."
+  },
+  {
+   "t": 1041.93,
+   "d": 4.99,
+   "text": "It is getting late here, I am getting tired, let's throw caution to the wind and generate"
+  },
+  {
+   "t": 1046.92,
+   "d": 1.0,
+   "text": "code directly, right?"
+  },
+  {
+   "t": 1047.92,
+   "d": 5.29,
+   "text": "If you this can -- if you think about the most popular language used by humans for writing"
+  },
+  {
+   "t": 1053.21,
+   "d": 7.53,
+   "text": "mechanics is program code."
+  },
+  {
+   "t": 1060.74,
+   "d": 5.2,
+   "text": "The thing with code is code is just text."
+  },
+  {
+   "t": 1065.94,
+   "d": 1.79,
+   "text": "You know, we know how to generate text."
+  },
+  {
+   "t": 1067.73,
+   "d": 4.73,
+   "text": "There is generative text in the cat system for the Roguelike Celebration and in loads"
+  },
+  {
+   "t": 1072.46,
+   "d": 2.14,
+   "text": "of roguelikes you have played."
+  },
+  {
+   "t": 1074.6,
+   "d": 7.96,
+   "text": "If you want, you can get unity C# to compile text into an assembly and load it at run-time"
+  },
+  {
+   "t": 1082.56,
+   "d": 2.64,
+   "text": "back into the game that compiled it."
+  },
+  {
+   "t": 1085.2,
+   "d": 1.0,
+   "text": "Should you do that?"
+  },
+  {
+   "t": 1086.2,
+   "d": 3.39,
+   "text": "Look, who am I to tell?"
+  },
+  {
+   "t": 1089.59,
+   "d": 1.0,
+   "text": "I have done it."
+  },
+  {
+   "t": 1090.59,
+   "d": 1.14,
+   "text": "It is a lot of fun."
+  },
+  {
+   "t": 1091.73,
+   "d": 6.34,
+   "text": "I think it is important to remember we can generate anything we want."
+  },
+  {
+   "t": 1098.07,
+   "d": 2.71,
+   "text": "We don't have to -- there is nothing special about code."
+  },
+  {
+   "t": 1100.78,
+   "d": 3.65,
+   "text": "If we want to generate code and compile it at run-time and throw it into your game why"
+  },
+  {
+   "t": 1104.43,
+   "d": 1.0,
+   "text": "not."
+  },
+  {
+   "t": 1105.43,
+   "d": 4.26,
+   "text": "I will tell you why not later probably but a reasonable question is why would you want"
+  },
+  {
+   "t": 1109.69,
+   "d": 1.59,
+   "text": "to do that?"
+  },
+  {
+   "t": 1111.28,
+   "d": 3.61,
+   "text": "The thing with domain specific languages which is the stuff we were looking at before, the"
+  },
+  {
+   "t": 1114.89,
+   "d": 7.38,
+   "text": "design languages, is they are generally less expressive than game code and that's intentional."
+  },
+  {
+   "t": 1122.27,
+   "d": 4.45,
+   "text": "The reason we build modding tools is because it is an easier way for people to create content"
+  },
+  {
+   "t": 1126.72,
+   "d": 5.38,
+   "text": "for our games but it is still less expressive and it might surprise us less the kinds of"
+  },
+  {
+   "t": 1132.1,
+   "d": 2.65,
+   "text": "things a system can do."
+  },
+  {
+   "t": 1134.75,
+   "d": 7.13,
+   "text": "Implementing these design languages take effort and if you give us negative hit points it"
+  },
+  {
+   "t": 1141.88,
+   "d": 5.09,
+   "text": "will crash the game and delete everyone's user data you have to remember I need to make"
+  },
+  {
+   "t": 1146.97,
+   "d": 2.14,
+   "text": "sure the AI doesn't generate that any more."
+  },
+  {
+   "t": 1149.11,
+   "d": 5.34,
+   "text": "So many things to remember and so much extra work whereas you are already writing code."
+  },
+  {
+   "t": 1154.45,
+   "d": 4.11,
+   "text": "If you are already writing code and if you change your code, the stuff your code generator"
+  },
+  {
+   "t": 1158.56,
+   "d": 2.08,
+   "text": "uses also changes."
+  },
+  {
+   "t": 1160.64,
+   "d": 2.62,
+   "text": "It is already linked to your creative process."
+  },
+  {
+   "t": 1163.26,
+   "d": 6.15,
+   "text": "If you are thinking making roguelikes is stressful enough and you don't want to do that I am"
+  },
+  {
+   "t": 1169.41,
+   "d": 5.06,
+   "text": "working on a tool called Pixy which attaches to C# code."
+  },
+  {
+   "t": 1174.47,
+   "d": 4.28,
+   "text": "At the moment it is in unity but there is nothing unity specific about it so I will"
+  },
+  {
+   "t": 1178.75,
+   "d": 4.45,
+   "text": "be looking into getting it into things like gato as well."
+  },
+  {
+   "t": 1183.2,
+   "d": 4.73,
+   "text": "It can generate code and you take it on a tour of the codebase and say here is our acceleration"
+  },
+  {
+   "t": 1187.93,
+   "d": 1.0,
+   "text": "available."
+  },
+  {
+   "t": 1188.93,
+   "d": 1.0,
+   "text": "You are allowed to use that."
+  },
+  {
+   "t": 1189.93,
+   "d": 5.28,
+   "text": "At the end of the talk you show to an empty code block and say I would like you to generate"
+  },
+  {
+   "t": 1195.21,
+   "d": 3.03,
+   "text": "code that goes here."
+  },
+  {
+   "t": 1198.24,
+   "d": 6.48,
+   "text": "Picky generated the break out example when you get the ball to bounce off the brick the"
+  },
+  {
+   "t": 1204.72,
+   "d": 4.72,
+   "text": "ball gets bigger."
+  },
+  {
+   "t": 1209.44,
+   "d": 6.53,
+   "text": "I want to be clear, just to be clear, this sent a GitHub copilot situation."
+  },
+  {
+   "t": 1215.97,
+   "d": 5.02,
+   "text": "Pixy only knows about your codebase."
+  },
+  {
+   "t": 1220.99,
+   "d": 6.03,
+   "text": "That's why we have attributes in the square brackets so you can say touch this data and"
+  },
+  {
+   "t": 1227.02,
+   "d": 5.2,
+   "text": "please don't touch this data and it will always do what you tell it."
+  },
+  {
+   "t": 1232.22,
+   "d": 5.59,
+   "text": "If you are interested in the theoretical background about this, I recorded a YouTube video about"
+  },
+  {
+   "t": 1237.81,
+   "d": 5.43,
+   "text": "the inspiration for this back in 2020 as well."
+  },
+  {
+   "t": 1243.24,
+   "d": 3.84,
+   "text": "So those are the kind of three approaches, three ways of thinking about generating game"
+  },
+  {
+   "t": 1247.08,
+   "d": 1.26,
+   "text": "mechanics."
+  },
+  {
+   "t": 1248.34,
+   "d": 4.69,
+   "text": "Before I close, I want to talk about how we can keep it under control."
+  },
+  {
+   "t": 1253.03,
+   "d": 3.75,
+   "text": "I am academic and I can spend my day job making broken thing and no one will ever ask me to"
+  },
+  {
+   "t": 1256.78,
+   "d": 6.69,
+   "text": "fix it but I have found strategy for making this work and making it sensible."
+  },
+  {
+   "t": 1263.47,
+   "d": 2.83,
+   "text": "The first solution is to solve it in the design phase."
+  },
+  {
+   "t": 1266.3,
+   "d": 5.66,
+   "text": "If we expect the game is going to produce broken rules and systems we can design the"
+  },
+  {
+   "t": 1271.96,
+   "d": 2.19,
+   "text": "game around that with that in mind."
+  },
+  {
+   "t": 1274.15,
+   "d": 6.52,
+   "text": "In bad chess, it randomly generates chess boards and knows some will be unfair."
+  },
+  {
+   "t": 1280.67,
+   "d": 4.58,
+   "text": "It gives the player different mounts of scores based on whether they win or lose and teach"
+  },
+  {
+   "t": 1285.25,
+   "d": 3.18,
+   "text": "the plan not to expect to win every board."
+  },
+  {
+   "t": 1288.43,
+   "d": 5.0,
+   "text": "This link do is the notion of streaks in roguelikes which is something coming out or and more"
+  },
+  {
+   "t": 1293.43,
+   "d": 4.99,
+   "text": "where it isn't about the performance in a single run but consistent performance across"
+  },
+  {
+   "t": 1298.42,
+   "d": 3.99,
+   "text": "many runs."
+  },
+  {
+   "t": 1302.41,
+   "d": 4.7,
+   "text": "Winning a single run isn't important but what's important is understanding the ability of"
+  },
+  {
+   "t": 1307.11,
+   "d": 1.0,
+   "text": "many runs."
+  },
+  {
+   "t": 1308.11,
+   "d": 10.08,
+   "text": "When I was writing the slides it made me think of orbs on YouTube."
+  },
+  {
+   "t": 1318.19,
+   "d": 3.11,
+   "text": "He talks about two types of players, optimal and nemesis."
+  },
+  {
+   "t": 1321.3,
+   "d": 8.16,
+   "text": "He says when I make the plays that I think are right, I still lose most of the time."
+  },
+  {
+   "t": 1329.46,
+   "d": 4.92,
+   "text": "He is saying he doesn't care about winning every game of Slay the Spire."
+  },
+  {
+   "t": 1334.38,
+   "d": 4.69,
+   "text": "He cares about playing the best he can in the conditions he has been given."
+  },
+  {
+   "t": 1339.07,
+   "d": 4.8,
+   "text": "That's the kind of mindset we have to get our players into if we want to generate systems"
+  },
+  {
+   "t": 1343.87,
+   "d": 1.77,
+   "text": "that we don't know where they work."
+  },
+  {
+   "t": 1345.64,
+   "d": 6.29,
+   "text": "He has a book called before we go live that I highly recommend."
+  },
+  {
+   "t": 1351.93,
+   "d": 3.05,
+   "text": "I will post the link later."
+  },
+  {
+   "t": 1354.98,
+   "d": 2.79,
+   "text": "I have another thing I wanted to talk about."
+  },
+  {
+   "t": 1357.77,
+   "d": 4.75,
+   "text": "Just last week I found this game called Mosa Lina."
+  },
+  {
+   "t": 1362.52,
+   "d": 5.19,
+   "text": "It is impossible to check if all levels are beatable with all combinations of tools because"
+  },
+  {
+   "t": 1367.71,
+   "d": 1.95,
+   "text": "I have never seen them."
+  },
+  {
+   "t": 1369.66,
+   "d": 6.46,
+   "text": "This is about randomly giving players tools and a level and seeing if they can solve it."
+  },
+  {
+   "t": 1376.12,
+   "d": 2.96,
+   "text": "This is a game that sets the player up to expect that."
+  },
+  {
+   "t": 1379.08,
+   "d": 4.32,
+   "text": "Designing around it is the best solution but there are other solutions."
+  },
+  {
+   "t": 1383.4,
+   "d": 2.85,
+   "text": "Another option is we can solve it in development time."
+  },
+  {
+   "t": 1386.25,
+   "d": 5.41,
+   "text": "Elite has galaxy generation in it but they only released five galaxies in the game for"
+  },
+  {
+   "t": 1391.66,
+   "d": 1.88,
+   "text": "various reasons."
+  },
+  {
+   "t": 1393.54,
+   "d": 3.9,
+   "text": "As a designer you can decide which procedural generation goes into the game."
+  },
+  {
+   "t": 1397.44,
+   "d": 11.05,
+   "text": "Maybe you spend time each month and pick one to go into the next patch."
+  },
+  {
+   "t": 1408.49,
+   "d": 3.79,
+   "text": "Systems are quite impactful so it makes sense you might want to release them manual."
+  },
+  {
+   "t": 1412.28,
+   "d": 7.66,
+   "text": "If you are feeling spicy, you can try to fix it live."
+  },
+  {
+   "t": 1419.94,
+   "d": 4.93,
+   "text": "If you don't know how to make something good but recognize something good you can generate"
+  },
+  {
+   "t": 1424.87,
+   "d": 3.93,
+   "text": "loads of stuff and especially you will find something that trips the good censor."
+  },
+  {
+   "t": 1428.8,
+   "d": 6.91,
+   "text": "What you can do and what I use in systems like pixy is to build unwinnable scenario."
+  },
+  {
+   "t": 1435.71,
+   "d": 2.89,
+   "text": "I know this player is going to die on the next turn."
+  },
+  {
+   "t": 1438.6,
+   "d": 2.17,
+   "text": "Six skeletons are going to hit them."
+  },
+  {
+   "t": 1440.77,
+   "d": 5.91,
+   "text": "Generate an item, give it to the player and get them to use it on themselves and we can"
+  },
+  {
+   "t": 1446.68,
+   "d": 4.36,
+   "text": "do this hundreds of times until we find an item that allows them to survive the next"
+  },
+  {
+   "t": 1451.04,
+   "d": 1.0,
+   "text": "turn."
+  },
+  {
+   "t": 1452.04,
+   "d": 4.89,
+   "text": "We don't care what that item does we just know it is interesting."
+  },
+  {
+   "t": 1456.93,
+   "d": 4.05,
+   "text": "Generating tests that can allow you to investigate these questions of what your generative mechanics"
+  },
+  {
+   "t": 1460.98,
+   "d": 2.26,
+   "text": "can do an interesting approach."
+  },
+  {
+   "t": 1463.24,
+   "d": 8.01,
+   "text": "Going to close up and before I do that there is one thought I want to leave you with."
+  },
+  {
+   "t": 1471.25,
+   "d": 4.27,
+   "text": "There is a reason why doors are good and that's because I go through them every day so I understand"
+  },
+  {
+   "t": 1475.52,
+   "d": 1.87,
+   "text": "how they work."
+  },
+  {
+   "t": 1477.39,
+   "d": 4.12,
+   "text": "The problem is if you generate loads of mechanics you don't actually know what to tell the player"
+  },
+  {
+   "t": 1481.51,
+   "d": 2.24,
+   "text": "this thing is; right?"
+  },
+  {
+   "t": 1483.75,
+   "d": 4.1,
+   "text": "So the one final tip I wanted to leave is that just like any other generated content"
+  },
+  {
+   "t": 1487.85,
+   "d": 4.46,
+   "text": "you often need a theme that tells the story of the generated con tent."
+  },
+  {
+   "t": 1492.31,
+   "d": 6.13,
+   "text": "For systems that's why potions work, it could be spells, ancient languages, experimental"
+  },
+  {
+   "t": 1498.44,
+   "d": 4.44,
+   "text": "technology, find a theme that works and the player doesn't know what will happen when"
+  },
+  {
+   "t": 1502.88,
+   "d": 5.57,
+   "text": "they push this button or throw caution to the wind and don't worry about the theme and"
+  },
+  {
+   "t": 1508.45,
+   "d": 5.34,
+   "text": "live your life but I know theme is very important to lots of us in this community."
+  },
+  {
+   "t": 1513.79,
+   "d": 4.89,
+   "text": "Before I close up for question, I just wanted to leave with one last slide which is I have"
+  },
+  {
+   "t": 1518.68,
+   "d": 7.41,
+   "text": "been working in AI and procedural generation for almost 14 years."
+  },
+  {
+   "t": 1526.09,
+   "d": 6.67,
+   "text": "I now have a permanent job at a university in London that I am very happy about and I"
+  },
+  {
+   "t": 1532.76,
+   "d": 2.33,
+   "text": "have wonderful students, a wonderful group."
+  },
+  {
+   "t": 1535.09,
+   "d": 5.81,
+   "text": "And so many amazing things and a lot of it is because of people I met in the indie game"
+  },
+  {
+   "t": 1540.9,
+   "d": 5.89,
+   "text": "system and generative and many are here today and I don't think that's a coincidence."
+  },
+  {
+   "t": 1546.79,
+   "d": 1.92,
+   "text": "I want to Thank you all."
+  },
+  {
+   "t": 1548.71,
+   "d": 4.47,
+   "text": "I kept meaning to submit talks to this place and I am finally here and it feels lovely"
+  },
+  {
+   "t": 1553.18,
+   "d": 1.04,
+   "text": "to talk to you all."
+  },
+  {
+   "t": 1554.22,
+   "d": 2.49,
+   "text": "It is a real privilege to be part of this community."
+  },
+  {
+   "t": 1556.71,
+   "d": 2.28,
+   "text": "Such a kind and understanding one."
+  },
+  {
+   "t": 1558.99,
+   "d": 5.69,
+   "text": "You walk around this space that's been designed and you just feel the warmth of this space."
+  },
+  {
+   "t": 1564.68,
+   "d": 4.35,
+   "text": "I really hope there is many decades ahead of doing weird things together."
+  },
+  {
+   "t": 1569.03,
+   "d": 5.32,
+   "text": "We all float between these strange job titles and are all in and out of industry and Academia"
+  },
+  {
+   "t": 1574.35,
+   "d": 3.88,
+   "text": "and don't know where we are going but it is wonderful when we get to come together and"
+  },
+  {
+   "t": 1578.23,
+   "d": 1.67,
+   "text": "remember what really matter."
+  },
+  {
+   "t": 1579.9,
+   "d": 7.54,
+   "text": "Thank you all for the support you have shown me over the last 10 years."
+  },
+  {
+   "t": 1587.44,
+   "d": 1.73,
+   "text": "I wouldn't be here without."
+  },
+  {
+   "t": 1589.17,
+   "d": 4.4,
+   "text": "Please check out the students and colleagues of mine who do wonderful work."
+  },
+  {
+   "t": 1593.57,
+   "d": 4.19,
+   "text": "If you want to talk to me now or 15 years from now drop me a line."
+  },
+  {
+   "t": 1597.76,
+   "d": 4.09,
+   "text": "Probably not on Twitter 15 years from now but certainly at that email address."
+  },
+  {
+   "t": 1601.85,
+   "d": 1.91,
+   "text": "Thank you so much for listening."
+  },
+  {
+   "t": 1603.76,
+   "d": 1.93,
+   "text": "ALEXEI: Thank you."
+  },
+  {
+   "t": 1605.69,
+   "d": 4.64,
+   "text": "You hit me with emotions right at the end."
+  },
+  {
+   "t": 1610.33,
+   "d": 2.45,
+   "text": "I got to emcee, Mike."
+  },
+  {
+   "t": 1612.78,
+   "d": 1.0,
+   "text": "Thank you."
+  },
+  {
+   "t": 1613.78,
+   "d": 1.0,
+   "text": "I mean, the same."
+  },
+  {
+   "t": 1614.78,
+   "d": 5.14,
+   "text": "My career would not be what it is without this conference absolutely."
+  },
+  {
+   "t": 1619.92,
+   "d": 1.0,
+   "text": "Thank you."
+  },
+  {
+   "t": 1620.92,
+   "d": 3.99,
+   "text": "It is -- I help run it because it meant so much to me bought -- but it also works because"
+  },
+  {
+   "t": 1624.91,
+   "d": 1.0,
+   "text": "of the speakers."
+  },
+  {
+   "t": 1625.91,
+   "d": 5.96,
+   "text": "It was such a spicy talk and I love it."
+  },
+  {
+   "t": 1631.87,
+   "d": 8.06,
+   "text": "So full of height takes and you get the energy in the last minute and get the punch."
+  },
+  {
+   "t": 1639.93,
+   "d": 1.34,
+   "text": "Well Thank you."
+  },
+  {
+   "t": 1641.27,
+   "d": 4.22,
+   "text": "Zee a -- we have a little bit of time for question."
+  },
+  {
+   "t": 1645.49,
+   "d": 5.48,
+   "text": "The current top voted question is tell me more about rubber Santa?"
+  },
+  {
+   "t": 1650.97,
+   "d": 2.27,
+   "text": "MIKE: I cut this example out from the beginning."
+  },
+  {
+   "t": 1653.24,
+   "d": 2.56,
+   "text": "It was the third example of a generative mechanic."
+  },
+  {
+   "t": 1655.8,
+   "d": 4.48,
+   "text": "Back in 2012, the first experiments I did with mechanic generation I wanted to put them"
+  },
+  {
+   "t": 1660.28,
+   "d": 2.44,
+   "text": "in a game and it was Christmas."
+  },
+  {
+   "t": 1662.72,
+   "d": 6.65,
+   "text": "One of the mechanics is it just made the player bouncy."
+  },
+  {
+   "t": 1669.37,
+   "d": 3.69,
+   "text": "Santa was pinging off the walls and kicking snow everywhere."
+  },
+  {
+   "t": 1673.06,
+   "d": 2.45,
+   "text": "I was like it is going to be out for Christmas."
+  },
+  {
+   "t": 1675.51,
+   "d": 3.36,
+   "text": "I don't have time to think about it."
+  },
+  {
+   "t": 1678.87,
+   "d": 2.53,
+   "text": "Sometimes you can make a game about rubber Santa and it is fine."
+  },
+  {
+   "t": 1681.4,
+   "d": 1.33,
+   "text": "Don't worry too much about theme."
+  },
+  {
+   "t": 1682.73,
+   "d": 1.06,
+   "text": "ALEXEI: I love it."
+  },
+  {
+   "t": 1683.79,
+   "d": 1.05,
+   "text": "One last goofy question."
+  },
+  {
+   "t": 1684.84,
+   "d": 10.28,
+   "text": "What are some ideas to make the code generator more versatile than a design language approach?"
+  },
+  {
+   "t": 1695.12,
+   "d": 7.07,
+   "text": "MIKE: I think it is quite challenging."
+  },
+  {
+   "t": 1702.19,
+   "d": 4.9,
+   "text": "What I really want to do next year, hopefully, is share what my code generator looks like"
+  },
+  {
+   "t": 1707.09,
+   "d": 3.79,
+   "text": "because some things you can give it way too much variation."
+  },
+  {
+   "t": 1710.88,
+   "d": 5.19,
+   "text": "Do you want to let it choose any number when it is applying it to a variable?"
+  },
+  {
+   "t": 1716.07,
+   "d": 1.0,
+   "text": "Probably not."
+  },
+  {
+   "t": 1717.07,
+   "d": 2.55,
+   "text": "Lots of numbers have a sensible range."
+  },
+  {
+   "t": 1719.62,
+   "d": 3.36,
+   "text": "You know, pixy allows you to tell it don't go outside this range."
+  },
+  {
+   "t": 1722.98,
+   "d": 1.94,
+   "text": "I don't think anything interesting is out there."
+  },
+  {
+   "t": 1724.92,
+   "d": 2.98,
+   "text": "But at the same time you want to give it that freedom."
+  },
+  {
+   "t": 1727.9,
+   "d": 4.94,
+   "text": "Letting it call functions in your code that maybe you don't think are useful is sometimes"
+  },
+  {
+   "t": 1732.84,
+   "d": 1.91,
+   "text": "interesting."
+  },
+  {
+   "t": 1734.75,
+   "d": 3.33,
+   "text": "Don't just restrict yourself to the things that you think are going to lead to good game"
+  },
+  {
+   "t": 1738.08,
+   "d": 6.22,
+   "text": "mechanic because most of the cool stuff for me is the most bonkers change like I forget"
+  },
+  {
+   "t": 1744.3,
+   "d": 1.5,
+   "text": "to tell it not to do something and it runs with it."
+  },
+  {
+   "t": 1752.93,
+   "d": 1.0,
+   "text": "ALEXEI: Thank you for staying up late."
+  },
+  {
+   "t": 1756.66,
+   "d": 1.0,
+   "text": "Excellent."
+  },
+  {
+   "t": 1759.5,
+   "d": 1.0,
+   "text": "Thank you."
+  }
+ ],
+ "note": "re-timed 3 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 13 s off the audio)"
+}

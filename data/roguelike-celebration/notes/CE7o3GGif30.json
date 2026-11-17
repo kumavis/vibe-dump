@@ -1,0 +1,163 @@
+{
+  "id": "CE7o3GGif30",
+  "title": "Aaron A. Reed: Klingons, Hobbits, and the Oregon Trail",
+  "speaker": "Aaron A. Reed",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=CE7o3GGif30",
+  "talk_type": "history",
+  "summary": "Aaron A. Reed surveys the first decade of text games (and their precursors) to show how procedural generation and randomness entered computer games. He contrasts deterministic early simulations (war games, business games, Hammurabi, Lunar Lander) with games that used simulation-informed randomness, such as The Oregon Trail's mileage-dependent events and Star Trek's randomly generated galaxy with lossy-compressed quadrants. He recounts how an adult cleanup of Star Trek's galaxy-generation code introduced bugs, and how The Hobbit (1982) used autonomous scripted characters and dynamic objects to produce emergent, buggy, charming play that text adventures later abandoned. Q&A covers the simulationist vs authored-story split and how genres calcified in the mid-1980s.",
+  "games": [
+    "The Oregon Trail",
+    "Star Trek (1971)",
+    "The Hobbit",
+    "Colossal Cave Adventure",
+    "Hammurabi",
+    "Lunar Lander",
+    "ELIZA",
+    "Lifeline",
+    "AI Dungeon"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "early procedural generation",
+      "kind": "history",
+      "claim": "In the earliest computer games procedural generation was a necessity rather than a replayability feature, because a hand-made world large enough to explore could not fit in early machines' memory.",
+      "detail": "Reed notes that today we think of procgen as serving replayability and run variety, but early on you had to generate a world to have a game at all. This framing runs through his book on fifty years of text games.",
+      "t": 125,
+      "quote": "in the earliest days of computer it was more necessity. You couldn't fit a premade world big enough to be interesting to explore",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "template text",
+      "kind": "history",
+      "claim": "Christopher Strachey's 1952 love-letter generator for the Manchester computer produced text by filling template sentences with random words from lists of nouns and adjectives.",
+      "detail": "Reed presents it as the core of procedural text: grab random words from a list and insert them into templates. He adds that random numbers were not a callable function then, and that using a costly computer to 'pretend to have feeling' was considered scandalous.",
+      "t": 227,
+      "quote": "What this program is doing is grabbing random words from a list and inserting them into template sentences",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "deterministic simulation",
+      "kind": "history",
+      "claim": "Early computer war games, business simulations, Hammurabi and Lunar Lander were fully deterministic equation-solvers where the player's role was to supply the right variables, which Reed says makes them feel stale.",
+      "detail": "Reed links this to the mid-century ideal that correct math could predict outcomes perfectly. Lunar Lander is 'a fun game about doing calculus' with no randomness. Games in this mode were fun for novelty but feel stale; people trying to capture humanity kept returning to randomness, as ELIZA did.",
+      "t": 370,
+      "quote": "There is no randomness. The game is plugging numbers into the brutal or beautiful if you are that kind of person equation",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "random events",
+      "kind": "example",
+      "claim": "The original Oregon Trail drew from a pool of about 20 random events whose presentation and probability depended on the simulated miles travelled, so geography was implicit in the randomness.",
+      "detail": "A weather event prints cold weather and checks cold-weather gear past roughly 950 miles (the Rockies) but rain before. The rider-attack chance is a single BASIC equation over miles: low in Missouri, peaking on the open plains, falling toward zero past the Rockies. The game never shows landmarks, yet geography is encoded in how events appear.",
+      "t": 555,
+      "quote": "The game doesn't show landmarks or milestones but you get increasing mileage number but the geography is",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "constrained randomness",
+      "kind": "principle",
+      "claim": "Good procedural randomness is randomness constrained by a plausibility space informed by a simulation, balancing the predictable and the unpredictable.",
+      "detail": "Drawing on Oregon Trail's mileage-weighted bandit chance, Reed argues these events are random but informed by the simulation, creating a little universe the designer can't entirely control. He traces this balance back to the earliest games.",
+      "t": 641,
+      "quote": "These events are random but informed by the simulation, right? It is randomness constrained by a plausibility space",
+      "weight": 3
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "star trek",
+      "kind": "history",
+      "claim": "Mike Mayfield's 1971 Star Trek game, with a randomly generated galaxy of Klingons each play, shares much with the later roguelike genre, including getting screwed by the RNG.",
+      "detail": "Made by a high school senior who missed the TV show, it is the original tactical space sim. Reed points to the fun possibility of starting next to a Klingon as a roguelike-like quality.",
+      "t": 693,
+      "quote": "I would argue it has a ton in common with the genre rogue would name years later",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "lossy compression",
+      "kind": "technique",
+      "claim": "Star Trek (1971) stored each quadrant only as a three-digit count of Klingons, starbases and stars, regenerating positions randomly on entry as a form of lossy compression for its 8x8 galaxy.",
+      "detail": "The galaxy of 64 quadrants of sectors was too big to store in 1971. The three-digit code the player learns to read was the literal in-memory representation. Re-entering a quadrant re-randomized it, which players rarely noticed and which could be read as Klingons moving.",
+      "t": 775,
+      "quote": "The sneaky thing is this code was the literal representation of the quadrant in the game's memory",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "regenerate on failure",
+      "kind": "warning",
+      "claim": "In Star Trek (1971) the original rejected and regenerated galaxies lacking a starbase or Klingon, while the adult cleanup instead hard-overwrote one quadrant and introduced three bugs.",
+      "detail": "Mayfield's line 775 restarted generation if the total starbase or Klingon count was zero. The cleanup forced quadrant 63 to a fixed code, which no longer handled zero Klingons, changed counts after they were shown to the player, and failed to update the global counters the game used to track win state, so the game could fail to end.",
+      "t": 950,
+      "quote": "There alternate solution might seem clever, just a single line of code, but it introduces three new bugs into the program",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "autonomous npcs",
+      "kind": "example",
+      "claim": "Veronika Megler's The Hobbit made every character play the game alongside the player according to its own script, to fix the problem that static adventure puzzles lose interest once solved.",
+      "detail": "A goblin wanders and attacks; Gandalf roams, picks up interesting objects and drops them when bored. Areas like the goblin tunnels change between plays, so maps may not be accurate.",
+      "t": 1112,
+      "quote": "all the characters would be playing it themselves just like the player was each according to their own little script",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "state-based goals",
+      "kind": "technique",
+      "claim": "The Hobbit checks for goal states (the dragon is dead) rather than a specific solution, so dynamic objects and other characters allow many ways to reach them.",
+      "detail": "Objects had weight, size and fragility; bashing a door with a sword might break it. You could kill the dragon yourself, lead another character to do it, or a wandering monster might do it. Companions could carry you out of the goblin tunnels or be given orders to escape and return.",
+      "t": 1155,
+      "quote": "the game doesn't care how you kill the dragon. It just looking for a state where the dragon is dead here",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "debugging emergence",
+      "kind": "warning",
+      "claim": "The Hobbit's emergent character simulation made it extremely hard to debug or verify as winnable, and it shipped infamous bugs.",
+      "detail": "Debugging meant squinting at memory dumps; testers gave up verifying it was bug-free. Elrond's weight was unset so Bilbo could carry him; Bard could refuse to slay the dragon; Thorin behaved like a kleptomaniac. Reed says this also lent the game charm.",
+      "t": 1254,
+      "quote": "the only way to debug is squint hard at a memory dump. The poor folks that tried to verify this game is bug free or winnable gave up",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent story",
+      "kind": "history",
+      "claim": "The Hobbit's simulationist ideas were not adopted by text adventures, which treated its un-Tolkien emergent stories as bugs, but they resurfaced in roguelikes.",
+      "detail": "Reed says the joy of never knowing what happens next gave it charm. Despite being a huge bestseller, its ideas were not picked up by a genre that wanted control, though they had been hanging out in roguelikes all along.",
+      "t": 1355,
+      "quote": "They saw all these emerging stories that seemed very un-Tolken as a bug and not a feature",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "authored vs simulated",
+      "kind": "principle",
+      "claim": "Text adventures pulled back simulation features because a designer telling a specific story finds emergent behavior breaks it, while other genres embraced the weird stories simulation produces.",
+      "detail": "In Q&A Reed says simulation was seen as what computers were good at, but if the story is about the nobility of elves, picking one up and carrying him around breaks it. He calls The Hobbit a bifurcation point where text adventures could have become more like roguelikes.",
+      "t": 1521,
+      "quote": "the design ideas that this is about a story and the designer has a specific story they want to tell",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "genre calcification",
+      "kind": "history",
+      "claim": "Computer game genres calcified around 1985-87, largely due to business and marketing, ending an early-80s period of weird experimental games.",
+      "detail": "In Q&A Reed says many early-80s games don't fit today's genre boxes; publishers learned people would pay for certain kinds of games and demanded more of them. He recommends playing these abandoned experiments in emulators.",
+      "t": 1919,
+      "quote": "An of that was business and marketing and they found out people will pay",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

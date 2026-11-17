@@ -1,0 +1,205 @@
+{
+  "id": "LQPGmxytTws",
+  "title": "Jeff Lait - Teaching Long Term Consequences in Games",
+  "speaker": "Jeff Lait",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=LQPGmxytTws",
+  "talk_type": "design",
+  "summary": "Jeff Lait, author of Powder and many 7DRLs, asks whether games should teach long-term consequences, which he calls one of the hardest things to express in games. He recounts how the 7DRL challenge broke the design stasis of massive roguelikes, and argues the art of a roguelike lives in its systems. Games are good at fun learning through short nested feedback loops, but real-world problems often involve walls (a resource that is free until suddenly exhausted) and hidden growth (costs that compound until they overtake rewards), as in NetHack starvation. He walks through his 7DRLs (Fatherhood, Vicious Orcs, Sword in Hand, Smith's Hand, 1812 and a survival game) as experiments where immediate feedback misleads, and concludes that hard-to-learn games are a valid design space.",
+  "games": [
+    "Powder",
+    "NetHack",
+    "ADOM",
+    "Angband",
+    "GearHead",
+    "Dungeon Crawl Stone Soup",
+    "Clair Obscur: Expedition 33",
+    "Warlords",
+    "Train",
+    "Fatherhood",
+    "Vicious Orcs"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "7drl",
+      "kind": "history",
+      "claim": "The Seven Day Roguelike challenge, started when Joseph Hewitt (GearHead) made a roguelike in a week, broke a design stasis in which roguelikes had to be ADOM- or NetHack-sized and new mechanics had nowhere to be tried.",
+      "detail": "Lait says massive roguelikes like his Powder bake design in, so changing something like hit point recovery means changing the whole game, as Dungeon Crawl's large strip-downs show. Realising a roguelike could be done in seven days opened up experimentation.",
+      "t": 129,
+      "quote": "We had a lot of discussions coming with new idea and mechanics we would like to see go into roguelikes",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "finishing games",
+      "kind": "principle",
+      "claim": "Giving yourself permission to declare a small game complete and move on lets you try more things and explore more of the design space.",
+      "detail": "Unlike Powder, which is not complete, Lait's 7DRLs were actually finished. He says tying the bow, shipping and walking away is hard because creators always see more to add.",
+      "t": 200,
+      "quote": "giving yourself the permission to say it is complete and I can move on gives you the community to try more things",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "systems as art",
+      "kind": "principle",
+      "claim": "In a roguelike, where the font and visuals are rarely designed by the author, the art should live in the code and game systems rather than the presentation.",
+      "detail": "Lait recalls the 'are games art' debate pointing to visuals. He tries to make good art that is still a playable game, citing the physical game Train, whose rules are engineered toward its artistic goal.",
+      "t": 242,
+      "quote": "The art should live in the code of the game. The game systems is where the art should live",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "long-term consequences",
+      "kind": "open-question",
+      "claim": "Long-term consequences are one of the hardest things to express in games, because games excel at short feedback loops and players who fail at long-term loops often don't recognise them and just call the game bad.",
+      "detail": "Lait raised this at an IndieCade discussion when Train's designer asked what is hardest to express in video games.",
+      "t": 319,
+      "quote": "Games seem good working short feedback loops where we learn quickly from mistakes but anything long-term players walk out and fail to learn",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "nested feedback loops",
+      "kind": "example",
+      "claim": "Clair Obscur: Expedition 33 teaches fun learning through clear signposting, early feedback, quick deaths that return you near the decision point, and nested loops scaffolding from small to meta-level mechanics.",
+      "detail": "Lait draws on Theory of Fun's distinction between flow (exercising existing mastery) and fun (learning a new skill). He was struck that he never had to save, realising how much he relied on trusting the developer.",
+      "t": 454,
+      "quote": "It has a bunch of nested loops starting off with small interloops which are short term cycles you can learn the correct behavior",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "learnability",
+      "kind": "warning",
+      "claim": "If games train us to expect that everything is learnable through short, enjoyable feedback loops, we lose the ability to learn things in the world that lack such loops.",
+      "detail": "Lait, as a 'contrarian and mathematician', questions gamifying education: the brain's learning pattern evolved for the world, but there is no reason everything we need to learn fits it.",
+      "t": 570,
+      "quote": "we will have no ability or training ourselves to actually learn things that don't show up as short term feedback loops",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "resource walls",
+      "kind": "example",
+      "claim": "A 'wall' is a resource that seems free and constant until it suddenly runs out, as when Lait's Warlords armies all vanished the turn his gold hit zero after long-running upkeep exceeded income.",
+      "detail": "Lait also shows a volcano simulation whose per-voxel time was constant until it exceeded 64GB of memory and hit swap, with nothing in the graph warning of it. In Warlords his war chest masked growing upkeep; he notes a modern design would warn the player, and asks whether games should.",
+      "t": 708,
+      "quote": "I could lose all the gold I wanted until I hit the wall and as soon as I hit it the armies disappeared",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "food clock",
+      "kind": "example",
+      "claim": "New NetHack players often starve because they first think about food when 'Hungry' appears, which is too late; food management must be planned from the start.",
+      "detail": "Lait says players should pick up rations and eat corpses from the beginning, but they react to the hunger warning instead, leading to complaints that NetHack is impossible because you always starve.",
+      "t": 759,
+      "quote": "the first time they think about starvation is usually when the hungry shows up on the screen. This is probably too late",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "hidden growth",
+      "kind": "principle",
+      "claim": "In 'hidden growth', a slowly rising cost is cheap to fix early but expensive later, yet players react too late because proactive action shows no immediate benefit until the cost overtakes the reward.",
+      "detail": "Lait's real-world example is an invasive species, easy to eradicate when first established but not seen as worth the effort until it causes problems.",
+      "t": 817,
+      "quote": "this cost function is cheap to deal with when low on the curve but more expensive to fix the further it goes up",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "breaking rules",
+      "kind": "principle",
+      "claim": "Walls and hidden growth hurt review scores, but designers should be willing to break such rules deliberately because games shape how players expect the world to work.",
+      "detail": "Lait argues if we expect everything to be learnable in a straightforward dopamine loop, we won't look beyond it outside games.",
+      "t": 861,
+      "quote": "we should always be willing to break those rules of design if we have intention of breaking it",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "attention seeking",
+      "kind": "example",
+      "claim": "Lait's 7DRL Fatherhood makes immediate feedback misleading: scolding children who play tag instantly returns them to dam-building, but because children seek attention, scolding reinforces tag and praise is the strategy that actually works.",
+      "detail": "The player builds a dam against a flood with three children who drift into tag. Praising a child already working seems to do nothing, but praise draws others to the rewarded behaviour. Lait based it on parenting advice to focus on positive reinforcement.",
+      "t": 1000,
+      "quote": "the actual feedback the game is giving you immediately is completely opposite to the actual play you should be doing",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "hidden ending",
+      "kind": "warning",
+      "claim": "Lait's Vicious Orcs hid its good ending behind avoiding easy free-mana spellcasting, hoping the sudden drop in difficulty would signal a mistake, but he believes no player found it independently.",
+      "detail": "Using mana caused fields to freeze and villagers to fall ill, and the ending reveals the player had a psychotic break and killed the villagers. Spells made the game trivially easy (teleport back, heal, repeat), which Lait hoped players would read as a warning.",
+      "t": 1155,
+      "quote": "The hope was the players would recognize that break in gameplay difficulty was a sign they should not have done that",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "world decay",
+      "kind": "example",
+      "claim": "In a later 7DRL, Lait made the consequence overt: casting spells progressively strips item descriptions down to bare utility (an elegant sword becomes a source of wood), and the ending depends on how decayed the player's world view is.",
+      "detail": "Finishing with a world of 'sources of wood' saves the world but you can't enjoy it; finishing without spells gives the best ending. Lait says it plays on how players come to see games as mere numbers, like staring at a minimap instead of the rendered scene.",
+      "t": 1225,
+      "quote": "When you kill the because and finish the game, it is dependent on how decayed your world view is",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "multiple endings",
+      "kind": "example",
+      "claim": "Lait's Sword in Hand, where the player is a sword choosing war or peace missions, scores its ending by how long the world takes to repopulate, deliberately conflating which ending counts as 'good'.",
+      "detail": "War missions (napalm, gunpowder) strengthen armies; peace missions (crops, water filters) help repopulation. Within 15 years gives a peaceful ending with the sword in a museum. The good ending differs for the sword (most violence), the people, the king (any win) and the player (most missions).",
+      "t": 1349,
+      "quote": "it doesn't matter who wins but it matters how long it takes the world to repopulate after the battle",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "population growth",
+      "kind": "example",
+      "claim": "In Lait's Smith's Hand the player is a monopoly blacksmith who can fleece adventurers, but they are breeding orcs, so exploitation must be balanced by continually pruning their hidden growth.",
+      "detail": "There is a risky sweet spot where you farm them for maximum gold without letting them overrun you. Lait's message is that even a monopolist must keep investing because disruptors keep coming.",
+      "t": 1501,
+      "quote": "You have to keep pruning the population in order to ensure they don't overrun and kill you off",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "information delay",
+      "kind": "example",
+      "claim": "Lait's 1812 7DRL shows the illusion of strategic control: the general receives troop positions only via messengers, so the farther troops go the staler the information.",
+      "detail": "Lait could never see how a hyper-realistic general's-tent simulation would be strategic, and Tolstoy's War and Peace persuaded him top-down control is intrinsically impossible. Each side has 10,000 soldiers in 10 regiments, and you can zoom in to watch troops be massacred.",
+      "t": 1603,
+      "quote": "The further away your troops get the more out of date your information is",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "unguided loops",
+      "kind": "example",
+      "claim": "In a Lait survival 7DRL with no broadcast goals, players learned to make a campfire but not the meta-loop of stopping periodically to warm up while exploring, so they froze to death.",
+      "detail": "Each run is a new island with the same rules and only tools and systems, no stated objectives. Players kept walking through snow or lit a fire and left after one or two turns before warming up. Lait compares it to scouts letting a campfire go out.",
+      "t": 1715,
+      "quote": "I should stop ever so often, light a fire, warm up, and continue exploring. This I did not see people figure out",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hard to learn",
+      "kind": "principle",
+      "claim": "Most games should stay easy to learn, but hard-to-learn games that force unguided meta-learning are as valid a design space as hard-to-master ones.",
+      "detail": "Lait closes by saying designers shouldn't polish every game until it matches our trained learning model.",
+      "t": 1756,
+      "quote": "making games that are hard to learn is actually an interesting design space as much as hard to master is",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

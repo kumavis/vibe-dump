@@ -1,0 +1,117 @@
+{
+  "id": "BJ_84d7v3K4",
+  "title": "Younès Rabii - We Are Maxwell's Demons: The Thermodynamics of Procedural Generators",
+  "speaker": "Younès Rabii",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=BJ_84d7v3K4",
+  "talk_type": "design",
+  "summary": "Younès Rabii proposes a formalism, borrowed from thermodynamics, for reasoning about the cost and character of procedural generators, motivated by GenAI marketing that hides the human labour behind generated content. He defines a generator's scale (size of its possibility space), its minimum information volume (Kolmogorov-style compressed size, read as encoded designer knowledge) and its temperature (average output complexity), relating them in an analogue of the ideal gas law. From this he derives that scaling a generator without adding knowledge drifts it toward 'oatmeal', and offers solid / liquid / gas metaphors for generators, illustrated with Slay the Spire's modes and Caves of Qud's books. He closes with a Maxwell's demon analogy: the sorting of good from bad artifacts is real knowledge work by human creators, and calling generation cheap means ignoring or stealing that work.",
+  "games": [
+    "Slay the Spire",
+    "Caves of Qud",
+    "Minecraft"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "cost of generators",
+      "kind": "principle",
+      "claim": "Rabii argues procedural generators are not free content: PCG practitioners have long known breadth trades off against depth and quality, knowledge absent from GenAI cost claims.",
+      "detail": "He contrasts industry claims that PCG and GenAI speed up development cheaply with practitioners' views, citing a joke tweet about producing twice the content in twice the time and a GDC 2007 remark about the trade-off between breadth and depth/quality. He also points to hidden labour such as stolen training data and underpaid filtering work.",
+      "t": 285,
+      "quote": "there's a trade-off between the breath of content you can make in one of these tools and the depth and the quality of that content",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "possibility space",
+      "kind": "technique",
+      "claim": "Rabii models a generator as a deterministic seed-to-artifact function characterised by its possibility space (scale N) and probability distribution, illustrated with 1d6 versus 2d6.",
+      "detail": "Inputs (seeds) and outputs (artifacts) are fixed-size binary strings measured in bits. A 1d6 generator has six equally likely outputs; 2d6 has outputs 2-12 with unequal odds since many combinations make 7 but only one makes 2.",
+      "t": 643,
+      "quote": "the possibility space of a generator which is a simple set that contains all the generator outputs",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "kolmogorov complexity",
+      "kind": "technique",
+      "claim": "Kolmogorov complexity — the minimum description needed to reproduce an artifact — gives a way to measure how patterned or noisy generated output is.",
+      "detail": "Rabii compares three 6x6 pixel images coded in PICO-8 Lua: a checkerboard takes about 30 bytes, a flower about 60, and a noisy image must list every pixel. Low complexity means repetitive structure, high means noise, and the in-between is often the most interesting. Exact values are almost impossible to compute but can be estimated.",
+      "t": 894,
+      "quote": "With a lower lower K complexity you have repetitive structures uh easy to spot patterns. With a high K complexity you have noisy patterns",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "designer knowledge",
+      "kind": "principle",
+      "claim": "The minimum compressed size of a generator's code (its 'minimum information volume') represents the designer knowledge encoded in it, and therefore its real cost to gather, write, test and debug.",
+      "detail": "Code can always be inflated with long names or dead code, but compressing it to the limit leaves only crucial information. Rabii reads that residue as the designer's knowledge, and encoding it is costly in research, specification, testing and debugging.",
+      "t": 1025,
+      "quote": "this is in in my in my view where the designer's knowledge is stored. It is the designer's knowledge uncoded in an algorithm",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator temperature",
+      "kind": "technique",
+      "claim": "Rabii defines a generator's 'temperature' as the average complexity of its outputs and shows that pressure × volume = scale × temperature, an analogue of the ideal gas law.",
+      "detail": "Low temperature means structured outputs, high means noisy. A library that returns one of N stored artifacts at random is itself a generator whose size is N × T bits, which yields the PV = NT relationship and allows bounds between the variables to be plotted.",
+      "t": 1080,
+      "quote": "how complex are the outputs on average. If a generator has a low temperature in average usually its artifacts are have a low complexity",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "oatmeal problem",
+      "kind": "principle",
+      "claim": "Rabii's formalism suggests that increasing a generator's scale or output complexity without adding designer knowledge pushes it toward a white-noise generator, i.e. oatmeal.",
+      "detail": "Plotting generators by scale and minimum information shows extremes: a white-noise generator (little information, outputs everything) and a zipped single artifact. He calls the result 'oatmeal is cheap' and refers listeners to his earlier paper.",
+      "t": 1375,
+      "quote": "if you don't put more knowledge into the system then you will more you're more likely to end up with a generator that is very close",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "states of matter",
+      "kind": "principle",
+      "claim": "Generators can be thought of as solid (rigid, reliable, repetitive, cheap), gaseous (unpredictable, looks different but may not feel different, cheap) or liquid (knowledge-rich, adaptable, parameterised).",
+      "detail": "Rabii maps the three states of matter onto the plot. Solid generators suit hand-made content; gaseous ones lean on random functions; liquid ones contain a lot of knowledge and can take distinctly different shapes via tunable parameters, like water taking its container's shape.",
+      "t": 1462,
+      "quote": "A gaseous one would be much more unpredictable. It will always look different but might not feel different right like oatmeal",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "game modes",
+      "kind": "example",
+      "claim": "Slay the Spire's modes illustrate the three states: the hand-tuned standard mode is solid, the Daily Challenge is gaseous and chaotic, and Custom mode is liquid.",
+      "detail": "The standard mode is sculpted and fine-tuned with a smaller possibility space; the Daily Challenge with random character and modifiers feels less pruned and balanced. Custom mode, where players toggle modifiers, is the most complex and can be configured into either the solid or gaseous version.",
+      "t": 1562,
+      "quote": "both the solid and gazous version of these games can be you can get them from the liquid version",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "generated books",
+      "kind": "example",
+      "claim": "Caves of Qud mixes entropic Markov-chain books with occasional hand-written ones that hold real clues, like crystals in a cloud of smoke that reward exploration.",
+      "detail": "To find the item 'The Fall of House Hastner' (as transcribed) players need information hidden in books; most books are readable Markov-chain nonsense but some are handwritten and lead to interesting objects. Rabii frames the Markov text as gas and the authored bits as crystal.",
+      "t": 1634,
+      "quote": "the handwritten bits are crystal and have been put here here and there",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "curation labor",
+      "kind": "principle",
+      "claim": "Like Maxwell's demon, whose sorting has a hidden memory cost, a generator's separation of desirable from undesirable artifacts depends on hidden human knowledge work; generation only looks cheap if that work is ignored or stolen.",
+      "detail": "Rabii's 'little guy' sorts the possibility space into wanted and unwanted artifacts. A 'tech bro' view treats scraped datasets or underpaid labelling as free and compresses them into a model, forgetting the creators who encoded that knowledge and need to rest and sleep. He says roguelike creators are the demons: gardeners and sculptors who know the work isn't cheap.",
+      "t": 1928,
+      "quote": "We encode our knowledge in our data sets and or generators and we know it isn't cheap",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}
