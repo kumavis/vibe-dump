@@ -19,6 +19,7 @@
 
 import { carveSpirals } from './relief.js'
 import FOOT_LONG_PLATES from '../../../reference/met-fangyi/faces/face-long-foot.plates.json'
+import END_PLATES from '../../../reference/met-fangyi/faces/face-end.plates.json'
 
 export const L1 = 1.4 // plateau height above the ground, mm (dossier 1.2 ± 0.3)
 
@@ -277,7 +278,43 @@ export const FOOT_LONG = [
     },
     // the eye (right-half face mm, mirrored): rounded-square boss, a small sunk pupil low toward the snout
     pillows: [{ c: [101.0, 18.25], w: 5.6, h: 5.9, round: 0.55, height: 3.3, crown: 0.85, slit: { len: 1.2, width: 0.9, depth: 0.6, offset: [-0.4, -0.5], rot: 60 } }],
-    refit: (fits, o) => refit(FOOT_LONG_R5, fits, o), // the end face keeps round 5 until it is traced
+    refit: () => FOOT_END, // the end face has its own tracing
+  },
+]
+
+/**
+ * Foot register, end face — face-end.jpg mm (vessel y = fy − 2), face-end.trace.json (plates with centroid
+ * y < 31): the same kui, narrower and taller-eyed. (1) upper jaw: snout band with three spirals, round the notch
+ * end into the lip, down beside the eye, the hooked lower jaw with its ring lobe; (2) bottle horn; (3) body band
+ * (two spirals); (4) the coil, its outer column running down beside the body; (5) claw; (6) the lower limb under
+ * the body; (7) the leg; (8) the lip curl. Right half read, mirrored about the face axis x 59.
+ */
+export const FOOT_END = [
+  {
+    ...FOOT_LONG[0], data: END_PLATES, axis: 59, y: [0, 31],
+    groups: [{ box: [82, 20.4, 91, 29], height: 3.2, shoulder: 1.5, pillow: 0.6, pillowWidth: 2.2, contour: false }],
+    deco: {
+      spirals: [
+        [66.6, 25.6, 3.2, 1], [70.5, 25.1, 3.2, 1], [73.6, 24.9, 3.0, 1], // snout row
+        [79.0, 12.6, 3.2, -1], // jaw lobe
+        [87.5, 16.6, 4.0, 1], [92.4, 16.4, 4.0, -1], // body
+        [88.2, 11.1, 3.0, 1], [92.3, 11.1, 3.0, -1], // lower limb
+        [83.6, 12.0, 2.6, 1], // leg
+        [95.9, 23.1, 2.6, -1], // the coil's sunk eye
+        [84.4, 25.6, 2.4, 1], // horn bulb
+        [72.2, 29.6, 2.0, 1], // lip curl
+      ],
+      lines: [
+        [[76.6, 25.2], [80.6, 24.9]], [[76.6, 23.8], [81.0, 23.6]],
+        [[73.2, 14.0], [77.0, 14.0], [77.0, 11.6], [75.0, 11.6]], [[73.0, 10.4], [79.8, 10.4]],
+        [[84.6, 18.8], [97.6, 18.8]],
+        [[100.8, 13.6], [100.8, 26.4], [93.6, 26.4], [93.6, 22.0]],
+        [[86.0, 23.6], [87.4, 24.6], [86.0, 25.6]], [[88.2, 21.6], [88.2, 27.4]],
+      ],
+      pockets: [{ pts: [[94.2, 21.6], [97.6, 21.6], [97.6, 24.6], [94.2, 24.6]], round: [1.2, 1.0, 1.0, 1.2], depth: 1.0 }],
+    },
+    pillows: [{ c: [80.5, 18.1], w: 4.4, h: 5.3, round: 0.55, height: 3.3, crown: 0.85, slit: { len: 1.6, width: 0.8, depth: 0.6, rot: 90 } }],
+    refit: () => FOOT_END,
   },
 ]
 
@@ -520,7 +557,7 @@ export function renderTraced(kit, panel, layers, { fields, halfRect, ground = {}
     const mbox = ([x0, y0, x1, y1]) => [2 * ax - x1, y0, 2 * ax - x0, y1]
     const groups = (s.groups || []).map(({ box, ...o }) => ({ boxes: [box, mbox(box)], o, items: [] }))
     const rest = []
-    const list = s.data.plates || []
+    const list = (s.data.plates || []).filter((pl) => !s.y || inBox(centroid(pl.outer), [-1e9, s.y[0], 1e9, s.y[1]]))
     for (const pl of list) {
       const c = centroid(pl.outer)
       const g = groups.find((q) => q.boxes.some((b) => inBox(c, b)))

@@ -45,6 +45,14 @@ export default {
     'detail-body': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.155, target: [4, 166, 167], ref: 'detail-body.jpg' },
     'detail-cord': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.06, target: [2, 231, 137], ref: 'detail-cord.jpg' },
     'detail-foot': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.172, target: [-56, 48, 126], ref: 'detail-foot.jpg' },
+    // TMP-HUFIX
+    'tmp-hR-front': { azimuth: 0, elevation: 7.8, fov: 6, fit: 0.2, target: [122, 292, 0] },
+    'tmp-hR-side': { azimuth: 90, elevation: 8, fov: 6, fit: 0.2, target: [122, 292, 0] },
+    'tmp-hR-34': { azimuth: 50, elevation: 20, fov: 6, fit: 0.22, target: [122, 292, 0] },
+    'tmp-hR-back': { azimuth: 150, elevation: 15, fov: 6, fit: 0.22, target: [122, 292, 0] },
+    'tmp-head-top': { azimuth: 60, elevation: 55, fov: 6, fit: 0.1, target: [130, 325, 0] },
+    'tmp-body-close': { azimuth: 0, elevation: 7.8, fov: 3, fit: 0.06, target: [0, 166, 168] },
+    'tmp-shoulder-close': { azimuth: 0, elevation: 20, fov: 3, fit: 0.06, target: [0, 270, 112] },
     // flat faces (KIT.md § Flat faces; reference/nezu-hu/faces.json): chord planes down photo-11's line of sight
     'face-shoulder': { face: { center: [0, 274, 109.07], normal: [0, 0.135, 0.9908], up: [0, 0.9908, -0.135], width: 200, height: 76 }, ref: 'faces/face-shoulder.jpg' },
     'face-body': { face: { center: [0, 142, 170.17], normal: [0, 0.135, 0.9908], up: [0, 0.9908, -0.135], width: 260, height: 164 }, ref: 'faces/face-body.jpg' },

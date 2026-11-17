@@ -35,7 +35,7 @@ const EAVE_Y = LID_Y + SKIRT // 164.8
 const RISE = 224.1 - EAVE_Y // eave line → ridge line (59.3)
 const OGIVE = (alpha, beta, n = 16) => Array.from({ length: n + 1 }, (_, i) => { const t = i / n; return [1 - Math.pow(1 - Math.pow(t, alpha), beta), t] })
 const SECTION = OGIVE(1.325, 0.8)
-const PILLOW = { long: 1.5, short: 1.0 } // mm: each slope swells along its length (three-quarter.jpg; side.jpg outline +1 mm)
+const PILLOW = { long: 1.0, short: 0.8 } // mm: each slope swells along its length (three-quarter.jpg; side.jpg outline +1 mm)
 const CONVEX = -0.5 // legacy `concave` (unused once `section` is given)
 const RIDGE = 100 // ridge length (mm)
 // knob: side.jpg end outline (profile.json, y 238 → 254) is the same ogive as the lid: 9.2 / 7.3 / 5.0 / 2.1 mm
@@ -68,9 +68,9 @@ export default {
     // back edge and notch jamb, knob top), jointly with the long-axis wall widths: camera ≈ 1.0 m from the axis at
     // 270 mm above the ground (el 8.2° toward the target), az 26.8°, full-frame vertical fov 23° (11 px rms)
     'three-quarter': { azimuth: 26.8, elevation: 8.2, fov: 23, fit: 1.29, target: [0, 129.6, 0], ref: 'three-quarter.jpg' },
-    side: { azimuth: 90, elevation: 5, fov: 26, fit: 1.3, ref: 'side.jpg' },
-    'side-x8': { azimuth: 90, elevation: 5, fov: 8, fit: 1.3, ref: 'side.jpg' },
-    'side-x14': { azimuth: 90, elevation: 4, fov: 14, fit: 1.3, ref: 'side.jpg' },
+    // side.jpg is the same studio set-up seen square to the +X end (no long face visible, el ≈ 5°): the same ≈ 1 m
+    // camera distance as the three-quarter solve gives fov 20 at this framing (it was 26, ≈ 0.8 m)
+    side: { azimuth: 90, elevation: 5, fov: 20, fit: 1.3, ref: 'side.jpg' },
     front: { azimuth: 0, elevation: 4, fov: 26, fit: 1.25 },
     top: { azimuth: 20, elevation: 62, fov: 26, fit: 1.25 },
     'detail-face-short': { azimuth: 90, elevation: 3, fov: 26, fit: 0.33, target: [68, 81, 0], ref: 'detail-face-short.jpg' },
@@ -85,13 +85,13 @@ export default {
     'detail-knob': { azimuth: 21, elevation: 10, fov: 26, fit: 0.14, target: [0, 240, 0], ref: 'detail-knob.jpg' },
     // flat faces (KIT.md § Flat faces): head-on, framed on a face rectangle in mm; ref = the flattened photograph
     // (reference/met-fangyi/faces.json → tools/faces.mjs --rectify)
-    'face-long': { face: { center: [0, 81, 49], normal: [0, -0.0247, 1], up: [0, 1, 0.0247], width: 152, height: 166 }, ref: 'faces/face-long.jpg' },
-    'face-long-frieze': { face: { center: [0, 145, 50.6], normal: [0, -0.0247, 1], up: [0, 1, 0.0247], width: 152, height: 38 }, ref: 'faces/face-long-frieze.jpg' },
-    'face-long-main': { face: { center: [0, 81, 49], normal: [0, -0.0247, 1], up: [0, 1, 0.0247], width: 152, height: 100 }, ref: 'faces/face-long-main.jpg' },
-    'face-long-foot': { face: { center: [0, 17, 47.4], normal: [0, -0.0247, 1], up: [0, 1, 0.0247], width: 152, height: 38 }, ref: 'faces/face-long-foot.jpg' },
-    'face-lid-long': { face: { center: [0, 195.85, 25.5], normal: [0, 0.67, 0.742], up: [0, 0.742, -0.67], width: 146, height: 82 }, ref: 'faces/face-lid-long.jpg' },
+    'face-long': { face: { center: [0, 81, 48.4], normal: [0, -0.0314, 1], up: [0, 1, 0.0314], width: 152, height: 166 }, ref: 'faces/face-long.jpg' },
+    'face-long-frieze': { face: { center: [0, 145, 50.4], normal: [0, -0.0314, 1], up: [0, 1, 0.0314], width: 152, height: 38 }, ref: 'faces/face-long-frieze.jpg' },
+    'face-long-main': { face: { center: [0, 81, 48.4], normal: [0, -0.0314, 1], up: [0, 1, 0.0314], width: 152, height: 100 }, ref: 'faces/face-long-main.jpg' },
+    'face-long-foot': { face: { center: [0, 17, 46.4], normal: [0, -0.0314, 1], up: [0, 1, 0.0314], width: 152, height: 38 }, ref: 'faces/face-long-foot.jpg' },
+    'face-lid-long': { face: { center: [0, 195.85, 25.13], normal: [0, 0.6646, 0.7472], up: [0, 0.7472, -0.6646], width: 146, height: 82 }, ref: 'faces/face-lid-long.jpg' },
     'face-end': { face: { center: [67.3, 81, 0], normal: [1, -0.0247, 0], up: [0.0247, 1, 0], width: 118, height: 166 }, ref: 'faces/face-end.jpg' },
-    'face-lid-end': { face: { center: [59.75, 195.85, 0], normal: [0.945, 0.326, 0], up: [-0.326, 0.945, 0], width: 108, height: 66 }, ref: 'faces/face-lid-end.jpg' },
+    'face-lid-end': { face: { center: [59.6, 195.85, 0], normal: [0.9469, 0.3216, 0], up: [-0.3216, 0.9469, 0], width: 108, height: 66 }, ref: 'faces/face-lid-end.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
