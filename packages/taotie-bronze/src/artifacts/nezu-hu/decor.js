@@ -17,8 +17,10 @@ import INSCRIPTION from '../../../reference/nezu-hu/inscription.json'
 // a dark centre, an eye). At 5 px/mm (q 1) the groove is ≈ 2.3 px, at the phone cap (q 0.5, 2048 px) ≈ 1.6 px;
 // the geometry is displaced by the low-passed field, so the line lives in the normal map and the cavity channel.
 export const MEDIAN = { width: 0.46, depth: 0.32, inset: 0.45, profile: 'v', eye: { r: 0.38 } }
+// hu-fix: bands widened (shoulder 2.35 → 2.8 mm, body 2.8 → 3.2 mm, knobs with them) against photo-11 at 6×: the
+// bronze's bands are broad, flat-topped and close, the ground between them narrow channels (≈ 1.2–1.6 mm)
 // strands ≈ 2.1 mm, round-shouldered with a narrow flat top, ≈ 1.4 mm proud; knobs and pellets a little prouder
-const RIB = { median: MEDIAN, rib: 2.35, height: 1.7, profile: 'plateau', shoulder: 0.8, knob: 1.35, knobHeight: 2.0, jitter: 0.35, wobble: 0.14, wavelength: 16, swell: 0.08 }
+const RIB = { median: MEDIAN, rib: 2.8, height: 1.7, profile: 'plateau', shoulder: 0.8, knob: 1.55, knobHeight: 2.0, jitter: 0.35, wobble: 0.14, wavelength: 16, swell: 0.08 }
 
 /** a flat-topped ledge (plateau section, crisp shoulders) */
 function flatCord(panel, x0, x1, y, width, height) {
@@ -43,7 +45,7 @@ export function bodyPanel(kit, P, size, { ppmm, seed }) {
   for (let k = 0; k < 9; k++) rows.push({ weight: 1, mirror: k % 2 === 1, shift: k % 2 ? 0.5 : 0 })
   // the belly's impressions read FATTER than the shoulder's on photo-11 (detail-body, seen face-on: strands ≈ 2.8 mm,
   // channels ≈ 1.6 mm — a dense mass with little ground), the shoulder's ≈ 2.2 mm
-  kit.panchiBand(panel, rect, { unit: 'nezu-hu', rows, ...RIB, rib: 2.8, shoulder: 0.85, knob: 1.55, knobHeight: 2.1, centre: W / 2, rowWidth: (y) => size.widthAt(y), seed })
+  kit.panchiBand(panel, rect, { unit: 'nezu-hu', rows, ...RIB, rib: 3.2, shoulder: 0.85, knob: 1.75, knobHeight: 2.1, centre: W / 2, rowWidth: (y) => size.widthAt(y), seed })
   // cords: plain (224.4), twisted rope (229.7), plain (236.4)
   const yc = (y) => A(y)
   // photo-11 (detail-cord): a broad flat ledge, a plain strip, the rope (long sloping strands ≈ 5.5 mm apart), a plain

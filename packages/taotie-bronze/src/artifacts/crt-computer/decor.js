@@ -167,7 +167,7 @@ export function bezelPanel(kit, { ppmm, seed }) {
   els.push(...K.els)
   kit.carve(panel, els, { height: H1, shoulder: 0.7, depth: 0.45, irregularity: 0.8, seed })
   // the eyes: big pillow bosses with slit pupils, the highest relief on the face
-  kit.pillowBoss(panel, { c: P([40, yEye]), w: 36, h: 23, round: 0.58, height: 6.8, crown: 0.9, rot: 0, slit: { len: 13, width: 1.8, depth: 1.5, offset: [-0.8, -0.4] }, ring: { gap: 1.0, line: 0.9, depth: 0.7 } })
+  kit.pillowBoss(panel, { c: P([40, yEye - 0.5]), w: 35, h: 24.5, round: 0.82, height: 7.2, crown: 0.95, rot: -6, slit: { len: 14, width: 2.6, depth: 2.0, offset: [-1.2, -0.3] }, ring: { gap: 1.0, line: 0.9, depth: 0.7 } })
   kuiEye(kit, panel, K.eye, 3.6)
   // the knobs' collars: a sunk ring round each and a raised ring outside it (the knobs themselves are cast bosses)
   panel.raise((ctx) => {

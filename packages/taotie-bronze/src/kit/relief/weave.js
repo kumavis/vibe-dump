@@ -340,7 +340,8 @@ function scroll(L, T, p) {
  */
 function ring(L, T, p) {
   const w = p.w, E = emptyEls()
-  const mid = T / 2, a = T / 2 - w / 2 - 0.4, half = Math.min(L / 2 - w / 2 - 0.3, p.half ?? L * 0.42)
+  // the oval may lap a little over its neighbours' frames (the bo: ≈ 20 mm wide in a 16 mm slot)
+  const mid = T / 2, a = T / 2 - w / 2 - 0.4, half = Math.min(L * 0.62, p.half ?? L * 0.42)
   const c = (a * a - half * half) / (2 * half), R = half + c
   for (const sgn of [-1, 1]) {
     const cc = [L / 2 - sgn * c, mid], th = Math.atan2(a, c) * 1.22
@@ -509,10 +510,10 @@ export const WEAVE_PRESETS = {
   // dragons — every second cell turned 180°, S-links between; the two columns are the same column REPEATED (not mirrored)
   'bo-centre-panel': {
     sequence: [{ unit: 'scroll', h: 0.62 }, { unit: 'dragon' }, { unit: 'dragon' }, { unit: 'dragon' }, { unit: 'dragon' }, { unit: 'scroll', h: 0.62, params: { two: true } }, { unit: 'dragon' }, { unit: 'dragon' }],
-    cell: [27], tiling: { y: 'rotate' }, gapY: 6.5, links: true, params: { link: true, nest: 1, head: 1.15, headX: 0.1 }, ribs: 3, rib: 1.7, groove: 0.55, plaque: { w: 56, h: 262 },
+    cell: [27], tiling: { y: 'rotate' }, gapY: 6.5, links: true, params: { link: true, nest: 1, head: 1.0, headX: 0.16 }, ribs: 3, rib: 1.7, groove: 0.55, plaque: { w: 56, h: 262 },
   },
   // the strips between the boss rows: dragons in G-frames ≈ 35 × 34 mm facing the centre, the crest over the frame
-  'bo-band': { unit: 'dragon', cell: [40, 34], tiling: { x: 'mirror' }, params: { nest: 1, head: 1.2, closed: false }, ribs: 3, rib: 1.75, groove: 0.6, plaque: { w: 160, h: 35 } },
+  'bo-band': { unit: 'dragon', cell: [40, 34], tiling: { x: 'mirror' }, params: { nest: 1, head: 0.95, headY: 0.2, closed: false }, ribs: 3, rib: 1.75, groove: 0.6, plaque: { w: 160, h: 35 } },
   // the field: dragons in G-frames, cells 62 × 31.6 mm, the crest hooked back over the head (no stalk: the rows' stalks
   // would line up into spines the bronze does not have), rows flipped by turns, a straight repeat round the bell
   'bo-field': { unit: 'dragon', cell: [62, 31.6], tiling: { y: 'flip' }, params: { nest: 1, head: 0.92, headX: 0.16, closed: true, crest: 'hook' }, ribs: 3, rib: 1.6, groove: 0.55, plaque: { w: 186, h: 63 } },

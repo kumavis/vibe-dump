@@ -98,7 +98,7 @@ export function upperPanels(kit, { ppmm, seed, y0 }) {
     const yb = Y(b0) + 0.4, T = b1 - b0 - 0.8
     for (const u of UNITS) {
       if (!u) {
-        kit.weaveMerge(bandEls, kit.weaveMap(kit.weaveCell('ring', 16, T, { w: wB, half: 10.6 }), ([s, t]) => [113 + s, yb + t]))
+        kit.weaveMerge(bandEls, kit.weaveMap(kit.weaveCell('ring', 16, T, { w: wB, half: 7.4 }), ([s, t]) => [113 + s, yb + t]))
         continue
       }
       const [xa, xb, crest] = u

@@ -44,7 +44,7 @@ export default {
     'detail-panchi': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.129, target: [5, 278, 107], ref: 'detail-panchi.jpg' },
     'detail-body': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.155, target: [4, 166, 167], ref: 'detail-body.jpg' },
     'detail-cord': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.06, target: [2, 231, 137], ref: 'detail-cord.jpg' },
-    'detail-inscription': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.206, target: [-5, 364, 90], ref: 'detail-inscription.jpg' },
+    'detail-inscription': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.186, target: [-5, 361, 90], ref: 'detail-inscription.jpg' },
     'detail-foot': { azimuth: 0, elevation: 7.8, fov: 4, fit: 0.172, target: [-56, 48, 126], ref: 'detail-foot.jpg' },
     // TMP-HUFIX
     'tmp-hR-front': { azimuth: 0, elevation: 7.8, fov: 6, fit: 0.2, target: [122, 292, 0] },
