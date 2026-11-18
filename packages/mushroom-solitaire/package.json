@@ -1,0 +1,26 @@
+{
+  "name": "@vibe-dump/mushroom-solitaire",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node --test engine.test.js drop-target.test.js",
+    "test:browser": "node --test browser.test.mjs"
+  },
+  "gallery": {
+    "title": "Mushroom Solitaire",
+    "description": "A little patch of patience, with hand-drawn mushroom cards.",
+    "tags": [
+      "game",
+      "kids",
+      "art"
+    ],
+    "status": "done",
+    "models": [
+      "GPT-6"
+    ],
+    "thinking": "high"
+  }
+}

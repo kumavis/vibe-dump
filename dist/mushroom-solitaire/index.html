@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6d935b" />
+  <meta name="description" content="Solitaire on the grass, with hand-drawn mushroom cards." />
+  <title>Mushroom Solitaire</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍄%3C/text%3E%3C/svg%3E" />
+  <link rel="preload" as="image" href="./cards/back.jpg" fetchpriority="high" />
+  <script type="module" crossorigin src="./assets/index-C-7kBlMi.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CO4WZrDW.css">
+</head>
+<body>
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute"><defs>
+    <filter id="lemon-contrast" color-interpolation-filters="sRGB">
+      <!-- Isolate bright yellows, preserving paper, outlines, stems and court art. -->
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  5 0 -5 0 -.6" result="warm" />
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  -6 6 0 0 1" result="yellowHue" />
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  6 0 0 0 -4.2" result="bright" />
+      <feComposite in="warm" in2="yellowHue" operator="in" result="warmYellow" />
+      <feComposite in="warmYellow" in2="bright" operator="in" result="yellowMask" />
+      <feColorMatrix in="SourceGraphic" type="matrix" values=".65 0 .35 0 0  -.7 1 .7 0 0  -1.4 0 2.4 0 0  0 0 0 1 0" result="goldInk" />
+      <feComposite in="goldInk" in2="yellowMask" operator="in" result="enhancedYellow" />
+      <feComposite in="enhancedYellow" in2="SourceGraphic" operator="over" />
+    </filter>
+  </defs></svg>
+  <div class="page">
+    <main>
+      <h1 class="sr-only">Mushroom Solitaire</h1>
+      <section class="game" aria-label="Solitaire garden">
+        <div class="game-bar"><div class="stats"><div><span>TIME</span><strong id="time">0:00</strong></div><div><span>MOVES</span><strong id="moves">0</strong></div><div><span>HOME</span><strong><span id="gathered">0</span><small> / 52</small></strong></div></div><div class="utilities"><button id="sound" class="icon-button" aria-label="Turn sound on" aria-pressed="false"></button><button id="help" class="help-button" aria-label="How to play">?</button></div></div>
+        <div class="table-surface">
+          <div class="table" id="table">
+            <div class="top-row"><div class="stock-area"><div id="stock" class="pile stock" data-type="stock"></div><span class="pile-label" id="stock-label">PICK A CARD</span></div><div class="waste-area"><div id="waste" class="pile" data-type="waste"></div><span class="pile-label">YOUR PICK</span></div><div class="top-spacer"></div><div class="foundations" id="foundations"></div></div>
+            <div class="tableau" id="tableau"></div>
+          </div>
+          <div class="garden-note" id="message" role="status" aria-live="polite">A fresh little start. Let’s see what grows.</div>
+        </div>
+        <div class="toolbar"><div class="tools"><button id="undo" disabled><span aria-hidden="true">↶</span> Undo <kbd>Z</kbd></button><button id="hint"><span aria-hidden="true">☀</span> Hint <kbd>H</kbd></button><button id="collect"><span aria-hidden="true">✧</span> Gather</button></div><button id="new-game" class="new-game"><span aria-hidden="true">⤨</span> New game</button></div>
+      </section>
+    </main>
+  </div>
+  <dialog id="dialog"><div class="dialog-inner" id="dialog-content"></div></dialog>
+  <div id="confetti" aria-hidden="true"></div>
+</body>
+</html>
