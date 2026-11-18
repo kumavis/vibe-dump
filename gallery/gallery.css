@@ -211,3 +211,6 @@ body {
   color: var(--muted);
   font-size: 0.85rem;
 }
+
+#loading[hidden], #error[hidden], .empty[hidden] { display: none; }
+#error button { font: inherit; color: inherit; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: .3rem .6rem; cursor: pointer; }

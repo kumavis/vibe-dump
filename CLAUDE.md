@@ -8,122 +8,53 @@ This file is the playbook for adding a new app. Follow it top to bottom.
 
 ## How the build fits together
 
-```
-npm run build                                    (by hand — output is committed)
-├─ build:apps      → vite build in every package  → packages/<name>/dist/
-└─ build:gallery   → scripts/build-gallery.mjs
-                     • copies each packages/<name>/dist into dist/<name>/
-                     • copies the committed packages/<name>/thumbnail.jpg beside it
-                     • renders the grid dist/index.html from each package's
-                       `gallery` field, most recently updated vibe first
+- App source and metadata live in `packages/<slug>/`; finished app assets in
+  `dist/<slug>/` and app thumbnails are committed.
+- `gallery/` owns the stable HTML shell, JS renderer/model, and CSS.
+- `npm run build:gallery` reads package metadata and committed app assets,
+  writes ignored `dist/apps.json`, and copies the stable gallery shell. It
+  never builds apps, assembles app directories, or takes screenshots.
+- `npm run assemble:apps -- <slug>` is LOCAL ONLY. It copies a completed
+  `packages/<slug>/dist/` and thumbnail into `dist/<slug>/`.
+- `npm run build` is the LOCAL full-build shortcut: compile apps, assemble,
+  generate the gallery. `npm run preview` generates the gallery before serving.
+- Deployment runs asset verification and lightweight gallery generation with
+  Node builtins. No dependency install, app build, browser, or screenshot step.
 
-npm run thumbnails                               (needs a browser — run by hand)
-└─ scripts/thumbnails.mjs
-   • screenshots each app with Playwright → packages/<name>/thumbnail.jpg
-   • you commit the result
-
-npm run verify                                   (what CI runs — builds nothing)
-└─ scripts/verify.mjs
-   • checks the committed dist/ still matches packages/
-```
-
-**Nothing is built in CI.** Two generated things are produced by hand and
-committed, because both got more expensive with every vibe added:
-
-- **`dist/`** — the assembled gallery. `deploy.yml` publishes the committed copy
-  with no Node, no npm and no build; `ci.yml` runs `npm run verify` and nothing
-  else. So the last step before pushing is always `npm run build` + commit
-  `dist/`. Vite output is deterministic, so an app you didn't touch rebuilds
-  byte-identical and doesn't show up in the diff.
-- **`packages/<name>/thumbnail.jpg`** — captured once after developing an app.
-  A card can't silently change because a screenshot landed on a different frame.
-
-The gallery is **auto-discovered**: any package with a built `dist/index.html`
-shows up. There is **no central registry to edit** — wiring up a new app means
-creating the package correctly, nothing more.
-
-The full contributor workflow — create, iterate, shoot, prepare the PR — is in
-[README.md](./README.md#working-on-a-vibe). What follows is the checklist form
-plus the gotchas that only bite when you're deep in it.
+Generated shared files (`dist/index.html`, `gallery.css`, `gallery.js`,
+`gallery-model.js`, `apps.json`) are ignored. **Never commit or hand-edit them.**
+New apps must not add entries to a central JS list: discovery reads each
+package's metadata. Counts are computed by the browser from the generated list.
+Source recency still comes from Git; deployment fetches commit/tree history
+with `filter: blob:none`, and name/date queries use `--no-renames` so they do
+not fetch historical asset contents.
 
 ## Add a new package — checklist
 
-Pick a `slug` (kebab-case, e.g. `particle-pond`). It becomes the directory name
-*and* the URL path (`/vibe-dump/<slug>/`).
+1. Create `packages/<slug>/package.json` with the established workspace name,
+   Vite dev/build scripts, and `gallery` metadata. See README for the example.
+2. Re-export `../../vite.config.shared.js` from `vite.config.js`; add the entry
+   `index.html` and self-contained app source with relative asset paths.
+3. Run `npm install` locally to register the workspace. Keep lockfile updates
+   in a separate commit from app source.
+4. Build locally: `npm run build -w @vibe-dump/<slug>`.
+5. For a new app, deliberately capture and inspect its local thumbnail with
+   `npm run thumbnails -- <slug>`. Existing thumbnails change only on request.
+6. Run `npm run assemble:apps -- <slug>`, `npm run verify`, and
+   `npm run preview`. Confirm the gallery and app load.
+7. Commit only `packages/<slug>/` and `dist/<slug>/` for the app. No shared
+   gallery regeneration needs to appear in the diff.
 
-1. **Create `packages/<slug>/package.json`** — the `gallery` field is what the
-   grid renders, so write a real title and a one-line description:
-
-   ```json
-   {
-     "name": "@vibe-dump/<slug>",
-     "version": "0.0.0",
-     "private": true,
-     "type": "module",
-     "scripts": { "dev": "vite", "build": "vite build" },
-     "gallery": {
-       "title": "Particle Pond",
-       "description": "One-line pitch shown on the gallery card.",
-       "tags": ["art"],
-       "status": "wip",
-       "models": ["Opus 5"],
-       "thinking": "high"
-     }
-   }
-   ```
-
-   See **Gallery metadata** below for what goes in the four new fields.
-
-2. **Create `packages/<slug>/vite.config.js`** — always re-export the shared
-   config (it sets `base: './'` so the app works under the Pages sub-path):
-
-   ```js
-   export { default } from '../../vite.config.shared.js'
-   ```
-
-3. **Add the app's entry `packages/<slug>/index.html`** plus whatever
-   `main.js` / `style.css` it needs. Reference assets with **relative** paths
-   (`./main.js`, `./style.css`) — never absolute (`/main.js`).
-
-4. **Register the workspace**: run `npm install` once so npm links the new
-   package. (Needed any time you add a package.)
-
-5. **Build + verify**:
-
-   ```bash
-   npm run build            # builds all apps + regenerates the gallery
-   npm run preview          # serve dist/ at http://127.0.0.1:4173
-   ```
-
-   Confirm the new card appears in the gallery and its app loads.
-
-6. **Shoot the thumbnail** — a new app has no card image until you do, and
-   `npm run verify` fails on the missing one:
-
-   ```bash
-   npm run thumbnails                 # shoots only apps with no thumbnail yet
-   ```
-
-   **Look at the result** (`packages/<slug>/thumbnail.jpg`) before moving on —
-   see the section below for the ones that come out blank, and for the
-   `waitFor` / `click` / `settle` knobs that fix them.
-
-7. **Rebuild and commit the built gallery** — `dist/` is committed, so a PR that
-   adds an app but not its built output fails CI:
-
-   ```bash
-   npm run build                      # apps + gallery, with the new card in it
-   npm run verify                     # the exact check CI runs
-   git add packages/<slug> dist
-   ```
-
-That's the whole wiring. The "N and counting" tagline updates itself.
+For gallery changes, edit `gallery/` and the relevant scripts, run
+`npm run test:gallery`, generate the local gallery, and run the LOCAL browser
+checks with `npm run test:gallery:browser`. Preserve the requirement that
+CI/deployment never installs app dependencies, builds apps, or captures images.
 
 ## Gallery metadata
 
 Beyond `title` and `description`, each package's `gallery` field carries four
-things the grid uses. The vocabularies live in `scripts/apps.mjs`. The gallery
-build warns about a value outside them and `npm run verify` fails on it, because
+things the grid uses. The vocabularies live in `gallery/gallery-model.js`. The gallery
+build and `npm run verify` reject values outside them, because
 a tag with no chip quietly drops the app out of every filtered view.
 
 | field      | values                                              |
@@ -165,7 +96,7 @@ an unrecorded app reads as silent rather than as the word "unknown".
 
 `npm run thumbnails` shoots `packages/<slug>/thumbnail.jpg` with Playwright's
 Chromium. It's a **local, by-hand step** — never CI. Apps must be built first,
-because it shoots the real `dist/` output, not the dev server.
+because it shoots the real `packages/<slug>/dist/` output, not the dev server.
 
 ```bash
 npm run thumbnails                  # only the apps that have no thumbnail yet
@@ -239,10 +170,9 @@ above. Keep provenance in the commit message (link the source PR).
 
 ## Conventions
 
-- **`dist/` is committed** — it's what Pages deploys, and CI builds nothing.
-  Always finish with `npm run build && npm run verify` before pushing.
-  `packages/*/dist/` stays gitignored: it's the intermediate `dist/` is
-  assembled from, not the deployable.
+- **`dist/<slug>/` app assets are committed.** Shared gallery output is ignored.
+  Build and assemble the changed app locally, then run `npm run verify`.
+  `packages/*/dist/` remains an ignored local build intermediate.
 - `packages/*/thumbnail.jpg` is committed too — an input to the build rather
   than output of it.
 - Keep each app self-contained in its own package; no cross-package imports.
