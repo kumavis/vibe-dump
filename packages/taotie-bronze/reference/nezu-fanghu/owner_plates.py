@@ -55,6 +55,10 @@ P = fwd(-(17.4 + (S - 20.6) * 1.14), Y)
 snap = json.load(open(ROOT + '.work/lead/propose/hu-snapped.json'))['outlines']; crop = cv2.imread(ROOT + '.work/lead/propose/hu-crop.jpg')
 M = np.zeros(crop.shape[:2], np.uint8); cv2.fillPoly(M, [np.array(o).round().astype(np.int32) for o in snap], 1)   # even-odd
 fig = map_coordinates(M.astype(np.float32), [(P[..., 1] - 840) * 3, (P[..., 0] - 280) * 3], order=1, mode='constant') > 0.5
+import os
+if os.path.exists(REF + 'faces/dev-up.fused-outlines.json'):       # better: both upper birds registered and averaged (see that file's note)
+    FO = json.load(open(REF + 'faces/dev-up.fused-outlines.json'))['outlines_dev_mm']
+    f8 = np.zeros(S.shape, np.uint8); cv2.fillPoly(f8, [toPx(o, fr).round().astype(np.int32) for o in FO], 1); fig = f8 > 0
 dev = cv2.remap(photo, P[..., 0].astype(np.float32), P[..., 1].astype(np.float32), cv2.INTER_LINEAR)
 field = np.array(UP['field']['poly']); fm = np.zeros(S.shape, np.uint8); cv2.fillPoly(fm, [toPx(field, fr).round().astype(np.int32)], 1)
 inner = cv2.erode(fm, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int((UP['rim'] + 0.2) * PP) + 1,) * 2))     # inside the stepped rim
@@ -64,7 +68,7 @@ figU = carve((fig & (inner > 0)).astype(np.uint8), fr, eye) > 0
 PU, figU = plates(figU, fr)
 cov = float(figU.sum() / max(1, fm.sum()))
 json.dump({'zone': 'up', 'units': 'mm', 'frame': UP['frame'], 'field': UP['field'], 'rim': UP['rim'], 'plates': PU, 'eyes': [eye], 'coverage': round(cov, 3),
-           'generator': "tools/propose.py (trained on the owner's tracing and corrections) + tools/snap.py, upper-left cartouche mirrored; reference/nezu-fanghu/owner_plates.py"},
+           'generator': "tools/propose.py (trained on the owner's tracing and corrections) + tools/snap.py on both upper cartouches registered and averaged (faces/dev-up.fused-outlines.json); reference/nezu-fanghu/owner_plates.py"},
           open(REF + 'faces/dev-up.machine.json', 'w'), separators=(',', ':'))
 sheet('up-plates.jpg', dev, fr, PU, field, eye); print('upper: plates', len(PU), 'holes', sum(len(p['holes']) for p in PU), 'coverage %.2f' % cov)
 
@@ -86,7 +90,10 @@ hc = max(cv2.findContours(hull, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[0], ke
 fieldL = np.round(toMm(cv2.approxPolyDP(hc.astype(np.float32), 0.15 * PP, True)[:, 0, :] + 0.5, fr), 2)
 PL, figL = plates(carve(fig, fr, eye) > 0, fr)
 cov = float(figL.sum() / max(1, hull.sum()))
-json.dump({'zone': 'low', 'units': 'mm', 'frame': LOW['frame'], 'field': {'poly': fieldL.tolist()}, 'rim': 0, 'plates': PL, 'eyes': [eye], 'coverage': round(cov, 3),
+import os
+LN = json.load(open(REF + 'faces/dev-low.owner-lines.json'))['lines'] if os.path.exists(REF + 'faces/dev-low.owner-lines.json') else []
+lines = [{'line': np.round(warp(l['line']), 2).tolist(), 'w': l['w']} for l in LN]          # owner_lines.py: incised lines on the figure
+json.dump({'zone': 'low', 'units': 'mm', 'frame': LOW['frame'], 'field': {'poly': fieldL.tolist()}, 'rim': 0, 'plates': PL, 'eyes': [eye], 'lines': lines, 'coverage': round(cov, 3),
            'span': [round(float(fieldL[:, 0].min()), 2), round(float(fieldL[:, 0].max()), 2)],
            'generator': "the owner's own outline (owner-trace-phoenix.json) developed onto the model; limb and underside un-stretched; reference/nezu-fanghu/owner_plates.py"},
           open(REF + 'faces/dev-low.owner.json', 'w'), separators=(',', ':'))

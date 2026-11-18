@@ -159,6 +159,9 @@ export function bodyPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1, side = false }
   // lower birds: the field is the bird's own hull + a 1.2 mm moat (no stepped rim: the lines that follow its edge are
   // drawn ON the bird, as the fine contour line set in from every edge)
   kit.sunkCartouche(p, cartouchePair(LOW_RIB), { ...SUNK, rim: false, contour: { inset: 1.2, line: 0.55, depth: 0.22, maxHalf: 9 }, map: mapLow, seed })
+  // the lines cut INTO the bird (belly curve, wing spiral, tail and crest lines): earlier hand-traced lines kept only
+  // where they lie inside the owner's figure and photo-08 shows a dark line under them (reference/nezu-fanghu/owner_lines.py)
+  if (LOW_RIB.lines?.length) kit.cutRibbons(p, { channels: LOW_RIB.lines }, { map: mapLow, mirror: true, axis: 0, seed, depth: 0.6, shoulder: 0.45, widen: 1.25, smooth: 2, border: false, boss: false, leiwen: false })
   kit.sunkCartouche(p, cartouchePair(UP_RIB), { ...SUNK, map: mapUp, seed: seed + 1 })
   // the neck frieze: the same sunk-and-embossed construction, a confronted pair meeting on the centre line
   kit.sunkCartouche(p, cartouchePair(FRIEZE_RIB), { ...SUNK, depth: 1.2, rim: { ribs: 2, pitch: 1.2 }, map, seed: seed + 2 })
