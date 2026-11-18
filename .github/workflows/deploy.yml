@@ -1,9 +1,8 @@
 name: Deploy gallery to GitHub Pages
 
-# Publishes the committed dist/ as-is. Nothing is built here — no Node, no npm,
-# no browser. `npm run build` runs on a contributor's machine and dist/ goes in
-# with the PR, so a deploy is a file copy whose cost doesn't grow with the
-# number of vibes.
+# App builds and thumbnails are already committed. Deployment only copies the
+# stable gallery shell and writes apps.json from per-app metadata. No dependency
+# installation, app compilation, screenshot generation, or browser launch.
 
 on:
   push:
@@ -30,8 +29,22 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Dates need history; historical app binaries are not fetched.
+          fetch-depth: 0
+          filter: blob:none
 
-      - name: Upload the committed gallery
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify committed app assets
+        run: npm run verify
+
+      - name: Generate gallery from committed metadata and assets
+        run: npm run build:gallery -- --require-history
+
+      - name: Upload the finished gallery
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist

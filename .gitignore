@@ -1,7 +1,12 @@
 node_modules/
-# The assembled gallery at /dist is COMMITTED — it's what GitHub Pages deploys,
-# and building it in CI got slower with every vibe. Per-package dist/ stays out:
-# it's the intermediate that /dist is assembled from.
+# Per-app dist/<slug>/ assets stay committed. Shared gallery output is generated
+# from gallery/ and package metadata locally and during deployment.
+/dist/index.html
+/dist/gallery.css
+/dist/gallery.js
+/dist/gallery-model.js
+/dist/apps.json
+# Intermediate local app builds:
 packages/*/dist/
 # and the scratch dirs the single-file build makes on its way to dist/artifact.html
 packages/*/dist-standalone/

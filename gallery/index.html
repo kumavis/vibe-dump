@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vibe-dump · gallery</title>
+    <meta name="description" content="A dump of tiny static web experiments." />
+    <link rel="stylesheet" href="./gallery.css" />
+    <script type="module" src="./gallery.js"></script>
+  </head>
+  <body>
+    <header class="masthead">
+      <h1 class="masthead__title">vibe&#8209;dump</h1>
+      <p class="masthead__tagline">A dump of tiny static web experiments.</p>
+    </header>
+    <nav class="filters" id="filters" aria-label="Filter apps"></nav>
+    <p class="empty" id="loading" role="status">Loading apps…</p>
+    <p class="empty" id="error" role="alert" hidden>
+      The app list could not be loaded. <button id="retry" type="button">Try again</button>
+    </p>
+    <main class="grid" id="grid" aria-busy="true"></main>
+    <p class="empty" id="empty" hidden>Nothing matches those filters.</p>
+    <noscript><p class="empty">Enable JavaScript to load the app gallery.</p></noscript>
+    <footer class="colophon">
+      Built with Vite · thumbnails by Playwright · deployed to GitHub Pages
+    </footer>
+  </body>
+</html>

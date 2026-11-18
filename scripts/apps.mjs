@@ -3,6 +3,8 @@ import { existsSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { TAGS, STATUSES, THINKING, appProblems } from '../gallery/gallery-model.js'
+export { TAGS, STATUSES, THINKING }
 
 export const root = dirname(dirname(fileURLToPath(import.meta.url)))
 export const packagesDir = join(root, 'packages')
@@ -16,22 +18,7 @@ export const THUMBNAIL = 'thumbnail.jpg'
 // aspect ratio, so changing it means changing `.thumb` in the gallery CSS too.
 export const SHOT = { width: 1280, height: 800 }
 
-// The tag vocabulary the gallery filter offers, in the order the chips appear.
-// An app declares any subset in its `gallery.tags`; the gallery build warns
-// about anything outside this list, since a stray tag has no chip to match it
-// and would quietly drop the app out of every filtered view.
-export const TAGS = ['game', 'simulation', 'tool', 'art', 'kids', 'tutorial']
-
-// Every app is either finished or still being poked at. Anything else is a typo.
-export const STATUSES = ['done', 'wip']
-
-// Which model(s) built an app, and how hard they were told to think. Recovered
-// from the Co-Authored-By trailers in each package's commits where they exist;
-// nothing in the history records thinking level, so those start as "unknown"
-// and are filled in by hand. The list runs from least to most effort — this is
-// a guard against typos silently dropping a card out of a filtered view, so a
-// genuinely new setting belongs in it rather than rounded to the nearest old one.
-export const THINKING = ['unknown', 'low', 'medium', 'high', 'extra', 'max', 'ultracode']
+// Browser rendering and build-time validation share gallery/gallery-model.js.
 
 // When each package was last worked on, so the gallery can lead with whatever
 // is freshest. Read out of the history rather than a hand-maintained field —
@@ -50,7 +37,7 @@ export const THINKING = ['unknown', 'low', 'medium', 'high', 'extra', 'max', 'ul
 // The max rather than the first hit, because a commit's author date is when the
 // work was done and not when it landed: a branch merged a week later carries the
 // older date and shows up out of order in the log.
-function updatedDates() {
+function updatedDates(repoRoot) {
   const dates = new Map()
   let out
   try {
@@ -60,12 +47,13 @@ function updatedDates() {
         'log',
         '--format=%aI',
         '--name-only',
+        '--no-renames', // Blobless CI needs names/dates, never old asset contents.
         '--',
         'packages/',
         ':(exclude)packages/*/package.json',
         ':(exclude)packages/*/thumbnail.jpg',
       ],
-      { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 32 * 1024 * 1024 },
+      { cwd: repoRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 32 * 1024 * 1024 },
     )
   } catch {
     return dates
@@ -89,26 +77,19 @@ function updatedDates() {
 // gallery build prints these as warnings for fast local feedback; `npm run
 // verify` treats them as failures, because that's the gate a PR has to pass.
 export function metaProblems(apps) {
-  const problems = []
-  for (const app of apps) {
-    const stray = app.tags.filter((t) => !TAGS.includes(t))
-    if (stray.length > 0) problems.push(`"${app.slug}" has unknown tag(s): ${stray.join(', ')}`)
-    if (app.tags.length === 0) problems.push(`"${app.slug}" has no tags`)
-    if (!STATUSES.includes(app.status)) problems.push(`"${app.slug}" has unknown status "${app.status}"`)
-    if (!THINKING.includes(app.thinking)) problems.push(`"${app.slug}" has unknown thinking "${app.thinking}"`)
-  }
-  return problems
+  return apps.flatMap(appProblems)
 }
 
 // Discover every package under packages/. `built` says whether `vite build` has
 // run for it; `hasThumbnail` whether a committed thumbnail sits alongside it.
-export async function discoverApps() {
-  const updated = updatedDates()
-  const entries = await readdir(packagesDir, { withFileTypes: true })
+export async function discoverApps(repoRoot = root) {
+  const updated = updatedDates(repoRoot)
+  const packageRoot = join(repoRoot, 'packages')
+  const entries = await readdir(packageRoot, { withFileTypes: true })
   const apps = []
   for (const entry of entries) {
     if (!entry.isDirectory()) continue
-    const pkgDir = join(packagesDir, entry.name)
+    const pkgDir = join(packageRoot, entry.name)
     if (!existsSync(join(pkgDir, 'package.json'))) continue
     const pkg = JSON.parse(await readFile(join(pkgDir, 'package.json'), 'utf8'))
     const meta = pkg.gallery ?? {}
@@ -116,6 +97,7 @@ export async function discoverApps() {
     const thumbnail = join(pkgDir, THUMBNAIL)
     apps.push({
       slug: entry.name,
+      hasEntry: existsSync(join(pkgDir, 'index.html')),
       pkgDir,
       distDir,
       thumbnail,

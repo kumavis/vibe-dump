@@ -1,78 +1,49 @@
 import { readFile, readdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
-import { join } from 'node:path'
-import { discoverApps, metaProblems, outDir, THUMBNAIL } from './apps.mjs'
+import { join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { execFileSync } from 'node:child_process'
+import { discoverApps, metaProblems, root, THUMBNAIL } from './apps.mjs'
+import { SHELL_FILES } from './build-gallery.mjs'
 
-// Check that the committed dist/ still matches the packages, without building
-// anything. This is what CI runs: the apps are built by hand and the result is
-// committed with the PR, so the only thing left to police is whether somebody
-// added or changed an app and forgot to rebuild before committing.
-//
-// Deliberately dependency-free (node builtins only) so CI needs no npm install
-// — its cost stays flat as the number of apps grows, which building never did.
-//
-//   npm run verify
-
-async function main() {
-  const apps = await discoverApps()
-  const failures = []
-
-  if (!existsSync(join(outDir, 'index.html'))) {
-    failures.push('dist/index.html is missing — run "npm run build" and commit dist/.')
-    report(failures)
-    return
-  }
-
-  const index = await readFile(join(outDir, 'index.html'), 'utf8')
-  failures.push(...metaProblems(apps))
-
+// Dependency-free verification of committed app assets. The shared gallery
+// shell and apps.json are generated, ignored files and are not required here.
+export async function verifyApps(repoRoot = root) {
+  const apps = (await discoverApps(repoRoot)).filter(app => app.hasEntry)
+  const output = join(repoRoot, 'dist'), failures = metaProblems(apps)
+  // Ignore rules alone do not protect against an older branch reintroducing
+  // these tracked files, so enforce the ownership boundary explicitly.
+  let tracked = ''
+  try {
+    tracked = execFileSync('git', ['ls-files', '--', ...SHELL_FILES.map(name => `dist/${name}`), 'dist/apps.json'], {
+      cwd: repoRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim()
+  } catch { /* File-only fixture/checkouts can still verify their app assets. */ }
+  if (tracked) failures.push(`Generated gallery output must not be tracked: ${tracked.split('\n').join(', ')}. Remove it from Git and edit gallery/ instead.`)
+  if (!existsSync(output)) return { failures: [...failures, 'dist/ is missing; build and assemble apps locally.'], total: apps.length }
   for (const app of apps) {
-    // A package is an app once it has an entry point; anything else is scaffolding.
-    if (!existsSync(join(app.pkgDir, 'index.html'))) continue
-
-    if (!existsSync(join(outDir, app.slug, 'index.html'))) {
-      failures.push(`"${app.slug}" has no built dist/${app.slug}/index.html — rebuild and commit dist/.`)
-    }
+    if (!existsSync(join(output, app.slug, 'index.html'))) failures.push(`"${app.slug}" has no committed dist/${app.slug}/index.html; build locally and run npm run assemble:apps -- ${app.slug}.`)
     if (!app.hasThumbnail) {
-      failures.push(`"${app.slug}" has no committed ${THUMBNAIL} — run "npm run thumbnails".`)
+      failures.push(`"${app.slug}" has no committed ${THUMBNAIL}; run npm run thumbnails -- ${app.slug} locally.`)
       continue
     }
-    const shipped = join(outDir, app.slug, THUMBNAIL)
-    if (!existsSync(shipped)) {
-      failures.push(`"${app.slug}" thumbnail was never copied into dist/ — rebuild and commit dist/.`)
-    } else {
-      const [a, b] = await Promise.all([readFile(app.thumbnail), readFile(shipped)])
-      if (!a.equals(b)) {
-        failures.push(`"${app.slug}" thumbnail in dist/ is stale — rebuild and commit dist/.`)
-      }
-    }
-    if (!index.includes(`"./${app.slug}/"`)) {
-      failures.push(`"${app.slug}" has no card in the gallery — rebuild and commit dist/.`)
+    const shipped = join(output, app.slug, THUMBNAIL)
+    if (!existsSync(shipped)) failures.push(`"${app.slug}" thumbnail was not copied into dist/; run npm run assemble:apps -- ${app.slug}.`)
+    else {
+      const [source, dest] = await Promise.all([readFile(app.thumbnail), readFile(shipped)])
+      if (!source.equals(dest)) failures.push(`"${app.slug}" thumbnail in dist/ is stale; run npm run assemble:apps -- ${app.slug}.`)
     }
   }
-
-  // The other direction: a slug still shipping after its package was deleted.
-  const slugs = new Set(apps.map((a) => a.slug))
-  for (const entry of await readdir(outDir, { withFileTypes: true })) {
-    if (entry.isDirectory() && !slugs.has(entry.name)) {
-      failures.push(`dist/${entry.name}/ has no package — rebuild and commit dist/.`)
-    }
+  const slugs = new Set(apps.map(app => app.slug))
+  for (const entry of await readdir(output, { withFileTypes: true })) {
+    if (entry.isDirectory() && !slugs.has(entry.name)) failures.push(`dist/${entry.name}/ has no app package; remove that obsolete built directory.`)
   }
-
-  report(failures, apps.length)
+  return { failures, total: apps.length }
 }
 
-function report(failures, total) {
-  if (failures.length === 0) {
-    console.log(`dist/ is in step with all ${total} app(s).`)
-    return
-  }
-  console.error(`${failures.length} problem(s):`)
-  for (const f of failures) console.error(`  ! ${f}`)
-  process.exitCode = 1
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  verifyApps().then(({ failures, total }) => {
+    if (failures.length) { console.error(failures.join('\n')); process.exitCode = 1 }
+    else console.log(`Committed assets and metadata are valid for all ${total} apps.`)
+  }).catch(error => { console.error(error.message); process.exitCode = 1 })
 }
-
-main().catch((err) => {
-  console.error(err.message ?? err)
-  process.exit(1)
-})

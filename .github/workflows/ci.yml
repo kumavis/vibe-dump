@@ -1,11 +1,7 @@
 name: CI check
 
-# Check that the committed dist/ still matches the packages, on every PR.
-#
-# This job deliberately builds nothing. The apps are built by hand and dist/ is
-# committed with the PR (see "Adding a vibe" in README.md), so CI's only job is
-# to catch a PR that changed an app and forgot to rebuild. Building all of them
-# here would get slower with every vibe added; this stays flat.
+# Apps and thumbnails are built locally and committed. CI validates those
+# assets and generates only the lightweight gallery shell and JSON app list.
 on:
   pull_request:
     branches:
@@ -20,11 +16,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Recency uses commit/tree history, not old asset contents.
+          fetch-depth: 0
+          filter: blob:none
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # No npm install: scripts/verify.mjs is node builtins only.
-      - name: Verify dist/ is in step with packages/
+      # All commands below use Node builtins only. No npm install or browser.
+      - name: Test gallery data and local assembly
+        run: npm run test:gallery
+
+      - name: Verify committed app assets
         run: npm run verify
+
+      - name: Generate deployment gallery
+        run: npm run build:gallery -- --require-history
+
+      - name: Ensure generation leaves tracked files unchanged
+        run: git diff --exit-code
