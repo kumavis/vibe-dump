@@ -37,6 +37,7 @@ def plates(fig, fr, min_mm2=3.0, hole_mm2=1.0):
     return list(out.values()), fig
 def carve(fig, fr, eye):
     c = toPx([eye['c']], fr)[0]; cv2.circle(fig, tuple(c.round().astype(int)), int(round(eye['recess'] * PP)), 0, -1); return fig
+LINES_FOR_SHEET = []
 def sheet(name, devimg, fr, P, field, eye):
     k = 2; im = cv2.resize(devimg, None, fx=k, fy=k, interpolation=cv2.INTER_CUBIC); a = im.copy(); e = np.zeros_like(im); e[:] = (40, 50, 60)
     T = lambda p: (toPx(p, fr) * k).round().astype(np.int32)
@@ -44,6 +45,7 @@ def sheet(name, devimg, fr, P, field, eye):
     cv2.fillPoly(e, loops, (150, 170, 140))
     cv2.polylines(a, loops, True, (40, 40, 255), 2, cv2.LINE_AA); cv2.polylines(a, [T(field)], True, (255, 220, 0), 2, cv2.LINE_AA)
     cv2.circle(a, tuple(T([eye['c']])[0]), int(eye['r'] * PP * k), (0, 255, 0), 2)
+    for l in LINES_FOR_SHEET: cv2.polylines(e, [T(l['line'])], False, (60, 60, 60), 2, cv2.LINE_AA)
     cv2.imwrite(OUT + name, np.hstack([im, a, e]), [cv2.IMWRITE_JPEG_QUALITY, 86])
 
 # ---------------- upper bird: machine map of the upper LEFT cartouche, mirrored into the right bird's frame
@@ -55,6 +57,10 @@ P = fwd(-(17.4 + (S - 20.6) * 1.14), Y)
 snap = json.load(open(ROOT + '.work/lead/propose/hu-snapped.json'))['outlines']; crop = cv2.imread(ROOT + '.work/lead/propose/hu-crop.jpg')
 M = np.zeros(crop.shape[:2], np.uint8); cv2.fillPoly(M, [np.array(o).round().astype(np.int32) for o in snap], 1)   # even-odd
 fig = map_coordinates(M.astype(np.float32), [(P[..., 1] - 840) * 3, (P[..., 0] - 280) * 3], order=1, mode='constant') > 0.5
+import os
+if os.path.exists(REF + 'faces/dev-up.fused-outlines.json'):       # better: both upper birds registered and averaged (see that file's note)
+    FO = json.load(open(REF + 'faces/dev-up.fused-outlines.json'))['outlines_dev_mm']
+    f8 = np.zeros(S.shape, np.uint8); cv2.fillPoly(f8, [toPx(o, fr).round().astype(np.int32) for o in FO], 1); fig = f8 > 0
 dev = cv2.remap(photo, P[..., 0].astype(np.float32), P[..., 1].astype(np.float32), cv2.INTER_LINEAR)
 field = np.array(UP['field']['poly']); fm = np.zeros(S.shape, np.uint8); cv2.fillPoly(fm, [toPx(field, fr).round().astype(np.int32)], 1)
 inner = cv2.erode(fm, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int((UP['rim'] + 0.2) * PP) + 1,) * 2))     # inside the stepped rim
@@ -64,7 +70,7 @@ figU = carve((fig & (inner > 0)).astype(np.uint8), fr, eye) > 0
 PU, figU = plates(figU, fr)
 cov = float(figU.sum() / max(1, fm.sum()))
 json.dump({'zone': 'up', 'units': 'mm', 'frame': UP['frame'], 'field': UP['field'], 'rim': UP['rim'], 'plates': PU, 'eyes': [eye], 'coverage': round(cov, 3),
-           'generator': "tools/propose.py (trained on the owner's tracing and corrections) + tools/snap.py, upper-left cartouche mirrored; reference/nezu-fanghu/owner_plates.py"},
+           'generator': "tools/propose.py (trained on the owner's tracing and corrections) + tools/snap.py on both upper cartouches registered and averaged (faces/dev-up.fused-outlines.json); reference/nezu-fanghu/owner_plates.py"},
           open(REF + 'faces/dev-up.machine.json', 'w'), separators=(',', ':'))
 sheet('up-plates.jpg', dev, fr, PU, field, eye); print('upper: plates', len(PU), 'holes', sum(len(p['holes']) for p in PU), 'coverage %.2f' % cov)
 
@@ -84,11 +90,43 @@ if len(sys.argv) > 3: eye['c'] = [float(sys.argv[3]), float(sys.argv[4])]
 hull = cv2.dilate(cv2.morphologyEx(fig, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * 7 * PP + 1,) * 2)), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int(1.2 * PP) + 1,) * 2))
 hc = max(cv2.findContours(hull, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[0], key=cv2.contourArea)
 fieldL = np.round(toMm(cv2.approxPolyDP(hc.astype(np.float32), 0.15 * PP, True)[:, 0, :] + 0.5, fr), 2)
+# a cleaner edge: the hand's jitter (about a millimetre) is smoothed out of the figure; channels 3 mm wide survive it
+el_ = lambda mmr: cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int(round(mmr * PP)) + 1,) * 2)
+fig = cv2.morphologyEx(cv2.morphologyEx(fig, cv2.MORPH_OPEN, el_(0.6)), cv2.MORPH_CLOSE, el_(0.25))
+fig = (gaussian_filter(fig.astype(np.float32), 0.5 * PP) > 0.5).astype(np.uint8)
+solid = fig.copy()
 PL, figL = plates(carve(fig, fr, eye) > 0, fr)
 cov = float(figL.sum() / max(1, hull.sum()))
-json.dump({'zone': 'low', 'units': 'mm', 'frame': LOW['frame'], 'field': {'poly': fieldL.tolist()}, 'rim': 0, 'plates': PL, 'eyes': [eye], 'coverage': round(cov, 3),
+import os
+LN = json.load(open(REF + 'faces/dev-low.owner-lines.json'))['lines'] if os.path.exists(REF + 'faces/dev-low.owner-lines.json') else []
+closed = cv2.morphologyEx(solid, cv2.MORPH_CLOSE, el_(3.5))                      # the silhouette without its bays
+dist = cv2.distanceTransform(closed, cv2.DIST_L2, 5) / PP                        # mm in from the outer edge
+inside = cv2.erode(solid, el_(0.9)) > 0
+def runs(c, ok, min_mm):
+    out = []; a = 0
+    while a < len(c):
+        if not ok[a]: a += 1; continue
+        b = a
+        while b < len(c) and ok[b]: b += 1
+        if (b - a) / PP >= min_mm: out.append(c[a:b])
+        a = b
+    return out
+edge_lines = []
+for inset in (1.5, 3.0, 4.5):                                                    # photo-08: three lines, about 1.5 mm apart
+    cs_, _h = cv2.findContours((dist >= inset).astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    for c in cs_:
+        c = c[:, 0, :]; ok = inside[c[:, 1], c[:, 0]]
+        for r in runs(c, ok, 6.0):
+            q = cv2.approxPolyDP(r.astype(np.float32).reshape(-1, 1, 2), 0.8, False)[:, 0, :]
+            edge_lines.append({'line': [[round(float(x), 2), round(float(y), 2)] for x, y in toMm(q + 0.5, fr)], 'w': 0.7})
+def near_edge(l):                                                                # a photo-read line that only repeats an edge line
+    q = toPx(warp(l['line']), fr).round().astype(int); q[:, 0] = q[:, 0].clip(0, dist.shape[1] - 1); q[:, 1] = q[:, 1].clip(0, dist.shape[0] - 1)
+    return float((dist[q[:, 1], q[:, 0]] < 5.6).mean()) > 0.7
+lines = edge_lines + [{'line': [[round(float(x), 2), round(float(y), 2)] for x, y in warp(l['line'])], 'w': 0.9} for l in LN if not near_edge(l)]   # + owner_lines.py
+json.dump({'zone': 'low', 'units': 'mm', 'frame': LOW['frame'], 'field': {'poly': fieldL.tolist()}, 'rim': 0, 'plates': PL, 'eyes': [eye], 'lines': lines, 'coverage': round(cov, 3),
            'span': [round(float(fieldL[:, 0].min()), 2), round(float(fieldL[:, 0].max()), 2)],
            'generator': "the owner's own outline (owner-trace-phoenix.json) developed onto the model; limb and underside un-stretched; reference/nezu-fanghu/owner_plates.py"},
           open(REF + 'faces/dev-low.owner.json', 'w'), separators=(',', ':'))
 Pd = fwd(S, Y); dev = cv2.remap(photo, Pd[..., 0].astype(np.float32), Pd[..., 1].astype(np.float32), cv2.INTER_LINEAR)
+LINES_FOR_SHEET[:] = lines
 sheet('low-plates.jpg', dev, fr, PL, fieldL, eye); print('lower: plates', len(PL), 'holes', sum(len(p['holes']) for p in PL), 'coverage %.2f' % cov, 'field s', fieldL[:, 0].min(), fieldL[:, 0].max(), 'y', fieldL[:, 1].min(), fieldL[:, 1].max(), 'eye', eye)
