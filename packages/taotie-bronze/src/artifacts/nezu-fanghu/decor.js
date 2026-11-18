@@ -11,11 +11,14 @@
 import FOOT from '../../../reference/nezu-fanghu/faces/dev-foot.trace.json'
 // The two body birds as the OWNER reads them (the earlier ribbons.py tracings, dev-low/dev-up.ribbons.json, cut the
 // birds into pieces and are no longer used here):
-//  lower — the owner's own outline drawn over photo-08 (reference/nezu-fanghu/owner-trace-phoenix.json): ONE broad
-//          raised bird filling the cartouche, the sunk parts only the narrow channels and bays between its parts;
+//  lower — a PUBLISHED DRAWING of the same bird scheme, which the owner identified: outlines derived from the pattern
+//          drawing of the Guo Ji square hu (虢季铜方壶, Henan Museum; 懿品博悟 数字拓纹库 entry 967), laid into this cartouche
+//          by the affine that best puts its broad figure on the owner's own outline (faces/dev-low.guoji.json). It is the
+//          same scheme, not this vessel's exact proportions: the owner's outline version (faces/dev-low.owner.json —
+//          ONE broad raised bird, narrow sunk channels, a few incised lines) is kept and is one import away;
 //  upper — the figure/ground map a classifier learnt from that outline and from the owner's corrections
 //          (tools/propose.py, tools/snap.py; owner-scribbles-1.json), read off the upper-left cartouche and mirrored.
-import LOW_RIB from '../../../reference/nezu-fanghu/faces/dev-low.owner.json'
+import LOW_RIB from '../../../reference/nezu-fanghu/faces/dev-low.guoji.json'
 import UP_RIB from '../../../reference/nezu-fanghu/faces/dev-up.machine.json'
 import FRIEZE_RIB from '../../../reference/nezu-fanghu/faces/dev-frieze.ribbons.json'
 import LID_RIB from '../../../reference/nezu-fanghu/faces/dev-lid.ribbons.json'
@@ -156,9 +159,13 @@ export function bodyPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1, side = false }
   const nar = side ? 0.85 : 1
   const fitLow = refitter(Qh, 17 * nar, LOW_RIB.span[0], () => LOW_RIB.span[1]), fitUp = refitter(Qh, 18 * nar, 20.6, (y) => lerpY(UP_OUTER, y))
   const mapLow = ([s, y]) => [panelW / 2 + fitLow(s, y), arc(y) - a0], mapUp = ([s, y]) => [panelW / 2 + fitUp(s, y), arc(y) - a0]
-  // lower birds: the field is the bird's own hull + a 1.2 mm moat (no stepped rim: the lines that follow its edge are
-  // drawn ON the bird, as the fine contour line set in from every edge)
-  kit.sunkCartouche(p, cartouchePair(LOW_RIB), { ...SUNK, rim: false, contour: { inset: 1.2, line: 0.55, depth: 0.22, maxHalf: 9 }, map: mapLow, seed })
+  // lower birds: the drawing carries its own rim lines, spiral threads and incised lines as outlines, so the kit adds
+  // none (no stepped rim, no generated ground, no contour line). With the owner's-outline data the contour line and the
+  // traced incised lines below come back.
+  const lowDrawn = !LOW_RIB.lines
+  kit.sunkCartouche(p, cartouchePair(LOW_RIB), lowDrawn
+    ? { ...SUNK, rim: false, contour: null, shoulder: 0.45, ground: false, map: mapLow, seed }
+    : { ...SUNK, rim: false, contour: { inset: 1.2, line: 0.55, depth: 0.22, maxHalf: 9 }, map: mapLow, seed })
   // the lines cut INTO the bird (belly curve, wing spiral, tail and crest lines): earlier hand-traced lines kept only
   // where they lie inside the owner's figure and photo-08 shows a dark line under them (reference/nezu-fanghu/owner_lines.py)
   if (LOW_RIB.lines?.length) kit.cutRibbons(p, { channels: LOW_RIB.lines }, { map: mapLow, mirror: true, axis: 0, seed, depth: 0.6, shoulder: 0.45, widen: 1.25, smooth: 2, border: false, boss: false, leiwen: false })
