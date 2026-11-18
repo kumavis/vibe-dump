@@ -1,0 +1,19 @@
+{
+  "note": "Nezu Museum square lei 饕餮文方罍 (90081). NO published dimension: H = 503 mm is INFERRED (dossier §a.3) and every ratio below is measured on the owner's photographs through solved cameras (photo-37 front: az ≈ −1°, el ≈ 12°, a long lens ≈ 3.7 m; photo-36: az ≈ 69°) — see dossier.md §b. Round 10b: depth : width 0.75 → 0.65 ± 0.05 (photo-36 refitted with a close camera, plan ratio free; dossier §e). Axes: front (+Z) = the broad face with the low lug; handles on the narrow ±X faces. Parts: foot (foot ring), belly (belly wall to the shoulder crease), shoulder (shoulder to the ledge, incl. the ledge), collar (neck band), lid (roof, skirt, no flanges), knob (post + little roof), flanges (every flange), handles (2), heads (2 frontal shoulder heads), lug (1).",
+  "dimensions": { "h": 503, "w": 261, "d": 170, "inferred": true },
+  "ratios": {
+    "footShare":     { "expr": "parts.foot.h / overall.h",        "expected": 0.043, "tol": 0.008 },
+    "bellyTop":      { "expr": "parts.belly.max.1 / overall.h",   "expected": 0.523, "tol": 0.02 },
+    "shoulderTop":   { "expr": "parts.shoulder.max.1 / overall.h", "expected": 0.646, "tol": 0.02 },
+    "collarTop":     { "expr": "parts.collar.max.1 / overall.h",  "expected": 0.748, "tol": 0.02 },
+    "lidTop":        { "expr": "parts.lid.max.1 / overall.h",     "expected": 0.911, "tol": 0.03 },
+    "bellyWidth":    { "expr": "parts.belly.w / overall.h",       "expected": 0.52,  "tol": 0.025 },
+    "plan":          { "expr": "parts.belly.d / parts.belly.w",   "expected": 0.65,  "tol": 0.05 },
+    "collarOverBelly": { "expr": "parts.collar.w / parts.belly.w", "expected": 0.656, "tol": 0.03 },
+    "footOverBelly": { "expr": "parts.foot.w / parts.belly.w",    "expected": 0.48,  "tol": 0.03 },
+    "lidOverCollar": { "expr": "parts.lid.w / parts.collar.w",    "expected": 1.03,  "tol": 0.04 },
+    "handleSpan":    { "expr": "parts.handles.w / parts.belly.w", "expected": 1.25,  "tol": 0.05 },
+    "flangeReach":   { "expr": "parts.flanges.w / parts.belly.w", "expected": 1.12,  "tol": 0.05 },
+    "lugLow":        { "expr": "parts.lug.min.1 / overall.h",     "expected": 0.055, "tol": 0.015 }
+  }
+}

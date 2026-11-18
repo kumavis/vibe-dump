@@ -1,0 +1,240 @@
+{
+ "note": "Nezu hu 90099 — the BELLY's stamped interlace unit, read off photo-11 (hu-fix round 2; .work/hu-fix/NOTES.txt, unit-body.png). Unit mm, origin bottom-left, y up; ribs are band centre lines (kit.panchiBand). Repeat 47.2 mm (2D autocorrelation of the belly developed at 8 px/mm), rows 17.9 mm (nine rows), each row a STRAIGHT repeat shifted ≈ 3.4 mm right of the row above. Three frames of 15.7 mm, each the full row height: a squared C with a nested inner C and a tongue ending in a comma head; a ∩ with a nested U hanging from its top bar, its right leg ending in a head; a U with an inner ∩ hook rising from its bottom bar, the bottom bar running on into the next unit. Top and bottom bars run on from frame to frame (long horizontals ≈ 2 mm inside the row borders, so the rows nearly touch), frames share their verticals across ≈ 0.6 mm channels, pellets at the bar joints and between the rows. Faithful in kind: the photograph resolves ≈ 3.6 px/mm, enough for the grammar and the dimensions, not for a line-for-line copy of the block.",
+ "belly": {
+  "w": 47.2,
+  "h": 17.9,
+  "ribs": [
+   {
+    "pts": [
+     [
+      17.333000000000002,
+      15.9
+     ],
+     [
+      1.6,
+      15.9
+     ],
+     [
+      1.6,
+      2.0
+     ],
+     [
+      12.6,
+      2.0
+     ]
+    ],
+    "r": [
+     0,
+     2.2,
+     2.2,
+     0
+    ],
+    "caps": [
+     "flat",
+     "knob"
+    ]
+   },
+   {
+    "pts": [
+     [
+      11.8,
+      12.0
+     ],
+     [
+      5.4,
+      12.0
+     ],
+     [
+      5.4,
+      6.0
+     ],
+     [
+      9.4,
+      6.0
+     ]
+    ],
+    "r": [
+     0,
+     1.6,
+     1.6,
+     0
+    ],
+    "caps": [
+     "round",
+     "knob"
+    ]
+   },
+   {
+    "pts": [
+     [
+      5.4,
+      9.0
+     ],
+     [
+      11.2,
+      9.0
+     ]
+    ],
+    "r": 0,
+    "caps": [
+     "flat",
+     "knob"
+    ]
+   },
+   {
+    "pts": [
+     [
+      17.333000000000002,
+      2.0
+     ],
+     [
+      17.333000000000002,
+      15.9
+     ],
+     [
+      29.833,
+      15.9
+     ],
+     [
+      29.833,
+      5.6
+     ]
+    ],
+    "r": [
+     0,
+     2.2,
+     2.2,
+     0
+    ],
+    "caps": [
+     "round",
+     "knob"
+    ]
+   },
+   {
+    "pts": [
+     [
+      21.133000000000003,
+      15.9
+     ],
+     [
+      21.133000000000003,
+      5.8
+     ],
+     [
+      26.133000000000003,
+      5.8
+     ],
+     [
+      26.133000000000003,
+      10.6
+     ]
+    ],
+    "r": [
+     0,
+     1.6,
+     1.6,
+     0
+    ],
+    "caps": [
+     "flat",
+     "knob"
+    ]
+   },
+   {
+    "pts": [
+     [
+      33.066,
+      15.9
+     ],
+     [
+      33.066,
+      2.0
+     ],
+     [
+      48.800000000000004,
+      2.0
+     ]
+    ],
+    "r": [
+     0,
+     2.2,
+     0
+    ],
+    "caps": [
+     "knob",
+     "flat"
+    ]
+   },
+   {
+    "pts": [
+     [
+      45.566,
+      2.0
+     ],
+     [
+      45.566,
+      12.6
+     ]
+    ],
+    "r": 0,
+    "caps": [
+     "flat",
+     "knob"
+    ]
+   },
+   {
+    "pts": [
+     [
+      41.866,
+      2.0
+     ],
+     [
+      41.866,
+      12.2
+     ],
+     [
+      36.866,
+      12.2
+     ],
+     [
+      36.866,
+      7.8
+     ]
+    ],
+    "r": [
+     0,
+     1.6,
+     1.6,
+     0
+    ],
+    "caps": [
+     "flat",
+     "knob"
+    ]
+   }
+  ],
+  "beads": [
+   [
+    17.333000000000002,
+    15.9,
+    1.45
+   ],
+   [
+    1.6,
+    2.0,
+    1.45
+   ],
+   [
+    23.6,
+    0.25,
+    0.9
+   ],
+   [
+    39.3,
+    17.65,
+    0.9
+   ]
+  ]
+ }
+}

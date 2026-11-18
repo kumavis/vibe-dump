@@ -1,0 +1,52 @@
+{
+  "note": "Nezu fanghe, vessel A of the museum's set of three (photos 25, 39–45; vessel B = photos 13–16, 24 is never measured here). No dimension is on the label: H 720 mm to the spout lip is INFERRED (the project lead's recollection of 71–73 cm, consistent with the frame, see dossier.md § Scale). Proportions are measured on the side photographs 39 (−X face, ≈ 12° elevated) and 42 (+X face, ≈ 20° elevated) and the flattened faces (faces.json). Axes: front (+Z) = the HANDLE face; the spout leans back over −Z. Parts: lobes (four lobes + legs), body (frieze band + collar), eave (slab), lid (cap, plateau, ridge), spout (tube, flange, peg), handles (the dragon handle with its two horn plates), flanges (every flange), heads (the three small frieze heads).",
+  "dimensions": {
+    "h": 720,
+    "w": 332,
+    "d": 437,
+    "eave": 430,
+    "assumed": true
+  },
+  "ratios": {
+    "eaveLevel": {
+      "expr": "parts.eave.min.1 / overall.h",
+      "expected": 0.59,
+      "tol": 0.035
+    },
+    "lobeTop": {
+      "expr": "parts.lobes.max.1 / parts.eave.min.1",
+      "expected": 0.63,
+      "tol": 0.045
+    },
+    "legsFromGround": {
+      "expr": "parts.lobes.min.1",
+      "expected": 0,
+      "tol": 1.5
+    },
+    "eaveOverBody": {
+      "expr": "parts.eave.w / parts.lobes.w",
+      "expected": 1.44,
+      "tol": 0.1
+    },
+    "capOverEave": {
+      "expr": "parts.lid.w / parts.eave.w",
+      "expected": 0.84,
+      "tol": 0.05
+    },
+    "spoutTop": {
+      "expr": "parts.spout.max.1 / overall.h",
+      "expected": 1.0,
+      "tol": 0.01
+    },
+    "handleReach": {
+      "expr": "parts.handles.max.2 - parts.eave.max.2",
+      "expected": 28,
+      "tol": 15
+    },
+    "spoutReach": {
+      "expr": "parts.spout.min.2 - parts.eave.min.2",
+      "expected": -24,
+      "tol": 25
+    }
+  }
+}

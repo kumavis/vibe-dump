@@ -1,0 +1,433 @@
+{
+ "vessel": "nezu-bo",
+ "blur": 0.8,
+ "note": "Flat faces of the Nezu bo (KIT.md § Flat faces). Two photographs, an oval bell: each face is a chord plane seen down its photograph's own line of sight (the crown: its own plane); the points are exact points of that plane projected through the camera fitted to both photographs together (dossier §b.1), so the camera solve stands in for hand-read landmarks. Scale is inferred (dossier §b.3). dev-*.jpg beside them are the same photographs DEVELOPED onto the half-face panel (x = panel mm from the face's centre line, angle-proportional; y = body mm), ruled every 10 mm: the images the décor was traced from.",
+ "sources": {
+  "photo-18": {
+   "file": "photo-18.jpg",
+   "size": [
+    1536,
+    2048
+   ],
+   "note": "owner's photograph, head-on at a broad face, from about two thirds of the bell's height"
+  },
+  "photo-19": {
+   "file": "photo-19.jpg",
+   "size": [
+    1536,
+    2048
+   ],
+   "note": "owner's photograph, ≈ 30° round toward the left end, from about the top"
+  }
+ },
+ "faces": {
+  "face-panel": {
+   "label": "central panel and the inner boss columns, front (photo-18)",
+   "source": "photo-18",
+   "center": [
+    0.0,
+    297.0,
+    159.63
+   ],
+   "normal": [
+    0.0305,
+    0.1446,
+    0.989
+   ],
+   "up": [
+    -0.0045,
+    0.9895,
+    -0.1445
+   ],
+   "width": 170,
+   "height": 290,
+   "ppmm": 6,
+   "points": [
+    [
+     403.2,
+     1552.7,
+     -84.31,
+     153.52,
+     183.2
+    ],
+    [
+     388.5,
+     502.7,
+     -85.61,
+     440.48,
+     141.29
+    ],
+    [
+     711.1,
+     1546.3,
+     0.65,
+     153.52,
+     180.58
+    ],
+    [
+     696.4,
+     500.5,
+     -0.65,
+     440.48,
+     138.67
+    ],
+    [
+     1016.4,
+     1539.9,
+     85.61,
+     153.52,
+     177.96
+    ],
+    [
+     1001.9,
+     498.4,
+     84.31,
+     440.48,
+     136.05
+    ]
+   ],
+   "trust": "good on the panel (it faces the camera within 8°); the boss columns at ±60 mm lie ≈ 10 mm behind the chord plane, ±1.5 mm parallax",
+   "fit": "points are exact plane points through the fitted camera (dossier §b.1: 9.5 px rms over 89 landmark coordinates, both photographs)"
+  },
+  "face-band": {
+   "label": "interlace band 1 (篆) and its ledges, left half (photo-19)",
+   "source": "photo-19",
+   "center": [
+    -107.11,
+    344.0,
+    109.02
+   ],
+   "normal": [
+    -0.4368,
+    0.1709,
+    0.8832
+   ],
+   "up": [
+    0.0758,
+    0.9853,
+    -0.1532
+   ],
+   "width": 230,
+   "height": 62,
+   "ppmm": 7,
+   "points": [
+    [
+     247.8,
+     927.6,
+     -212.54,
+     313.46,
+     62.78
+    ],
+    [
+     241.9,
+     735.5,
+     -207.84,
+     374.54,
+     53.29
+    ],
+    [
+     602.8,
+     921.3,
+     -109.46,
+     313.46,
+     113.77
+    ],
+    [
+     598.9,
+     730.9,
+     -104.76,
+     374.54,
+     104.27
+    ],
+    [
+     951.6,
+     915.2,
+     -6.37,
+     313.46,
+     164.75
+    ],
+    [
+     949.8,
+     726.3,
+     -1.68,
+     374.54,
+     155.25
+    ]
+   ],
+   "trust": "the band curves ≈ 75° round the oval across its 230 mm: true near the middle (x ≈ 70–180 mm from the centre line), compressed toward both ends; read the units from faces/dev-band.jpg (developed)",
+   "fit": "points are exact plane points through the fitted camera (dossier §b.1: 9.5 px rms over 89 landmark coordinates, both photographs)"
+  },
+  "face-band2": {
+   "label": "interlace band 2 (篆), left half (photo-19)",
+   "source": "photo-19",
+   "center": [
+    -110.72,
+    242.0,
+    112.69
+   ],
+   "normal": [
+    -0.4231,
+    0.2861,
+    0.8597
+   ],
+   "up": [
+    0.1263,
+    0.9582,
+    -0.2567
+   ],
+   "width": 230,
+   "height": 62,
+   "ppmm": 7,
+   "points": [
+    [
+     256.1,
+     1232.1,
+     -217.82,
+     212.3,
+     69.87
+    ],
+    [
+     253.2,
+     1045.0,
+     -209.98,
+     271.7,
+     53.96
+    ],
+    [
+     604.1,
+     1223.2,
+     -114.63,
+     212.3,
+     120.65
+    ],
+    [
+     600.3,
+     1037.7,
+     -106.8,
+     271.7,
+     104.74
+    ],
+    [
+     946.1,
+     1214.4,
+     -11.45,
+     212.3,
+     171.43
+    ],
+    [
+     941.3,
+     1030.5,
+     -3.62,
+     271.7,
+     155.52
+    ]
+   ],
+   "trust": "as face-band; the patina is rougher here, the lines softer",
+   "fit": "points are exact plane points through the fitted camera (dossier §b.1: 9.5 px rms over 89 landmark coordinates, both photographs)"
+  },
+  "face-field": {
+   "label": "the lower field (鼓), left half (photo-19)",
+   "source": "photo-19",
+   "center": [
+    -100.18,
+    82.0,
+    123.33
+   ],
+   "normal": [
+    -0.4094,
+    0.4443,
+    0.7968
+   ],
+   "up": [
+    0.2031,
+    0.8959,
+    -0.3952
+   ],
+   "width": 230,
+   "height": 140,
+   "ppmm": 5,
+   "points": [
+    [
+     317.5,
+     1792.9,
+     -216.68,
+     19.29,
+     98.44
+    ],
+    [
+     321.7,
+     1379.1,
+     -188.25,
+     144.71,
+     43.11
+    ],
+    [
+     655.6,
+     1782.5,
+     -114.39,
+     19.29,
+     151.0
+    ],
+    [
+     648.8,
+     1371.5,
+     -85.96,
+     144.71,
+     95.67
+    ],
+    [
+     989.3,
+     1772.2,
+     -12.11,
+     19.29,
+     203.56
+    ],
+    [
+     971.8,
+     1364.1,
+     16.32,
+     144.71,
+     148.23
+    ]
+   ],
+   "trust": "curved as face-band; the field’s lowest row is worn almost flat and reads poorly",
+   "fit": "points are exact plane points through the fitted camera (dossier §b.1: 9.5 px rms over 89 landmark coordinates, both photographs)"
+  },
+  "face-crown": {
+   "label": "the openwork crown, head-on (photo-18; its own plane z = 0)",
+   "source": "photo-18",
+   "center": [
+    0.0,
+    505.0,
+    0.0
+   ],
+   "normal": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "up": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "width": 250,
+   "height": 128,
+   "ppmm": 4,
+   "points": [
+    [
+     343.4,
+     539.4,
+     -125.0,
+     441.0,
+     0.0
+    ],
+    [
+     328.9,
+     144.7,
+     -125.0,
+     569.0,
+     0.0
+    ],
+    [
+     711.4,
+     535.8,
+     0.0,
+     441.0,
+     0.0
+    ],
+    [
+     706.3,
+     140.9,
+     0.0,
+     569.0,
+     0.0
+    ],
+    [
+     1079.6,
+     532.2,
+     125.0,
+     441.0,
+     0.0
+    ],
+    [
+     1083.8,
+     137.1,
+     125.0,
+     569.0,
+     0.0
+    ]
+   ],
+   "trust": "a true plane (the crown plate); its foot is hidden behind the front of the top, the camera looks up at it by ≈ 9°",
+   "fit": "points are exact plane points through the fitted camera (dossier §b.1: 9.5 px rms over 89 landmark coordinates, both photographs)"
+  },
+  "face-bosses": {
+   "label": "the top row of bosses, left half (photo-19)",
+   "source": "photo-19",
+   "center": [
+    -103.55,
+    401.0,
+    105.4
+   ],
+   "normal": [
+    -0.4426,
+    0.1034,
+    0.8907
+   ],
+   "up": [
+    0.046,
+    0.9946,
+    -0.0926
+   ],
+   "width": 230,
+   "height": 62,
+   "ppmm": 6,
+   "points": [
+    [
+     246.1,
+     750.4,
+     -207.96,
+     370.17,
+     57.09
+    ],
+    [
+     238.3,
+     554.7,
+     -205.11,
+     431.83,
+     51.35
+    ],
+    [
+     604.1,
+     745.8,
+     -104.98,
+     370.17,
+     108.27
+    ],
+    [
+     600.3,
+     551.7,
+     -102.12,
+     431.83,
+     102.53
+    ],
+    [
+     956.0,
+     741.2,
+     -1.99,
+     370.17,
+     159.45
+    ],
+    [
+     956.0,
+     548.8,
+     0.86,
+     431.83,
+     153.7
+    ]
+   ],
+   "trust": "the bosses stand ≈ 13 mm proud of the plane: their crowns read displaced ≈ 3 mm toward the photo centre",
+   "fit": "points are exact plane points through the fitted camera (dossier §b.1: 9.5 px rms over 89 landmark coordinates, both photographs)"
+  }
+ }
+}

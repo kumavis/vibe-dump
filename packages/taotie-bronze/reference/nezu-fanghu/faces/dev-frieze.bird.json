@@ -1,0 +1,16 @@
+{"image": "dev-frieze.jpg", "frame": [-3, 306, 80, 362], "ppmm": 8, "field": {"rrect": [0.0, 309.6, 72.0, 356.6], "r": 2}, "rim": 2.4, "ribbons": [
+  {"name": "beakhook", "band": [[7.4, 343.6], [3.6, 344.6], [3.0, 349.4], [5.4, 352.4], [9.4, 352.4]], "width": 2.8, "bend": 0.8, "cap": "round"}, 
+  {"name": "beak", "band": [[2.6, 327.0], [2.8, 334.6], [5.2, 337.6], [9.4, 337.8]], "width": 2.8, "bend": 0.8, "cap": "round"}, 
+  {"name": "chin", "band": [[8.0, 320.0], [5.4, 320.6], [4.6, 326.4], [7.6, 331.4]], "width": 2.0, "bend": 0.8, "cap": "round"}, 
+  {"name": "crestcol", "band": [[14.0, 312.0], [14.0, 346.0], [15.6, 351.0], [20, 353.0], [30, 353.2]], "width": [4.8, 4.8, 4.8, 4.4, 4.0], "bend": 0.7, "cap": "round"}, 
+  {"name": "head", "poly": [[19.6, 350.0], [32.6, 350.2], [34.0, 345.0], [33.6, 334.6], [21.2, 334.6], [19.6, 338]], "round": 1.4}, 
+  {"name": "crestG", "band": [[33.0, 332.6], [44, 332.6], [47.6, 335.4], [48.0, 344], [46.8, 350.4], [42, 352.6], [36.4, 351.8], [34.6, 348.4]], "width": [3.6, 3.6, 3.6, 3.6, 3.4, 3.2, 3.0, 2.8], "bend": 0.8, "cap": "round"}, 
+  {"name": "crestcurl", "band": [[37.4, 349.0], [37.0, 343.4], [39.6, 340.4], [43.4, 340.6], [44.6, 343.6], [42.4, 345.6]], "width": 2.4, "bend": 0.8, "cap": "round"}, 
+  {"name": "breast", "band": [[20.6, 325.6], [30, 325.4], [40, 325.6], [50, 325.8]], "width": 5.4, "cap": "round"}, 
+  {"name": "claw", "band": [[20.4, 316.4], [30, 316.2], [40, 316.6], [43.4, 314.0]], "width": 3.6, "cap": "round"}, 
+  {"name": "foot", "band": [[44.4, 312.4], [45.4, 318.0], [48.6, 321.0], [52.0, 320.4], [53.0, 317.0], [50.6, 315.2]], "width": 2.6, "bend": 0.8, "cap": "round"}, 
+  {"name": "wingcol", "band": [[51.2, 322.6], [51.4, 340], [51.2, 352.6]], "width": 3.4, "cap": "round"}, 
+  {"name": "tailcol", "band": [[57.0, 312.0], [57.0, 333], [57.0, 353.0]], "width": 3.2, "cap": "round"}, 
+  {"name": "tailcurl", "band": [[71.0, 336.0], [63, 336.4], [60.6, 332.6], [60.6, 320.6], [63.4, 317.2], [69.2, 317.6], [71.0, 321.6], [70.2, 326.6], [66.4, 327.0], [66.0, 323.6]], "width": [3.0, 3.0, 3.0, 3.0, 2.8, 2.8, 2.6, 2.4, 2.2, 2.0], "bend": 0.8, "cap": "round"}, 
+  {"name": "plume1", "band": [[60.6, 340.0], [66, 340.6], [71.0, 340.0]], "width": 2.6, "cap": "round"}, 
+  {"name": "plume2", "band": [[60.8, 348.4], [66, 348.6], [71.0, 347.4]], "width": 2.6, "cap": "round"}], "eyes": [{"c": [26.0, 342.6], "r": 3.9, "recess": 5.2}], "zone": "neck frieze, right of the centre line (the left half is its mirror): a bird facing the centre, drawn in ribbons in one long sunk field: beak column hooked at the top, the crest column arching over the head, head plate with the ring eye, G-crest curl, a breast band with three small scroll cells, a claw bar and hooked foot, the tail column and its C-curl at the corner", "grow": 0.4, "cuts": [{"band": [[26.4, 325.0], [26.8, 328.2], [30.0, 328.2], [30.2, 326.0], [28.6, 325.6]], "width": 1.1}, {"band": [[35.4, 325.0], [35.8, 328.2], [39.0, 328.2], [39.2, 326.0], [37.6, 325.6]], "width": 1.1}, {"band": [[44.4, 325.0], [44.8, 328.2], [48.0, 328.2], [48.2, 326.0], [46.6, 325.6]], "width": 1.1}]}

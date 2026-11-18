@@ -1,0 +1,16 @@
+{
+  "note": "A portal gun (an original design, reference/portal-gun/SOURCES.md) dressed with the Taotie Kit; a showpiece, not a museum object. Sizes chosen: the device 378 mm from the cell's cap to the emitter's lip (401 with the ring handle), the emitter 140 mm across, the body 146 mm long and 84 mm deep, the barrel axis 175 mm above the plinth. These ratios check that the build keeps those proportions.",
+  "dimensions": { "l": 401, "h": 247, "w": 145, "chosen": true },
+  "ratios": {
+    "overallLength":   { "expr": "overall.w",                         "expected": 401.1, "tol": 2 },
+    "emitterAcross":   { "expr": "parts.emitter.h",                   "expected": 140,   "tol": 1.5 },
+    "emitterOverBody": { "expr": "parts.emitter.h / parts.body.h",    "expected": 1.659, "tol": 0.03 },
+    "bodyLength":      { "expr": "parts.body.w",                      "expected": 146,   "tol": 1 },
+    "bodyAspect":      { "expr": "parts.body.h / parts.body.w",       "expected": 0.578, "tol": 0.02 },
+    "gripLength":      { "expr": "parts.grip.h",                      "expected": 104.5, "tol": 3 },
+    "gripClearOfBase": { "expr": "parts.grip.min.1",                  "expected": 32,    "tol": 4 },
+    "finCount":        { "expr": "parts.fins.count",                  "expected": 3,     "tol": 0 },
+    "eyeCount":        { "expr": "parts.eyes.count",                  "expected": 2,     "tol": 0 },
+    "standsOnPlinth":  { "expr": "parts.stand.min.1",                 "expected": 0,     "tol": 0.3 }
+  }
+}

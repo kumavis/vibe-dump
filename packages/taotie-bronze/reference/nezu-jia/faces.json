@@ -1,0 +1,153 @@
+{
+ "vessel": "nezu-jia",
+ "blur": 0.7,
+ "note": "Flat faces of the Nezu jia (KIT.md § Flat faces). The vessel is ROUND and photo-21 was taken from ≈ 0.4–0.7 m: each face is the chord plane seen down the photograph's own line of sight (θ ≈ −4°, the drum face looked down on at ≈ 12°), so the flattened photo is close to an orthographic projection and the model is rendered down the same normal — both foreshorten the curved wall alike. Developed (unrolled) mm = r·asin(x / r) for a point x mm from the centre line. Landmarks are the décor borders on the nose axis, the drum / rim silhouettes and the crest of the slab and wall flanges at θ 60 (off-plane points: perspective at this distance is the main residual). Scale is INFERRED (rim Ø 176 mm).",
+ "sources": {
+  "photo-21": {
+   "file": "photo-21.jpg",
+   "size": [
+    1536,
+    2048
+   ],
+   "note": "owner's photograph: near elevation, handle on the left, camera ≈ 4° left of the θ 0 mask, below the rim"
+  }
+ },
+ "faces": {
+  "face-drum": {
+   "label": "lower drum, mask at θ 0 with its flanking half masks (photo-21)",
+   "source": "photo-21",
+   "center": [
+    0,
+    203,
+    40
+   ],
+   "normal": [
+    -0.0682,
+    0.2079,
+    0.9758
+   ],
+   "up": [
+    0.0145,
+    0.9781,
+    -0.2074
+   ],
+   "width": 132,
+   "height": 60,
+   "ppmm": 7,
+   "points": [
+    [
+     773,
+     1040,
+     0,
+     225.8,
+     57.4
+    ],
+    [
+     773,
+     1255,
+     0,
+     181.5,
+     55.6
+    ],
+    [
+     495,
+     1045,
+     -57.2,
+     225.5,
+     3.0
+    ],
+    [
+     493,
+     1245,
+     -55.4,
+     182.3,
+     2.9
+    ],
+    [
+     1030,
+     1000,
+     60.2,
+     227.3,
+     34.8
+    ],
+    [
+     1030,
+     1232,
+     60.2,
+     180.5,
+     34.8
+    ]
+   ],
+   "trust": "centre ± 35 mm good (the drum is within 10 mm of the chord plane); beyond |x| ≈ 45 mm the wall turns away (> 2:1 foreshortening) and perspective bows the borders.",
+   "fit": "see tools/faces.mjs --rectify"
+  },
+  "face-upper": {
+   "label": "upper wall: waist band and rising blades either side of the θ 0 flange (photo-21)",
+   "source": "photo-21",
+   "center": [
+    0,
+    277,
+    45
+   ],
+   "normal": [
+    -0.0698,
+    0,
+    0.9976
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "width": 150,
+   "height": 88,
+   "ppmm": 6,
+   "points": [
+    [
+     761,
+     990,
+     0,
+     231.6,
+     52.0
+    ],
+    [
+     761,
+     822,
+     0,
+     266.7,
+     54.4
+    ],
+    [
+     757,
+     602,
+     0,
+     320.6,
+     87.8
+    ],
+    [
+     348,
+     612,
+     -87.9,
+     319.5,
+     4.6
+    ],
+    [
+     1035,
+     700,
+     62.4,
+     296.1,
+     36.0
+    ],
+    [
+     985,
+     900,
+     50.2,
+     250.3,
+     29.0
+    ]
+   ],
+   "trust": "fair: the wall flares from r 52 to 88 so its upper half leans back up to 35°; the flange crest points stand 6 mm off the wall.",
+   "fit": "see tools/faces.mjs --rectify"
+  }
+ }
+}

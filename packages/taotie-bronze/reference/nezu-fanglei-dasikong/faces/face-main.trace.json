@@ -1,0 +1,321 @@
+{
+ "note": "face-main (photo-34 flattened, ≈ 3.5 px/mm). Round r8-dsk-fix: drawn BY BAND off the illumination-flattened face with a 5 mm grid (.work/r8-dsk-fix/grid.py) on the cleaner LEFT half, mirrored about the centre strip (axis x 117: the camera residual puts it 3 mm left of the face centre). Auto classifier off. Elements: (a) outer 冂 horn: root beside the centre strip, up, along the top, down the outer column, its foot turning OUTWARD under the leiwen box; (b) the nested inner 冂, its hollow leiwen; (c) the thin band under the horn; (d) the fat body band with C-hooks cut on it, ending at the eye; (e) the oval eye boss in a ring; (f) the lower jaw band and its curls; (g) the rolled spiral ear at the corner side; (h) the crest hooks over the ear; (i) the corner curl below the ear; (j) the centre strip.",
+ "field": {
+  "box": [
+   0,
+   0.5,
+   240,
+   65.5
+  ]
+ },
+ "symmetry": {
+  "axis": 117,
+  "keep": "left"
+ },
+ "regions": [
+  {
+   "box": [
+    0,
+    0,
+    240,
+    74.2
+   ],
+   "mode": "off"
+  }
+ ],
+ "draw": [
+  {
+   "band": [
+    [
+     100.6,
+     35.8
+    ],
+    [
+     100.6,
+     60.8
+    ],
+    [
+     61.6,
+     60.8
+    ],
+    [
+     61.6,
+     40.2
+    ],
+    [
+     47,
+     40.2
+    ]
+   ],
+   "width": [
+    6.2,
+    6.4,
+    6.2,
+    5.6,
+    4.6
+   ],
+   "bend": 0.35,
+   "label": "(a) outer 冂 horn; its foot turns OUTWARD under the leiwen box (detail-main)"
+  },
+  {
+   "band": [
+    [
+     71.2,
+     42.5
+    ],
+    [
+     71.2,
+     54.2
+    ],
+    [
+     88.4,
+     54.2
+    ],
+    [
+     88.4,
+     38.2
+    ],
+    [
+     76.5,
+     38.2
+    ]
+   ],
+   "width": [
+    4.4,
+    4.8,
+    4.8,
+    4.6,
+    4.2
+   ],
+   "bend": 0.3,
+   "label": "(b) nested inner 冂"
+  },
+  {
+   "band": [
+    [
+     41,
+     33.4
+    ],
+    [
+     99,
+     33.4
+    ]
+   ],
+   "width": 3.0,
+   "label": "(c) band under the horn"
+  },
+  {
+   "band": [
+    [
+     83,
+     24.8
+    ],
+    [
+     37.5,
+     24.8
+    ]
+   ],
+   "width": [
+    9.6,
+    10.4
+   ],
+   "bend": 0.5,
+   "end": {
+    "coil": {
+     "turns": 0.7,
+     "R": 3.4,
+     "dir": 1,
+     "gap": 0.9,
+     "tip": 0.6
+    }
+   },
+   "label": "(d) body band, rolled hook at its outer end"
+  },
+  {
+   "band": [
+    [
+     99,
+     16.6
+    ],
+    [
+     57,
+     16.6
+    ],
+    [
+     57,
+     6.5
+    ]
+   ],
+   "width": [
+    4.8,
+    4.8,
+    4.4
+   ],
+   "bend": 0.4,
+   "end": {
+    "coil": {
+     "turns": 1.0,
+     "R": 3.2,
+     "dir": 1,
+     "gap": 0.8,
+     "tip": 0.6
+    }
+   },
+   "label": "(f) lower jaw band rolled into a curl"
+  },
+  {
+   "band": [
+    [
+     72,
+     4
+    ],
+    [
+     72,
+     10.5
+    ]
+   ],
+   "width": 4.4,
+   "end": {
+    "coil": {
+     "turns": 1.1,
+     "R": 3.6,
+     "dir": -1,
+     "gap": 0.8,
+     "tip": 0.6
+    }
+   },
+   "label": "(f) jaw curl"
+  },
+  {
+   "band": [
+    [
+     38.5,
+     8.5
+    ],
+    [
+     46,
+     8.5
+    ]
+   ],
+   "width": 4.2,
+   "end": {
+    "coil": {
+     "turns": 1.0,
+     "R": 3.4,
+     "dir": 1,
+     "gap": 0.8,
+     "tip": 0.6
+    }
+   },
+   "label": "(f) outer jaw curl"
+  },
+  {
+   "band": [
+    [
+     35,
+     46.6
+    ],
+    [
+     19,
+     46.6
+    ]
+   ],
+   "width": 5.8,
+   "bend": 0.5,
+   "end": {
+    "coil": {
+     "turns": 1.6,
+     "R": 8.4,
+     "dir": 1,
+     "gap": 1.2,
+     "tip": 0.55
+    }
+   },
+   "label": "(g) rolled spiral ear"
+  },
+  {
+   "band": [
+    [
+     32,
+     52.5
+    ],
+    [
+     15,
+     52.5
+    ],
+    [
+     11.5,
+     56.5
+    ]
+   ],
+   "width": 3.8,
+   "bend": 0.6,
+   "end": {
+    "coil": {
+     "turns": 0.8,
+     "R": 2.2,
+     "dir": 1,
+     "gap": 0.6,
+     "tip": 0.6
+    }
+   },
+   "label": "(h) crest hook over the ear"
+  },
+  {
+   "band": [
+    [
+     31,
+     3
+    ],
+    [
+     20.5,
+     3
+    ]
+   ],
+   "width": 4.4,
+   "end": {
+    "coil": {
+     "turns": 1.4,
+     "R": 6.4,
+     "dir": -1,
+     "gap": 1.0,
+     "tip": 0.55
+    }
+   },
+   "label": "(i) corner curl below the ear"
+  },
+  {
+   "poly": [
+    [
+     113.3,
+     1.2
+    ],
+    [
+     120.7,
+     1.2
+    ],
+    [
+     120.7,
+     65.0
+    ],
+    [
+     113.3,
+     65.0
+    ]
+   ],
+   "round": 0.8,
+   "label": "(j) centre strip"
+  }
+ ],
+ "bosses": [
+  {
+   "c": [
+    91.6,
+    24.6
+   ],
+   "r": 7.0,
+   "hole": 0,
+   "label": "(e) eye"
+  }
+ ]
+}

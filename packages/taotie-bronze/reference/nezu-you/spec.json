@@ -1,0 +1,19 @@
+{
+  "note": "Nezu Museum you 饕餮文卣 (90086), Shang dynasty 12th–11th c. BC. Proportions measured on the owner's photographs through fitted cameras (photo-31 head-on at the pivot face, photo-32 three-quarter); ABSOLUTE SIZE INFERRED from the leiwen pitch (≈ 1.2 mm ↔ 5.7 px), ±15 %. Plan round (dossier §b.3). Part names: body (foot + belly + neck), lid, knob, horns, heads (bail pivots), handles (the bail), flanges. See dossier.md.",
+  "dimensions": { "h": 390, "w": 265, "d": 263, "inferred": true },
+  "ratios": {
+    "bodyTop":      { "expr": "parts.body.max.1 / overall.h",  "expected": 0.548, "tol": 0.02 },
+    "lidTop":       { "expr": "parts.lid.max.1 / overall.h",   "expected": 0.802, "tol": 0.03 },
+    "lidBottom":    { "expr": "parts.lid.min.1 / overall.h",   "expected": 0.548, "tol": 0.02 },
+    "knobTop":      { "expr": "parts.knob.max.1 / overall.h",  "expected": 0.89,  "tol": 0.04 },
+    "bodyWidth":    { "expr": "parts.body.w / overall.h",      "expected": 0.614, "tol": 0.04 },
+    "planRatio":    { "expr": "parts.body.d / parts.body.w",   "expected": 1.0,   "tol": 0.07 },
+    "hornSpan":     { "expr": "parts.horns.w / parts.body.w",  "expected": 1.0,   "tol": 0.05 },
+    "hornTop":      { "expr": "parts.horns.max.1 / overall.h", "expected": 0.724, "tol": 0.03 },
+    "headCentre":   { "expr": "parts.heads.min.1 / overall.h", "expected": 0.43,  "tol": 0.03 },
+    "flangeReach":  { "expr": "overall.w / parts.body.w",      "expected": 1.065, "tol": 0.04 },
+    "knobCap":      { "expr": "parts.knob.w / parts.lid.w",   "expected": 0.176, "tol": 0.02 },
+    "headReach":    { "expr": "parts.heads.d / parts.body.d", "expected": 1.07,  "tol": 0.03 },
+    "silhouette":   { "expr": "overall.w / overall.h",         "expected": 0.653,  "tol": 0.04 }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "note": "A generic c. 1990 desktop computer (system unit, CRT monitor, keyboard) dressed with the Taotie Kit; a showpiece, not a museum object. Sizes chosen (reference/crt-computer/SOURCES.md): unit 420 x 360 x 112 on 18 mm feet with a 9 mm cover; monitor housing 340 x 306 front section on a 30 mm swivel foot; bezel 344 x 310 with a 262 x 197 (4:3) opening; keyboard 404 x 152. These ratios check that the build keeps those proportions.",
+  "dimensions": { "w": 420, "h": 477, "d": 565, "chosen": true },
+  "ratios": {
+    "unitWidth":      { "expr": "parts.lid.w",                 "expected": 428,   "tol": 1.5 },
+    "unitTop":        { "expr": "parts.lid.max.1",             "expected": 140.9, "tol": 1.0 },
+    "bezelWidth":     { "expr": "parts.bezel.w",               "expected": 344,   "tol": 1.0 },
+    "bezelAspect":    { "expr": "parts.bezel.h / parts.bezel.w", "expected": 0.901, "tol": 0.01 },
+    "screenAspect":   { "expr": "parts.screen.h / parts.screen.w", "expected": 0.756, "tol": 0.01 },
+    "monitorOverUnit":{ "expr": "parts.bezel.w / parts.lid.w", "expected": 0.804, "tol": 0.01 },
+    "keyboardWidth":  { "expr": "parts.keyboard.w",            "expected": 404,   "tol": 1.5 },
+    "standsOnPlinth": { "expr": "parts.legs.min.1",            "expected": 0,     "tol": 0.3 },
+    "legCount":       { "expr": "parts.legs.count",            "expected": 4,     "tol": 0 },
+    "knobCount":      { "expr": "parts.knobs.count",           "expected": 3,     "tol": 0 }
+  }
+}

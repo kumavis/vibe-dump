@@ -1,0 +1,18 @@
+{
+  "note": "Met gui 62.217 (12th c. BCE). Published H 117, W between handles 235, rim D 159, foot D 121 mm (Met API: 11.7 / 23.5 / 15.9 / 12.1 cm). Weight not published. Proportions from DP218261 (front.jpg, face A head-on, ≈ 4° above the rim) and DP218262 (side.jpg); see dossier.md. TWO-fold décor: mask faces A/B centred on azimuth 0 / 180 (+Z = face A), handles at ±90. Part names (userData.part): body = the whole lathe (base ring, foot frieze, belly, neck, lip, incl. low relief, eye bosses and the low nose / foot ridges), handles = the 2 cast loop handles with their animal heads (2 meshes), heads = the 2 frontal heads in the neck frieze at azimuth 0 and 180.",
+  "dimensions": { "h": 117, "w": 235, "d": 165, "rimDiameter": 159, "footDiameter": 121, "bellyMaxDiameter": 161, "weight": null },
+  "ratios": {
+    "silhouetteW":    { "expr": "overall.w / overall.h",          "expected": 2.009, "tol": 0.04, "note": "235 / 117 published" },
+    "bodyFromGround": { "expr": "parts.body.min.1",               "expected": 0,     "tol": 1.0 },
+    "bodyHeight":     { "expr": "parts.body.h / overall.h",       "expected": 1.0,   "tol": 0.015 },
+    "bellyWidth":     { "expr": "parts.body.w / overall.h",       "expected": 1.378, "tol": 0.03, "note": "belly max ≈ 161 (photo: equal to the rim within 2 mm; the scout's 175–180 is not borne out by the silhouettes)" },
+    "handleCount":    { "expr": "parts.handles.count",            "expected": 2,     "tol": 0 },
+    "handleSpan":     { "expr": "parts.handles.w / overall.h",    "expected": 2.009, "tol": 0.04 },
+    "handleTop":      { "expr": "parts.handles.max.1 / overall.h", "expected": 0.915, "tol": 0.03, "note": "horn tops y ≈ 107 (front.jpg)" },
+    "handleLow":      { "expr": "parts.handles.min.1 / overall.h", "expected": 0.39,  "tol": 0.03, "note": "loop underside y ≈ 45.6" },
+    "headCount":      { "expr": "parts.heads.count",              "expected": 2,     "tol": 0 },
+    "headTop":        { "expr": "parts.heads.max.1 / overall.h",  "expected": 0.875, "tol": 0.03, "note": "frieze head top ≈ y 102 (photo y_px 565 at the front, corrected for the 4° view)" },
+    "headLow":        { "expr": "parts.heads.min.1 / overall.h",  "expected": 0.735, "tol": 0.03, "note": "frieze head chin ≈ y 86, just into the mask's top border" },
+    "planDepth":      { "expr": "overall.d / overall.h",          "expected": 1.41,  "tol": 0.04, "note": "frieze heads stand ≈ 5 mm proud of the neck (r 76 → ≈ 82)" }
+  }
+}

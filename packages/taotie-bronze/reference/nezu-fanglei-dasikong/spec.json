@@ -1,0 +1,18 @@
+{
+  "note": "Nezu Museum square lei 饕餮文方罍 (90079), said to be from the Dasikong site, Anyang. NO published dimension: H = 500 mm is INFERRED (dossier §a.3) and every ratio below is back-projected from the owner's photo-34 through an ASSUMED camera (az 3.5°, el 10°, ≈ 0.9 m, f ≈ 2983 px; .work/r8-dsk/solve) — see dossier.md §b. The plan depth is not visible in either photograph (0.9 × width, inferred). Axes: front (+Z) = the face with the low lug; handles on ±X. Parts: body (rounded-square body, foot to the shoulder ledge, incl. the ledge), collar (straight neck), lid (domed lid with its lip, no knob, no flanges), knob, flanges (2 lid centre flanges), handles (2), heads (front + back shoulder heads), lug (1).",
+  "dimensions": { "h": 500, "w": 284, "d": 256, "inferred": true },
+  "ratios": {
+    "shoulderTop":     { "expr": "parts.body.max.1 / overall.h",    "expected": 0.711, "tol": 0.015, "note": "r8-dsk-fix: the body now includes the shoulder ledge rising ≈ 5 mm to the collar foot (photo-03: no flat deck), so its top is 351, not 346" },
+    "collarTop":       { "expr": "parts.collar.max.1 / overall.h",  "expected": 0.795, "tol": 0.015 },
+    "lidTop":          { "expr": "parts.lid.max.1 / overall.h",     "expected": 0.932, "tol": 0.015 },
+    "knobH":           { "expr": "parts.knob.h / overall.h",        "expected": 0.075, "tol": 0.02 },
+    "bellyWidth":      { "expr": "parts.body.w / overall.h",        "expected": 0.568, "tol": 0.025 },
+    "plan":            { "expr": "parts.body.d / parts.body.w",     "expected": 0.9,   "tol": 0.05 },
+    "collarOverBelly": { "expr": "parts.collar.w / parts.body.w",   "expected": 0.613, "tol": 0.03 },
+    "lidOverCollar":   { "expr": "parts.lid.w / parts.collar.w",    "expected": 1.02,  "tol": 0.03 },
+    "handleSpan":      { "expr": "parts.handles.w / parts.body.w",  "expected": 1.13,  "tol": 0.05 },
+    "handleTop":       { "expr": "parts.handles.max.1 / overall.h", "expected": 0.685, "tol": 0.03 },
+    "headTop":         { "expr": "parts.heads.max.1 / overall.h",   "expected": 0.686, "tol": 0.03 },
+    "lugLow":          { "expr": "parts.lug.min.1 / overall.h",     "expected": 0.07,  "tol": 0.02 }
+  }
+}
