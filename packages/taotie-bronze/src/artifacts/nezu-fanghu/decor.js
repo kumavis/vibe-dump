@@ -11,14 +11,16 @@
 import FOOT from '../../../reference/nezu-fanghu/faces/dev-foot.trace.json'
 // The two body birds as the OWNER reads them (the earlier ribbons.py tracings, dev-low/dev-up.ribbons.json, cut the
 // birds into pieces and are no longer used here):
-//  lower — a PUBLISHED DRAWING of the same bird scheme, which the owner identified: outlines derived from the pattern
-//          drawing of the Guo Ji square hu (虢季铜方壶, Henan Museum; 懿品博悟 数字拓纹库 entry 967), laid into this cartouche
-//          by the affine that best puts its broad figure on the owner's own outline (faces/dev-low.guoji.json). It is the
-//          same scheme, not this vessel's exact proportions: the owner's outline version (faces/dev-low.owner.json —
-//          ONE broad raised bird, narrow sunk channels, a few incised lines) is kept and is one import away;
+//  lower — the owner's own outline drawn over photo-08 (reference/nezu-fanghu/owner-trace-phoenix.json): ONE broad,
+//          chunky raised bird filling the cartouche, the sunk parts only the narrow channels and bays between its
+//          parts. Its edge is cleaned of the hand's jitter; three engraved lines follow its outer edge and a few more
+//          are read off the photograph (faces/dev-low.owner.json, owner_plates.py, owner_lines.py). A published
+//          drawing of the same bird SCHEME on another vessel (the Guo Ji square hu; faces/dev-low.guoji.json, see
+//          SOURCES.md) showed what the engraved lines should look like; its bird is smaller and differently
+//          proportioned, so it guides the language and is not laid on — it is one import away for comparison;
 //  upper — the figure/ground map a classifier learnt from that outline and from the owner's corrections
 //          (tools/propose.py, tools/snap.py; owner-scribbles-1.json), read off the upper-left cartouche and mirrored.
-import LOW_RIB from '../../../reference/nezu-fanghu/faces/dev-low.guoji.json'
+import LOW_RIB from '../../../reference/nezu-fanghu/faces/dev-low.owner.json'
 import UP_RIB from '../../../reference/nezu-fanghu/faces/dev-up.machine.json'
 import FRIEZE_RIB from '../../../reference/nezu-fanghu/faces/dev-frieze.ribbons.json'
 import LID_RIB from '../../../reference/nezu-fanghu/faces/dev-lid.ribbons.json'
@@ -165,10 +167,10 @@ export function bodyPanel(kit, { ppmm, seed, Qh, Qf, arc, y0, y1, side = false }
   const lowDrawn = !LOW_RIB.lines
   kit.sunkCartouche(p, cartouchePair(LOW_RIB), lowDrawn
     ? { ...SUNK, rim: false, contour: null, shoulder: 0.45, ground: false, map: mapLow, seed }
-    : { ...SUNK, rim: false, contour: { inset: 1.2, line: 0.55, depth: 0.22, maxHalf: 9 }, map: mapLow, seed })
+    : { ...SUNK, rim: false, contour: null, map: mapLow, seed })
   // the lines cut INTO the bird (belly curve, wing spiral, tail and crest lines): earlier hand-traced lines kept only
   // where they lie inside the owner's figure and photo-08 shows a dark line under them (reference/nezu-fanghu/owner_lines.py)
-  if (LOW_RIB.lines?.length) kit.cutRibbons(p, { channels: LOW_RIB.lines }, { map: mapLow, mirror: true, axis: 0, seed, depth: 0.6, shoulder: 0.45, widen: 1.25, smooth: 2, border: false, boss: false, leiwen: false })
+  if (LOW_RIB.lines?.length) kit.cutRibbons(p, { channels: LOW_RIB.lines }, { map: mapLow, mirror: true, axis: 0, seed, depth: 0.55, shoulder: 0.45, widen: 1.2, smooth: 3, border: false, boss: false, leiwen: false })
   kit.sunkCartouche(p, cartouchePair(UP_RIB), { ...SUNK, map: mapUp, seed: seed + 1 })
   // the neck frieze: the same sunk-and-embossed construction, a confronted pair meeting on the centre line
   kit.sunkCartouche(p, cartouchePair(FRIEZE_RIB), { ...SUNK, depth: 1.2, rim: { ribs: 2, pitch: 1.2 }, map, seed: seed + 2 })

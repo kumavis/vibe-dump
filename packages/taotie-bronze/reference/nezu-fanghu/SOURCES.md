@@ -39,7 +39,7 @@ File numbers are the photograph's position in the owner's upload of 47 (sorted b
 Each detail crop is the region of photo-08 that the view of the same name frames (target projected through the assumed
 camera, 4 : 3, half height = view fit × R at the target's distance; `.work/r8-fanghu/solve/refcrops.py`).
 
-## Published drawing used for the lower birds
+## Published drawing consulted for the lower birds
 
 - **What:** the phoenix pattern of the Guo Ji square hu (虢季铜方壶, Western Zhou, Henan Museum) as drawn in the
   懿品博悟 数字拓纹库 ("digital rubbing-pattern library"), entry 967 — https://www.yipinbowu.com/tuowen/967.html
@@ -47,5 +47,8 @@ camera, 4 : 3, half height = view fit × R at the target's distance; `.work/r8-f
 - **Why:** the project owner identified it as the same bird as this vessel's lower cartouches. Compared with the
   owner's own outline of the Nezu bird it is the same scheme (eye, bar, frame band, wing loop, spiral) but not the same
   proportions (overlap 0.50 under the best affine fit).
+- **How it is used:** as a guide to the bird's engraved lines and clean edges. It is NOT what the model shows: the
+  owner judged it a motif match whose bird is smaller than the Nezu's chunkier one, so the model keeps the owner's
+  outline. `faces/dev-low.guoji.json` holds the drawing's outlines for comparison only.
 - **What is kept:** only outlines derived from the drawing (`faces/dev-low.guoji.json`) and the two scripts that made
   them (`guoji_fit.py`, `guoji_outlines.py`). The source images are NOT in the repository, at the owner's instruction.
