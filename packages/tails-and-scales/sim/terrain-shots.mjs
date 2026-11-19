@@ -73,6 +73,9 @@
 //
 //   node sim/terrain-shots.mjs [--ref <git ref>] [--seeds 1,4242,90210,411,22392] [--full] [--out <dir>]
 //
+// (S1) Every page is opened with ?dress=0 (DESIGN §4.3): the battlefield's
+// dressing is no terrain, and the references draw none.
+//
 // --ref defaults to the R0 commit (sim/lib.mjs LEGACY_REF). PNGs of both
 // sides and a diff mask (differing pixels red over a dimmed frame) go to
 // --out; without it, to a fresh temp dir that is kept only when something
@@ -303,7 +306,7 @@ async function shootBoard(seed, s, url) {
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
     await page.addInitScript(`(${seedRandom})(${seed * 7919 + 1})`)
-    await page.goto(`${url}/?debug&seed=${seed}`, { timeout: IDLE_MS })
+    await page.goto(`${url}/?debug&seed=${seed}&dress=0`, { timeout: IDLE_MS })
     await page.waitForFunction(() => window.__ts, null, { timeout: IDLE_MS })
     await freeze(page)
     const table = await page.evaluate(shoot, !!a.full)
@@ -379,7 +382,7 @@ async function shootFort(seed, name, url) {
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
     await page.addInitScript(`(${seedRandom})(${seed * 7919 + 1})`)
-    await page.goto(`${url}/?debug&seed=${seed}&dice=1&terrain=fortified`, { timeout: IDLE_MS })
+    await page.goto(`${url}/?debug&seed=${seed}&dice=1&terrain=fortified&dress=0`, { timeout: IDLE_MS })
     await page.waitForFunction(() => window.__ts, null, { timeout: IDLE_MS })
     await page.evaluate(`(${seedRandom})(${seed * 7919 + 2}); window.__ts.start('hotseat')`)
     await page.waitForFunction(() => window.__ts.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })

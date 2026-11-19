@@ -39,6 +39,11 @@
 //
 //   node sim/title-shot.mjs [--ref <git ref>] [--seeds 1,2,3] [--out <dir>] [--control] [--timeout <s>]
 //
+// (S1) Both sides are shot with ?dress=0 (DESIGN §4.3): the table as it was
+// before the battlefield's dressing, so a reference from before it still
+// holds the rest of the title to its pixels. --dressed shoots the title as
+// the page shows it, the dressing in it: against a reference that has the
+// dressing too (the commit the dressed title was last accepted at).
 // --control shoots the reference on both sides (two loads of one build):
 // the harness's own determinism, which must hold for a difference to mean
 // anything.
@@ -67,12 +72,12 @@ const VIEW = { width: 1280, height: 800 }
 const MIN_COLOURS = 1000
 
 function usage(why) {
-  console.error(`title-shot: ${why}\nusage: node sim/title-shot.mjs [--ref <git ref>] [--seeds 1,2,3] [--out <dir>] [--control] [--timeout <s>]`)
+  console.error(`title-shot: ${why}\nusage: node sim/title-shot.mjs [--ref <git ref>] [--seeds 1,2,3] [--out <dir>] [--control] [--timeout <s>] [--dressed]`)
   process.exit(2)
 }
 let a
 try {
-  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, seeds: { type: 'string' }, out: { type: 'string' }, control: { type: 'boolean' }, timeout: { type: 'string' } } }))
+  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, seeds: { type: 'string' }, out: { type: 'string' }, control: { type: 'boolean' }, timeout: { type: 'string' }, dressed: { type: 'boolean' } } }))
 } catch (e) {
   usage(e.message)
 }
@@ -133,8 +138,9 @@ try {
       const errors = []
       page.on('pageerror', (e) => errors.push(e.message))
       await page.addInitScript(`(${seedRandom})(${seed * 7919 + 1});(${handFrames})()`)
-      // (?debug, for the scene; it adds nothing to it)
-      await page.goto(servers[i].url + '/?debug', { timeout: TIMEOUT_MS })
+      // (?debug, for the scene; it adds nothing to it; (S1) and ?dress=0,
+      // the table undressed as the references draw it, unless --dressed)
+      await page.goto(servers[i].url + (a.dressed ? '/?debug' : '/?debug&dress=0'), { timeout: TIMEOUT_MS })
       await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {})
       // the figures: each root's place and turn, its miniature's meshes
       // (every vertex, hashed), and hidden for the first frame

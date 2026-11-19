@@ -114,6 +114,8 @@ export class Stage {
   setQuality(name) {
     const q = QUALITY[name], r = this.renderer, sun = this.sun
     this.quality = name
+    // (the battlefield's dressing thins with it: view/dressing/)
+    this.onQuality?.(name)
     if (this.lowfi) return
     setSplatBudget(q.splats)
     r.setPixelRatio(Math.min(devicePixelRatio, q.dpr))
@@ -145,11 +147,33 @@ export class Stage {
     sun.shadow.camera.layers.enable(SHADOW_LAYER)
     scene.add(sun)
     // ((V2) the splats prepared at the start of each render, lit by the sun)
-    const toSun = sun.position.clone().normalize()
+    const toSun = (this.toSun = sun.position.clone().normalize())
     scene.onBeforeRender = (renderer, scene, camera) => prepareSplats(camera, renderer, toSun, scene, 'table')
-    const fill = new THREE.DirectionalLight('#9fb8ff', 0.35)
+    const fill = (this.fill = new THREE.DirectionalLight('#9fb8ff', 0.35))
     fill.position.set(18, 12, -16)
     scene.add(fill)
+  }
+
+  // (The battlefield's dressing, S1: view/dressing/) The time of day the
+  // board is fought at: where the sun stands (`sunPos`, as far off as ever,
+  // so its shadow camera fits as it did) and its colour, the sky light's,
+  // the fill's, and the haze, which is the fog's and the background's
+  // colour (the sky's dome meets it at the horizon). The burning field's
+  // mood (mood) warms it as it always warmed the day's. Never called
+  // without the dressing (?dress=0): the table is lit as it always was.
+  daylight({ sunPos, sun, sunI, sky, skyI, ground, fill, fillI, haze }) {
+    this.sun.position.copy(sunPos)
+    this.toSun.copy(sunPos).normalize()
+    this.day = { sky, skyI, sun, sunI }
+    this.sky.groundColor.set(ground)
+    this.fill.color.set(fill)
+    this.fill.intensity = fillI
+    this.scene.fog.color.set(haze)
+    this.scene.background.set(haze)
+    // (lit again at once, burning or not)
+    const was = !!this.burning
+    this.burning = !was
+    this.mood(was)
   }
 
   // (V3d) The light over a field still burning (the Powder Field's: the
@@ -160,10 +184,12 @@ export class Stage {
   mood(burning) {
     if (!!burning === !!this.burning) return
     this.burning = !!burning
-    this.sky.color.set(burning ? '#d9c0a6' : '#d6e6ff')
-    this.sky.intensity = burning ? 0.8 : 0.85
-    this.sun.color.set(burning ? '#ffc58f' : '#fff0d6')
-    this.sun.intensity = burning ? 2.15 : 2.3
+    // (the day's, when the dressing has set one: daylight)
+    const d = this.day
+    this.sky.color.set(burning ? '#d9c0a6' : d ? d.sky : '#d6e6ff')
+    this.sky.intensity = burning ? 0.8 : d ? d.skyI : 0.85
+    this.sun.color.set(burning ? '#ffc58f' : d ? d.sun : '#fff0d6')
+    this.sun.intensity = burning ? 2.15 : d ? d.sunI : 2.3
   }
 
   // (F8a) The fog and the sun's shadows for a board W×H: the fog from 70k to

@@ -2274,6 +2274,8 @@ answered; 35 (Escape) by the user: no change.
   needed porting; play-check's shot and unit hovers still tell the two
   apart. DESIGN's F17 notes, the fix's paragraph.)
 
+- [ ] **S1-S10 Battlefield dressing** (DESIGN §4.3): a seeded, view-only world round the board and ground under its pieces; S1 (the surround and the sky) built, `?dress=0` the old table, checks `sim/dressing-check.mjs` (Node; `--browser` owed) and `sim/boundaries.mjs` rule 5; S2-S10 to come.
+
 ### Open questions (building the defaults unless told otherwise)
 
 1. Online opponents are **friends sharing a link**. Dice are seeded jointly,

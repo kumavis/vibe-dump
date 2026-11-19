@@ -68,7 +68,8 @@ import { PerfOverlay } from '../ui/perf.js'
 // The URL: ?seed=N the title's board (else a random one), ?dice=N every
 // battle's dice (else fresh ones per battle), ?races=<seat 0>,<seat 1> the
 // races at the table, ?watch a watched battle at once, ?lowfi no shadows
-// and a pixel ratio of 0.5, ?fast nothing drawn and game time effectively
+// and a pixel ratio of 0.5, ((S1) ?dress=0 the battlefield undressed: the
+// wooden table as it always was, view/dressing/), ?fast nothing drawn and game time effectively
 // instant (a test mode), ?debug the hooks; (N2) ?sync=<ws url> the sync
 // server a battle hosted here uses; (F8a) ?mission=<name> the mission a
 // battle started here is fought for; (F11a) ?armies=<seat 0>,<seat 1> the
@@ -254,7 +255,7 @@ export function boot(location) {
   // board seed (a Math.random draw, where it always came); then (below) the
   // figures, the shooting's effects and the overlay: the same three.js
   // objects, materials and Math.random draws as before R7, in the same order.
-  const view = new View({ lowfi: params.has('lowfi'), fast: FAST, quality: drawnAt(quality.value), W, H, deploy: MISSIONS.classic.deploy, edges: EDGES, objectives: MISSIONS.classic.objectives, range: OBJECTIVE_RANGE, colorOf })
+  const view = new View({ lowfi: params.has('lowfi'), fast: FAST, quality: drawnAt(quality.value), dress: params.get('dress') !== '0', W, H, deploy: MISSIONS.classic.deploy, edges: EDGES, objectives: MISSIONS.classic.objectives, range: OBJECTIVE_RANGE, colorOf })
   // (Every seed the page takes is made a whole number from 0 to 2^32 - 1, as
   // a setup's must be, with `>>> 0`: what the board's and the dice's
   // generators always did with a seed, so ?seed=-5 is still the board -5

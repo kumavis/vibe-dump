@@ -263,6 +263,8 @@ export class Table {
     table.position.y = -0.62
     table.receiveShadow = true
     scene.add(table)
+    // ((S1) what the battlefield's dressing puts away: woodShown())
+    this.wood = table
     {
       const frameMat = new THREE.MeshStandardMaterial({ color: '#5a3a22', roughness: 0.6 })
       const parts = [
@@ -407,7 +409,19 @@ export class Table {
       this.zoneMats[s].color.set(colors[s])
       this.zoneLineMats[s].color.set(colors[s])
     }
+    // ((S1) and the dressing's pennants)
+    this.colors = colors
+    this.onPaint?.(colors)
   }
+
+  // (The battlefield's dressing, view/dressing/: none under ?dress=0, where
+  // none of this is called and the table is as it always was.) (S1) The
+  // wooden table, its frame and the box under the mat put away (`on`
+  // false), the world round the board drawn in their place.
+  woodShown(on) {
+    for (const m of [this.wood, ...this.frame, this.under]) m.visible = on
+  }
+
 
   // how strongly each seat's zone shows
   zones(opacity) {
