@@ -69,7 +69,7 @@
 // slot each. Each a branch only a rider reaches (u.aboard): a unit on the
 // table keeps the expressions it always had (§4.1 rule 26). The events are
 // as they were, the rider's id their `u`.
-import { hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount, svOf } from '../rules.js'
+import { hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount, svOf, tl, tails } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot, hypot3, sin, cos } from '../dmath.js'
 import { emit, log } from '../journal.js'
@@ -188,13 +188,13 @@ export function shotInfo(G, u, target, sp) {
     if (target.side !== u.side) return { ok: false, why: `${w.name} is cast on a friend` }
     if (target.aboard) return { ok: false, why: `${target.t.short} is inside a vehicle` }
     const range = target === u ? 0 : v ? (target === v ? 0 : gap(v, target)) : gap(u, target)
-    if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${w.range}")` }
+    if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)} / ${tails(w.range)})` }
     return { ok: true, range, reach: w.range, ally: true }
   }
   if (target.side === u.side) return { ok: false, why: 'one of your own' }
   if (target.aboard) return { ok: false, why: `${target.t.short} is inside a vehicle` }
   const range = v ? gap(v, target) : gap(u, target), reach = v ? rangeOf(G, u, target, deckPoint(v), sp) : rangeOf(G, u, target, u.pos, sp)
-  if (range > reach) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${reach === w.range ? w.range : reach.toFixed(1)}")` }
+  if (range > reach) return { ok: false, why: `out of range (${range.toFixed(1)} / ${tails(reach === w.range ? w.range : reach.toFixed(1))})` }
   const s = v ? sight(G, u, target, deckPoint(v), undefined, deckEye(G, u)) : sight(G, u, target)
   if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }
   let mod = 0
@@ -356,7 +356,7 @@ export function blastVolley(G, u, target, w, info) {
         x: Math.max(-W / 2 + 0.3, Math.min(W / 2 - 0.3, aim.x + cos(a) * sc)),
         z: Math.max(-H / 2 + 0.3, Math.min(H / 2 - 0.3, aim.z + sin(a) * sc)),
       }
-      emit(G, 'dice', { label: 'Scatter D6+1', dice: [sc - 1], need: 0, sum: true, note: `${sc}"` })
+      emit(G, 'dice', { label: 'Scatter D6+1', dice: [sc - 1], need: 0, sum: true, note: tl(sc) })
       emit(G, 'blast.scatter', { from: { x: aim.x, z: aim.z }, to: { x: land.x, z: land.z }, d: sc })
     }
     emit(G, 'blast.fire', { u: u.id, to: { x: land.x, z: land.z }, fx: w.fx })

@@ -101,6 +101,15 @@
 //      and it draws nothing, holds no module-level state and runs no
 //      approximated Math (its load-time constants are Math.sqrt's, §4.1
 //      rule 24), as every module of core/.
+//   5. (the units rename, DESIGN's Units section) the copy lint: no string
+//      or template literal of any layer, nor index.html's text (its tags,
+//      comments, scripts and styles taken out), names a length in inches:
+//      no inch mark after a number, a dice expression or an interpolation
+//      (6", D6+1", `${n}"`; a quotation's closing mark, `"${name}"`, is
+//      told apart by the marks before it) and no word inch or inches. The
+//      table's unit is the tail, worded by core/rules.js's tails() and tl()
+//      (LENGTH), so a stray mark can't come back. Comments are not copy and
+//      are not read; nor is sim/.
 // The top level is told by indentation (the code puts module-level
 // declarations at column 0, and everything nested deeper).
 //
@@ -116,6 +125,7 @@ import { join, posix } from 'node:path'
 import { parseArgs } from 'node:util'
 import { dirFromArgs } from './oracle/pin.mjs'
 import { BANNED, OWNED, ALLOW, lintSource } from './flag-lint.mjs'
+import { parseAst } from 'rollup/parseAst'
 
 const LAYERS = ['core', 'data', 'match', 'present', 'net', 'view', 'input', 'ui', 'app']
 const VIEW = new Set(['view', 'input', 'ui', 'app', 'root'])
@@ -372,13 +382,83 @@ function statements(lines) {
 
 // Check the package's sources, `files` a Map of path (posix, from the
 // package root) → text. Returns { problems: [text], edges }.
+// 5. The copy lint: an inch mark after a number or a dice expression
+// (not inside a word, an attribute's `="1"` or a quotation), and the word.
+const MARK = /(?<![\w"=.$])(?:\d+(?:\.\d+)?|D[36](?:[+-]\d+)?)"/
+const INCH = /\binch(?:es)?\b/i
+const lineAt = (text) => {
+  const starts = [0]
+  for (let i = 0; i < text.length; i++) if (text[i] === '\n') starts.push(i + 1)
+  return (pos) => {
+    let lo = 0, hi = starts.length - 1
+    while (lo < hi) {
+      const m = (lo + hi + 1) >> 1
+      if (starts[m] <= pos) lo = m
+      else hi = m - 1
+    }
+    return lo + 1
+  }
+}
+// (a file's hits by its text: the self-test's cases share all but one file)
+const LINTED = new Map()
+export function copyLint(f, text) {
+  const key = `${f}\0${text}`
+  if (!LINTED.has(key)) LINTED.set(key, lintCopy(f, text))
+  return LINTED.get(key)
+}
+function lintCopy(f, text) {
+  const hits = []
+  const look = (line, s, what) => {
+    if (MARK.test(s)) hits.push({ line, what: `${what} names a length with an inch mark (the unit is the tail: core/rules.js tails() or tl())`, text: s })
+    else if (INCH.test(s)) hits.push({ line, what: `${what} names inches (the unit is the tail: core/rules.js tails() or tl())`, text: s })
+  }
+  if (f.endsWith('.html')) {
+    const at = lineAt(text)
+    const body = text.replace(/<!--[\s\S]*?-->|<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[^>]*>/g, (m) => m.replace(/[^\n]/g, ' '))
+    body.split('\n').forEach((l, i) => look(i + 1, l.replace(/&quot;/g, '"'), 'its text'))
+    return hits
+  }
+  let ast
+  try {
+    ast = parseAst(text)
+  } catch (e) {
+    return [{ line: 0, what: `could not be parsed for the copy lint: ${e.message}`, text: '' }]
+  }
+  const at = lineAt(text)
+  const visit = (n) => {
+    if (!n || typeof n.type !== 'string') return
+    if (n.type === 'Literal' && typeof n.value === 'string') look(at(n.start), n.value, 'a string')
+    else if (n.type === 'TemplateLiteral') {
+      let quotes = 0
+      n.quasis.forEach((q, i) => {
+        const v = q.value.cooked ?? q.value.raw
+        // a mark straight after an interpolation, unless it closes a quotation
+        if (i > 0 && v.startsWith('"') && quotes % 2 === 0) hits.push({ line: at(q.start), what: 'a template names a length with an inch mark after an interpolation (the unit is the tail: core/rules.js tails() or tl())', text: text.slice(n.start, n.end).slice(0, 100) })
+        else look(at(q.start), v, 'a template')
+        quotes += (v.match(/"/g) ?? []).length
+      })
+    }
+    for (const k in n) {
+      if (k === 'start' || k === 'end') continue
+      const c = n[k]
+      if (Array.isArray(c)) c.forEach(visit)
+      else if (c && typeof c === 'object') visit(c)
+    }
+  }
+  visit(ast)
+  return hits
+}
+
 export function check(files) {
   const problems = []
   const say = (f, line, what) => problems.push(`${f}${line ? `:${line}` : ''} ${what}`)
   const who = (layer) => (layer === 'root' ? 'the view' : VIEW.has(layer) ? `the view (${layer}/)` : `${layer}/`)
   const short = (m) => m.replace(/^core\//, '')
   let edges = 0
+  // 5. the copy lint, over every file (index.html among them)
+  for (const [f, text] of files) for (const h of copyLint(f, text)) say(f, h.line, `${h.what}: ${h.text.trim().slice(0, 100)}`)
   for (const [f, text] of files) {
+    if (!f.endsWith('.js')) continue
     const layer = layerOf(f)
     const lines = strip(text)
     const { imports, exports } = statements(lines)
@@ -472,6 +552,8 @@ export function sources(dir) {
     }
   }
   walk('')
+  // (5. the copy lint's) the page's own copy: the help, the title, the panels
+  if (existsSync(join(dir, 'index.html'))) files.set('index.html', readFileSync(join(dir, 'index.html'), 'utf8'))
   return files
 }
 
@@ -648,6 +730,13 @@ if (a['self-test']) {
     ["core/ reading a hull's footprint record outside core/footprint.js", append('core/actions/move.js', 'export const turnOf = (u) => u.t.footprint.turn'), true, /footprint record read outside core\/footprint\.js .*\(flag-lint's ban\)/],
     ['the word in a comment (core/: "no Promise, no window")', append('core/rules.js', '// no Promise, no window, no Math.random, no Date'), false],
     ['a nested let (not module-level)', append('core/rules.js', 'export function f() {\n  let k = 0\n  return k\n}'), false],
+    // (5. the copy lint) the inch mark and the word back in copy, each layer's way
+    ['a log line with an inch mark after its number', append('core/actions/move.js', 'export const said = (n) => `moved ${n.toFixed(1)}".`'), true, /core\/actions\/move\.js:\d+ a template names a length with an inch mark after an interpolation/],
+    ['an ability with an inch mark', append('data/races/squirrel.js', "export const line = 'Scout — deploys 6\" ahead.'"), true, /data\/races\/squirrel\.js:\d+ a string names a length with an inch mark/],
+    ['a dice expression with an inch mark', append('ui/card.js', 'export const adv = `Advance (+D6")`'), true, /ui\/card\.js:\d+ a template names a length with an inch mark/],
+    ['a hint naming inches', append('present/hud-model.js', "export const say = 'a D6 more inches'"), true, /present\/hud-model\.js:\d+ a string names inches/],
+    ['the help with an inch mark', (m) => new Map(m).set('index.html', m.get('index.html').replace('</h2>', '</h2><p>within 6" of it</p>')), true, /index\.html:\d+ its text names a length with an inch mark/],
+    ['a quotation, a comment and an attribute (not inch marks)', append('ui/card.js', 'export const q = (k) => `no field "${k}" in "${k}"`\n// a move of 6" (a comment)\nexport const a = \'<i data-n="1">\''), false],
   ]
   console.log('boundaries self-test: edits in memory on the working tree')
   for (const [what, edit, fail, want] of CASES) {

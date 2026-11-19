@@ -49,7 +49,7 @@
 // heading (input/tools/move.js headsOf); its charge's end, picked here as
 // any unit's, ends on the spot heading the roll reaches shortest at the
 // clicked cell (sent as the body's f), its ghost its outline there.
-import { CHARGE_RANGE } from '../core/rules.js'
+import { CHARGE_RANGE, tl } from '../core/rules.js'
 import { phaseKey } from '../core/queries.js'
 import { sfx, unlock } from '../view/sfx.js'
 import { chargePick, nearestSpot, endAt, SHORTEST, spotFacing } from './tools/charge-end.js'
@@ -830,7 +830,7 @@ export class Human {
     const board = !pk && sel && h.unit && this.boards?.get(h.unit.id)
     if (board && (this.myTurn() || this.deploySeat() >= 0)) {
       if (board.c >= 0) path(this.ask((G, q) => G.nav.path(this.reach.res, board.c, sel.r, this.reach.mode === 'fly' ? null : this.reach.forbid)), board.c, sel.r)
-      text = board.c >= 0 ? `⤒ Board ${h.unit.t.short} · ${board.L.toFixed(1)}" of ${board.max}"` : `⤒ Board ${h.unit.t.short}`
+      text = board.c >= 0 ? `⤒ Board ${h.unit.t.short} · ${tl(board.L.toFixed(1))} of ${tl(board.max)}` : `⤒ Board ${h.unit.t.short}`
     } else if (!pk && sel && this.land && this.myTurn() && h.ground && !h.unit) {
       const i = nearestSpot(G.nav, this.land.ok, h.ground.x, h.ground.z)
       if (i >= 0) {
@@ -848,7 +848,7 @@ export class Human {
         text = `End charge here · ${this.ask((G) => move.hullText(G, pk.plan, i, f, pk.rolled))}`
       } else if (i >= 0) {
         path(this.ask((G) => G.nav.path(pk.plan.res, i, pk.u.r, pk.plan.mode === 'fly' ? null : pk.plan.forbid)), i, pk.u.r)
-        text = `End charge here · ${pk.plan.res.dist[i].toFixed(1)}" of ${pk.rolled}"`
+        text = `End charge here · ${tl(pk.plan.res.dist[i].toFixed(1))} of ${tl(pk.rolled)}`
       } else text = `✖ out of reach — pick a spot in the orange area`
     } else if (this.myTurn() && sel) {
       text = this.ask((G, q) => {

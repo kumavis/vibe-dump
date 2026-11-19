@@ -17,6 +17,7 @@
 // ladders): "6.0" of 6" (0.5" turning, 1.0" backing)"; and where the hull
 // could pivot neither way from there, "no room to turn here" (roomAt).
 // headsOf gives the reach overlay its headings.
+import { tl } from '../../core/rules.js'
 import { hypot } from '../../core/dmath.js'
 
 // unit u's move plan, asked with the dice locked
@@ -46,7 +47,7 @@ export function preview(G, q, plan, sel, ground, path, far = false, rimAt = null
   }
   path(G.nav.path(plan.res, i, sel.r, plan.mode === 'fly' ? null : plan.forbid), i, sel.r)
   const up = climbOf(G, plan, i)
-  let text = `${plan.res.dist[i].toFixed(1)}" of ${plan.max}"${up > 0 ? ` (${up.toFixed(1)}" climbing)` : ''}${ray ? ' · as far as it goes' : ''}`
+  let text = `${tl(plan.res.dist[i].toFixed(1))} of ${tl(plan.max)}${up > 0 ? ` (${tl(up.toFixed(1))} climbing)` : ''}${ray ? ' · as far as it goes' : ''}`
   if (rimAt?.(G.nav.index(ground.x, ground.z))) text += `<br><span class="ledge">✖ a ledge: no way down here</span>`
   return text
 }
@@ -170,8 +171,8 @@ export const NO_ROOM = '<br><span class="ledge">✖ no room to turn here</span>'
 // inches it has (a move's plan's, a charge's roll).
 export function hullText(G, plan, i, f, max = plan.max) {
   const c = costOf(G, plan, i, f)
-  const parts = [c.turn > 0 && `${c.turn.toFixed(1)}" turning`, c.back > 0 && `${c.back.toFixed(1)}" backing`].filter(Boolean)
-  return `${c.L.toFixed(1)}" of ${max}"${parts.length ? ` (${parts.join(', ')})` : ''}${roomAt(G, plan, i, f) ? '' : NO_ROOM}`
+  const parts = [c.turn > 0 && `${tl(c.turn.toFixed(1))} turning`, c.back > 0 && `${tl(c.back.toFixed(1))} backing`].filter(Boolean)
+  return `${tl(c.L.toFixed(1))} of ${tl(max)}${parts.length ? ` (${parts.join(', ')})` : ''}${roomAt(G, plan, i, f) ? '' : NO_ROOM}`
 }
 
 // (F9b) The reach overlay's headings for a long hull's plan: a byte per

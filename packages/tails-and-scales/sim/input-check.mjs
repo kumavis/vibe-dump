@@ -177,6 +177,10 @@ import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { buildApp, copyCode } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
+import { lengthWords } from './lib.mjs'
+// (the units rename) how the build words a length: the working tree's LENGTH
+const { LENGTH, tl } = await import(pathToFileURL(`${PKG}/core/rules.js`).href)
+const LEN = lengthWords(LENGTH)
 import { IDLE_MS } from './chromium.mjs'
 import { fortScene } from './fort-scene.mjs'
 
@@ -1430,7 +1434,7 @@ async function checkCarts(page, say) {
   await page.mouse.move(q.x, q.y)
   await sleep(500)
   tip = await ev(() => document.querySelector('#tooltip').textContent)
-  if (!/^⤒ Board War-Cart · \d+\.\d" of \d+"$/.test(tip)) fail(`hovering the cart with unit ${board.u} picked up says "${tip}", not "⤒ Board War-Cart · 4.2" of 7""`)
+  if (!new RegExp(`^⤒ Board War-Cart · \\d+\\.\\d${LEN.mark} of \\d+${LEN.mark}$`).test(tip)) fail(`hovering the cart with unit ${board.u} picked up says "${tip}", not "⤒ Board War-Cart · ${tl('4.2')} of ${tl(7)}"`)
   n0 = await count()
   await page.mouse.click(q.x, q.y)
   await sent(n0, 'an embark by click')
@@ -1890,7 +1894,7 @@ async function aimCase(page, say, h) {
     const out = await sent(n0)
     const at = await unitAt(u.id)
     if (!unmoved(cam1, cam0)) fail(`the camera moved under a finger aiming (${cam0.map((v) => v.toFixed(3))} → ${cam1.map((v) => v.toFixed(3))})`)
-    if (!/" of /.test(seen.tip)) fail(`a long press's aim showed the tooltip "${seen.tip}", not the move's inches`)
+    if (!new RegExp(`\\d${LEN.mark} of `).test(seen.tip)) fail(`a long press's aim showed the tooltip "${seen.tip}", not the move's inches`)
     if (out.length !== 1 || out[0].t !== 'move' || out[0].u !== u.id || out[0].c !== seen.ghost || at.cell !== seen.ghost) fail(`the lift sent ${JSON.stringify(out)} (unit ${u.id} now on cell ${at.cell}); its ghost stood on cell ${seen.ghost}`)
     done = { id: u.id, tip: seen.tip }
     break
@@ -1978,7 +1982,7 @@ async function aimCase(page, say, h) {
   await settled()
   let out = await sent(n0)
   if (first !== 'on') fail(`👆 Aim: a finger's press started no aim (${first})`)
-  if (!seen.path || seen.ghost === null || !/" of /.test(seen.tip)) fail(`👆 Aim: a one-finger drag drew ${JSON.stringify(seen)}, no move`)
+  if (!seen.path || seen.ghost === null || !new RegExp(`\\d${LEN.mark} of `).test(seen.tip)) fail(`👆 Aim: a one-finger drag drew ${JSON.stringify(seen)}, no move`)
   if (!unmoved(cam1, cam0)) fail(`👆 Aim: the camera moved under the drag (${cam0.map((v) => v.toFixed(3))} → ${cam1.map((v) => v.toFixed(3))})`)
   if (out.length !== 1 || out[0].t !== 'move' || out[0].u !== bb.id || out[0].c !== seen.ghost) fail(`👆 Aim: the lift sent ${JSON.stringify(out)}; the ghost stood on cell ${seen.ghost}`)
   say(`👆 Aim: a plain one-finger drag showed unit ${bb.id}'s move ("${seen.tip}"), the camera still; the lift moved it to the ghost's cell`)
@@ -2834,7 +2838,7 @@ async function checkDeck(page, say) {
   await page.mouse.move(q[0], q[1])
   await sleep(500)
   const tip = await tipText()
-  const want = `${tg.range.toFixed(1)}" / ${tg.reach === Math.round(tg.reach) ? tg.reach : tg.reach.toFixed(1)}"`
+  const want = `${tl(tg.range.toFixed(1))} / ${tl(tg.reach === Math.round(tg.reach) ? tg.reach : tg.reach.toFixed(1))}`
   if (!tip.includes(want) || !tip.includes(`hit ${tg.need}+`) || !tip.includes("From the War-Cart's deck")) fail(`hovering unit ${tg.id} with unit ${rider} picked up reads "${tip}": not the rules' ${want}, hit ${tg.need}+, from the War-Cart's deck`)
   const beams = await ev(() => {
     const out = []
@@ -3077,7 +3081,7 @@ async function checkHullDeck(page, say) {
   await page.mouse.move(q[0], q[1])
   await sleep(500)
   const tip = await ev(() => document.querySelector('#tooltip').textContent)
-  const want = `${tg.range.toFixed(1)}" / ${tg.reach === Math.round(tg.reach) ? tg.reach : tg.reach.toFixed(1)}"`
+  const want = `${tl(tg.range.toFixed(1))} / ${tl(tg.reach === Math.round(tg.reach) ? tg.reach : tg.reach.toFixed(1))}`
   if (!tip.includes(want) || !tip.includes(`hit ${tg.need}+`) || !tip.includes("From the Howdah's deck")) fail(`hovering unit ${tg.id} reads "${tip}": not the rules' ${want}, hit ${tg.need}+, from the Howdah's deck`)
   const beams = await ev(() => {
     const out = []

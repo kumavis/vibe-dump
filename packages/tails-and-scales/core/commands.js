@@ -70,6 +70,7 @@
 // dirty between commands, §4.1 rule 9). HANDLERS[t](G, seat, body, via) plays
 // a legal one; `via` is 'seat' for a seat's own command, 'ai' for the AI's
 // (an AI seat's, or a human's Auto).
+import { tails } from './rules.js'
 import { lock, unlock } from './rng.js'
 import { deepFreeze } from './util.js'
 import { emit, log } from './journal.js'
@@ -396,6 +397,6 @@ function mayPilot(G, seat, m, P) {
 function mayEnd(G, P, c, f) {
   if (c === -1) return f === undefined ? null : `the shortest move (-1) ends on its own heading: it takes no f`
   const plan = inGrid(G, c) && chargePlan(G, unitOf(G, P.u), unitOf(G, P.tg))
-  if (plan && plan.fp) return plan.spotOk(c, f, P.rolled) ? null : `the charge can't end on cell ${c}${f === undefined ? '' : ` facing ${f}`} (rolled ${P.rolled}")`
-  return plan && chargeSpots(plan, P.rolled)[c] ? null : `the charge can't end on cell ${c} (rolled ${P.rolled}")`
+  if (plan && plan.fp) return plan.spotOk(c, f, P.rolled) ? null : `the charge can't end on cell ${c}${f === undefined ? '' : ` facing ${f}`} (rolled ${tails(P.rolled)})`
+  return plan && chargeSpots(plan, P.rolled)[c] ? null : `the charge can't end on cell ${c} (rolled ${tails(P.rolled)})`
 }

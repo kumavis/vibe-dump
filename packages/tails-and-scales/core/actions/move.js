@@ -14,7 +14,7 @@
 // (core/commands.js), the only path to them, calls core/engine.js's
 // finishAction after the action (DESIGN §2.2's (R6a) note). The advance
 // roll writes no `act` line at all (§4.1 rule 8).
-import { ENGAGE, roll } from '../rules.js'
+import { ENGAGE, roll, tails, tl } from '../rules.js'
 import { hypot, sin, cos, atan2 } from '../dmath.js'
 import { lerp } from '../util.js'
 import { emit, log } from '../journal.js'
@@ -344,7 +344,7 @@ export function doMove(G, u, cell, plan = movePlan(G, u, u.flags.advanced ? u.fl
   if (plan.fallback) u.flags.fellBack = true
   // (F7a: with height a climb counts what it costs, not the ground it spans)
   const L = G.nav.hasHeight ? walkCost(pts) : pathLength(pts)
-  log(G, u.side, `<b>${u.t.short}</b> ${plan.fallback ? 'fall back' : u.flags.advanced ? 'advance' : 'move'} ${L.toFixed(1)}".`)
+  log(G, u.side, `<b>${u.t.short}</b> ${plan.fallback ? 'fall back' : u.flags.advanced ? 'advance' : 'move'} ${tails(L.toFixed(1))}.`)
   const kegs = resolveWalk(G, u, pts, { fly: plan.mode === 'fly', stomp: u.t.wrecker && L > 0.1 })
   // (the nav follows the walk, at today's site: DESIGN §4.1 rule 9)
   refreshNav(G)
@@ -360,7 +360,7 @@ function hullMove(G, u, cell, plan, h) {
   const L = plan.res.dist[cell * 8 + h]
   u.flags.moved = true
   if (plan.fallback) u.flags.fellBack = true
-  log(G, u.side, `<b>${u.t.short}</b> ${plan.fallback ? 'fall back' : u.flags.advanced ? 'advance' : 'move'} ${L.toFixed(1)}".`)
+  log(G, u.side, `<b>${u.t.short}</b> ${plan.fallback ? 'fall back' : u.flags.advanced ? 'advance' : 'move'} ${tails(L.toFixed(1))}.`)
   const kegs = hullWalk(G, u, pts, { stomp: u.t.wrecker && L > 0.1 })
   refreshNav(G)
   settle(G)
@@ -374,10 +374,10 @@ function hullMove(G, u, cell, plan, h) {
 export function doAdvance(G, u) {
   emit(G, 'tray.open', { title: `${u.t.short} — Advance` })
   const r = roll(G, 1)
-  emit(G, 'dice', { label: 'Advance D6', dice: r, need: 0, sum: true, note: `+${r[0]}"` })
+  emit(G, 'dice', { label: 'Advance D6', dice: r, need: 0, sum: true, note: `+${tl(r[0])}` })
   u.flags.advanced = true
   u.flags.advRoll = r[0]
-  log(G, u.side, `<b>${u.t.short}</b> advance: +${r[0]}".`)
+  log(G, u.side, `<b>${u.t.short}</b> advance: +${tails(r[0])}.`)
   return r[0]
 }
 

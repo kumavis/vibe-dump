@@ -262,6 +262,7 @@ const legacy = await imp(LEGACY, 'rules.js')
 const legacyMain = readFileSync(join(LEGACY, 'main.js'), 'utf8')
 const legacyAi = readFileSync(join(LEGACY, 'ai.js'), 'utf8')
 const { RACES, AI_ROLES, defineRace, raceRegistry } = await imp(PKG, 'data/schema.js')
+const { tails } = await imp(PKG, 'core/rules.js')
 const { RULES_ID, rulesId, rulesData, CONSTANTS } = await imp(PKG, 'core/version.js')
 const { SETS } = await imp(PKG, 'core/terrain/sets.js')
 const { MISSIONS, CLASSIC, checkMission } = await imp(PKG, 'data/mission.js')
@@ -324,6 +325,14 @@ const LEGACY_TESTS = [
 const legacySays = (src, text, what) => check(src.includes(text), `the R0 code says ${what}`, `"${text}" not found: sim/lib.mjs's LEGACY_REF must name the R0 commit`)
 for (const [src, text, what] of LEGACY_TESTS) legacySays(src, text, what)
 const ROLE = literal(legacyAi, 'ROLE')
+// (the units rename, DESIGN's Units section) The card copy reworded since
+// R0, by unit: each [R0's words, today's], applied to the legacy record's
+// abilities before it is compared, so every other byte is still R0's. The
+// table's unit became the tail (core/rules.js LENGTH): the Grenadiers'
+// scatter in tails, not inches. (The casters' abilities are left out of the
+// compare already: V3c's spells reworded them.)
+const COPY_SINCE_R0 = { grenadier: [['D6+1"', tails('D6+1')]] }
+const reworded = (key, abilities) => abilities?.map((a) => (COPY_SINCE_R0[key] ?? []).reduce((x, [was, now]) => x.split(was).join(now), a))
 const legacyRace = (side) => CLASSIC[side]
 function expected(key, L) {
   const { side, ...rest } = L
@@ -354,8 +363,10 @@ const legacyKeys = Object.keys(legacy.TYPES).sort(), keys = Object.keys(TYPES).f
 check(new Set(ALL.map((t) => t.key)).size === ALL.length, 'no two races share a unit key', 'look their types up by race')
 check(isDeepStrictEqual(keys, legacyKeys), `the same ${legacyKeys.length} unit keys`, `got ${keys.join(',')}`)
 for (const key of legacyKeys) {
-  const L = legacy.TYPES[key], t = TYPES[key]
+  const L0 = legacy.TYPES[key], t = TYPES[key]
   if (!t) continue
+  const L = COPY_SINCE_R0[key] ? { ...L0, abilities: reworded(key, L0.abilities) } : L0
+  if (COPY_SINCE_R0[key] && isDeepStrictEqual(L.abilities, L0.abilities)) check(false, `${key}: COPY_SINCE_R0 rewords nothing of the R0 copy`, JSON.stringify(L0.abilities))
   // ((F11a) `cost`, the army builder's price, is new: the R0 code had none;
   // (V3c) so is a caster's `spells` list, whose first spell is its ranged
   // weapon, the very record (the legacy one, field for field, below), and
@@ -863,9 +874,9 @@ const brokenMissions = [
   ['a board of odd width', /board is 41×28/, (m) => (m.board.W = 41)],
   ['a board of fractional height', /board is 40×28.5/, (m) => (m.board.H = 28.5)],
   ['no board', /board is undefined×undefined/, (m) => delete m.board],
-  ['a zone reaching within 6" of the centre line', /zone 15" deep/, (m) => (m.deploy = 15)],
-  ['no zone', /zone 0" deep/, (m) => (m.deploy = 0)],
-  ['an objective at the board\'s edge (and its mirror)', /less than 1" inside/, (m) => m.objectives.push({ x: 0, z: 13.5 }, { x: 0, z: -13.5 })],
+  ['a zone reaching within 6 tails of the centre line', /zone 15 tails deep/, (m) => (m.deploy = 15)],
+  ['no zone', /zone 0 tails deep/, (m) => (m.deploy = 0)],
+  ['an objective at the board\'s edge (and its mirror)', /less than 1 tail inside/, (m) => m.objectives.push({ x: 0, z: 13.5 }, { x: 0, z: -13.5 })],
   ['an objective in a zone (and its mirror)', /in a deployment zone/, (m) => m.objectives.push({ x: 13, z: 0 }, { x: -13, z: 0 })],
   ['an objective without its point mirror', /no point mirror/, (m) => (m.objectives[1].z = 9)],
   ['no objectives', /no objectives/, (m) => (m.objectives = [])],
@@ -2031,13 +2042,13 @@ console.log("\n16. long hulls: the Howdah's record, the footprint rules and thei
   refuse('no body disc at [0, 0]', discs([0, 2, 0.95], [0, 0.5, 1.25], [0, -2, 0.95]), /footprint: needs exactly one body disc at \[0, 0\], where the unit stands, not 0/)
   refuse("a body disc whose r is not the unit's base", discs([0, 2, 0.95], [0, 0, 1.2], [0, -2, 0.95]), /footprint: the body disc's r is 1\.2, not the unit's base, 1\.25/)
   refuse('an offset turning onto a half cell (a head 1.25" ahead: 2.5 cells)', discs([0, 1.25, 0.95], [0, 0, 1.25], [0, -2, 0.95]), /footprint: an offset turns onto a half cell \(disc 0 at 0°: z 1\.25\)/)
-  refuse('a snap error over 0.15" (a head 1" ahead: 0.293" off on the diagonals)', discs([0, 1, 0.95], [0, 0, 1.25], [0, -2, 0.95]), /footprint: disc 0 at heading 1 snaps 0\.293" from its exact place: at most 0\.15"/)
-  refuse('discs apart (a head of r 0.8: 0.071" off the body on the diagonals)', discs([0, 2, 0.8], [0, 0, 1.25], [0, -2, 0.95]), /footprint: discs 0 and 1 at heading 1 stand 0\.071" apart: consecutive discs overlap or touch/)
-  refuse('a pivot gap over 0.06" (a base of 1.6 with r 0.6 discs 2" out: 0.070")', (u) => ((u.base = 1.6), (u.footprint.discs = [[0, 2, 0.6], [0, 0, 1.6], [0, -2, 0.6]])), /footprint: disc 0's pivot gap is 0\.070": at most 0\.06"/)
-  refuse('a bounding R over 3.5" (a head of r 1.6: 3.721")', discs([0, 2, 1.6], [0, 0, 1.25], [0, -2, 0.95]), /footprint: its bounding R is 3\.721": at most 3\.5"/)
-  refuse('a turn below 0', (u) => (u.footprint.turn = -0.25), /footprint: turn is the inches a 45° pivot costs, a number from 0, not -0\.25/)
+  refuse('a snap error over 0.15" (a head 1" ahead: 0.293" off on the diagonals)', discs([0, 1, 0.95], [0, 0, 1.25], [0, -2, 0.95]), /footprint: disc 0 at heading 1 snaps 0\.293 tails from its exact place: at most 0\.15 tails/)
+  refuse('discs apart (a head of r 0.8: 0.071" off the body on the diagonals)', discs([0, 2, 0.8], [0, 0, 1.25], [0, -2, 0.95]), /footprint: discs 0 and 1 at heading 1 stand 0\.071 tails apart: consecutive discs overlap or touch/)
+  refuse('a pivot gap over 0.06" (a base of 1.6 with r 0.6 discs 2" out: 0.070")', (u) => ((u.base = 1.6), (u.footprint.discs = [[0, 2, 0.6], [0, 0, 1.6], [0, -2, 0.6]])), /footprint: disc 0's pivot gap is 0\.070 tails: at most 0\.06 tails/)
+  refuse('a bounding R over 3.5" (a head of r 1.6: 3.721")', discs([0, 2, 1.6], [0, 0, 1.25], [0, -2, 0.95]), /footprint: its bounding R is 3\.721 tails: at most 3\.5 tails/)
+  refuse('a turn below 0', (u) => (u.footprint.turn = -0.25), /footprint: turn is what a 45° pivot costs in tails, a number from 0, not -0\.25/)
   refuse('a turn that is no number', (u) => (u.footprint.turn = '0.25'), /footprint: turn is .*not 0\.25/)
-  refuse('a rev below 1', (u) => (u.footprint.rev = 0.5), /footprint: rev is what a step backing up costs per inch of a step forward, a number from 1, not 0\.5/)
+  refuse('a rev below 1', (u) => (u.footprint.rev = 0.5), /footprint: rev is what a step backing up costs per tail of a step forward, a number from 1, not 0\.5/)
   refuse('a footprint field it takes not', (u) => (u.footprint.turns = 1), /footprint: unknown field "turns"/)
   refuse('a footprint that is a number', (u) => (u.footprint = 3), /footprint: must be \{ discs, turn, rev \}/)
   refuse('a footprint on a unit that is no vehicle (the Brute)', (u, d) => (d.units.brute.footprint = structuredClone(u.footprint)), /unit brute: a footprint is a vehicle's \(vehicle: true\)/)

@@ -19,6 +19,7 @@
 // projectile's material is one per colour, shared by every shot (main.js
 // made one per shot and never freed it), and an eruption's thorns are
 // freed once gone.
+import { tl } from '../../core/rules.js'
 import * as THREE from 'three'
 import { M } from '../models/kit.js'
 import { tween, wait, easeOut, lerp } from '../clock.js'
@@ -136,7 +137,7 @@ export class Shots {
   async scattered(e) {
     const marker = this.blastMarker
     const y0 = this.floorAt(e.from.x, e.from.z), y1 = this.floorAt(e.to.x, e.to.z)
-    this.effects.text({ x: e.from.x, y: y0 + 1.5, z: e.from.z }, `scatter ${e.d}"`, '#ffd36e', { size: 15 })
+    this.effects.text({ x: e.from.x, y: y0 + 1.5, z: e.from.z }, `scatter ${tl(e.d)}`, '#ffd36e', { size: 15 })
     await tween(0.35, (t) => marker?.position.set(lerp(e.from.x, e.to.x, t), lerp(y0, y1, t) + 0.05, lerp(e.from.z, e.to.z, t)), easeOut)
   }
 

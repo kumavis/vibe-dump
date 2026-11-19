@@ -118,6 +118,7 @@
 // copied into `t.transport` (present/deck.js packs the riders round it).
 // ---------------------------------------------------------------------------
 
+import { tails } from '../core/rules.js'
 import { deepFreeze } from '../core/util.js'
 import { deriveFootprint, insideDiscs } from '../core/footprint.js'
 import squirrel from './races/squirrel.js'
@@ -252,17 +253,17 @@ function footprintOf(f, base, id, where) {
   const { fp, figures } = deriveFootprint({ discs, turn: f.turn, rev: f.rev }, id)
   if (figures.halves.length) throw bad(`an offset turns onto a half cell (${figures.halves[0]}): within 1e-9 of a half, it would round either way`)
   for (let h = 0; h < 8; h++) {
-    for (let q = 0; q < fp.n; q++) if (figures.snap[h][q] > FP.snap) throw bad(`disc ${q} at heading ${h} snaps ${figures.snap[h][q].toFixed(3)}" from its exact place: at most ${FP.snap}" at every heading`)
+    for (let q = 0; q < fp.n; q++) if (figures.snap[h][q] > FP.snap) throw bad(`disc ${q} at heading ${h} snaps ${tails(figures.snap[h][q].toFixed(3))} from its exact place: at most ${tails(String(FP.snap))} at every heading`)
   }
   for (let h = 0; h < 8; h++) {
-    for (let q = 0; q < fp.n - 1; q++) if (figures.connected[h][q] > 0) throw bad(`discs ${q} and ${q + 1} at heading ${h} stand ${figures.connected[h][q].toFixed(3)}" apart: consecutive discs overlap or touch at every heading`)
+    for (let q = 0; q < fp.n - 1; q++) if (figures.connected[h][q] > 0) throw bad(`discs ${q} and ${q + 1} at heading ${h} stand ${tails(figures.connected[h][q].toFixed(3))} apart: consecutive discs overlap or touch at every heading`)
   }
   figures.pivot.forEach((g, q) => {
-    if (g > FP.pivot) throw bad(`disc ${q}'s pivot gap is ${g.toFixed(3)}": at most ${FP.pivot}" (the point its pivot's 15° samples leave uncovered)`)
+    if (g > FP.pivot) throw bad(`disc ${q}'s pivot gap is ${tails(g.toFixed(3))}: at most ${tails(String(FP.pivot))} (the point its pivot's 15° samples leave uncovered)`)
   })
-  if (fp.R > FP.R) throw bad(`its bounding R is ${fp.R.toFixed(3)}": at most ${FP.R}"`)
-  if (!(Number.isFinite(f.turn) && f.turn >= 0)) throw bad(`turn is the inches a 45° pivot costs, a number from 0, not ${f.turn}`)
-  if (!(Number.isFinite(f.rev) && f.rev >= 1)) throw bad(`rev is what a step backing up costs per inch of a step forward, a number from 1, not ${f.rev}`)
+  if (fp.R > FP.R) throw bad(`its bounding R is ${tails(fp.R.toFixed(3))}: at most ${tails(String(FP.R))}`)
+  if (!(Number.isFinite(f.turn) && f.turn >= 0)) throw bad(`turn is what a 45° pivot costs in tails, a number from 0, not ${f.turn}`)
+  if (!(Number.isFinite(f.rev) && f.rev >= 1)) throw bad(`rev is what a step backing up costs per tail of a step forward, a number from 1, not ${f.rev}`)
   // (the tables' exact point symmetry is the derivation's own, §4.1 rule 24)
   if (!figures.symmetric) throw bad('its tables are not point-symmetric (heading h + 4 the negation of h)')
   return fp

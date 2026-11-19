@@ -53,6 +53,13 @@ export function legacyDir() {
 export const h10 = (s) => createHash('sha256').update(s).digest('hex').slice(0, 10)
 export const hashLines = (lines) => lines.map(h10).join(' ')
 
+// (the units rename, DESIGN's Units section) A length as the code's copy
+// words it, as pattern source for a check: `word` the word after a number
+// (" tail" or " tails", core/rules.js LENGTH's), `mark` the short mark
+// ("t"). Code from before LENGTH wrote both as the inch mark.
+const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+export const lengthWords = (L) => (L ? { word: ` (?:${reEsc(L.one)}|${reEsc(L.many)})`, mark: reEsc(L.mark) } : { word: '"', mark: '"' })
+
 // Index of the first line whose hash differs (or that is missing on either
 // side), or -1 when every line matches.
 export function firstDiff(lines, hashes) {

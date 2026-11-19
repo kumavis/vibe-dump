@@ -2,7 +2,7 @@
 // Plain data, normalised and checked by defineRace (data/schema.js). Names,
 // shorts and weapon names appear in the battle log: change them only on
 // purpose.
-import { AURA } from '../../core/rules.js'
+import { AURA, tails } from '../../core/rules.js'
 
 const KNIVES = { name: 'Twig knives', S: 3, AP: 0, D: 1 }
 
@@ -34,7 +34,7 @@ export default {
       stats: 'M6 WS4 BS4 S3 T3 W1 A1 Ld7 Sv5 OC1',
       ranged: { name: 'Blasting acorns', range: 12, shots: 2, blast: 1.6, S: 4, AP: 1, D: 1, scenery: 1, fx: 'bomb' },
       melee: KNIVES,
-      abilities: ['Blast — lobs 2 templates; a miss scatters D6+1".'],
+      abilities: [`Blast — lobs 2 templates; a miss scatters ${tails('D6+1')}.`],
     },
     oakguard: {
       name: 'Oak Guard', short: 'Oak Guard', role: 'Elite', ai: 'melee', models: 5, base: 0.34, pts: 22, cost: 105,
@@ -76,7 +76,7 @@ export default {
         { name: 'Root Snare', spell: 7, range: 18, snare: true, fx: 'roots' },
       ],
       melee: { name: 'Rootwood staff', S: 5, AP: 1, D: 2 },
-      abilities: ['Spells — casts one of the three above a turn, each on 2D6 ≥ its number; Thornburst erupts under the target, no scatter.', `Grey whiskers — friends within ${AURA}" use his Ld 9.`],
+      abilities: ['Spells — casts one of the three above a turn, each on 2D6 ≥ its number; Thornburst erupts under the target, no scatter.', `Grey whiskers — friends within ${tails(AURA)} use his Ld 9.`],
     },
     // (F9a, DESIGN §4.2.5) the clan's transport: a giant acorn cup on spiked
     // wheels, pushed by its crew. Round (one disc, base 1.5: no footprint),

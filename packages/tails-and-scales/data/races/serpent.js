@@ -2,7 +2,7 @@
 // Plain data, normalised and checked by defineRace (data/schema.js). Names,
 // shorts and weapon names appear in the battle log: change them only on
 // purpose.
-import { AURA } from '../../core/rules.js'
+import { AURA, tails } from '../../core/rules.js'
 
 export default {
   key: 'serpent', name: 'Coil of Ssithra', short: 'Serpents', icon: '\u{1F40D}',
@@ -65,7 +65,7 @@ export default {
         { name: 'Venom Mist', spell: 6, range: 18, shots: 1, blast: 3, S: 2, AP: 0, D: 1, poison: 2, scenery: 0, fx: 'mist' },
       ],
       melee: { name: 'Fang staff', S: 5, AP: 2, D: 2, poison: 3 },
-      abilities: ['Spells — casts one of the three above a turn, each on 2D6 ≥ its number; a Mesmerized target can’t shoot or charge next turn and hits at −1 in melee.', `Coiled will — friends within ${AURA}" use her Ld 9.`],
+      abilities: ['Spells — casts one of the three above a turn, each on 2D6 ≥ its number; a Mesmerized target can’t shoot or charge next turn and hits at −1 in melee.', `Coiled will — friends within ${tails(AURA)} use her Ld 9.`],
     },
     // (F9b, DESIGN §4.2.5) the Coil's transport: a great serpent carrying a
     // long tortoise-shell howdah on its back. Long, so a footprint of three
@@ -132,7 +132,7 @@ export default {
       melee: { name: 'Coil crush', S: 6, AP: 1, D: 2 },
       abilities: [
         'Transport — carries two squads (12 models) under its shell; a unit boards or steps off it as its move.',
-        'Riders — ride along, can’t be shot or charged, and hold no objectives; they step off at its head or tail.',
+        'Riders — ride along, can’t be shot or charged, and hold no objectives; they step off at either end.',
         'Firing deck — up to three squads aboard shoot from its shell each turn, all round, from the shell’s height (it sees over walls), their range from its edge; they count as having moved, or advanced, when it has.',
         'Long hull — drives forward, backs up at half speed, and turns only where its whole body has room to swing.',
         'Coil crush — ploughs through anything breakable in its way.',

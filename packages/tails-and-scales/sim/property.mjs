@@ -256,7 +256,7 @@ import { join, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 import { readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { loadCorpus, select, verdict, pool, CPUS, copyCode, h10 } from './lib.mjs'
+import { loadCorpus, select, verdict, pool, CPUS, copyCode, h10, lengthWords } from './lib.mjs'
 import { foldJob, shadowPartsG, mirrorTap, jobSetup, loadMatch, seatDevices, differ } from './run.mjs'
 import { shadowString } from './oracle/shadow.mjs'
 import { mulberry32 } from './oracle/human-bot.mjs'
@@ -4225,7 +4225,7 @@ function spellTask(core, mods) {
           if (a.rows.length !== 1) throw new Error(`${where}: an unresolved charge rolled ${a.rows.length} rows`)
           if (!b.rows[0].pass) {
             const again = [d6(b.r), d6(b.r)]
-            if (b.rows.length !== 2 || !/^Charge \d+" rolled again \(2D6\)$/.test(b.rows[1].label) || JSON.stringify(b.rows[1].dice) !== JSON.stringify(again)) throw new Error(`${where}: a resolute charge failed (${first.join('+')}) and rolled ${JSON.stringify(b.rows.slice(1))}, not the stream's ${JSON.stringify(again)} again`)
+            if (b.rows.length !== 2 || !new RegExp(`^Charge \\d+${lengthWords(mods.rules.LENGTH).mark} rolled again \\(2D6\\)$`).test(b.rows[1].label) || JSON.stringify(b.rows[1].dice) !== JSON.stringify(again)) throw new Error(`${where}: a resolute charge failed (${first.join('+')}) and rolled ${JSON.stringify(b.rows.slice(1))}, not the stream's ${JSON.stringify(again)} again`)
             counts.rerolls++
             meet('charge rolled again')
           } else if (b.rows.length !== 1) throw new Error(`${where}: a resolute charge that made it rolled again`)
@@ -6183,7 +6183,7 @@ const MUTATIONS = {
   'ward-forever': ['core/engine.js', '      if (u.warded || u.resolute) {\n        u.warded = u.resolute = false\n        worn = true\n      }\n', ''],
   'snare-forever': ['core/engine.js', '    if (u.snared) u.snared = false\n', ''],
   'cast-twice': ['core/actions/shoot.js', "  const info = shotInfo(G, u, target, sp)\n  u.flags.shot = true\n", "  const info = shotInfo(G, u, target, sp)\n  if (!w.spell) u.flags.shot = true\n"],
-  'ward-anywhere': ['core/actions/shoot.js', "    if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)}\" / ${w.range}\")` }\n    return { ok: true, range, reach: w.range, ally: true }\n", '    return { ok: true, range, reach: w.range, ally: true }\n'],
+  'ward-anywhere': ['core/actions/shoot.js', "    if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)} / ${tails(w.range)})` }\n    return { ok: true, range, reach: w.range, ally: true }\n", '    return { ok: true, range, reach: w.range, ally: true }\n'],
   'snare-walks': ['core/commands.js', "  if (u.flags.moved) return `${u.t.short} has moved`\n  if (u.snared) return `${u.t.short} is snared`\n  if (!inGrid(G, c)", "  if (u.flags.moved) return `${u.t.short} has moved`\n  if (!inGrid(G, c)"],
   'ward-no-better': ['core/rules.js', 'export const svOf = (u) => (u.warded ? u.t.Sv - 1 : u.t.Sv)', 'export const svOf = (u) => u.t.Sv'],
   'resolute-tested': ['core/actions/morale.js', '    if (u.resolute) {\n', '    if (u.resolute && false) {\n'],
@@ -6361,7 +6361,7 @@ const MUTATIONS = {
   // the autoload boards any unit, not only Troops (the Elder among them)
   'autoload-any-role': ['core/actions/transport.js', "      if (u.side !== v.side || u.t.role !== 'Troops' || u.aboard || !alive(u)) continue", '      if (u.side !== v.side || u.aboard || !alive(u) || u.t.vehicle) continue'],
   // embark takes bases too large for the hull (the Trebuchet aboard)
-  'board-any-base': ['core/actions/transport.js', "  if (u.t.base > tr.maxBase) return `${u.t.short}'s bases are too large for the ${v.t.short} (${u.t.base}\" over its ${tr.maxBase}\")`\n", ''],
+  'board-any-base': ['core/actions/transport.js', "  if (u.t.base > tr.maxBase) return `${u.t.short}'s bases are too large for the ${v.t.short}`\n", ''],
   // a rider is the enemy's to see: in every bubble, fight and target list
   'enemies-see-riders': ['core/queries.js', 'export const enemiesOf = (G, u) => G.units.filter((e) => e.side !== u.side && alive(e) && !e.aboard)', 'export const enemiesOf = (G, u) => G.units.filter((e) => e.side !== u.side && alive(e))'],
   // riders lend auras and count among the AI's friends
