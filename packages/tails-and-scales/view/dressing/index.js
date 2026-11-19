@@ -21,10 +21,14 @@
 //       tufts and flowers in clumps (ground.js); (A) the works' feet worn,
 //       the forest floors covered ragged, the clutter hidden under bases
 //       (bases.js)
+//   S3: the lanes the armies walk, painted on the mat and carried off it
+//       (place.js lanesOf)
+//   S4: the board's theme: its palette, its own clutter, the works of the
+//       people round it (place.js themeOf and worksOf, works.js), its name
 //
-// Draw calls: the sky 1, the surround 5, the debris 4, the floors' cover 1:
-// 11, against the 6 the wooden table, its frame and the box under the mat
-// drew.
+// Draw calls: the sky 1, the surround 6 (the works one of them), the debris
+// 4, the floors' cover 1: 12, the budget's cap, against the 6 the wooden
+// table, its frame and the box under the mat drew.
 import { plan, dressSeed } from './place.js'
 import { Sky, SKIES, sunAt } from './sky.js'
 import { Surround } from './surround.js'

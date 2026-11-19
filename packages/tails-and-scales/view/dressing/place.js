@@ -21,7 +21,7 @@
 //     reorders one (view/dressing/index.js), so it decides nothing here.
 // Angles and lengths go through core/dmath.js (the same bits on every
 // engine), so two peers on two browsers place the same items.
-import { sin, cos, hypot } from '../../core/dmath.js'
+import { sin, cos, hypot, atan2 } from '../../core/dmath.js'
 
 // the low clutter's height cap and its clearance from a rules piece
 export const LOW = 0.3
@@ -362,6 +362,142 @@ function lanesOf(ctx, R, seed, trackSide) {
   return out
 }
 
+// ---- S4: themes ---------------------------------------------------------
+// One identity per board, from the rules terrain on it: the Powder Field's
+// burned hamlet; a fortified board's border keep; else a quarry where rock
+// and stone outweigh the green, a farmstead where they don't. The theme sets
+// the palette (the mat's wash, its lanes, the meadow round it), the works
+// of the people who live there (off the mat, worksOf), and the board's name
+// (nameOf: kept with the theme, not yet shown).
+export const THEMES = Object.freeze(['farm', 'quarry', 'keep', 'burned'])
+export function themeOf(ctx) {
+  if (ctx.set === 'powder') return 'burned'
+  if (ctx.set === 'fortified') return 'keep'
+  let stone = 0, green = 0
+  for (const c of ctx.chunks) {
+    const g = groupOf(c)
+    if (g === 'stone' || g === 'fort') stone += c.kind === 'block' ? 0.25 : 1
+    else if (g === 'green') green += c.kind === 'floor' ? 3 : 1
+  }
+  return stone > green * 1.2 ? 'quarry' : 'farm'
+}
+export const PALETTES = Object.freeze({
+  farm: Object.freeze({ wash: null, lane: '#7a6846', verge: '#7d8a48', meadow: '#74813f' }),
+  quarry: Object.freeze({ wash: '#a39b84', washA: 0.13, chalk: '#c2bcaa', lane: '#8d8572', verge: '#8a8a62', meadow: '#7d8048' }),
+  keep: Object.freeze({ wash: '#7f7a5c', washA: 0.07, lane: '#6e5d3e', verge: '#7a8048', meadow: '#6f7a3e' }),
+  burned: Object.freeze({ wash: null, lane: '#4a4038', verge: '#5a5236', meadow: '#5a5034', scorch: '#2e2820' }),
+})
+// the board's name, from its theme's syllables
+const NAMES = {
+  farm: [['Hazel', 'Barley', 'Thistle', 'Bramble', 'Clover', 'Acorn', 'Sorrel', 'Hollin'], ['lea', 'croft', 'field', 'stead', 'hollow', 'mead', 'wick', 'ford']],
+  quarry: [['Grey', 'Flint', 'Chalk', 'Slate', 'Rook', 'Cold', 'Scree', 'Crag'], ['cut', 'scar', 'pits', 'edge', 'delve', 'stone', 'rise', 'fall']],
+  keep: [['Thorn', 'Watch', 'Iron', 'Ash', 'Briar', 'High', 'Wyrm', 'Dun'], ['hold', 'gate', 'keep', 'ward', 'mark', 'wall', 'tower', 'burgh']],
+  burned: [['Cinder', 'Ember', 'Smoke', 'Black', 'Char', 'Soot', 'Brand', 'Ash'], ['field', 'stead', 'end', 'ford', 'marsh', 'lea', 'thorpe', 'wick']],
+}
+export function nameOf(seed, theme) {
+  const r = stream(seed, 'name'), [a, b] = NAMES[theme]
+  return a[Math.floor(r() * a.length)] + b[Math.floor(r() * b.length)]
+}
+
+// The works: each a record (kind, place, turn yaw toward the mat, its
+// bounding radius r and height h, for the check), off the mat, on the side
+// the wood is not; their yards (trodden ground) painted round them.
+// view/dressing/works.js draws them, merged.
+function worksOf(out, seed, theme, woodSide) {
+  const { W, H, k } = out
+  const r = stream(seed, 'works')
+  const sides = [0, 1, 2, 3].filter((s) => s !== woodSide)
+  const side = sides[Math.floor(r() * sides.length)]
+  // a place `d` tails out from the mat's middle on `side`, `along` it, and
+  // the turn that faces the mat
+  const spot = (sd, d, along) => {
+    const [x, z] = sd === 0 ? [along, -(H / 2 + d)] : sd === 1 ? [along, H / 2 + d] : sd === 2 ? [-(W / 2 + d), along] : [W / 2 + d, along]
+    return { x, z, yaw: sd === 0 ? 0 : sd === 1 ? Math.PI : sd === 2 ? Math.PI / 2 : -Math.PI / 2 }
+  }
+  // a work at local (lx, lz) of a site
+  const add = (site, kind, lx, lz, yaw, extra = {}) => {
+    const c = cos(site.yaw), sn = sin(site.yaw)
+    const x = site.x + lx * c + lz * sn, z = site.z - lx * sn + lz * c
+    const w = { kind, x, z, y: lift(seed, W, H, x, z) - 0.25, yaw: site.yaw + yaw, ...SIZE[kind], ...extra }
+    out.works.push(w)
+    return w
+  }
+  const yard = (site, lx, lz, rad) => {
+    const c = cos(site.yaw), sn = sin(site.yaw)
+    out.yards.push({ x: site.x + lx * c + lz * sn, z: site.z - lx * sn + lz * c, r: rad })
+  }
+  const along = (sd) => (r() - 0.5) * (sd < 2 ? W * 0.7 : H * 0.6)
+  if (theme === 'farm') {
+    const site = spot(side, 16 + r() * 6, along(side))
+    add(site, 'house', 0, 0, 0)
+    add(site, 'barn', 8.5, -1.5, 0.1 * (r() - 0.5))
+    add(site, 'well', 3.6, 3.4, 0)
+    add(site, 'cart', -4.2, 2.6, 0.6 + r())
+    yard(site, 3.5, 1, 7)
+    // the paddock by the barn
+    for (const [a, b] of [[[5, 3.5], [14, 3.5]], [[14, 3.5], [14, -7]], [[14, -7], [5, -7]]]) add(site, 'fence', (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, atan2(b[0] - a[0], b[1] - a[1]) - Math.PI / 2, { len: hypot(b[0] - a[0], b[1] - a[1]) })
+    // hay stooks in rows in the next field
+    const fx = -14 - r() * 4
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) add(site, 'stook', fx + i * 2.6 + (r() - 0.5) * 0.6, -3 + j * 2.8 + (r() - 0.5) * 0.6, r() * 3)
+    // a second cottage down the lane
+    const s2 = spot(sides[(sides.indexOf(side) + 1) % sides.length], 20 + r() * 8, along(side))
+    add(s2, 'house', 0, 0, 0.3, { s: 0.8 })
+    yard(s2, 0, 0, 4)
+  } else if (theme === 'quarry') {
+    const site = spot(side, 18 + r() * 5, along(side))
+    add(site, 'cut', 0, -4, 0)
+    add(site, 'crane', -6, 1.5, 0.5 + r())
+    add(site, 'hut', 7.5, 2.5, -0.2)
+    for (let i = 0; i < 3; i++) add(site, 'spoil', -11 + i * 3.5 + r(), -2 - r() * 3, r() * 3, { s: 0.8 + r() * 0.6 })
+    for (let i = 0; i < 6; i++) add(site, 'block', 2 + (i % 3) * 1.3, 5 + Math.floor(i / 3) * 1.1, 0)
+    add(site, 'cart', -2.5, 5.5, 1.2)
+    yard(site, 0, 1, 9)
+  } else if (theme === 'keep') {
+    // the outer wall behind one army, its gate where that army's road goes
+    // through it; a beacon on the far side; the garrison's huts and tents
+    // inside the wall
+    const sx = r() < 0.5 ? -1 : 1, d = 22
+    const rd = out.roads.find((q) => q.sx === sx)
+    const gz = rd ? rd.z + 4 * sin(d / 17 + rd.z) : 0
+    const wall = spot(sx < 0 ? 2 : 3, d, gz)
+    add(wall, 'gatehouse', 0, 0, 0)
+    const half = H / 2 + 10
+    for (const dir of [-1, 1]) {
+      // two runs of wall from the gate to a tower at each end
+      // (in runs of at most 6 tails, each its own record)
+      const from = 3.2, to = dir < 0 ? half + gz : half - gz, n = Math.max(1, Math.ceil((to - from) / 6)), len = (to - from) / n
+      for (let i = 0; i < n; i++) add(wall, 'wall', dir * (from + (i + 0.5) * len), 0, 0, { len, r: len / 2 + 0.6 })
+      add(wall, 'tower', dir * (to + 1), 0, 0)
+    }
+    const camp = spot(sx < 0 ? 2 : 3, 14, gz + (r() < 0.5 ? -1 : 1) * (6 + r() * 4))
+    for (let i = 0; i < 3; i++) add(camp, 'hut', (i - 1) * 4.2, (r() - 0.5) * 1.5, (r() - 0.5) * 0.3, { s: 0.8 })
+    for (let i = 0; i < 4; i++) add(camp, 'tent', (i - 1.5) * 3 + (r() - 0.5), 4 + (r() - 0.5), r() * 3)
+    yard(camp, 0, 2, 8)
+    const far = spot(sx < 0 ? 3 : 2, 18 + r() * 8, (r() - 0.5) * H * 0.5)
+    add(far, 'beacon', 0, 0, 0)
+    yard(far, 0, 0, 2.5)
+  } else {
+    // the burned hamlet: cottages burned to their walls, chimneys standing
+    const site = spot(side, 15 + r() * 6, along(side))
+    const n = 3 + Math.floor(r() * 3)
+    for (let i = 0; i < n; i++) {
+      const lx = (i - (n - 1) / 2) * 6.5 + (r() - 0.5) * 2, lz = (r() - 0.5) * 5
+      add(site, 'shell', lx, lz, (r() - 0.5) * 0.5)
+      if (r() < 0.7) add(site, 'chimney', lx + 1.6, lz - 1.1, 0)
+    }
+    add(site, 'cart', (r() - 0.5) * 10, 6, r() * 3, { burned: true })
+    yard(site, 0, 0, 14)
+    for (const f of out.fields) if (outside(W, H, f.x, f.z) < 40 * k && r() < 0.45) f.kind = 'charred'
+  }
+}
+// each work's bounding radius and height (works.js draws them to these)
+const SIZE = {
+  house: { r: 3.2, h: 4.2 }, barn: { r: 4.4, h: 5.2 }, well: { r: 0.8, h: 1.6 }, cart: { r: 1.6, h: 1.2 }, stook: { r: 0.6, h: 1.1 },
+  fence: { r: 6, h: 0.9 }, cut: { r: 7.5, h: 4 }, crane: { r: 4.5, h: 7 }, hut: { r: 2.4, h: 2.8 }, spoil: { r: 2.4, h: 2.2 }, block: { r: 0.7, h: 0.8 },
+  gatehouse: { r: 4, h: 6 }, wall: { r: 3.6, h: 3.6 }, tower: { r: 2, h: 6.5 }, tent: { r: 1.3, h: 1.6 }, beacon: { r: 1.2, h: 6 },
+  shell: { r: 3, h: 2.6 }, chimney: { r: 0.7, h: 5 },
+}
+
 // ---- the plan ----------------------------------------------------------
 // The whole dressing of one table: `ctx` as rulesOf's, plus `seed`
 // (dressSeed's) and `set`. Every list is in the seed's order.
@@ -370,7 +506,7 @@ export function plan(ctx) {
   const k = scaleOf(W, H), area = (W * H) / (40 * 28)
   const R = rulesOf(ctx)
   const day = dayOf(seed, ctx.set)
-  const out = { seed, day, k, W, H, stakes: [], grass: [], trees: [], fields: [], hedgerows: [], track: [], decals: [], debris: [], tufts: [], flowers: [] }
+  const out = { seed, day, k, W, H, stakes: [], grass: [], trees: [], fields: [], hedgerows: [], track: [], decals: [], debris: [], tufts: [], flowers: [], works: [], yards: [] }
   const pieces = ctx.chunks.filter(grounded)
 
   // the boundary stakes: each mat corner and where each zone meets the long
@@ -426,6 +562,14 @@ export function plan(ctx) {
     R.clutter = (x, z, rr, h) => !L.worn(x, z) && clutter(x, z, rr, h)
   }
 
+  // ---- S4: the theme, its name, and its people's works off the mat -----
+  {
+    const th = (out.theme = themeOf(ctx))
+    out.palette = PALETTES[th]
+    out.name = nameOf(seed, th)
+    worksOf(out, seed, th, Math.floor(stream(seed, 'trees')() * 4))
+  }
+
   // the trees: copses and a wood's edge, from 12 tails out (nothing tall near
   // the mat, where the camera stands)
   {
@@ -433,6 +577,8 @@ export function plan(ctx) {
     const put = (x, z, s, kind) => {
       const d = outside(W, H, x, z)
       if (d < 12 || d > 90 * k) return
+      // (S4) clear of the works and their yards
+      if (out.works.some((w) => hypot(w.x - x, w.z - z) < w.r + 2.5)) return
       out.trees.push({ x, z, y: lift(seed, W, H, x, z), s, yaw: r() * 6.283, kind, tint: r(), r: 1.4 * s, h: 6 * s })
     }
     // a wood along one side, in two or three stands with open ground
@@ -523,6 +669,15 @@ export function plan(ctx) {
         }
       }
     }
+    // (S4) the theme's own strewing over open ground: a quarry's stone
+    // chips, a keep's, a burned field's charred sticks (none on a farm)
+    const strew = { quarry: 160, keep: 70, burned: 110 }[out.theme] ?? 0
+    for (let i = 0; i < strew * Math.min(2, area); i++) {
+      const x = (r() - 0.5) * W, z = (r() - 0.5) * H
+      const kind = out.theme === 'burned' ? 'stick' : 'pebble', s2 = 0.5 + r() * 0.7
+      const item = { kind, x, z, s: s2, yaw: r() * 6.283, tilt: r(), tint: r(), r: (kind === 'stick' ? 0.2 : 0.08) * s2, h: kind === 'pebble' ? 0.07 * s2 : 0.04, ash: out.theme === 'burned' }
+      if (R.clutter(x, z, item.r, item.h)) out.debris.push(item)
+    }
     // (a cap, cut from the end: the budget's)
     out.debris.length = Math.min(out.debris.length, DEBRIS)
   }
@@ -573,6 +728,6 @@ export function plan(ctx) {
 // the placement rules.
 export function standing(p) {
   const out = []
-  for (const list of ['stakes', 'grass', 'trees', 'debris', 'tufts', 'flowers']) for (const it of p[list]) out.push({ list, ...it })
+  for (const list of ['stakes', 'grass', 'trees', 'works', 'debris', 'tufts', 'flowers']) for (const it of p[list]) out.push({ list, ...it })
   return out
 }

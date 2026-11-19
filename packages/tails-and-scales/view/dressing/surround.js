@@ -6,11 +6,14 @@
 // and pine; and the long grass off the mat. Nothing here is on the mat,
 // and nothing casts a shadow.
 //
-// (S3) The lanes' roads off the mat, out to the land and the cart track.
+// (S3) The lanes' roads off the mat; (S4) the works and their yards, a
+// burned field's scorch past the mat's edge and its scorched trees.
 //
-// Draw calls: the ground 1, the edge and stakes 1, the trees 2, the grass 1.
+// Draw calls: the ground 1, the edge and stakes 1, the trees 2, the grass 1,
+// the works 1.
 import * as THREE from 'three'
 import { lift, outside, stream } from './place.js'
+import { worksGeometry } from './works.js'
 
 const C = (hex) => new THREE.Color(hex)
 const FIELDS = {
@@ -20,6 +23,7 @@ const FIELDS = {
   barley: ['#a3a456', '#b0ad62'],
   plough: ['#6e5a3e', '#5f4c33'],
   fallow: ['#7d8048', '#6f7440'],
+  charred: ['#3a3328', '#2a2620'],
 }
 
 // the fields' paint: `T` inches either side of the board's centre on a
@@ -132,8 +136,29 @@ function paintFields(p, T, seed) {
   g.strokeStyle = '#5d7a3a'
   g.lineWidth = 12
   g.strokeRect(0, 0, 1024, 1024)
-  g.fillStyle = '#74813f'
+  g.fillStyle = p.palette?.meadow ?? '#74813f'
   g.fillRect(at(-W / 2 - 5), at(-H / 2 - 5), (W + 10) * px, (H + 10) * px)
+  // (S4) the works' yards, trodden bare
+  for (const y of p.yards ?? []) {
+    for (let i = 0; i < 3; i++) {
+      g.globalAlpha = 0.25
+      g.fillStyle = '#8a7650'
+      g.beginPath()
+      g.ellipse(at(y.x), at(y.z), y.r * px * (1 - i * 0.25), y.r * px * (0.8 - i * 0.2), 0, 0, Math.PI * 2)
+      g.fill()
+    }
+  }
+  // (S4) a burned field's scorch running on past the mat's edge, fading
+  if (p.palette?.scorch) {
+    for (let i = 12; i >= 1; i--) {
+      g.globalAlpha = 0.09
+      g.fillStyle = p.palette.scorch
+      const d = i * 0.9
+      g.beginPath()
+      g.roundRect(at(-W / 2 - d), at(-H / 2 - d), (W + 2 * d) * px, (H + 2 * d) * px, d * px)
+      g.fill()
+    }
+  }
   // (S3) the lanes again across the meadow, to the mat's edge
   for (const rd of p.roads ?? []) way([[rd.x, rd.z], [rd.x + rd.sx * 6, rd.z + 4 * Math.sin(6 / 17 + rd.z) * 0.5]], 1.5, '#86704a', 0.75)
   if (p.spur) way([[p.spur.x, p.spur.z], [p.spur.x, p.spur.z + p.spur.sz * 6]], 1.2, '#86704a', 0.75)
@@ -325,13 +350,23 @@ export class Surround {
       list.forEach((t, i) => {
         m4.compose(v.set(t.x, t.y - 0.2, t.z), q.setFromEuler(e.set(0, t.yaw, 0)), s3.setScalar(t.s * 1.15))
         mesh.setMatrixAt(i, m4)
-        mesh.setColorAt(i, col.setHSL(0, 0, 0.82 + t.tint * 0.3))
+        // ((S4) round a burned field, the near trees scorched)
+        const charred = p.theme === 'burned' && outside(W, H, t.x, t.z) < 32 * k && t.tint < 0.7
+        mesh.setColorAt(i, charred ? col.setRGB(0.32, 0.27, 0.22) : col.setHSL(0, 0, 0.82 + t.tint * 0.3))
       })
       mesh.count = list.length
       mesh.full = list.length
       this.group.add(mesh)
       return mesh
     })
+
+    // (S4) the works, one mesh
+    const wg = worksGeometry(p.works ?? [])
+    this.works = wg ? new THREE.Mesh(wg, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, flatShading: true })) : null
+    if (this.works) {
+      this.works.receiveShadow = true
+      this.group.add(this.works)
+    }
 
     // the long grass off the mat
     {
@@ -368,6 +403,8 @@ export class Surround {
       m.count = Math.ceil(m.full * f)
       m.visible = f > 0 && m.full > 0
     }
+    // (the works go with the trees: none on 'low' or ?lowfi)
+    if (this.works) this.works.visible = f > 0
   }
 
   dispose() {

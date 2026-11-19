@@ -39,6 +39,24 @@ const WEAR = {
 export function decalPainter(p) {
   return (g, c, W, H) => {
     const sx = c.width / W
+    // (S4) the theme's wash over the whole mat (a quarry's dust, a keep's
+    // trodden grey), and a quarry's chalky patches
+    const pal = p.palette ?? {}
+    if (pal.wash) {
+      g.globalAlpha = pal.washA
+      g.fillStyle = pal.wash
+      g.fillRect(0, 0, c.width, c.height)
+    }
+    if (pal.chalk) {
+      const r = stream(p.seed ?? 0, 'chalk')
+      for (let i = 0; i < 40 * (W * H) / 1120; i++) {
+        g.globalAlpha = 0.1 + r() * 0.12
+        g.fillStyle = pal.chalk
+        g.beginPath()
+        g.ellipse(r() * c.width, r() * c.height, (0.4 + r() * 1.2) * sx, (0.3 + r() * 0.8) * sx, r() * 3, 0, Math.PI * 2)
+        g.fill()
+      }
+    }
     // (S3) the lanes first, under everything: a broad band of flattened,
     // paler grass, then the bare earth down its middle, both as heavy as the
     // lane's wear (a gap, a ladder's foot), then stones kicked along it
@@ -58,8 +76,8 @@ export function decalPainter(p) {
         g.stroke()
       }
     }
-    for (const pth of p.lanes ?? []) lane(pth, 1.25, '#7d8a48', 0.1)
-    for (const pth of p.lanes ?? []) lane(pth, 0.55, '#7a6846', 0.2)
+    for (const pth of p.lanes ?? []) lane(pth, 1.25, p.palette?.verge ?? '#7d8a48', 0.1)
+    for (const pth of p.lanes ?? []) lane(pth, 0.55, p.palette?.lane ?? '#7a6846', 0.2)
     for (const pth of p.lanes ?? []) {
       const r = stream(Math.round(pth.pts[0][0] * 977) ^ Math.round(pth.pts[0][1] * 991), 'lane')
       for (const [x, z, wear] of pth.pts) {
