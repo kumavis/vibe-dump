@@ -1044,11 +1044,26 @@ async function check(page, say) {
     // ((F8b's review) the group let go mid-plan: Escape while a third
     // place's ghosts are still coming leaves no ring, flag or tooltip on
     // the table, however many frames the plan had left)
+    // (the plan's next step is a frame away, and on a fast machine that
+    // frame comes before this check can read the plan: the page's frames
+    // are held here from before the pointer arrives until Escape has been
+    // pressed, so the plan is mid-way by construction, as it is on a slower
+    // machine, and let go only then)
     const [jx, jy] = await ev(({ x, z }) => window.__ts.screen(x, 0, z), { x: ahead.x, z: ahead.z - 4 })
+    await ev(() => {
+      const held = (window.__heldFrames = { fns: [], raf: window.requestAnimationFrame })
+      window.requestAnimationFrame = (fn) => held.fns.push(fn)
+    })
     await page.mouse.move(jx, jy)
     const mid = await ev(() => window.__ts.group.ghosts())
-    if (!mid.busy) fail(`the third place's ghosts planned in the frame the pointer arrived (${JSON.stringify(mid)}): nothing to let go mid-plan`)
+    if (!mid.busy) fail(`the third place's ghosts were whole in the frame the pointer arrived, the page's frames held (${JSON.stringify(mid)}): nothing to let go mid-plan`)
     await page.keyboard.press('Escape')
+    await ev(() => {
+      const held = window.__heldFrames
+      delete window.__heldFrames
+      window.requestAnimationFrame = held.raf
+      for (const fn of held.fns.splice(0)) held.raf.call(window, fn)
+    })
     await sleep(1500)
     const gone = await ev(() => ({ ...window.__ts.group.ghosts(), picked: window.__ts.group.ids().length, tip: document.querySelector('#tooltip').style.display === 'block' ? document.querySelector('#tooltip').textContent : '' }))
     if (gone.picked || gone.busy || gone.rings || gone.tip) fail(`Escape mid-plan left ${gone.picked} units picked, the plan ${gone.busy ? 'still running' : 'let go'}, ${gone.rings} rings showing and the tooltip "${gone.tip}" (DESIGN §4.2.7: nothing drawn once the group is let go)`)
