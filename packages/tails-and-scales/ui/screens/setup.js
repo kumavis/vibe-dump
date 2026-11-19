@@ -70,6 +70,8 @@ export const TERRAINS = Object.freeze({
   keg: { name: 'Powder keg', what: 'ruins, woods, hedges and walls round a powder keg' },
   // (V3d's, the Powder Field's only one)
   powder: { name: 'Powder Field', what: 'a battlefield still burning: wrecks to climb, shell holes, and powder everywhere' },
+  // ((Breakthrough) the line set's, Breakthrough's only one)
+  march: { name: 'March Wall', what: 'a walled line across the field: a gate to ram, siege ladders, a breach, and a wood on its flank' },
 })
 export const terrainName = (set) => TERRAINS[set]?.name ?? set
 
@@ -82,7 +84,7 @@ export const MISSION_NAMES = Object.freeze({
   powder: { name: 'Powder Field', what: 'A Grand battle on the wreckage of the day\'s fighting, still burning: the objectives on a burned farmstead, wrecked trebuchets and venom engines, and among heaps of powder kegs. Climb the wrecks; a blast that touches the powder sets off every keg in reach.' },
   // (Breakthrough) the first asymmetric mission, a Field battle of its own:
   // its target and rounds the size's own (SIZES, app/boot.js)
-  breakthrough: { name: 'Breakthrough', what: (at) => `One army holds a walled line across the field; the other must break through it. The attacker scores for each objective it holds beyond the line at the end of each round, and wins on ${at.target}. The defender wins by holding them off for ${at.rounds} rounds.` },
+  breakthrough: { name: 'Breakthrough', what: (at) => `One army holds a walled line across the field; the other must break through it. The attacker scores for each objective it holds behind the wall at the end of each round, and wins on ${at.target}. The defender wins by holding them off for ${at.rounds} rounds.` },
 })
 // what a mission of its own is about, for size `at` (a SIZES record), or
 // null for a plain size

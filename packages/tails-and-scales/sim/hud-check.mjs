@@ -350,10 +350,18 @@ async function tips(browser, url) {
 // plays alone, each from its board, dice, races and lists (the page's own
 // door: ?seed, ?dice, ?races, ?armies, ?mission) and its attacker pressed
 // on the panel's Who attacks. Picked so each of a role battle's own ends
-// comes: board 9 (the Bushtails defending on a list of three units, seat 1
-// attacking) breaks through; board 1 (the presets, seat 0 attacking) is
-// held. Their numbers (the target, the rounds) and the races' names are
-// the code under test's own (data/mission.js, data/schema.js).
+// comes, on the March Wall (S2b): board 205 (the Bushtails attacking on
+// their preset, seat 0, against a Coil defence of seven units, half the
+// preset's: a Hierophant, three Scaleguard and three Spitters) breaks
+// through in round 4 at 6 of 5; board 1 (the presets, seat 1 attacking)
+// is held at 0. Neither is lopsided by construction alone: on the wall
+// today's AI wipes a tiny defence (or a tiny attack) before it scores
+// (29-30 battles of 30 for a three-unit list), so the breakthrough is the
+// widest one a search found (seven units, boards 1-300: the only round-4
+// end at 6) and the held line the presets', held on 20 boards of 20 at 2 VP
+// at most; the AI lane (S3) re-picks both if its play moves them. Their
+// numbers (the target, the rounds) and the races' names are the code under
+// test's own (data/mission.js, data/schema.js).
 const { MISSIONS: MISSIONS_UT } = await import(pathToFileURL(join(PKG, 'data', 'mission.js')).href)
 const { RACES: RACES_UT } = await import(pathToFileURL(join(PKG, 'data', 'schema.js')).href)
 const BT = MISSIONS_UT.breakthrough
@@ -367,7 +375,7 @@ const roleBattle = (id, board, attacker, armies) => ({
   },
   click: `#setupRoles button[data-attacker="${attacker}"]`,
 })
-const ROLE_ITEMS = BT ? [roleBattle('breakthrough-9', 9, 1, ['102', 'field']), roleBattle('held-1', 1, 0, ['field', 'field'])] : []
+const ROLE_ITEMS = BT ? [roleBattle('breakthrough-205', 205, 0, ['field', '1033']), roleBattle('held-1', 1, 1, ['field', 'field'])] : []
 
 // The role lane: each role battle watched whole on a page of its own,
 // nothing snapped, and a battle against the AI at its deployment, each

@@ -245,11 +245,15 @@
 //    slot table); two Howdahs a Field or Grand list, none in a Skirmish.
 // 17. (Breakthrough, DESIGN §4.2.12) Asymmetric missions: the breakthrough
 //    record as DESIGN has it (Field's board, rounds, preset, list rules and
-//    prices whole, on `open`, overtime false; the roles' zones, target,
-//    first turn and line; three objectives beyond the line scoring for the
-//    attacker); checkMission refusing each role rule broken (the roles'
-//    shape, a field a role takes not, zones outside the board, overlapping
-//    or under 12 tails apart, the attacker's zone east of the centre, an
+//    prices whole, on `march` alone, overtime false, `deploy` the
+//    attacker's depth; the roles' zones, the defender's behind the line,
+//    target, first turn and line; three objectives behind the wall scoring
+//    for the attacker); checkMission refusing each role rule broken (the
+//    roles' shape, a field a role takes not, and on a copy whose defender
+//    holds a rectangle zones outside the board, overlapping or under 12
+//    tails apart; a zone behind the line anywhere but the defender's,
+//    with any other field, without a line, or with the attacker's front
+//    under 12 tails from it; the attacker's zone east of the centre, an
 //    objective in the attacker's zone or in front of the line, `scores`
 //    naming no role, `vp` 0, a target of 0 or out of reach, `first` other
 //    than true, a role mission allowing overtime, a role list breaking
@@ -258,8 +262,11 @@
 //    target, a role zone, the line, an objective's `scores` and `vp`, and a
 //    role's own list; rulesFor handing each seat its role's list rules;
 //    the objectives on the table point-mirrored exactly when seat 1
-//    attacks, the zones with them, and Terrain.generate handed the role
-//    record in the attacker frame (and nothing on any other mission).
+//    attacks, the zones with them (the defender's the board's plan, its x
+//    bounds the defender's side's on the table; on a board with no plan,
+//    the line to the edge), every default unit inside its zone, and
+//    Terrain.generate handed the role record in the attacker frame (and
+//    nothing on any other mission).
 // 18. (Breakthrough, DESIGN's line set) The March Wall: the `march` set is
 //    a plan set (plan 'wall', every field of the plan's, none of scatter's),
 //    named by no mission yet; checkSet refuses a plan set broken a field at
@@ -1529,6 +1536,7 @@ console.log('\n12. the size envelope: every mission, preset, list rule and set i
   const A = await imp(PKG, 'core/army.js')
   const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
   const { gridSize } = await imp(PKG, 'core/nav.js')
+  const { roleFrame, roleObjectives } = await imp(PKG, 'core/match.js')
   const ENV = { W: 80, H: 56, cells: 17919, rounds: 7, points: 1500, units: 24, models: 90, chunks: 450 }
   // the sizes §4.2.1 and §4.2.3 give each mission
   const SIZES = {
@@ -1540,8 +1548,9 @@ console.log('\n12. the size envelope: every mission, preset, list rule and set i
     // (V3d) the Powder Field: a Grand battle, seven objectives
     powder: { W: 80, H: 56, deploy: 14, rounds: 7, points: 1500, size: 'Grand', objectives: 7 },
     // (Breakthrough) a Field battle with roles, three objectives beyond the
-    // line (`deploy` the view's depth: the zones are the roles', section 17)
-    breakthrough: { W: 60, H: 40, deploy: 12, rounds: 6, points: 1000, size: 'Field', objectives: 3 },
+    // line (`deploy` the view's depth, the attacker's 10: the zones are the
+    // roles', section 17)
+    breakthrough: { W: 60, H: 40, deploy: 10, rounds: 6, points: 1000, size: 'Field', objectives: 3 },
   }
   check(isDeepStrictEqual(Object.keys(MISSIONS), Object.keys(SIZES)), `the missions are ${Object.keys(SIZES).join(', ')} (${Object.keys(MISSIONS).join(', ')})`)
   for (const [name, m] of Object.entries(MISSIONS)) {
@@ -1560,7 +1569,10 @@ console.log('\n12. the size envelope: every mission, preset, list rule and set i
       let worst = 0, at = 0, sum = 0
       for (let seed = 1; seed <= 200; seed++) {
         const T = new Terrain(m.board.W, m.board.H)
-        T.generate(seed, m.objectives, m.deploy, set, null)
+        // ((Breakthrough) a mission with roles builds its board as newState
+        // does, handed the roles' frame: the March Wall needs it)
+        if (m.roles) T.generate(seed, roleObjectives(m, false), m.deploy, set, null, roleFrame(m.roles, false))
+        else T.generate(seed, m.objectives, m.deploy, set, null)
         sum += T.chunks.length
         if (T.chunks.length > worst) [worst, at] = [T.chunks.length, seed]
       }
@@ -2166,15 +2178,20 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
   const core = await imp(PKG, 'core/index.js')
   const { zone } = await imp(PKG, 'core/deploy.js')
   const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
+  const { faceDist } = await imp(PKG, 'core/terrain/breakthrough.js')
   const B = MISSIONS.breakthrough
   // the record: Field's battle, whole, with the roles
-  check(!!B && isDeepStrictEqual(B.list, MISSIONS.field.list) && B.army === MISSIONS.field.army && B.rounds === MISSIONS.field.rounds && isDeepStrictEqual(B.board, MISSIONS.field.board) && B.deploy === MISSIONS.field.deploy, "breakthrough is a Field battle: Field's board, depth, rounds, preset, list rules and prices, whole", B ? diffPath({ list: B.list, army: B.army, rounds: B.rounds, board: B.board, deploy: B.deploy }, { list: MISSIONS.field.list, army: MISSIONS.field.army, rounds: MISSIONS.field.rounds, board: MISSIONS.field.board, deploy: MISSIONS.field.deploy }) : 'no breakthrough')
-  check(isDeepStrictEqual(B?.sets, ['open']) && B?.overtime === false, "it is fought on open alone (until the line set), with no overtime", JSON.stringify({ sets: B?.sets, overtime: B?.overtime }))
-  check(isDeepStrictEqual(B?.roles, { attack: { zone: { x: [-30, -18] }, first: true, target: 5 }, defend: { zone: { x: [2, 30] }, line: 2 } }), "its roles: the attacker within 12 tails of the west edge, first to move, 5 to win; the defender from its line's front face (x 2) to the east edge", JSON.stringify(B?.roles))
-  check(isDeepStrictEqual(B?.objectives, [{ x: 14, z: -12, scores: 'attack' }, { x: 18, z: 0, scores: 'attack' }, { x: 14, z: 12, scores: 'attack' }]), "its three objectives stand beyond the line and score for the attacker alone", JSON.stringify(B?.objectives))
+  check(!!B && isDeepStrictEqual(B.list, MISSIONS.field.list) && B.army === MISSIONS.field.army && B.rounds === MISSIONS.field.rounds && isDeepStrictEqual(B.board, MISSIONS.field.board), "breakthrough is a Field battle: Field's board, rounds, preset, list rules and prices, whole", B ? diffPath({ list: B.list, army: B.army, rounds: B.rounds, board: B.board }, { list: MISSIONS.field.list, army: MISSIONS.field.army, rounds: MISSIONS.field.rounds, board: MISSIONS.field.board }) : 'no breakthrough')
+  check(B?.deploy === 10 && B.deploy === B.roles.attack.zone.x[1] + B.board.W / 2, "its deploy (the depth the view draws both zones by) is the attacker's zone's, 10 tails", JSON.stringify({ deploy: B?.deploy, attack: B?.roles?.attack?.zone }))
+  check(isDeepStrictEqual(B?.sets, ['march']) && B?.overtime === false, "it is fought on the March Wall alone (march), with no overtime", JSON.stringify({ sets: B?.sets, overtime: B?.overtime }))
+  check(isDeepStrictEqual(B?.roles, { attack: { zone: { x: [-30, -20] }, first: true, target: 5 }, defend: { zone: { behind: true }, line: -4.5 } }), "its roles: the attacker within 10 tails of the west edge, first to move, 5 to win; the defender behind the wall, its line the gate face's nominal x (-4.5)", JSON.stringify(B?.roles))
+  check(isDeepStrictEqual(B?.objectives, [{ x: 9, z: 0, scores: 'attack' }, { x: 3, z: 13, scores: 'attack' }, { x: 3, z: -13, scores: 'attack' }]), "its three objectives stand behind the wall (the road behind the gate, and behind each arm) and score for the attacker alone", JSON.stringify(B?.objectives))
   check(Object.entries(MISSIONS).filter(([, m]) => m.roles !== undefined).map(([k]) => k).join() === 'breakthrough' && Object.values(MISSIONS).every((m) => (m.roles === undefined) === (m.overtime === undefined)), 'breakthrough is the one mission with roles, and the one with overtime false')
   check(missionError(B) === null, 'checkMission passes breakthrough', missionError(B))
-  // the role rules, each broken in a copy of breakthrough
+  // the role rules, each broken in a copy of breakthrough (`R`: a copy
+  // whose defender holds a rectangle, x 2 to 30 behind a line at x 2, for
+  // the rectangle zones' rules)
+  const R = (m) => (m.roles.defend = { zone: { x: [2, 30] }, line: 2 })
   const brokenRoles = [
     ['roles that are a list', /roles are \[\], not \{ attack, defend \}/, (m) => (m.roles = [])],
     ['a third role', /roles are .*, not \{ attack, defend \}/, (m) => (m.roles.raid = { zone: { x: [-1, 1] } })],
@@ -2182,16 +2199,25 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
     ['a field a role takes not', /attack role takes no field "line"/, (m) => (m.roles.attack.line = 0)],
     ["the defender's target", /defend role takes no field "target"/, (m) => (m.roles.defend.target = 3)],
     ['a zone with no x', /attack zone's x is undefined/, (m) => (m.roles.attack.zone = { z: [-5, 5] })],
-    ['a zone past the board', /defend zone's x is \[2,31\]/, (m) => (m.roles.defend.zone.x = [2, 31])],
-    ['a zone the wrong way round', /attack zone's x is \[-18,-30\]/, (m) => (m.roles.attack.zone.x = [-18, -30])],
-    ["a zone's z past the board", /defend zone's z is \[-21,0\]/, (m) => (m.roles.defend.zone.z = [-21, 0])],
+    ['a zone past the board', /defend zone's x is \[2,31\]/, (m) => (R(m), (m.roles.defend.zone.x = [2, 31]))],
+    ['a zone the wrong way round', /attack zone's x is \[-20,-30\]/, (m) => (m.roles.attack.zone.x = [-20, -30])],
+    ["a zone's z past the board", /defend zone's z is \[-21,0\]/, (m) => (R(m), (m.roles.defend.zone.z = [-21, 0]))],
     ['a zone with a field it takes not', /attack zone is .*, not \{ x: \[a, b\], z\?: \[c, d\] \}/, (m) => (m.roles.attack.zone.y = [0, 1])],
-    ['zones overlapping', /zones are -10 tails apart, under 12 tails/, (m) => (m.roles.defend.zone.x = [-28, 30])],
-    ['zones under 12 tails apart', /zones are 11 tails apart, under 12 tails/, (m) => (m.roles.attack.zone.x = [-30, -9])],
+    ['zones overlapping', /zones are -8 tails apart, under 12 tails/, (m) => (R(m), (m.roles.defend.zone.x = [-28, 30]))],
+    ['zones under 12 tails apart', /zones are 11 tails apart, under 12 tails/, (m) => (R(m), (m.roles.attack.zone.x = [-30, -9]))],
     ["the attacker's zone east of the centre", /attack zone reaches x 30, past the centre line/, (m) => (m.roles.attack.zone.x = [18, 30])],
-    ['an objective in the attacker\'s zone', /objective at \(-20, 0\) is in the attacker's zone/, (m) => m.objectives.push({ x: -20, z: 0, scores: 'attack' })],
-    ['an objective in front of the line', /objective at \(0, 5\) is in front of the defender's line \(x 2\)/, (m) => m.objectives.push({ x: 0, z: 5, scores: 'attack' })],
-    ['an objective on the line', /objective at \(2, 5\) is in front of the defender's line/, (m) => m.objectives.push({ x: 2, z: 5, scores: 'attack' })],
+    // ((the March Wall) the zone behind the line: the defender's alone, as
+    // written, with a line, the attacker's front 12 tails or more from it)
+    ['the attacker behind the line', /attack zone is \{"behind":true\}, not \{ x: \[a, b\], z\?: \[c, d\] \}$/, (m) => (m.roles.attack.zone = { behind: true })],
+    ['a zone behind the line with an x', /defend zone is \{"behind":true,"x":\[2,30\]\}, not \{ behind: true \}/, (m) => (m.roles.defend.zone.x = [2, 30])],
+    ['a zone behind the line that is false', /defend zone is \{"behind":false\}, not \{ behind: true \}/, (m) => (m.roles.defend.zone.behind = false)],
+    ['a zone behind no line', /defend zone is behind the line, but the defender has no line/, (m) => delete m.roles.defend.line],
+    ["the attacker's front under 12 tails from the line", /attacker's zone front is 11 tails from the defender's line, under 12 tails/, (m) => (m.roles.defend.line = -9)],
+    ['a defender zone that is neither', /defend zone is \{"y":\[0,1\]\}, not \{ x: \[a, b\], z\?: \[c, d\] \} or \{ behind: true \}/, (m) => (m.roles.defend.zone = { y: [0, 1] })],
+    ['an objective in the attacker\'s zone', /objective at \(-25, 0\) is in the attacker's zone/, (m) => m.objectives.push({ x: -25, z: 0, scores: 'attack' })],
+    ['an objective in front of the line', /objective at \(-6, 5\) is in front of the defender's line \(x -4.5\)/, (m) => m.objectives.push({ x: -6, z: 5, scores: 'attack' })],
+    ['an objective on the line', /objective at \(-4.5, 5\) is in front of the defender's line/, (m) => m.objectives.push({ x: -4.5, z: 5, scores: 'attack' })],
+    ['an objective in front of a rectangle\'s line', /objective at \(0, 5\) is in front of the defender's line \(x 2\)/, (m) => (R(m), m.objectives.push({ x: 0, z: 5, scores: 'attack' }))],
     ['an objective at the board\'s edge', /objective at \(29.5, 0\) is less than 1 tail inside/, (m) => m.objectives.push({ x: 29.5, z: 0 })],
     ['scores naming no role', /scores for "attacker", not 'attack' or 'defend'/, (m) => (m.objectives[0].scores = 'attacker')],
     ['an objective worth 0', /worth 0, not a whole number of VP from 1/, (m) => (m.objectives[0].vp = 0)],
@@ -2222,10 +2248,13 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
     ['an objective worth 2', (m) => (m.objectives[1].vp = 2)],
     ['an objective scoring for the defender', (m) => m.objectives.push({ x: 24, z: 0, scores: 'defend' })],
     ['an objective scoring for both', (m) => m.objectives.push({ x: 24, z: 0 })],
-    ['a defender boxed in z', (m) => (m.roles.defend.zone.z = [-10, 10])],
-    ['a defender with no line', (m) => delete m.roles.defend.line],
+    ['a defender holding a rectangle (x 2 to 30, its line at 2)', R],
+    ['a defender boxed in z', (m) => (R(m), (m.roles.defend.zone.z = [-10, 10]))],
+    ['a defender with a rectangle and no line', (m) => (R(m), delete m.roles.defend.line)],
     ['no first turn by right (the roll-off)', (m) => delete m.roles.attack.first],
-    ['zones exactly 12 tails apart', (m) => (m.roles.attack.zone.x = [-30, -10])],
+    ['zones exactly 12 tails apart', (m) => (R(m), (m.roles.attack.zone.x = [-30, -10]))],
+    ["the attacker's front exactly 12 tails from the line", (m) => (m.roles.defend.line = -8)],
+    ['a defender behind the line with its own list', (m) => (m.roles.defend.list = { ...structuredClone(m.list), points: 900 })],
   ]) {
     const m = structuredClone(B)
     edit(m)
@@ -2246,9 +2275,9 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
   check(bt(() => {}) === RULES_ID, 'RULES_ID stays on an unchanged copy of breakthrough (the control)')
   for (const [what, edit] of [
     ["the attacker's target (5 → 6)", (m) => (m.roles.attack.target = 6)],
-    ["the attacker's zone (x -18 → -17)", (m) => (m.roles.attack.zone.x[1] = -17)],
-    ["the defender's zone boxed in z", (m) => (m.roles.defend.zone.z = [-15, 15])],
-    ["the defender's line (2 → 3)", (m) => (m.roles.defend.line = 3)],
+    ["the attacker's zone (x -20 → -19)", (m) => (m.roles.attack.zone.x[1] = -19)],
+    ["the defender's zone a rectangle (behind the line → x -4.5 to 30)", (m) => (m.roles.defend.zone = { x: [-4.5, 30] })],
+    ["the defender's line (-4.5 → -4)", (m) => (m.roles.defend.line = -4)],
     ["the first turn by right dropped", (m) => delete m.roles.attack.first],
     ["an objective's scores (attack → both)", (m) => delete m.objectives[1].scores],
     ["an objective's worth (1 → 2)", (m) => (m.objectives[1].vp = 2)],
@@ -2281,8 +2310,24 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
   const exact = (a, b) => Object.is(a, b)
   check(G0.objectives.every((o, i) => exact(o.x, B.objectives[i].x) && exact(o.z, B.objectives[i].z) && o.scores === 'attack' && o.vp === 1) && G1.objectives.every((o, i) => exact(o.x, -B.objectives[i].x) && exact(o.z, -B.objectives[i].z) && o.scores === 'attack' && o.vp === 1), "the objectives stand where the mission has them with seat 0 attacking, and at their exact point mirror (to the bit: -0 for 0) with seat 1", JSON.stringify([G0.objectives, G1.objectives]))
   const z = (G, s) => zone(G, s)
-  check(isDeepStrictEqual([z(G0, 0), z(G0, 1)], [{ minX: -30, maxX: -18 }, { minX: 2, maxX: 30 }]) && isDeepStrictEqual([z(G1, 1), z(G1, 0)], [{ minX: 18, maxX: 30 }, { minX: -30, maxX: -2 }]), "the zones are the roles': seat 0 attacking, x -30 to -18 and 2 to 30; seat 1 attacking, its own 18 to 30 and seat 0's -30 to -2", JSON.stringify([z(G0, 0), z(G0, 1), z(G1, 0), z(G1, 1)]))
-  check([G0, G1].every((G) => G.units.every((u) => { const b = zone(G, u.side); return u.pos.x - u.r >= b.minX - 0.01 && u.pos.x + u.r <= b.maxX + 0.01 })), 'every unit of both default deployments stands inside its role\'s zone')
+  // (the defender's: the board's plan, its x bounds the defender's side's
+  // on the table, the region's least x to the edge, or the edge to its
+  // most with seat 1 attacking)
+  const side = (G, lo) => {
+    const xs = G.terrain.plan.region.map((p) => p.x)
+    return lo ? { minX: Math.max(-30, Math.min(...xs)), maxX: 30, plan: G.terrain.plan } : { minX: -30, maxX: Math.min(30, Math.max(...xs)), plan: G.terrain.plan }
+  }
+  check(isDeepStrictEqual(z(G0, 0), { minX: -30, maxX: -20 }) && z(G0, 1).plan === G0.terrain.plan && isDeepStrictEqual(z(G0, 1), side(G0, true)) && isDeepStrictEqual(z(G1, 1), { minX: 20, maxX: 30 }) && z(G1, 0).plan === G1.terrain.plan && isDeepStrictEqual(z(G1, 0), side(G1, false)), "the zones are the roles': seat 0 attacking, x -30 to -20 and the defender's the board's plan, behind the wall; seat 1 attacking, its own 20 to 30 and seat 0's the plan's", JSON.stringify([z(G0, 0), z(G0, 1), z(G1, 0), z(G1, 1)].map((b) => ({ minX: b.minX, maxX: b.maxX, plan: !!b.plan }))))
+  check(z(G0, 1).minX > -20 && z(G0, 1).minX < -4.5 - 1.5, `the defender's side reaches forward of the line on the table, short of the attacker's zone (x ${z(G0, 1).minX})`)
+  // (on a board with no plan, the line itself is the face: x from the line
+  // to the defender's edge, mirrored when seat 1 attacks)
+  const bare = (G) => ({ setup: G.setup, board: G.board, terrain: { plan: null } })
+  check(isDeepStrictEqual(z(bare(G0), 1), { minX: -4.5, maxX: 30 }) && isDeepStrictEqual(z(bare(G1), 0), { minX: -30, maxX: 4.5 }), "a zone behind the line on a board with no plan is the line to the defender's edge, x -4.5 to 30 (seat 1 attacking: -30 to 4.5)", JSON.stringify([z(bare(G0), 1), z(bare(G1), 0)]))
+  const inZone = (G, u) => {
+    const b = zone(G, u.side)
+    return u.pos.x - u.r >= b.minX - 0.01 && u.pos.x + u.r <= b.maxX + 0.01 && (!b.plan || faceDist(b.plan, u.pos.x, u.pos.z) >= u.r - 0.01)
+  }
+  check([G0, G1].every((G) => G.units.every((u) => u.aboard || inZone(G, u))), "every unit of both default deployments stands inside its role's zone, the defender's wholly behind the wall's face")
   check(isDeepStrictEqual(core.army.armyOf(G1.setup, 0).keys, core.army.armyOf(G0.setup, 0).keys), "each seat fields its preset whichever seat attacks (no role list)")
   // the generator's sixth argument: the role record on breakthrough, in the
   // attacker frame; nothing on any other mission
@@ -2298,7 +2343,7 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
   } finally {
     T.generate = was
   }
-  const frame = (flip) => ({ flip, zones: { attack: { x: [-30, -18] }, defend: { x: [2, 30] } }, line: 2 })
+  const frame = (flip) => ({ flip, zones: { attack: { x: [-30, -20] }, defend: { behind: true } }, line: -4.5 })
   check(isDeepStrictEqual(heard, [frame(false), frame(true), 'none']), "Terrain.generate is handed { flip, zones, line } in the attacker frame on breakthrough (flip true when seat 1 attacks), and no sixth argument on field", JSON.stringify(heard))
 }
 
@@ -2315,7 +2360,7 @@ console.log("\n18. the March Wall: its set, its plan's fields, the gate and the 
   const { PLAN_FIELDS } = await imp(PKG, 'core/terrain/recipes.js')
   check(M && M.plan === 'wall' && ['centre', 'kinds', 'pairs', 'mirror', 'gap'].every((k) => !(k in M)), "march is a plan set: plan 'wall', none of scatter's fields (centre, kinds, pairs, mirror, gap)")
   check(Object.keys(M).sort().join() === ['plan', ...Object.keys(PLAN_FIELDS.wall)].sort().join(), "march holds every field of the wall plan's (recipes.js PLAN_FIELDS) and no other", Object.keys(M).join(', '))
-  check(Object.values(MISSIONS).every((m) => !m.sets.includes('march')), 'no mission names march yet (the role mission that will, S1\'s, passes its role to generate)')
+  check(Object.entries(MISSIONS).filter(([, m]) => m.sets.includes('march')).map(([k]) => k).join() === 'breakthrough' && MISSIONS.breakthrough.roles !== undefined, 'march is named by breakthrough alone, a mission with roles (it passes its role to generate)', Object.entries(MISSIONS).filter(([, m]) => m.sets.includes('march')).map(([k]) => k).join())
   check(BT.PICKET_CELL === NAV_CELL, `the wood's picket stands on the nav grid's cells (breakthrough.js PICKET_CELL ${BT.PICKET_CELL} = core/match.js NAV_CELL ${NAV_CELL})`)
   check(M.gate.hp === 12 && M.gate.ram === 4 && M.gate.w === 6, `the gate is the line set's: 6 wide, hp 12, ram 4 (three blows): ${M.gate.w}, ${M.gate.hp}, ${M.gate.ram}`)
   // a plan set refused, a field at a time
@@ -2345,8 +2390,11 @@ console.log("\n18. the March Wall: its set, its plan's fields, the gate and the 
   for (const [what, edit] of [["gate's hit points (12 → 11)", (c) => (c.gate.hp = 11)], ['ram (4 → 3)', (c) => (c.gate.ram = 3)], ["walk's ladders ([2, 3] → [2, 2])", (c) => (c.walk.ladders = [2, 2])]]) check(withMarch(edit) !== RULES_ID, `RULES_ID moves on the march set's ${what}`)
   check(withMarch(() => {}) === RULES_ID, 'RULES_ID stays on an unchanged copy of the march set (the control)')
   // generate: a plan set needs a role, a scattered set keeps no plan
-  const role = { flip: false, zones: { attack: { x: [-30, -20] }, defend: { x: [-18, 30] } }, line: -4.5 }
-  const objs = [{ x: 9, z: 0 }, { x: 3, z: 13 }, { x: 3, z: -13 }]
+  // (the boards breakthrough builds: its roles' frame and its objectives,
+  // as newState hands them)
+  const { roleFrame, roleObjectives } = await imp(PKG, 'core/match.js')
+  const role = roleFrame(MISSIONS.breakthrough.roles, false)
+  const objs = roleObjectives(MISSIONS.breakthrough, false)
   const T = new Terrain(60, 40)
   let refused = null
   try {

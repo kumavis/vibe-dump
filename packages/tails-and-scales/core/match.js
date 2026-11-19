@@ -23,6 +23,7 @@ import { createRng } from './rng.js'
 import { deepFreeze } from './util.js'
 import { NavGrid } from './nav.js'
 import { Terrain } from './terrain/terrain.js'
+import { SETS } from './terrain/sets.js'
 import { makeUnit } from './units.js'
 import { deployArmies } from './deploy.js'
 import { armyOf } from './army.js'
@@ -35,6 +36,10 @@ export const EDGES = Object.freeze([-1, 1])
 // `classic`, as every setup did before F8a. (fullSetup has refused a name
 // MISSIONS lacks by the time a match reads it.)
 export const missionOf = (setup) => MISSIONS[setup?.mission ?? 'classic']
+// (Breakthrough, the March Wall) A terrain set's record by name, or null:
+// the page's door to a set's numbers (the help's gate: its hit points and
+// the ram's blow), read as the rules read them, never copied into the copy
+export const setOf = (name) => (Object.hasOwn(SETS, name) ? SETS[name] : null)
 
 // (Breakthrough, DESIGN §4.2.12) The roles of the mission `setup` is fought
 // for (data/mission.js `roles`: { attack, defend }, each with its zone, and
@@ -156,7 +161,7 @@ export function newState(setup, { out = null, onTrace = null } = {}) {
 // each with whom it scores for (`scores`: 'attack', 'defend', or null for
 // both) and its worth (`vp`, 1 by default), and, when `flip` (seat 1
 // attacks), at the point mirror of where the mission's frame stands it.
-function roleObjectives(mission, flip) {
+export function roleObjectives(mission, flip) {
   return mission.objectives.map((p, i) => ({ i, x: flip ? -p.x : p.x, z: flip ? -p.z : p.z, scores: p.scores ?? null, vp: p.vp ?? 1 }))
 }
 // What the terrain's generator is told of the roles (core/terrain/
@@ -164,8 +169,11 @@ function roleObjectives(mission, flip) {
 // defender's line, all in the mission's attacker-west frame (the generator
 // mirrors what it builds itself on a flip; the objectives it is handed are
 // the table's, already mirrored). `line` is null for a mission without one.
-function roleFrame({ attack, defend }, flip) {
-  const zone = (z) => (z.z ? { x: [...z.x], z: [...z.z] } : { x: [...z.x] })
+// ((the March Wall) A zone behind the line goes as it is written,
+// { behind: true }: the generator reads the attacker's front and the line.)
+// Exported for sim/'s rows, which build the boards as newState does.
+export function roleFrame({ attack, defend }, flip) {
+  const zone = (z) => (z.behind ? { behind: true } : z.z ? { x: [...z.x], z: [...z.z] } : { x: [...z.x] })
   return { flip, zones: { attack: zone(attack.zone), defend: zone(defend.zone) }, line: defend.line ?? null }
 }
 

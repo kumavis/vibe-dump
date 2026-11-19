@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { RACES } from '../data/schema.js'
 import { MISSIONS, CLASSIC } from '../data/mission.js'
-import { EDGES, NAV_CELL, refreshNav } from '../core/match.js'
+import { EDGES, NAV_CELL, refreshNav, setOf } from '../core/match.js'
 import { preview, q, stateHash, army } from '../core/index.js'
 import { gridSize } from '../core/nav.js'
 import { project } from '../present/mirror.js'
@@ -33,7 +33,7 @@ import { TitleScreen } from '../ui/screens/title.js'
 import { ResultScreen } from '../ui/screens/result.js'
 import { wireHelp } from '../ui/screens/help.js'
 import { ReplayBar } from '../ui/replaybar.js'
-import { SetupScreen, sizeName } from '../ui/screens/setup.js'
+import { SetupScreen, sizeName, terrainName } from '../ui/screens/setup.js'
 import { rolesHelp, ROLE_TITLE } from '../present/roles.js'
 import { MusterScreen, PassScreen, presetsFor, presetName, presetCounts } from '../ui/screens/muster.js'
 import { cyrb53 } from '../core/util.js'
@@ -481,8 +481,10 @@ export function boot(location) {
   // ((Breakthrough) the rules' paragraph on Breakthrough, written from the
   // mission's own numbers: present/roles.js)
   {
+    // ((the March Wall) and its battlefield: the set's name, its record
+    // and the race data, handed over as the mission is)
     const p = $('#helpBreakthrough'), m = MISSIONS.breakthrough
-    if (p && m?.roles) p.innerHTML = rolesHelp(m)
+    if (p && m?.roles) p.innerHTML = rolesHelp(m, { name: terrainName(m.sets[0]), set: setOf(m.sets[0]), races: RACES })
     else p?.remove()
   }
   // (N2) online play: app/online.js, the net layer and Automerge loaded the

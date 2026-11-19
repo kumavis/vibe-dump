@@ -1784,16 +1784,17 @@ Math.random = realRandom
 // ── 10. The March Wall (Breakthrough, DESIGN's line set) ───────────────────
 // The line set's boards (sets.js `march`, core/terrain/breakthrough.js), on
 // --march-seeds (the run's seeds when not given; `--march-seeds 1-2000` for
-// the rates), each built as a role mission builds it: the Field's 60×40,
-// generate's `role` the literal below (attacker zone x −30..−20, defender
-// zone x −18..30, the line the gate face's nominal x, −4.5, in the
-// attacker-west frame) and the three objectives behind the wall (the road
-// in the yard behind the gate, and behind each arm), point-mirrored when
-// the role says seat 1 attacks. No mission names the set yet (S1's), so the
-// connectivity rows below, which sweep the missions' sets, never meet it,
-// and the point-symmetry rows of section 6 never judge it: its own rows
-// stand here instead. Every row must hold on every board; a failure names
-// the row, the seed and the flip.
+// the rates), each built as the mission that names the set builds it
+// (breakthrough, S2b): its board, generate's `role` its roles' frame
+// (core/match.js roleFrame: the attacker's zone, the defender's behind the
+// line, the line the gate face's nominal x, in the attacker-west frame) and
+// its objectives as newState puts them on the table (roleObjectives: the
+// road in the yard behind the gate, and behind each arm), point-mirrored
+// when seat 1 attacks; the attacker zone's front and edge are the
+// mission's. The point-symmetry rows of section 6 never judge it (a role
+// board is no mirror of itself): its own rows stand here instead, and the
+// connectivity rows below build it per role. Every row must hold on every
+// board; a failure names the row, the seed and the flip.
 //  - determinism: built twice with Math.random made to throw, the same adds
 //    (every def, look and height field), footprints and plan, and the same
 //    again on a Terrain reused (a snap or a late join folds the match from
@@ -1837,7 +1838,10 @@ Math.random = realRandom
 //  - the zones and objectives: no chunk's footprint in the attacker zone;
 //    each objective behind the line, outside every footprint and clear of
 //    every chunk's by objectiveGap, and held at its level by a squad from
-//    the defender's side;
+//    the defender's side; (S2b) the least distance from the attacker's
+//    zone to the wall's outer face on the table (its polyline cut to the
+//    table's depth) at least FACE_FLOOR, its minimum, median and maximum
+//    reported;
 //  - the plan's readers: behindLine true at every objective and ground post
 //    and false in the attacker zone and at every glacis piece, faceDist's
 //    sign the same, gateCells the passage's, the plan frozen; and the
@@ -1850,7 +1854,7 @@ Math.random = realRandom
 // behind; the firing positions; the trebuchet's reach; the wall's shape and
 // counts; as a table and, with --march-json <file>, as JSON.
 const MARCH = SETS.march
-const mw = { boards: 0, failed: 0, rows: {}, south: 0, chunks: [], decks: [], ladders: [], dist: { gate: [], ladders: [], breach: [], wood: [] }, width: { gate: [], breach: [], wood: [] }, seen: { gate: [], ladders: [], breach: [], wood: [] }, report: [] }
+const mw = { boards: 0, failed: 0, rows: {}, south: 0, chunks: [], decks: [], ladders: [], faceGap: [], dist: { gate: [], ladders: [], breach: [], wood: [] }, width: { gate: [], breach: [], wood: [] }, seen: { gate: [], ladders: [], breach: [], wood: [] }, report: [] }
 const mwShown = []
 const mwRow = (name, ok, where, what) => {
   const r = (mw.rows[name] ??= { pass: 0, fail: 0 })
@@ -1872,10 +1876,26 @@ if (MARCH) {
   const { HIGH: HI } = await imp(PKG, 'core/queries.js')
   const { NAV_CELL } = await imp(PKG, 'core/match.js')
   const { defOf: mwDefOf } = await imp(PKG, 'view/terrain.js')
-  const MB = MISSIONS.field.board, MW = MB.W, MH = MB.H
-  const MOBJ = Object.freeze([{ x: 9, z: 0 }, { x: 3, z: 13 }, { x: 3, z: -13 }])
-  const ROLE = (flip) => ({ flip, zones: { attack: { x: [-30, -20] }, defend: { x: [-18, 30] } }, line: -4.5 })
-  const objsOf = (flip) => (flip ? MOBJ.map((o) => ({ x: 0 - o.x, z: 0 - o.z })) : MOBJ.map((o) => ({ ...o })))
+  // (S2b) the mission that names the set: its board, its roles' frame, its
+  // objectives as newState puts them, the attacker zone's front and edge
+  // (from the centre line, the attacker-west frame's) and its depth
+  const { roleFrame, roleObjectives } = await imp(PKG, 'core/match.js')
+  const BTM = Object.values(MISSIONS).find((m) => m.sets.includes('march') && m.roles)
+  if (!BTM) {
+    console.log('terrain-check: VACUOUS: no mission with roles names the march set')
+    process.exit(2)
+  }
+  const MB = BTM.board, MW = MB.W, MH = MB.H
+  const MOBJ = Object.freeze(BTM.objectives.map((o) => Object.freeze({ x: o.x, z: o.z })))
+  const ROLE = (flip) => roleFrame(BTM.roles, flip)
+  const objsOf = (flip) => roleObjectives(BTM, flip)
+  const FRONT = -BTM.roles.attack.zone.x[1], EDGE = -BTM.roles.attack.zone.x[0], ZMID = (FRONT + EDGE) / 2
+  // (the least the attacker's zone keeps from the wall's outer face on any
+  // board, either seat attacking: S2b measured 1.065 / 4.161 / 7.082 tails
+  // (min / median / max) over seeds 1-2000, the least always where the
+  // face runs down the crag's west side and on past the table's edge
+  // across the wood; the floor is under that minimum)
+  const FACE_FLOOR = 1
   const HOWDAH = RACES.serpent.units.howdah.fp
   const { LADDER_OUT: LADDER_OUT_ } = await imp(PKG, 'core/terrain/recipes.js')
   // (a squad of the largest r, a big walker, a round hull: the War-Cart's
@@ -1886,7 +1906,7 @@ if (MARCH) {
   // `south`, through wallPlan itself (the z mirror forced)
   const build = (seed, flip, { out = null, south } = {}) => {
     const T = new Terrain(MW, MH)
-    if (south === undefined) T.generate(seed, objsOf(flip), MISSIONS.field.deploy, 'march', out, ROLE(flip))
+    if (south === undefined) T.generate(seed, objsOf(flip), BTM.deploy, 'march', out, ROLE(flip))
     else {
       T.clear(out)
       const built = BT.wallPlan({ W: MW, H: MH, add: (def) => T.add(def, out) }, MARCH, seed, objsOf(flip), ROLE(flip), { south })
@@ -2010,8 +2030,8 @@ if (MARCH) {
     for (let zc = -16; zc <= 16; zc += 4) {
       let best = -1, bd = Infinity
       for (let i = 0; i < nav.N; i++) {
-        if (!(sgn * nav.x(i) > 20) || nav.floor[i] > STEP || !nav.standable(i, r, 'walk', forbid)) continue
-        const d = hypot(nav.x(i) - sgn * 20.75, nav.z(i) - zc)
+        if (!(sgn * nav.x(i) > FRONT) || nav.floor[i] > STEP || !nav.standable(i, r, 'walk', forbid)) continue
+        const d = hypot(nav.x(i) - sgn * (FRONT + 0.75), nav.z(i) - zc)
         if (d < bd) [bd, best] = [d, i]
       }
       if (best >= 0) out.push(best)
@@ -2035,8 +2055,8 @@ if (MARCH) {
     for (const zc of [-12, -6, 0, 6, 12]) {
       let start = -1, bd = Infinity
       for (let i = 0; i < nav.N; i++) {
-        if (!(sgn * nav.x(i) > 21) || forbid?.[i] || nav.floor[i] > STEP || !(nav.clearAll[i] >= HOWDAH.R) || !(nav.cliff[i] >= HOWDAH.R)) continue
-        const d = hypot(nav.x(i) - sgn * 25, nav.z(i) - zc)
+        if (!(sgn * nav.x(i) > FRONT + 1) || forbid?.[i] || nav.floor[i] > STEP || !(nav.clearAll[i] >= HOWDAH.R) || !(nav.cliff[i] >= HOWDAH.R)) continue
+        const d = hypot(nav.x(i) - sgn * ZMID, nav.z(i) - zc)
         if (!(d < bd)) continue
         let all = true
         for (let h = 0; h < 8 && all; h++) all = nav.hullStands(i, h, HOWDAH, 'walk')
@@ -2056,7 +2076,7 @@ if (MARCH) {
     const v = new Float32Array(nav.N)
     for (let i = 0; i < nav.N; i++) v[i] = forbid?.[i] || nav.floor[i] > STEP ? 0 : Math.min(nav.clearAll[i], nav.cliff[i])
     const goal = holdsOf(nav, objs, 0.5), src = []
-    for (let i = 0; i < nav.N; i++) if (sgn * nav.x(i) > 20 && v[i] > 0) src.push(i)
+    for (let i = 0; i < nav.N; i++) if (sgn * nav.x(i) > FRONT && v[i] > 0) src.push(i)
     const ok = (th) => {
       const seen = new Uint8Array(nav.N), st = []
       for (const s of src) if (v[s] >= th) (seen[s] = 1), st.push(s)
@@ -2114,13 +2134,13 @@ if (MARCH) {
   // a box's corners on the table (geom.js's corners)
   const boxHitsZone = (s, sgn) => {
     const cs = corners(s)
-    // (the zone x beyond 20 on the attacker's side, the table's z)
+    // (the zone x beyond its front on the attacker's side, the table's z)
     const zx = cs.map(([x]) => sgn * x), zz = cs.map(([, z]) => z)
-    if (Math.max(...zx) <= 20 || Math.min(...zz) >= MH / 2 || Math.max(...zz) <= -MH / 2) return false
+    if (Math.max(...zx) <= FRONT || Math.min(...zz) >= MH / 2 || Math.max(...zz) <= -MH / 2) return false
     // separating axes: the zone's (x and z) and the box's own two
-    if (Math.max(...zx) <= 20) return false
+    if (Math.max(...zx) <= FRONT) return false
     const c = Math.cos(s.yaw), sn = Math.sin(s.yaw)
-    const zone = [[sgn * 20, -MH / 2], [sgn * 30, -MH / 2], [sgn * 30, MH / 2], [sgn * 20, MH / 2]]
+    const zone = [[sgn * FRONT, -MH / 2], [sgn * EDGE, -MH / 2], [sgn * EDGE, MH / 2], [sgn * FRONT, MH / 2]]
     for (const [ax, az] of [[c, -sn], [sn, c]]) {
       const pb = cs.map(([x, z]) => x * ax + z * az), pz = zone.map(([x, z]) => x * ax + z * az)
       if (Math.max(...pb) <= Math.min(...pz) || Math.max(...pz) <= Math.min(...pb)) return false
@@ -2163,8 +2183,31 @@ if (MARCH) {
     rep.decks = T.chunks.filter((c) => c.kind === 'deck').length
     rep.ladders = plan.ladders.length
     // the zone and the objectives
-    const inZone = T.chunks.filter((c) => boxHitsZone(c.shape, sgn) || (c.nav && boxHitsZone(c.nav, sgn)) || (c.link && sgn * c.link.foot.x > 20))
+    const inZone = T.chunks.filter((c) => boxHitsZone(c.shape, sgn) || (c.nav && boxHitsZone(c.nav, sgn)) || (c.link && sgn * c.link.foot.x > FRONT))
     mwRow("nothing in the attacker's zone", !inZone.length, where, inZone.slice(0, 3).map((c) => `${c.kind} ${c.id} at (${c.shape.x.toFixed(2)}, ${c.shape.z.toFixed(2)})`).join('; '))
+    // ((S2b) the zones apart: the least distance from the attacker's zone
+    // (its front, sgn·x ≥ FRONT, the table's whole depth) to the outer face
+    // on the table. The zone spans the table's z, so a point's distance to
+    // it is FRONT − sgn·x, linear along a segment: its least at an end of
+    // the segment cut to |z| ≤ H/2.)
+    {
+      let least = Infinity
+      for (let k = 0; k + 1 < plan.face.length; k++) {
+        const a = plan.face[k], b2 = plan.face[k + 1]
+        const cut = (t) => ({ x: a.x + (b2.x - a.x) * t, z: a.z + (b2.z - a.z) * t })
+        let t0 = 0, t1 = 1
+        if (b2.z !== a.z) {
+          const ta = (MH / 2 - a.z) / (b2.z - a.z), tb = (-MH / 2 - a.z) / (b2.z - a.z)
+          t0 = Math.max(0, Math.min(ta, tb))
+          t1 = Math.min(1, Math.max(ta, tb))
+        } else if (Math.abs(a.z) > MH / 2) continue
+        if (t0 > t1) continue
+        for (const p of [cut(t0), cut(t1)]) least = Math.min(least, Math.max(0, FRONT - sgn * p.x))
+      }
+      mw.faceGap.push(least)
+      rep.zoneToFace = +least.toFixed(3)
+      mwRow(`the attacker's zone ${FACE_FLOOR} tails or more from the wall's outer face`, least >= FACE_FLOOR, where, `${least.toFixed(3)} tails`)
+    }
     for (const o of objs) {
       const near = T.chunks.filter((c) => boxDist2(c.shape, o.x, o.z) < MARCH.objectiveGap || (c.nav && boxDist2(c.nav, o.x, o.z) < MARCH.objectiveGap))
       mwRow('each objective behind the line, clear of every footprint by objectiveGap', BT.behindLine(plan, o.x, o.z) && BT.faceDist(plan, o.x, o.z) > 0 && !near.length, where, `(${o.x}, ${o.z}): behind ${BT.behindLine(plan, o.x, o.z)}, ${near.map((c) => `${c.kind} ${c.id} ${boxDist2(c.shape, o.x, o.z).toFixed(2)} off`).join('; ')}`)
@@ -2172,7 +2215,7 @@ if (MARCH) {
     // the readers
     const ground = plan.posts.filter((p) => p.y === 0)
     const glacis = T.features.filter((f) => ['mantlet', 'orchard', 'rocks'].includes(f.piece))
-    const zoneMid = { x: sgn * 25, z: 0 }
+    const zoneMid = { x: sgn * ZMID, z: 0 }
     mwRow("the plan's readers", Object.isFrozen(plan) && Object.isFrozen(plan.posts) && ground.every((p) => BT.behindLine(plan, p.x, p.z)) && !BT.behindLine(plan, zoneMid.x, zoneMid.z) && glacis.every((f) => !BT.behindLine(plan, f.x, f.z) && BT.faceDist(plan, f.x, f.z) < 0) && ['tower', 'walk', 'yard', 'second'].every((k) => BT.postsOf(plan, k).length > 0) && BT.postsOf(plan).length === plan.posts.length, where, `frozen ${Object.isFrozen(plan)}, ground posts behind ${ground.filter((p) => BT.behindLine(plan, p.x, p.z)).length} of ${ground.length}, the zone's middle behind ${BT.behindLine(plan, zoneMid.x, zoneMid.z)}, glacis in front ${glacis.filter((f) => !BT.behindLine(plan, f.x, f.z)).length} of ${glacis.length}`)
     // the routes: standing
     const lad = plan.ladders.map((l) => T.byId(l.id))
@@ -2272,7 +2315,7 @@ if (MARCH) {
         const i = path[q], x = n.x(i), z = n.z(i)
         const step = hypot(x - n.x(path[q - 1]), z - n.z(path[q - 1]))
         if (n.diff[i]) diff += step
-        if (sgn * x > 20 || n.floor[i] > STEP) continue
+        if (sgn * x > FRONT || n.floor[i] > STEP) continue
         const behind = BT.behindLine(plan, x, z)
         if (!behind) {
           front++
@@ -2327,7 +2370,7 @@ if (MARCH) {
       const open = { front: [0, 0], v: [0, 0], behind: [0, 0] }
       for (let i = 0; i < nav.N; i++) {
         const x = nav.x(i), z = nav.z(i)
-        if (sgn * x > 20) continue
+        if (sgn * x > FRONT) continue
         const k = BT.behindLine(plan, x, z) ? 'behind' : 'front'
         const ok = nav.floor[i] <= STEP && nav.standable(i, SQUAD, 'walk') ? 1 : 0
         open[k][0] += ok
@@ -2345,14 +2388,14 @@ if (MARCH) {
         const ix = i % nav.nx, iz = (i / nav.nx) | 0
         if (ix % 4 || iz % 4) continue
         const x = nav.x(i), z = nav.z(i)
-        if (sgn * x < westmost && sgn * x <= 20 && !BT.behindLine(plan, x, z) && nav.floor[i] <= STEP) vcells.push(i)
+        if (sgn * x < westmost && sgn * x <= FRONT && !BT.behindLine(plan, x, z) && nav.floor[i] <= STEP) vcells.push(i)
       }
       const shares = F.map((f) => vcells.filter((v) => seenBy(T, nav, [f], nav.x(v), nav.z(v), 1) > 0).length / Math.max(1, vcells.length))
       rep.firing = { positions: F.length, vShareMean: +(shares.reduce((a, b) => a + b, 0) / Math.max(1, shares.length)).toFixed(3), vShareMax: +Math.max(0, ...shares).toFixed(3) }
       // the trebuchet: from the attacker zone's nearest cell to the gate and
       // the breach (its range 36), and from the defender's nearest post to
       // the V
-      const zoneEdge = (p) => Math.abs(p.x - sgn * 20)
+      const zoneEdge = (p) => Math.abs(p.x - sgn * FRONT)
       const vMid = vcells.length ? { x: vcells.reduce((a, i) => a + nav.x(i), 0) / vcells.length, z: vcells.reduce((a, i) => a + nav.z(i), 0) / vcells.length } : { x: 0, z: 0 }
       rep.trebuchet = { toGate: +zoneEdge(plan.gate).toFixed(2), toBreach: +zoneEdge(bm).toFixed(2), defenderToV: +Math.min(...plan.posts.map((p) => hypot(p.x - vMid.x, p.z - vMid.z))).toFixed(2), range: RACES.squirrel.units.trebuchet.ranged.range }
       // the wall's shape
@@ -2375,7 +2418,7 @@ if (MARCH) {
         const outA = [], outB = [], outC = []
         const A = build(seed, flip, { out: outA }), B = build(seed, flip, { out: outB })
         Math.random = realRandom
-        A.generate(seed, objsOf(flip), MISSIONS.field.deploy, 'march', outC, ROLE(flip))
+        A.generate(seed, objsOf(flip), BTM.deploy, 'march', outC, ROLE(flip))
         mwRow('built alike twice, and again on a Terrain reused (a snap, a late join)', sameJSON(defsOf(outA), defsOf(outB)) && sameJSON(defsOf(outA), defsOf(outC)) && sameJSON(B.plan, A.plan) && sameJSON(B.features, A.features), where, 'the adds, the plan or the footprints differ')
         sides = ['the add', "the view's defOf"]
         try {
@@ -2418,7 +2461,7 @@ if (MARCH) {
   // the rate: the wood south on 40-60% of boards
   const unflipped = mhi - mlo + 1
   if (unflipped >= 100) mwRow('the wood south on 40-60% of boards', mw.south >= 0.4 * unflipped && mw.south <= 0.6 * unflipped, `seeds ${mlo}-${mhi}`, `${mw.south} of ${unflipped}`)
-  console.log(`\nthe March Wall (Breakthrough): ${n} boards, seeds ${mlo}-${mhi} each with seat 0 and seat 1 attacking (${((Date.now() - tm0) / 1000).toFixed(1)} s): the wood south on ${mw.south} of ${unflipped}; chunks ${pct(mw.chunks)}, decks ${pct(mw.decks)}, ladders ${pct(mw.ladders)} (min / median / max); the view: ${mwView.synced} chunks synced, ${mwView.tops} walkable tops, ${mwView.taken} meshes taken back`)
+  console.log(`\nthe March Wall (Breakthrough): ${n} boards, seeds ${mlo}-${mhi} each with seat 0 and seat 1 attacking (${((Date.now() - tm0) / 1000).toFixed(1)} s): the wood south on ${mw.south} of ${unflipped}; chunks ${pct(mw.chunks)}, decks ${pct(mw.decks)}, ladders ${pct(mw.ladders)} (min / median / max); (S2b) the attacker's zone to the outer face ${mw.faceGap.length ? `${Math.min(...mw.faceGap).toFixed(3)} / ${[...mw.faceGap].sort((a, b) => a - b)[mw.faceGap.length >> 1].toFixed(3)} / ${Math.max(...mw.faceGap).toFixed(3)}` : '-'} tails (min / median / max, the floor ${FACE_FLOOR}); the view: ${mwView.synced} chunks synced, ${mwView.tops} walkable tops, ${mwView.taken} meshes taken back`)
   console.log(`  routes' distances to the nearest objective (min / median / max): ${Object.entries(mw.dist).map(([k, v]) => `${k} ${pct(v)}`).join('; ')}`)
   console.log(`  bottlenecks: gate broken ${pct(mw.width.gate)}, breach broken ${pct(mw.width.breach)}, wood ${pct(mw.width.wood)}; tails of each route seen: ${Object.entries(mw.seen).map(([k, v]) => `${k} ${pct(v)}`).join('; ')}`)
   for (const [k, r] of Object.entries(mw.rows)) console.log(`  ${r.fail ? 'FAIL' : 'ok  '} ${k}: ${r.pass} of ${r.pass + r.fail}`)
@@ -2487,6 +2530,19 @@ if (MARCH) {
 // is judged on every set a mission with a Vehicle slot offers (Field,
 // Grand, the Powder Field) and reported only on the others (the
 // Skirmish's, its slot [0, 0]), its crossings counted per mission and set.
+// (Breakthrough, S2b) A mission with roles is built as newState builds it,
+// handed its roles' frame and its objectives as the table has them, once
+// with each seat attacking (both boards counted), and each seat's zone is
+// its role's, by the rules' own reader (core/deploy.js zone: the attacker's
+// rectangle; the defender's behind the wall's outer face, the board's
+// plan), a cell in it when its middle is (as the strips' rows count one).
+// On a board with a plan (the March Wall) the line is built to stop a hull
+// that does not plough while the gate stands, which section 10 holds route
+// by route (the gate shut, the breach standing, the wood's picket), so
+// there the round hull's row and each footprint's walk as a wrecker does
+// (mode 'wreck', ploughing the breach: every hull a Vehicle slot buys is
+// one, `wrecker` in the race data, a row below); the squad's rows are as
+// on every board.
 // (NavGrid: imported for P-climb, above)
 const { OBJECTIVE_RANGE } = await imp(PKG, 'core/rules.js')
 const { HIGH } = await imp(PKG, 'core/queries.js')
@@ -2497,6 +2553,26 @@ const lattice = {}
 const CONTROL = process.env.CONNECT_MUTATE ?? null
 // ((F19a) the Skirmish-sized missions, classic and keg, each reported apart)
 const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, byCentre: {}, small: {} }
+// ((Breakthrough) a board as newState builds it, a role mission's with its
+// roles' frame, `flip` when seat 1 attacks; and the rules' zone reader)
+const { roleFrame: frameOfRoles, roleObjectives: objectivesOfRoles } = await imp(PKG, 'core/match.js')
+const { zone: zoneOf } = await imp(PKG, 'core/deploy.js')
+const { faceDist: faceOf } = await imp(PKG, 'core/terrain/breakthrough.js')
+function generateAs(T, seed, m, set, out, flip = false) {
+  if (m.roles) T.generate(seed, objectivesOfRoles(m, flip), m.deploy, set, out, frameOfRoles(m.roles, flip))
+  else T.generate(seed, m.objectives, m.deploy, set, out)
+}
+// ((Breakthrough) every hull a Vehicle slot buys ploughs: the March Wall's
+// connectivity walks them as wreckers)
+{
+  const { RACES: R_ } = await imp(PKG, 'data/schema.js')
+  const hulls = Object.values(R_).flatMap((r) => Object.values(r.units).filter((t) => t.role === 'Vehicle'))
+  const soft = hulls.filter((t) => !t.wrecker)
+  if (soft.length) {
+    console.log(`MISMATCH: a Vehicle that does not plough (${soft.map((t) => t.name).join(', ')}): the March Wall's connectivity rows walk every hull as a wrecker`)
+    process.exitCode = 1
+  }
+}
 // what scatter stood round the centre objective, from the footprints it
 // placed (recipes.js CENTRES: the keep's is marked `fort`, the tower ring's
 // `hollow`; the rock box's four piles stand off the centre)
@@ -2507,10 +2583,11 @@ const centreOf = (placed) => {
 const connShown = []
 const tn0 = Date.now()
 // one board's rows: null when every row holds, else what failed
-function connectBoard(name, m, set, seed) {
+function connectBoard(name, m, set, seed, flip = false) {
   const { W: BW, H: BH } = m.board
   const T = new Terrain(BW, BH)
-  T.generate(seed, m.objectives, m.deploy, set, null)
+  generateAs(T, seed, m, set, null, flip)
+  const objectives = m.roles ? objectivesOfRoles(m, flip) : m.objectives
   const nav = new NavGrid(BW, BH, 0.5)
   nav.rebuild(T.chunks)
   // (the controls: cells made unstandable in the grid, as a wall of scenery
@@ -2519,19 +2596,32 @@ function connectBoard(name, m, set, seed) {
     for (let i = 0; i < nav.N; i++) if (pred(nav.x(i), nav.z(i))) nav.clearAll[i] = nav.clearHard[i] = 0
   }
   if (CONTROL === 'wall') block((x) => Math.abs(x) < 1)
-  if (CONTROL === 'ring') block((x, z) => { const d = hypot(x - m.objectives[1].x, z - m.objectives[1].z); return d > OBJECTIVE_RANGE + SQUAD_R + 0.5 && d < OBJECTIVE_RANGE + SQUAD_R + 4 })
+  if (CONTROL === 'ring') block((x, z) => { const d = hypot(x - objectives[1].x, z - objectives[1].z); return d > OBJECTIVE_RANGE + SQUAD_R + 0.5 && d < OBJECTIVE_RANGE + SQUAD_R + 4 })
   const edge = BW / 2 - m.deploy
+  // ((Breakthrough) each seat's zone: its role's by the rules' reader, a
+  // cell's middle in it; else the strip |x| > W/2 − deploy on its edge)
+  const G = m.roles ? { setup: { mission: name, attacker: flip ? 1 : 0 }, board: { W: BW, H: BH, deploy: m.deploy }, terrain: T } : null
+  const boxes = G ? [zoneOf(G, 0), zoneOf(G, 1)] : null
+  const inZone = (seat, i) => {
+    const x = nav.x(i), z = nav.z(i)
+    if (!boxes) return (seat ? 1 : -1) * x > edge
+    const b = boxes[seat]
+    return x >= b.minX && x <= b.maxX && (b.minZ === undefined || (z >= b.minZ && z <= b.maxZ)) && (!b.plan || faceOf(b.plan, x, z) >= 0)
+  }
+  const wreck = !!T.plan
   const why = []
   const centre = centreOf(T.features)
   // (with height) the cells off the ground, which the hull never enters
   const raised = nav.hasHeight ? Uint8Array.from(nav.floor, (f) => (f > STEP ? 1 : 0)) : null
   for (const seat of [0, 1]) {
-    const sgn = seat ? 1 : -1, mid = sgn * (BW / 2 - m.deploy / 2)
+    const sgn = seat ? 1 : -1, mid = boxes ? (boxes[seat].minX + boxes[seat].maxX) / 2 : sgn * (BW / 2 - m.deploy / 2)
     for (const r of [HULL_R, SQUAD_R]) {
       const forbid = r === HULL_R ? raised : null
+      // ((Breakthrough) the hull ploughs on the March Wall)
+      const mode = r === HULL_R && wreck ? 'wreck' : 'walk'
       let start = -1, bd = Infinity
       for (let i = 0; i < nav.N; i++) {
-        if (!(sgn * nav.x(i) > edge) || !nav.standable(i, r, 'walk', forbid)) continue
+        if (!inZone(seat, i) || !nav.standable(i, r, mode, forbid)) continue
         const d = hypot(nav.x(i) - mid, nav.z(i))
         if (d < bd) [bd, start] = [d, i]
       }
@@ -2539,27 +2629,28 @@ function connectBoard(name, m, set, seed) {
         why.push(`seat ${seat}'s zone has no cell an r ${r} disc stands on`)
         continue
       }
-      const res = nav.reach(nav.x(start), nav.z(start), { r, max: Infinity, mode: 'walk', forbid })
+      const res = nav.reach(nav.x(start), nav.z(start), { r, max: Infinity, mode, forbid })
       conn.reaches++
       let crossed = false
-      for (let i = 0; i < nav.N && !crossed; i++) crossed = -sgn * nav.x(i) > edge && isFinite(res.dist[i])
-      if (!crossed) why.push(`an r ${r} disc from seat ${seat}'s zone (${nav.x(start)}, ${nav.z(start)}) reaches no cell of seat ${1 - seat}'s`)
+      for (let i = 0; i < nav.N && !crossed; i++) crossed = inZone(1 - seat, i) && isFinite(res.dist[i])
+      if (!crossed) why.push(`an r ${r} disc${mode === 'wreck' ? ' ploughing' : ''} from seat ${seat}'s zone (${nav.x(start)}, ${nav.z(start)}) reaches no cell of seat ${1 - seat}'s${flip ? ' (seat 1 attacking)' : ''}`)
       if (r !== SQUAD_R) continue
-      for (const o of m.objectives) {
+      for (const o of objectives) {
         // (with height) the objective's floor: a cell counts within HIGH of it
         const oy = raised ? nav.floor[nav.index(o.x, o.z)] : 0
         let held = false
         for (let i = 0; i < nav.N && !held; i++) held = isFinite(res.dist[i]) && hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OBJECTIVE_RANGE + r && (!raised || Math.abs(nav.floor[i] - oy) <= HIGH)
         const round = o.x === 0 && o.z === 0 ? `, ${centre} round it` : ''
-        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no cell within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})${oy ? ` and within ${HIGH}" of its floor (${oy}")` : ''}${round}`)
+        if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no cell within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})${oy ? ` and within ${HIGH}" of its floor (${oy}")` : ''}${round}${flip ? ' (seat 1 attacking)' : ''}`)
       }
     }
     // ((F9b) each footprint on its lattice, from where it could pivot
     // freely, facing the enemy)
     for (const fp of FOOTPRINTS) {
       let start = -1, bd = Infinity
+      const fmode = wreck ? 'wreck' : 'walk'
       for (let i = 0; i < nav.N; i++) {
-        if (!(sgn * nav.x(i) > edge) || !(nav.clearAll[i] >= fp.R) || (raised && (raised[i] || !(nav.cliff[i] >= fp.R)))) continue
+        if (!inZone(seat, i) || !(nav.clearAll[i] >= fp.R) || (raised && (raised[i] || !(nav.cliff[i] >= fp.R)))) continue
         const d = hypot(nav.x(i) - mid, nav.z(i))
         if (!(d < bd)) continue
         let all = true
@@ -2571,10 +2662,10 @@ function connectBoard(name, m, set, seed) {
         continue
       }
       const h0 = seat ? 6 : 2
-      const res = nav.hullReach(nav.x(start), nav.z(start), h0, fp, { max: Infinity, mode: 'walk' })
+      const res = nav.hullReach(nav.x(start), nav.z(start), h0, fp, { max: Infinity, mode: fmode })
       conn.reaches++
-      const crossed = res.touched.some((s) => -sgn * nav.x(s >> 3) > edge)
-      if (!crossed) why.push(`a long hull (${fp.id}) on its lattice from seat ${seat}'s zone (${nav.x(start)}, ${nav.z(start)}) facing ${h0} reaches no state of seat ${1 - seat}'s`)
+      const crossed = res.touched.some((s) => inZone(1 - seat, s >> 3))
+      if (!crossed) why.push(`a long hull (${fp.id}) on its lattice${fmode === 'wreck' ? ' ploughing' : ''} from seat ${seat}'s zone (${nav.x(start)}, ${nav.z(start)}) facing ${h0} reaches no state of seat ${1 - seat}'s${flip ? ' (seat 1 attacking)' : ''}`)
     }
   }
   return { why, chunks: T.chunks.length, centre }
@@ -2585,10 +2676,11 @@ for (const [name, m] of Object.entries(MISSIONS)) {
     const counts = []
     // ((V3d) the Powder Field on its own seeds, --powder-seeds)
     const [slo, shi] = name === 'powder' ? [plo, phi] : [lo, hi]
-    for (let seed = slo; seed <= shi; seed++) {
+    // ((Breakthrough) a mission with roles: a board with each seat attacking)
+    for (let seed = slo; seed <= shi; seed++) for (const flip of m.roles ? [false, true] : [false]) {
       let r
       try {
-        r = connectBoard(name, m, set, seed)
+        r = connectBoard(name, m, set, seed, flip)
       } catch (e) {
         r = { why: [`threw: ${e.stack.split('\n').slice(0, 3).join(' / ')}`], chunks: 0 }
       }
@@ -2622,7 +2714,7 @@ for (const [name, m] of Object.entries(MISSIONS)) {
     conn.chunks[key] = `${counts[0]}-${counts[counts.length - 1]} (median ${counts[counts.length >> 1]}, mean ${(counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(0)})`
   }
 }
-console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (the Powder Field's ${plo}-${phi}) (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}, up stairs) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}", and with height within HIGH, ${HIGH}", of its floor)${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
+console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (the Powder Field's ${plo}-${phi}) (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}, up stairs) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}", and with height within HIGH, ${HIGH}", of its floor); (Breakthrough) a mission with roles on a board with each seat attacking, from and to each role's zone (the defender's behind the wall's face), the hull and the long hulls ploughing on the March Wall${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
 for (const [key, c] of Object.entries(conn.chunks)) console.log(`  ${key}: chunks ${c}`)
 for (const [name, C] of Object.entries(conn.small)) console.log(`  (reported, not judged) ${name}: the hull crosses on ${C.hull} of ${C.boards} boards, the squad on ${C.squad}, and controls every objective on ${C.objectives}`)
 // ((F9b) each footprint's lattice row, crossing zone to zone: both seats'
@@ -2716,7 +2808,8 @@ async function tileBoard(name, m, set, seed) {
     return r
   }
   Math.random = mulberry(seed ^ 0x711e)
-  T.generate(seed, m.objectives, m.deploy, set, out)
+  // ((Breakthrough) a role mission's board as newState builds it)
+  generateAs(T, seed, m, set, out)
   play()
   await Promise.resolve()
   const fresh = check('fresh')

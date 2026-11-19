@@ -1928,16 +1928,36 @@ follows N3.
     section 17 and its envelope row, P-mission's role rows and refusals,
     P-roles (scenes and 300 AI battles never drawn), seven `roles-*`
     self-test mutants, flag-lint's `roles` row.
-  - [ ] **S2** The line set (the battlefield designer's): a one-sided
-    scatter (`mirror: 'none'`), a `line` phase building the line's pieces
-    in the attacker frame from `generate`'s `role` (mirrored on `flip`),
-    the gate, water, fords, palisades and a ditch that plays as difficult
-    ground, and the line's hold points in `features`; `breach` replaces
-    `open` in the mission's sets before anything merges. terrain-check's
-    rows (connectivity over ladders and through the gate, the gate's clear
-    width, no burrow path but through a gate's cells), P-flip (the board
-    with `attacker` 1 the exact point mirror of 0, to the bit), data-check's
-    recipe rows.
+  - [x] **S2** The line set: the March Wall (`sets.js` `march`, plan
+    `'wall'`, `core/terrain/breakthrough.js` `wallPlan`), built to a plan
+    instead of scattered, so no other set's draws move: the gatehouse and
+    its gate (hp 12, `ram` 4: three moves of a wrecker), the curtain walk
+    with its siege ladders and stair, the breach to the crag, the Hollow
+    Wood with its picket on the nav grid's cells, the ditch, the glacis and
+    the second line; seat 1 attacking the exact point mirror, the wood's
+    side the exact z mirror; the plan record `T.plan` and its readers
+    (`behindLine`, `faceDist`, `gateCells`, `postsOf`). terrain-check's
+    section 10 (each route alone, the distances within 15%, no route free
+    of fire, the works, the mirrors), data-check's section 18, P-ram.
+  - [x] **S2b** Breakthrough fought on the March Wall: the record on
+    `march` (the attacker's zone 10 deep, the defender's `{ behind: true }`
+    with its line at −4.5, the three objectives behind the wall, `deploy`
+    10); `checkRoles` taking a zone behind the line (the attacker's front
+    12 tails from the line); `core/deploy.js` `zone`/`fits` holding every
+    defender's base wholly behind the wall's outer face (`faceDist`), and
+    the defender's default deployment on the plan's posts (shooters on the
+    towers and the walk, the rest in the yard, then the second line, then
+    behind it); the help's four ways through and the gate's moves from the
+    set and the race data, the panel's "March Wall"; `roleFrame` and
+    `roleObjectives` exported for the checks, `setOf` the page's door to a
+    set. The checks moved to the real board: data-check 17 and 18, the
+    envelope and P-keg's boards, terrain-check's section 10 from the record
+    with its zone-to-face row and the connectivity rows per role, P-mission's
+    role rows, P-roles' scenes, its AI battles held to the ends the rules
+    allow and its deployment row (300 boards × each attacker × each race
+    order and at the caps), four `roles-wall-*` mutants, hud-check's two
+    role battles re-picked on the wall. Parity 97 of 97, nothing
+    re-recorded; `CORE_VERSION` 17 as S1's.
   - [ ] **S3** The AI: a flow field to the scoring objectives (per
     movement kind, memoised by the nav's epoch), the role wants, the
     defender's hold points and its walk term, the guns' gate gain, all
@@ -1946,14 +1966,16 @@ follows N3.
     wrecker is fielded, defender melee behind the line, both ends in 25%
     each) and P-prop strict. Until it lands every breakthrough battle ends
     'held'.
-  - [ ] **S4** The UI and online: the setup panel's "Who attacks" line
-    (and `attacker` in the setup it builds), the Muster screen's role and
-    its `rulesFor` points (with the panel's and the lobby's judges), the
-    HUD's tally ("Breakthrough 3 of 5"), the opening banners, the end
-    screen's wording and Swap sides, the help's paragraph, the lobby's
-    `attacker` field, the per-seat zones in the view and the minimap (drawn
-    from `zone`, not `G.board.deploy`). ui-check, hud-check, present-check,
-    input-check's breakthrough page, lobby-rig.
+  - [x] **S4a** The page: the setup panel's "Who attacks" line (and
+    `attacker` in the setup it builds), the Muster screen's role and its
+    `rulesFor` points (with the panel's and the lobby's judges), the HUD's
+    tally ("Breakthrough 3 of 5"), the opening banners, the end screen's
+    wording and Swap sides, the help's paragraph, the lobby's `attacker`
+    field. ui-check, hud-check, lobby-rig.
+  - [ ] **S4b** The view: the per-seat zones on the table and the minimap
+    (drawn from `zone`, the defender's behind the wall's face, not
+    `G.board.deploy`), the gate's, breach's and ditch's look;
+    input-check's breakthrough page.
   - [ ] **S5** Balance and the corpus: army-sim's role mode (the attacker's
     share per ordered race pair, 40-60% each and 45-55% pooled, each seat
     attacking in alternate battles; its `--self-test` planting a target of
