@@ -17,12 +17,15 @@
 //   S1: the sky (sky.js), the time of day (the stage's daylight), the
 //       ground, fields, hills, trees, long grass, the mat's edge and its
 //       stakes (surround.js); the wooden table put away
+//   S2: the pieces' footprints painted into the mat, their debris, the
+//       tufts and flowers in clumps (ground.js)
 //
-// Draw calls: the sky 1, the surround 5: 6, against the 6 the wooden
-// table, its frame and the box under the mat drew.
+// Draw calls: the sky 1, the surround 5, the debris 4: 10, against the 6
+// the wooden table, its frame and the box under the mat drew.
 import { plan, dressSeed } from './place.js'
 import { Sky, SKIES, sunAt } from './sky.js'
 import { Surround } from './surround.js'
+import { Ground, decalPainter, strewer } from './ground.js'
 
 // the share of the trees, grass and debris drawn at each quality: from the
 // end of each seeded list, never reordered
@@ -60,6 +63,12 @@ export class Dressing {
     this.surround?.dispose()
     this.surround = new Surround(this.scene, this.renderer, p, seed)
     if (this.table.colors) this.surround.paint(this.table.colors)
+    // S2: the ground under the pieces, the debris, the tufts
+    this.ground?.dispose()
+    this.ground = new Ground(this.scene, p, { camera: this.camera, canvas: this.renderer.domElement })
+    this.table.dress(decalPainter(p))
+    this.table.strew = strewer(p)
+    this.table.scatterTufts()
     this.quality(this.stage.quality)
     return true
   }
@@ -68,5 +77,6 @@ export class Dressing {
   quality(name) {
     const f = this.lowfi ? 0 : SHARE[name] ?? 1
     this.surround?.quality(f)
+    this.ground?.quality(f)
   }
 }

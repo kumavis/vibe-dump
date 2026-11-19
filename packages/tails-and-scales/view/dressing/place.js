@@ -275,6 +275,90 @@ export function plan(ctx) {
     }
   }
 
+  // ---- S2: the pieces in the ground ------------------------------------
+  // each piece's decals: a soft contact shadow, then worn ground thinning
+  // outward, in its group's colours (painted into the mat: anywhere)
+  for (const c of pieces) {
+    const b = boxOf(c)
+    out.decals.push({ kind: groupOf(c), piece: c.kind, x: b.x, z: b.z, hx: b.hx, hz: b.hz, yaw: b.yaw, salt: mix(seed, c.id), r: c.kind === 'floor' ? (c.look?.r ?? b.hx) : 0, color: c.kind === 'floor' ? c.look?.color : null })
+  }
+  // and the objectives' trodden ground (the marker's base stands on it)
+  for (const o of objectives) out.decals.push({ kind: 'trodden', x: o.x, z: o.z, hx: 0.95, hz: 0.95, yaw: 0, salt: mix(seed, hashStr(`o${o.x},${o.z}`)), r: 0 })
+
+  // the debris: round each piece, from CLEAR out, thinner the farther (low
+  // clutter); inside a forest's footprint, its leaf litter, twigs and ferns
+  {
+    const r = stream(seed, 'debris')
+    for (const c of pieces) {
+      const b = boxOf(c), g = groupOf(c)
+      const perim = 4 * (b.hx + b.hz)
+      const n = Math.min(14, Math.round(perim * (g === 'green' ? 0.6 : 0.8)))
+      for (let i = 0; i < n; i++) {
+        // a point on the box's edge, then out along its normal
+        const u = r() * perim, d = CLEAR + 0.08 + r() * r() * 1.8
+        const [lx, lz, nx, nz] = u < 2 * b.hx ? [u - b.hx, -b.hz, 0, -1] : u < 2 * b.hx + 2 * b.hz ? [b.hx, u - 2 * b.hx - b.hz, 1, 0] : u < 4 * b.hx + 2 * b.hz ? [b.hx - (u - 2 * b.hx - 2 * b.hz), b.hz, 0, 1] : [-b.hx, b.hz - (u - 4 * b.hx - 2 * b.hz), -1, 0]
+        const ox = lx + nx * d + (r() - 0.5) * 0.6, oz = lz + nz * d + (r() - 0.5) * 0.6
+        const cy = cos(b.yaw), sy = sin(b.yaw)
+        const x = b.x + ox * cy + oz * sy, z = b.z - ox * sy + oz * cy
+        const kind = g === 'stone' ? 'pebble' : g === 'wood' ? (r() < 0.6 ? 'stick' : 'pebble') : g === 'ash' ? (r() < 0.5 ? 'stick' : 'pebble') : 'leaf'
+        const s = 0.6 + r() * 0.8, h = kind === 'pebble' ? 0.07 * s : kind === 'stick' ? 0.04 : 0.01
+        const item = { kind, x, z, s, yaw: r() * 6.283, tilt: r(), tint: r(), r: (kind === 'stick' ? 0.2 : 0.08) * s, h, ash: g === 'ash' }
+        if (R.ok(x, z, item.r, item.h)) out.debris.push(item)
+      }
+      // a forest's floor and a tree's own ground: litter, twigs, ferns
+      if (c.kind === 'floor' || c.kind === 'tree') {
+        const m = c.kind === 'floor' ? 26 : 5
+        for (let i = 0; i < m; i++) {
+          const x = b.x + (r() * 2 - 1) * b.hx, z = b.z + (r() * 2 - 1) * b.hz
+          const roll = r(), kind = roll < 0.5 ? 'leaf' : roll < 0.7 ? 'stick' : 'fern'
+          const s = kind === 'fern' ? 0.8 + r() * 0.9 : 0.6 + r() * 0.8
+          const item = { kind, x, z, s, yaw: r() * 6.283, tilt: r(), tint: r(), r: (kind === 'fern' ? 0.25 : kind === 'stick' ? 0.2 : 0.08) * s, h: kind === 'fern' ? 0.3 * s : 0.04 }
+          if (R.ok(x, z, item.r, item.h)) out.debris.push(item)
+        }
+      }
+    }
+    // (a cap, cut from the end: the budget's)
+    out.debris.length = Math.min(out.debris.length, DEBRIS)
+  }
+
+  // the tufts and flowers, in clumps: by the pieces (where no scythe
+  // reaches), along the mat's margins, and a few strewn
+  {
+    const r = stream(seed, 'tufts')
+    const nt = Math.min(2800, Math.round(700 * area)), nf = Math.min(560, Math.round(140 * area))
+    const clump = (cx, cz, m, list, make) => {
+      for (let j = 0; j < m; j++) {
+        const x = cx + (r() - 0.5) * 0.8, z = cz + (r() - 0.5) * 0.8
+        const item = make(x, z)
+        if (R.ok(x, z, item.r, item.h)) list.push(item)
+      }
+    }
+    const tuft = (x, z) => {
+      const s = 0.6 + r() * 1.2
+      return { x, z, s, tx: (r() - 0.5) * 0.5, tz: (r() - 0.5) * 0.5, tint: r(), r: 0.04 * s, h: 0.13 * s }
+    }
+    const flower = (x, z) => ({ x, z, tint: r(), r: 0.05, h: 0.08 })
+    const spot = () => {
+      const u = r()
+      if (u < 0.5 && pieces.length) {
+        const b = boxOf(pieces[Math.floor(r() * pieces.length)])
+        const a = r() * 6.283, d = CLEAR + 0.3 + r() * 1.4
+        return [b.x + cos(a) * (hypot(b.hx, b.hz) * 0.8 + d), b.z + sin(a) * (hypot(b.hx, b.hz) * 0.8 + d)]
+      }
+      if (u < 0.78) return [(r() - 0.5) * (W - 2 * deploy), (r() < 0.5 ? -1 : 1) * (H / 2 - 0.2 - r() * 1.6)]
+      return [(r() - 0.5) * W, (r() - 0.5) * H]
+    }
+    for (let i = 0; out.tufts.length < nt && i < nt; i++) {
+      const [x, z] = spot()
+      clump(x, z, 3 + Math.floor(r() * 4), out.tufts, tuft)
+    }
+    out.tufts.length = Math.min(out.tufts.length, nt)
+    for (let i = 0; out.flowers.length < nf && i < nf; i++) {
+      const [x, z] = spot()
+      clump(x, z, 2 + Math.floor(r() * 3), out.flowers, flower)
+    }
+    out.flowers.length = Math.min(out.flowers.length, nf)
+  }
   return out
 }
 

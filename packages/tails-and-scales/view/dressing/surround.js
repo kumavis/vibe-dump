@@ -225,13 +225,13 @@ function edgeGeometry(p) {
 function treeGeometry(kind) {
   const parts = []
   if (kind === 'broad') {
-    parts.push([new THREE.CylinderGeometry(0.16, 0.24, 2.4, 5).translate(0, 1.2, 0), '#5a4028'])
+    parts.push([new THREE.CylinderGeometry(0.16, 0.24, 2.4, 5, 1, true).translate(0, 1.2, 0), '#5a4028'])
     parts.push([new THREE.IcosahedronGeometry(1.25, 0).translate(0, 3.0, 0), '#4f7a34'])
     parts.push([new THREE.IcosahedronGeometry(0.9, 0).translate(0.55, 3.8, 0.2), '#5d8a3c'])
   } else {
-    parts.push([new THREE.CylinderGeometry(0.12, 0.18, 1.2, 5).translate(0, 0.6, 0), '#4e3824'])
-    parts.push([new THREE.ConeGeometry(1.1, 2.6, 7).translate(0, 2.2, 0), '#2f5530'])
-    parts.push([new THREE.ConeGeometry(0.8, 2.0, 7).translate(0, 3.5, 0), '#355d34'])
+    parts.push([new THREE.CylinderGeometry(0.12, 0.18, 1.2, 5, 1, true).translate(0, 0.6, 0), '#4e3824'])
+    parts.push([new THREE.ConeGeometry(1.1, 2.6, 7, 1, true).translate(0, 2.2, 0), '#2f5530'])
+    parts.push([new THREE.ConeGeometry(0.8, 2.0, 7, 1, true).translate(0, 3.5, 0), '#355d34'])
   }
   const pos = [], col = [], c = new THREE.Color()
   for (const [g0, colour] of parts) {

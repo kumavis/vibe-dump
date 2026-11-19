@@ -14,9 +14,9 @@ import * as THREE from 'three'
 // 'noon' lights the table exactly as it always was (the stage's own
 // numbers); none is darker than late golden hour.
 export const SKIES = Object.freeze({
-  morning: { bearing: -1.6, height: 0.62, sun: '#ffe8c8', sunI: 2.25, sky: '#d9e4f2', skyI: 0.85, ground: '#3e3322', fill: '#a8bce8', fillI: 0.35, zenith: '#4f86c8', horizon: '#b8cad8', glow: '#ffd9a0' },
+  morning: { bearing: -1.6, height: 0.7, sun: '#ffe8c8', sunI: 2.25, sky: '#d9e4f2', skyI: 0.85, ground: '#3e3322', fill: '#a8bce8', fillI: 0.35, zenith: '#4f86c8', horizon: '#b8cad8', glow: '#ffd9a0' },
   noon: { bearing: -0.675, height: 0.93, sun: '#fff0d6', sunI: 2.3, sky: '#d6e6ff', skyI: 0.85, ground: '#3b2a1a', fill: '#9fb8ff', fillI: 0.35, zenith: '#3f78c0', horizon: '#aec6dc', glow: '#fff1d0' },
-  afternoon: { bearing: 0.35, height: 0.52, sun: '#ffd6a0', sunI: 2.25, sky: '#e6dccb', skyI: 0.82, ground: '#43321e', fill: '#a9b6e0', fillI: 0.33, zenith: '#5079b4', horizon: '#d2c2a4', glow: '#ffc27a' },
+  afternoon: { bearing: 0.35, height: 0.64, sun: '#ffd6a0', sunI: 2.25, sky: '#e6dccb', skyI: 0.82, ground: '#43321e', fill: '#a9b6e0', fillI: 0.33, zenith: '#5079b4', horizon: '#d2c2a4', glow: '#ffc27a' },
   smoke: { bearing: -0.675, height: 0.7, sun: '#ffc58f', sunI: 2.15, sky: '#d9c0a6', skyI: 0.8, ground: '#3b2a1a', fill: '#9fb0d8', fillI: 0.33, zenith: '#6a7486', horizon: '#ae967c', glow: '#ff9a50' },
 })
 // where the sun stands for a sky, as far from the table as it always was
