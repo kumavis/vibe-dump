@@ -456,10 +456,20 @@ export function wallPlan(T, S, seed, objectives, role, opts = {}) {
   }
 
   // ── the face, and the defender's side ──
-  // the outer face from the wood's edge (the crag's west face run on north
-  // past the table) down the north arm, the north tower, the gate, the south
-  // tower and the south arm, past the south edge; closed round the east
-  const face = [{ x: C.x - cragR, z: H / 2 + 2 }, { x: C.x - cragR, z: C.z + cragR }, { x: C.x - cragR, z: C.z - cragR }]
+  // The stone line: the crag's west face run on north past the table, down
+  // the north arm, the north tower, the gate, the south tower and the south
+  // arm, past the south edge; closed round the east. The glacis is laid out
+  // from it (below), the cover standing off the stone itself.
+  // (Breakthrough) The plan's face is the line of deployment, and the wood
+  // is no-man's-land: from beyond the table's edge it runs down the
+  // picket's column to the crag's top, along the top and down its east
+  // face to where the breach's outer face leaves the crag, then on as the
+  // stone line. The wood west of the picket and the crag itself are in
+  // front of it, so a defender starts at the wood's east mouth, never in
+  // the attacker's slow way round (on the stone line it might start inside
+  // it, 1.065 tails from the attacker's zone).
+  const stoneLine = [{ x: C.x - cragR, z: H / 2 + 2 }, { x: C.x - cragR, z: C.z + cragR }, { x: C.x - cragR, z: C.z - cragR }]
+  const face = [{ x: wood.picket.x, z: H / 2 + 2 }, { x: wood.picket.x, z: C.z + cragR }, { x: C.x + cragR, z: C.z + cragR }]
   const off = (s, t, o) => s.at(t, o)
   const meetX = (s, o, lo, hi) => {
     // where arm s's face (o out from its line) crosses x = FX, by halving
@@ -473,16 +483,28 @@ export function wallPlan(T, S, seed, objectives, role, opts = {}) {
   }
   const faceOf = { breach: ROW + 0.31, walk: d / 2 }
   const nFace = faceOf.breach
-  face.push(off(north, 0, nFace), meetX(north, nFace, 0, north.L))
-  face.push({ x: FX, z: GZ + half }, { x: FX, z: GZ - half })
-  face.push(meetX(south, faceOf.walk, 0, south.L), off(south, south.L, faceOf.walk))
-  const region = [...face, { x: W / 2 + 2, z: face[face.length - 1].z }, { x: W / 2 + 2, z: face[0].z }]
+  // (Breakthrough) where the breach's outer face, run from the crag's east
+  // face's middle, leaves the crag's box: through its east face, or first
+  // through its south face (then round the south-east corner to it), or
+  // already east of it at the arm's start
+  const q0 = off(north, 0, nFace), cE = C.x + cragR, cS = C.z - cragR
+  if (q0.x >= cE) face.push(q0)
+  else {
+    const tE = (cE - q0.x) / north.ux
+    if (q0.z + north.uz * tE >= cS) face.push(off(north, tE, nFace))
+    else face.push({ x: cE, z: cS }, off(north, (cS - q0.z) / north.uz, nFace))
+  }
+  const rest = [meetX(north, nFace, 0, north.L), { x: FX, z: GZ + half }, { x: FX, z: GZ - half }, meetX(south, faceOf.walk, 0, south.L), off(south, south.L, faceOf.walk)]
+  stoneLine.push(q0, ...rest)
+  face.push(...rest)
+  const closed = (pl) => [...pl, { x: W / 2 + 2, z: pl[pl.length - 1].z }, { x: W / 2 + 2, z: pl[0].z }]
+  const stoneIn = closed(stoneLine), region = closed(face)
 
   // ── the glacis ──
   // cover on the approach: mantlets (two crates side by side), a shelled
   // orchard (two or three oaks) or a few rocks, each drawn by weight and
-  // placed by tries from `from` to `to` in front of the face, clear of each
-  // route's mouth, of the wood, of the attacker's zone and of each other
+  // placed by tries from `from` to `to` in front of the stone line, clear of
+  // each route's mouth, of the wood, of the attacker's zone and of each other
   {
     const r = mulberry32(seeds.glacis)
     const GL = S.glacis
@@ -501,8 +523,8 @@ export function wallPlan(T, S, seed, objectives, role, opts = {}) {
       const rad = R[kind]
       for (let tries = 0; tries < 12; tries++) {
         const x = rr(r, FX - GL.to, FX - GL.from), z = rr(r, -H / 2 + 1.5, H / 2 - 1.5)
-        const fd = polyDist(face, x, z)
-        if (inside(region, x, z) || fd < GL.from + rad || fd > GL.to) continue
+        const fd = polyDist(stoneLine, x, z)
+        if (inside(stoneIn, x, z) || fd < GL.from + rad || fd > GL.to) continue
         if (x - rad < front + 0.5 || z + rad > C.z - cragR) continue
         if (mouths.some((m) => hypot(m.x - x, m.z - z) < GL.mouthGap + rad)) continue
         if (here.some((p) => hypot(p.x - x, p.z - z) < p.r + rad + 1) || !clearOfObjectives(x, z, rad)) continue
@@ -664,7 +686,9 @@ function inside(pts, x, z) {
 //   south    the wood stands south (the board's z mirror); flip: the
 //            attacker is at the east edge (the role's flip)
 //   face     [{ x, z }]: the wall's outer face, from beyond the table's
-//            edge at the wood's end, down the crag, the wood's arm, its
+//            edge at the wood's end, down the picket's column, round the
+//            crag's top and east face (Breakthrough: the wood west of the
+//            picket, and the crag, in front of it), the wood's arm, its
 //            tower, the gate, the other tower and the walk's arm, to beyond
 //            the other edge
 //   region   [{ x, z }]: the defender's side, the face closed round the

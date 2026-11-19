@@ -150,6 +150,9 @@ export const MUTATIONS = {
   'march-ladder-end': ['/core/terrain/breakthrough.js', 'offs.sort((a, b) => a - b).forEach((o, k) => wk.ladders.push(wk.lad[0] + o + k * apart))', 'offs.sort((a, b) => a - b).forEach((o, k) => wk.ladders.push(k ? wk.lad[0] + o + k * apart : tS + 0.5))', '1-6'],
   // a tree on the wood's track, a cell past the picket
   'march-tree-on-track': ['/core/terrain/breakthrough.js', '      trunks.push({ x: xP, z })\n    }\n', "      trunks.push({ x: xP, z })\n    }\n    ids.push(tree(at, F0, r, xP + 1.5, zMid, 'pine').id)\n", '1-6'],
+  // (Breakthrough) the old face: down the crag's west side and across the
+  // whole wood, so the wood and the crag stand behind the line
+  'march-face-wood': ['/core/terrain/breakthrough.js', '  plan.face = face\n  plan.region = region\n', '  plan.face = stoneLine\n  plan.region = stoneIn\n', '1-6'],
   // ── (F7c) a platform's fall drawn (the tiles section's fall rows) ──
   // under ?fast a falling deck animates its drop all the same
   'drop-fast-slow': ['/view/terrain.js', '    if (this.fast || !o?.parent) {\n', '    if (!o?.parent) {\n', '1-3'],

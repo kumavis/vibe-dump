@@ -150,7 +150,8 @@
 //     readers; the counts; and the wood south on 40-60% of 100 boards or
 //     more. --march-report prints what the balance work reads, per board,
 //     and --march-json <file> writes it as JSON. Its self-test edits: a
-//     gate 4.5 wide, a ladder at a walk's end, a tree on the wood's track.
+//     gate 4.5 wide, a ladder at a walk's end, a tree on the wood's track,
+//     (Breakthrough) the old face across the wood.
 //
 // One fx call is held to R5's rule rather than R0's own (DESIGN §2.3): the
 // dust a dropped block raises when its fall ends. R0 read the block's place
@@ -1841,7 +1842,9 @@ Math.random = realRandom
 //    the defender's side; (S2b) the least distance from the attacker's
 //    zone to the wall's outer face on the table (its polyline cut to the
 //    table's depth) at least FACE_FLOOR, its minimum, median and maximum
-//    reported;
+//    reported; (Breakthrough) no cell of the wood on the attacker's side
+//    of the picket's column, and none of the crag, behind the line, and no
+//    defender's base there in the match's default deployment;
 //  - the plan's readers: behindLine true at every objective and ground post
 //    and false in the attacker zone and at every glacis piece, faceDist's
 //    sign the same, gateCells the passage's, the plan frozen; and the
@@ -1893,9 +1896,20 @@ if (MARCH) {
   // (the least the attacker's zone keeps from the wall's outer face on any
   // board, either seat attacking: S2b measured 1.065 / 4.161 / 7.082 tails
   // (min / median / max) over seeds 1-2000, the least always where the
-  // face runs down the crag's west side and on past the table's edge
-  // across the wood; the floor is under that minimum)
-  const FACE_FLOOR = 1
+  // face ran down the crag's west side and on past the table's edge across
+  // the wood. (Breakthrough) The face now runs down the picket's column
+  // instead: 1.250 / 4.250 / 7.250 over the same boards, the least still
+  // at the table's edge, now on the column. The column stands on a cell
+  // centre over the crag's west edge, at the least 0.05 east of it, and the
+  // crag's west edge never nearer the zone's front than 1 (the gate's face
+  // 1.5 forward of the line, the arm's 9 and the crag's 4 forward of that),
+  // so the column, on the centres a quarter off the whole tails, never
+  // nearer than 1.25: the floor)
+  const FACE_FLOOR = 1.25
+  // ((Breakthrough) the match newState builds for a board: the default
+  // deployment's, each seat its preset)
+  const { createMatch: mwCreate } = await imp(PKG, 'core/index.js')
+  const mwMatch = (seed, flip) => mwCreate({ board: seed, dice: 5, mission: Object.keys(MISSIONS).find((k) => MISSIONS[k] === BTM), attacker: flip ? 1 : 0, seats: [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }] })
   const HOWDAH = RACES.serpent.units.howdah.fp
   const { LADDER_OUT: LADDER_OUT_ } = await imp(PKG, 'core/terrain/recipes.js')
   // (a squad of the largest r, a big walker, a round hull: the War-Cart's
@@ -2207,6 +2221,26 @@ if (MARCH) {
       mw.faceGap.push(least)
       rep.zoneToFace = +least.toFixed(3)
       mwRow(`the attacker's zone ${FACE_FLOOR} tails or more from the wall's outer face`, least >= FACE_FLOOR, where, `${least.toFixed(3)} tails`)
+    }
+    // ((Breakthrough) the wood in front of the line: no cell of the Hollow
+    // Wood on the attacker's side of the picket's column (past the crag's
+    // top, from the column to the zone's front) and no cell of the crag's
+    // footprint behind it; and the defender's default deployment, on the
+    // match's own board (newState's, the same seed and seat), puts no base
+    // there, wholly or in part)
+    {
+      const crag = T.byId(plan.crag).shape, xP = plan.wood.picket.x
+      const zs = Math.sign(plan.wood.picket.z[plan.wood.picket.z.length - 1] - crag.z), top = zs * crag.z + crag.hz
+      const inWood = (x, z, r = 0) => zs * z + r > top && sgn * x + r > sgn * xP && sgn * x <= FRONT
+      const inCrag = (x, z, r = 0) => boxDist2(crag, x, z) < r - 0.01 || boxDist2(crag, x, z) === 0
+      const wrong = []
+      for (let x = -MW / 2 + NAV_CELL / 2; x < MW / 2; x += NAV_CELL) for (let z = -MH / 2 + NAV_CELL / 2; z < MH / 2; z += NAV_CELL) {
+        if ((inWood(x, z) || inCrag(x, z)) && BT.behindLine(plan, x, z)) wrong.push(`(${x}, ${z}) ${inCrag(x, z) ? 'the crag' : 'the wood'}`)
+      }
+      const G = mwMatch(seed, flip), def = flip ? 0 : 1
+      const there = G.units.filter((u) => u.side === def && !u.aboard && (inWood(u.pos.x, u.pos.z, u.r - 0.01) || inCrag(u.pos.x, u.pos.z, u.r)))
+      const same = sameJSON(G.terrain.plan, plan)
+      mwRow("the wood west of the picket and the crag in front of the line, no defender there", same && !wrong.length && !there.length, where, `${same ? '' : "the match's board is not this one; "}${wrong.length} cells behind the line: ${wrong.slice(0, 3).join(', ')}; ${there.map((u) => `${u.key} at (${u.pos.x.toFixed(2)}, ${u.pos.z.toFixed(2)}) r ${u.r}`).join('; ')}`)
     }
     for (const o of objs) {
       const near = T.chunks.filter((c) => boxDist2(c.shape, o.x, o.z) < MARCH.objectiveGap || (c.nav && boxDist2(c.nav, o.x, o.z) < MARCH.objectiveGap))
