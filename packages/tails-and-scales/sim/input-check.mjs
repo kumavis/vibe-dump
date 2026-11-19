@@ -777,7 +777,7 @@ async function check(page, say) {
     let sb = await spellBar()
     if (!sb.shown || sb.spells.length !== caster.names.length) fail(`the caster (unit ${caster.id}) picked up: the spell bar ${sb.shown ? `shows ${sb.spells.length} spells` : 'is hidden'}, not its ${caster.names.length}`)
     sb.spells.forEach((s, k) => {
-      if (s.key !== String(k + 1) || s.name !== caster.names[k] || !s.small?.startsWith(`${caster.casts[k]}+ · `) || !s.small.endsWith(` · ${caster.ranges[k]}"`) || !s.line) fail(`spell ${k + 1} on the bar reads ${JSON.stringify(s)}, not key ${k + 1}, ${caster.names[k]}, cast ${caster.casts[k]}+ and ${caster.ranges[k]}" with a line of what it does`)
+      if (s.key !== String(k + 1) || s.name !== caster.names[k] || !s.small?.startsWith(`${caster.casts[k]}+ · `) || !s.small.endsWith(` · ${tl(caster.ranges[k])}`) || !s.line) fail(`spell ${k + 1} on the bar reads ${JSON.stringify(s)}, not key ${k + 1}, ${caster.names[k]}, cast ${caster.casts[k]}+ and ${tl(caster.ranges[k])} with a line of what it does`)
     })
     if (lit(sb) !== caster.best) fail(`the bar lights spell ${lit(sb) + 1}, the AI's pick is ${caster.best + 1}`)
     say(`the caster's spell bar: ${sb.spells.map((s) => `${s.key} ${s.name} (${s.small})`).join(', ')}; the AI's pick, ${caster.names[caster.best]}, lit`)
