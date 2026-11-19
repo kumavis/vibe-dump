@@ -181,6 +181,17 @@
 //                page says the lobby can't start for seat 2's army without
 //                quoting it, the list's digits nowhere in its DOM
 //
+//   (Breakthrough, DESIGN §4.2.12's "The page")
+//   attacker     the host's lobby offers Who attacks on Breakthrough alone
+//                (the seats by their names; none on a Skirmish), seat 1
+//                attacking by default, the guest's page showing it, not
+//                its to change, and each seat's head "Attacks" or
+//                "Defends"; both ready, the host makes seat 2 attack: both
+//                seats un-readied, the guest's lobby shows it and the lines
+//                swapped; ready again, the start names attacker 1 on both
+//                pages; the end screen offers no Swap sides online; and a
+//                rematch's lobby keeps it
+//
 //   node sim/lobby-rig.mjs [--only <cases>] [--dist <dir>] [--self-test]
 //
 // --self-test: each broken copy in MUTANTS must fail its case (with
@@ -213,7 +224,7 @@ import { RACES } from '../data/schema.js'
 import { MISSIONS } from '../data/mission.js'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
-const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size', 'follow', 'fog', 'lists', 'sealed', 'altered-army', 'ai-seat', 'forged']
+const CASES = ['play', 'names', 'concurrent', 'altered', 'vote-blocks-end', 'history', 'catch-up', 'rematch-race', 'bad-lobby', 'continue', 'scrub', 'replay', 'files', 'kept', 'group', 'terrain', 'size', 'follow', 'fog', 'lists', 'sealed', 'altered-army', 'ai-seat', 'forged', 'attacker']
 const { values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } })
 const only = a.only ? a.only.split(',') : CASES
 
@@ -1428,10 +1439,12 @@ async function runCases(dist, cases) {
       // ((F19a) and the Powder keg, a mission of its own beside the sizes;
       // (V3d) and the Powder Field after it, offered in the lobby as on the
       // panel (DESIGN §4.2.11): the picker lists data/mission.js's MISSIONS
-      // in their order, so a mission added there is a row here)
-      must(offered.join() === 'classic,field,grand,keg,powder', `the host's page offers every size, the Powder keg and the Powder Field among them: ${offered.join(', ')}`)
-      const named = await host.$$eval('#lobbySize option[value="keg"], #lobbySize option[value="powder"]', (os) => os.map((o) => o.textContent))
-      must(/^Powder keg · 40×28, 500 pts$/.test(named[0]) && /^Powder Field · 80×56, 1,500 pts$/.test(named[1]), `the Powder keg and the Powder Field offered by their own names, their boards and points: ${JSON.stringify(named)}`)
+      // in their order, so a mission added there is a row here; (Breakthrough)
+      // Breakthrough after them, by its own name)
+      must(offered.join() === 'classic,field,grand,keg,powder,breakthrough', `the host's page offers every size, the Powder keg, the Powder Field and Breakthrough among them: ${offered.join(', ')}`)
+      const named = await host.$$eval('#lobbySize option[value="keg"], #lobbySize option[value="powder"], #lobbySize option[value="breakthrough"]', (os) => os.map((o) => o.textContent))
+      const bt = MISSIONS.breakthrough
+      must(/^Powder keg · 40×28, 500 pts$/.test(named[0]) && /^Powder Field · 80×56, 1,500 pts$/.test(named[1]) && named[2] === `Breakthrough · ${bt.board.W}×${bt.board.H}, ${bt.list.points.toLocaleString('en')} pts`, `the Powder keg, the Powder Field and Breakthrough offered by their own names, their boards and points: ${JSON.stringify(named)}`)
       await host.selectOption('#lobbySize', 'field')
       await until(guest, () => window.__ts.net.handle.doc().lobby.mission === 'field', null, 20000, "the size reaching the guest's page")
       const L = JSON.parse(await lobbyNow(guest))
@@ -1454,6 +1467,64 @@ async function runCases(dist, cases) {
       const L2 = JSON.parse(await lobbyNow(host))
       must(link2 !== link && L2.mission === 'field' && (await host.$eval('#lobbySize', (e) => e.value)) === 'field', `the rematch's lobby keeps the size: ${JSON.stringify({ mission: L2.mission })}`)
       return `Field picked by the host: both seats un-readied, terrain, rounds and armies let go, the guest shown it; the battle on 60×40 (${got[0].terrain}, ${got[0].rounds} rounds); the rematch kept it`
+    },
+
+    // (Breakthrough, DESIGN §4.2.12's "The page") Who attacks, through a
+    // lobby to a start
+    async attacker() {
+      const { host, guest, link } = await lobbyPair({ autoStart: false })
+      await setName(guest, 'Ben')
+      await until(host, () => !!window.__ts.net.handle.doc().lobby.seats.s1, null, 30000, "the guest's claim reaching the host")
+      // (none on a Skirmish)
+      const none = await guest.evaluate(() => document.querySelector('#lobbyAttacker')?.closest('label').classList.contains('hidden'))
+      must(none === true, "a Skirmish's lobby offers no Who attacks")
+      await host.selectOption('#lobbySize', 'breakthrough')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.mission === 'breakthrough' && !document.querySelector('#lobbyAttacker').closest('label').classList.contains('hidden'), null, 20000, "Breakthrough and its Who attacks on the guest's lobby")
+      // what each page shows: Who attacks (its options, value, whether its
+      // to change) and each seat's role on its head
+      const shows = (p) => p.evaluate(() => ({
+        opts: [...document.querySelectorAll('#lobbyAttacker option')].map((o) => [o.value, o.textContent]),
+        value: document.querySelector('#lobbyAttacker').value,
+        disabled: document.querySelector('#lobbyAttacker').disabled,
+        roles: [0, 1].map((i) => document.querySelector(`.seat[data-seat="${i}"] .seatHead .role`)?.textContent ?? null),
+      }))
+      const named = (await shows(host)).opts
+      must(named.length === 2 && named[1][1].startsWith('Ben') && named.every(([v], i) => v === String(i)), `Who attacks offers the seats by name: ${JSON.stringify(named)}`)
+      for (const [p, who, off] of [[host, 'host', false], [guest, 'guest', true]]) {
+        const s = await shows(p)
+        must(s.value === '0' && s.disabled === off && JSON.stringify(s.roles) === '["Attacks","Defends"]', `the ${who}'s lobby: seat 1 attacking by default, ${off ? 'not its' : 'its'} to change, the seats' lines "Attacks" and "Defends": ${JSON.stringify(s)}`)
+      }
+      // both ready, then the host makes seat 2 attack: both un-readied
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await until(host, () => { const L = window.__ts.net.handle.doc().lobby; return L.seats.s0?.ready && L.seats.s1?.ready }, null, 30000, 'both seats ready on the host')
+      await host.selectOption('#lobbyAttacker', '1')
+      await until(guest, () => window.__ts.net.handle.doc().lobby.attacker === 1, null, 20000, "the attacker reaching the guest's page")
+      const L = JSON.parse(await lobbyNow(guest))
+      must(!L.seats.s0.ready && !L.seats.s1.ready, `a change of who attacks un-readies both seats: ${JSON.stringify(L.seats)}`)
+      await until(guest, () => document.querySelector('#lobbyAttacker').value === '1' && document.querySelector('.seat[data-seat="1"] .seatHead .role')?.textContent === 'Attacks', null, 20000, "seat 2 attacking on the guest's lobby")
+      const g = await shows(guest)
+      must(JSON.stringify(g.roles) === '["Defends","Attacks"]', `the guest's lobby: the seats' lines "Defends" and "Attacks": ${JSON.stringify(g.roles)}`)
+      // ready again: the start names it, on both pages
+      await host.evaluate(() => (window.__ts.net.autoStart = true))
+      await press(guest, 'Ready')
+      await press(host, 'Ready')
+      await Promise.all([live(host), live(guest)])
+      const got = await Promise.all([host, guest].map((p) => p.evaluate(() => {
+        const st = window.__ts.session.store.entries().find((e) => e.t === 'start')
+        return { attacker: window.__ts.G.setup.attacker, start: st?.setup?.attacker, mission: window.__ts.G.setup.mission }
+      })))
+      must(got.every((x) => x.attacker === 1 && x.start === 1 && x.mission === 'breakthrough'), `the start names seat 2 attacking, on both pages: ${JSON.stringify(got)}`)
+      // a rematch keeps it
+      await guest.evaluate(() => window.__ts.session.submit(1, { t: 'concede' }))
+      await until(host, () => window.__ts.session.status === 'over' && !document.querySelector('#rematch').classList.contains('hidden'), null, 30000, "the host's Rematch button")
+      const swap = await host.evaluate(() => getComputedStyle(document.querySelector('#swapSides')).display !== 'none')
+      must(!swap, "an online battle's end screen offers no Swap sides (the host's lobby picks who attacks)")
+      await host.click('#rematch')
+      const link2 = await linkOf(host, link)
+      const L2 = JSON.parse(await lobbyNow(host))
+      must(link2 !== link && L2.mission === 'breakthrough' && L2.attacker === 1, `the rematch's lobby keeps who attacks: ${JSON.stringify({ mission: L2.mission, attacker: L2.attacker })}`)
+      return `Who attacks offered on Breakthrough alone (${named.map(([, n]) => n).join(', ')}), the host's to change; seat 2 picked: both seats un-readied, the lines "Defends" and "Attacks"; the start names attacker 1 on both pages; no Swap sides online; the rematch kept it`
     },
   }
 
@@ -1543,7 +1614,9 @@ const MUTANTS = {
   'fog-unread': ['fog', 'app/online.js', 'leave: () => this.close(), fog: N.lobbyOf(this.handle.doc()).fog })', 'leave: () => this.close(), fog: false })'],
   'fog-unwired': ['fog', 'net/lobby.js', '    if (fields.fog !== undefined) d.lobby.fog = fields.fog === true\n', ''],
   // (F11b) the opponent's list handed to the lobby screen raw (no sealing)
-  'army-unsealed': ['sealed', 'app/online.js', '        else if (r) seat.armyLine = this.sealedLine(r, L.mission)\n', "        else if (r) seat.armyLine = r.army ?? this.sealedLine(r, L.mission)\n"],
+  // ((Breakthrough) its anchor the line as Breakthrough left it: the seat
+  // and the attacker handed on, for its role's list rules)
+  'army-unsealed': ['sealed', 'app/online.js', '        else if (r) seat.armyLine = this.sealedLine(r, L.mission, i, L.attacker)\n', "        else if (r) seat.armyLine = r.army ?? this.sealedLine(r, L.mission, i, L.attacker)\n"],
   // a seat's army left out of the start (and of the record readied)
   'army-not-started': ['lists', 'net/lobby.js', "nonce: r.nonce, ...(typeof r.army === 'string' ? { army: r.army } : {}) })", 'nonce: r.nonce })'],
   // the Muster screen's Ready writes nothing into the seat
@@ -1572,6 +1645,14 @@ const MUTANTS = {
   // another seat's refused army quoted in the status line
   'problem-unsealed': ['forged', 'app/online.js', "        : theirs >= 0 ? `This lobby can't start a battle: seat ${theirs + 1}'s army isn't one this battle takes.`\n", ''],
   'size-unwired': ['size', 'app/online.js', '        N.editBattle(this.handle, { mission: name, ...keptTerrain(L, name) })\n', ''],
+  // (Breakthrough) the host's Who attacks never reaching the lobby; a
+  // change of it that un-readies nobody; the start naming none; each
+  // seat's role unsaid; a rematch dropping it
+  'attacker-unwired': ['attacker', 'net/lobby.js', '    if (fields.attacker !== undefined) d.lobby.attacker = fields.attacker\n', ''],
+  'attacker-keeps-ready': ['attacker', 'app/online.js', "N.editBattle(this.handle, { attacker: seat === 1 ? 1 : 0 }),", "this.handle.change((d) => { d.lobby.attacker = seat === 1 ? 1 : 0 }),"],
+  'attacker-not-started': ['attacker', 'net/lobby.js', '  ...(lobby.attacker !== undefined ? { attacker: lobby.attacker } : {}),\n  seats: lobby.seats.map(startSeat),', '  seats: lobby.seats.map(startSeat),'],
+  'role-unsaid': ['attacker', 'ui/screens/lobby.js', "      if (s.role) h.append(el('span', 'role', s.role))\n", ''],
+  'rematch-drops-attacker': ['attacker', 'app/online.js', "...(G.setup.attacker !== undefined ? { attacker: G.setup.attacker } : {}), me:", 'me:'],
 }
 
 const bad = only.filter((c) => !CASES.includes(c) && !(a['self-test'] && Object.hasOwn(MUTANTS, c)))

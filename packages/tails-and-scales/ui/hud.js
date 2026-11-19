@@ -14,6 +14,13 @@ export class Hud {
     $('#vp0').textContent = m.vp[0]
     $('#vp1').textContent = m.vp[1]
     $('#round').textContent = m.round
+    // ((Breakthrough) the attacker's tally on a mission with roles, under
+    // the round)
+    const tally = $('#tally')
+    if (tally) {
+      tally.textContent = m.tally ?? ''
+      tally.classList.toggle('hidden', !m.tally)
+    }
     document.querySelectorAll('#phases .ph').forEach((el) => {
       el.classList.toggle('on', el.dataset.k === m.phase)
     })

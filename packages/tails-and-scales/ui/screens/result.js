@@ -10,6 +10,15 @@
 // played here (app/flow.js shows it while one of them is still to vote, the
 // table caught up). Keep playing is held back once the battle's log is
 // nearly full: the battle can only end then.
+//
+// (Breakthrough, DESIGN §4.2.12's "The page") A role battle's own ends are
+// worded by present/roles.js's roleResult from the battle's setup (the
+// target its mission's): "Bushtail Clans break through!" over
+// "Breakthrough 5 of 5 in round 5.", or "The line holds: Coil of Ssithra
+// win!" over "The attackers scored 3 of the 5 they needed in 6 rounds."; a
+// wipe or a concession reads as on any battle. And Swap sides, for a role
+// battle played on this device (app/flow.js's swapSides: the same board,
+// races and lists, the other seat attacking).
 import { sfx } from '../../view/sfx.js'
 
 const $ = (s) => document.querySelector(s)
@@ -25,22 +34,22 @@ export class ResultScreen {
   }
 
   // `sides`: each seat's look (ui/theme.js); `ink`: the winner's colour in a
-  // mirror match ('' for the stylesheet's)
-  show({ win, why, vp, rounds }, sides, ink) {
-    const t = win < 0 ? 'A bloody draw' : `${sides[win].name} win!`
+  // mirror match ('' for the stylesheet's); ((Breakthrough) `roles` a role
+  // battle's own end as present/roles.js words it ({ title, line }, or
+  // null), `swap` whether Swap sides is offered)
+  show({ win, why, vp, rounds }, sides, ink, { roles = null, swap = false } = {}) {
+    const t = roles ? roles.title : win < 0 ? 'A bloody draw' : `${sides[win].name} win!`
     const when = rounds ? `in round ${rounds}` : 'in the deployment'
-    const line = why === 'wipe' ? `${sides[1 - win].name} have been wiped from the table ${when}.`
+    const line = roles ? roles.line
+      : why === 'wipe' ? `${sides[1 - win].name} have been wiped from the table ${when}.`
       : why === 'concede' ? `${sides[1 - win].name} conceded ${when}.`
-      // ((Breakthrough) a role mission's ends: the attacker's target
-      // reached, or the line held to the last round)
-      : why === 'breakthrough' ? `${sides[win].name} broke through in round ${rounds}.`
-      : why === 'held' ? `${sides[win].name} held the line for ${rounds} round${rounds === 1 ? '' : 's'}.`
       : `Final score ${vp[0]} – ${vp[1]} after ${rounds} round${rounds === 1 ? '' : 's'}.`
     const title = $('#overTitle')
     title.textContent = `${win >= 0 ? sides[win].icon + ' ' : ''}${t}`
     title.style.color = ink
     $('#overWhy').textContent = line
     this.parts(false)
+    $('#swapSides').classList.toggle('hidden', !swap)
     $('#over').classList.remove('hidden')
     sfx.fanfare()
   }
@@ -74,11 +83,17 @@ export class ResultScreen {
     $('#overVotes').classList.toggle('hidden', !vote)
     $('#again').classList.toggle('hidden', vote)
     $('#watchReplay').classList.toggle('hidden', vote)
+    if (vote) $('#swapSides').classList.add('hidden')
   }
 
   // Back to the war room: `back()`; (F4) the vote: `vote(more)`
-  // (app/flow.js); (N3) the battle watched back: `replay()` (app/boot.js)
-  wire(back, vote, replay) {
+  // (app/flow.js); (N3) the battle watched back: `replay()` (app/boot.js);
+  // (Breakthrough) Swap sides: `swap()` (app/boot.js)
+  wire(back, vote, replay, swap = null) {
+    $('#swapSides').onclick = () => {
+      this.hide()
+      swap?.()
+    }
     $('#again').onclick = back
     $('#watchReplay').onclick = () => {
       this.hide()

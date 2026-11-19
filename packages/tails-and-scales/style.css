@@ -2765,3 +2765,96 @@ body:has(#muster:not(.hidden)) #tooltip {
   white-space: nowrap;
   cursor: help;
 }
+
+/* Breakthrough (DESIGN §4.2.12's "The page") */
+/* the HUD's tally under the round, on a mission with roles (ui/hud.js) */
+#tally {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--ink);
+  letter-spacing: 0.03em;
+  margin-top: 1px;
+}
+#tally.hidden {
+  display: none;
+}
+/* the battle-setup panel's Who attacks line, under the size line
+   (ui/screens/setup.js), as the size line is drawn */
+#setupRoles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  background: rgba(30, 23, 16, 0.94);
+  border: 1px solid rgba(255, 210, 140, 0.25);
+  border-radius: 12px;
+  padding: 10px 16px;
+}
+#setupRoles .lbl {
+  font-size: 12px;
+  color: var(--dim);
+  margin-right: 4px;
+}
+#setupRoles button {
+  min-width: 112px;
+}
+#setupRoles button.on {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+#setupRolesNote {
+  margin: 0;
+}
+@media (max-width: 700px) {
+  #setupRoles button {
+    min-width: 0;
+    flex: 1 1 30%;
+  }
+}
+/* the lobby's Who attacks, beside the battle size (ui/screens/lobby.js),
+   and each seat's role on its head */
+#lobbyAttacker {
+  margin-left: 6px;
+  font: inherit;
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  padding: 5px 7px;
+  max-width: 100%;
+}
+#lobby .attackerPick.hidden {
+  display: none;
+}
+#lobby .seatHead .role {
+  margin-left: 6px;
+  font-weight: bold;
+  color: var(--gold);
+}
+/* the end screen's Swap sides (ui/screens/result.js) */
+#swapSides.hidden {
+  display: none;
+}
+/* the banner's long second line (the tally) and its third, a role battle's
+   opening goal (ui/banner.js) */
+#banner .b2.long {
+  font-size: 30px;
+  letter-spacing: 0.05em;
+}
+#banner .b3 {
+  font-family: Georgia, serif;
+  font-size: 17px;
+  color: var(--ink);
+  max-width: 40em;
+  margin: 6px auto 0;
+  padding: 0 16px;
+  text-shadow: 0 2px 8px #000;
+}
+@media (max-width: 700px) {
+  #banner .b2.long {
+    font-size: 20px;
+  }
+  #banner .b3 {
+    font-size: 14px;
+  }
+}

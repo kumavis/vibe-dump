@@ -68,7 +68,7 @@ import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
 import { RACES } from '../data/schema.js'
 import { edgeOf } from '../core/match.js'
-import { createMatch, fullSetup, preview, army } from '../core/index.js'
+import { createMatch, fullSetup, preview, army, rolesOf } from '../core/index.js'
 import { Session } from '../match/session.js'
 import { LocalStore } from '../match/store.js'
 import { MAX_ENTRIES, Folder } from '../match/fold.js'
@@ -77,6 +77,7 @@ import { fogStart, fogAsks, fogLands, fogSight, fogStep, fogView, fogOpen, fogRe
 import { PACE } from '../present/pace.js'
 import { viewsFor } from '../present/camera-presets.js'
 import { hudModel, ringLooks, afterSnap, factsOf, turnBegun, resultOf, undoable, PHASE_NAME } from '../present/hud-model.js'
+import { tallyOf, openingOf, roleResult, attackerSeat } from '../present/roles.js'
 import { EventPlayer } from '../view/player.js'
 import { defOf } from '../view/terrain.js'
 import { clock } from '../view/clock.js'
@@ -117,10 +118,13 @@ export function bookKey(session) {
 // (F11a) the armies they field, each seat's as fullSetup fills it in (the
 // mission's preset where the setup names none, so a setup naming no army
 // and one naming 'classic' are on one table). Who plays a seat, the dice
-// and the rounds draw nothing on it.
+// and the rounds draw nothing on it. ((Breakthrough) On a mission with
+// roles, the attacking seat too: seat 1 attacking, the table is the point
+// mirror of the mission's frame, its scenery and objectives elsewhere;
+// never named on another mission, whose table is as it always was.)
 export const tableOf = (setup) => {
   const s = fullSetup(setup)
-  return { board: s.board, mission: s.mission, terrain: s.terrain, races: s.seats.map((x) => x.race), armies: s.seats.map((x) => x.army) }
+  return { board: s.board, mission: s.mission, terrain: s.terrain, races: s.seats.map((x) => x.race), armies: s.seats.map((x) => x.army), ...(s.attacker !== undefined ? { attacker: s.attacker } : {}) }
 }
 const sameTable = (a, b) => JSON.stringify(tableOf(a)) === JSON.stringify(tableOf(b))
 
@@ -496,6 +500,9 @@ export class Flow {
   // ((V3a) Every label drawn again: what a unit did shows on it only in its
   // seat's turn of the battle, so not once it is over.)
   // ((F11b) The deployment's points banner as it begins, gone with it.)
+  // ((Breakthrough) A role battle's first stage, its deployment (or, a
+  // battle with no seat to deploy by hand, its battle): the opening
+  // banners, which the table waits on.)
   staged(e) {
     this.hud.phaseShown = false
     if (e.stage !== 'deploy') this.human.select(null)
@@ -503,16 +510,32 @@ export class Flow {
     else this.ui.armyBanner?.hide()
     this.view.units.labelAll()
     this.refreshUI()
+    if (!this.rolesSaid && (e.stage === 'deploy' || e.stage === 'battle') && this.session?.G && rolesOf(this.session.G.setup)) return this.sayRoles(this.session)
+  }
+
+  // (Breakthrough, DESIGN §4.2.12's "The page") The opening banners of a
+  // role battle: for each seat played here (a watched battle's both), the
+  // attacker's first, its name over its role and its goal: "🐿️ Bushtail
+  // Clans" / "Attack" / "Break through the line: hold the objectives beyond
+  // it. 5 to win."; "🐍 Coil of Ssithra" / "Defend" / "Hold the line: keep
+  // them under 5 by the end of round 6." (present/roles.js: the numbers
+  // the mission's). Once a battle.
+  async sayRoles(session) {
+    this.rolesSaid = true
+    const setup = session.G.setup, atk = attackerSeat(setup)
+    const seats = (session.localSeats.length ? [...session.localSeats] : [0, 1]).sort((a, b) => (a === atk ? -1 : b === atk ? 1 : a - b))
+    for (const s of seats) await this.ui.banner.show(`${this.sides[s].icon} ${this.sides[s].name}`, s === atk ? 'Attack' : 'Defend', this.ink(s), PACE.phaseStart(true, 'deploy'), openingOf(setup, s))
   }
 
   // (F11b) Both armies' totals as the battle's setup fields them (each
   // seat's list priced by its mission's rules, core/army.js): "Bushtails
   // 970 pts · 14 units vs Serpents 990 pts · 14 units".
+  // ((Breakthrough) each priced by its seat's role's rules: core/army.js
+  // rulesFor)
   armiesLine(setup) {
-    const rules = MISSIONS[setup.mission ?? 'classic'].list
     return [0, 1].map((s) => {
       const { counts } = army.armyOf(setup, s), n = counts.reduce((x, y) => x + y, 0)
-      return `${this.sides[s].short} ${army.listCost(RACES[setup.seats[s].race], counts, rules).toLocaleString('en')} pts · ${n} unit${n === 1 ? '' : 's'}`
+      return `${this.sides[s].short} ${army.listCost(RACES[setup.seats[s].race], counts, army.rulesFor(setup, s)).toLocaleString('en')} pts · ${n} unit${n === 1 ? '' : 's'}`
     }).join(' vs ')
   }
 
@@ -549,14 +572,38 @@ export class Flow {
     })
     this.refreshUI()
     const M = this.player.mirror
-    return this.ui.banner.show(`End of round ${e.round}`, `VP ${e.vp[0]} – ${e.vp[1]}`, this.ink(-1), PACE.phaseStart(this.local(M.active), M.stage))
+    // ((Breakthrough) a role battle's banner says its tally: "Breakthrough
+    // 4 of 5")
+    const setup = this.session?.G?.setup
+    return this.ui.banner.show(`End of round ${e.round}`, (setup && tallyOf(setup, e.vp)) ?? `VP ${e.vp[0]} – ${e.vp[1]}`, this.ink(-1), PACE.phaseStart(this.local(M.active), M.stage))
   }
 
-  // The end: who won and why (ui/screens/result.js).
+  // The end: who won and why (ui/screens/result.js). ((Breakthrough) A
+  // role battle's own end worded by present/roles.js from its setup, and
+  // Swap sides offered for one played on this device: swapSides.)
   over(r) {
     this.human.select(null)
     this.refreshUI()
-    this.ui.result.show(r, this.sides, this.ink(r.win))
+    const setup = this.session?.G?.setup
+    const roles = setup ? roleResult(setup, r, this.sides) : null
+    this.ui.result.show(r, this.sides, this.ink(r.win), { roles, swap: !!setup && !!rolesOf(setup) && this.canSwap() })
+  }
+
+  // (Breakthrough) Whether the end screen's Swap sides is offered: the
+  // battle on the table is the one last started here (never online, where
+  // the host's lobby picks who attacks; nor a replay).
+  canSwap() {
+    return !this.online && !!this.lastStart && this.session === this.battle && !this.replay?.battle
+  }
+  // (Breakthrough, DESIGN §4.2.12's "The page") Swap sides: the battle
+  // last started here fought again on the same board seed, by the same
+  // mode, races, terrain and lists, the other seat attacking (its dice
+  // fresh, as any battle's). There is no score across the two.
+  swapSides() {
+    const s = this.lastStart
+    if (!s || s.attacker === undefined) throw new Error('there is no battle with roles to swap sides in')
+    this.S.seed = s.board
+    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, s.armies, 1 - s.attacker)
   }
 
   // The table has played everything: the trace catches up (?debug), a card
@@ -700,13 +747,15 @@ export class Flow {
   // table afresh for it), so the title is always the classic table, as at
   // 1200 ms (DESIGN §4.2.3: the title stays on the classic table), Back
   // from a fortified battle included.
-  showTable(board, { mission = 'classic', terrain = MISSIONS[mission].sets[0], races = this.races, armies = null } = {}) {
+  // ((Breakthrough) `attacker`, on a mission with roles: the seat that
+  // attacks, whose table it is)
+  showTable(board, { mission = 'classic', terrain = MISSIONS[mission].sets[0], races = this.races, armies = null, attacker = undefined } = {}) {
     const { view, ui, human } = this
     // the new table first: if building it throws, the last one stays whole
     // (a quiet match: none of what it did is played, the table being drawn
     // from it as it stands)
     const seats = races.map((race, i) => (armies?.[i] == null ? { race, ctrl: 'human' } : { race, ctrl: 'human', army: armies[i] }))
-    const next = createMatch({ board, dice: 0, mission, terrain, seats }, { out: null })
+    const next = createMatch({ board, dice: 0, mission, terrain, seats, ...(attacker !== undefined ? { attacker } : {}) }, { out: null })
     this.session?.close()
     this.session = null
     this.battle = null
@@ -765,8 +814,10 @@ export class Flow {
   // own preset, the setup naming none; a line still on its ?armies=
   // default hands that value on as given, so a harness's URL starts the
   // battle it always did); left out, the flow's own (?armies='s, as
-  // before the panel had an army line).
-  start(mode, races = this.races, size = this.mission, terrain = this.terrainOf(size), fog = this.fogPick, armies = undefined) {
+  // before the panel had an army line). (Breakthrough) `attacker`, on a
+  // mission with roles, the attacking seat (the panel's Who attacks; left
+  // out, 0); on any other none is named.
+  start(mode, races = this.races, size = this.mission, terrain = this.terrainOf(size), fog = this.fogPick, armies = undefined, attacker = undefined) {
     const { view, ui, human } = this
     // an unknown mode changes nothing (S included), so the table stays
     // playable
@@ -806,7 +857,8 @@ export class Flow {
     // (a battle starts on a fresh table: a second start without the end
     // screen's Back would find the last battle's on show; (F8a) the fresh
     // one is the battle's mission's, so its board is made once)
-    if (this.session) this.showTable(this.S.seed, { mission: this.mission, terrain, armies: fielded })
+    const roled = !!MISSIONS[this.mission].roles
+    if (this.session) this.showTable(this.S.seed, { mission: this.mission, terrain, armies: fielded, ...(roled ? { attacker: attacker ?? 0 } : {}) })
     // a fresh logic-dice stream per battle; ?dice=N replays one exactly
     const dice = (Number(this.params.get('dice')) || ((Math.random() * 1e9) | 0)) >>> 0
     // (F4) a battle with a seat played by a human asks to play on past its
@@ -824,7 +876,13 @@ export class Flow {
     const setup = {
       board: this.S.seed, dice, mission: this.mission, terrain, rounds: mission.rounds, overtime, diceMode: 'shared',
       seats: this.races.map((race, i) => (who[i] === 'human' ? { race, ctrl: who[i], dev: DEVICE, ...armyOf(i) } : { race, ctrl: who[i], ...armyOf(i) })),
+      // ((Breakthrough) the attacking seat, on a mission with roles)
+      ...(roled ? { attacker: attacker ?? 0 } : {}),
     }
+    // ((Breakthrough) what Swap sides starts again; the opening banners
+    // still to say)
+    this.lastStart = { mode, races: [...this.races], mission: this.mission, terrain, fog, armies: fielded ?? [null, null], board: setup.board, attacker: setup.attacker }
+    this.rolesSaid = false
     // The battle starts on the table shown, which must be its own: the
     // backdrop, on the same board and terrain with the same races, (F11a)
     // fielding the same armies (sameTable: a battle with lists is never on
@@ -908,12 +966,18 @@ export class Flow {
     this.acted.length = 0
     this.online = online
     session.sink = this.sink
+    // ((Breakthrough) a battle followed here is no battle Swap sides
+    // starts again; its opening banners said as it is followed at its
+    // deployment, never later)
+    this.lastStart = null
+    this.rolesSaid = true
     this.fog = online?.fog && session.localSeats.length === 1 ? { seat: session.localSeats[0] } : null
     // (F10c) the battle's book: a rejoin finds its orders again
     this.human.standing?.reset()
     this.human.standing?.book.open(bookKey(session))
     this.player.snap(G, project(G))
     this.relog(session.folder.pushed, session)
+    if (rolesOf(G.setup) && G.turn.stage === 'deploy') this.sayRoles(session)
     ui.title.hide()
     view.rig.setViews(viewsFor({ localSeats: session.localSeats, edges: [0, 1].map((s) => edgeOf(G, s)) }))
     this.refreshUI()

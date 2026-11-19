@@ -2,7 +2,7 @@
 // start, a last-writer-wins map every peer edits, which the fold never
 // reads (the start copies what it needs):
 //
-//   lobby: { host, board, mission, terrain, rounds, overtime, fog,
+//   lobby: { host, board, mission, terrain, rounds, overtime, fog, attacker,
 //            seats: { s0: { ctrl, dev, name, race, army, ready, nonce }, s1: … },
 //            next }
 //
@@ -21,6 +21,14 @@
 // seat can't see); next: the rematch's
 // document id, once someone asks for one. Plain fields of a map, so F8a's
 // `mission` and F11b's `army` joined without a schema change.
+//
+// (Breakthrough, DESIGN §4.2.12's "The page") attacker: on a mission with
+// roles, the seat that attacks (0 or 1), the host's to change like the
+// mission (a change un-readies both seats) and copied into the start's
+// setup (setupOf), whose check refuses anything but 0 or 1; absent, the
+// start names none and the attacker is seat 0. A new mission lets it go,
+// as it does the terrain and the rounds (the start of a mission without
+// roles refuses any attacker); a rematch's lobby names the old match's.
 //
 // (F11b, DESIGN §4.2.8.9) A seat's `army`: a preset's name or a list's
 // digits (core/army.js's, judged by the start's check as the fold judges
@@ -58,8 +66,8 @@ export const SEAT_KEYS = Object.freeze(['s0', 's1'])
 // A new match document: the lobby as its host makes it, the host in seat 0
 // (`me`: its seat record, nonce '' as the host's always is), and an empty
 // log (the host's Session writes its `open` next).
-export function lobbyDoc({ host, board, mission = 'classic', terrain = 'classic', rounds, overtime = 'vote', fog = false, me }) {
-  return { ...matchDoc(), lobby: { host, board, mission, terrain, rounds, overtime, fog: fog === true, seats: { s0: { ...me, ready: false, nonce: '' } }, next: null } }
+export function lobbyDoc({ host, board, mission = 'classic', terrain = 'classic', rounds, overtime = 'vote', fog = false, attacker, me }) {
+  return { ...matchDoc(), lobby: { host, board, mission, terrain, rounds, overtime, fog: fog === true, ...(attacker !== undefined ? { attacker } : {}), seats: { s0: { ...me, ready: false, nonce: '' } }, next: null } }
 }
 
 // the lobby of a document as it stands, read safely (a peer may have
@@ -81,6 +89,9 @@ export function lobbyOf(doc) {
     // ((F16) off unless the host turned it on: a lobby written before F16
     // has none)
     fog: L?.fog === true,
+    // ((Breakthrough) the attacking seat as the lobby holds it (absent:
+    // none named), passed on as written: the start's check is the judge)
+    ...(L && L.attacker !== undefined ? { attacker: L.attacker } : {}),
     seats: SEAT_KEYS.map((k) => rec(L?.seats?.[k])),
     next: typeof L?.next === 'string' ? L.next : null,
   }
@@ -107,8 +118,10 @@ export const ready = (lobby) => lobby.seats.every((r) => r?.ready && nameOk(r.na
 export const startSeat = (r) => ({ race: r.race, ctrl: r.ctrl, dev: r.dev, name: r.name, nonce: r.nonce, ...(typeof r.army === 'string' ? { army: r.army } : {}) })
 
 // The start's setup from a ready lobby and its dice (net/seed.js).
+// ((Breakthrough) the attacking seat where the lobby names one)
 export const setupOf = (lobby, dice) => ({
   board: lobby.board, dice, mission: lobby.mission, terrain: lobby.terrain, rounds: lobby.rounds, overtime: lobby.overtime, diceMode: 'shared',
+  ...(lobby.attacker !== undefined ? { attacker: lobby.attacker } : {}),
   seats: lobby.seats.map(startSeat),
 })
 
@@ -192,7 +205,7 @@ export function unseatAI(handle, i, host) {
 }
 
 // The host changes the battle (the board, the mission, (F7a) the terrain,
-// (F16) the fog): both seats un-readied. A new mission lets the old one's terrain and rounds
+// (F16) the fog, (Breakthrough) who attacks): both seats un-readied. A new mission lets the old one's terrain and rounds
 // go: the start's setup takes the new mission's first set and its rounds,
 // unless the same change names a terrain (one of the new mission's sets:
 // the lobby screen offers no other, and the start's check refuses any).
@@ -209,6 +222,8 @@ export function editBattle(handle, fields) {
       d.lobby.mission = fields.mission
       delete d.lobby.terrain
       delete d.lobby.rounds
+      // ((Breakthrough) and who attacks: another mission's roles, or none)
+      if ('attacker' in d.lobby) delete d.lobby.attacker
       for (const k of SEAT_KEYS) if (d.lobby.seats[k] && 'army' in d.lobby.seats[k]) delete d.lobby.seats[k].army
     }
     if (fields.terrain !== undefined) d.lobby.terrain = fields.terrain
@@ -216,6 +231,8 @@ export function editBattle(handle, fields) {
     // sets 'never': app/online.js, as the size changes)
     if (fields.overtime !== undefined) d.lobby.overtime = fields.overtime
     if (fields.fog !== undefined) d.lobby.fog = fields.fog === true
+    // ((Breakthrough) who attacks, on a mission with roles)
+    if (fields.attacker !== undefined) d.lobby.attacker = fields.attacker
     for (const k of SEAT_KEYS) if (d.lobby.seats[k]) d.lobby.seats[k].ready = false
   })
 }

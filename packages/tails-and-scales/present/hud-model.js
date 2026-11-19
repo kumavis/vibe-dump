@@ -14,6 +14,10 @@
 //     vp, round, phase, active    the score, the round, the phase and the
 //                                 seat as shown (null and -1 outside the
 //                                 battle)
+//     tally                       (Breakthrough) on a mission with roles,
+//                                 the attacker's VP as shown against its
+//                                 target ("Breakthrough 3 of 5",
+//                                 present/roles.js); null on every other
 //     end, auto, advance, shortest   the action buttons: { show, label,
 //                                 busy } (show or label null: as it was);
 //                                 end.ready, nothing left to do in the
@@ -100,6 +104,7 @@
 import { PHASES, p2D6, tails, CHARGE_RANGE } from '../core/rules.js'
 import { inCover } from '../core/queries.js'
 import { cardConds } from './conditions.js'
+import { tallyOf } from './roles.js'
 
 const NOBODY = new Set()
 // a phase's name by its key ('move' → 'Movement')
@@ -197,6 +202,9 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   } else if (!mine) hint = ''
   return {
     vp: [M.vp[0], M.vp[1]],
+    // ((Breakthrough) the attacker's tally, from the score as shown and
+    // the mission's target)
+    tally: tallyOf(G.setup, M.vp),
     // (F4) a round past the setup's: overtime, a round at a time
     round: M.stage === 'deploy' ? 'Deployment' : M.round > rounds ? `Round ${M.round} · overtime` : `Round ${M.round} / ${rounds}`,
     phase: M.stage === 'battle' ? M.phase : null,

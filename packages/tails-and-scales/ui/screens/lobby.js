@@ -33,6 +33,12 @@
 // AI-shaped seat naming the host's device that the host's page didn't
 // seat, another peer's write, shows there as another seat, sealed, with
 // Unseat: the page never readies it, and starts nothing while it sits.)
+//
+// (Breakthrough, DESIGN §4.2.12's "The page") On a mission with roles, Who
+// attacks beside the battle size: the seats by their players' names (and
+// races), the host's to choose (a change un-readies both seats), shown to
+// the guest as the size is; and each seat's head says its role, "Attacks"
+// or "Defends".
 import { RacePicker } from './races.js'
 import { terrainName } from './setup.js'
 
@@ -99,6 +105,15 @@ export class LobbyScreen {
       $('#lobby .seedrow').prepend(label)
     }
     $('#lobbySize').onchange = () => on.mission?.($('#lobbySize').value)
+    // ((Breakthrough) Who attacks, made once after the size's select)
+    if (!$('#lobbyAttacker')) {
+      const label = el('label', 'attackerPick hidden', 'Who attacks ')
+      const pick = el('select')
+      pick.id = 'lobbyAttacker'
+      label.append(pick)
+      $('#lobbySize').closest('label').after(label)
+    }
+    $('#lobbyAttacker').onchange = () => on.attacker?.(Number($('#lobbyAttacker').value))
     // (F16) the fog's switch, made once after the battle's row
     if (!$('#lobbyFog')) {
       const label = el('label', 'fogPick', 'Fog of war ')
@@ -129,7 +144,7 @@ export class LobbyScreen {
     for (const p of this.pickers) p?.picker.close()
     this.nameBox = null
     $('#lobbyLink').value = ''
-    for (const id of ['#copyLink', '#secondTab', '#lobbyReroll', '#lobbyBoard', '#lobbyTerrain', '#lobbySize', '#lobbyFog']) $(id).disabled = true
+    for (const id of ['#copyLink', '#secondTab', '#lobbyReroll', '#lobbyBoard', '#lobbyTerrain', '#lobbySize', '#lobbyFog', '#lobbyAttacker']) $(id).disabled = true
   }
 
   // m: { status, link, board, (F7a) terrain and terrains (the set chosen and
@@ -141,7 +156,10 @@ export class LobbyScreen {
   // page), ai (the host's own AI seat, on the host's page), foreignAI (an
   // AI seat on the host's page it didn't seat: Unseat), army (your
   // seat's and the host's AI seat's: { options [{ value, label }], value,
-  // total, why, random }), armyLine (another seat's: its sentence alone) }] }
+  // total, why, random }), armyLine (another seat's: its sentence alone),
+  // (Breakthrough) role ("Attacks" or "Defends", on a mission with roles)
+  // }], (Breakthrough) roles: { attacker, names } on a mission with roles
+  // (each seat's name as Who attacks offers it), else null }
   render(m) {
     this.show()
     $('#lobbyStatus').textContent = m.status
@@ -173,6 +191,19 @@ export class LobbyScreen {
     }
     if (document.activeElement !== size) size.value = m.mission
     size.disabled = !m.host
+    // ((Breakthrough) Who attacks: on a mission with roles, the seats by
+    // name, the lobby's chosen, the host's to change)
+    const atk = $('#lobbyAttacker')
+    atk.closest('label').classList.toggle('hidden', !m.roles)
+    if (m.roles) {
+      const opts = JSON.stringify(m.roles.names)
+      if (atk.dataset.shown !== opts) {
+        atk.replaceChildren(...m.roles.names.map((name, i) => Object.assign(el('option', '', name), { value: String(i) })))
+        atk.dataset.shown = opts
+      }
+      if (document.activeElement !== atk) atk.value = String(m.roles.attacker)
+    }
+    atk.disabled = !m.host || !m.roles
     // (F16) the fog: the lobby's, the host's to turn
     const fog = $('#lobbyFog')
     fog.checked = !!m.fog
@@ -189,6 +220,8 @@ export class LobbyScreen {
     const head = (who) => {
       const h = el('div', 'seatHead')
       h.append(el('span', 'who', who), el('span', 'edge', i ? 'east edge' : 'west edge'))
+      // ((Breakthrough) its role, on a mission with roles)
+      if (s.role) h.append(el('span', 'role', s.role))
       return h
     }
     const ctl = (...parts) => {

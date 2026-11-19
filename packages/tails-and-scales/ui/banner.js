@@ -17,10 +17,13 @@ export class Banner {
   }
 
   // `a` over `b`, `ink` the first line's colour ('' for the stylesheet's);
-  // played for `seconds` (game time)
-  async show(a, b, ink, seconds) {
+  // played for `seconds` (game time). ((Breakthrough) `c`, a sentence under
+  // them (a role battle's opening banner says its goal); and a `b` longer
+  // than a phase's name, the tally's "Breakthrough 4 of 5", set smaller, so
+  // it keeps to a line on a phone)
+  async show(a, b, ink, seconds, c = '') {
     const el = this.el
-    el.innerHTML = `<div class="b1">${a}</div><div class="b2">${b}</div>`
+    el.innerHTML = `<div class="b1">${a}</div><div class="b2${String(b).length > 12 ? ' long' : ''}">${b}</div>${c ? `<div class="b3">${c}</div>` : ''}`
     el.querySelector('.b1').style.color = ink
     el.classList.remove('show')
     void el.offsetWidth
