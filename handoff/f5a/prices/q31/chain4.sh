@@ -1,0 +1,2 @@
+./r.sh fin-f1111 node sim/army-sim.mjs --check --mission field --seed 1111 --jobs 2 --dir /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/f5a/prices/q31/fin/packages/tails-and-scales
+./r.sh fin-kgp1111 node sim/army-sim.mjs --check --mission keg,grand,powder --seed 1111 --jobs 2 --dir /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/f5a/prices/q31/fin/packages/tails-and-scales

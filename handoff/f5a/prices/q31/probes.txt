@@ -1,0 +1,613 @@
+p2: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  classic fit Bushtails vs Hivekin: 160/600 battles, 7 s
+  classic fit Bushtails vs Hivekin: 320/600 battles, 10 s
+  classic fit Bushtails vs Hivekin: 480/600 battles, 14 s
+  classic fit Bushtails vs Hivekin: 600/600 battles, 16 s
+  the race-level edge (the intercept; the heroes fitted): 14.6 ± 85.7 points to the Bushtails
+  Hivekin: Deepguard                 Elite         100      88 ±  13       90   ok   (w 25)
+  Hivekin: Spinethrower Brood        Troops         75      85 ±   9       85   ok   (w 18)
+  Hivekin: Delver Swarm              Troops         90      66 ±  12       65   FAIL (w 23)
+  Hivekin: Hopper Lancers            Fast           55      60 ±   9       60   ok   (w 18)
+  Hivekin: Boilback Bombardier       Artillery      45      29 ±  13       30   ok   (w 27)
+  FAIL the per-unit gate, classic, Bushtails vs Hivekin: 1 unit(s) priced outside their band
+  classic fit Serpents vs Hivekin: 160/600 battles, 8 s
+  classic fit Serpents vs Hivekin: 320/600 battles, 11 s
+  classic fit Serpents vs Hivekin: 480/600 battles, 15 s
+  classic fit Serpents vs Hivekin: 600/600 battles, 18 s
+  the race-level edge (the intercept; the heroes fitted): -11.7 ± 81.1 points to the Serpents
+  Hivekin: Deepguard                 Elite         100      90 ±  12       90   ok   (w 24)
+  Hivekin: Spinethrower Brood        Troops         75      75 ±   9       75   ok   (w 18)
+  Hivekin: Delver Swarm              Troops         90      76 ±  11       75   ok   (w 23)
+  Hivekin: Hopper Lancers            Fast           55      56 ±   9       55   ok   (w 18)
+  Hivekin: Boilback Bombardier       Artillery      45      39 ±  13       40   ok   (w 25)
+  FAIL the per-unit gate, classic, Serpents vs Hivekin: 1 unit(s) priced outside their band
+  classic fit Hivekin vs Windfolk: 160/600 battles, 7 s
+  classic fit Hivekin vs Windfolk: 320/600 battles, 11 s
+  classic fit Hivekin vs Windfolk: 480/600 battles, 15 s
+  classic fit Hivekin vs Windfolk: 600/600 battles, 17 s
+  the heroes' difference (the intercept): -51.2 ± 89.8 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      34 ±  45       35   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      77 ±  13       75   ok   (w 27)
+  Hivekin: Spinethrower Brood        Troops         75      88 ±  10       90   ok   (w 19)
+  Hivekin: Delver Swarm              Troops         90      83 ±  12       85   ok   (w 24)
+  Hivekin: Hopper Lancers            Fast           55      60 ±  10       60   ok   (w 20)
+  Hivekin: Boilback Bombardier       Artillery      45      49 ±  13       50   ok   (w 26)
+  Windfolk: Skyseer Varra            Hero           60      86 ±  45       80   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      83 ±  13       80   ok   (w 26)
+  Windfolk: Longbill Pikes           Troops         65      62 ±   9       60   ok   (w 18)
+  Windfolk: Finch Flock              Troops         50      57 ±   8       55   ok   (w 17)
+  Windfolk: Kestrel Divers           Fast           50      40 ±   9       35   ok   (w 18)
+  Windfolk: Greatwing Roc            Monster       105     131 ±  15      130   ok   (w 31)
+  ok   the per-unit gate, classic, Hivekin vs Windfolk: every unit within its band
+  FAIL classic score Bushtails vs Hivekin on classic: 68.8% ± 2.6 (N = 300, band 4)
+  FAIL classic score Bushtails vs Hivekin on fortified: 76.2% ± 2.4 (N = 300, band 4)
+  FAIL classic score Serpents vs Hivekin on classic: 54.7% ± 2.8 (N = 300, band 4)
+  FAIL classic score Serpents vs Hivekin on fortified: 67.0% ± 2.6 (N = 300, band 4)
+  ok   classic score Hivekin vs Windfolk on classic: 48.7% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 27.2% ± 2.5 (N = 300, band 4)
+  FAIL classic per-unit Bushtails vs Hivekin: 1 unit(s) outside their band (fit N = 600)
+  FAIL classic per-unit Serpents vs Hivekin: 1 unit(s) outside their band (fit N = 600)
+  ok   classic per-unit Hivekin vs Windfolk: every unit within its band (fit N = 600)
+p3: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.Sv=5 delver.st.W=2
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): 4.9 ± 88.4 points to the Bushtails
+  Hivekin: Deepguard                 Elite         100      78 ±  13       80   ok   (w 26)
+  Hivekin: Spinethrower Brood        Troops         75      79 ±   9       80   ok   (w 19)
+  Hivekin: Delver Swarm              Troops         90      74 ±  12       75   ok   (w 23)
+  Hivekin: Hopper Lancers            Fast           55      59 ±   9       60   ok   (w 19)
+  Hivekin: Boilback Bombardier       Artillery      45      45 ±  13       45   ok   (w 27)
+  the race-level edge (the intercept; the heroes fitted): -183.0 ± 93.7 points to the Serpents
+  Hivekin: Deepguard                 Elite         100      69 ±  14       70   FAIL (w 27)
+  Hivekin: Spinethrower Brood        Troops         75      55 ±  10       55   ok   (w 20)
+  Hivekin: Delver Swarm              Troops         90      62 ±  13       60   FAIL (w 26)
+  Hivekin: Hopper Lancers            Fast           55      41 ±  10       40   ok   (w 20)
+  Hivekin: Boilback Bombardier       Artillery      45      29 ±  14       30   ok   (w 28)
+  FAIL the per-unit gate, classic, Serpents vs Hivekin: 4 unit(s) priced outside their band
+  the heroes' difference (the intercept): -142.1 ± 87.5 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60     -11 ±  44        5   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      91 ±  13       90   ok   (w 25)
+  Hivekin: Spinethrower Brood        Troops         75      88 ±   9       90   ok   (w 19)
+  Hivekin: Delver Swarm              Troops         90      93 ±  12       95   ok   (w 24)
+  Hivekin: Hopper Lancers            Fast           55      58 ±  10       55   ok   (w 19)
+  Hivekin: Boilback Bombardier       Artillery      45      74 ±  13       75   FAIL (w 26)
+  Windfolk: Skyseer Varra            Hero           60     131 ±  44      130   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      69 ±  13       65   FAIL (w 26)
+  Windfolk: Longbill Pikes           Troops         65      52 ±   9       50   ok   (w 18)
+  Windfolk: Finch Flock              Troops         50      46 ±   8       45   ok   (w 16)
+  Windfolk: Kestrel Divers           Fast           50      39 ±   9       35   ok   (w 18)
+  Windfolk: Greatwing Roc            Monster       105     129 ±  15      125   ok   (w 30)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 2 unit(s) priced outside their band
+  FAIL classic score Bushtails vs Hivekin on classic: 65.0% ± 2.6 (N = 300, band 4)
+  FAIL classic score Bushtails vs Hivekin on fortified: 70.3% ± 2.5 (N = 300, band 4)
+  ok   classic score Serpents vs Hivekin on classic: 54.0% ± 2.8 (N = 300, band 4)
+  FAIL classic score Serpents vs Hivekin on fortified: 64.7% ± 2.6 (N = 300, band 4)
+  ok   classic score Hivekin vs Windfolk on classic: 52.0% ± 2.8 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 27.3% ± 2.5 (N = 300, band 4)
+p4: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): -103.5 ± 117.4 points to the Bushtails
+  Hivekin: Deepguard                 Elite         100      77 ±  17       75   ok   (w 34)
+  Hivekin: Spinethrower Brood        Troops         75      69 ±  12       70   ok   (w 25)
+  Hivekin: Delver Swarm              Troops         90      80 ±  15       80   ok   (w 30)
+  Hivekin: Hopper Lancers            Fast           55      30 ±  13       30   ok   (w 26)
+  Hivekin: Boilback Bombardier       Artillery      45      29 ±  17       30   ok   (w 35)
+  FAIL the per-unit gate, classic, Bushtails vs Hivekin: 1 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): 1.7 ± 70.9 points to the Serpents
+  Hivekin: Deepguard                 Elite         100      79 ±  11       80   ok   (w 21)
+  Hivekin: Spinethrower Brood        Troops         75      76 ±   8       75   ok   (w 15)
+  Hivekin: Delver Swarm              Troops         90      92 ±  10       90   ok   (w 19)
+  Hivekin: Hopper Lancers            Fast           55      57 ±   8       55   ok   (w 16)
+  Hivekin: Boilback Bombardier       Artillery      45      42 ±  11       40   ok   (w 22)
+  FAIL the per-unit gate, classic, Serpents vs Hivekin: 1 unit(s) priced outside their band
+  the heroes' difference (the intercept): -144.2 ± 100.7 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60     -12 ±  50        5   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      91 ±  14       90   ok   (w 29)
+  Hivekin: Spinethrower Brood        Troops         75      90 ±  11       90   ok   (w 22)
+  Hivekin: Delver Swarm              Troops         90     106 ±  13      105   ok   (w 27)
+  Hivekin: Hopper Lancers            Fast           55      56 ±  11       55   ok   (w 22)
+  Hivekin: Boilback Bombardier       Artillery      45      68 ±  15       65   ok   (w 29)
+  Windfolk: Skyseer Varra            Hero           60     132 ±  50      130   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      66 ±  15       65   FAIL (w 30)
+  Windfolk: Longbill Pikes           Troops         65      55 ±  10       55   ok   (w 21)
+  Windfolk: Finch Flock              Troops         50      48 ±   9       45   ok   (w 18)
+  Windfolk: Kestrel Divers           Fast           50      35 ±  10       35   ok   (w 21)
+  Windfolk: Greatwing Roc            Monster       105     119 ±  17      115   ok   (w 33)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 1 unit(s) priced outside their band
+  ok   classic score Bushtails vs Hivekin on classic: 52.0% ± 2.7 (N = 300, band 4)
+  FAIL classic score Bushtails vs Hivekin on fortified: 66.0% ± 2.6 (N = 300, band 4)
+  ok   classic score Serpents vs Hivekin on classic: 48.5% ± 2.8 (N = 300, band 4)
+  FAIL classic score Serpents vs Hivekin on fortified: 58.3% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 56.7% ± 2.8 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 26.3% ± 2.4 (N = 300, band 4)
+p5: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): -22.6 ± 92.9 points to the Bushtails
+  Hivekin: Deepguard                 Elite         100      82 ±  14       80   ok   (w 27)
+  Hivekin: Spinethrower Brood        Troops         75      65 ±  10       65   ok   (w 20)
+  Hivekin: Delver Swarm              Troops         90      86 ±  12       85   ok   (w 24)
+  Hivekin: Hopper Lancers            Fast           55      71 ±  10       70   ok   (w 20)
+  Hivekin: Boilback Bombardier       Artillery      45      41 ±  14       40   ok   (w 28)
+  FAIL the per-unit gate, classic, Bushtails vs Hivekin: 1 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -34.2 ± 80.7 points to the Serpents
+  Hivekin: Deepguard                 Elite         100      75 ±  12       75   FAIL (w 24)
+  Hivekin: Spinethrower Brood        Troops         75      70 ±   9       70   ok   (w 17)
+  Hivekin: Delver Swarm              Troops         90      86 ±  11       85   ok   (w 22)
+  Hivekin: Hopper Lancers            Fast           55      74 ±   9       75   FAIL (w 18)
+  Hivekin: Boilback Bombardier       Artillery      45      40 ±  12       40   ok   (w 25)
+  FAIL the per-unit gate, classic, Serpents vs Hivekin: 3 unit(s) priced outside their band
+  the heroes' difference (the intercept): -82.4 ± 102.2 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      19 ±  51       20   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      85 ±  15       85   ok   (w 30)
+  Hivekin: Spinethrower Brood        Troops         75      79 ±  11       80   ok   (w 22)
+  Hivekin: Delver Swarm              Troops         90      90 ±  14       90   ok   (w 27)
+  Hivekin: Hopper Lancers            Fast           55      70 ±  11       70   ok   (w 22)
+  Hivekin: Boilback Bombardier       Artillery      45      74 ±  15       75   ok   (w 30)
+  Windfolk: Skyseer Varra            Hero           60     101 ±  51      100   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      81 ±  15       80   ok   (w 30)
+  Windfolk: Longbill Pikes           Troops         65      60 ±  10       60   ok   (w 21)
+  Windfolk: Finch Flock              Troops         50      45 ±   9       45   ok   (w 19)
+  Windfolk: Kestrel Divers           Fast           50      44 ±  10       45   ok   (w 21)
+  Windfolk: Greatwing Roc            Monster       105     112 ±  17      110   ok   (w 33)
+  FAIL classic score Bushtails vs Hivekin on classic: 44.5% ± 2.7 (N = 300, band 4)
+  FAIL classic score Bushtails vs Hivekin on fortified: 60.8% ± 2.6 (N = 300, band 4)
+  FAIL classic score Serpents vs Hivekin on classic: 42.3% ± 2.6 (N = 300, band 4)
+  ok   classic score Serpents vs Hivekin on fortified: 53.8% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 60.5% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 33.5% ± 2.7 (N = 300, band 4)
+a1: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4 stormtalon.st.Sv=5 roc.st.T=5 kestrel.st.Sv=6 longbill.st.T=4 longbill.st.Sv=3
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): -112.4 ± 97.6 points to the Bushtails
+  Windfolk: Stormtalon Guard         Elite         105      93 ±  14       95   ok   (w 28)
+  Windfolk: Longbill Pikes           Troops         65      69 ±  10       70   ok   (w 21)
+  Windfolk: Finch Flock              Troops         50      44 ±   8       45   ok   (w 17)
+  Windfolk: Kestrel Divers           Fast           50      33 ±  10       35   ok   (w 19)
+  Windfolk: Greatwing Roc            Monster       105      86 ±  16       85   ok   (w 32)
+  FAIL the per-unit gate, classic, Bushtails vs Windfolk: 1 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -74.5 ± 84.9 points to the Serpents
+  Windfolk: Stormtalon Guard         Elite         105      73 ±  13       75   FAIL (w 26)
+  Windfolk: Longbill Pikes           Troops         65      86 ±   9       85   FAIL (w 17)
+  Windfolk: Finch Flock              Troops         50      41 ±   8       40   ok   (w 16)
+  Windfolk: Kestrel Divers           Fast           50      50 ±   8       50   ok   (w 17)
+  Windfolk: Greatwing Roc            Monster       105      86 ±  15       85   ok   (w 31)
+  FAIL the per-unit gate, classic, Serpents vs Windfolk: 2 unit(s) priced outside their band
+  the heroes' difference (the intercept): 2.2 ± 89.7 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      61 ±  45       60   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      78 ±  13       80   ok   (w 26)
+  Hivekin: Spinethrower Brood        Troops         75      76 ±  10       75   ok   (w 19)
+  Hivekin: Delver Swarm              Troops         90      91 ±  12       90   ok   (w 24)
+  Hivekin: Hopper Lancers            Fast           55      60 ±  10       60   ok   (w 19)
+  Hivekin: Boilback Bombardier       Artillery      45      44 ±  13       45   ok   (w 26)
+  Windfolk: Skyseer Varra            Hero           60      59 ±  45       55   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      77 ±  13       75   FAIL (w 26)
+  Windfolk: Longbill Pikes           Troops         65      75 ±   9       75   ok   (w 18)
+  Windfolk: Finch Flock              Troops         50      58 ±   8       55   ok   (w 17)
+  Windfolk: Kestrel Divers           Fast           50      39 ±   9       35   ok   (w 18)
+  Windfolk: Greatwing Roc            Monster       105     132 ±  15      130   ok   (w 30)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 1 unit(s) priced outside their band
+  ok   classic score Bushtails vs Windfolk on classic: 48.8% ± 2.8 (N = 300, band 4)
+  FAIL classic score Bushtails vs Windfolk on fortified: 22.3% ± 2.3 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on classic: 60.0% ± 2.7 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on fortified: 37.7% ± 2.7 (N = 300, band 4)
+  ok   classic score Hivekin vs Windfolk on classic: 52.8% ± 2.8 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 31.3% ± 2.6 (N = 300, band 4)
+a2: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4 stormtalon.fly=walk finch.fly=walk
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): 93.2 ± 91.7 points to the Bushtails
+  Windfolk: Stormtalon Guard         Elite         105     124 ±  13      125   ok   (w 27)
+  Windfolk: Longbill Pikes           Troops         65      73 ±   9       70   ok   (w 19)
+  Windfolk: Finch Flock              Troops         50      53 ±   8       55   ok   (w 15)
+  Windfolk: Kestrel Divers           Fast           50      50 ±   9       50   ok   (w 18)
+  Windfolk: Greatwing Roc            Monster       105     125 ±  15      125   ok   (w 31)
+  FAIL the per-unit gate, classic, Bushtails vs Windfolk: 3 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -58.5 ± 74.4 points to the Serpents
+  Windfolk: Stormtalon Guard         Elite         105      85 ±  11       85   ok   (w 23)
+  Windfolk: Longbill Pikes           Troops         65      66 ±   8       65   ok   (w 15)
+  Windfolk: Finch Flock              Troops         50      44 ±   7       45   ok   (w 14)
+  Windfolk: Kestrel Divers           Fast           50      54 ±   7       55   ok   (w 15)
+  Windfolk: Greatwing Roc            Monster       105      98 ±  13      100   ok   (w 26)
+  the heroes' difference (the intercept): -81.5 ± 97.5 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      19 ±  49       20   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      81 ±  14       80   ok   (w 28)
+  Hivekin: Spinethrower Brood        Troops         75      84 ±  11       85   ok   (w 21)
+  Hivekin: Delver Swarm              Troops         90      97 ±  13       95   ok   (w 26)
+  Hivekin: Hopper Lancers            Fast           55      75 ±  11       75   ok   (w 21)
+  Hivekin: Boilback Bombardier       Artillery      45      53 ±  14       55   ok   (w 28)
+  Windfolk: Skyseer Varra            Hero           60     101 ±  49      100   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      75 ±  14       75   FAIL (w 29)
+  Windfolk: Longbill Pikes           Troops         65      57 ±  10       55   ok   (w 20)
+  Windfolk: Finch Flock              Troops         50      44 ±   9       45   ok   (w 18)
+  Windfolk: Kestrel Divers           Fast           50      48 ±  10       45   ok   (w 20)
+  Windfolk: Greatwing Roc            Monster       105     124 ±  16      125   ok   (w 32)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 1 unit(s) priced outside their band
+  ok   classic score Bushtails vs Windfolk on classic: 48.3% ± 2.8 (N = 300, band 4)
+  FAIL classic score Bushtails vs Windfolk on fortified: 29.2% ± 2.5 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on classic: 65.7% ± 2.6 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on fortified: 36.8% ± 2.6 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 60.3% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 32.7% ± 2.6 (N = 300, band 4)
+a3: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4 kestrel.st.M=10 stormtalon.st.M=10 roc.st.M=10 skyseer.st.M=8 finch.st.M=8
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): -120.0 ± 72.0 points to the Bushtails
+  Windfolk: Stormtalon Guard         Elite         105      91 ±  10       90   ok   (w 21)
+  Windfolk: Longbill Pikes           Troops         65      62 ±   8       60   ok   (w 15)
+  Windfolk: Finch Flock              Troops         50      44 ±   6       45   ok   (w 12)
+  Windfolk: Kestrel Divers           Fast           50      41 ±   7       40   ok   (w 14)
+  Windfolk: Greatwing Roc            Monster       105      76 ±  12       75   FAIL (w 24)
+  FAIL the per-unit gate, classic, Bushtails vs Windfolk: 2 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): 37.8 ± 76.6 points to the Serpents
+  Windfolk: Stormtalon Guard         Elite         105     107 ±  12      105   ok   (w 24)
+  Windfolk: Longbill Pikes           Troops         65      67 ±   8       65   ok   (w 16)
+  Windfolk: Finch Flock              Troops         50      54 ±   7       55   ok   (w 14)
+  Windfolk: Kestrel Divers           Fast           50      55 ±   8       55   ok   (w 16)
+  Windfolk: Greatwing Roc            Monster       105     123 ±  14      125   ok   (w 28)
+  FAIL the per-unit gate, classic, Serpents vs Windfolk: 1 unit(s) priced outside their band
+  the heroes' difference (the intercept): 21.2 ± 108.6 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      71 ±  54       70   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      69 ±  16       70   ok   (w 32)
+  Hivekin: Spinethrower Brood        Troops         75      78 ±  12       80   ok   (w 23)
+  Hivekin: Delver Swarm              Troops         90      91 ±  14       90   ok   (w 28)
+  Hivekin: Hopper Lancers            Fast           55      70 ±  12       70   ok   (w 23)
+  Hivekin: Boilback Bombardier       Artillery      45      33 ±  16       35   ok   (w 32)
+  Windfolk: Skyseer Varra            Hero           60      49 ±  54       50   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      85 ±  16       85   ok   (w 32)
+  Windfolk: Longbill Pikes           Troops         65      78 ±  11       75   ok   (w 22)
+  Windfolk: Finch Flock              Troops         50      49 ±  10       45   ok   (w 20)
+  Windfolk: Kestrel Divers           Fast           50      50 ±  11       50   ok   (w 22)
+  Windfolk: Greatwing Roc            Monster       105     122 ±  18      120   ok   (w 35)
+  ok   classic score Bushtails vs Windfolk on classic: 51.0% ± 2.8 (N = 300, band 4)
+  FAIL classic score Bushtails vs Windfolk on fortified: 36.3% ± 2.7 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on classic: 63.5% ± 2.7 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on fortified: 35.5% ± 2.6 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 60.7% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 35.8% ± 2.7 (N = 300, band 4)
+a4: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4 roc.st.OC=1 longbill.st.OC=1
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): -5.5 ± 95.1 points to the Bushtails
+  Windfolk: Stormtalon Guard         Elite         105     132 ±  15      130   ok   (w 30)
+  Windfolk: Longbill Pikes           Troops         65      61 ±  10       60   ok   (w 20)
+  Windfolk: Finch Flock              Troops         50      47 ±   8       45   ok   (w 16)
+  Windfolk: Kestrel Divers           Fast           50      41 ±   9       40   ok   (w 19)
+  Windfolk: Greatwing Roc            Monster       105     107 ±  16      105   ok   (w 32)
+  FAIL the per-unit gate, classic, Bushtails vs Windfolk: 2 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -31.2 ± 78.4 points to the Serpents
+  Windfolk: Stormtalon Guard         Elite         105      97 ±  12       95   ok   (w 24)
+  Windfolk: Longbill Pikes           Troops         65      74 ±   8       75   ok   (w 16)
+  Windfolk: Finch Flock              Troops         50      43 ±   7       45   ok   (w 15)
+  Windfolk: Kestrel Divers           Fast           50      51 ±   8       50   ok   (w 16)
+  Windfolk: Greatwing Roc            Monster       105      93 ±  14       95   ok   (w 28)
+  FAIL the per-unit gate, classic, Serpents vs Windfolk: 2 unit(s) priced outside their band
+  the heroes' difference (the intercept): -66.4 ± 105.0 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      27 ±  52       25   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      86 ±  15       85   ok   (w 30)
+  Hivekin: Spinethrower Brood        Troops         75      79 ±  11       80   ok   (w 23)
+  Hivekin: Delver Swarm              Troops         90      90 ±  14       90   ok   (w 28)
+  Hivekin: Hopper Lancers            Fast           55      66 ±  11       65   ok   (w 23)
+  Hivekin: Boilback Bombardier       Artillery      45      75 ±  15       75   ok   (w 31)
+  Windfolk: Skyseer Varra            Hero           60      93 ±  52       95   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      86 ±  15       85   ok   (w 31)
+  Windfolk: Longbill Pikes           Troops         65      59 ±  11       60   ok   (w 22)
+  Windfolk: Finch Flock              Troops         50      49 ±  10       50   ok   (w 19)
+  Windfolk: Kestrel Divers           Fast           50      45 ±  11       45   ok   (w 22)
+  Windfolk: Greatwing Roc            Monster       105     108 ±  17      105   ok   (w 34)
+  ok   classic score Bushtails vs Windfolk on classic: 48.2% ± 2.8 (N = 300, band 4)
+  FAIL classic score Bushtails vs Windfolk on fortified: 33.0% ± 2.6 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on classic: 64.0% ± 2.7 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on fortified: 39.8% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 61.7% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 36.5% ± 2.7 (N = 300, band 4)
+a5: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4 skyseer.spell2.spell=8 skyseer.spell0.spell=8
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): -78.4 ± 83.2 points to the Bushtails
+  Windfolk: Stormtalon Guard         Elite         105     117 ±  12      115   ok   (w 25)
+  Windfolk: Longbill Pikes           Troops         65      61 ±   9       60   ok   (w 17)
+  Windfolk: Finch Flock              Troops         50      36 ±   7       35   ok   (w 14)
+  Windfolk: Kestrel Divers           Fast           50      31 ±   8       30   FAIL (w 17)
+  Windfolk: Greatwing Roc            Monster       105     103 ±  14      105   ok   (w 28)
+  FAIL the per-unit gate, classic, Bushtails vs Windfolk: 2 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -67.1 ± 82.1 points to the Serpents
+  Windfolk: Stormtalon Guard         Elite         105      95 ±  13       95   ok   (w 25)
+  Windfolk: Longbill Pikes           Troops         65      60 ±   9       60   ok   (w 17)
+  Windfolk: Finch Flock              Troops         50      40 ±   8       40   ok   (w 15)
+  Windfolk: Kestrel Divers           Fast           50      55 ±   8       55   ok   (w 16)
+  Windfolk: Greatwing Roc            Monster       105     108 ±  14      110   ok   (w 29)
+  the heroes' difference (the intercept): 14.2 ± 102.5 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      67 ±  51       65   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      67 ±  15       65   FAIL (w 31)
+  Hivekin: Spinethrower Brood        Troops         75      72 ±  11       70   ok   (w 22)
+  Hivekin: Delver Swarm              Troops         90      84 ±  14       85   ok   (w 27)
+  Hivekin: Hopper Lancers            Fast           55      69 ±  11       70   ok   (w 22)
+  Hivekin: Boilback Bombardier       Artillery      45      60 ±  15       60   ok   (w 29)
+  Windfolk: Skyseer Varra            Hero           60      53 ±  51       50   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      98 ±  15       95   ok   (w 30)
+  Windfolk: Longbill Pikes           Troops         65      64 ±  11       65   ok   (w 21)
+  Windfolk: Finch Flock              Troops         50      42 ±   9       40   ok   (w 19)
+  Windfolk: Kestrel Divers           Fast           50      53 ±  11       50   ok   (w 21)
+  Windfolk: Greatwing Roc            Monster       105     135 ±  17      135   ok   (w 34)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 1 unit(s) priced outside their band
+  ok   classic score Bushtails vs Windfolk on classic: 46.2% ± 2.8 (N = 300, band 4)
+  FAIL classic score Bushtails vs Windfolk on fortified: 31.5% ± 2.6 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on classic: 69.3% ± 2.6 (N = 300, band 4)
+  ok   classic score Serpents vs Windfolk on fortified: 46.3% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 65.0% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 39.8% ± 2.8 (N = 300, band 4)
+a6: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4 finch.st.T=3 kestrel.st.Sv=4 stormtalon.st.Sv=3 longbill.st.Sv=3
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): -51.3 ± 92.1 points to the Bushtails
+  Windfolk: Stormtalon Guard         Elite         105     121 ±  14      120   ok   (w 29)
+  Windfolk: Longbill Pikes           Troops         65      73 ±  10       75   ok   (w 20)
+  Windfolk: Finch Flock              Troops         50      46 ±   8       45   ok   (w 16)
+  Windfolk: Kestrel Divers           Fast           50      37 ±   9       35   ok   (w 18)
+  Windfolk: Greatwing Roc            Monster       105      96 ±  15       95   ok   (w 30)
+  FAIL the per-unit gate, classic, Bushtails vs Windfolk: 2 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -105.8 ± 65.5 points to the Serpents
+  Windfolk: Stormtalon Guard         Elite         105      95 ±  10       95   ok   (w 21)
+  Windfolk: Longbill Pikes           Troops         65      68 ±   7       70   ok   (w 13)
+  Windfolk: Finch Flock              Troops         50      42 ±   6       40   ok   (w 12)
+  Windfolk: Kestrel Divers           Fast           50      54 ±   7       55   ok   (w 13)
+  Windfolk: Greatwing Roc            Monster       105      81 ±  12       80   FAIL (w 23)
+  FAIL the per-unit gate, classic, Serpents vs Windfolk: 1 unit(s) priced outside their band
+  the heroes' difference (the intercept): 17.0 ± 163.2 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      68 ±  82       70   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      43 ±  27       45   FAIL (w 54)
+  Hivekin: Spinethrower Brood        Troops         75      61 ±  18       60   ok   (w 37)
+  Hivekin: Delver Swarm              Troops         90      67 ±  23       65   ok   (w 45)
+  Hivekin: Hopper Lancers            Fast           55      66 ±  18       65   ok   (w 35)
+  Hivekin: Boilback Bombardier       Artillery      45      56 ±  24       55   ok   (w 47)
+  Windfolk: Skyseer Varra            Hero           60      52 ±  82       40   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      99 ±  24       85   ok   (w 47)
+  Windfolk: Longbill Pikes           Troops         65      69 ±  16       60   ok   (w 33)
+  Windfolk: Finch Flock              Troops         50      59 ±  16       50   ok   (w 31)
+  Windfolk: Kestrel Divers           Fast           50      77 ±  19       65   ok   (w 37)
+  Windfolk: Greatwing Roc            Monster       105     151 ±  29      140   ok   (w 58)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 1 unit(s) priced outside their band
+  FAIL classic score Bushtails vs Windfolk on classic: 28.8% ± 2.5 (N = 300, band 4)
+  FAIL classic score Bushtails vs Windfolk on fortified: 20.8% ± 2.2 (N = 300, band 4)
+  ok   classic score Serpents vs Windfolk on classic: 46.0% ± 2.8 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on fortified: 21.8% ± 2.3 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 38.2% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 16.7% ± 2.0 (N = 300, band 4)
+a7: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4 finch.st.T=3 kestrel.st.Sv=4 stormtalon.st.Sv=3 longbill.st.Sv=3 stormtalon.st.A=2 roc.st.A=3
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): -91.0 ± 87.7 points to the Bushtails
+  Windfolk: Stormtalon Guard         Elite         105     104 ±  13      105   ok   (w 26)
+  Windfolk: Longbill Pikes           Troops         65      59 ±   9       60   ok   (w 18)
+  Windfolk: Finch Flock              Troops         50      45 ±   7       45   ok   (w 15)
+  Windfolk: Kestrel Divers           Fast           50      34 ±   9       35   ok   (w 17)
+  Windfolk: Greatwing Roc            Monster       105     113 ±  15      115   ok   (w 30)
+  FAIL the per-unit gate, classic, Bushtails vs Windfolk: 1 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -135.3 ± 94.0 points to the Serpents
+  Windfolk: Stormtalon Guard         Elite         105      74 ±  14       75   FAIL (w 29)
+  Windfolk: Longbill Pikes           Troops         65      68 ±   9       70   ok   (w 19)
+  Windfolk: Finch Flock              Troops         50      50 ±   8       50   ok   (w 17)
+  Windfolk: Kestrel Divers           Fast           50      51 ±   9       50   ok   (w 18)
+  Windfolk: Greatwing Roc            Monster       105      75 ±  17       75   ok   (w 34)
+  FAIL the per-unit gate, classic, Serpents vs Windfolk: 2 unit(s) priced outside their band
+  the heroes' difference (the intercept): 34.5 ± 161.7 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      77 ±  81       75   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      47 ±  26       45   FAIL (w 52)
+  Hivekin: Spinethrower Brood        Troops         75      77 ±  17       75   ok   (w 35)
+  Hivekin: Delver Swarm              Troops         90      94 ±  21       95   ok   (w 42)
+  Hivekin: Hopper Lancers            Fast           55      77 ±  18       75   ok   (w 35)
+  Hivekin: Boilback Bombardier       Artillery      45      11 ±  25       10   ok   (w 50)
+  Windfolk: Skyseer Varra            Hero           60      43 ±  81       40   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      87 ±  23       80   ok   (w 46)
+  Windfolk: Longbill Pikes           Troops         65      72 ±  16       65   ok   (w 33)
+  Windfolk: Finch Flock              Troops         50      72 ±  16       65   ok   (w 32)
+  Windfolk: Kestrel Divers           Fast           50      88 ±  19       85   ok   (w 38)
+  Windfolk: Greatwing Roc            Monster       105     107 ±  26      100   ok   (w 52)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 1 unit(s) priced outside their band
+  FAIL classic score Bushtails vs Windfolk on classic: 36.8% ± 2.6 (N = 300, band 4)
+  FAIL classic score Bushtails vs Windfolk on fortified: 21.0% ± 2.3 (N = 300, band 4)
+  ok   classic score Serpents vs Windfolk on classic: 52.2% ± 2.7 (N = 300, band 4)
+  FAIL classic score Serpents vs Windfolk on fortified: 29.3% ± 2.5 (N = 300, band 4)
+  ok   classic score Hivekin vs Windfolk on classic: 47.5% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 24.2% ± 2.4 (N = 300, band 4)
+h6: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4 hopper.st.OC=2 spinethrower.st.OC=3 deepguard.st.Sv=4
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): 58.3 ± 95.5 points to the Bushtails
+  Hivekin: Deepguard                 Elite         100      79 ±  14       80   ok   (w 28)
+  Hivekin: Spinethrower Brood        Troops         75      76 ±  10       75   ok   (w 20)
+  Hivekin: Delver Swarm              Troops         90      97 ±  12       95   ok   (w 24)
+  Hivekin: Hopper Lancers            Fast           55      77 ±  10       75   FAIL (w 21)
+  Hivekin: Boilback Bombardier       Artillery      45      46 ±  14       45   ok   (w 28)
+  FAIL the per-unit gate, classic, Bushtails vs Hivekin: 3 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -2.8 ± 91.0 points to the Serpents
+  Hivekin: Deepguard                 Elite         100      72 ±  14       70   FAIL (w 28)
+  Hivekin: Spinethrower Brood        Troops         75      75 ±  10       75   ok   (w 20)
+  Hivekin: Delver Swarm              Troops         90      88 ±  12       90   ok   (w 25)
+  Hivekin: Hopper Lancers            Fast           55      69 ±  10       70   ok   (w 20)
+  Hivekin: Boilback Bombardier       Artillery      45      55 ±  14       55   ok   (w 28)
+  FAIL the per-unit gate, classic, Serpents vs Hivekin: 1 unit(s) priced outside their band
+  the heroes' difference (the intercept): -4.2 ± 95.9 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      58 ±  48       60   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      66 ±  15       65   FAIL (w 29)
+  Hivekin: Spinethrower Brood        Troops         75      78 ±  10       80   ok   (w 21)
+  Hivekin: Delver Swarm              Troops         90      83 ±  13       85   ok   (w 26)
+  Hivekin: Hopper Lancers            Fast           55      66 ±  10       65   ok   (w 21)
+  Hivekin: Boilback Bombardier       Artillery      45      59 ±  14       60   ok   (w 28)
+  Windfolk: Skyseer Varra            Hero           60      62 ±  48       60   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      93 ±  14       90   ok   (w 28)
+  Windfolk: Longbill Pikes           Troops         65      65 ±  10       60   ok   (w 20)
+  Windfolk: Finch Flock              Troops         50      52 ±   9       50   ok   (w 18)
+  Windfolk: Kestrel Divers           Fast           50      51 ±  10       50   ok   (w 20)
+  Windfolk: Greatwing Roc            Monster       105     126 ±  16      125   ok   (w 32)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 1 unit(s) priced outside their band
+  FAIL classic score Bushtails vs Hivekin on classic: 44.7% ± 2.7 (N = 300, band 4)
+  FAIL classic score Bushtails vs Hivekin on fortified: 57.5% ± 2.7 (N = 300, band 4)
+  ok   classic score Serpents vs Hivekin on classic: 48.0% ± 2.7 (N = 300, band 4)
+  ok   classic score Serpents vs Hivekin on fortified: 51.7% ± 2.8 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 60.3% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 31.5% ± 2.6 (N = 300, band 4)
+h7: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=100 spinethrower.cost=75 delver.cost=90 delver.st.S=4 delver.melee.S=4 delver.pts=10 hopper.cost=55 boilback.cost=45 skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=50 kestrel.cost=50 roc.cost=105 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 hopper.st.T=4 hopper.st.Sv=4 hopper.st.OC=2 spinethrower.st.OC=3 delver.st.Sv=5 delver.st.A=2 hopper.st.A=3
+   classic: 857 by points; spent p10 455, median 480, 440-500
+--
+   classic: 679 by points; spent p10 460, median 485, 405-500
+  the race-level edge (the intercept; the heroes fitted): -106.3 ± 92.6 points to the Bushtails
+  Hivekin: Deepguard                 Elite         100      63 ±  14       65   FAIL (w 28)
+  Hivekin: Spinethrower Brood        Troops         75      64 ±  10       65   ok   (w 20)
+  Hivekin: Delver Swarm              Troops         90      53 ±  13       55   FAIL (w 25)
+  Hivekin: Hopper Lancers            Fast           55      77 ±  10       75   FAIL (w 19)
+  Hivekin: Boilback Bombardier       Artillery      45      46 ±  14       45   ok   (w 28)
+  FAIL the per-unit gate, classic, Bushtails vs Hivekin: 4 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -83.6 ± 83.3 points to the Serpents
+  Hivekin: Deepguard                 Elite         100      74 ±  12       75   FAIL (w 25)
+  Hivekin: Spinethrower Brood        Troops         75      68 ±   9       70   ok   (w 18)
+  Hivekin: Delver Swarm              Troops         90      60 ±  12       60   FAIL (w 24)
+  Hivekin: Hopper Lancers            Fast           55      58 ±   9       60   ok   (w 18)
+  Hivekin: Boilback Bombardier       Artillery      45      49 ±  13       50   ok   (w 25)
+  FAIL the per-unit gate, classic, Serpents vs Hivekin: 4 unit(s) priced outside their band
+  the heroes' difference (the intercept): 19.7 ± 114.3 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      70 ±  57       70   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite         100      59 ±  17       60   FAIL (w 35)
+  Hivekin: Spinethrower Brood        Troops         75      78 ±  12       80   ok   (w 24)
+  Hivekin: Delver Swarm              Troops         90      67 ±  16       65   ok   (w 31)
+  Hivekin: Hopper Lancers            Fast           55     100 ±  14      100   FAIL (w 27)
+  Hivekin: Boilback Bombardier       Artillery      45      41 ±  17       40   ok   (w 33)
+  Windfolk: Skyseer Varra            Hero           60      50 ±  57       50   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         105      79 ±  17       75   ok   (w 33)
+  Windfolk: Longbill Pikes           Troops         65      64 ±  12       65   ok   (w 23)
+  Windfolk: Finch Flock              Troops         50      61 ±  11       60   ok   (w 21)
+  Windfolk: Kestrel Divers           Fast           50      51 ±  12       50   ok   (w 23)
+  Windfolk: Greatwing Roc            Monster       105     138 ±  19      135   ok   (w 39)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 2 unit(s) priced outside their band
+  ok   classic score Bushtails vs Hivekin on classic: 50.8% ± 2.7 (N = 300, band 4)
+  FAIL classic score Bushtails vs Hivekin on fortified: 61.5% ± 2.7 (N = 300, band 4)
+  ok   classic score Serpents vs Hivekin on classic: 50.8% ± 2.7 (N = 300, band 4)
+  FAIL classic score Serpents vs Hivekin on fortified: 62.7% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 59.8% ± 2.7 (N = 300, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 31.2% ± 2.6 (N = 300, band 4)
+h8: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=80 deepguard.st.Sv=4 spinethrower.cost=75 spinethrower.st.OC=3 delver.cost=85 delver.st.S=4 delver.melee.S=4 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 delver.pts=10 hopper.cost=70 hopper.st.T=4 hopper.st.Sv=4 hopper.st.OC=2 boilback.cost=45 skyseer.cost=60 stormtalon.cost=110 longbill.cost=65 finch.cost=45 kestrel.cost=50 roc.cost=100 delver.st.M=4 deepguard.st.M=4
+   classic: 820 by points; spent p10 460, median 490, 435-500
+--
+   classic: 546 by points; spent p10 460, median 480, 435-500
+  the race-level edge (the intercept; the heroes fitted): -216.0 ± 131.8 points to the Bushtails
+  Hivekin: Deepguard                 Elite          80      50 ±  17       50   ok   (w 34)
+  Hivekin: Spinethrower Brood        Troops         75      55 ±  14       55   ok   (w 28)
+  Hivekin: Delver Swarm              Troops         85      43 ±  18       45   FAIL (w 35)
+  Hivekin: Hopper Lancers            Fast           70      55 ±  15       55   ok   (w 31)
+  Hivekin: Boilback Bombardier       Artillery      45      48 ±  23       50   ok   (w 45)
+  FAIL the per-unit gate, classic, Bushtails vs Hivekin: 1 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): -104.1 ± 105.2 points to the Serpents
+  Hivekin: Deepguard                 Elite          80      66 ±  14       65   ok   (w 28)
+  Hivekin: Spinethrower Brood        Troops         75      69 ±  12       70   ok   (w 24)
+  Hivekin: Delver Swarm              Troops         85      64 ±  14       65   ok   (w 28)
+  Hivekin: Hopper Lancers            Fast           70      84 ±  13       85   ok   (w 27)
+  Hivekin: Boilback Bombardier       Artillery      45      13 ±  21       15   ok   (w 42)
+  the heroes' difference (the intercept): -186.5 ± 109.0 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60     -33 ±  55        5   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite          80      86 ±  13       85   ok   (w 26)
+  Hivekin: Spinethrower Brood        Troops         75      93 ±  12       90   ok   (w 25)
+  Hivekin: Delver Swarm              Troops         85     105 ±  14      100   ok   (w 28)
+  Hivekin: Hopper Lancers            Fast           70     103 ±  15      100   FAIL (w 31)
+  Hivekin: Boilback Bombardier       Artillery      45      32 ±  18       30   ok   (w 37)
+  Windfolk: Skyseer Varra            Hero           60     153 ±  55      150   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         110      66 ±  17       65   FAIL (w 35)
+  Windfolk: Longbill Pikes           Troops         65      44 ±  11       45   ok   (w 23)
+  Windfolk: Finch Flock              Troops         45      44 ±  10       45   ok   (w 20)
+  Windfolk: Kestrel Divers           Fast           50      56 ±  11       55   ok   (w 23)
+  Windfolk: Greatwing Roc            Monster       100      98 ±  17       95   ok   (w 35)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 2 unit(s) priced outside their band
+  ok   classic score Bushtails vs Hivekin on classic: 47.9% ± 1.7 (N = 800, band 4)
+  FAIL classic score Bushtails vs Hivekin on fortified: 59.6% ± 1.7 (N = 800, band 4)
+  ok   classic score Serpents vs Hivekin on classic: 46.4% ± 1.7 (N = 800, band 4)
+  FAIL classic score Serpents vs Hivekin on fortified: 55.6% ± 1.7 (N = 800, band 4)
+  ok   classic score Hivekin vs Windfolk on classic: 53.1% ± 1.7 (N = 800, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 29.0% ± 1.5 (N = 800, band 4)
+h9: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=80 deepguard.st.Sv=4 spinethrower.cost=75 spinethrower.st.OC=3 delver.cost=85 delver.st.S=4 delver.melee.S=4 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 delver.pts=10 hopper.cost=70 hopper.st.T=4 hopper.st.Sv=4 hopper.st.OC=2 boilback.cost=45 skyseer.cost=60 stormtalon.cost=110 longbill.cost=65 finch.cost=45 kestrel.cost=50 roc.cost=100 delver.st.M=4 deepguard.st.M=4 hopper.st.A=3 spinethrower.ranged.range=18
+   classic: 820 by points; spent p10 460, median 490, 435-500
+--
+   classic: 546 by points; spent p10 460, median 480, 435-500
+  the race-level edge (the intercept; the heroes fitted): -231.7 ± 122.6 points to the Bushtails
+  Hivekin: Deepguard                 Elite          80      53 ±  16       55   ok   (w 31)
+  Hivekin: Spinethrower Brood        Troops         75      56 ±  13       55   ok   (w 26)
+  Hivekin: Delver Swarm              Troops         85      54 ±  16       55   ok   (w 32)
+  Hivekin: Hopper Lancers            Fast           70      38 ±  15       40   FAIL (w 29)
+  Hivekin: Boilback Bombardier       Artillery      45      40 ±  21       40   ok   (w 41)
+  FAIL the per-unit gate, classic, Bushtails vs Hivekin: 3 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): 124.1 ± 134.8 points to the Serpents
+  Hivekin: Deepguard                 Elite          80     104 ±  18      105   ok   (w 37)
+  Hivekin: Spinethrower Brood        Troops         75      93 ±  16       90   ok   (w 31)
+  Hivekin: Delver Swarm              Troops         85      93 ±  18       95   ok   (w 35)
+  Hivekin: Hopper Lancers            Fast           70      87 ±  17       85   ok   (w 34)
+  Hivekin: Boilback Bombardier       Artillery      45      23 ±  27       25   ok   (w 53)
+  the heroes' difference (the intercept): -54.9 ± 168.6 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60      33 ±  84       35   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite          80      48 ±  23       50   ok   (w 45)
+  Hivekin: Spinethrower Brood        Troops         75      95 ±  20       95   ok   (w 40)
+  Hivekin: Delver Swarm              Troops         85     102 ±  22      100   ok   (w 44)
+  Hivekin: Hopper Lancers            Fast           70      64 ±  23       65   ok   (w 46)
+  Hivekin: Boilback Bombardier       Artillery      45      29 ±  29       30   ok   (w 58)
+  Windfolk: Skyseer Varra            Hero           60      87 ±  84       85   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         110      84 ±  26       80   ok   (w 53)
+  Windfolk: Longbill Pikes           Troops         65      49 ±  18       45   ok   (w 36)
+  Windfolk: Finch Flock              Troops         45      47 ±  16       45   ok   (w 33)
+  Windfolk: Kestrel Divers           Fast           50      79 ±  20       80   ok   (w 39)
+  Windfolk: Greatwing Roc            Monster       100     123 ±  28      120   ok   (w 55)
+  FAIL classic score Bushtails vs Hivekin on classic: 40.4% ± 1.6 (N = 800, band 4)
+  ok   classic score Bushtails vs Hivekin on fortified: 53.6% ± 1.7 (N = 800, band 4)
+  FAIL classic score Serpents vs Hivekin on classic: 39.3% ± 1.6 (N = 800, band 4)
+  ok   classic score Serpents vs Hivekin on fortified: 52.8% ± 1.7 (N = 800, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 61.4% ± 1.7 (N = 800, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 35.6% ± 1.6 (N = 800, band 4)
+a8: hivemother.cost=60 hivemother.spell0.S=5 hivemother.spell0.AP=2 deepguard.cost=80 deepguard.st.Sv=4 spinethrower.cost=75 spinethrower.st.OC=3 delver.cost=85 delver.st.S=4 delver.melee.S=4 delver.st.A=3 delver.st.Sv=4 delver.st.W=2 delver.pts=10 hopper.cost=70 hopper.st.T=4 hopper.st.Sv=4 hopper.st.OC=2 boilback.cost=45 skyseer.cost=60 stormtalon.cost=110 longbill.cost=65 finch.cost=45 kestrel.cost=50 roc.cost=100 stormtalon.fly=walk finch.fly=walk
+   classic: 820 by points; spent p10 460, median 490, 435-500
+--
+   classic: 546 by points; spent p10 460, median 480, 435-500
+  the race-level edge (the intercept; the heroes fitted): 22.8 ± 123.7 points to the Bushtails
+  Windfolk: Stormtalon Guard         Elite         110     125 ±  20      125   ok   (w 39)
+  Windfolk: Longbill Pikes           Troops         65      64 ±  12       65   ok   (w 24)
+  Windfolk: Finch Flock              Troops         45      44 ±  10       45   ok   (w 20)
+  Windfolk: Kestrel Divers           Fast           50      49 ±  12       50   ok   (w 24)
+  Windfolk: Greatwing Roc            Monster       100     113 ±  21      115   ok   (w 42)
+  FAIL the per-unit gate, classic, Bushtails vs Windfolk: 2 unit(s) priced outside their band
+  the race-level edge (the intercept; the heroes fitted): 12.5 ± 122.0 points to the Serpents
+  Windfolk: Stormtalon Guard         Elite         110     105 ±  19      105   ok   (w 39)
+  Windfolk: Longbill Pikes           Troops         65      60 ±  13       60   ok   (w 25)
+  Windfolk: Finch Flock              Troops         45      46 ±  11       45   ok   (w 22)
+  Windfolk: Kestrel Divers           Fast           50      69 ±  11       70   ok   (w 23)
+  Windfolk: Greatwing Roc            Monster       100      94 ±  21       95   ok   (w 42)
+  the heroes' difference (the intercept): -178.0 ± 99.5 points to the Hivekin
+  Hivekin: Hivemother Kesh           Hero           60     -29 ±  50        5   exempt (its count never varies: the intercept)
+  Hivekin: Deepguard                 Elite          80      83 ±  12       80   ok   (w 23)
+  Hivekin: Spinethrower Brood        Troops         75      93 ±  11       90   ok   (w 23)
+  Hivekin: Delver Swarm              Troops         85     108 ±  13      105   ok   (w 26)
+  Hivekin: Hopper Lancers            Fast           70      67 ±  13       60   ok   (w 26)
+  Hivekin: Boilback Bombardier       Artillery      45      77 ±  17       70   ok   (w 34)
+  Windfolk: Skyseer Varra            Hero           60     149 ±  50      150   exempt (its count never varies: the intercept)
+  Windfolk: Stormtalon Guard         Elite         110      71 ±  16       70   FAIL (w 32)
+  Windfolk: Longbill Pikes           Troops         65      48 ±  10       50   ok   (w 21)
+  Windfolk: Finch Flock              Troops         45      38 ±   9       40   ok   (w 19)
+  Windfolk: Kestrel Divers           Fast           50      42 ±  10       40   ok   (w 20)
+  Windfolk: Greatwing Roc            Monster       100      98 ±  16      100   ok   (w 31)
+  FAIL the per-unit gate, classic, Hivekin vs Windfolk: 1 unit(s) priced outside their band
+  ok   classic score Bushtails vs Windfolk on classic: 46.3% ± 1.7 (N = 800, band 4)
+  FAIL classic score Bushtails vs Windfolk on fortified: 26.6% ± 1.5 (N = 800, band 4)
+  FAIL classic score Serpents vs Windfolk on classic: 61.5% ± 1.7 (N = 800, band 4)
+  FAIL classic score Serpents vs Windfolk on fortified: 34.5% ± 1.6 (N = 800, band 4)
+  FAIL classic score Hivekin vs Windfolk on classic: 63.6% ± 1.6 (N = 800, band 4)
+  FAIL classic score Hivekin vs Windfolk on fortified: 34.4% ± 1.6 (N = 800, band 4)

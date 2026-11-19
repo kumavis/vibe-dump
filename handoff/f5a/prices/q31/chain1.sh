@@ -1,0 +1,2 @@
+./r.sh fin-1111 node sim/army-sim.mjs --check --mission classic --seed 1111 --jobs 2 --dir /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/f5a/prices/q31/fin/packages/tails-and-scales
+./r.sh fin-5555 node sim/army-sim.mjs --check --mission classic --seed 5555 --jobs 2 --dir /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/f5a/prices/q31/fin/packages/tails-and-scales

@@ -1,0 +1,12 @@
+diff -ru a/data/races/insect.js b/data/races/insect.js
+--- a/data/races/insect.js	2026-11-19 07:32:46.596968634 +0000
++++ b/data/races/insect.js	2026-11-19 08:53:40.934220490 +0000
+@@ -38,7 +38,7 @@
+       // (F5a, fitted: 73 ± 3 against the Bushtails, 73 ± 3 against the
+       // Serpents, so 75 (band 15), the Windfolk 84 ± 3; judged 70 ± 5, 74 ± 5
+       // and 88 ± 5 on 1111, 82 ± 6, 78 ± 5 and 75 ± 5 on 5555, in band each)
+-      name: 'Spinethrower Brood', short: 'Spinethrowers', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 8, cost: 75,
++      name: 'Spinethrower Brood', short: 'Spinethrowers', role: 'Troops', ai: 'line', models: 6, base: 0.3, pts: 8, cost: 75,
+       // (Q31) OC 2 -> 3: a climber that holds the works' objectives the burrowers can't reach (the balance's probes)
+       stats: 'M6 WS4 BS4 S3 T3 W1 A1 Ld6 Sv5 OC3',
+       ranged: { name: 'Spine volleys', range: 15, shots: 2, S: 3, AP: 1, D: 1, fx: 'sting' },

@@ -1,0 +1,40 @@
+boundaries EXIT 0 0s load 0.29-0.29 cpus=2 node sim/boundaries.mjs
+boundaries-st EXIT 0 20s load 0.29-0.49 cpus=2 node sim/boundaries.mjs --self-test
+flag-lint EXIT 0 0s load 0.49-0.49 cpus=2 node sim/flag-lint.mjs
+flag-lint-st EXIT 0 0s load 0.49-0.49 cpus=2 node sim/flag-lint.mjs --self-test
+data-check EXIT 0 7s load 0.45-0.61 cpus=2 node sim/data-check.mjs
+self-test EXIT 0 24s load 0.31-0.64 cpus=2 node sim/self-test.mjs
+present-check EXIT 1 265s load 0.64-6.79 cpus=2 node sim/present-check.mjs
+present-check-st EXIT 1 378s load 6.79-8.33 cpus=2 node sim/present-check.mjs --self-test --mutations no-advance-roll,no-charge-result,no-charge-face,no-charge-failed,no-move,walk-speed
+property EXIT 1 774s load 8.33-7.33 cpus=2 node sim/property.mjs
+property-anchors EXIT 1 99s load 7.33-7.15 cpus=2 node sim/property.mjs --self-test --mutations ward-anywhere,board-any-base
+wording-proof EXIT 0 51s load 5.80-5.97 cpus=2 node sim/wording-proof.mjs
+fog-check EXIT 0 6s load 5.36-5.33 cpus=2 node sim/fog-check.mjs
+macro-check EXIT 0 47s load 5.33-4.43 cpus=2 node sim/macro-check.mjs
+pilot-check EXIT 0 34s load 4.43-4.24 cpus=2 node sim/pilot-check.mjs
+parity-pre EXIT 1 122s load 4.24-4.83 cpus=2 node sim/parity.mjs
+data-check-2 EXIT 0 8s load 3.78-3.81 cpus=2 node sim/data-check.mjs
+boundaries-2 EXIT 0 1s load 3.81-3.81 cpus=2 node sim/boundaries.mjs
+boundaries-st-2 EXIT 0 21s load 3.81-3.65 cpus=2 node sim/boundaries.mjs --self-test
+flag-lint-2 EXIT 0 0s load 3.65-3.65 cpus=2 node sim/flag-lint.mjs
+parity-record EXIT 0 55s load 3.14-5.49 cpus=2 node sim/parity.mjs --record
+parity EXIT 0 55s load 4.71-5.89 cpus=2 node sim/parity.mjs
+parity-pin EXIT 0 52s load 5.89-6.90 cpus=2 node sim/parity.mjs --pin
+--- after commit 2 (45723864)
+data-check-3 EXIT 0 9s load 4.68-4.65 cpus=2 node sim/data-check.mjs
+self-test-3 EXIT 0 26s load 4.65-4.43 cpus=2 node sim/self-test.mjs
+present-check-3 EXIT 0 330s load 4.43-7.08 cpus=2 node sim/present-check.mjs
+present-check-st-3 EXIT 0 1989s load 7.08-6.46 cpus=2 node sim/present-check.mjs --self-test --mutations no-advance-roll,no-charge-result,no-charge-face,no-charge-failed,no-move,walk-speed
+property-3 EXIT 1 869s load 6.46-6.84 cpus=2 node sim/property.mjs
+property-anchors-3 EXIT 1 119s load 6.84-6.90 cpus=2 node sim/property.mjs --self-test --mutations ward-anywhere,board-any-base
+replay-check-3 EXIT 0 218s load 6.90-6.32 cpus=2 node sim/replay-check.mjs
+merge-sim-3 EXIT 0 443s load 6.32-7.43 cpus=2 node sim/merge-sim.mjs
+mutation-3 EXIT 0 463s load 7.43-8.12 cpus=2 node sim/mutation.mjs
+mutation-core-3 EXIT 0 106s load 8.12-7.70 cpus=2 node sim/mutation.mjs --core
+parity-page-3 EXIT 0 258s load 7.70-6.82 cpus=2 node sim/parity.mjs --page
+QDONE
+property-4 EXIT 0 1027s load 5.90-6.92 cpus=2 node sim/property.mjs
+property-anchors-4 EXIT 0 250s load 6.92-8.35 cpus=2 node sim/property.mjs --self-test --mutations ward-anywhere,board-any-base
+QDONE
+parity-browser EXIT 0 2105s load 6.22-6.17 [chromium] cpus=2 node sim/parity.mjs --browser
+input-check EXIT 1 3587s load 6.17-6.55 [chromium] cpus=2 node sim/input-check.mjs

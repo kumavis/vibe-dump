@@ -1,0 +1,26 @@
+diff -ru a/data/mission.js b/data/mission.js
+--- a/data/mission.js	2026-11-19 10:20:55.959447674 +0000
++++ b/data/mission.js	2026-11-19 10:20:55.980100892 +0000
+@@ -89,6 +89,10 @@
+       prices: {
+         squirrel: { elder: 75, oakguard: 115, nutkin: 70, grenadier: 45, glider: 60, trebuchet: 55 },
+         serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 45 },
++        // (F5a phase 3) the Aerie's fliers at about 1.2x their Skirmish cost (their pace is worth more on a larger
++        // table), and the Hive's Boilback and Hoppers at what the Field fit found them worth
++        bird: { skyseer: 85, stormtalon: 100, finch: 55, kestrel: 60, roc: 140 },
++        insect: { boilback: 20, hopper: 70 },
+       },
+     },
+     // (F7a) and `fortified`, as every mission's
+diff -ru a/data/races/bird.js b/data/races/bird.js
+--- a/data/races/bird.js	2026-11-19 10:20:55.959531816 +0000
++++ b/data/races/bird.js	2026-11-19 10:20:55.980322929 +0000
+@@ -31,7 +31,7 @@
+   // the presets of the larger battles, as counts in roster order: the
+   // classic list twice over for a Field battle, three times for a Grand one
+   // (data/mission.js names them; sim/data-check.mjs holds each legal there)
+-  armies: { field: '224222', grand: '336333' },
++  armies: { field: '213222', grand: '336333' }, // (F5a phase 3) one Stormtalon Guard and three Longbills at Field: 975 at its prices
+   units: {
+     longbill: {
+       // (F5a, fitted: 65 ± 3 against the Bushtails, 66 ± 3 against the

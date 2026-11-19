@@ -1,0 +1,72 @@
+diff -ru a/core/actions/charge.js b/core/actions/charge.js
+--- a/core/actions/charge.js	2026-11-19 07:32:46.591953087 +0000
++++ b/core/actions/charge.js	2026-11-19 08:53:40.941763177 +0000
+@@ -22,6 +22,7 @@
+ // R6b). The AI's charge takes the same `charge` handler inside the fold,
+ // where declareCharge finishes it the shortest way, opening no decision.
+ import { CHARGE_RANGE, ENGAGE, roll } from '../rules.js'
++import { STEP as STEP_B } from '../nav.js'
+ import { hypot } from '../dmath.js'
+ import { emit, log } from '../journal.js'
+ import { refreshNav } from '../match.js'
+@@ -94,6 +95,7 @@
+     }
+     if (nav.hasHeight && Math.abs(nav.floor[i] - ty) > HIGH) continue
+     if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', forbid)) continue
++    if (mode === 'burrow' && nav.hasHeight && nav.floor[i] > STEP_B) continue
+     if (nav.hasHeight) {
+       if (others.some((e, k) => (e.t.fp ? clearOf(e, nav.x(i), nav.z(i), u.r) < ENGAGE : hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE) && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue
+     } else if (others.some((e) => (e.t.fp ? clearOf(e, nav.x(i), nav.z(i), u.r) < ENGAGE : hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE))) continue
+diff -ru a/core/actions/move.js b/core/actions/move.js
+--- a/core/actions/move.js	2026-11-19 07:32:46.592131123 +0000
++++ b/core/actions/move.js	2026-11-19 08:53:40.941598364 +0000
+@@ -96,7 +96,7 @@
+   // (F9a) a ground vehicle never enters a cell whose floor is above STEP:
+   // the reach, the path's shortcuts (nav.walkable reads the mask) and the
+   // end (standable) all keep it on the ground
+-  if (groundOnly(u)) for (let i = 0; i < nav.N; i++) if (nav.floor[i] > STEP) f[i] = 1
++  if (groundOnly(u) && u.t.move !== 'burrow') for (let i = 0; i < nav.N; i++) if (nav.floor[i] > STEP) f[i] = 1
+   for (const e of enemiesOf(G, u)) {
+     if (e.t.fp) {
+       forbidDiscs(nav, f, e, r + (onlyBodies.includes(e) ? 0.02 : pad), groundY(G, e))
+@@ -232,6 +232,7 @@
+   const nav = G.nav
+   if (i < 0 || !isFinite(res.dist[i])) return false
+   if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) return false
++  if (mode === 'burrow' && nav.hasHeight && nav.floor[i] > STEP) return false
+   const x = nav.x(i), z = nav.z(i)
+   for (const o of G.units) {
+     if (o === u || !alive(o) || o.aboard) continue
+diff -ru a/core/nav.js b/core/nav.js
+--- a/core/nav.js	2026-11-19 07:32:46.592860430 +0000
++++ b/core/nav.js	2026-11-19 08:53:40.942130595 +0000
+@@ -630,6 +630,7 @@
+     const clMode = mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'all'
+     const burrow = mode === 'burrow'
+     const climbs = climb && !burrow   // (Q4 makes climb false for it anyway)
++    // (h2) a burrower tunnels under a deck's body: no floor or ledge test on the way (its end keeps to the ground)
+     // a unit that starts somewhere cramped may wriggle out through its own
+     // footprint, as on the flat; a ledge squeezes it as an obstacle does (it
+     // still never steps more than STEP up or down)
+@@ -652,9 +653,8 @@
+           if (jx < 0 || jz < 0 || jx >= nx || jz >= nz) continue
+           const j = jz * nx + jx
+           if (forbid && forbid[j]) continue
+-          if (Math.abs(floor[j] - fi) > STEP) continue
+-          if (burrow && floor[j] > STEP) continue   // a deck's footprint is hard (D:2926)
+-          const cl = this.clearance(j, clMode), cf = cliff[j]
++          if (!burrow && Math.abs(floor[j] - fi) > STEP) continue
++          const cl = this.clearance(j, clMode), cf = burrow ? Infinity : cliff[j]
+           if ((cl < r - 0.06 || cf < r - 0.06) && !(escape && cl > 0.05 && cf > 0.05 && hypot(this.x(j) - sx, this.z(j) - sz) < escape)) continue
+           let mul = burrow ? 1 : this.diff[j] ? 2 : 1
+           if (mode === 'wreck' && this.clearAll[j] < r - 0.06) mul = 2
+@@ -727,8 +727,7 @@
+       if (i < 0) return false
+       if (forbid && forbid[i]) return false
+       if (this.clearance(i, mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'all') < r - 0.06) return false
+-      if (this.cliff[i] < r - 0.06 || Math.abs(this.floor[i] - f) > STEP) return false
+-      if (mode === 'burrow' && this.floor[i] > STEP) return false
++      if (mode !== 'burrow' && (this.cliff[i] < r - 0.06 || Math.abs(this.floor[i] - f) > STEP)) return false
+       f = this.floor[i]
+       if (mode !== 'burrow' && this.diff[i] !== d0) return false
+       if (mode === 'wreck' && this.clearAll[i] < r - 0.06) return false

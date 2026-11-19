@@ -1,0 +1,116 @@
+{
+ "classic": {
+  "classic": {
+   "insect": {
+    "hivemother": 60,
+    "deepguard": 75,
+    "spinethrower": 70,
+    "delver": 95,
+    "hopper": 75,
+    "boilback": 50
+   },
+   "bird": {
+    "skyseer": 65,
+    "stormtalon": 80,
+    "longbill": 65,
+    "finch": 45,
+    "kestrel": 50,
+    "roc": 110
+   }
+  },
+  "fortified": {
+   "insect": {
+    "hivemother": 60,
+    "deepguard": 75,
+    "spinethrower": 70,
+    "delver": 95,
+    "hopper": 75,
+    "boilback": 50
+   },
+   "bird": {
+    "skyseer": 75,
+    "stormtalon": 95,
+    "longbill": 65,
+    "finch": 50,
+    "kestrel": 55,
+    "roc": 125
+   }
+  }
+ },
+ "field": {
+  "open": {
+   "insect": {
+    "hivemother": 65,
+    "deepguard": 80,
+    "spinethrower": 75,
+    "delver": 100,
+    "hopper": 75,
+    "boilback": 20
+   },
+   "bird": {
+    "skyseer": 75,
+    "stormtalon": 90,
+    "longbill": 65,
+    "finch": 50,
+    "kestrel": 55,
+    "roc": 125
+   }
+  },
+  "fortified": {
+   "insect": {
+    "hivemother": 60,
+    "deepguard": 75,
+    "spinethrower": 70,
+    "delver": 95,
+    "hopper": 70,
+    "boilback": 20
+   },
+   "bird": {
+    "skyseer": 85,
+    "stormtalon": 105,
+    "longbill": 65,
+    "finch": 55,
+    "kestrel": 60,
+    "roc": 140
+   }
+  }
+ },
+ "grand": {
+  "open": {
+   "insect": {
+    "hivemother": 70,
+    "deepguard": 85,
+    "spinethrower": 80,
+    "delver": 110,
+    "hopper": 80,
+    "boilback": 25
+   },
+   "bird": {
+    "skyseer": 140,
+    "stormtalon": 175,
+    "longbill": 65,
+    "finch": 90,
+    "kestrel": 100,
+    "roc": 235
+   }
+  },
+  "fortified": {
+   "insect": {
+    "hivemother": 65,
+    "deepguard": 80,
+    "spinethrower": 75,
+    "delver": 100,
+    "hopper": 75,
+    "boilback": 20
+   },
+   "bird": {
+    "skyseer": 125,
+    "stormtalon": 155,
+    "longbill": 65,
+    "finch": 80,
+    "kestrel": 90,
+    "roc": 210
+   }
+  }
+ }
+}

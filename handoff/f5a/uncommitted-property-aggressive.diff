@@ -1,0 +1,18 @@
+diff --git a/packages/tails-and-scales/sim/property.mjs b/packages/tails-and-scales/sim/property.mjs
+index 7e7d9be1..00eb9a5d 100644
+--- a/packages/tails-and-scales/sim/property.mjs
++++ b/packages/tails-and-scales/sim/property.mjs
+@@ -1108,7 +1108,12 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
+   const f5 = !lists && seed % 4 === 3 && seed >= 12 && races.includes('insect') && races.includes('bird')
+   const mix = lists ? MIXES[1 + (seed % 3)] : seed < 4 ? MIXES[seed] : pick(MIXES)
+   const ctrl = f5 ? MIXES[3] : mix
+-  const aggressive = seed % 2 === 0
++  // ((F5a's sweep) the Hive-against-Aerie hotseats aggressive too: their
++  // seeds are odd, so they had played at random, and a caster's spell at an
++  // enemy is then one pick among every legal command (the default run's
++  // Hivemother cast Upwelling in none of them once Q31's balance played the
++  // games otherwise); its draws are rand()'s, as a plain game's)
++  const aggressive = f5 || seed % 2 === 0
+   const r = rand()
+   const setup = {
+     board: 1 + Math.floor(rand() * 1e6), dice: 1 + Math.floor(rand() * 1e9),

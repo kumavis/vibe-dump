@@ -1,0 +1,190 @@
+sim/_probe-rm.mjs:305: if (W !== (missionOf(i) === 'grand' ? 80 : 40)) throw new Error(`battle ${i} (${missionOf(i)}) was fought on a table ${W}" wide`)
+sim/bake-check.mjs:497: console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${style.padEnd(7)} ${key.padEnd(7)} riders stand at ${at.toFixed(2)} + ${typeof deck === 'number' ? deck.toFixed(2) : deck} = ${y.toFixed(3)}", deckY ${want}" (${(y - want).toFixed(3)})${at === lift ? '' : `; th
+sim/boundaries.mjs:459: for (const a of ALLOW) if (/^(core|data)\//.test(a[0]) && used.get(a) !== a[2]) say(a[0], 0, `flag-lint's allow entry "${a[1]}" matches ${used.get(a)} line(s), not ${a[2]}`)
+sim/camera-check.mjs:349: check(near === 45 && far === 46 && d >= near - 1e-9 && d <= far + 1e-9 && (d >= far - 1e-9 || (middle && seen(p, aspect, half, 1 + 1e-9))), `(F8b) behind(${edge}) on a ${bw}×${bh} board, aspect ${aspect.toFixed(2)}: ${d.toFixed(1)}" away, in 45-46, 
+sim/camera-check.mjs:363: check(panSpeed(0) === 18 && panSpeed(30) === 18 && panSpeed(50) === 18 && panSpeed(100) === 36 && panSpeed(75) === 27, '(F8b) the keys pan 18"/s up to 50" away, then 18 · d/50', [0, 30, 50, 75, 100].map(panSpeed).join(', '))
+sim/data-check.mjs:324: const legacySays = (src, text, what) => check(src.includes(text), `the R0 code says ${what}`, `"${text}" not found: sim/lib.mjs's LEGACY_REF must name the R0 commit`)
+sim/data-check.mjs:769: if (p.shape.y - p.shape.hy !== d.surface.y || 2 * p.shape.hy !== 0.7 || !p.coverShape) bad.push(`seed ${seed}: a parapet not 0.7" tall on its deck's top with a cover band`)
+sim/data-check.mjs:814: if (p.navKind !== null || p.los !== 'block' || p.shape.hx !== 0.2 || p.shape.hz !== 0.2) bad.push(`seed ${seed}: post ${k + 1} not the piece table's (navKind ${p.navKind}, los ${p.los}, ${2 * p.shape.hx}×${2 * p.shape.hz}")`)
+sim/data-check.mjs:815: if (by[0] && (2 * p.shape.hy !== by[0].surface.y || !inside(by[0], p))) bad.push(`seed ${seed}: post ${k + 1} not under its deck, its height (${2 * p.shape.hy}" against ${by[0].surface.y}")`)
+sim/data-check.mjs:1510: check(!!want && isDeepStrictEqual(got, want), `the ${name} mission is the ${want?.size ?? '?'} of §4.2.3 (${want ? `${want.W}×${want.H}, zones ${want.deploy}", ${want.rounds} rounds, ${want.points} points, ${want.objectives} objectives` : 'no size'
+sim/data-check.mjs:1544: check(hazardError(K) === null, `checkHazard passes the keg (hp ${K.hp}, S${K.S} AP${K.AP} D${K.D}, blast ${K.blast}", scenery ${K.scenery})`, hazardError(K))
+sim/data-check.mjs:1567: for (const [what, edit] of [['hp (2 → 3)', (h) => (h.hp = 3)], ['S (5 → 6)', (h) => (h.S = 6)], ['AP (1 → 2)', (h) => (h.AP = 2)], ['D (2 → 1)', (h) => (h.D = 1)], ['blast (3" → 3.5")', (h) => (h.blast = 3.5)], ['scenery damage (4 → 3)', 
+sim/data-check.mjs:1579: check(typeof CENTRES.keg === 'function' && KEG_R === 1, `the keg is a centre piece, keeping the features ${KEG_R}" off`)
+sim/data-check.mjs:1597: check(M.objectives.length === 4 && M.objectives.every((o) => Math.hypot(o.x, o.z) === 2.5 && o.x !== 0 && o.z !== 0), 'its four objectives each 2.5" from the keg exactly, off the axes, none at the keg', JSON.stringify(M.objectives))
+sim/hud-check.mjs:234: else if (m[3] !== want || +m[1] < +m[3] || +m[1] > +m[2]) no(`the climbing breakdown "${m[0]}": the climb costs ${want}" (twice the ladder's ${c.h}"), within the inches spent`)
+sim/hud-check.mjs:249: if (/climbing|a ledge/.test(tm.text)) no(`the deck's middle reads "${tm.text}"`)
+sim/hud-check.mjs:291: else if (!t.text.includes('Visible · target behind a parapet (cover)')) no(`seat ${seat}'s unit ${shot.s} on the ground hovering unit ${shot.e} behind a parapet: the tooltip reads "${t.text}"`)
+sim/hud-check.mjs:292: else if (shot.range && !/· cover ·|· cover$/m.test(t.text)) no(`the odds don't say cover: "${t.text}"`)
+sim/hud-check.mjs:295: else rows.push(`unit ${shot.s} on the ground at unit ${shot.e} on a deck: "${t.text.split('\n').find((l) => l.includes('parapet'))}", the ray amber, ${b.n} beams`)
+sim/hud-check.mjs:312: if (!head || !th.text.includes('Blocked') || th.los !== 'blocked' || bh.color !== '#ff5a4a') no(`unit ${hid.id}, unseen: the tooltip reads "${th.text}" (${th.los}), the ray ${bh.n} beams in ${bh.color}: ${hid.indirect ? '"unseen (indirect −1)"' : '
+sim/hud-check.mjs:313: else rows.push(`unit ${hid.id}, unseen: "${th.text.split('\n').find((l) => l.startsWith('Blocked'))}", the ray red`)
+sim/hud-check.mjs:578: if (want.win < 0 ? got.over.title !== 'A bloody draw' : !got.over.title.endsWith(' win!')) bad.push(`the end screen's title "${got.over.title}"`)
+sim/hud-check.mjs:579: if (!got.over.why.endsWith(want.line)) bad.push(`the end screen says "${got.over.why}", not "… ${want.line}"`)
+sim/hud-check.mjs:586: else if (got.over.title !== `Round ${want.round} is over`) bad.push(`the vote panel's title "${got.over.title}", not "Round ${want.round} is over"`)
+sim/hud-check.mjs:591: if (!got.end.show || !got.end.enabled || got.end.text !== 'Begin battle ▸') bad.push(`End ${got.end.show ? `"${got.end.text}"${got.end.enabled ? '' : ', disabled'}` : 'down'}, not "Begin battle ▸"`)
+sim/hud-check.mjs:593: if (!got.hint.startsWith('Deployment')) bad.push(`the hint "${got.hint}"`)
+sim/hud-check.mjs:599: if (!got.hint.startsWith(`Charge! Rolled ${want.rolled}"`)) bad.push(`the hint "${got.hint}"`)
+sim/hud-check.mjs:603: if (!got.end.show || !got.end.enabled || got.end.text !== `End ${want.phase} ▸`) bad.push(`End ${got.end.show ? `"${got.end.text}"${got.end.enabled ? '' : ', disabled'}` : 'down'}, not "End ${want.phase} ▸"`)
+sim/hud-check.mjs:630: const brief = (s) => `${s.what} (trace line ${s.at}: ${s.what === 'past the end' ? `"${s.got.over.title}", "${s.got.over.why}"` : s.what === 'at the round limit' ? `"${s.got.over.title}"` : s.what.endsWith("at a charge's end") ? `Shortest move, "${s.
+sim/input-check.mjs:481: if (dbl && !/selected/.test(cardLine)) fail(`the card shows no group line with ${dbl.length} picked ("${cardLine}")`)
+sim/input-check.mjs:704: if (!/\+D6 each/.test((await bar()).summary)) fail(`the +D6 pin's summary: "${(await bar()).summary}"`)
+sim/input-check.mjs:776: if (s.key !== String(k + 1) || s.name !== caster.names[k] || !s.small?.startsWith(`${caster.casts[k]}+ · `) || !s.small.endsWith(` · ${caster.ranges[k]}"`) || !s.line) fail(`spell ${k + 1} on the bar reads ${JSON.stringify(s)}, not key ${k + 1}, ${
+sim/input-check.mjs:795: if (!hint.includes(caster.names[caster.ally])) fail(`with ${caster.names[caster.ally]} picked the hint reads "${hint}"`)
+sim/input-check.mjs:805: if (!lines.includes(caster.names[caster.ally])) fail(`the cast wrote "${lines}", which doesn't name ${caster.names[caster.ally]}`)
+sim/input-check.mjs:807: say(`${caster.names[caster.ally]} cast on the caster itself by a click on it: "${lines.replace(/<[^>]+>/g, '')}"; the bar gone`)
+sim/input-check.mjs:950: if (!plan.actors.length || !hud.end.endsWith(`· ⟳ ${plan.actors.length}`) || hud.go !== `▶ Go (${plan.actors.length})`) fail(`End reads "${hud.end}" and Go "${hud.go}", the orders act for ${plan.actors.length}`)
+sim/input-check.mjs:951: if (hud.orders !== 'Orders 3') fail(`the counter reads "${hud.orders}", three units hold orders`)
+sim/input-check.mjs:1029: if (tip !== g1.note) fail(`the tooltip reads "${tip}", the plan's summary "${g1.note}"`)
+sim/input-check.mjs:1247: if (want && !want.test(tip)) fail(`the pointer back at (${Math.round(q.x)}, ${Math.round(q.y)}) reads "${tip}": the camera moved since`)
+sim/input-check.mjs:1324: if (!/Board War-Cart/.test(tip)) fail(`hovering the badged cart in the deployment says "${tip}", not "Board War-Cart"`)
+sim/input-check.mjs:1433: if (!/^⤒ Board War-Cart · \d+\.\d" of \d+"$/.test(tip)) fail(`hovering the cart with unit ${board.u} picked up says "${tip}", not "⤒ Board War-Cart · 4.2" of 7""`)
+sim/input-check.mjs:1487: if (!/riders ride along/.test(tip)) fail(`the group Move's hover with cart ${loaded} and its riders says "${tip}"`)
+sim/input-check.mjs:1745: if (/facing/.test(tipAfter)) fail(`${label}: after ${verb === 'place' ? 'Enter' : 'the flag'} sent Howdah ${hulls[0]}, the tooltip still reads "${tipAfter}"`)
+sim/input-check.mjs:1893: if (!/" of /.test(seen.tip)) fail(`a long press's aim showed the tooltip "${seen.tip}", not the move's inches`)
+sim/input-check.mjs:2024: if (!/as far as it goes/.test(seen.tip)) fail(`${how}: beyond its reach the tooltip read "${seen.tip}"`)
+sim/input-check.mjs:2154: if (!seen.tip || /^✖/.test(seen.tip)) fail(`a long press on enemy unit ${tg} showed "${seen.tip}", not the shot's odds`)
+sim/input-check.mjs:2251: if (!text.includes(c.title) || sentences < 1 || sentences > 2 || text.length > 300) fail(`condition ${k}'s tip for ${t ? t.name : 'no type'} reads "${text}": its title, then one or two sentences`)
+sim/input-check.mjs:2419: if (!t.shown || !(await textOf(t.html)).startsWith(line.split('\n')[0].slice(0, 20)) || !(await textOf(t.html)).includes('Mesmerized')) fail(`a hover over ${U.name}'s figure shows "${await textOf(t.html)}", not its line and its conditions told`)
+sim/input-check.mjs:2823: if (!/^From the War-Cart's deck \(2 of 2 slots left\)/.test(hint)) fail(`unit ${rider} picked up on its deck, the hint reads "${hint}"`)
+sim/input-check.mjs:2837: const want = `${tg.range.toFixed(1)}" / ${tg.reach === Math.round(tg.reach) ? tg.reach : tg.reach.toFixed(1)}"`
+sim/input-check.mjs:2838: if (!tip.includes(want) || !tip.includes(`hit ${tg.need}+`) || !tip.includes("From the War-Cart's deck")) fail(`hovering unit ${tg.id} with unit ${rider} picked up reads "${tip}": not the rules' ${want}, hit ${tg.need}+, from the War-Cart's deck`)
+sim/input-check.mjs:2895: say(`deck: unit ${rider}'s chip picked it up ("${hint.slice(0, 40)}…"), its range ring round the War-Cart (${hull.r} + ${tg.reach}"), the tooltip the rules' ${want}, hit ${tg.need}+, "From the War-Cart's deck", ${beams.length} rays from the deck's 
+sim/input-check.mjs:2909: if (!/Aboard the War-Cart · steps off as its move · shoots from its deck/.test(rideLine)) fail(`unit ${found.b[0]}'s card, a rider, reads "${rideLine}": not "Aboard the War-Cart · steps off as its move · shoots from its deck"`)
+sim/input-check.mjs:2927: if (!/pick up the vehicle, R, then click an enemy/.test(rules.row) || !/shoot from its deck/.test(rules.para) || !/see over walls/.test(rules.para)) fail(`the rules screen's "Fire from a deck" row reads "${rules.row.slice(0, 80)}" and its fire deck p
+sim/input-check.mjs:2950: if (!/2 of 3 fire/.test(gtip)) fail(`the riders' group hovering unit ${tgB.id} reads "${gtip}", not "2 of 3 fire"`)
+sim/input-check.mjs:2960: if (!/the War-Cart's deck has fired 2 of its 2/.test(why ?? '')) fail(`the third rider, unit ${third}, refused with "${why}", not the deck's slots`)
+sim/input-check.mjs:3080: const want = `${tg.range.toFixed(1)}" / ${tg.reach === Math.round(tg.reach) ? tg.reach : tg.reach.toFixed(1)}"`
+sim/input-check.mjs:3081: if (!tip.includes(want) || !tip.includes(`hit ${tg.need}+`) || !tip.includes("From the Howdah's deck")) fail(`hovering unit ${tg.id} reads "${tip}": not the rules' ${want}, hit ${tg.need}+, from the Howdah's deck`)
+sim/lobby-rig.mjs:265: await until(guest, () => document.querySelector('.seat[data-seat="1"] button.primary')?.textContent === 'Sit here', null, 30000, "the guest's page offers seat 2")
+sim/lobby-rig.mjs:271: await until(page, (t) => [...document.querySelectorAll('.seat.mine button')].some((b) => b.textContent === t), label, 30000, `the "${label}" button`)
+sim/lobby-rig.mjs:493: await until(guest, (t) => document.querySelector('.seat[data-seat="0"] .armyState')?.textContent === t, want, 20000, `the guest's page showing "${want}"`)
+sim/lobby-rig.mjs:507: return `the guest saw "${want}" and no digit or unit name of ${mine.text} (looked for ${names.join(', ')}; on the page before the list existed: ${shown.join(', ') || 'none'}); the start fielded it on both pages`
+sim/lobby-rig.mjs:528: must(why.startsWith('The start changed your seat (army)') && seats === 0, `the guest's page, its list swapped by the host: "${why}", ${seats} seats played`)
+sim/lobby-rig.mjs:538: await until(host, () => [...document.querySelectorAll('.seat[data-seat="1"] button')].some((b) => b.textContent === 'Seat the AI here'), null, 30000, "the host's free seat offering Seat the AI here")
+sim/lobby-rig.mjs:539: await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Seat the AI here').click())
+sim/lobby-rig.mjs:549: await until(watcher, () => /^Ready · /.test(document.querySelector('.seat[data-seat="1"] .armyState')?.textContent ?? ''), null, 30000, "the watcher's page showing the AI's seat sealed")
+sim/lobby-rig.mjs:591: await until(guest, () => document.querySelector('.seat[data-seat="0"] button.primary')?.textContent === 'Sit here', null, 30000, "the guest's page offers seat 1")
+sim/lobby-rig.mjs:633: await until(guest, () => !!window.__ts.net?.handle?.doc()?.lobby && document.querySelector('.seat[data-seat="1"] button.primary')?.textContent === 'Sit here', null, 30000, "the guest's page on the lobby")
+sim/lobby-rig.mjs:642: const box = await host.evaluate(() => ({ text: document.querySelector('.seat[data-seat="1"]').textContent, unseat: [...document.querySelectorAll('.seat[data-seat="1"] button')].some((b) => b.textContent === 'Unseat the AI'), pick: !!document.querySel
+sim/lobby-rig.mjs:657: await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Unseat the AI').click())
+sim/lobby-rig.mjs:659: await until(host, () => [...document.querySelectorAll('.seat[data-seat="1"] button')].some((b) => b.textContent === 'Seat the AI here'), null, 10000, 'Seat the AI here offered again')
+sim/lobby-rig.mjs:660: await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Seat the AI here').click())
+sim/lobby-rig.mjs:662: must((await host.evaluate(() => document.querySelector('.seat[data-seat="1"]').textContent)).includes('seated by you'), "the host's own AI seat shown as its own")
+sim/lobby-rig.mjs:668: await host.waitForFunction(() => { const r = window.__ts.net.handle.doc().lobby.seats.s1; return typeof r?.army === 'string' && r.ready === true && document.querySelector('.seat[data-seat="1"]')?.textContent.includes('seated by you') }, null, { timeo
+sim/lobby-rig.mjs:709: await host.evaluate(() => [...document.querySelectorAll('.seat[data-seat="1"] button')].find((b) => b.textContent === 'Unseat the AI').click())
+sim/lobby-rig.mjs:710: await until(guest, () => document.querySelector('.seat[data-seat="1"] button.primary')?.textContent === 'Sit here', null, 20000, "the guest's page offering seat 2 again")
+sim/lobby-rig.mjs:723: must(said === "This lobby can't start a battle: seat 2's army isn't one this battle takes." && !(await domOf(host)).includes(digits), `the host's page on the guest's refused army: "${said}", the digits ${(await domOf(host)).includes(digits) ? 'in' : 
+sim/lobby-rig.mjs:934: must(why.startsWith(`The start changed your seat (${field})`) && seats === 0, `the guest's page, its ${field} changed by the host: "${why}", ${seats} seats played`)
+sim/lobby-rig.mjs:1225: must(seats === '0' && /against Ben/.test(offer), `Continue ("${offer}") takes the page back to its seat (seats ${seats})`)
+sim/lobby-rig.mjs:1390: must(after.followed === before.followed + 1 && off > 1, `the guest's move swings the host's camera once (${after.followed - before.followed} moves, its look ${off.toFixed(1)}" away)`)
+sim/macro-check.mjs:503: if (!/riders ride along/i.test(pv.summary ?? '')) return `board ${board}: a group Move holding a hull and its riders previews "${pv.summary}", which doesn't say the riders ride along`
+sim/macro-check.mjs:591: if (may.length !== want) return `board ${board}: the group's Fire from the deck previews ${may.length} of ${members.length} firing ("${pv.summary}"), where ${pick.able} may shoot and the deck has ${pick.slots} slots left: want ${want}`
+sim/merge-sim.mjs:985: if (!r || !want.test(r.why)) throw new Error(`${where}: the start with ${what} is ${r ? `refused as "${r.why}"` : 'not refused'}, not ${want}`)
+sim/play-check.mjs:272: if (!(await text('#hint')).startsWith('Deployment')) throw new Error(`no deployment hint for seat ${seat}: "${await text('#hint')}"`)
+sim/play-check.mjs:450: await page.click(`[data-mode="${name === 'grand' || name === 'cart' ? 'bushtail' : name}"]`)
+sim/play-check.mjs:480: if (!/^Round \d+ is over$/.test(asked)) problems.push(`the vote's panel says "${asked}", not which round is over`)
+sim/play-check.mjs:486: if (!/^Round 6 · overtime$/.test(await text('#round'))) problems.push(`Keep playing: the HUD reads "${await text('#round')}", not round 6, overtime`)
+sim/play-check.mjs:511: if (!/\/ 7/.test(board)) problems.push(`the HUD's round line names no seventh round ("${board}"): not a Grand battle`)
+sim/play-check.mjs:515: if (name === 'cart' && (!stats.steps || !/^▣ \d+\/12$/.test(stats.cargo))) problems.push(`the cart lane stepped ${stats.steps} riders off by their chips (one at least), the cart's label reading "${stats.cargo}" (▣ n/12)`)
+sim/play-check.mjs:684: else if (!/End or dice roll/.test(undo.title)) problems.push(`${at}: ↶ Undo's title doesn't say the rule ("${undo.title}")`)
+sim/playback-check.mjs:265: if (JSON.stringify(got) !== JSON.stringify(want)) return `the attacks on "${what}": batches ${JSON.stringify(got)}, should be ${JSON.stringify(want)}`
+sim/playback-check.mjs:269: for (const [what, events, want] of BRIEF_CASES) if (P.briefAt(events, 0) !== want) return `the banner of "${what}" ${want ? 'should play' : 'plays'} brief`
+sim/playback-check.mjs:276: if (JSON.stringify(got) !== JSON.stringify(want)) return `the rule on "${what}": batches ${JSON.stringify(got)}, should be ${JSON.stringify(want)}`
+sim/present-check.mjs:659: if (now !== top) miss(`(F16) entry ${at}: a line the fog hid was written ("${e.html}")`)
+sim/present-check.mjs:662: if (now === top || now?.innerHTML !== e.html) return miss(`(F16) entry ${at}: a line the fog showed wasn't written as marked ("${e.html}" | "${now?.innerHTML}")`)
+sim/present-check.mjs:676: if (e.veil === 'hide') return miss(`(F16) entry ${at}: a tray the fog hid was opened ("${e.title}")`)
+sim/present-check.mjs:680: if (name !== 'Unseen' && !namedSeen(name, at)) miss(`(F16) entry ${at}: the tray "${e.title}" names ${name}, none of whom the seat saw as its entry opened or closed`)
+sim/present-check.mjs:749: if (w.speed !== speed) why ||= `${nameOf(w.u)}'s walk (${embark ? 'an embark\'s' : 'not a move'}) goes at ${w.speed}"/s, not ${speed}`
+sim/present-check.mjs:761: if (e.dice.length !== 1 || (k > 2 && e.label !== roll.rows[(k - 1) % 2].label)) why ||= `a roll-off row "${e.label}" of ${e.dice.length} dice, not one die for seat ${(k - 1) % 2} as the first pair had it`
+sim/present-check.mjs:767: why ||= `the roll-off (rows ${rows() || 'none'}) not followed straight by the line naming ${roll.won < 0 ? 'a winner (no pair decided it)' : `its winner, seat ${roll.won}`} (${e.t}${e.t === 'log' ? ` "${text(e.html)}" of seat ${e.side}` : e.label ? `
+sim/present-check.mjs:780: why ||= `a scatter roll (${p1.dice[0]} + 1) not followed straight by the template's scatter from its aim (${e.t}${e.t === 'blast.scatter' ? ` ${e.d}"` : ''})`
+sim/present-check.mjs:787: if (e.t === 'keg.fuse' && !(p1?.t === 'log' && p1.traced && text(p1.html) === 'The powder keg goes up!')) why ||= `a powder keg set off at (${e.x}, ${e.z}) not straight after its line (${p1?.t}${p1?.t === 'log' ? ` "${text(p1.html)}"` : ''})`
+sim/present-check.mjs:791: why ||= `a template landing not followed straight by a victim's wound row or the 0.25 s pause (${e.t}${e.t === 'pause' ? ` ${e.s} s` : e.label ? ` "${e.label}"` : ''})`
+sim/present-check.mjs:804: if (!ok) why ||= `${pair(p2)}: the snare's status not straight on to its line (${e.t}${e.t === 'log' ? ` "${text(e.html)}"` : ''})`
+sim/present-check.mjs:810: if (!ok) why ||= `${pair(p2)}: the ward's status not straight on to its line (${e.t}${e.t === 'log' ? ` "${text(e.html)}"` : ''})`
+sim/present-check.mjs:821: if (!(p1?.t === 'unit.face' && e.title.startsWith(`${nameOf(p1.u)} → ${nameOf(p1.tg)} · `))) why ||= `a shot's tray ("${e.title}") not straight after the shooter's turn to face its target (${p1?.t})`
+sim/present-check.mjs:849: if (!tmpl || tmpl.hit !== false || tmpl.land) why ||= `a scatter (${e.d}") with no missed template to scatter`
+sim/present-check.mjs:924: if (mv && (nameOf(e.u) !== mv.name || !(len >= lo - 0.05 && len <= 2 * lo + 0.05))) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, its path's cost ${lo.toFixed(2)}" on open ground, ${e.L.toFixed(1)}" its timing)`
+sim/present-check.mjs:925: } else if (mv && (nameOf(e.u) !== mv.name || cost.toFixed(1) !== mv.len)) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, ${cost.toFixed(1)}"${cost !== e.L ? `, ${e.L.toFixed(1)}" over the ground` : ''})`
+sim/present-check.mjs:927: if (mv && e.stomp !== stomp) why ||= `${nameOf(e.u)}'s walk of ${e.L.toFixed(2)}" (a move) has stomp ${e.stomp}, not ${stomp}`
+sim/present-check.mjs:934: if (mv && e.speed !== 7) why ||= `${nameOf(e.u)}'s walk (a move) goes at ${e.speed}"/s, not 7`
+sim/present-check.mjs:939: if (moving.len !== '0.0') why ||= `the move line "${moving.text}" not followed by its walk (${e.t})`
+sim/present-check.mjs:955: why ||= `the charge line "${text(e.html)}" not straight after its charge.result (${p1?.t}${p1?.t === 'charge.result' ? ` ${pair(p1)}, ok ${p1.ok}` : ''})`
+sim/present-check.mjs:972: if (!vol || nameOf(vol.u) !== v[1] || nameOf(vol.tg) !== v[2]) why ||= `the shooting line "${text(e.html)}" with no volley of its own before it${vol ? ` (the last ${pair(vol)})` : ''}`
+sim/present-check.mjs:977: if (fz && !(p1?.t === 'spell.fizzle' && nameOf(p1.u) === fz[1])) why ||= `the fizzle line "${text(e.html)}" not straight after its spell.fizzle (${p1?.t})`
+sim/present-check.mjs:981: if (!(p1?.t === 'spell.cast' && nameOf(p1.u) === ca[1])) why ||= `the eruption line "${text(e.html)}" not straight after its spell.cast (${p1?.t})`
+sim/present-check.mjs:986: if (mz && !(p1?.t === 'spell.mesmerized' && nameOf(p1.u) === mz[1] && nameOf(p1.tg) === mz[2])) why ||= `the mesmerize line "${text(e.html)}" not straight after its spell.mesmerized (${p1?.t})`
+sim/property.mjs:782: if (!standsHere(nav, fp, b.c, b.f, u.t.move === 'wreck' ? 'wreck' : 'walk', plan.endForbid)) return no(`moves ${u.t.short} to state (${b.c}, ${b.f}), where a disc doesn't stand (or stands in an enemy's 1")`)
+sim/property.mjs:789: if (!(d0 <= P.rolled + 0.011) && !(b.c === plan.cell && b.f === plan.f)) return no(`ends ${u.t.short}'s charge on state (${b.c}, ${b.f}), which its roll of ${P.rolled}" doesn't reach`)
+sim/property.mjs:1400: if (!want.test(why)) throw new Error(`P-mission: a setup with ${name} is refused as "${why}", not ${want}`)
+sim/property.mjs:1530: if (!want.test(why)) throw new Error(`P-mission: a setup with ${name} is refused by ${how} as "${why}", not ${want}`)
+sim/property.mjs:1588: if (!want.test(why ?? '')) throw new Error(`P-mission: checkMission ${why ? `refuses ${what} as "${why}"` : `takes ${what}`}, not ${want}`)
+sim/property.mjs:1613: if (!Object.hasOwn(G, 'pending') || G.pending !== null) throw new Error(`an all-AI battle's G has pending ${JSON.stringify(G.pending)} (${Object.hasOwn(G, 'pending') ? 'not null' : 'missing'}) at trace line ${lines}, "${line.slice(0, 40)}"`)
+sim/property.mjs:1811: if (!both && !named.includes(seat)) throw new Error(`${where}: refused as "${e.message.slice(0, 120)}", naming another seat than the one fuzzed`)
+sim/property.mjs:1818: if (!want || want.message !== e.message) throw new Error(`${where}: both seats fuzzed, refused as "${e.message.slice(0, 100)}", not seat-major ("${want?.message.slice(0, 100) ?? 'taken'}")`)
+sim/property.mjs:2376: if ((piece.hp < 999) !== want) throw new Error(`${where}: a wrecker's smash on the ground at (${at.x}, ${at.z}) ${want ? 'spared' : 'hit'} a piece standing at ${base}"`)
+sim/property.mjs:2625: if (!Object.is(got, want)) throw new Error(`${where}: ${w.name} (${w.range}") from cell ${i} (floor ${nav.floor[i]}) at cell ${j} (floor ${nav.floor[j]}) reaches ${got}", not ${want}"`)
+sim/property.mjs:2627: if (out !== g > want) throw new Error(`${where}: ${w.name} at ${g.toFixed(3)}" against a reach of ${want}" (cell ${i} at ${j}) is ${out ? '' : 'not '}refused as out of range${info.ok ? '' : ` (${info.why})`}`)
+sim/property.mjs:2628: if (g > want && mods.score.shotValue(G, u, e, u.pos, false) !== 0) throw new Error(`${where}: the AI values ${w.name} at ${g.toFixed(3)}", past its reach of ${want}" (cell ${i} at ${j})`)
+sim/property.mjs:2646: if (!info.ok && info.why.startsWith('out of range')) throw new Error(`${where}: ${w.name} (${R}") from cell ${i}, ${nav.floor[i]}" up, refuses a target on the ground ${q.gap(u, e).toFixed(2)}" off, within its reach of ${far.toFixed(2)}": ${info.why}`
+sim/property.mjs:2647: if (info.ok && info.reach !== far) throw new Error(`${where}: ${w.name}'s shotInfo gives a reach of ${info.reach}", not ${far}"`)
+sim/property.mjs:2667: if (info.ok || !info.why.startsWith('out of range')) throw new Error(`${where}: ${w.name} (${R}") from the ground at cell ${j} takes a target ${nav.floor[i]}" up at cell ${i}, ${q.gap(u, e).toFixed(2)}" off, past its reach of ${near.toFixed(2)}" firi
+sim/property.mjs:2791: if (q.engagedWith(G, a).includes(e) || q.engagedWith(G, e).includes(a)) throw new Error(`${where}: two enemies under 1" apart, one at floor ${nav.floor[across[0]]} (cell ${across[0]}), one at ${nav.floor[across[1]]} (cell ${across[1]}), are engaged`)
+sim/property.mjs:2805: if (!q.engagedWith(G, a).includes(e)) throw new Error(`${where}: two enemies on one level (cells ${flat[0]} and ${flat[1]}, floor ${nav.floor[flat[0]]}) under 1" apart aren't engaged`)
+sim/property.mjs:2952: if (!/^(no line of sight|out of range)/.test(info.why)) throw new Error(`P-fight, board ${G.setup.board}: shotInfo refuses ${u.t.short} (${w.name}) at ${e.t.short}${q.isEngaged(G, e) ? ', locked in combat with ours,' : ''} ${q.gap(u, e).toFixed(2)}" 
+sim/property.mjs:3038: if (kind === 'clear' && fight) throw new Error(`${where}: fightOf finds a fight with the friend 4" off`)
+sim/property.mjs:3447: if (want < 0) throw new Error(`${where}: the scene left nowhere to land within ${u.r + 6}"`)
+sim/property.mjs:3448: if (u.pos.x !== nav.x(want) || u.pos.z !== nav.z(want)) throw new Error(`${where}: unit ${u.id} landed at (${u.pos.x}, ${u.pos.z}), not on cell ${want} (${nav.x(want)}, ${nav.z(want)}): the nearest on the ground within u.r + 6", standable, outside it
+sim/property.mjs:3514: if (want < 0 || !q.alive(v) || v.pos.x !== nav.x(want) || v.pos.z !== nav.z(want)) throw new Error(`${where}: with the nearest ground ${D.toFixed(3)}" off, inside u.r + 6" (${R.toFixed(3)}), unit ${v.id} ${q.alive(v) ? `landed at (${v.pos.x}, ${v.pos
+sim/property.mjs:3518: if (want >= 0) throw new Error(`${where}: the ring left cell ${want} to land on within u.r + 6"`)
+sim/property.mjs:3519: if (q.alive(v) || !falls[0].e.crushed || G.rng.n !== r0) throw new Error(`${where}: with the nearest ground ${D.toFixed(3)}" off, past u.r + 6" (${R.toFixed(3)}), unit ${v.id} ${q.alive(v) ? `landed at (${v.pos.x}, ${v.pos.z})` : `was crushed but dre
+sim/property.mjs:3549: if (!q.alive(v) || v.pos.x !== nav.x(want) || v.pos.z !== nav.z(want) || q.groundY(G, v) > STEP) throw new Error(`${where}: with a raised top nearer (cell ${any}, ${nav.floor[any]}" up) than the nearest ground (cell ${want}), unit ${v.id} landed at (
+sim/property.mjs:3587: if (!q.alive(p) || p.pos.x !== nav.x(want) || p.pos.z !== nav.z(want)) throw new Error(`${where}: unit ${p.id}, with unit ${s.id}'s rim under 0.08" from its own, ${q.alive(p) ? `stands at (${p.pos.x}, ${p.pos.z}), not on cell ${want} (it can't stay: 
+sim/property.mjs:3848: if (rowsBefore.some((x) => x.label.includes(`${f.t.short}:`))) throw new Error(`${where}: the template caught ${f.t.short}, set 4.8" off it`)
+sim/property.mjs:3903: if (mods.score.kegWalk(G, brute, from, mods.score.kegsOf(G)) === 0) throw new Error(`${where}: the AI's kegWalk is 0 for a walk ending ${Math.hypot(from.x, from.z).toFixed(2)}" from the keg`)
+sim/property.mjs:4051: if (!/^(no line of sight|out of range)/.test(info.why)) throw new Error(`P-spell, board ${board}: shotInfo refuses ${c.t.short} at ${e.t.short} ${q.gap(c, e).toFixed(2)}" off: ${info.why}`)
+sim/property.mjs:4547: if (!d || !e.label.startsWith(`${d.short}: `)) fail(`a bail-out's dice row "${e.label}" not straight after its rider's forced step off (${JSON.stringify(d)})`)
+sim/property.mjs:4589: if (best !== i) fail(`unit ${p.id} bailed out onto cell ${i}, not the landing cell nearest its hull's centre ${free.length ? 'outside the enemies\' 1"' : '(none outside the enemies\' 1" left)'} (cell ${best}, ${bd.toFixed(3)}" off, against ${Math.hyp
+sim/property.mjs:4595: if (far !== undefined) fail(`unit ${p.id}'s landing off long hull ${v.id} offers cell ${far}, ${edgeTo(v, nav.x(far), nav.z(far), p.r).toFixed(3)}" from its nearest disc, past 3"`)
+sim/property.mjs:4836: if (why === null || !want.test(why)) throw new Error(`${where}: legal() ${why === null ? 'takes' : `refuses with "${why}"`} ${JSON.stringify(b)} for seat ${s}, not refusing it with ${want}`)
+sim/property.mjs:4891: if (!q.engagedWith(G, v).includes(e)) throw new Error(`${where}: an enemy 0.5" from the hull doesn't engage it`)
+sim/property.mjs:4947: if (!bailed || (bailed.to.x === cx && bailed.to.z === cz)) throw new Error(`${where}: the first rider bailed out ${bailed ? `onto (${cx}, ${cz}), inside the enemy's 1"` : 'nowhere'}`)
+sim/property.mjs:5080: if (a !== b) throw new Error(`${where}: with an enemy squad ${D.toFixed(2)}" from the War-Cart the AI shoots ${a}, and ${b} with the cart's riders off the table: its friendly fire counts the riders, whom a template can't reach`)
+sim/property.mjs:5162: if (info.ok || !/inside a vehicle/.test(info.why)) throw new Error(`${where}: shotInfo ${info.ok ? 'takes' : `refuses with "${info.why}"`} the Elder's ${w.name} at ${whose} rider (unit ${tg.id}, aboard unit ${tg.aboard}): a rider is inside its vehicl
+sim/property.mjs:5201: if (far !== undefined) throw new Error(`${where}: the landing off the Howdah offers cell ${far}, past 3" of its discs`)
+sim/property.mjs:5349: if (eye !== q.groundY(G, v) + v.t.transport.deckY + gun.t.eye) throw new Error(`${where}: the rider's deck eye reads ${eye}", not its hull's floor + its deck's ${v.t.transport.deckY}" + its own ${gun.t.eye}"`)
+sim/property.mjs:5428: if (!wi.ok || wi.range !== 0) throw new Error(`${where}: the Elder's ward on his own hull from its deck reads ${JSON.stringify(wi)}: want it taken at 0"`)
+sim/property.mjs:5477: if (!(Math.abs(info.reach - want) < 1e-9) || !(Math.abs(info.range - (want - 0.1)) < 1e-6)) throw new Error(`${where}: the Grenadiers' lob from the deck at a target ${(-h).toFixed(2)}" up reads ${JSON.stringify({ range: info.range, reach: info.reach 
+sim/property.mjs:5481: legalOk(G, s, { t: 'shoot', u: lob.id, tg: tg.id }, `${where} (the target ${(want - 0.1).toFixed(2)}" from the hull's edge, its reach ${want.toFixed(2)}")`)
+sim/property.mjs:5484: refused(G, s, { t: 'shoot', u: lob.id, tg: tg.id }, /out of range/, `${where} (the target ${(want + 0.1).toFixed(2)}" from the hull's edge, its reach ${want.toFixed(2)}")`)
+sim/property.mjs:5952: : t.kind === 'ridesScene' ? `${c.scenes} scenes: ${c.autoloaded} riders autoloaded, ${c.hidden} hidden-rider queries, ${c.bailed} bailed out by an enemy's 1", ${c.lost} lost with nowhere to stand, the AI's friendly fire swept at ${c.sweep} places${c.
+sim/rematch-memory.mjs:316: if (W !== (missionOf(i) === 'grand' ? 80 : 40)) throw new Error(`battle ${i} (${missionOf(i)}) was fought on a table ${W}" wide`)
+sim/snap-check.mjs:916: if (title.W !== 40 || title.builds !== 0) why.push(`the title's table is ${title.W}" wide, made over ${title.builds} times (classic's, never)`)
+sim/terrain-check.mjs:1364: if (!Object.is(down, wantDown)) fail(where, `${w.name} (${R}") on deck ${d.id} (${d.look.recipe}, ${h}" up) reaches ${down}" at the ground, not ${wantDown}"`)
+sim/terrain-check.mjs:1365: if (!Object.is(up, wantUp)) fail(where, `${w.name} (${R}") on the ground reaches ${up}" at deck ${d.id} (${d.look.recipe}, ${h}" up), not ${wantUp}"`)
+sim/terrain-check.mjs:1370: if (got !== tenth) fail(where, `${w.name} ${way === 'down' ? `from ${hh}" up at the ground` : `at ${hh}" up from the ground`} reaches ${got}", not the roadmap's ${tenth}"`)
+sim/terrain-check.mjs:1445: console.log(`Lobbing (F17): ${lob.pairs} weapon-deck rows on ${lob.decks} decks: the lobbed weapons (${LOBS.map((t) => `${t.short} ${t.ranged.range}"`).join(', ')}) reach √(R² ± 2hR) down from each top and up at it, the ring the reach down, direc
+sim/terrain-check.mjs:1626: same(`a wrecker's smash ${off.toFixed(2)}" from the keg: the keg in the list broken`, want, broke.includes(k))
+sim/terrain-check.mjs:1627: same(`a wrecker's smash ${off.toFixed(2)}" from the keg: the keg broken`, !want, k.alive)
+sim/terrain-hooks.mjs:187: if (!src.includes(from)) throw new Error(`terrain-hooks: R5's dust edit found no "${from.trim()}" in ${url}`)
+sim/terrain-hooks.mjs:191: if (!src.includes(from)) throw new Error(`terrain-hooks: R7's fall edit found no "${from.trim()}" in ${url}`)
+sim/ui-check.mjs:148: for (const [i, [k, n]] of have.entries()) for (let j = n; j > (want[i] ?? 0); j--) await page.click(`.mRow[data-unit="${k}"] .minus`)
+sim/ui-check.mjs:149: for (const [i, [k, n]] of have.entries()) for (let j = n; j < (want[i] ?? 0); j++) await page.click(`.mRow[data-unit="${k}"] .plus`)
+sim/ui-check.mjs:199: if (!p.off || p.say !== want || p.tip !== 'say') out.why.push(`${mission}, ${listText(c)}: ${k}'s + ${p.off ? 'off' : 'on'}, its why ${JSON.stringify(p.say)} (want off, "${want}")`)
+sim/ui-check.mjs:200: else out.rows.push(`${MISSIONS[mission].list.size} ${k} "${want}"`)
+sim/ui-check.mjs:217: if (!tip.shown || tip.text !== want || !tip.onTop) out.why.push(`a hover over ${k}'s +: the tooltip ${tip.shown ? `"${tip.text}"${tip.onTop ? '' : ', under the screen'}` : 'not shown'}`)
+sim/ui-check.mjs:260: if (!ok) out.why.push(`${listText(c) || 'no unit'}: Ready ${got.disabled ? 'disabled' : 'enabled'}, "${got.text}" (want ${want ? `disabled, "${cap(want)}"` : 'enabled'})`)
+sim/ui-check.mjs:344: if (over <= 0 || said !== `Prices changed: ${over} over` || !opened || listText(opened) !== listText(oc) || !red.bar) out.why.push(`a list ${over} over: Saved says "${said}", opens ${opened ? listText(opened) : 'nothing'}, the bar ${red.bar ? 'red' :
+sim/ui-check.mjs:366: if (!why || !line.bad || line.value !== 'list' || line.why !== cap(why) || !start.disabled || !start.why.includes(why)) out.why.push(`a Field list in a Skirmish: the line ${line.bad ? 'red' : 'not red'} (${line.value}, "${line.why}"), Start ${start.d
+sim/ui-check.mjs:371: if (!red.bar || !ready.disabled || ready.text !== cap(why)) out.why.push(`the Muster screen on it: the bar ${red.bar ? 'red' : 'not red'} (${red.pts}), Ready "${ready.text}"`)
+sim/ui-check.mjs:404: if (back.value !== 'list' || back.total !== want || built.total !== want) out.why.push(`back to the Bushtails: the line ${back.value}, "${back.total}" (want its last list, "${want}")`)
+sim/ui-check.mjs:480: if (!tip.shown || tip.text !== 'Hero: 2 of 2') out.why.push(`a tap on the Elder's +: the tooltip ${tip.shown ? `"${tip.text}"` : 'not shown'}`)
+sim/ui-check.mjs:506: if (!fire || fire.text !== `⛭ deck fires ${tr.fire}` || fire.left < 0 || fire.right > fire.W + 0.5 || w.n) out.why.push(`the War-Cart's row at 360 px: its fire slots ${fire ? `"${fire.text}" at ${Math.round(fire.left)}-${Math.round(fire.right)}` : 
+sim/ui-check.mjs:548: if (!title.startsWith(RACES.serpent.name) || JSON.stringify(shown) !== JSON.stringify(RACES.serpent.roster)) out.why.push(`player 2's Muster screen is "${title}" (${shown.join(' ')})`)
+sim/ui-check.mjs:553: if (!l0.total.startsWith('Ready · ') || !l1.total.startsWith('Ready · ')) out.why.push(`the panel after both: "${l0.total}", "${l1.total}"`)
+sim/ui-check.mjs:572: if (st2.disabled || b0.bad || !b0.total.startsWith('Ready · ')) out.why.push(`back at the Skirmish: player 1's line "${b0.total}" ${b0.bad ? 'red' : ''}, Start ${st2.disabled ? `disabled ("${st2.why}")` : 'enabled'}`)
+sim/ui-check.mjs:596: if (mirror.value === 'list' || mirror.options.includes('list') || mirror.total.startsWith(`Ready · `)) out.why.push(`player 2 on the Bushtails: the line ${mirror.value} (${mirror.options.join(', ')}), "${mirror.total}" (want the preset, not player 1
+sim/ui-check.mjs:646: if (b.banner !== want) out.why.push(`the deployment's banner: "${b.banner}" (want "${want}")`)
+sim/undo-check.mjs:163: if (!after.act || after.seat !== mover || after.phase !== 'move' || !end.up || end.text !== 'End Movement ▸') fail(`Undo after a move leaves the phase ${JSON.stringify(after)}, End "${end.text}" (${end.up ? 'up' : 'down'}): seat ${mover}'s movement
+sim/undo-check.mjs:249: if (!s.bar || s.label !== 'Before the battle') fail(`a click on the deployment's line ("${first.text}", move ${first.k}) shows "${s.label}", not "Before the battle"`)

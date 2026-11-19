@@ -1,0 +1,8 @@
+# Handoff: the first Prices attempt (stopped by the maintainer at 23:30Z Nov 8, not a crash)
+
+The maintainer stopped the build workflow to fold a design call in BEFORE the prices are fitted: the Delver Swarm's ai becomes 'melee' (see your brief). Your predecessor had, on --dir copies made by mk.sh (read it: a copy of the package with a price table applied, so the working tree's data was never edited):
+- fit1: node sim/army-sim.mjs --fit --mission classic --races insect,bird --seed 1111,2222,3333 --jobs 2 (EXIT 0, 763 s; 36,000 battles at about 48 a second: far faster than the design's 80-minute estimate). Its log is logs/fit1.log: every pair's score, exchange rate, intercept and per-unit fit. The two Aerie-only pairs (Bushtails v Windfolk, Serpents v Windfolk) do not seat the Hive, so their fits STAND and may be reused as they are; the three Hive pairs (Hivekin v Bushtails, Hivekin v Serpents, Hivekin v Windfolk) were fitted with the Delvers at ai 'line' and must be fitted again (--races insect; about 10 minutes at that speed).
+- c1-4444: --check --mission classic --seed 4444 on a first proposed table (EXIT 1, 1,127 s; logs/c1-4444.log): read what missed.
+- c1-1111: the same on seed 1111, killed mid-run by the stop (logs/c1-1111.log is partial).
+Headline from fit1 at the first-guess costs: Hivekin v Windfolk 35.1% (the Hive weak), Serpents v Windfolk 52.9%; the Hive's fits put the Deepguard near 70 (priced 100), the Spinethrowers 80, the Delvers 57, the Hoppers 52, the Boilback 74, the Hivemother's intercept about 45; the Aerie's Roc 104-113, the Stormtalons 97-106, the Finches 49-53, the Kestrels 48-55.
+Nothing was committed by the first attempt. The working tree's data/races/*.js are the Rules commit's (21052ce).

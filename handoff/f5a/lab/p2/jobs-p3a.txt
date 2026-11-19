@@ -1,0 +1,15 @@
+cf3 classic fortified squirrel,bird 300 0
+cf3 classic fortified serpent,bird 300 0
+cf3 classic fortified insect,bird 300 0
+cf4 classic fortified squirrel,bird 300 0
+cf4 classic fortified serpent,bird 300 0
+cf4 classic fortified insect,bird 300 0
+cf6 classic fortified squirrel,bird 300 0
+cf6 classic fortified serpent,bird 300 0
+cf6 classic fortified insect,bird 300 0
+cf5 classic fortified squirrel,bird 300 0
+cf5 classic fortified serpent,bird 300 0
+cf5 classic fortified insect,bird 300 0
+cf5 classic fortified squirrel,serpent 300 0
+cf3 classic fortified squirrel,serpent 300 0
+cf6 classic fortified squirrel,serpent 300 0

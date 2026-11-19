@@ -1,0 +1,12 @@
+diff -ru a/data/mission.js b/data/mission.js
+--- a/data/mission.js	2026-11-19 07:32:46.596802536 +0000
++++ b/data/mission.js	2026-11-19 08:53:40.949350731 +0000
+@@ -89,6 +89,8 @@
+       prices: {
+         squirrel: { elder: 75, oakguard: 115, nutkin: 70, grenadier: 45, glider: 60, trebuchet: 55 },
+         serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 45 },
++        // (F5a phase 2) the Aerie's fliers at about 1.15x their Skirmish cost: their pace is worth more on a larger table
++        bird: { skyseer: 80, stormtalon: 100, finch: 55, kestrel: 50, roc: 140 },
+       },
+     },
+     // (F7a) and `fortified`, as every mission's

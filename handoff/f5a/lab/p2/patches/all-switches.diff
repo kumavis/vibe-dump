@@ -1,0 +1,540 @@
+diff -ru orig/core/actions/charge.js pkg/core/actions/charge.js
+--- orig/core/actions/charge.js	2026-11-19 07:32:46.591953087 +0000
++++ pkg/core/actions/charge.js	2026-11-19 09:57:18.520750520 +0000
+@@ -22,11 +22,13 @@
+ // R6b). The AI's charge takes the same `charge` handler inside the fold,
+ // where declareCharge finishes it the shortest way, opening no decision.
+ import { CHARGE_RANGE, ENGAGE, roll } from '../rules.js'
++import { X } from '../x.js'
++import { STEP as STEP_X } from '../nav.js'
+ import { hypot } from '../dmath.js'
+ import { emit, log } from '../journal.js'
+ import { refreshNav } from '../match.js'
+ import { alive, enemiesOf, gap, isEngaged, groundY, HIGH } from '../queries.js'
+-import { moveMode, climbs, forbidMask, resolveWalk, masksOf, latticeMode, hullWalk } from './move.js'
++import { moveMode, climbs, forbidMask, resolveWalk, masksOf, latticeMode, hullWalk, wallOf } from './move.js'
+ import { kegsGoOff } from './shoot.js'
+ import { settle } from './settle.js'
+ import { clearOf } from '../footprint.js'
+@@ -70,7 +72,7 @@
+   const mode = moveMode(u)
+   // the target's 1" bubble is fine to enter, its base is not
+   const forbid = forbidMask(G, u, ENGAGE + 0.05, [target])
+-  const res = nav.reach(u.pos.x, u.pos.z, { r: u.r, max: CHARGE_RANGE + 0.5, mode, forbid: mode === 'fly' ? null : forbid, climb: climbs(u) })
++  const res = nav.reach(u.pos.x, u.pos.z, { r: u.r, max: CHARGE_RANGE + 0.5, mode, forbid: mode === 'fly' ? null : forbid, climb: climbs(u), wall: wallOf(u) })
+   const ty = nav.hasHeight ? groundY(G, target) : 0
+   const oy = nav.hasHeight ? others.map((e) => groundY(G, e)) : null
+   const spots = []
+@@ -94,6 +96,7 @@
+     }
+     if (nav.hasHeight && Math.abs(nav.floor[i] - ty) > HIGH) continue
+     if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', forbid)) continue
++    if (X.h2 && mode === 'burrow' && nav.hasHeight && nav.floor[i] > STEP_X) continue
+     if (nav.hasHeight) {
+       if (others.some((e, k) => (e.t.fp ? clearOf(e, nav.x(i), nav.z(i), u.r) < ENGAGE : hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE) && Math.abs(nav.floor[i] - oy[k]) <= HIGH)) continue
+     } else if (others.some((e) => (e.t.fp ? clearOf(e, nav.x(i), nav.z(i), u.r) < ENGAGE : hypot(nav.x(i) - e.pos.x, nav.z(i) - e.pos.z) < e.r + u.r + ENGAGE))) continue
+diff -ru orig/core/actions/move.js pkg/core/actions/move.js
+--- orig/core/actions/move.js	2026-11-19 07:32:46.592131123 +0000
++++ pkg/core/actions/move.js	2026-11-19 09:57:18.520398512 +0000
+@@ -25,6 +25,7 @@
+ import { settle } from './settle.js'
+ import { alive, enemiesOf, isEngaged, ownersOf, statusOf, floorAt, groundY, HIGH } from '../queries.js'
+ import { discsOf } from '../footprint.js'
++import { X } from '../x.js'
+ 
+ export function moveMode(u) {
+   return u.t.move
+@@ -49,8 +50,11 @@
+ // plans, which never step above STEP, would leave it stranded), a pile-in
+ // never lifts it onto one, and its masks forbid the raised cells its
+ // reach already refuses: a branch only a burrower reaches (§4.1 rule 30).
++// (scratch cf4 / a6) how the Aerie's fliers meet fortification bodies: 'block' (cf4: as a walker, stairs and
++// ladders allowed), a toll in inches per body crossed (a6a 2, a6b 4), or nothing
++export const wallOf = (u) => (u.race !== 'bird' || u.t.move !== 'fly' ? null : X.cf4 ? 'block' : X.a6b ? 4 : X.a6a ? 2 : X.a6c ? 6 : null)
+ export function groundOnly(u) {
+-  return u.t.vehicle || u.t.move === 'burrow'
++  return u.t.vehicle || u.t.move === 'burrow' || (X.cf2 && u.race === 'bird' && u.t.move === 'fly')
+ }
+ 
+ // Cells a unit may not enter: within 1" of an enemy (or just their bases when
+@@ -96,7 +100,8 @@
+   // (F9a) a ground vehicle never enters a cell whose floor is above STEP:
+   // the reach, the path's shortcuts (nav.walkable reads the mask) and the
+   // end (standable) all keep it on the ground
+-  if (groundOnly(u)) for (let i = 0; i < nav.N; i++) if (nav.floor[i] > STEP) f[i] = 1
++  // (scratch h2) a burrower's path may pass under a deck: its raised cells are refused at the end (validEnd), not on the way
++  if (groundOnly(u) && !(X.h2 && u.t.move === 'burrow')) for (let i = 0; i < nav.N; i++) if (nav.floor[i] > STEP) f[i] = 1
+   for (const e of enemiesOf(G, u)) {
+     if (e.t.fp) {
+       forbidDiscs(nav, f, e, r + (onlyBodies.includes(e) ? 0.02 : pad), groundY(G, e))
+@@ -168,7 +173,7 @@
+   // any other move's mask is the end's, made once
+   const endForbid = forbidMask(G, u, ENGAGE + 0.05)
+   const forbid = fallback ? forbidMask(G, u, ENGAGE + 0.05, enemies) : endForbid
+-  const res = G.nav.reach(u.pos.x, u.pos.z, { r: u.r, max, mode: mode === 'fly' ? 'fly' : mode, forbid: mode === 'fly' ? null : forbid, climb: climbs(u) })
++  const res = G.nav.reach(u.pos.x, u.pos.z, { r: u.r, max, mode: mode === 'fly' ? 'fly' : mode, forbid: mode === 'fly' ? null : forbid, climb: climbs(u), wall: wallOf(u) })
+   const plan = { u, res, max, mode, forbid, endForbid, fallback }
+   if (memo) {
+     memo.sig = key
+@@ -232,6 +237,7 @@
+   const nav = G.nav
+   if (i < 0 || !isFinite(res.dist[i])) return false
+   if (!nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) return false
++  if (X.h2 && mode === 'burrow' && nav.hasHeight && nav.floor[i] > STEP) return false
+   const x = nav.x(i), z = nav.z(i)
+   for (const o of G.units) {
+     if (o === u || !alive(o) || o.aboard) continue
+diff -ru orig/core/ai/score.js pkg/core/ai/score.js
+--- orig/core/ai/score.js	2026-11-19 07:32:46.592388601 +0000
++++ pkg/core/ai/score.js	2026-11-19 07:34:41.733906261 +0000
+@@ -19,6 +19,7 @@
+ import { inFootprint } from '../actions/settle.js'
+ import { HAZARDS } from '../../data/hazards.js'
+ import { MISSIONS } from '../../data/mission.js'
++import { X } from '../x.js'
+ 
+ // a unit's points still standing
+ export const worth = (u) => (u.t.pts * u.alive) / u.t.models
+@@ -704,7 +705,7 @@
+   if (ci >= 0 && G.nav.cover[ci]) s += fragile ? 1.5 : 0.5
+   if (role === 'artillery' && moved) s -= 2.5
+   // (F7a) the high ground, for the guns
+-  if (high && (role === 'shooter' || role === 'artillery')) s += 0.25 * Math.min(4, floorAt(G, x, z))
++  if (high && !X.cf1 && (role === 'shooter' || role === 'artillery')) s += 0.25 * Math.min(4, floorAt(G, x, z))
+   // heroes like company
+   if (role === 'hero') {
+     let n = 0
+diff -ru orig/core/army.js pkg/core/army.js
+--- orig/core/army.js	2026-11-19 07:32:46.592437205 +0000
++++ pkg/core/army.js	2026-11-19 11:14:14.605879600 +0000
+@@ -50,6 +50,7 @@
+ import { RACES, ROLES, LIST } from '../data/schema.js'
+ import { MISSIONS } from '../data/mission.js'
+ import { mulberry32 } from './util.js'
++import { X } from './x.js'
+ 
+ export { LIST }
+ 
+@@ -132,6 +133,16 @@
+ // data/mission.js checks it), else the unit's `cost`. Own fields only (the
+ // tables are frozen data, but a race or unit named like an Object.prototype
+ // member must find nothing), and whole numbers either way.
++// (scratch sp) The list rules for a battle fought on terrain set `set`: the mission's list with its set prices
++// (list.setPrices[set]: { <race>: { <unit>: cost } }) laid over its size prices, unit by unit; the list itself when
++// the switch is off, the set unnamed or the list has no entry for it (so every older battle's costs are untouched)
++export function listFor(rules, set) {
++  const sp = X.sp && set && rules?.setPrices && Object.hasOwn(rules.setPrices, set) ? rules.setPrices[set] : null
++  if (!sp) return rules
++  const prices = { ...(rules.prices ?? {}) }
++  for (const r of Object.keys(sp)) prices[r] = { ...(prices[r] ?? {}), ...sp[r] }
++  return { ...rules, prices }
++}
+ export function priceOf(race, key, rules) {
+   const own = rules?.prices && Object.hasOwn(rules.prices, race.key) ? rules.prices[race.key] : null
+   return own && Object.hasOwn(own, key) ? own[key] : race.units[key].cost
+@@ -147,7 +158,7 @@
+ // it names none): its mission's price for it (priceOf), the price the
+ // view shows on the card, the roster and the group card, so a Field or
+ // Grand battle shows its own prices, never the Skirmish's.
+-export const unitPrice = (setup, u) => priceOf(RACES[u.race], u.key, MISSIONS[setup?.mission ?? 'classic']?.list)
++export const unitPrice = (setup, u) => priceOf(RACES[u.race], u.key, listFor(MISSIONS[setup?.mission ?? 'classic']?.list, setup?.terrain))
+ 
+ // A list's one spelling: a digit per count, trailing zeros dropped (so a
+ // list of no units is '', which LIST refuses).
+@@ -207,7 +218,7 @@
+     throw new Error(`seat ${seat}'s list ${shown(army)} counts ${army.length} kinds of unit; the ${race.name} muster ${race.roster.length} (${race.roster.join(' ')})`)
+   }
+   const counts = countsOf(race, text)
+-  const why = checkList(race, mission.list, counts)
++  const why = checkList(race, listFor(mission.list, setup.terrain ?? mission.sets[0]), counts)
+   if (why) throw new Error(`seat ${seat}'s army: ${why}`)
+   return { preset, counts, keys: keysOf(race, counts) }
+ }
+diff -ru orig/core/deploy.js pkg/core/deploy.js
+--- orig/core/deploy.js	2026-11-19 07:32:46.592542732 +0000
++++ pkg/core/deploy.js	2026-11-19 09:57:18.519769712 +0000
+@@ -7,6 +7,7 @@
+ import { groundOnly } from './actions/move.js'
+ import { autoload } from './actions/transport.js'
+ import { clearOf } from './footprint.js'
++import { X } from './x.js'
+ 
+ // The deployment zone of seat `side`: the strip the mission's depth deep
+ // along its seat's edge, as x bounds (G.board: the mission's board).
+@@ -46,7 +47,7 @@
+   const cx = nav.x(i), cz = nav.z(i)
+   if (cx - u.r < minX - 0.01 || cx + u.r > maxX + 0.01) return false
+   if (!nav.standable(i, u.r, 'walk')) return false
+-  if (nav.hasHeight && groundOnly(u) && nav.floor[i] > STEP) return false
++  if (nav.hasHeight && (groundOnly(u) || X.cf5) && nav.floor[i] > STEP) return false
+   if (others.some((o) => !o.aboard && (o.t.fp ? clearOf(o, cx, cz, u.r) < 0.4 : hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4))) return false
+   return true
+ }
+diff -ru orig/core/nav.js pkg/core/nav.js
+--- orig/core/nav.js	2026-11-19 07:32:46.592860430 +0000
++++ pkg/core/nav.js	2026-11-19 09:57:18.521835028 +0000
+@@ -1,4 +1,5 @@
+ import { hypot, sin, cos } from './dmath.js'
++import { X } from './x.js'
+ 
+ // ---------------------------------------------------------------------------
+ // Movement on the tabletop. The board is rasterised into half-inch cells; each
+@@ -242,7 +243,7 @@
+   //
+   // (F7a) `climb`: the unit climbs ladders (u.t.climb, which only the plans'
+   // mode setup reads: core/actions/move.js climbs). Read only with height.
+-  reach(sx, sz, { r, max, mode = 'walk', forbid = null, climb = false }) {
++  reach(sx, sz, { r, max, mode = 'walk', forbid = null, climb = false, wall = null }) {
+     const N = this.N
+     // Float64, not Float32: the heap keys are doubles, and a rounded-down
+     // stored distance made `d > dist[i]` discard live entries, so diagonal
+@@ -253,9 +254,15 @@
+     const res = { dist, prev, start, mode, sx, sz }
+     if (start < 0) return res
+     if (mode === 'fly') {
++      // (scratch cf4) a flier the fortifications block as a walker: the height Dijkstra, no scenery, no rough ground
++      if (wall === 'block' && this.hasHeight) return this.reachHeight(res, { r, max, mode: 'flywall', forbid: null, climb: true })
++      // (scratch a6) the wall toll: each raised run the straight flight passes over (not the one it starts or ends on) costs `wall` inches
++      const toll = typeof wall === 'number' && this.hasHeight ? wall : 0
+       for (let i = 0; i < N; i++) {
+         const d = hypot(this.x(i) - sx, this.z(i) - sz)
+-        if (d <= max) dist[i] = d
++        if (d > max) continue
++        const t = toll ? d + toll * this.crossings(sx, sz, this.x(i), this.z(i)) : d
++        if (t <= max) dist[i] = t
+       }
+       return res
+     }
+@@ -620,6 +627,20 @@
+   // steps onto a floor above STEP (no stair top, no deck), takes no ladder
+   // (its climb is false, and `climbs` refuses it anyway), and keeps its
+   // disc clear of every ledge by the cliff test, as a walker's.
++  // (scratch a6) the raised runs a straight segment passes over, its two ends' own runs not counted
++  crossings(ax, az, bx, bz) {
++    const len = hypot(bx - ax, bz - az), steps = Math.max(1, Math.ceil(len / (this.cell * 0.5)))
++    let n = 0, inRun = false, first = true
++    for (let s = 0; s <= steps; s++) {
++      const t = s / steps, i = this.index(ax + (bx - ax) * t, az + (bz - az) * t)
++      const up = i >= 0 && this.floor[i] > STEP
++      if (up && !inRun) inRun = true
++      else if (!up && inRun) { if (!first) n++; inRun = false; first = false }
++      else if (!up) first = false
++    }
++    return n
++  }
++
+   reachHeight(res, { r, max, mode, forbid, climb }) {
+     const { dist, prev, start, sx, sz } = res
+     const { nx, nz, cell, floor, cliff, link, linkCost } = this
+@@ -628,12 +649,15 @@
+     const heap = new Heap()
+     heap.push(start, d0)
+     const clMode = mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'all'
+-    const burrow = mode === 'burrow'
++    const burrow = mode === 'burrow', flywall = mode === 'flywall'
++    // (scratch cf6) no fortification body blocks a ground path: no floor or ledge test on the way for walk and wreck
++    const open = X.cf6 && (mode === 'walk' || mode === 'wreck')
+     const climbs = climb && !burrow   // (Q4 makes climb false for it anyway)
++    const under = burrow && X.h2      // (scratch h2) tunnels under a deck's body: no floor or ledge test on the way
+     // a unit that starts somewhere cramped may wriggle out through its own
+     // footprint, as on the flat; a ledge squeezes it as an obstacle does (it
+     // still never steps more than STEP up or down)
+-    const escape = this.clearance(start, clMode) < r - 0.06 || cliff[start] < r - 0.06 ? r * 1.5 : 0
++    const escape = !flywall && (this.clearance(start, clMode) < r - 0.06 || cliff[start] < r - 0.06) ? r * 1.5 : 0
+     const relax = (i, j, nd) => {
+       if (nd <= max && nd < dist[j]) {
+         dist[j] = nd
+@@ -652,11 +676,11 @@
+           if (jx < 0 || jz < 0 || jx >= nx || jz >= nz) continue
+           const j = jz * nx + jx
+           if (forbid && forbid[j]) continue
+-          if (Math.abs(floor[j] - fi) > STEP) continue
+-          if (burrow && floor[j] > STEP) continue   // a deck's footprint is hard (D:2926)
+-          const cl = this.clearance(j, clMode), cf = cliff[j]
++          if (!under && !open && Math.abs(floor[j] - fi) > STEP) continue
++          if (!under && burrow && floor[j] > STEP) continue   // a deck's footprint is hard (D:2926)
++          const cl = flywall ? Infinity : this.clearance(j, clMode), cf = under || open ? Infinity : cliff[j]
+           if ((cl < r - 0.06 || cf < r - 0.06) && !(escape && cl > 0.05 && cf > 0.05 && hypot(this.x(j) - sx, this.z(j) - sz) < escape)) continue
+-          let mul = burrow ? 1 : this.diff[j] ? 2 : 1
++          let mul = burrow || flywall ? 1 : this.diff[j] ? 2 : 1
+           if (mode === 'wreck' && this.clearAll[j] < r - 0.06) mul = 2
+           relax(i, j, d + (ox && oz ? SQRT2 : 1) * cell * mul)
+         }
+@@ -727,8 +751,8 @@
+       if (i < 0) return false
+       if (forbid && forbid[i]) return false
+       if (this.clearance(i, mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'all') < r - 0.06) return false
+-      if (this.cliff[i] < r - 0.06 || Math.abs(this.floor[i] - f) > STEP) return false
+-      if (mode === 'burrow' && this.floor[i] > STEP) return false
++      if (!(X.h2 && mode === 'burrow') && !(X.cf6 && (mode === 'walk' || mode === 'wreck')) && (this.cliff[i] < r - 0.06 || Math.abs(this.floor[i] - f) > STEP)) return false
++      if (mode === 'burrow' && !X.h2 && this.floor[i] > STEP) return false
+       f = this.floor[i]
+       if (mode !== 'burrow' && this.diff[i] !== d0) return false
+       if (mode === 'wreck' && this.clearAll[i] < r - 0.06) return false
+diff -ru orig/core/queries.js pkg/core/queries.js
+--- orig/core/queries.js	2026-11-19 07:32:46.592926146 +0000
++++ pkg/core/queries.js	2026-11-19 09:57:18.522319609 +0000
+@@ -48,6 +48,7 @@
+ import { canCharge, chargeTargets } from './actions/charge.js'
+ import { discsOf, clearOf, fpGap } from './footprint.js'
+ import { deckFrom } from './actions/transport.js'
++import { X } from './x.js'
+ 
+ export { moveMode, climbs, forbidMask, movePlan, validEnd, nearestValid } from './actions/move.js'
+ export { canShoot, shotInfo, shootTargets, rangeOf, lobbed, weaponOf, allySpell, hasTarget } from './actions/shoot.js'
+@@ -137,7 +138,8 @@
+     return n * 2 >= ds.length && n > 0
+   }
+   const live = u.models.filter((m) => m.alive)
+-  if (u.t.fly) return false
++  // (scratch w1) canopy cover: the Aerie's fliers take cover as a walker does (half their models over cover)
++  if (u.t.fly && !(X.w1 && u.race === 'bird')) return false
+   let n = 0
+   for (const m of live) if (G.nav.cover[G.nav.index(mx(u, m), mz(u, m))]) n++
+   return n * 2 >= live.length && n > 0
+@@ -271,6 +273,19 @@
+   }
+   return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
+ }
++// (scratch h3b) how far (x, z) is from the edge of the deck under objective o (its turned box); Infinity if none
++function deckGap(G, o, x, z) {
++  for (const c of G.terrain.chunks) {
++    if (!c.alive || c.kind !== 'deck' || !c.shape) continue
++    const { x: cx, z: cz, hx, hz, yaw = 0 } = c.shape
++    const lo = (px, pz) => { const dx = px - cx, dz = pz - cz; return [dx * Math.cos(yaw) - dz * Math.sin(yaw), dx * Math.sin(yaw) + dz * Math.cos(yaw)] }
++    const [ox, oz] = lo(o.x, o.z)
++    if (Math.abs(ox) > hx || Math.abs(oz) > hz) continue
++    const [px, pz] = lo(x, z)
++    return Math.hypot(Math.max(0, Math.abs(px) - hx), Math.max(0, Math.abs(pz) - hz))
++  }
++  return Infinity
++}
+ function controlHigh(G, o) {
+   const oc = [0, 0], y = floorAt(G, o.x, o.z)
+   for (const u of G.units) {
+@@ -278,7 +293,12 @@
+     for (const m of u.models) {
+       if (!m.alive) continue
+       const x = mx(u, m), z = mz(u, m)
+-      if (hypot(x - o.x, z - o.z) <= OBJECTIVE_RANGE + u.t.base && Math.abs(floorAt(G, x, z) - y) <= HIGH) oc[u.side] += u.t.OC
++      const fl = floorAt(G, x, z)
++      if (hypot(x - o.x, z - o.z) <= OBJECTIVE_RANGE + u.t.base && Math.abs(fl - y) <= HIGH) oc[u.side] += u.t.OC
++      // (scratch h3) undermine: a burrower's model on the ground within range counts at a raised objective
++      else if (X.h3 && u.t.move === 'burrow' && y > STEP && fl <= STEP && hypot(x - o.x, z - o.z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
++      // (scratch h3b) the same, its range measured from the edge of the deck the objective stands on
++      else if (X.h3b && u.t.move === 'burrow' && y > STEP && fl <= STEP && deckGap(G, o, x, z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
+     }
+   }
+   return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
+@@ -309,7 +329,7 @@
+ // O(gates of two levels) a call, and no field built.
+ export function levelDist(G, a, b, climb) {
+   const nav = G.nav, line = hypot(a.x - b.x, a.z - b.z)
+-  if (!nav.hasHeight) return line
++  if (!nav.hasHeight || X.cf6) return line
+   const la = nav.levelAt(a.x, a.z), lb = nav.levelAt(b.x, b.z)
+   const gg = gateGraph(nav, climb), gs = gg.gates, n = gs.length
+   let best = Infinity
+diff -ru orig/core/terrain/terrain.js pkg/core/terrain/terrain.js
+--- orig/core/terrain/terrain.js	2026-11-19 07:32:46.593236108 +0000
++++ pkg/core/terrain/terrain.js	2026-11-19 09:57:18.519245555 +0000
+@@ -63,6 +63,7 @@
+ import { SETS } from './sets.js'
+ import { scatter } from './recipes.js'
+ import { segmentHitsBox, distToBox } from './geom.js'
++import { X } from '../x.js'
+ 
+ // where a chunk stands now, as a report carries it
+ const place = (c) => ({ x: c.shape.x, y: c.shape.y, z: c.shape.z })
+@@ -171,6 +172,8 @@
+     this.clear(out)
+     const T = { W: this.W, H: this.H, add: (def) => this.add(def, out) }
+     this.features = scatter(T, SETS[set], seed, objectives, deployDepth)
++    // (scratch cf3) the zone ramparts gone: every rampart piece within 2.5" of a zone's front, dead
++    if (X.cf3 && SETS[set].works) for (const c of this.chunks) if (c.look?.recipe === 'rampart' && c.shape && Math.abs(c.shape.x) > this.W / 2 - deployDepth - 2.5) c.alive = false
+     this.dirty = true
+   }
+ 
+Only in pkg/core: x.js
+diff -ru orig/data/mission.js pkg/data/mission.js
+--- orig/data/mission.js	2026-11-19 07:32:46.596802536 +0000
++++ pkg/data/mission.js	2026-11-19 11:14:14.605387859 +0000
+@@ -38,6 +38,11 @@
+ import { deepFreeze } from '../core/util.js'
+ import { SETS } from '../core/terrain/sets.js'
+ import { ROLES, RACES } from './schema.js'
++import { X } from '../core/x.js'
++import { readFileSync } from 'node:fs'
++// (scratch spd) the set prices: a JSON file named by TS_SP, { <mission>: { <set>: { <race>: { <unit>: cost } } } }
++const SP = X.spd && process.env.TS_SP ? JSON.parse(readFileSync(process.env.TS_SP, 'utf8')) : {}
++const SPD = (m) => (SP[m] ? { setPrices: SP[m] } : {})
+ 
+ // A registry with no prototype, so a mission named like an Object.prototype
+ // member (from a URL, or a lobby a peer writes) finds nothing.
+@@ -53,6 +58,7 @@
+     // DESIGN §4.2.5's measurements)
+     list: {
+       size: 'Skirmish', points: 500, units: 10, models: 36, perKind: 3,
++      ...SPD('classic'),
+       roles: { Hero: [1, 1], Troops: [1, 6], Elite: [0, 2], Fast: [0, 2], Monster: [0, 1], Artillery: [0, 1], Vehicle: [0, 0] },
+     },
+     // (F7a) and `fortified`, the fortifications to climb, which F7a adds to
+@@ -78,6 +84,7 @@
+     // (F9a) at most two vehicles
+     list: {
+       size: 'Field', points: 1000, units: 18, models: 70, perKind: 5,
++      ...SPD('field'),
+       roles: { Hero: [1, 2], Troops: [2, 10], Elite: [0, 3], Fast: [0, 3], Monster: [0, 2], Artillery: [0, 2], Vehicle: [0, 2] },
+       // (F8b, DESIGN §4.2.8.2's fallback) a Field battle's own prices,
+       // fitted by sim/army-sim.mjs on its boards: no one table priced the
+@@ -89,6 +96,12 @@
+       prices: {
+         squirrel: { elder: 75, oakguard: 115, nutkin: 70, grenadier: 45, glider: 60, trebuchet: 55 },
+         serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 45 },
++        // (scratch a4a / a4b / a4c) every flying Aerie unit's Field cost x1.25 / x1.5 / x1.15, to 5
++        // (scratch a4d) the Aerie's fliers at x1.2 their re-fitted (pd) Skirmish cost; (hf) the Hive's Field entry:
++        // the Boilback, Spinethrowers and Hoppers the Field fit found overpriced
++        ...(X.a4d ? { bird: { skyseer: 85, stormtalon: 100, finch: 55, kestrel: 60, roc: 140 } } : {}),
++        ...(X.hf ? { insect: { boilback: 10, spinethrower: 60, hopper: 70 } } : X.hf2 ? { insect: { boilback: 20, hopper: 70 } } : {}),
++        ...(X.a4a || X.a4b || X.a4c ? { bird: Object.fromEntries(Object.entries({ skyseer: 70, stormtalon: 85, finch: 50, kestrel: 45, roc: 120 }).map(([k, c]) => [k, 5 * Math.round((c * (X.a4b ? 1.5 : X.a4c ? 1.15 : 1.25)) / 5)])) } : {}),
+       },
+     },
+     // (F7a) and `fortified`, as every mission's
+@@ -139,6 +152,7 @@
+     // (F9a) at most two vehicles
+     list: {
+       size: 'Grand', points: 1500, units: 24, models: 90, perKind: 7,
++      ...SPD('grand'),
+       roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3], Vehicle: [0, 2] },
+       // (F8b, the fallback as at Field) a Grand battle's own prices. The
+       // Coil's big units are worth more here than its ×3 preset may cost
+@@ -182,6 +196,8 @@
+       prices: {
+         squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15, warcart: 150 },
+         serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 5 },
++        // (scratch gx) the Field entries extrapolated to Grand: the Aerie's fliers x1.4 of pd, the Hive's Field entry
++        ...(X.gx ? { bird: { skyseer: 100, stormtalon: 120, finch: 65, kestrel: 70, roc: 160 }, insect: { boilback: 20, hopper: 70 } } : {}),
+       },
+     },
+     // (F7a) and `fortified`, as every mission's
+@@ -338,7 +354,7 @@
+ // table can't hold at every size, core/army.js priceOf): a record by race
+ // key, each a record by that race's unit keys, each price a whole multiple
+ // of 5 above 0, as a unit's cost is. RULES_ID hashes it with the mission.
+-const LIST_KEYS = ['size', 'points', 'units', 'models', 'perKind', 'roles', 'prices']
++const LIST_KEYS = ['size', 'points', 'units', 'models', 'perKind', 'roles', 'prices', 'setPrices']
+ const record = (v) => !!v && typeof v === 'object' && !Array.isArray(v)
+ const ENVELOPE = { units: 24, models: 90 }
+ function checkListRules(l, bad) {
+diff -ru orig/data/races/bird.js pkg/data/races/bird.js
+--- orig/data/races/bird.js	2026-11-19 07:32:46.597012606 +0000
++++ pkg/data/races/bird.js	2026-11-19 09:57:18.533972969 +0000
+@@ -15,6 +15,7 @@
+ // (N 7,200 a pair), the I–W pair's fit the check, the table judged on 1111
+ // and 5555 (N 2,400 a pair each), each unit's figures beside it.
+ import { AURA } from '../../core/rules.js'
++import { X } from '../../core/x.js'
+ 
+ const FLY = 'Fly — moves over scenery and enemy units; never in cover.'
+ 
+@@ -48,8 +49,8 @@
+       // 45 4444's check had it 54 ± 4 against the Serpents, outside its band,
+       // so 50 (band 10); judged 49 ± 4, 53 ± 4 on 1111 and 43 ± 4, 49 ± 4,
+       // 45 ± 4 on 5555, in band, but 35 ± 4 against the Hivekin on 1111)
+-      name: 'Finch Flock', short: 'Finches', role: 'Troops', ai: 'shooter', models: 6, base: 0.28, pts: 8, cost: 50, fly: true,
+-      stats: 'M10 WS4 BS4 S2 T2 W1 A1 Ld6 Sv6 OC1',
++      name: 'Finch Flock', short: 'Finches', role: 'Troops', ai: 'shooter', models: 6, base: 0.28, pts: 8, cost: X.pd ? 45 : 50, fly: true,
++      stats: `M10 WS4 BS4 S2 T2 W1 A1 Ld6 Sv6 OC${X.a3 || X.a3b ? 0 : 1}`,
+       ranged: { name: 'Pebble drops', range: 12, shots: 2, S: 3, AP: 0, D: 1, assault: true, fx: 'pebble' },
+       melee: { name: 'Tiny beaks', S: 2, AP: 0, D: 1 },
+       abilities: [FLY, 'Flit — may shoot after Advancing.'],
+@@ -58,8 +59,8 @@
+       // (F5a, fitted: 42 ± 2 and 52 ± 2, the mean 47, so 45 (band 9), the
+       // Hivekin 51 ± 3; judged 44 ± 4, 46 ± 4 on 1111 and 52 ± 4, 54 ± 4,
+       // 54 ± 4 on 5555, in band, but 55 ± 4 against the Serpents on 1111)
+-      name: 'Kestrel Divers', short: 'Kestrels', role: 'Fast', ai: 'melee', models: 4, base: 0.32, pts: 16, cost: 45, fly: true, swoop: { chargeS: 2 },
+-      stats: 'M14 WS3 BS5 S3 T3 W1 A2 Ld7 Sv5 OC1',
++      name: 'Kestrel Divers', short: 'Kestrels', role: 'Fast', ai: 'melee', models: 4, base: 0.32, pts: 16, cost: X.pd ? 50 : 45, fly: true, swoop: { chargeS: 2 },
++      stats: `M14 WS3 BS5 S3 T3 W1 A2 Ld7 Sv5 OC${X.a3 || X.a3b ? 0 : 1}`,
+       ranged: null,
+       melee: { name: 'Hooked talons', S: 3, AP: 1, D: 1 },
+       abilities: [FLY, 'Dive — +2 Strength in the fight on the turn it charges.'],
+@@ -68,9 +69,9 @@
+       // (F5a, fitted at A2: 94 ± 4 and 80 ± 4, the mean 87, so 85 (band 17),
+       // the Hivekin 75 ± 4; judged 93 ± 6, 74 ± 5, 72 ± 6 on 1111 and 94 ± 5,
+       // 82 ± 6, 81 ± 6 on 5555, in band each)
+-      name: 'Stormtalon Guard', short: 'Stormtalons', role: 'Elite', ai: 'melee', models: 3, base: 0.38, pts: 30, cost: 85, fly: true, swoop: { chargeS: 1 },
++      name: 'Stormtalon Guard', short: 'Stormtalons', role: 'Elite', ai: 'melee', models: 3, base: 0.38, pts: 30, cost: 85, ...(X.a5 || X.a5b ? {} : { fly: true, swoop: { chargeS: 1 } }),
+       // (Q31) A 3 -> 2: at A3 the Aerie scored 57% and 69% against the Bushtails (round 1, 4444), the Stormtalons fitting 116 ± 3
+-      stats: 'M12 WS3 BS5 S4 T4 W2 A2 Ld8 Sv4 OC1',
++      stats: `M12 WS3 BS5 S4 T4 W2 A2 Ld8 Sv4 OC${X.a3b ? 0 : 1}`,
+       ranged: null,
+       melee: { name: 'War-talons', S: 4, AP: 2, D: 1 },
+       abilities: [FLY, 'Dive — +1 Strength in the fight on the turn it charges.'],
+@@ -80,8 +81,8 @@
+       // 128 ± 5 (and 139 ± 8 on 4444's check) lie outside 100's band, so 120
+       // (band 24), inside all three; judged 100 ± 8, 106 ± 7, 117 ± 8 on 1111
+       // and 111 ± 7, 100 ± 8, 127 ± 8 on 5555, in band each)
+-      name: 'Greatwing Roc', short: 'Roc', role: 'Monster', ai: 'melee', models: 1, base: 0.9, pts: 120, cost: 120, big: true, fly: true, swoop: { chargeS: 1 },
+-      stats: 'M12 WS3 BS6 S6 T6 W8 A4 Ld8 Sv4 OC3',
++      name: 'Greatwing Roc', short: 'Roc', role: 'Monster', ai: 'melee', models: 1, base: 0.9, pts: 120, cost: X.pd ? 115 : 120, big: true, fly: true, swoop: { chargeS: 1 },
++      stats: `M12 WS3 BS6 S6 T6 W8 A4 Ld8 Sv4 OC${X.a3 || X.a3b ? 2 : 3}`,
+       ranged: null,
+       melee: { name: 'Rending beak', S: 6, AP: 2, D: 2 },
+       abilities: [FLY, 'Dive — +1 Strength in the fight on the turn it charges.', 'Vast — a blast catches it for D3+1 hits.'],
+@@ -91,7 +92,7 @@
+       // -60.7 ± 25.9 points against the Bushtails and -24.8 ± 24.5 against the
+       // Serpents (the Aerie's), and 70 is as far as the classic list's 500 lets
+       // the handicap go
+-      name: 'Skyseer Varra', short: 'Skyseer', role: 'Hero', ai: 'hero', models: 1, base: 0.42, pts: 80, cost: 70, hero: true, fly: true,
++      name: 'Skyseer Varra', short: 'Skyseer', role: 'Hero', ai: 'hero', models: 1, base: 0.42, pts: 80, cost: 70, hero: true, ...(X.a5b ? {} : { fly: true }),
+       stats: 'M10 WS3 BS3 S4 T4 W5 A3 Ld9 Sv5 OC1',
+       // (V3c) three spells, one cast a shooting phase, the player's pick:
+       // the first is her ranged weapon (data/schema.js)
+diff -ru orig/data/races/insect.js pkg/data/races/insect.js
+--- orig/data/races/insect.js	2026-11-19 07:32:46.596968634 +0000
++++ pkg/data/races/insect.js	2026-11-19 08:52:50.789589298 +0000
+@@ -15,6 +15,7 @@
+ // the I–W pair's fit the check, the table judged on 1111 and 5555 (N 2,400
+ // a pair each), each unit's figures beside it.
+ import { AURA } from '../../core/rules.js'
++import { X } from '../../core/x.js'
+ 
+ const CLAWS = { name: 'Spur-claws', S: 3, AP: 0, D: 1 }
+ 
+@@ -38,7 +39,7 @@
+       // (F5a, fitted: 73 ± 3 against the Bushtails, 73 ± 3 against the
+       // Serpents, so 75 (band 15), the Windfolk 84 ± 3; judged 70 ± 5, 74 ± 5
+       // and 88 ± 5 on 1111, 82 ± 6, 78 ± 5 and 75 ± 5 on 5555, in band each)
+-      name: 'Spinethrower Brood', short: 'Spinethrowers', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 8, cost: 75,
++      name: 'Spinethrower Brood', short: 'Spinethrowers', role: 'Troops', ai: X.h1 ? 'line' : 'shooter', models: 6, base: 0.3, pts: 8, cost: X.pd ? 70 : 75,
+       // (Q31) OC 2 -> 3: a climber that holds the works' objectives the burrowers can't reach (the balance's probes)
+       stats: 'M6 WS4 BS4 S3 T3 W1 A1 Ld6 Sv5 OC3',
+       ranged: { name: 'Spine volleys', range: 15, shots: 2, S: 3, AP: 1, D: 1, fx: 'sting' },
+@@ -56,7 +57,7 @@
+       // 85 the models still bind 235 to 364 of 1,000 lists, so 90 (band 18),
+       // inside the band; judged 85 ± 6, 81 ± 6, 91 ± 6 on 1111 and 96 ± 7,
+       // 89 ± 6, 84 ± 6 on 5555, in band each)
+-      name: 'Delver Swarm', short: 'Delvers', role: 'Troops', ai: 'melee', models: 8, base: 0.25, pts: 10, cost: 90, burrow: true, swarm: { min: 4 },
++      name: 'Delver Swarm', short: 'Delvers', role: 'Troops', ai: 'melee', models: 8, base: 0.25, pts: 10, cost: X.pd ? 95 : 90, burrow: true, swarm: { min: 4 },
+       stats: 'M5 WS4 BS6 S4 T3 W2 A3 Ld6 Sv4 OC2',
+       ranged: null,
+       melee: { name: 'Digging claws', S: 4, AP: 0, D: 1 },
+@@ -83,7 +84,7 @@
+       // 66 ± 5 against the Serpents on 5555, but 83 ± 6 against the Windfolk
+       // on 1111 and 78 ± 6 against the Bushtails on 5555, outside its band:
+       // the fit's 70 would have held both)
+-      name: 'Hopper Lancers', short: 'Hoppers', role: 'Fast', ai: 'raider', models: 4, base: 0.3, pts: 14, cost: 65,
++      name: 'Hopper Lancers', short: 'Hoppers', role: 'Fast', ai: 'raider', models: 4, base: 0.3, pts: 14, cost: X.pd ? 75 : 65,
+       // (Q31) T 3 -> 4, Sv 5 -> 4, OC 1 -> 2: 97% of them died, most to shooting, for 58 kills in 120 battles
+       stats: 'M10 WS3 BS4 S4 T4 W1 A2 Ld7 Sv4 OC2',
+       ranged: { name: 'Barbed spines', range: 8, shots: 1, S: 4, AP: 1, D: 1, assault: true, fx: 'sting' },
+@@ -94,7 +95,7 @@
+       // (F5a, fitted: 39 ± 4 and 47 ± 4, so 45 (band 14), the Windfolk 59 ±
+       // 4; judged 44 ± 7, 51 ± 7, 51 ± 7 on 1111 and 39 ± 8, 35 ± 7, 58 ± 7
+       // on 5555, in band each)
+-      name: 'Boilback Bombardier', short: 'Boilback', role: 'Artillery', ai: 'artillery', models: 1, base: 1.0, pts: 95, cost: 45, big: true,
++      name: 'Boilback Bombardier', short: 'Boilback', role: 'Artillery', ai: 'artillery', models: 1, base: 1.0, pts: 95, cost: X.pd ? 50 : 45, big: true,
+       stats: 'M4 WS6 BS4 S3 T6 W7 A2 Ld7 Sv3 OC0',
+       ranged: { name: 'Boiling glob', range: 30, shots: 1, blast: 2.6, S: 5, AP: 2, D: 1, indirect: true, heavy: true, scenery: 2, fx: 'glob' },
+       melee: { name: 'Crushing legs', S: 4, AP: 0, D: 1 },

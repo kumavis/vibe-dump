@@ -1,0 +1,1 @@
+skyseer.cost=60 stormtalon.cost=105 longbill.cost=65 finch.cost=45 kestrel.cost=45 roc.cost=110

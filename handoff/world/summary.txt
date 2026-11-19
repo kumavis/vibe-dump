@@ -1,0 +1,32 @@
+t1 EXIT 0 158s load 2.84-7.73 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs title skirm-classic-s1
+all EXIT 0 724s load 6.66-7.93 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs
+mid EXIT 0 138s load 6.53-8.58 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs mid mid-powder
+mid2 EXIT 0 299s load 6.35-7.67 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs mid mid-powder
+s1a EXIT 0 162s load 6.45-9.12 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs title skirm-classic-s411
+s1-title EXIT 0 88s load 6.12-7.96 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs title
+s1-skirm-classic-s411 EXIT 0 77s load 6.39-7.75 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-classic-s411
+s1-skirm-fort-s30 EXIT 0 96s load 6.46-8.11 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-fort-s30
+s1-field-open-s7 EXIT 0 96s load 6.48-8.11 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs field-open-s7
+s1-grand-fort-s5 EXIT 0 59s load 6.35-8.07 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs grand-fort-s5
+s1-lowfi EXIT 0 23s load 6.40-7.06 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs lowfi
+s1-phone EXIT 0 49s load 6.48-7.75 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs phone
+s1-skirm-classic-s1 EXIT 0 111s load 6.47-8.43 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-classic-s1
+s1-skirm-fort-s4 EXIT 0 121s load 6.49-8.17 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-fort-s4
+s2-skirm-classic-s411 EXIT 0 110s load 6.24-7.31 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-classic-s411
+s2-skirm-fort-s4 EXIT 0 87s load 6.17-8.67 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-fort-s4
+s2-title EXIT 0 91s load 6.45-9.41 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs title
+s2-skirm-classic-s411 EXIT 0 99s load 6.47-7.91 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-classic-s411
+s2-grand-fort-s5 EXIT 0 79s load 6.47-8.29 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs grand-fort-s5
+s2-title EXIT 0 70s load 6.32-7.67 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs title
+s2-skirm-classic-s1 EXIT 0 124s load 6.37-7.08 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-classic-s1
+s2-skirm-fort-s4 EXIT 0 125s load 6.45-7.33 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-fort-s4
+s2-skirm-fort-s30 EXIT 0 111s load 6.47-8.13 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-fort-s30
+s2-field-open-s7 EXIT 0 101s load 6.27-7.80 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs field-open-s7
+s2-lowfi EXIT 0 51s load 6.29-8.34 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs lowfi
+s2-phone EXIT 0 76s load 6.40-8.68 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs phone
+s2-mid-powder EXIT 0 157s load 6.34-7.57 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs mid-powder
+m0-skirm-classic-s411 EXIT 0 95s load 6.31-8.28 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-classic-s411
+m0-grand-fort-s5 EXIT 0 78s load 6.39-8.65 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs grand-fort-s5
+s2-measure-classic EXIT 0 48s load 6.49-7.76 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs measure-classic
+s2-measure-grand EXIT 0 60s load 6.47-8.57 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs measure-grand
+s2-skirm-classic-s411 EXIT 0 121s load 6.42-7.83 node /tmp/claude-0/-home-user-vibe-dump/c8117bd8-3b62-5359-9239-be458d8a067b/scratchpad/world/shoot.mjs skirm-classic-s411

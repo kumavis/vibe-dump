@@ -1,0 +1,35 @@
+diff -ru a/core/queries.js b/core/queries.js
+--- a/core/queries.js	2026-11-19 07:32:46.592926146 +0000
++++ b/core/queries.js	2026-11-19 08:53:40.926699377 +0000
+@@ -271,6 +271,19 @@
+   }
+   return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
+ }
++// (undermine) how far (x, z) is from the edge of the deck objective o stands on (its turned box); Infinity if none
++function deckGap(G, o, x, z) {
++  for (const c of G.terrain.chunks) {
++    if (!c.alive || c.kind !== 'deck' || !c.shape) continue
++    const { x: cx, z: cz, hx, hz, yaw = 0 } = c.shape
++    const lo = (px, pz) => { const dx = px - cx, dz = pz - cz; return [dx * Math.cos(yaw) - dz * Math.sin(yaw), dx * Math.sin(yaw) + dz * Math.cos(yaw)] }
++    const [ox, oz] = lo(o.x, o.z)
++    if (Math.abs(ox) > hx || Math.abs(oz) > hz) continue
++    const [px, pz] = lo(x, z)
++    return Math.hypot(Math.max(0, Math.abs(px) - hx), Math.max(0, Math.abs(pz) - hz))
++  }
++  return Infinity
++}
+ function controlHigh(G, o) {
+   const oc = [0, 0], y = floorAt(G, o.x, o.z)
+   for (const u of G.units) {
+@@ -278,7 +291,10 @@
+     for (const m of u.models) {
+       if (!m.alive) continue
+       const x = mx(u, m), z = mz(u, m)
+-      if (hypot(x - o.x, z - o.z) <= OBJECTIVE_RANGE + u.t.base && Math.abs(floorAt(G, x, z) - y) <= HIGH) oc[u.side] += u.t.OC
++      const fl = floorAt(G, x, z)
++      if (hypot(x - o.x, z - o.z) <= OBJECTIVE_RANGE + u.t.base && Math.abs(fl - y) <= HIGH) oc[u.side] += u.t.OC
++      // (undermine) a burrower's model on the ground counts at an objective on a deck when within range of the deck's edge
++      else if (u.t.move === 'burrow' && y > STEP && fl <= STEP && deckGap(G, o, x, z) <= OBJECTIVE_RANGE + u.t.base) oc[u.side] += u.t.OC
+     }
+   }
+   return oc[0] > oc[1] ? 0 : oc[1] > oc[0] ? 1 : -1
