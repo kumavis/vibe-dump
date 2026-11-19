@@ -6,6 +6,8 @@
 // and pine; and the long grass off the mat. Nothing here is on the mat,
 // and nothing casts a shadow.
 //
+// (S3) The lanes' roads off the mat, out to the land and the cart track.
+//
 // Draw calls: the ground 1, the edge and stakes 1, the trees 2, the grass 1.
 import * as THREE from 'three'
 import { lift, outside, stream } from './place.js'
@@ -97,6 +99,31 @@ function paintFields(p, T, seed) {
   }
   line(2.4, '#8a7650', 0.75)
   line(1.1, '#9a8660', 0.5)
+  // (S3) the lanes off the mat: each army's road out from its edge into
+  // the land it came from, and the spur from the mat to the cart track
+  const way = (pts, width, colour, alpha) => {
+    g.globalAlpha = alpha
+    g.strokeStyle = colour
+    g.lineWidth = width * px
+    g.beginPath()
+    pts.forEach(([x, z], i) => (i ? g.lineTo(at(x), at(z)) : g.moveTo(at(x), at(z))))
+    g.stroke()
+  }
+  const k = p.k
+  for (const rd of p.roads ?? []) {
+    const pts = []
+    for (let i = 0; i <= 24; i++) {
+      const d = (i / 24) * 70 * k
+      pts.push([rd.x + rd.sx * d, rd.z + 4 * Math.sin(d / 17 + rd.z) * Math.min(1, d / 12)])
+    }
+    way(pts, 1.9, '#8a7650', 0.7)
+    way(pts, 0.8, '#9a8660', 0.45)
+  }
+  if (p.spur) {
+    const tz = (x) => p.track.reduce((b, q) => (Math.abs(q.x - x) < Math.abs(b.x - x) ? q : b), p.track[0]).z
+    const pts = [[p.spur.x, p.spur.z], [p.spur.x, (p.spur.z + tz(p.spur.x)) / 2], [p.spur.x + 1.5, tz(p.spur.x + 1.5)]]
+    way(pts, 1.4, '#8a7650', 0.7)
+  }
   // the near ground, round the mat: uncut meadow, paler and yellower than
   // the mat's turf, so the board reads as the mown field it is; and
   // the canvas's own edge, which the ground beyond it stretches
@@ -107,6 +134,10 @@ function paintFields(p, T, seed) {
   g.strokeRect(0, 0, 1024, 1024)
   g.fillStyle = '#74813f'
   g.fillRect(at(-W / 2 - 5), at(-H / 2 - 5), (W + 10) * px, (H + 10) * px)
+  // (S3) the lanes again across the meadow, to the mat's edge
+  for (const rd of p.roads ?? []) way([[rd.x, rd.z], [rd.x + rd.sx * 6, rd.z + 4 * Math.sin(6 / 17 + rd.z) * 0.5]], 1.5, '#86704a', 0.75)
+  if (p.spur) way([[p.spur.x, p.spur.z], [p.spur.x, p.spur.z + p.spur.sz * 6]], 1.2, '#86704a', 0.75)
+  g.globalAlpha = 1
   const t = new THREE.CanvasTexture(c)
   t.colorSpace = THREE.SRGBColorSpace
   return t

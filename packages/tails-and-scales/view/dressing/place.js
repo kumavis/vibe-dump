@@ -180,6 +180,188 @@ export function groupOf(c) {
 // a piece that stands on the ground (not a parapet on a deck)
 const grounded = (c) => c.shape.y - c.shape.hy < 0.05
 
+// ---- S3: the lanes ------------------------------------------------------
+// The ways the armies would walk, found on a grid of the view's own (CELL
+// tails a cell) over the table as made: a cell is shut where a rules piece
+// stands (its box and a little more) or the nav grid says nobody walks
+// (read, never asked to plan); open ground costs least, a corridor between
+// pieces and rough ground more, and a seeded noise lets a lane wander as
+// worn tracks do. A* in plain arithmetic, ties broken by the cell's index,
+// so every engine finds the same lanes. They run between the objectives (a
+// tree spanning them), in from each army's edge to its nearest objective,
+// from the objective nearest the cart track out to it, and from each
+// ladder's foot to its nearest objective; where lanes share ground the wear
+// adds up, and a lane through a gap or at a ladder's foot wears hardest.
+const CELL = 0.5
+function lanesOf(ctx, R, seed, trackSide) {
+  const { W, H, edges, objectives, nav } = ctx
+  const nx = Math.round(W / CELL), nz = Math.round(H / CELL), N = nx * nz
+  const cx = (i) => -W / 2 + ((i % nx) + 0.5) * CELL, cz = (i) => -H / 2 + (Math.floor(i / nx) + 0.5) * CELL
+  const at = (x, z) => {
+    const ix = Math.floor((x + W / 2) / CELL), iz = Math.floor((z + H / 2) / CELL)
+    return ix < 0 || iz < 0 || ix >= nx || iz >= nz ? -1 : iz * nx + ix
+  }
+  const shut = new Uint8Array(N), cost = new Float64Array(N), clear = new Float64Array(N)
+  for (let i = 0; i < N; i++) {
+    const x = cx(i), z = cz(i)
+    let c = 9
+    for (const b of R.near(x, z)) c = Math.min(c, boxDist(b, x, z))
+    clear[i] = c
+    const j = nav.index(x, z)
+    const walk = j >= 0 && !nav.hard[j] && !nav.soft[j] && !(nav.hasHeight && nav.floor[j] > 0.01)
+    if (c < 0.3 || !walk) shut[i] = 1
+    cost[i] = 1 + 2.4 * Math.max(0, 1 - c / 1.6) + (j >= 0 && nav.diff[j] ? 1.4 : 0) + 0.9 * noise(seed ^ 0x1a7e, x / 5, z / 5)
+  }
+  // the nearest open cell to a point (a spiral out, at most 6 tails)
+  const open = (x, z) => {
+    for (let d = 0; d <= 12; d++) {
+      for (let a = -d; a <= d; a++) {
+        for (const [dx, dz] of [[a, -d], [a, d], [-d, a], [d, a]]) {
+          const i = at(x + dx * CELL, z + dz * CELL)
+          if (i >= 0 && !shut[i]) return i
+        }
+      }
+    }
+    return -1
+  }
+  const g = new Float64Array(N), from = new Int32Array(N), seen = new Uint32Array(N)
+  let gen = 0
+  const DIRS = [[1, 0, 1], [-1, 0, 1], [0, 1, 1], [0, -1, 1], [1, 1, Math.SQRT2], [1, -1, Math.SQRT2], [-1, 1, Math.SQRT2], [-1, -1, Math.SQRT2]]
+  const find = (a, b) => {
+    if (a < 0 || b < 0) return null
+    gen++
+    const heap = [], push = (f, i) => {
+      heap.push([f, i])
+      let k = heap.length - 1
+      while (k > 0) {
+        const up = (k - 1) >> 1
+        if (heap[up][0] < f || (heap[up][0] === f && heap[up][1] < i)) break
+        ;[heap[k], heap[up]] = [heap[up], heap[k]]
+        k = up
+      }
+    }
+    const pop = () => {
+      const top = heap[0], last = heap.pop()
+      if (heap.length) {
+        heap[0] = last
+        let k = 0
+        for (;;) {
+          const l = 2 * k + 1, r = l + 1
+          let m = k
+          if (l < heap.length && (heap[l][0] < heap[m][0] || (heap[l][0] === heap[m][0] && heap[l][1] < heap[m][1]))) m = l
+          if (r < heap.length && (heap[r][0] < heap[m][0] || (heap[r][0] === heap[m][0] && heap[r][1] < heap[m][1]))) m = r
+          if (m === k) break
+          ;[heap[k], heap[m]] = [heap[m], heap[k]]
+          k = m
+        }
+      }
+      return top
+    }
+    const bx = b % nx, bz = Math.floor(b / nx)
+    const hOf = (i) => hypot((i % nx) - bx, Math.floor(i / nx) - bz)
+    seen[a] = gen
+    g[a] = 0
+    from[a] = -1
+    push(hOf(a), a)
+    while (heap.length) {
+      const [f, i] = pop()
+      if (i === b) break
+      if (f - hOf(i) > g[i] + 1e-9) continue
+      const ix = i % nx, iz = Math.floor(i / nx)
+      for (const [dx, dz, len] of DIRS) {
+        const jx = ix + dx, jz = iz + dz
+        if (jx < 0 || jz < 0 || jx >= nx || jz >= nz) continue
+        const j = jz * nx + jx
+        if (shut[j]) continue
+        const ng = g[i] + len * (cost[i] + cost[j]) * 0.5
+        if (seen[j] === gen && ng >= g[j]) continue
+        seen[j] = gen
+        g[j] = ng
+        from[j] = i
+        push(ng + hOf(j), j)
+      }
+    }
+    if (seen[b] !== gen) return null
+    const cells = []
+    for (let i = b; i >= 0; i = from[i]) cells.push(i)
+    return cells.reverse()
+  }
+  // a lane's points: the cells' centres, smoothed twice (Chaikin), each
+  // with its wear: more in a narrow gap, more yet at its `hard` ends
+  const lane = (cells, w, hardA = false, hardB = false) => {
+    let pts = cells.map((i) => [cx(i), cz(i), clear[i]])
+    for (let k = 0; k < 2; k++) {
+      const next = [pts[0]]
+      for (let i = 0; i < pts.length - 1; i++) {
+        const [a, b] = [pts[i], pts[i + 1]]
+        next.push([a[0] * 0.75 + b[0] * 0.25, a[1] * 0.75 + b[1] * 0.25, Math.min(a[2], b[2])], [a[0] * 0.25 + b[0] * 0.75, a[1] * 0.25 + b[1] * 0.75, Math.min(a[2], b[2])])
+      }
+      next.push(pts[pts.length - 1])
+      pts = next
+    }
+    const n = pts.length
+    return { w, pts: pts.map(([x, z, c], i) => [x, z, Math.min(2, 1 + 0.8 * Math.max(0, 1 - c / 1.4) + (hardA ? Math.max(0, 1 - i / 8) : 0) + (hardB ? Math.max(0, 1 - (n - 1 - i) / 8) : 0))]) }
+  }
+  const out = { paths: [], roads: [], spur: null }
+  const r = stream(seed, 'lanes')
+  const objs = objectives.map((o) => open(o.x, o.z))
+  // the tree spanning the objectives (Prim's, from the first)
+  if (objs.length > 1) {
+    const inT = [0]
+    while (inT.length < objs.length) {
+      let best = null
+      for (const a of inT) for (let b = 0; b < objs.length; b++) {
+        if (inT.includes(b)) continue
+        const d = hypot(objectives[a].x - objectives[b].x, objectives[a].z - objectives[b].z)
+        if (!best || d < best[2]) best = [a, b, d]
+      }
+      inT.push(best[1])
+      const cells = find(objs[best[0]], objs[best[1]])
+      if (cells) out.paths.push(lane(cells, 0.8))
+    }
+  }
+  const nearestObj = (x, z) => objectives.reduce((m, o, k) => (hypot(o.x - x, o.z - z) < hypot(objectives[m].x - x, objectives[m].z - z) ? k : m), 0)
+  // each army's road in from its own edge
+  for (const s of [0, 1]) {
+    const sx = edges[s], z = (r() - 0.5) * H * 0.5, x = sx * (W / 2 - 0.3)
+    const cells = find(open(x, z), objs[nearestObj(x, z)])
+    if (!cells) continue
+    out.paths.push(lane(cells, 1.0, true))
+    const [x0, z0] = [cx(cells[0]), cz(cells[0])]
+    out.roads.push({ x: sx * W / 2, z: z0, sx, from: [x0, z0] })
+  }
+  // the spur out to the cart track
+  {
+    const sz = trackSide, k = objectives.reduce((m, o, j) => (o.z * sz > objectives[m].z * sz ? j : m), 0)
+    const x = objectives[k].x + (r() - 0.5) * 4, z = sz * (H / 2 - 0.3)
+    const cells = find(objs[k], open(x, z))
+    if (cells) {
+      out.paths.push(lane(cells, 0.7, false, true))
+      out.spur = { x: cx(cells[cells.length - 1]), z: sz * H / 2, sz }
+    }
+  }
+  // each ladder's foot, worn hardest, to its nearest objective
+  for (const c of ctx.chunks) {
+    if (!c.link?.foot) continue
+    const f = c.link.foot, a = open(f.x, f.z)
+    const cells = find(a, objs[nearestObj(f.x, f.z)])
+    if (cells) out.paths.push(lane(cells, 0.7, true))
+  }
+  // the cells a lane covers (no clutter stands on a lane)
+  const worn = new Uint8Array(N)
+  for (const pth of out.paths) for (const [x, z] of pth.pts) {
+    for (let dz = -1; dz <= 1; dz++) for (let dx = -1; dx <= 1; dx++) {
+      const i = at(x + dx * CELL * 0.8, z + dz * CELL * 0.8)
+      if (i >= 0) worn[i] = 1
+    }
+  }
+  out.worn = (x, z) => {
+    const i = at(x, z)
+    return i >= 0 && worn[i] === 1
+  }
+  return out
+}
+
 // ---- the plan ----------------------------------------------------------
 // The whole dressing of one table: `ctx` as rulesOf's, plus `seed`
 // (dressSeed's) and `set`. Every list is in the seed's order.
@@ -232,6 +414,16 @@ export function plan(ctx) {
       const x = from + ((to - from) * i) / 40
       out.track.push({ x, z: sz * (off + 3 * sin(x / 13 + r() * 0.2) + (Math.abs(x) > W / 2 + 10 ? (Math.abs(x) - W / 2 - 10) * 0.35 : 0)) })
     }
+  }
+
+  // ---- S3: the lanes, painted (ground.js); no clutter stands on one -----
+  {
+    const L = lanesOf(ctx, R, seed, stream(seed, 'track')() < 0.5 ? -1 : 1)
+    out.lanes = L.paths
+    out.roads = L.roads
+    out.spur = L.spur
+    const clutter = R.clutter
+    R.clutter = (x, z, rr, h) => !L.worn(x, z) && clutter(x, z, rr, h)
   }
 
   // the trees: copses and a wood's edge, from 12 tails out (nothing tall near

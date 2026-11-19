@@ -39,6 +39,38 @@ const WEAR = {
 export function decalPainter(p) {
   return (g, c, W, H) => {
     const sx = c.width / W
+    // (S3) the lanes first, under everything: a broad band of flattened,
+    // paler grass, then the bare earth down its middle, both as heavy as the
+    // lane's wear (a gap, a ladder's foot), then stones kicked along it
+    g.save()
+    g.translate((W / 2) * sx, (H / 2) * sx)
+    g.scale(sx, sx)
+    g.lineCap = g.lineJoin = 'round'
+    const lane = (pth, width, colour, alpha) => {
+      for (let i = 0; i < pth.pts.length - 1; i++) {
+        const [x0, z0, w0] = pth.pts[i], [x1, z1, w1] = pth.pts[i + 1], wear = (w0 + w1) / 2
+        g.globalAlpha = Math.min(0.9, alpha * wear)
+        g.strokeStyle = colour
+        g.lineWidth = width * pth.w * (0.8 + 0.25 * wear)
+        g.beginPath()
+        g.moveTo(x0, z0)
+        g.lineTo(x1, z1)
+        g.stroke()
+      }
+    }
+    for (const pth of p.lanes ?? []) lane(pth, 1.25, '#7d8a48', 0.1)
+    for (const pth of p.lanes ?? []) lane(pth, 0.55, '#7a6846', 0.2)
+    for (const pth of p.lanes ?? []) {
+      const r = stream(Math.round(pth.pts[0][0] * 977) ^ Math.round(pth.pts[0][1] * 991), 'lane')
+      for (const [x, z, wear] of pth.pts) {
+        if (r() > 0.25 * wear) continue
+        g.globalAlpha = 0.4 + r() * 0.3
+        g.fillStyle = ['#8d877b', '#6e5a3e', '#9a8a68'][Math.floor(r() * 3)]
+        const s2 = 0.04 + r() * 0.06
+        g.fillRect(x + (r() - 0.5) * 0.5 * pth.w, z + (r() - 0.5) * 0.5 * pth.w, s2, s2)
+      }
+    }
+    g.restore()
     for (const d of p.decals) {
       const w = WEAR[d.kind] ?? WEAR.stone, r = stream(d.salt, 'wear')
       g.save()
