@@ -141,6 +141,15 @@ export const MUTATIONS = {
   'post-unbreakable': ['/core/terrain/recipes.js', 'export const POST_HP = 3\n', 'export const POST_HP = Infinity\n', '1-3'],
   // a platform's deck that never falls (no fallsAt), on posts that break
   'falls-never': ['/core/terrain/recipes.js', "recipe: 'platform', supports, fallsAt: FALLS_AT })", "recipe: 'platform', supports })", '1-3'],
+  // ── (Breakthrough) the March Wall's rows (section 10) ──
+  // a gate 4.5 wide: the broken gate's passage narrower than the widest
+  // path's 2.2
+  'march-gate-narrow': ['/core/terrain/sets.js', 'gate: { w: 6, hp: 12, ram: 4,', 'gate: { w: 4.5, hp: 12, ram: 4,', '1-6'],
+  // a ladder at a walk's end: the first where the walk meets its tower,
+  // its top's cliff under 1.3
+  'march-ladder-end': ['/core/terrain/breakthrough.js', 'offs.sort((a, b) => a - b).forEach((o, k) => wk.ladders.push(wk.lad[0] + o + k * apart))', 'offs.sort((a, b) => a - b).forEach((o, k) => wk.ladders.push(k ? wk.lad[0] + o + k * apart : tS + 0.5))', '1-6'],
+  // a tree on the wood's track, a cell past the picket
+  'march-tree-on-track': ['/core/terrain/breakthrough.js', '      trunks.push({ x: xP, z })\n    }\n', "      trunks.push({ x: xP, z })\n    }\n    ids.push(tree(at, F0, r, xP + 1.5, zMid, 'pine').id)\n", '1-6'],
   // ── (F7c) a platform's fall drawn (the tiles section's fall rows) ──
   // under ?fast a falling deck animates its drop all the same
   'drop-fast-slow': ['/view/terrain.js', '    if (this.fast || !o?.parent) {\n', '    if (!o?.parent) {\n', '1-3'],

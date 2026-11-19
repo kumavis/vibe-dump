@@ -442,9 +442,12 @@ export function resolveWalk(G, u, pts, { speed = 7, fly = false, stomp = false }
     samples.push({ s: L, x: pts[pts.length - 1].x, z: pts[pts.length - 1].z, dir: atan2(last.b.x - last.a.x, last.b.z - last.a.z) })
     // (a quiet run, G.out null, keeps no events: the smashing is the same;
     // a wrecker is big, so never a climber, and no sample lies on a climb)
+    // ((Breakthrough) `rammed`: the chunks with a ram this walk has rammed,
+    // each once a walk: smashAround)
+    const rammed = new Set()
     for (const p of samples) {
       const ev = G.out ? [] : null
-      if (smashAround(G, u, p, ev, broke) && ev) smashes.push({ s: p.s, ev })
+      if (smashAround(G, u, p, ev, broke, u.r, rammed) && ev) smashes.push({ s: p.s, ev })
     }
   }
   // the walk's last frame: k = 1, so the distance along is L itself (F9a:
@@ -506,6 +509,9 @@ export function hullWalk(G, u, pts, { speed = 7, stomp = false } = {}) {
   const L = acc
   const smashes = [], broke = []
   if (u.t.wrecker) {
+    // ((Breakthrough) the chunks with a ram this walk has rammed, each once
+    // a walk, whichever disc and sample meets it: smashAround)
+    const rammed = new Set()
     // one sample: the discs at (x, z) facing h, in front-to-back order,
     // each heading `dir` (a run's) or its tangent (a pivot's, `turn` ±1)
     const at = (s, x, z, row, dirOf) => {
@@ -513,7 +519,7 @@ export function hullWalk(G, u, pts, { speed = 7, stomp = false } = {}) {
       let n = 0
       for (let q = 0; q < row.length; q++) {
         const d = row[q], ox = d.ix * cell, oz = d.iz * cell
-        n += smashAround(G, u, { x: x + ox, z: z + oz, dir: dirOf(ox, oz) }, ev, broke, d.r)
+        n += smashAround(G, u, { x: x + ox, z: z + oz, dir: dirOf(ox, oz) }, ev, broke, d.r, rammed)
       }
       if (n && ev) smashes.push({ s, ev })
     }
@@ -578,7 +584,16 @@ export function hullWalk(G, u, pts, { speed = 7, stomp = false } = {}) {
 //
 // (F9b) `r`, the radius smashing: the unit's own by default (every round
 // walk's), a long hull's disc's at each of its samples (hullWalk).
-export function smashAround(G, u, { x, z, dir }, out, broke = [], r = u.r) {
+//
+// (Breakthrough, the ram) A chunk carrying `ram: n` (the March Wall's gate:
+// core/terrain/sets.js, its data) takes min(99, n) from a smash, not 99,
+// and at most once a walk: `rammed`, the walk's own set of the rammed
+// chunks' ids (resolveWalk's and hullWalk's, one each walk, whatever its
+// samples and discs), skips one already rammed, uncounted. So the wrecker is
+// the battering ram, a move a blow. Without `rammed` (sim/'s lone samples)
+// every call rams. Only a chunk with the field reaches either branch, so no
+// board without one changes.
+export function smashAround(G, u, { x, z, dir }, out, broke = [], r = u.r, rammed = null) {
   let n = 0
   const y = G.nav.hasHeight ? floorAt(G, x, z) : 0
   for (const c of G.terrain.chunks) {
@@ -586,7 +601,11 @@ export function smashAround(G, u, { x, z, dir }, out, broke = [], r = u.r) {
     if (G.nav.hasHeight && Math.abs((c.base ?? 0) - y) > HIGH) continue
     const s = c.nav || c.shape
     if (hypot(s.x - x, s.z - z) < r + Math.max(s.hx, s.hz) * 0.8) {
-      G.terrain.hurt(c, 99, { x: x - sin(dir), z: z - cos(dir) }, out, broke)
+      if (c.ram !== undefined) {
+        if (rammed?.has(c.id)) continue
+        rammed?.add(c.id)
+      }
+      G.terrain.hurt(c, c.ram === undefined ? 99 : Math.min(99, c.ram), { x: x - sin(dir), z: z - cos(dir) }, out, broke)
       n++
     }
   }

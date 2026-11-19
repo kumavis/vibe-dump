@@ -29,7 +29,9 @@
 //   terrain.add      { def }                    a chunk joined (a board's, a
 //                                               rubble pile's, a fallen tree's
 //                                               log, (F9a) a hull's wreck,
-//                                               (F7c) a fallen deck's planks):
+//                                               (F7c) a fallen deck's planks,
+//                                               (Breakthrough) a broken gate's
+//                                               timbers):
 //                                               def is { id, kind,
 //                                               shape, look }, a copy of its
 //                                               place and look as it joined
@@ -62,6 +64,7 @@ import { hypot, atan2 } from '../dmath.js'
 import { emitTo } from '../journal.js'
 import { SETS } from './sets.js'
 import { scatter } from './recipes.js'
+import { wallPlan } from './breakthrough.js'
 import { segmentHitsBox, distToBox } from './geom.js'
 
 // where a chunk stands now, as a report carries it
@@ -93,6 +96,9 @@ const addDef = (c) => {
 // joins.
 const BIN = 4, PAD = 0.01
 
+// (Breakthrough) the plans a set may name, each its generator
+const PLANS = Object.freeze({ wall: wallPlan })
+
 // (F19a) The powder kegs in `broke` (a blast's list of what broke, or a
 // wrecker's walk's, in the order they broke), which the rules set off
 // (core/actions/shoot.js kegsGoOff).
@@ -110,6 +116,9 @@ export class Terrain {
   clear(out = null) {
     this.chunks = []
     this.features = []
+    // (Breakthrough) the plan a planned set's generator keeps (null on every
+    // scattered board): breakthrough.js's record of the line
+    this.plan = null
     this.nextId = 1
     this.dirty = true
     this.bins = Array.from({ length: this.nbx * this.nbz }, () => [])
@@ -166,18 +175,26 @@ export class Terrain {
   // its def gave them (Object spread, below in add), so core/nav.js reads
   // them from the chunks.
   //
-  // (Breakthrough, DESIGN §4.2.12) `role`: null on a mission without roles,
-  // else { flip, zones: { attack: { x: [a, b], z?: [c, d] }, defend: … },
-  // line }, all in the mission's attacker-west frame, `flip` true when seat
-  // 1 attacks (the table is then the point mirror of that frame; the
-  // objectives handed in are the table's, already mirrored). Taken and not
-  // yet read: the line set (DESIGN §4.2.12's "The line set") builds by it.
+  // (Breakthrough) A set with a `plan` (sets.js `march`) is built by its
+  // plan's generator instead of scatter (core/terrain/breakthrough.js, the
+  // March Wall's: so no scattered set's draws move), which keeps its plan
+  // (`plan`, a frozen record of numbers and ids, beside `features`). It is
+  // built for a role mission: `role` is null on every other mission, and on
+  // a role mission { flip, zones: { attack: { x: [a, b], z? }, defend }, line },
+  // in the attacker-west frame; `flip` true (seat 1 attacking, from the east
+  // edge) builds the exact point mirror of the board it builds for false,
+  // the objectives already mirrored as the mission places them.
   generate(seed, objectives, deployDepth, set = 'classic', out = null, role = null) {
     // (SETS has no prototype, so only a set's own name is in it)
     if (!(set in SETS)) throw new Error(`no terrain set "${set}" (there are ${Object.keys(SETS).join(', ')})`)
     this.clear(out)
     const T = { W: this.W, H: this.H, add: (def) => this.add(def, out) }
-    this.features = scatter(T, SETS[set], seed, objectives, deployDepth)
+    const S = SETS[set]
+    if (S.plan) {
+      const built = PLANS[S.plan](T, S, seed, objectives, role)
+      this.features = built.features
+      this.plan = built.plan
+    } else this.features = scatter(T, S, seed, objectives, deployDepth)
     this.dirty = true
   }
 
@@ -347,6 +364,12 @@ export class Terrain {
       case 'post':
         this.cascade(c, from, out)
         break
+      // (Breakthrough) a gate leaves its timbers on its footprint, as a
+      // fallen platform leaves its planks: difficult ground that obscures
+      // and gives cover (planks: its box, its recipe and colour)
+      case 'gate':
+        this.planks(c, out)
+        break
     }
   }
 
@@ -401,7 +424,9 @@ export class Terrain {
   // recipe, color, w, d }, the deck's recipe and colour and the footprint's
   // size (the view draws the timber heap; a wall's rubble's pieces come
   // with its `terrain.rubble` events, which this pile never has). It joins
-  // as any chunk (`terrain.add`).
+  // as any chunk (`terrain.add`). (Breakthrough) A broken gate leaves the
+  // same over its own footprint: `d` is any chunk with a box and a look
+  // carrying its recipe and colour.
   planks(d, out = null) {
     const s = d.shape
     return this.add({

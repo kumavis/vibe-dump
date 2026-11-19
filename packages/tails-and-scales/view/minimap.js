@@ -531,8 +531,9 @@ export class Minimap {
 // how each kind of chunk shows from above ((F19a) a powder keg a red dot,
 // the colour of its danger band)
 // ((V3d) the Powder Field's: craters the burned turf's brown, the wrecks'
-// decks and hulks charred, a fire's orange)
-const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a', keg: '#e0402e', crater: '#4e3d2a', stump: '#3a2e26', cart: '#5a3f2a', sandbag: '#a8946a', pyre: '#ff7a1a', hulk: '#3d3a37' }
+// decks and hulks charred, a fire's orange; (Breakthrough) the March
+// Wall's gate its timber's red, its ditch a dark trodden brown)
+const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a', keg: '#e0402e', crater: '#4e3d2a', stump: '#3a2e26', cart: '#5a3f2a', sandbag: '#a8946a', pyre: '#ff7a1a', hulk: '#3d3a37', gate: '#8a2e22', ditch: '#3f3326' }
 // the kinds drawn as discs whatever their extent
 const ROUND = { tree: true, boulder: true, mushroom: true, barrel: true, sack: true, rubble: true, keg: true, crater: true, stump: true, pyre: true }
 

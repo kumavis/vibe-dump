@@ -136,6 +136,21 @@
 //     kegs one chain, the chains' sizes printed. Its connectivity rows run
 //     with the rest's, below, on the same --powder-seeds (2,000 boards:
 //     `--powder-seeds 1-2000`).
+// 10. (Breakthrough, DESIGN's line set) the March Wall: the `march` set's
+//     boards (60×40, a role literal, its three objectives behind the wall),
+//     on --march-seeds (the run's seeds when not given), each with seat 0
+//     and seat 1 attacking, held to rows of their own (its section says
+//     each): built alike twice and on a Terrain reused, the view's defs and
+//     sync; the exact point mirror for seat 1 and the exact z mirror; the
+//     gate, the breach, the ladders, the wood's gap and track; each route
+//     alone, the others masked, with its bottleneck; the routes' distances
+//     within 15% of their median; no route free of fire; the works reached
+//     from the defender's side; nothing in the attacker's zone; each
+//     objective behind the line, clear and held at its level; the plan's
+//     readers; the counts; and the wood south on 40-60% of 100 boards or
+//     more. --march-report prints what the balance work reads, per board,
+//     and --march-json <file> writes it as JSON. Its self-test edits: a
+//     gate 4.5 wide, a ladder at a walk's end, a tree on the wood's track.
 //
 // One fx call is held to R5's rule rather than R0's own (DESIGN §2.3): the
 // dust a dropped block raises when its fall ends. R0 read the block's place
@@ -148,6 +163,7 @@
 // every fx call is still R0's own.
 //
 //   node sim/terrain-check.mjs [--seeds 1-500 | 42] [--ops 8] [--max 10] [--powder-seeds 1-2000]
+//        [--march-seeds 1-2000] [--march-report] [--march-json <file>]
 //   node sim/terrain-check.mjs --self-test     each edit in terrain-hooks.mjs's
 //                                              MUTATIONS must fail it
 //
@@ -164,7 +180,7 @@
 // R5), the objectives held to the R0 code's main.js.
 import { register } from 'node:module'
 import { parseArgs } from 'node:util'
-import { readFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { pathToFileURL, fileURLToPath } from 'node:url'
 import { spawnSync } from 'node:child_process'
@@ -173,7 +189,7 @@ import { spawnSync } from 'node:child_process'
 // argument like any other: exit 2 with the usage line (usage is below)
 let args
 try {
-  ({ values: args } = parseArgs({ options: { seeds: { type: 'string' }, 'powder-seeds': { type: 'string' }, ops: { type: 'string' }, max: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
+  ({ values: args } = parseArgs({ options: { seeds: { type: 'string' }, 'powder-seeds': { type: 'string' }, 'march-seeds': { type: 'string' }, 'march-report': { type: 'boolean' }, 'march-json': { type: 'string' }, ops: { type: 'string' }, max: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
 } catch (e) {
   usage(e.message)
 }
@@ -314,7 +330,7 @@ if (!objText || JSON.stringify(new Function(`return ${objText}`)()) !== JSON.str
 
 // --seeds N or A-B (whole numbers, A <= B); --ops and --max whole numbers
 function usage(why) {
-  console.error(`terrain-check: ${why}\nusage: node sim/terrain-check.mjs [--seeds 1-500 | 42] [--ops 8] [--max 10] | --self-test`)
+  console.error(`terrain-check: ${why}\nusage: node sim/terrain-check.mjs [--seeds 1-500 | 42] [--ops 8] [--max 10] [--powder-seeds A-B] [--march-seeds A-B] [--march-report] [--march-json <file>] | --self-test`)
   process.exit(2)
 }
 const whole = (name, v, dflt) => {
@@ -1763,6 +1779,665 @@ Math.random = realRandom
     console.log(`terrain-check: VACUOUS: ${n} Powder Field boards, ${pw.sites} sites, ${pw.vents} fires checked`)
     process.exit(2)
   }
+}
+
+// ── 10. The March Wall (Breakthrough, DESIGN's line set) ───────────────────
+// The line set's boards (sets.js `march`, core/terrain/breakthrough.js), on
+// --march-seeds (the run's seeds when not given; `--march-seeds 1-2000` for
+// the rates), each built as a role mission builds it: the Field's 60×40,
+// generate's `role` the literal below (attacker zone x −30..−20, defender
+// zone x −18..30, the line the gate face's nominal x, −4.5, in the
+// attacker-west frame) and the three objectives behind the wall (the road
+// in the yard behind the gate, and behind each arm), point-mirrored when
+// the role says seat 1 attacks. No mission names the set yet (S1's), so the
+// connectivity rows below, which sweep the missions' sets, never meet it,
+// and the point-symmetry rows of section 6 never judge it: its own rows
+// stand here instead. Every row must hold on every board; a failure names
+// the row, the seed and the flip.
+//  - determinism: built twice with Math.random made to throw, the same adds
+//    (every def, look and height field), footprints and plan, and the same
+//    again on a Terrain reused (a snap or a late join folds the match from
+//    its setup, so the table and its plan are regenerated: the same record);
+//    every add's def the view's defOf, and section 6's view rows (a sync,
+//    the walkable tops, the adds played again taking back every mesh);
+//  - the flip: the board for seat 1 attacking is the exact point mirror of
+//    seat 0's (every place negated, every yaw plus π, a column's record and
+//    a ladder's link the same; everything else equal) and its plan the
+//    mirror of the plan; the z mirror (the wood north or south, forced
+//    both ways) exact too (z negated, a yaw −yaw, or π − yaw for a ladder
+//    or a parapet);
+//  - the pieces: one gate, the set's width, hit points and ram, hard,
+//    blocking sight, cover, spanning the passage between the towers; broken,
+//    timber rubble over its footprint (difficult, obscuring, cover); a
+//    breach of at least 6 tails; two ladders or more, each top's cliff 1.3
+//    or more; the wood's gap 6 or more; the track's every cell (its line from
+//    mouth to mouth) clear by 1.25 or more;
+//  - the routes, each alone, the others masked (cells forbidden across the
+//    wood's picket column and along the breach's line, the siege ladders
+//    taken off), each `cross` reaching a cell that holds an objective at
+//    its level (OBJECTIVE_RANGE + r, within HIGH of its floor) from the
+//    attacker zone's front: the gate shut lets nothing through (a squad, a
+//    climber, a Brute and a War-Cart ploughing); broken, a squad, a round
+//    hull of r 1.5 (ground only) and the Howdah on its lattice cross, the
+//    widest path 2.2 or more; the ladders let a climber through and a big
+//    walker (r 1.05) not; the breach standing lets the wreckers (wreck mode)
+//    through and a squad not, and broken a round hull, the widest path 1.75
+//    or more; the wood lets a squad through and a non-wrecking hull of
+//    r 1.5 not, the widest path 1.25 or more;
+//  - the distances: each route's cheapest cost to the nearest objective
+//    within 15% of the median of the four;
+//  - fire: no route free of it: at least 6 tails of each route's path seen
+//    (Terrain.los, the shooter's own parapets looked over, as core/
+//    queries.js's sight does) from a defender's firing position within 24
+//    tails (every other deck cell a squad stands on, and the plan's ground
+//    posts, the eye 0.95 over the floor, the target's chest 0.55);
+//  - the works: from the defender's side (the cell nearest its zone's
+//    middle, behind the line) a climber reaches every deck, a big walker
+//    every walk (its stair's deck), and every tower's top hosts r CLIMB_R;
+//  - the zones and objectives: no chunk's footprint in the attacker zone;
+//    each objective behind the line, outside every footprint and clear of
+//    every chunk's by objectiveGap, and held at its level by a squad from
+//    the defender's side;
+//  - the plan's readers: behindLine true at every objective and ground post
+//    and false in the attacker zone and at every glacis piece, faceDist's
+//    sign the same, gateCells the passage's, the plan frozen; and the
+//    counts: chunks ≤ 220, decks ≤ 6.
+// Over 100 boards or more it judges the z mirror's rate (the wood south on
+// 40-60% of boards). With --march-report it prints, per board, what the
+// balance work reads (memo §4.5): each route's distance, bottleneck, its
+// difficult ground, its cover and exposure on the way; the dead ground at
+// the gate, the ladders and the breach; openness in front, in the V and
+// behind; the firing positions; the trebuchet's reach; the wall's shape and
+// counts; as a table and, with --march-json <file>, as JSON.
+const MARCH = SETS.march
+const mw = { boards: 0, failed: 0, rows: {}, south: 0, chunks: [], decks: [], ladders: [], dist: { gate: [], ladders: [], breach: [], wood: [] }, width: { gate: [], breach: [], wood: [] }, seen: { gate: [], ladders: [], breach: [], wood: [] }, report: [] }
+const mwShown = []
+const mwRow = (name, ok, where, what) => {
+  const r = (mw.rows[name] ??= { pass: 0, fail: 0 })
+  if (ok) r.pass++
+  else {
+    r.fail++
+    mw.failed++
+    if (mwShown.length < MAX) mwShown.push(`${name}, ${where}: ${what}`)
+  }
+  return ok
+}
+if (MARCH) {
+  const mrange = /^(\d+)(?:-(\d+))?$/.exec(args['march-seeds'] ?? `${lo}-${hi}`) ?? usage(`--march-seeds ${args['march-seeds']}: give N or A-B`)
+  const mlo = Number(mrange[1]), mhi = Number(mrange[2] ?? mrange[1])
+  if (mlo > mhi) usage(`--march-seeds ${args['march-seeds']}: ${mlo} is above ${mhi}`)
+  const REPORT = !!args['march-report'] || !!args['march-json']
+  const BT = await imp(PKG, 'core/terrain/breakthrough.js')
+  const { OBJECTIVE_RANGE: OR } = await imp(PKG, 'core/rules.js')
+  const { HIGH: HI } = await imp(PKG, 'core/queries.js')
+  const { NAV_CELL } = await imp(PKG, 'core/match.js')
+  const { defOf: mwDefOf } = await imp(PKG, 'view/terrain.js')
+  const MB = MISSIONS.field.board, MW = MB.W, MH = MB.H
+  const MOBJ = Object.freeze([{ x: 9, z: 0 }, { x: 3, z: 13 }, { x: 3, z: -13 }])
+  const ROLE = (flip) => ({ flip, zones: { attack: { x: [-30, -20] }, defend: { x: [-18, 30] } }, line: -4.5 })
+  const objsOf = (flip) => (flip ? MOBJ.map((o) => ({ x: 0 - o.x, z: 0 - o.z })) : MOBJ.map((o) => ({ ...o })))
+  const HOWDAH = RACES.serpent.units.howdah.fp
+  const { LADDER_OUT: LADDER_OUT_ } = await imp(PKG, 'core/terrain/recipes.js')
+  // (a squad of the largest r, a big walker, a round hull: the War-Cart's
+  // base, and the Brute's)
+  const SQUAD = 1.18, BIG = 1.05, HULL = RACES.squirrel.units.warcart.base, BRUTE = RACES.serpent.units.brute.base
+  const tm0 = Date.now()
+  // the board: built into a Terrain (its out kept when asked), and, with
+  // `south`, through wallPlan itself (the z mirror forced)
+  const build = (seed, flip, { out = null, south } = {}) => {
+    const T = new Terrain(MW, MH)
+    if (south === undefined) T.generate(seed, objsOf(flip), MISSIONS.field.deploy, 'march', out, ROLE(flip))
+    else {
+      T.clear(out)
+      const built = BT.wallPlan({ W: MW, H: MH, add: (def) => T.add(def, out) }, MARCH, seed, objsOf(flip), ROLE(flip), { south })
+      T.features = built.features
+      T.plan = built.plan
+    }
+    return T
+  }
+  const defsOf = (out) => out.filter((e) => e.t === 'terrain.add').map((e) => e.def)
+  const sameJSON = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+  // the mirror rows: chunk b is chunk a turned by `pt` (a place) and `yaw`
+  // (a yaw, given the chunk's face), everything else the same
+  const turnedLike = (a, b, pt, yaw) => {
+    const bad = []
+    const box = (s, t, face) => {
+      const p = pt(s)
+      if (t.x !== p.x || t.z !== p.z || t.yaw !== yaw(s.yaw, face) || t.hx !== s.hx || t.hz !== s.hz || t.y !== s.y || t.hy !== s.hy) bad.push(`box (${s.x}, ${s.z}, ${s.yaw}) → (${t.x}, ${t.z}, ${t.yaw})`)
+    }
+    if (a.kind !== b.kind || a.id !== b.id) bad.push(`chunk ${a.id} ${a.kind} | ${b.id} ${b.kind}`)
+    const face = a.look?.face === '-z'
+    box(a.shape, b.shape, face)
+    if (!!a.nav !== !!b.nav || (a.nav && (box(a.nav, b.nav, face), false))) bad.push('nav')
+    if (!!a.coverShape !== !!b.coverShape || (a.coverShape && (box(a.coverShape, b.coverShape, face), false))) bad.push('coverShape')
+    if (a.link) {
+      const f = pt(a.link.foot), t = pt(a.link.top)
+      if (b.link.foot.x !== f.x || b.link.foot.z !== f.z || b.link.top.x !== t.x || b.link.top.z !== t.z || b.link.h !== a.link.h) bad.push('link')
+    }
+    for (const k of ['hp', 'maxHp', 'ram', 'navKind', 'los', 'cover', 'base', 'on', 'fallsAt', 'level', 'trunkH', 'trunkR']) if (!Object.is(a[k], b[k])) bad.push(k)
+    for (const k of ['surface', 'supports']) if (!sameJSON(a[k], b[k])) bad.push(k)
+    const la = { ...a.look }, lb = { ...b.look }
+    if (typeof la.yaw === 'number') {
+      if (lb.yaw !== yaw(la.yaw, face)) bad.push('look.yaw')
+      delete la.yaw
+      delete lb.yaw
+    }
+    if (!sameJSON(la, lb)) bad.push('look')
+    if (a.col) {
+      const p = pt(a.col)
+      if (b.col.x !== p.x || b.col.z !== p.z || b.col.yaw !== yaw(a.col.yaw, false) || b.col.style !== a.col.style) bad.push('col')
+    }
+    return bad
+  }
+  // the plan turned: every { x, z } by pt, every other number the same, the
+  // passage's box turned (its min and max)
+  const planLike = (a, b, pt) => {
+    const walk = (x, y, path) => {
+      if (x && typeof x === 'object' && !Array.isArray(x) && typeof x.x === 'number' && typeof x.z === 'number') {
+        const p = pt(x)
+        if (y.x !== p.x || y.z !== p.z) return `${path} (${x.x}, ${x.z}) → (${y.x}, ${y.z})`
+        for (const k of Object.keys(x)) if (k !== 'x' && k !== 'z') { const w = walk(x[k], y[k], `${path}.${k}`); if (w) return w }
+        return null
+      }
+      if (x && typeof x === 'object') {
+        if (path.endsWith('.passage')) {
+          const xs = [pt({ x: x.x0, z: 0 }).x, pt({ x: x.x1, z: 0 }).x], zs = [pt({ x: 0, z: x.z0 }).z, pt({ x: 0, z: x.z1 }).z]
+          return y.x0 === Math.min(...xs) && y.x1 === Math.max(...xs) && y.z0 === Math.min(...zs) && y.z1 === Math.max(...zs) ? null : `${path} ${JSON.stringify(x)} → ${JSON.stringify(y)}`
+        }
+        if (path.endsWith('.picket')) return y.x === pt({ x: x.x, z: 0 }).x && sameJSON(y.z, x.z.map((v) => pt({ x: 0, z: v }).z)) ? null : `${path}`
+        for (const k of Object.keys(x)) { const w = walk(x[k], y?.[k], `${path}.${k}`); if (w) return w }
+        return null
+      }
+      return Object.is(x, y) ? null : `${path} ${x} | ${y}`
+    }
+    const A = { ...a, south: 0, flip: 0 }, B = { ...b, south: 0, flip: 0 }
+    return walk(A, B, 'plan')
+  }
+  // a view of the board: section 6's rows, with counters of its own
+  const mwView = { synced: 0, tops: 0, taken: 0 }
+  const viewRows = (where, T, out) => {
+    const view = new TerrainView(new THREE.Scene(), recorder().proxy), mirror = blankMirror()
+    for (const e of out) view.apply(e, applyEvent(mirror, e))
+    syncCheck(`${where} synced`, { terrain: T, view }, null, false)
+    mwView.synced += T.chunks.length
+    same(`${where} the view's walkable tops (surfaces)`, T.chunks.filter((c) => c.surface).map((c) => c.id).join(), view.surfaces().map((c) => c.id).join())
+    mwView.tops += view.tops().length
+    const before = new Map([...view.items].map(([id, it]) => [id, it.obj]))
+    for (const e of out) view.apply(e, applyEvent(mirror, e))
+    for (const [id, obj] of before) same(`${where} chunk ${id} mesh taken back (cleared and added again)`, true, view.items.get(id)?.obj === obj)
+    mwView.taken += before.size
+    view.dispose()
+  }
+  // ── the nav's questions ──
+  const navOf = (T) => {
+    const nav = new NavGrid(MW, MH, NAV_CELL)
+    nav.rebuild(T.chunks)
+    return nav
+  }
+  const raisedOf = (nav) => Uint8Array.from(nav.floor, (f) => (f > STEP ? 1 : 0))
+  const or = (n, ...ms) => {
+    const o = new Uint8Array(n)
+    for (const m of ms) if (m) for (let i = 0; i < n; i++) o[i] |= m[i]
+    return o
+  }
+  // the masks: a band across the wood's picket column (from the crag's top
+  // to the edge), and one along the breach's line
+  const masks = (nav, plan) => {
+    const wood = new Uint8Array(nav.N), breach = new Uint8Array(nav.N)
+    const pk = plan.wood.picket, sg = Math.sign(pk.z[1] - pk.z[0])
+    const { a, b } = plan.breach, dx = b.x - a.x, dz = b.z - a.z, L2 = dx * dx + dz * dz
+    for (let i = 0; i < nav.N; i++) {
+      const x = nav.x(i), z = nav.z(i)
+      if (Math.abs(x - pk.x) <= 1.01 && (z - pk.z[0]) * sg >= -0.3) wood[i] = 1
+      const t = Math.max(0, Math.min(1, ((x - a.x) * dx + (z - a.z) * dz) / L2))
+      if (hypot(a.x + dx * t - x, a.z + dz * t - z) <= 1.6) breach[i] = 1
+    }
+    return { wood, breach }
+  }
+  // the cells that hold an objective for a disc of r, at its level
+  const holdsOf = (nav, objs, r) => {
+    const m = new Uint8Array(nav.N)
+    for (const o of objs) {
+      const oy = nav.floor[nav.index(o.x, o.z)]
+      for (let i = 0; i < nav.N; i++) if (hypot(nav.x(i) - o.x, nav.z(i) - o.z) <= OR + r && Math.abs(nav.floor[i] - oy) <= HI) m[i] = 1
+    }
+    return m
+  }
+  // the attacker zone's front: the ground cell nearest each of nine points
+  // along it that a disc of r stands on (sgn: −1 the attacker at the west)
+  const fronts = (nav, sgn, r, forbid) => {
+    const out = []
+    for (let zc = -16; zc <= 16; zc += 4) {
+      let best = -1, bd = Infinity
+      for (let i = 0; i < nav.N; i++) {
+        if (!(sgn * nav.x(i) > 20) || nav.floor[i] > STEP || !nav.standable(i, r, 'walk', forbid)) continue
+        const d = hypot(nav.x(i) - sgn * 20.75, nav.z(i) - zc)
+        if (d < bd) [bd, best] = [d, i]
+      }
+      if (best >= 0) out.push(best)
+    }
+    return out
+  }
+  // a crossing: the cheapest cost from the front to a cell holding an
+  // objective, its result and that cell (Infinity when none)
+  const cross = (nav, sgn, objs, { r, mode = 'walk', climb = false, forbid = null, hull = false }) => {
+    const fb = hull ? or(nav.N, forbid, raisedOf(nav)) : forbid
+    const goal = holdsOf(nav, objs, r)
+    let d = Infinity, res = null, cell = -1
+    for (const s of fronts(nav, sgn, r, fb)) {
+      const R = nav.reach(nav.x(s), nav.z(s), { r, max: Infinity, mode, forbid: fb, climb })
+      for (let i = 0; i < nav.N; i++) if (goal[i] && R.dist[i] < d) [d, res, cell] = [R.dist[i], R, i]
+    }
+    return { d, res, cell }
+  }
+  const howdahCrosses = (nav, sgn, objs, forbid) => {
+    const goal = holdsOf(nav, objs, HOWDAH.R)
+    for (const zc of [-12, -6, 0, 6, 12]) {
+      let start = -1, bd = Infinity
+      for (let i = 0; i < nav.N; i++) {
+        if (!(sgn * nav.x(i) > 21) || forbid?.[i] || nav.floor[i] > STEP || !(nav.clearAll[i] >= HOWDAH.R) || !(nav.cliff[i] >= HOWDAH.R)) continue
+        const d = hypot(nav.x(i) - sgn * 25, nav.z(i) - zc)
+        if (!(d < bd)) continue
+        let all = true
+        for (let h = 0; h < 8 && all; h++) all = nav.hullStands(i, h, HOWDAH, 'walk')
+        if (all) [bd, start] = [d, i]
+      }
+      if (start < 0) continue
+      const R = nav.hullReach(nav.x(start), nav.z(start), sgn < 0 ? 2 : 6, HOWDAH, { max: Infinity, mode: 'walk', forbid: forbid ? HOWDAH.radii.map(() => forbid) : null })
+      if (R.touched.some((s) => goal[s >> 3])) return true
+    }
+    return false
+  }
+  // the widest path: the most min(clearAll, cliff) a ground path from the
+  // attacker zone to a cell holding an objective keeps (by halving, to
+  // within WIDE)
+  const WIDE = 1e-3
+  const widest = (nav, sgn, objs, forbid) => {
+    const v = new Float32Array(nav.N)
+    for (let i = 0; i < nav.N; i++) v[i] = forbid?.[i] || nav.floor[i] > STEP ? 0 : Math.min(nav.clearAll[i], nav.cliff[i])
+    const goal = holdsOf(nav, objs, 0.5), src = []
+    for (let i = 0; i < nav.N; i++) if (sgn * nav.x(i) > 20 && v[i] > 0) src.push(i)
+    const ok = (th) => {
+      const seen = new Uint8Array(nav.N), st = []
+      for (const s of src) if (v[s] >= th) (seen[s] = 1), st.push(s)
+      while (st.length) {
+        const i = st.pop()
+        if (goal[i]) return true
+        const ix = i % nav.nx, iz = (i / nav.nx) | 0
+        for (let oz = -1; oz <= 1; oz++) for (let ox = -1; ox <= 1; ox++) {
+          const jx = ix + ox, jz = iz + oz
+          if ((!ox && !oz) || jx < 0 || jz < 0 || jx >= nav.nx || jz >= nav.nz) continue
+          const j = jz * nav.nx + jx
+          if (!seen[j] && v[j] >= th) (seen[j] = 1), st.push(j)
+        }
+      }
+      return false
+    }
+    let a = 0, b = 6
+    for (let k = 0; k < 16; k++) {
+      const m = (a + b) / 2
+      if (ok(m)) a = m
+      else b = m
+    }
+    return a
+  }
+  // the defender's firing positions: every other deck cell a squad stands
+  // on, and the plan's ground posts; and how many of them see (x, z)
+  // (`decks`: the deck cells alone, the wall's own defenders: the dead
+  // ground's measure)
+  const firing = (nav, plan, decks = false) => {
+    const out = []
+    if (!decks) for (const p of plan.posts) if (p.y === 0 && nav.index(p.x, p.z) >= 0) out.push(nav.index(p.x, p.z))
+    for (let i = 0; i < nav.N; i++) {
+      if ((i % nav.nx) % 2 || ((i / nav.nx) | 0) % 2) continue
+      if (nav.floor[i] > STEP && nav.standable(i, SQUAD, 'walk')) out.push(i)
+    }
+    return out
+  }
+  const seenBy = (T, nav, F, x, z, need = Infinity) => {
+    const ty = nav.floor[nav.index(x, z)] + 0.55
+    let n = 0
+    for (const i of F) {
+      const ex = nav.x(i), ez = nav.z(i), fy = nav.floor[i]
+      if (hypot(ex - x, ez - z) > 24) continue
+      const L = nav.levelAt(ex, ez), on = nav.onLevel
+      const over = L && on?.size ? (c) => on.get(c.id) === L && Math.abs(c.base - fy) <= STEP : null
+      if (!T.los({ x: ex, y: fy + 0.95, z: ez }, { x, y: ty, z }, 1.3, null, over).blocked && ++n >= need) return n
+    }
+    return n
+  }
+  const pathOf = (R) => {
+    const p = []
+    for (let i = R.cell; i >= 0; i = R.res.prev[i]) p.push(i)
+    return p.reverse()
+  }
+  // a box's corners on the table (geom.js's corners)
+  const boxHitsZone = (s, sgn) => {
+    const cs = corners(s)
+    // (the zone x beyond 20 on the attacker's side, the table's z)
+    const zx = cs.map(([x]) => sgn * x), zz = cs.map(([, z]) => z)
+    if (Math.max(...zx) <= 20 || Math.min(...zz) >= MH / 2 || Math.max(...zz) <= -MH / 2) return false
+    // separating axes: the zone's (x and z) and the box's own two
+    if (Math.max(...zx) <= 20) return false
+    const c = Math.cos(s.yaw), sn = Math.sin(s.yaw)
+    const zone = [[sgn * 20, -MH / 2], [sgn * 30, -MH / 2], [sgn * 30, MH / 2], [sgn * 20, MH / 2]]
+    for (const [ax, az] of [[c, -sn], [sn, c]]) {
+      const pb = cs.map(([x, z]) => x * ax + z * az), pz = zone.map(([x, z]) => x * ax + z * az)
+      if (Math.max(...pb) <= Math.min(...pz) || Math.max(...pz) <= Math.min(...pb)) return false
+    }
+    return true
+  }
+  // the 2D distance from (x, z) to a chunk's box (or its nav footprint)
+  const boxDist2 = (s, x, z) => {
+    const c = Math.cos(s.yaw), sn = Math.sin(s.yaw), dx = x - s.x, dz = z - s.z
+    const lx = Math.abs(dx * c - dz * sn) - s.hx, lz = Math.abs(dx * sn + dz * c) - s.hz
+    return Math.hypot(Math.max(0, lx), Math.max(0, lz))
+  }
+
+  // ── one board's rows ──
+  const board = (seed, flip) => {
+    const where = `seed ${seed}${flip ? ', seat 1 attacking' : ''}`
+    const sgn = flip ? 1 : -1, objs = objsOf(flip)
+    const out = []
+    const T = build(seed, flip, { out })
+    const plan = T.plan
+    const rep = { seed, flip, south: plan.south }
+    // the pieces
+    const gate = T.chunks.filter((c) => c.kind === 'gate')
+    const G = gate[0]
+    const pb = plan.gate.passage
+    mwRow("one gate, the set's", gate.length === 1 && G.id === plan.gate.id && G.hp === MARCH.gate.hp && G.ram === MARCH.gate.ram && G.navKind === 'hard' && G.los === 'block' && G.cover === true && G.shape.hz * 2 === MARCH.gate.w && plan.gate.w === MARCH.gate.w && Math.abs(pb.z1 - pb.z0 - MARCH.gate.w) < 1e-9 && Math.abs(G.shape.z - (pb.z0 + pb.z1) / 2) < 1e-9, where, `${gate.length} gates: ${gate.map((c) => `hp ${c.hp} ram ${c.ram} ${c.navKind} ${c.los} cover ${c.cover} width ${c.shape.hz * 2}`).join('; ')}, the passage ${JSON.stringify(plan.gate.passage)}`)
+    const towers = plan.towers.map((t) => T.byId(t.id))
+    const between = Math.abs(Math.abs(towers[0].shape.z - towers[1].shape.z) - towers[0].shape.hz - towers[1].shape.hz)
+    mwRow('the gate spans the passage between its towers', Math.abs(between - MARCH.gate.w) < 1e-9 && towers.every((t) => Math.abs(t.shape.x - (pb.x0 + pb.x1) / 2) < 1e-9 && Math.abs(t.shape.hx * 2 - (pb.x1 - pb.x0)) < 1e-9) && Math.abs(G.shape.x - (sgn < 0 ? pb.x0 : pb.x1)) <= G.shape.hx * 2 + 1e-9, where, `the towers ${between.toFixed(3)} apart`)
+    mwRow('a breach of 6 tails or more', plan.breach.len - 1 >= 6 && plan.breach.ids.length > 0 && plan.breach.ids.every((id) => T.byId(id).kind === 'block' && T.byId(id).navKind === 'soft'), where, `the breach ${(plan.breach.len - 1).toFixed(2)} long, ${plan.breach.ids.length} blocks`)
+    mwRow('two ladders or more', plan.ladders.length >= 2 && plan.ladders.every((l) => T.byId(l.id).kind === 'ladder'), where, `${plan.ladders.length} ladders`)
+    const crag = T.byId(plan.crag)
+    const gap = MH / 2 - (Math.abs(crag.shape.z) + crag.shape.hz)
+    mwRow("the wood's gap 6 tails or more", gap >= 6 && crag.navKind === 'hard' && crag.hp === Infinity, where, `the gap ${gap.toFixed(2)}`)
+    mwRow('chunks ≤ 220 and decks ≤ 6', T.chunks.length <= 220 && T.chunks.filter((c) => c.kind === 'deck').length <= 6, where, `${T.chunks.length} chunks, ${T.chunks.filter((c) => c.kind === 'deck').length} decks`)
+    mw.chunks.push(T.chunks.length)
+    mw.decks.push(T.chunks.filter((c) => c.kind === 'deck').length)
+    mw.ladders.push(plan.ladders.length)
+    rep.chunks = T.chunks.length
+    rep.decks = T.chunks.filter((c) => c.kind === 'deck').length
+    rep.ladders = plan.ladders.length
+    // the zone and the objectives
+    const inZone = T.chunks.filter((c) => boxHitsZone(c.shape, sgn) || (c.nav && boxHitsZone(c.nav, sgn)) || (c.link && sgn * c.link.foot.x > 20))
+    mwRow("nothing in the attacker's zone", !inZone.length, where, inZone.slice(0, 3).map((c) => `${c.kind} ${c.id} at (${c.shape.x.toFixed(2)}, ${c.shape.z.toFixed(2)})`).join('; '))
+    for (const o of objs) {
+      const near = T.chunks.filter((c) => boxDist2(c.shape, o.x, o.z) < MARCH.objectiveGap || (c.nav && boxDist2(c.nav, o.x, o.z) < MARCH.objectiveGap))
+      mwRow('each objective behind the line, clear of every footprint by objectiveGap', BT.behindLine(plan, o.x, o.z) && BT.faceDist(plan, o.x, o.z) > 0 && !near.length, where, `(${o.x}, ${o.z}): behind ${BT.behindLine(plan, o.x, o.z)}, ${near.map((c) => `${c.kind} ${c.id} ${boxDist2(c.shape, o.x, o.z).toFixed(2)} off`).join('; ')}`)
+    }
+    // the readers
+    const ground = plan.posts.filter((p) => p.y === 0)
+    const glacis = T.features.filter((f) => ['mantlet', 'orchard', 'rocks'].includes(f.piece))
+    const zoneMid = { x: sgn * 25, z: 0 }
+    mwRow("the plan's readers", Object.isFrozen(plan) && Object.isFrozen(plan.posts) && ground.every((p) => BT.behindLine(plan, p.x, p.z)) && !BT.behindLine(plan, zoneMid.x, zoneMid.z) && glacis.every((f) => !BT.behindLine(plan, f.x, f.z) && BT.faceDist(plan, f.x, f.z) < 0) && ['tower', 'walk', 'yard', 'second'].every((k) => BT.postsOf(plan, k).length > 0) && BT.postsOf(plan).length === plan.posts.length, where, `frozen ${Object.isFrozen(plan)}, ground posts behind ${ground.filter((p) => BT.behindLine(plan, p.x, p.z)).length} of ${ground.length}, the zone's middle behind ${BT.behindLine(plan, zoneMid.x, zoneMid.z)}, glacis in front ${glacis.filter((f) => !BT.behindLine(plan, f.x, f.z)).length} of ${glacis.length}`)
+    // the routes: standing
+    const lad = plan.ladders.map((l) => T.byId(l.id))
+    for (const c of lad) c.alive = false
+    let nav = navOf(T)
+    const M = masks(nav, plan)
+    const cells = BT.gateCells(plan, nav)
+    mwRow("gateCells: the passage's cells", cells.length > 0 && cells.every((i) => nav.x(i) >= pb.x0 && nav.x(i) <= pb.x1 && nav.z(i) >= pb.z0 && nav.z(i) <= pb.z1), where, `${cells.length} cells`)
+    const shut = or(nav.N, M.wood, M.breach)
+    const through = ['squad', 'climber', 'Brute', 'War-Cart'].filter((_, k) => isFinite(cross(nav, sgn, objs, [{ r: SQUAD, forbid: shut }, { r: SQUAD, climb: true, forbid: shut }, { r: BRUTE, mode: 'wreck', forbid: shut }, { r: HULL, mode: 'wreck', forbid: shut, hull: true }][k]).d))
+    mwRow('the gate shut lets nothing through', !through.length, where, `${through.join(', ')} crossed`)
+    const woodR = cross(nav, sgn, objs, { r: SQUAD, forbid: M.breach })
+    const woodHull = cross(nav, sgn, objs, { r: HULL, forbid: M.breach, hull: true }).d
+    const woodW = widest(nav, sgn, objs, M.breach)
+    mwRow('the wood: a squad through, a non-wrecking hull not, the widest path 1.25 or more', isFinite(woodR.d) && !isFinite(woodHull) && woodW >= 1.25 - WIDE, where, `squad ${woodR.d.toFixed(1)}, hull ${woodHull}, widest ${woodW.toFixed(2)}`)
+    // (the track: every cell its line crosses, mouth to mouth)
+    const [m0, m1] = plan.wood.mouths
+    let track = Infinity
+    for (let k = 0; k <= 48; k++) {
+      const x = m0.x + ((m1.x - m0.x) * k) / 48, z = m0.z + ((m1.z - m0.z) * k) / 48, i = nav.index(x, z)
+      if (i >= 0) track = Math.min(track, nav.clearAll[i], nav.cliff[i])
+    }
+    mwRow("the wood's track clear by 1.25 or more", track >= 1.25 - 1e-6, where, `its least clearance ${track.toFixed(2)}`)
+    const breachWreck = cross(nav, sgn, objs, { r: BRUTE, mode: 'wreck', forbid: M.wood }).d, breachCart = cross(nav, sgn, objs, { r: HULL, mode: 'wreck', forbid: M.wood, hull: true }).d, breachSquad = cross(nav, sgn, objs, { r: SQUAD, forbid: M.wood }).d
+    mwRow('the breach standing: the wreckers through, a squad not', isFinite(breachWreck) && isFinite(breachCart) && !isFinite(breachSquad), where, `Brute ${breachWreck}, War-Cart ${breachCart}, squad ${breachSquad}`)
+    for (const c of lad) c.alive = true
+    T.dirty = true
+    nav = navOf(T)
+    const ladR = cross(nav, sgn, objs, { r: SQUAD, climb: true, forbid: M.wood })
+    const ladBig = cross(nav, sgn, objs, { r: BIG, forbid: M.wood }).d
+    mwRow('the ladders: a climber through, a big walker not', isFinite(ladR.d) && !isFinite(ladBig), where, `climber ${ladR.d}, big walker ${ladBig}`)
+    const tops = plan.ladders.map((l) => nav.cliff[nav.index(l.top.x, l.top.z)])
+    mwRow("each ladder's top clear by 1.3 or more", tops.every((c) => c >= 1.3), where, `tops ${tops.map((c) => c.toFixed(2)).join(', ')}`)
+    // the works, from the defender's side
+    let home = -1, hd = Infinity
+    for (let i = 0; i < nav.N; i++) {
+      if (nav.floor[i] > STEP || !nav.standable(i, CLIMB_R, 'walk') || !BT.behindLine(plan, nav.x(i), nav.z(i))) continue
+      const d = hypot(nav.x(i) + sgn * 6, nav.z(i))
+      if (d < hd) [hd, home] = [d, i]
+    }
+    const climbR = nav.reach(nav.x(home), nav.z(home), { r: SQUAD, max: Infinity, climb: true }), bigR = nav.reach(nav.x(home), nav.z(home), { r: BIG, max: Infinity })
+    const onDeck = (R, d) => {
+      for (let i = 0; i < nav.N; i++) if (isFinite(R.dist[i]) && Math.abs(nav.floor[i] - d.surface.y) < 0.05 && boxDist2(d.shape, nav.x(i), nav.z(i)) === 0) return true
+      return false
+    }
+    const decks = T.chunks.filter((c) => c.kind === 'deck')
+    const unreached = decks.filter((d) => !onDeck(climbR, d)), walksUnreached = plan.walks.filter((w) => !onDeck(bigR, T.byId(w.id)))
+    const hosts = plan.towers.filter((t) => {
+      const d = T.byId(t.id)
+      for (let i = 0; i < nav.N; i++) if (Math.abs(nav.floor[i] - d.surface.y) < 0.05 && boxDist2(d.shape, nav.x(i), nav.z(i)) === 0 && nav.standable(i, CLIMB_R, 'walk')) return true
+      return false
+    })
+    mwRow("the works reached from the defender's side", home >= 0 && !unreached.length && !walksUnreached.length && hosts.length === plan.towers.length, where, `decks unreached by a climber ${unreached.map((d) => d.id).join(', ') || 'none'}, walks by a big walker ${walksUnreached.map((w) => w.id).join(', ') || 'none'}, tower tops hosting r ${CLIMB_R} ${hosts.length} of ${plan.towers.length}`)
+    const homeHolds = holdsOf(nav, objs, SQUAD), heldFrom = objs.filter((o) => {
+      const h = holdsOf(nav, [o], SQUAD)
+      for (let i = 0; i < nav.N; i++) if (h[i] && isFinite(climbR.dist[i])) return true
+      return false
+    })
+    mwRow('each objective held at its level from the defender\'s side', heldFrom.length === objs.length && homeHolds.some(Boolean), where, `${heldFrom.length} of ${objs.length}`)
+    // the fire
+    const F = firing(nav, plan)
+    // the gate broken (the ladders off, the wood masked)
+    const TG = build(seed, flip)
+    TG.hurt(TG.byId(plan.gate.id), 99)
+    const rubble = TG.chunks.filter((c) => c.kind === 'rubble')
+    mwRow('the gate broken leaves its timbers on its footprint', !TG.byId(plan.gate.id).alive && rubble.length === 1 && rubble[0].navKind === 'diff' && rubble[0].los === 'obscure' && rubble[0].cover && rubble[0].shape.x === G.shape.x && rubble[0].shape.z === G.shape.z && rubble[0].shape.hz === G.shape.hz && rubble[0].look.style === 'timber', where, `${rubble.length} piles`)
+    for (const l of plan.ladders) TG.byId(l.id).alive = false
+    const navG = navOf(TG)
+    const gateR = cross(navG, sgn, objs, { r: SQUAD, forbid: M.wood }), gateHull = cross(navG, sgn, objs, { r: HULL, forbid: M.wood, hull: true }).d
+    const gateHowdah = howdahCrosses(navG, sgn, objs, M.wood), gateW = widest(navG, sgn, objs, M.wood)
+    mwRow('the gate broken: a squad, a round hull and the Howdah through, the widest path 2.2 or more', isFinite(gateR.d) && isFinite(gateHull) && gateHowdah && gateW >= 2.2 - WIDE, where, `squad ${gateR.d}, hull ${gateHull}, Howdah ${gateHowdah}, widest ${gateW.toFixed(2)}`)
+    // the breach broken
+    const TB = build(seed, flip)
+    for (const id of plan.breach.ids) TB.hurt(TB.byId(id), 99)
+    for (const l of plan.ladders) TB.byId(l.id).alive = false
+    const navB = navOf(TB)
+    const breachR = cross(navB, sgn, objs, { r: SQUAD, forbid: M.wood }), breachHull = cross(navB, sgn, objs, { r: HULL, forbid: M.wood, hull: true }).d, breachW = widest(navB, sgn, objs, M.wood)
+    mwRow('the breach broken: a round hull through, the widest path 1.75 or more', isFinite(breachHull) && breachW >= 1.75 - WIDE, where, `hull ${breachHull}, widest ${breachW.toFixed(2)}`)
+    // the distances
+    const D = { gate: gateR.d, ladders: ladR.d, breach: breachR.d, wood: woodR.d }
+    const sorted = Object.values(D).sort((a, b) => a - b), med = (sorted[1] + sorted[2]) / 2
+    const off = Object.entries(D).filter(([, v]) => !(Math.abs(v - med) <= 0.15 * med))
+    mwRow('the routes\' distances within 15% of their median', !off.length, where, `${Object.entries(D).map(([k, v]) => `${k} ${v.toFixed(1)}`).join(', ')} (median ${med.toFixed(1)})`)
+    for (const k in D) mw.dist[k].push(D[k])
+    mw.width.gate.push(gateW)
+    mw.width.breach.push(breachW)
+    mw.width.wood.push(woodW)
+    // each route's path, seen
+    const routesOf = { gate: [gateR, navG, TG], ladders: [ladR, nav, T], breach: [breachR, navB, TB], wood: [woodR, nav, T] }
+    const routeRep = {}
+    for (const [k, [R, n, TT]] of Object.entries(routesOf)) {
+      if (!isFinite(R.d)) continue
+      const Fk = k === 'gate' || k === 'breach' ? firing(n, plan) : F
+      const path = pathOf(R)
+      let seen = 0, run = 0, longest = 0, exposure = 0, cells = 0, diff = 0, cover = 0, front = 0
+      for (let q = 1; q < path.length; q++) {
+        const i = path[q], x = n.x(i), z = n.z(i)
+        const step = hypot(x - n.x(path[q - 1]), z - n.z(path[q - 1]))
+        if (n.diff[i]) diff += step
+        if (sgn * x > 20 || n.floor[i] > STEP) continue
+        const behind = BT.behindLine(plan, x, z)
+        if (!behind) {
+          front++
+          if (n.cover[i]) cover++
+        }
+        const by = seenBy(TT, n, Fk, x, z, REPORT ? Infinity : 1)
+        if (by > 0) seen += step
+        if (REPORT) {
+          cells++
+          exposure += by
+          run = by >= 2 ? run + step : 0
+          longest = Math.max(longest, run)
+        }
+      }
+      mw.seen[k].push(seen)
+      mwRow('no route free of fire: 6 tails or more of each route seen', seen >= 6, where, `the ${k}: ${seen.toFixed(1)} tails seen`)
+      if (REPORT) routeRep[k] = { distance: +R.d.toFixed(2), difficult: +diff.toFixed(2), cover: front ? +(cover / front).toFixed(3) : 0, exposure: cells ? +(exposure / cells).toFixed(2) : 0, killingGround: +longest.toFixed(2), seen: +seen.toFixed(2) }
+    }
+    if (REPORT) {
+      routeRep.gate.width = +gateW.toFixed(2)
+      routeRep.breach.width = +breachW.toFixed(2)
+      routeRep.wood.width = +woodW.toFixed(2)
+      routeRep.ladders.width = +Math.min(...tops).toFixed(2)
+      rep.routes = routeRep
+      // the dead ground: from a point on the face out, how far before a cell
+      // is seen from a deck (the wall's own defenders)
+      const dead = (n, TT, Fk, p, ux, uz) => {
+        for (let t = 0; t <= 20; t += 0.5) if (seenBy(TT, n, Fk, p.x + ux * t, p.z + uz * t, 1) > 0) return t
+        return Infinity
+      }
+      const outward = (a, b) => {
+        // (the face's normal at a segment, pointing in front)
+        const dx = b.x - a.x, dz = b.z - a.z, L = hypot(dx, dz)
+        const nx = dz / L, nz = -dx / L
+        return BT.behindLine(plan, (a.x + b.x) / 2 + nx, (a.z + b.z) / 2 + nz) ? [-nx, -nz] : [nx, nz]
+      }
+      const gp = { x: plan.gate.x + sgn * 0.8, z: plan.gate.z }
+      const bm = { x: (plan.breach.a.x + plan.breach.b.x) / 2, z: (plan.breach.a.z + plan.breach.b.z) / 2 }
+      const [bnx, bnz] = outward(plan.breach.a, plan.breach.b)
+      rep.dead = {
+        gate: dead(navG, TG, firing(navG, plan, true), gp, sgn, 0) + 0.5,
+        breach: dead(navB, TB, firing(navB, plan, true), { x: bm.x + bnx * 1.5, z: bm.z + bnz * 1.5 }, bnx, bnz) + 1.5,
+        ladders: plan.ladders.map((l) => {
+          const dx = l.foot.x - l.top.x, dz = l.foot.z - l.top.z, L = hypot(dx, dz)
+          return dead(nav, T, firing(nav, plan, true), l.foot, dx / L, dz / L) + LADDER_OUT_
+        }),
+      }
+      // openness: the share of ground cells a squad stands on, in front
+      // (out of the attacker's zone), in the V (in front, east of the face's
+      // westmost point on the table) and behind
+      const westmost = Math.max(...plan.face.filter((p) => Math.abs(p.z) <= MH / 2).map((p) => sgn * p.x))
+      const open = { front: [0, 0], v: [0, 0], behind: [0, 0] }
+      for (let i = 0; i < nav.N; i++) {
+        const x = nav.x(i), z = nav.z(i)
+        if (sgn * x > 20) continue
+        const k = BT.behindLine(plan, x, z) ? 'behind' : 'front'
+        const ok = nav.floor[i] <= STEP && nav.standable(i, SQUAD, 'walk') ? 1 : 0
+        open[k][0] += ok
+        open[k][1]++
+        if (k === 'front' && sgn * x < westmost) {
+          open.v[0] += ok
+          open.v[1]++
+        }
+      }
+      rep.openness = Object.fromEntries(Object.entries(open).map(([k, [a, b]]) => [k, b ? +(a / b).toFixed(3) : 0]))
+      // the firing positions and the V's mouth each covers (the V's cells,
+      // sampled every 2 tails)
+      const vcells = []
+      for (let i = 0; i < nav.N; i++) {
+        const ix = i % nav.nx, iz = (i / nav.nx) | 0
+        if (ix % 4 || iz % 4) continue
+        const x = nav.x(i), z = nav.z(i)
+        if (sgn * x < westmost && sgn * x <= 20 && !BT.behindLine(plan, x, z) && nav.floor[i] <= STEP) vcells.push(i)
+      }
+      const shares = F.map((f) => vcells.filter((v) => seenBy(T, nav, [f], nav.x(v), nav.z(v), 1) > 0).length / Math.max(1, vcells.length))
+      rep.firing = { positions: F.length, vShareMean: +(shares.reduce((a, b) => a + b, 0) / Math.max(1, shares.length)).toFixed(3), vShareMax: +Math.max(0, ...shares).toFixed(3) }
+      // the trebuchet: from the attacker zone's nearest cell to the gate and
+      // the breach (its range 36), and from the defender's nearest post to
+      // the V
+      const zoneEdge = (p) => Math.abs(p.x - sgn * 20)
+      const vMid = vcells.length ? { x: vcells.reduce((a, i) => a + nav.x(i), 0) / vcells.length, z: vcells.reduce((a, i) => a + nav.z(i), 0) / vcells.length } : { x: 0, z: 0 }
+      rep.trebuchet = { toGate: +zoneEdge(plan.gate).toFixed(2), toBreach: +zoneEdge(bm).toFixed(2), defenderToV: +Math.min(...plan.posts.map((p) => hypot(p.x - vMid.x, p.z - vMid.z))).toFixed(2), range: RACES.squirrel.units.trebuchet.ranged.range }
+      // the wall's shape
+      const face = sgn < 0 ? pb.x0 : pb.x1, wk = plan.walks[0], edgeZ = Math.sign(wk.b.z) * (MH / 2), te = (edgeZ - wk.a.z) / (wk.b.z - wk.a.z)
+      rep.shape = { gateZ: +plan.gate.z.toFixed(2), face: +face.toFixed(2), sweepWood: +Math.abs(crag.shape.x - sgn * crag.shape.hx - face).toFixed(2), sweepWalk: +Math.abs(wk.a.x + (wk.b.x - wk.a.x) * te - face).toFixed(2), breach: +plan.breach.len.toFixed(2), gap: +gap.toFixed(2) }
+      mw.report.push(rep)
+    }
+    return T
+  }
+
+  for (let seed = mlo; seed <= mhi; seed++) {
+    for (const flip of [false, true]) {
+      const where = `seed ${seed}${flip ? ', seat 1 attacking' : ''}`
+      mw.boards++
+      try {
+        // determinism, the defs and the view (each orientation)
+        Math.random = () => {
+          throw new Error('Math.random called while building a March Wall board')
+        }
+        const outA = [], outB = [], outC = []
+        const A = build(seed, flip, { out: outA }), B = build(seed, flip, { out: outB })
+        Math.random = realRandom
+        A.generate(seed, objsOf(flip), MISSIONS.field.deploy, 'march', outC, ROLE(flip))
+        mwRow('built alike twice, and again on a Terrain reused (a snap, a late join)', sameJSON(defsOf(outA), defsOf(outB)) && sameJSON(defsOf(outA), defsOf(outC)) && sameJSON(B.plan, A.plan) && sameJSON(B.features, A.features), where, 'the adds, the plan or the footprints differ')
+        sides = ['the add', "the view's defOf"]
+        try {
+          for (const d of defsOf(outB)) deep(`${where} chunk ${d.id}'s def`, d, mwDefOf(B.byId(d.id)))
+          sides = ['want', 'got']
+          viewRows(where, B, outB)
+          mwRow("every add's def the view's defOf, and the view's rows", true)
+        } catch (e) {
+          if (!(e instanceof Stop)) throw e
+          mwRow("every add's def the view's defOf, and the view's rows", false, where, shown.pop() ?? 'a difference')
+        }
+        board(seed, flip)
+        if (!flip) {
+          if (B.plan.south) mw.south++
+          // the flip and the z mirror
+          const F1 = build(seed, true)
+          const neg = (p) => ({ x: 0 - p.x, z: 0 - p.z })
+          const bad = []
+          if (F1.chunks.length !== B.chunks.length) bad.push(`${F1.chunks.length} chunks | ${B.chunks.length}`)
+          else for (let k = 0; k < B.chunks.length && bad.length < 3; k++) for (const w of turnedLike(B.chunks[k], F1.chunks[k], neg, (y) => y + Math.PI)) bad.push(`chunk ${k + 1} ${B.chunks[k].kind}: ${w}`)
+          const pw = planLike(B.plan, F1.plan, neg)
+          mwRow('seat 1 attacking: the exact point mirror', !bad.length && !pw && F1.plan.flip === true, where, [...bad, pw].filter(Boolean).join('; '))
+          const N0 = build(seed, false, { south: false }), S0 = build(seed, false, { south: true })
+          const zm = (p) => ({ x: p.x, z: 0 - p.z })
+          const bad2 = []
+          if (N0.chunks.length !== S0.chunks.length) bad2.push(`${N0.chunks.length} chunks | ${S0.chunks.length}`)
+          else for (let k = 0; k < N0.chunks.length && bad2.length < 3; k++) for (const w of turnedLike(N0.chunks[k], S0.chunks[k], zm, (y, face) => (face ? Math.PI - y : 0 - y))) bad2.push(`chunk ${k + 1} ${N0.chunks[k].kind}: ${w}`)
+          mwRow('the wood north or south: the exact z mirror', !bad2.length && S0.plan.south === true && N0.plan.south === false, where, bad2.join('; '))
+        }
+      } catch (e) {
+        Math.random = realRandom
+        sides = ['want', 'got']
+        mwRow('threw', false, where, e.stack.split('\n').slice(0, 3).join(' / '))
+      }
+    }
+  }
+  Math.random = realRandom
+  const n = mw.boards
+  const pct = (a) => { const f = [...a].sort((x, y) => x - y); return f.length ? `${f[0].toFixed(2)} / ${f[f.length >> 1].toFixed(2)} / ${f[f.length - 1].toFixed(2)}` : 'none' }
+  // the rate: the wood south on 40-60% of boards
+  const unflipped = mhi - mlo + 1
+  if (unflipped >= 100) mwRow('the wood south on 40-60% of boards', mw.south >= 0.4 * unflipped && mw.south <= 0.6 * unflipped, `seeds ${mlo}-${mhi}`, `${mw.south} of ${unflipped}`)
+  console.log(`\nthe March Wall (Breakthrough): ${n} boards, seeds ${mlo}-${mhi} each with seat 0 and seat 1 attacking (${((Date.now() - tm0) / 1000).toFixed(1)} s): the wood south on ${mw.south} of ${unflipped}; chunks ${pct(mw.chunks)}, decks ${pct(mw.decks)}, ladders ${pct(mw.ladders)} (min / median / max); the view: ${mwView.synced} chunks synced, ${mwView.tops} walkable tops, ${mwView.taken} meshes taken back`)
+  console.log(`  routes' distances to the nearest objective (min / median / max): ${Object.entries(mw.dist).map(([k, v]) => `${k} ${pct(v)}`).join('; ')}`)
+  console.log(`  bottlenecks: gate broken ${pct(mw.width.gate)}, breach broken ${pct(mw.width.breach)}, wood ${pct(mw.width.wood)}; tails of each route seen: ${Object.entries(mw.seen).map(([k, v]) => `${k} ${pct(v)}`).join('; ')}`)
+  for (const [k, r] of Object.entries(mw.rows)) console.log(`  ${r.fail ? 'FAIL' : 'ok  '} ${k}: ${r.pass} of ${r.pass + r.fail}`)
+  if (REPORT) {
+    console.log('\n  the March Wall per board (--march-report): seed flip south | distance gate ladders breach wood | width gate breach wood ladder-top | seen | dead ground gate breach ladders | openness front V behind | firing (V share mean/max) | chunks decks')
+    for (const r of mw.report) console.log(`  ${String(r.seed).padStart(5)} ${r.flip ? 1 : 0} ${r.south ? 1 : 0} | ${['gate', 'ladders', 'breach', 'wood'].map((k) => r.routes[k].distance.toFixed(1).padStart(5)).join(' ')} | ${['gate', 'breach', 'wood', 'ladders'].map((k) => r.routes[k].width.toFixed(2)).join(' ')} | ${['gate', 'ladders', 'breach', 'wood'].map((k) => r.routes[k].seen.toFixed(0)).join(' ')} | ${r.dead.gate} ${r.dead.breach} ${r.dead.ladders.map((x) => x.toFixed(1)).join(',')} | ${r.openness.front} ${r.openness.v} ${r.openness.behind} | ${r.firing.positions} ${r.firing.vShareMean}/${r.firing.vShareMax} | ${r.chunks} ${r.decks}`)
+    if (args['march-json']) {
+      writeFileSync(args['march-json'], JSON.stringify({ seeds: [mlo, mhi], role: ROLE(false), objectives: MOBJ, boards: mw.report }, null, 1))
+      console.log(`  (JSON: ${args['march-json']})`)
+    }
+  }
+  if (mw.failed) {
+    console.log(`MISMATCH: the March Wall failed ${mw.failed} time(s):`)
+    for (const s of mwShown) console.log(`  ${s}`)
+    process.exitCode = 1
+  } else if (!n || !Object.keys(mw.rows).length) {
+    console.log(`terrain-check: VACUOUS: ${n} March Wall boards checked`)
+    process.exit(2)
+  } else console.log(`every March Wall board holds every row: ${n} of ${n}`)
 }
 
 // ── Connectivity (F8b, DESIGN §4.2.3 and §4.2.9) ────────────────────────────

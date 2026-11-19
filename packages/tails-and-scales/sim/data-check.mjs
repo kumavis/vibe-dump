@@ -243,7 +243,6 @@
 //    Grand price, staying on the card text; the Howdah's deck counts at
 //    the three scales pinned (open question 2's correction of DESIGN's
 //    slot table); two Howdahs a Field or Grand list, none in a Skirmish.
-//
 // 17. (Breakthrough, DESIGN §4.2.12) Asymmetric missions: the breakthrough
 //    record as DESIGN has it (Field's board, rounds, preset, list rules and
 //    prices whole, on `open`, overtime false; the roles' zones, target,
@@ -261,6 +260,18 @@
 //    the objectives on the table point-mirrored exactly when seat 1
 //    attacks, the zones with them, and Terrain.generate handed the role
 //    record in the attacker frame (and nothing on any other mission).
+// 18. (Breakthrough, DESIGN's line set) The March Wall: the `march` set is
+//    a plan set (plan 'wall', every field of the plan's, none of scatter's),
+//    named by no mission yet; checkSet refuses a plan set broken a field at
+//    a time; RULES_ID moves with the set, its gate's hit points, its ram and
+//    its ladders, and stays on a copy; generate refuses the set with no
+//    role, and a scattered board keeps no plan; the board's one gate is the
+//    set's (hard, blocking sight, cover, its hp and ram on the chunk, not
+//    the add's def); the wood's picket cell is the nav's; and the ram: a
+//    smash takes min(99, ram) off a chunk with one, once a walk (a walk's
+//    set), every time without one (a lone sample), three walks breaking the
+//    gate into its timbers on its footprint, a blast its own damage, and a
+//    chunk with no ram the smash's 99 as ever.
 //
 //   node sim/data-check.mjs
 //
@@ -2292,4 +2303,108 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
 }
 
 console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, (F11a) the army builder\'s prices, rosters, presets and list rules hold, (F8b) every mission, preset and set is inside the size envelope, (F19a) the powder keg, its set and its mission are as the rules have them, (F9a) the War-Cart, its transport and the Vehicle slot are as the rules have them, its riders fitting its deck, (V3d) the Powder Field, its set, its sites and its mission are as the rules have them, and (F9b) the Howdah, its footprint and the tables derived from it are as the rules have them, and (Breakthrough) the roles, the breakthrough mission and its flip are as the rules have them')
+
+// ── 18. The March Wall (Breakthrough) ───────────────────────────────────────
+console.log("\n18. the March Wall: its set, its plan's fields, the gate and the ram (Breakthrough, DESIGN's line set)")
+{
+  const M = SETS.march
+  const { Terrain } = await imp(PKG, 'core/terrain/terrain.js')
+  const { smashAround } = await imp(PKG, 'core/actions/move.js')
+  const BT = await imp(PKG, 'core/terrain/breakthrough.js')
+  const { NAV_CELL } = await imp(PKG, 'core/match.js')
+  const { PLAN_FIELDS } = await imp(PKG, 'core/terrain/recipes.js')
+  check(M && M.plan === 'wall' && ['centre', 'kinds', 'pairs', 'mirror', 'gap'].every((k) => !(k in M)), "march is a plan set: plan 'wall', none of scatter's fields (centre, kinds, pairs, mirror, gap)")
+  check(Object.keys(M).sort().join() === ['plan', ...Object.keys(PLAN_FIELDS.wall)].sort().join(), "march holds every field of the wall plan's (recipes.js PLAN_FIELDS) and no other", Object.keys(M).join(', '))
+  check(Object.values(MISSIONS).every((m) => !m.sets.includes('march')), 'no mission names march yet (the role mission that will, S1\'s, passes its role to generate)')
+  check(BT.PICKET_CELL === NAV_CELL, `the wood's picket stands on the nav grid's cells (breakthrough.js PICKET_CELL ${BT.PICKET_CELL} = core/match.js NAV_CELL ${NAV_CELL})`)
+  check(M.gate.hp === 12 && M.gate.ram === 4 && M.gate.w === 6, `the gate is the line set's: 6 wide, hp 12, ram 4 (three blows): ${M.gate.w}, ${M.gate.hp}, ${M.gate.ram}`)
+  // a plan set refused, a field at a time
+  for (const [what, want, edit] of [
+    ['a plan no generator knows', /plan "moat" is not one/, (c) => (c.plan = 'moat')],
+    ['a misspelt plan field', /unknown field "gate\.width"/, (c) => (c.gate.width = 6)],
+    ['a plan field missing', /no "walk\.ladders"/, (c) => delete c.walk.ladders],
+    ["scatter's mirror on a plan set", /unknown field "mirror"/, (c) => (c.mirror = 'point')],
+    ['a range that falls', /gate\.z \[3,-3\] must be a range/, (c) => (c.gate.z = [3, -3])],
+    ['hit points that are no whole number', /gate\.hp 12\.5 must be a count/, (c) => (c.gate.hp = 12.5)],
+    ['a ram of 0', /gate\.ram 0 must be a count/, (c) => (c.gate.ram = 0)],
+    ['a glacis piece no plan builds', /glacis\.kinds .* must be a list of \[piece, weight\]/, (c) => (c.glacis.kinds[0][0] = 'moat')],
+    ['a chance above 1', /second\.ruin 1\.5 must be a prob/, (c) => (c.second.ruin = 1.5)],
+  ]) {
+    const c = structuredClone(M)
+    edit(c)
+    const err = setError(c)
+    check(err && want.test(err), `refuses ${what}`, err ?? 'accepted')
+  }
+  // RULES_ID: the set is rules, the gate's numbers with it
+  const withMarch = (edit) => {
+    const c = structuredClone(M)
+    edit(c)
+    return rulesId({ sets: { ...SETS, march: c } })
+  }
+  check(rulesId({ sets: Object.fromEntries(Object.entries(SETS).filter(([k]) => k !== 'march')) }) !== RULES_ID, 'RULES_ID moves with the march set (it is rules)')
+  for (const [what, edit] of [["gate's hit points (12 → 11)", (c) => (c.gate.hp = 11)], ['ram (4 → 3)', (c) => (c.gate.ram = 3)], ["walk's ladders ([2, 3] → [2, 2])", (c) => (c.walk.ladders = [2, 2])]]) check(withMarch(edit) !== RULES_ID, `RULES_ID moves on the march set's ${what}`)
+  check(withMarch(() => {}) === RULES_ID, 'RULES_ID stays on an unchanged copy of the march set (the control)')
+  // generate: a plan set needs a role, a scattered set keeps no plan
+  const role = { flip: false, zones: { attack: { x: [-30, -20] }, defend: { x: [-18, 30] } }, line: -4.5 }
+  const objs = [{ x: 9, z: 0 }, { x: 3, z: 13 }, { x: 3, z: -13 }]
+  const T = new Terrain(60, 40)
+  let refused = null
+  try {
+    T.generate(1, objs, 12, 'march', null, null)
+  } catch (e) {
+    refused = e.message
+  }
+  check(/built for a role mission/.test(refused ?? ''), 'generate refuses the march set without a role', refused ?? 'built')
+  T.generate(1, MISSIONS.field.objectives, 12, 'open', null)
+  check(T.plan === null, 'a scattered board keeps no plan (Terrain.plan null)')
+  // the gate's def, off a March Wall board
+  const out = []
+  T.generate(1, objs, 12, 'march', out, role)
+  const gates = T.chunks.filter((c) => c.kind === 'gate'), g = gates[0]
+  check(gates.length === 1 && g.id === T.plan.gate.id && g.hp === M.gate.hp && g.maxHp === M.gate.hp && g.ram === M.gate.ram && g.destructible && g.navKind === 'hard' && g.los === 'block' && g.cover === true && g.shape.hz * 2 === M.gate.w && g.look.piece === 'gate', `the board's one gate: kind gate, hp ${M.gate.hp}, ram ${M.gate.ram}, hard, blocking sight, cover, ${M.gate.w} wide`, JSON.stringify(g && { hp: g.hp, ram: g.ram, navKind: g.navKind, los: g.los, cover: g.cover, w: g.shape.hz * 2 }))
+  const add = out.find((e) => e.t === 'terrain.add' && e.def.id === g.id)
+  check(add && !('ram' in add.def) && !('hp' in add.def), "the gate's add carries its place and look, as every chunk's: its hp and ram are the chunk's, no def's")
+  check(Object.isFrozen(T.plan) && T.plan.plan === 'wall' && T.plan.ladders.length >= 2 && T.plan.posts.length > 0, "the board's plan: frozen, a wall's, its ladders and its posts")
+  // the ram's damage: a lone gate, smashed at one spot by a disc of r 1
+  const lone = (ram = M.gate.ram, hp = M.gate.hp) => {
+    const L = new Terrain(40, 28)
+    const c = L.add({ kind: 'gate', hp, ram, shape: { x: 0, y: 1.4, z: 0, hx: 0.3, hy: 1.4, hz: 3, yaw: 0 }, navKind: 'hard', los: 'block', cover: true, look: { piece: 'gate', recipe: 'march', w: 0.6, d: 6, h: 2.8, color: '#7a2e22', chip: '#7a2e22' } })
+    return { L, c, G: { terrain: L, nav: { hasHeight: false } } }
+  }
+  {
+    const { G, c } = lone(), walk = new Set()
+    const n1 = smashAround(G, { r: 1 }, { x: -1.5, z: 0, dir: Math.PI / 2 }, null, [], 1, walk)
+    const n2 = smashAround(G, { r: 1 }, { x: -1.4, z: 0, dir: Math.PI / 2 }, null, [], 1, walk)
+    check(n1 === 1 && n2 === 0 && c.hp === M.gate.hp - M.gate.ram, `a smash takes the ram's ${M.gate.ram} off the gate, once a walk: a second sample of the same walk takes nothing and counts nothing (hp ${c.hp}, ${n1} then ${n2})`)
+    smashAround(G, { r: 1 }, { x: -1.5, z: 0, dir: Math.PI / 2 }, null, [], 1, new Set())
+    const broke = []
+    smashAround(G, { r: 1 }, { x: -1.5, z: 0, dir: Math.PI / 2 }, null, broke, 1, new Set())
+    const pile = G.terrain.chunks.find((x) => x.kind === 'rubble')
+    check(!c.alive && broke[0] === c && pile && pile.navKind === 'diff' && pile.los === 'obscure' && pile.cover && pile.shape.x === c.shape.x && pile.shape.hz === c.shape.hz && pile.look.style === 'timber', `three walks break it (${Math.ceil(M.gate.hp / M.gate.ram)} blows), into a pile of its timbers on its footprint: difficult, obscuring, cover`)
+  }
+  {
+    const { G, c } = lone()
+    smashAround(G, { r: 1 }, { x: -1.5, z: 0, dir: Math.PI / 2 }, null)
+    smashAround(G, { r: 1 }, { x: -1.5, z: 0, dir: Math.PI / 2 }, null)
+    check(c.hp === M.gate.hp - 2 * M.gate.ram, `without a walk's set (a lone sample) every smash rams: hp ${c.hp}`)
+  }
+  {
+    const { G, c } = lone(120, 200)
+    smashAround(G, { r: 1 }, { x: -1.5, z: 0, dir: Math.PI / 2 }, null, [], 1, new Set())
+    check(c.hp === 101, `a ram above the smash's 99 takes 99 (min(99, ram)): hp 200 → ${c.hp}`)
+  }
+  {
+    const { L, c } = lone()
+    L.blast(-1, 0, 1.5, 3)
+    check(c.hp === M.gate.hp - 3, `a blast takes its scenery damage off the gate, the ram aside (the Trebuchet's 3: hp ${c.hp})`)
+    const crate = L.add({ kind: 'crate', hp: 1, shape: { x: 5, y: 0.3, z: 0, hx: 0.36, hy: 0.3, hz: 0.36, yaw: 0 }, navKind: 'diff', los: 'obscure', cover: true, look: { piece: 'crate', s: 0.6, color: '#9a7048', stacked: false, yaw: 0, chip: '#9a7048' } })
+    const big = L.add({ kind: 'wreck', hp: 6, shape: { x: 8, y: 0.5, z: 0, hx: 1, hy: 0.5, hz: 1, yaw: 0 }, navKind: 'diff', los: 'obscure', cover: true, look: { piece: 'wreck', race: 'squirrel' } })
+    const G = { terrain: L, nav: { hasHeight: false } }
+    smashAround(G, { r: 1 }, { x: 5, z: 0, dir: Math.PI / 2 }, null, [], 1, new Set())
+    smashAround(G, { r: 1 }, { x: 8, z: 0, dir: Math.PI / 2 }, null, [], 1, new Set())
+    check(!crate.alive && !big.alive, 'a chunk with no ram takes the smash\'s 99 as ever (a crate, a wreck)')
+  }
+}
+
+console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, (F11a) the army builder\'s prices, rosters, presets and list rules hold, (F8b) every mission, preset and set is inside the size envelope, (F19a) the powder keg, its set and its mission are as the rules have them, (F9a) the War-Cart, its transport and the Vehicle slot are as the rules have them, its riders fitting its deck, (V3d) the Powder Field, its set, its sites and its mission are as the rules have them, (F9b) the Howdah, its footprint and the tables derived from it are as the rules have them, and (Breakthrough) the March Wall, its gate and the ram are as the rules have them')
 process.exit(failed ? 1 : 0)
