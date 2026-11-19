@@ -1,7 +1,7 @@
 // Deployment: where the armies start, and where a unit may be put during
 // its seat's deployment.
 import { hypot } from './dmath.js'
-import { edgeOf } from './match.js'
+import { edgeOf, rolesOf, roleOf, flipped } from './match.js'
 import { setUnitPos, defaultFacing } from './units.js'
 import { STEP } from './nav.js'
 import { groundOnly } from './actions/move.js'
@@ -10,10 +10,22 @@ import { clearOf } from './footprint.js'
 
 // The deployment zone of seat `side`: the strip the mission's depth deep
 // along its seat's edge, as x bounds (G.board: the mission's board).
+// (Breakthrough, DESIGN §4.2.12) On a mission with roles, the zone of the
+// seat's role, a rectangle in the mission's attacker-west frame (z bounds
+// too where the role's zone names them), point-mirrored when seat 1
+// attacks (core/match.js flipped).
 export function zone(G, side) {
+  if (rolesOf(G.setup)) return roleZone(G, side)
   const { W, deploy } = G.board
   const edge = edgeOf(G, side), outer = edge * (W / 2), inner = edge * (W / 2 - deploy)
   return { minX: Math.min(outer, inner), maxX: Math.max(outer, inner) }
+}
+function roleZone(G, side) {
+  const z = rolesOf(G.setup)[roleOf(G, side)].zone
+  const [x0, x1] = z.x
+  if (!z.z) return flipped(G.setup) ? { minX: -x1, maxX: -x0 } : { minX: x0, maxX: x1 }
+  const [z0, z1] = z.z
+  return flipped(G.setup) ? { minX: -x1, maxX: -x0, minZ: -z1, maxZ: -z0 } : { minX: x0, maxX: x1, minZ: z0, maxZ: z1 }
 }
 
 // May `u` be put on nav cell i during seat `side`'s deployment, with
@@ -45,18 +57,27 @@ export function fits(G, u, i, box, others, f) {
   const nav = G.nav
   const cx = nav.x(i), cz = nav.z(i)
   if (cx - u.r < minX - 0.01 || cx + u.r > maxX + 0.01) return false
+  // ((Breakthrough) a role's zone with z bounds holds the base inside them)
+  if (box.minZ !== undefined && (cz - u.r < box.minZ - 0.01 || cz + u.r > box.maxZ + 0.01)) return false
   if (!nav.standable(i, u.r, 'walk')) return false
   if (nav.hasHeight && groundOnly(u) && nav.floor[i] > STEP) return false
   if (others.some((o) => !o.aboard && (o.t.fp ? clearOf(o, cx, cz, u.r) < 0.4 : hypot(o.pos.x - cx, o.pos.z - cz) < o.r + u.r + 0.4))) return false
   return true
 }
-function hullFits(G, u, i, { minX, maxX }, others, f) {
+function hullFits(G, u, i, { minX, maxX, minZ, maxZ }, others, f) {
   const nav = G.nav, fp = u.t.fp
   if (!(Number.isInteger(f) && f >= 0 && f < 8)) return false
   const cx = nav.x(i), cz = nav.z(i), row = fp.H[f]
   for (const d of row) {
     const x = cx + d.ix * fp.cell
     if (x - d.r < minX - 0.01 || x + d.r > maxX + 0.01) return false
+  }
+  // ((Breakthrough) and a role's zone's z bounds, every disc inside them)
+  if (minZ !== undefined) {
+    for (const d of row) {
+      const z = cz + d.iz * fp.cell
+      if (z - d.r < minZ - 0.01 || z + d.r > maxZ + 0.01) return false
+    }
   }
   if (!nav.hullStands(i, f, fp, 'walk')) return false
   for (const d of row) {
@@ -151,8 +172,15 @@ function hullSpot(G, u, x, z, side, others, f) {
 // heading (freeSpot); failing that, at each other heading in order, then
 // the first state that fits in the board's order (hullFallback); its
 // facing is the state's.
+//
+// (Breakthrough, DESIGN §4.2.12) On a mission with roles the rows are
+// measured from the front of the seat's role zone (its edge toward the
+// enemy): the front row 1.8 tails behind it, the middle 3.6, the back row
+// 2.4 from the seat's own edge as ever, each spread along the zone's z
+// span (the board's, less 3 tails a side, for a zone with no z bounds).
 export function deployArmies(G) {
   const { W, H, deploy } = G.board
+  const roles = !!rolesOf(G.setup)
   for (const side of [0, 1]) {
     const sx = edgeOf(G, side)
     const list = G.units.filter((u) => u.side === side)
@@ -160,15 +188,22 @@ export function deployArmies(G) {
     const back = list.filter((u) => u.t.deployRow === 'back')
     const mid = list.filter((u) => u.t.deployRow === 'mid')
     const front = list.filter((u) => u.t.deployRow === 'front')
-    const rows = [
-      [front, W / 2 - deploy + 1.8],
-      [mid, W / 2 - deploy + 3.6],
-      [back, W / 2 - 2.4],
-    ]
+    const box = roles ? zone(G, side) : null
+    // (a role zone's front, as a depth from the centre line toward the
+    // seat's edge, and its z span's middle and length)
+    const lead = roles ? sx * (sx > 0 ? box.minX : box.maxX) : 0
+    const mz = roles && box.minZ !== undefined ? (box.minZ + box.maxZ) / 2 : 0, span = roles && box.minZ !== undefined ? box.maxZ - box.minZ : H
+    const rows = roles
+      ? [[front, lead + 1.8], [mid, lead + 3.6], [back, W / 2 - 2.4]]
+      : [
+        [front, W / 2 - deploy + 1.8],
+        [mid, W / 2 - deploy + 3.6],
+        [back, W / 2 - 2.4],
+      ]
     for (const [row, depth] of rows) {
       row.forEach((u, i) => {
         // each army lists its units from its own left
-        const z = ((i + 0.5) / row.length - 0.5) * (H - 6) * -sx
+        const z = roles ? mz + ((i + 0.5) / row.length - 0.5) * (span - 6) * -sx : ((i + 0.5) / row.length - 0.5) * (H - 6) * -sx
         if (u.t.fp) {
           const p = hullFallback(G, u, sx * depth, z, side, placed) || { x: sx * depth, z, f: u.facing }
           u.facing = p.f

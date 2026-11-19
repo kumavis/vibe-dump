@@ -212,6 +212,9 @@ export function editBattle(handle, fields) {
       for (const k of SEAT_KEYS) if (d.lobby.seats[k] && 'army' in d.lobby.seats[k]) delete d.lobby.seats[k].army
     }
     if (fields.terrain !== undefined) d.lobby.terrain = fields.terrain
+    // ((Breakthrough) the overtime, which a mission that allows no vote
+    // sets 'never': app/online.js, as the size changes)
+    if (fields.overtime !== undefined) d.lobby.overtime = fields.overtime
     if (fields.fog !== undefined) d.lobby.fog = fields.fog === true
     for (const k of SEAT_KEYS) if (d.lobby.seats[k]) d.lobby.seats[k].ready = false
   })

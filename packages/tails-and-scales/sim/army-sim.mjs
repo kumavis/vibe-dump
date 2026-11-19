@@ -519,12 +519,23 @@ function setsOf(mission, name) {
 async function main() {
   // (F8b) every mission by default, in MISSIONS order; --mission names one
   // or a comma-separated few
-  const names = a.mission === undefined ? Object.keys(MISSIONS) : a.mission.split(',').map((s) => s.trim())
+  // ((Breakthrough) but for a mission with roles: its gates are a role
+  // mode's, the attacker's share by ordered race pair (DESIGN §4.2.12),
+  // which this harness doesn't have yet; a default run leaves it out and
+  // says so, and --mission naming one is a bad command line)
+  const roled = Object.keys(MISSIONS).filter((m) => MISSIONS[m].roles)
+  const names = a.mission === undefined ? Object.keys(MISSIONS).filter((m) => !MISSIONS[m].roles) : a.mission.split(',').map((s) => s.trim())
   const unknown = names.filter((m) => !MISSIONS[m])
   if (!names.length || unknown.length) {
     console.error(`army-sim: no mission ${unknown.map((m) => JSON.stringify(m)).join(', ') || '""'} (there are ${Object.keys(MISSIONS).join(', ')})`)
     process.exit(2)
   }
+  const asked = names.filter((m) => MISSIONS[m].roles)
+  if (asked.length) {
+    console.error(`army-sim: the ${asked.join(', ')} mission has roles, and its gates (the attacker's share by race pair) are a role mode still to come`)
+    process.exit(2)
+  }
+  if (a.mission === undefined && roled.length) console.log(`army-sim: the ${roled.join(', ')} mission${roled.length === 1 ? ' has' : 's have'} roles, left out: a role mode's gates, still to come`)
   if (!a.check && !a.fit) {
     console.error('army-sim: --check (the gates), --fit (the fitted price table) or --self-test')
     process.exit(2)

@@ -31,6 +31,10 @@ export class ResultScreen {
     const when = rounds ? `in round ${rounds}` : 'in the deployment'
     const line = why === 'wipe' ? `${sides[1 - win].name} have been wiped from the table ${when}.`
       : why === 'concede' ? `${sides[1 - win].name} conceded ${when}.`
+      // ((Breakthrough) a role mission's ends: the attacker's target
+      // reached, or the line held to the last round)
+      : why === 'breakthrough' ? `${sides[win].name} broke through in round ${rounds}.`
+      : why === 'held' ? `${sides[win].name} held the line for ${rounds} round${rounds === 1 ? '' : 's'}.`
       : `Final score ${vp[0]} – ${vp[1]} after ${rounds} round${rounds === 1 ? '' : 's'}.`
     const title = $('#overTitle')
     title.textContent = `${win >= 0 ? sides[win].icon + ' ' : ''}${t}`

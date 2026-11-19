@@ -71,6 +71,9 @@ export const MISSION_NAMES = Object.freeze({
   keg: { name: 'Powder keg', what: 'Four objectives round a powder keg at the centre: hold them while it stands, and whoever sets it off (a template, acid or the Brute) catches everyone near it.' },
   // (V3d) a Grand battle of its own
   powder: { name: 'Powder Field', what: 'A Grand battle on the wreckage of the day\'s fighting, still burning: the objectives on a burned farmstead, wrecked trebuchets and venom engines, and among heaps of powder kegs. Climb the wrecks; a blast that touches the powder sets off every keg in reach.' },
+  // (Breakthrough) the first asymmetric mission, a Field battle of its own
+  // (the setup panel's role line is to come: seat 0 attacks until then)
+  breakthrough: { name: 'Breakthrough', what: 'One army holds a line across the field; the other must break through it. The attacker scores for each objective it holds beyond the line at the end of each round, and wins on 5. The defender wins by holding them off for 6 rounds.' },
 })
 // a mission's name on the size line: its own, else its list's size
 export const sizeName = (mission, m) => MISSION_NAMES[mission]?.name ?? m.list?.size ?? mission

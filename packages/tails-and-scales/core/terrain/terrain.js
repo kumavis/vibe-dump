@@ -165,7 +165,14 @@ export class Terrain {
   // A deck, stair, ladder or post carries its height fields on the chunk as
   // its def gave them (Object spread, below in add), so core/nav.js reads
   // them from the chunks.
-  generate(seed, objectives, deployDepth, set = 'classic', out = null) {
+  //
+  // (Breakthrough, DESIGN §4.2.12) `role`: null on a mission without roles,
+  // else { flip, zones: { attack: { x: [a, b], z?: [c, d] }, defend: … },
+  // line }, all in the mission's attacker-west frame, `flip` true when seat
+  // 1 attacks (the table is then the point mirror of that frame; the
+  // objectives handed in are the table's, already mirrored). Taken and not
+  // yet read: the line set (DESIGN §4.2.12's "The line set") builds by it.
+  generate(seed, objectives, deployDepth, set = 'classic', out = null, role = null) {
     // (SETS has no prototype, so only a set's own name is in it)
     if (!(set in SETS)) throw new Error(`no terrain set "${set}" (there are ${Object.keys(SETS).join(', ')})`)
     this.clear(out)

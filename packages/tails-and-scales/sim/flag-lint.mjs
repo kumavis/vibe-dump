@@ -62,6 +62,12 @@
 //                                         data/schema.js hands the record
 //                                         to: the rules read the tables it
 //                                         derives (t.fp), never the record
+//   (Breakthrough) roles                  core/match.js rolesOf, which every
+//                                         role rule asks, and core/army.js
+//                                         rulesFor (and a list's role slots
+//                                         there, as ever): a mission's
+//                                         roles, gating every branch a role
+//                                         mission takes
 // data/schema.js validating and copying them, data/mission.js checking a
 // mission's list and preset name, fullSetup filling in a seat's army and
 // core/version.js hashing a list without its size's name are listed in ALLOW, as the .fx and .abilities lines are, and so (F7a) are
@@ -160,6 +166,12 @@ export const OWNED = [
   // (F9b) a long hull's footprint record: core/footprint.js derives t.fp
   // from it, and every rule reads that
   [reads('footprint'), ['core/footprint.js'], "a long hull's footprint record read outside core/footprint.js (the rules read its derived t.fp)"],
+  // (Breakthrough, DESIGN §4.2.12) a mission's roles: core/match.js rolesOf
+  // is the rules' one reader (every role branch asks it, so a battle on a
+  // mission without roles takes the code it took before them), and
+  // core/army.js rulesFor its twin (the army builder imports nothing of the
+  // core's; it reads a list's role slots, `roles` too, as ever)
+  [reads('roles'), ['core/match.js', 'core/army.js'], "a mission's roles read outside core/match.js rolesOf and core/army.js rulesFor (the rules ask rolesOf)"],
 ]
 // the patterns that apply to file `f`
 const rulesFor = (f) => [...BANNED, ...(/^(core|data)\//.test(f) ? OWNED.filter(([, owners]) => !owners.includes(f)).map(([re, , what]) => [re, what]) : [])]
@@ -206,6 +218,12 @@ export const ALLOW = [
   ['data/mission.js', 'm.army', 1, "checkMission: the mission names its preset"],
   ['data/mission.js', 'checkListRules(m.list, bad)', 1, "checkMission hands the mission's list rules to their check"],
   ['data/mission.js', 'const prices = l.prices', 1, "(F8b) checkListRules reads a mission's own prices (DESIGN §4.2.8.2's fallback) to check them"],
+  // ((Breakthrough, OWNED) checkMission checking a mission's roles, and a
+  // role's own list rules, and checkListRules a list's role slots)
+  ['data/mission.js', 'if (m.roles !== undefined) return checkRoles(m, bad)', 1, "(Breakthrough) checkMission hands a mission with roles to their check"],
+  ['data/mission.js', 'const roles = m.roles', 1, "(Breakthrough) checkRoles reads the mission's roles to check them"],
+  ['data/mission.js', 'const roles = l.roles', 1, "checkListRules reads a list's role slots (the army builder's own `roles`, not a mission's) to check them"],
+  ['data/mission.js', 'if (r.list !== undefined) checkListRules(r.list, ', 1, "(Breakthrough) checkRoles hands a role's own list rules to their check"],
   ['core/index.js', 'army: x.army ?? mission.army', 1, "fullSetup fills in a seat's army, the mission's preset when it names none (core/army.js judges it)"],
   ['core/version.js', '(m.list ? { ...m, list: listRules(m.list) } : m)', 1, "rulesData hashes a mission's list rules without the size's name (presentation)"],
   ['core/rules.js', 'value: kills * t.pts', 1, "expected(): the AI's value of a shot, per model killed (a legacy reading of pts, kept)"],
@@ -441,6 +459,12 @@ if (main && args['self-test']) {
     ['core/actions/move.js', "const turn = u.t['footprint'].turn"],
     ['core/queries.js', 'const { footprint } = u.t'],
     ['data/mission.js', 'if (t.footprint) return'],
+    // (Breakthrough, OWNED) a mission's roles read outside rolesOf and
+    // rulesFor, by every route
+    ['core/engine.js', 'const target = missionOf(G.setup).roles.attack.target'],
+    ['core/deploy.js', "const z = MISSIONS[G.setup.mission]['roles']?.defend.zone"],
+    ['core/ai/score.js', 'const { roles } = missionOf(G.setup)'],
+    ['data/mission.js', 'if (m.roles) skip()'],
   ]
   // 3. lines that must not be: the registry lookup, the mirror check, and
   // reads of rule data that are the point of the flags
@@ -491,6 +515,11 @@ if (main && args['self-test']) {
     ['core/footprint.js', 'const fp = deriveFootprint(rec.footprint, id)'],
     ['core/actions/move.js', 'if (u.t.fp) return hullPlan(G, u)'],
     ['core/queries.js', 'const R = u.t.fp ? u.t.fp.R : u.r'],
+    // (Breakthrough, OWNED) its two readers, and the rules asking rolesOf
+    ['core/match.js', "export const rolesOf = (setup) => missionOf(setup)?.roles ?? null"],
+    ['core/army.js', 'if (!mission?.roles) return mission?.list'],
+    ['core/engine.js', 'const need = rolesOf(G.setup).attack.target'],
+    ['present/hud-model.js', 'const roles = MISSIONS[G.setup.mission].roles'],
   ]
   console.log('2. lines that must be flagged')
   for (const [f, line] of FLAG) {
@@ -514,6 +543,6 @@ if (main && !args['self-test']) {
   for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
   for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)
   const bad = hits.length + stale.length
-  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, (F11a) the army builder\'s data and pts each have their one reader in core/ and data/, and (F9a) so do a hull\'s transport, the vehicle and climb flags and the enclosed deck, and (F9b) a long hull\'s footprint')
+  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, (F11a) the army builder\'s data and pts each have their one reader in core/ and data/, and (F9a) so do a hull\'s transport, the vehicle and climb flags and the enclosed deck, and (F9b) a long hull\'s footprint, and (Breakthrough) a mission\'s roles')
   process.exit(bad ? 1 : 0)
 }

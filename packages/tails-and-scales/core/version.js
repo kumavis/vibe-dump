@@ -140,5 +140,17 @@ export const RULES_ID = rulesId()
 // shots from the deck and never advancing a hull with a gun aboard (rule
 // 10); each a branch only a rider (or a hull carrying one) reaches, so
 // only a battle fielding a hull plays otherwise; RULES_ID moves with the
-// transport's `deckY` (the deck's height, where its riders stand)
-export const CORE_VERSION = 16
+// transport's `deckY` (the deck's height, where its riders stand); 17:
+// Breakthrough's roles (DESIGN §4.2.12), the asymmetric missions' shared
+// machinery: a mission's `roles` (each role's zone and own list rules, the
+// attacker's target and first turn, the defender's line), `overtime`
+// false, an objective's `scores` and `vp`; the setup's `attacker`; the
+// table point-mirrored when seat 1 attacks (the objectives, the zones, and
+// Terrain.generate's `role` argument, taken and not yet read); the role
+// zones in deployment and its rows; the attacker's first turn with no
+// roll-off; the role scoring, the target's early end and the result with
+// no draw ('breakthrough', 'held'); each a branch only a mission with
+// roles reaches, through core/match.js rolesOf (and core/army.js
+// rulesFor), so every other battle plays as it did; RULES_ID moves with
+// the provisional `breakthrough` mission (on `open` until the line set)
+export const CORE_VERSION = 17

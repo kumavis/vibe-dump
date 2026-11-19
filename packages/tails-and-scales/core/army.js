@@ -38,6 +38,10 @@
 //                             names one (`rules.prices`), else the unit's cost
 //   listCost(race, counts, rules)   Σ counts[i] × the roster entry's price
 //                             (rules left out: its cost, the classic battle's)
+//   rulesFor(setup, seat)     (Breakthrough) the list rules seat `seat` of
+//                             `setup` is held to: its role's own `list` on a
+//                             mission with roles where the role has one,
+//                             else the mission's `list`
 //   unitPrice(setup, u)       (F8b) what unit u (a match's: its race and key)
 //                             costs in the battle `setup` is fought (its
 //                             mission's list's prices): the card's, the
@@ -147,7 +151,23 @@ export const listCost = (race, counts, rules) => race.roster.reduce((sum, k, i) 
 // it names none): its mission's price for it (priceOf), the price the
 // view shows on the card, the roster and the group card, so a Field or
 // Grand battle shows its own prices, never the Skirmish's.
-export const unitPrice = (setup, u) => priceOf(RACES[u.race], u.key, MISSIONS[setup?.mission ?? 'classic']?.list)
+// ((Breakthrough) at the prices of its seat's role's list rules, rulesFor)
+export const unitPrice = (setup, u) => priceOf(RACES[u.race], u.key, rulesFor(setup, u.side))
+
+// (Breakthrough, DESIGN §4.2.12) The list rules seat `seat` of `setup` is
+// held to: on a mission with roles (data/mission.js `roles`), its role's
+// `list` where the role has its own (the attacking seat setup.attacker, 0
+// by default; the other defends), else the mission's `list`, as on every
+// mission without roles. (This module imports nothing of the core's, so it
+// reads the roles itself: core/match.js rolesOf's twin, sim/flag-lint.mjs's
+// second reader of a mission's roles.) `missions` exists so sim/data-check.mjs
+// can hand it a role with its own list (none is shipped yet).
+export function rulesFor(setup, seat, missions = MISSIONS) {
+  const mission = byName(missions, setup?.mission ?? 'classic')
+  if (!mission?.roles) return mission?.list
+  const role = seat === (setup.attacker ?? 0) ? 'attack' : 'defend'
+  return mission.roles[role].list ?? mission.list
+}
 
 // A list's one spelling: a digit per count, trailing zeros dropped (so a
 // list of no units is '', which LIST refuses).
@@ -207,7 +227,8 @@ export function armyOf(setup, seat) {
     throw new Error(`seat ${seat}'s list ${shown(army)} counts ${army.length} kinds of unit; the ${race.name} muster ${race.roster.length} (${race.roster.join(' ')})`)
   }
   const counts = countsOf(race, text)
-  const why = checkList(race, mission.list, counts)
+  // ((Breakthrough) its role's list rules on a mission with roles)
+  const why = checkList(race, rulesFor(setup, seat), counts)
   if (why) throw new Error(`seat ${seat}'s army: ${why}`)
   return { preset, counts, keys: keysOf(race, counts) }
 }

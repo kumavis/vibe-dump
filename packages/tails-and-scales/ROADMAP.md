@@ -1896,6 +1896,70 @@ follows N3.
   timber platform, if ever allowed, puts its riders on a deck that can
   fall under them, and `settle` then moves them as any unit, the tower
   untouched.)
+- [ ] **Breakthrough** The first asymmetric mission (DESIGN §4.2.12): one
+  army holds a line across the table, the other must break through it. The
+  attacker deploys deep on its own edge, moves first and scores at each
+  round's end for every objective it holds beyond the line; reaching its
+  target wins at once, and otherwise the defender wins when the rounds run
+  out. No draws, no overtime. A Field battle, equal points, the ground and
+  the initiative the asymmetry. Its machinery (roles as mission data, the
+  one-frame flip, per-role zones, lists and scoring, the win condition) is
+  what Siege (after F9d) and Raid reuse. Five slices; S1-S3 land as one
+  consensus merge under one `CORE_VERSION` bump (S1's), S4 with them or
+  just after, S5 last.
+  - [x] **S1** The roles in the core. A mission's `roles` (`attack`,
+    `defend`: each a zone `{ x, z? }` in the attacker-west frame and an
+    optional `list`; the attacker's `target` and `first`, the defender's
+    `line`), `overtime: false`, an objective's `scores` and `vp`, all
+    checked by `checkMission`; the setup's `attacker` (0 by default on a
+    role mission, refused on any other); `rolesOf`, `roleOf`, `attackerOf`
+    and `flipped` (`core/match.js`) the one reader, with `army.rulesFor`
+    its twin; the objectives point-mirrored when seat 1 attacks and
+    `Terrain.generate`'s sixth argument, `role` (taken, not read); the role
+    zones in `zone`, `fits` and the default rows; the attacker's first turn
+    with no roll-off; `scoreRoles`, the target's early end and the result
+    with no draw ('breakthrough', 'held'); a provisional `breakthrough`
+    mission on `open`. (`CORE_VERSION` 17, `RULES_ID` `1rx0d67ozvb` →
+    `1gulci4w30x` with the mission, `stateHash`'s format unchanged; parity
+    97 of 97 byte-identical, no re-record, the PIN unmoved.) The page's
+    minimum: "Breakthrough" on the size line (seat 0 attacks), no vote on
+    it here or in the lobby, an end-screen line for each new end; army-sim
+    leaves a role mission out of a default run. The checks: data-check's
+    section 17 and its envelope row, P-mission's role rows and refusals,
+    P-roles (scenes and 300 AI battles never drawn), seven `roles-*`
+    self-test mutants, flag-lint's `roles` row.
+  - [ ] **S2** The line set (the battlefield designer's): a one-sided
+    scatter (`mirror: 'none'`), a `line` phase building the line's pieces
+    in the attacker frame from `generate`'s `role` (mirrored on `flip`),
+    the gate, water, fords, palisades and a ditch that plays as difficult
+    ground, and the line's hold points in `features`; `breach` replaces
+    `open` in the mission's sets before anything merges. terrain-check's
+    rows (connectivity over ladders and through the gate, the gate's clear
+    width, no burrow path but through a gate's cells), P-flip (the board
+    with `attacker` 1 the exact point mirror of 0, to the bit), data-check's
+    recipe rows.
+  - [ ] **S3** The AI: a flow field to the scoring objectives (per
+    movement kind, memoised by the nav's epoch), the role wants, the
+    defender's hold points and its walk term, the guns' gate gain, all
+    under `rolesOf`. Proved by play-report's four rows (an attacker beyond
+    the line by round 4 in 90% of battles, the gate broken in 60% where a
+    wrecker is fielded, defender melee behind the line, both ends in 25%
+    each) and P-prop strict. Until it lands every breakthrough battle ends
+    'held'.
+  - [ ] **S4** The UI and online: the setup panel's "Who attacks" line
+    (and `attacker` in the setup it builds), the Muster screen's role and
+    its `rulesFor` points (with the panel's and the lobby's judges), the
+    HUD's tally ("Breakthrough 3 of 5"), the opening banners, the end
+    screen's wording and Swap sides, the help's paragraph, the lobby's
+    `attacker` field, the per-seat zones in the view and the minimap (drawn
+    from `zone`, not `G.board.deploy`). ui-check, hud-check, present-check,
+    input-check's breakthrough page, lobby-rig.
+  - [ ] **S5** Balance and the corpus: army-sim's role mode (the attacker's
+    share per ordered race pair, 40-60% each and 45-55% pooled, each seat
+    attacking in alternate battles; its `--self-test` planting a target of
+    1 and of 30), the sweep and its tuning (target, rounds, objectives,
+    then role points), human-bot's role zones, the `breach/` corpus set
+    (six battles) recorded on the final code with the PIN moved.
 - [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if
   needed, publish.
 

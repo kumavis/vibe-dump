@@ -43,7 +43,7 @@
 // it); `strict` checks every AI command with legal() before it is applied,
 // and throws on one that isn't (sim/'s P-prop). Each is I/O, never match
 // state: the rules don't read them, and stateHash leaves them out.
-import { newState, missionOf, seatName, makeSeats, SETUP_KEYS, SEAT_KEYS } from './match.js'
+import { newState, missionOf, rolesOf, seatName, makeSeats, SETUP_KEYS, SEAT_KEYS } from './match.js'
 import { armyOf } from './army.js'
 import { MISSIONS } from '../data/mission.js'
 import { lock, unlock } from './rng.js'
@@ -57,7 +57,7 @@ export { legal, KINDS } from './commands.js'
 export { RULES_ID, CORE_VERSION } from './version.js'
 export { stateHash, shadowState } from './hash.js'
 export { canonicalJSON, cyrb53 } from './util.js'
-export { SETUP_KEYS, SEAT_KEYS, missionOf } from './match.js'
+export { SETUP_KEYS, SEAT_KEYS, missionOf, rolesOf, roleOf } from './match.js'
 export * as army from './army.js'
 
 // (a copy: whoever sorts or edits the answer leaves the match's decision be)
@@ -95,6 +95,12 @@ const MAX_ROUNDS = 99
 // mission's list rules, seat 0's every check before seat 1's (§4.2.8.4).
 // The seats are copies: the setup as written (a start entry's) is left as
 // it was, and only the filled-in one, G.setup, names each army.
+// (Breakthrough, DESIGN §4.2.12) On a mission with `overtime: false` a
+// setup asking for the vote is refused; on a mission with roles `attacker`
+// (the attacking seat) defaults to 0 and must be 0 or 1, and on one
+// without, a setup naming an attacker is refused. Then (army.js rulesFor)
+// each seat's army is held to its role's list rules where its role has
+// its own.
 export function fullSetup(setup) {
   // (the whitelist reads the setup's own fields before any is copied: a
   // `__proto__` field, an own key of a parsed log entry, would otherwise set
@@ -121,6 +127,14 @@ export function fullSetup(setup) {
   if (!seed(s.board) || !seed(s.dice)) throw new Error(`a setup's board and dice are whole numbers from 0 to 2^32 - 1, not ${s.board} and ${s.dice}`)
   if (!Number.isInteger(s.rounds) || s.rounds < 1 || s.rounds > MAX_ROUNDS) throw new Error(`a battle lasts a whole number of rounds, from 1 to ${MAX_ROUNDS}, not ${s.rounds}`)
   if (s.overtime !== 'never' && s.overtime !== 'vote') throw new Error(`overtime "${s.overtime}": a battle ends after its rounds ('never') or its human seats vote on more ('vote')`)
+  // ((Breakthrough) a mission that allows no vote, and the attacking seat
+  // of a mission with roles: 0 by default, 0 or 1; a mission without roles
+  // takes none)
+  if (mission.overtime === false && s.overtime === 'vote') throw new Error(`the ${s.mission} mission ends on its rounds: it takes no overtime vote`)
+  if (rolesOf(s)) {
+    s.attacker ??= 0
+    if (s.attacker !== 0 && s.attacker !== 1) throw new Error(`the attacker is seat 0 or seat 1, not ${JSON.stringify(s.attacker)}`)
+  } else if (s.attacker !== undefined) throw new Error(`the ${s.mission} mission has no attacker`)
   if (s.diceMode !== 'shared') throw new Error(`dice mode "${s.diceMode}": only 'shared' dice so far`)
   if (!Array.isArray(s.seats)) throw new Error('a setup names its seats')
   makeSeats(s.seats.map((x) => x.race), s.seats.map((x) => x.ctrl))

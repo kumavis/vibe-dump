@@ -811,14 +811,15 @@ export class Flow {
     const dice = (Number(this.params.get('dice')) || ((Math.random() * 1e9) | 0)) >>> 0
     // (F4) a battle with a seat played by a human asks to play on past its
     // rounds ('vote'), unless ?overtime=never says not (sim/'s replays of a
-    // log made without the vote); a watched one ends on its rounds
-    const overtime = who.includes('human') && this.params.get('overtime') !== 'never' ? 'vote' : 'never'
+    // log made without the vote); a watched one ends on its rounds, and
+    // (Breakthrough) so does one on a mission that allows no vote
+    const mission = MISSIONS[this.mission]
+    const overtime = who.includes('human') && this.params.get('overtime') !== 'never' && mission.overtime !== false ? 'vote' : 'never'
     // (F8a) the mission chooses the board and its rounds; (F7a) the terrain
     // is one of its sets, the panel's; (F11a) a seat names its `army` only
     // when ?armies= named one, so a setup naming none plays its mission's
     // preset, as every battle before lists did (the classic corpus's setups
     // among them)
-    const mission = MISSIONS[this.mission]
     const armyOf = (i) => (fielded?.[i] == null ? {} : { army: fielded[i] })
     const setup = {
       board: this.S.seed, dice, mission: this.mission, terrain, rounds: mission.rounds, overtime, diceMode: 'shared',

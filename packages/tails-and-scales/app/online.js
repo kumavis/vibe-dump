@@ -152,6 +152,9 @@ const FROZEN = {
 // name ((F19a) or its own: the Powder keg's), its board and points
 // (F7a with F8b) the terrain a lobby keeps through a size change: its own,
 // where the new size is fought on it (fortified, on every size)
+// (Breakthrough) the overtime a lobby on mission `name` starts with: the
+// vote, unless the mission allows none
+const overtimeOf = (name) => (MISSIONS[name]?.overtime === false ? 'never' : 'vote')
 const keptTerrain = (L, name) => (L.terrain && MISSIONS[name].sets.includes(L.terrain) ? { terrain: L.terrain } : {})
 const SIZES = Object.entries(MISSIONS).map(([mission, m]) => ({ mission, name: sizeName(mission, m), W: m.board.W, H: m.board.H, points: m.list?.points ?? 0 }))
 
@@ -237,6 +240,9 @@ export class Online {
         const L = N.lobbyOf(this.handle.doc())
         const ais = name !== L.mission ? L.seats.flatMap((r, i) => (this.mineAI(r, i) ? [[i, r.race]] : [])) : []
         N.editBattle(this.handle, { mission: name, ...keptTerrain(L, name) })
+        // ((Breakthrough) a mission that allows no vote is started without
+        // it; every other with the vote, the lobby's default)
+        if (overtimeOf(name) !== L.overtime) N.editBattle(this.handle, { overtime: overtimeOf(name) })
         for (const [i, race] of ais) this.markAI(i, { race, army: null, random: this.aiRandom.has(i) })
       },
       reroll: () => this.isHost() && N.editBattle(this.handle, { board: (Math.random() * 1e6) | 0 }),
@@ -301,7 +307,7 @@ export class Online {
     const { repo, ws } = await N.openRepo(this.sync)
     if (gen !== this.gen) return
     Object.assign(this, { repo, ws })
-    const handle = repo.create(N.lobbyDoc({ host: this.dev, board: this.flow.S.seed, mission: this.flow.mission, terrain: this.flow.terrainOf(), rounds: MISSIONS[this.flow.mission].rounds, me: { ctrl: 'human', dev: this.dev, name: this.myName(), race: this.flow.races[0] } }))
+    const handle = repo.create(N.lobbyDoc({ host: this.dev, board: this.flow.S.seed, mission: this.flow.mission, terrain: this.flow.terrainOf(), rounds: MISSIONS[this.flow.mission].rounds, overtime: overtimeOf(this.flow.mission), me: { ctrl: 'human', dev: this.dev, name: this.myName(), race: this.flow.races[0] } }))
     kept.set(`ts.a.${handle.documentId}`, N.randomHex(16))
     this.id = handle.documentId
     try {
