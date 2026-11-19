@@ -154,16 +154,23 @@ export function rulesOf(ctx) {
   }
   // an item may stand here: off the mat, inside a piece, or low and clear
   const ok = (x, z, r, h) => offMat(x, z, r) || inPiece(x, z, r) || (h <= LOW && lowOk(x, z, r))
-  return { boxes, near, offMat, inPiece, lowOk, ok }
+  // (and the mat's own clutter, its debris, tufts and flowers, wholly on it)
+  const onMat = (x, z, r) => Math.abs(x) <= W / 2 - r && Math.abs(z) <= H / 2 - r
+  const clutter = (x, z, r, h) => onMat(x, z, r) && ok(x, z, r, h)
+  return { boxes, near, offMat, inPiece, lowOk, ok, onMat, clutter }
 }
 
 // what a rules piece is dressed as
 const STONE = new Set(['rock', 'parapet'])
 const WOOD = new Set(['crate', 'deck', 'stair', 'post', 'ladder', 'cart', 'keg', 'hulk'])
+// the works: a rampart's, bastion's or keep's deck and stair (earth or
+// stone, not a timber platform's), and a stone wall's blocks
+const WORKS = new Set(['earth', 'stone'])
 const GREEN = new Set(['floor', 'tree', 'hedge', 'mushroom', 'stump'])
 const ASH = new Set(['crater', 'pyre'])
 export function groupOf(c) {
-  if (c.kind === 'block') return c.look?.piece === 'log' ? 'wood' : 'stone'
+  if ((c.kind === 'deck' || c.kind === 'stair' || c.kind === 'parapet') && WORKS.has(c.look?.material)) return 'fort'
+  if (c.kind === 'block') return c.look?.piece === 'log' ? 'wood' : 'fort'
   if (STONE.has(c.kind)) return 'stone'
   if (WOOD.has(c.kind)) return 'wood'
   if (GREEN.has(c.kind)) return 'green'
@@ -181,7 +188,7 @@ export function plan(ctx) {
   const k = scaleOf(W, H), area = (W * H) / (40 * 28)
   const R = rulesOf(ctx)
   const day = dayOf(seed, ctx.set)
-  const out = { day, k, W, H, stakes: [], grass: [], trees: [], fields: [], hedgerows: [], track: [], decals: [], debris: [], tufts: [], flowers: [] }
+  const out = { seed, day, k, W, H, stakes: [], grass: [], trees: [], fields: [], hedgerows: [], track: [], decals: [], debris: [], tufts: [], flowers: [] }
   const pieces = ctx.chunks.filter(grounded)
 
   // the boundary stakes: each mat corner and where each zone meets the long
@@ -195,7 +202,7 @@ export function plan(ctx) {
   }
 
   // the fields round the board: a patchwork in a seeded grid, turned a
-  // little, from a few inches out to the haze
+  // little, from a few tails out to the haze
   {
     const r = stream(seed, 'fields')
     const turn = (r() - 0.5) * 0.5, size = 9 * Math.sqrt(k)
@@ -227,7 +234,7 @@ export function plan(ctx) {
     }
   }
 
-  // the trees: copses and a wood's edge, from 12" out (nothing tall near
+  // the trees: copses and a wood's edge, from 12 tails out (nothing tall near
   // the mat, where the camera stands)
   {
     const r = stream(seed, 'trees')
@@ -236,10 +243,14 @@ export function plan(ctx) {
       if (d < 12 || d > 90 * k) return
       out.trees.push({ x, z, y: lift(seed, W, H, x, z), s, yaw: r() * 6.283, kind, tint: r(), r: 1.4 * s, h: 6 * s })
     }
-    // a wood along one side
+    // a wood along one side, in two or three stands with open ground
+    // between them, from 20 tails back: never one wall of trunks across
+    // the view (dressing-check projects it into the battle's views)
     const side = Math.floor(r() * 4)
+    const stands = 2 + Math.floor(r() * 2)
     for (let i = 0; i < 170; i++) {
-      const t = r() * 2 - 1, depth = 16 + r() * 26 * k
+      const j = i % stands, c = -1 + (2 * j + 1) / stands + (r() - 0.5) * 0.12
+      const t = c + (r() * 2 - 1) * (0.5 / stands), depth = 20 + r() * 24 * k
       const along = t * (side < 2 ? W / 2 + 40 * k : H / 2 + 40 * k)
       const [x, z] = side === 0 ? [along, -(H / 2 + depth)] : side === 1 ? [along, H / 2 + depth] : side === 2 ? [-(W / 2 + depth), along] : [W / 2 + depth, along]
       put(x, z, 0.75 + r() * 0.6, r() < 0.45 ? 'pine' : 'broad')
@@ -280,7 +291,10 @@ export function plan(ctx) {
   // outward, in its group's colours (painted into the mat: anywhere)
   for (const c of pieces) {
     const b = boxOf(c)
-    out.decals.push({ kind: groupOf(c), piece: c.kind, x: b.x, z: b.z, hx: b.hx, hz: b.hz, yaw: b.yaw, salt: mix(seed, c.id), r: c.kind === 'floor' ? (c.look?.r ?? b.hx) : 0, color: c.kind === 'floor' ? c.look?.color : null })
+    const floor = c.kind === 'floor'
+    out.decals.push({ kind: groupOf(c), piece: c.kind, x: b.x, z: b.z, hx: b.hx, hz: b.hz, yaw: b.yaw, salt: mix(seed, c.id), r: floor ? (c.look?.r ?? b.hx) : 0, color: floor ? c.look?.color : null, rim: floor ? c.look?.rim : null, cx: c.shape.x, cz: c.shape.z })
+    // a ladder's foot, where every climber stands: the heaviest wear
+    if (c.link?.foot) out.decals.push({ kind: 'trodden', x: c.link.foot.x, z: c.link.foot.z, hx: 0.75, hz: 0.75, yaw: 0, salt: mix(seed, c.id + 7777), r: 0, heavy: true })
   }
   // and the objectives' trodden ground (the marker's base stands on it)
   for (const o of objectives) out.decals.push({ kind: 'trodden', x: o.x, z: o.z, hx: 0.95, hz: 0.95, yaw: 0, salt: mix(seed, hashStr(`o${o.x},${o.z}`)), r: 0 })
@@ -300,20 +314,20 @@ export function plan(ctx) {
         const ox = lx + nx * d + (r() - 0.5) * 0.6, oz = lz + nz * d + (r() - 0.5) * 0.6
         const cy = cos(b.yaw), sy = sin(b.yaw)
         const x = b.x + ox * cy + oz * sy, z = b.z - ox * sy + oz * cy
-        const kind = g === 'stone' ? 'pebble' : g === 'wood' ? (r() < 0.6 ? 'stick' : 'pebble') : g === 'ash' ? (r() < 0.5 ? 'stick' : 'pebble') : 'leaf'
+        const kind = g === 'stone' || g === 'fort' ? 'pebble' : g === 'wood' ? (r() < 0.6 ? 'stick' : 'pebble') : g === 'ash' ? (r() < 0.5 ? 'stick' : 'pebble') : 'leaf'
         const s = 0.6 + r() * 0.8, h = kind === 'pebble' ? 0.07 * s : kind === 'stick' ? 0.04 : 0.01
         const item = { kind, x, z, s, yaw: r() * 6.283, tilt: r(), tint: r(), r: (kind === 'stick' ? 0.2 : 0.08) * s, h, ash: g === 'ash' }
-        if (R.ok(x, z, item.r, item.h)) out.debris.push(item)
+        if (R.clutter(x, z, item.r, item.h)) out.debris.push(item)
       }
       // a forest's floor and a tree's own ground: litter, twigs, ferns
       if (c.kind === 'floor' || c.kind === 'tree') {
-        const m = c.kind === 'floor' ? 26 : 5
+        const m = c.kind === 'floor' ? 44 : 5
         for (let i = 0; i < m; i++) {
           const x = b.x + (r() * 2 - 1) * b.hx, z = b.z + (r() * 2 - 1) * b.hz
-          const roll = r(), kind = roll < 0.5 ? 'leaf' : roll < 0.7 ? 'stick' : 'fern'
+          const roll = r(), kind = roll < 0.4 ? 'leaf' : roll < 0.55 ? 'stick' : 'fern'
           const s = kind === 'fern' ? 0.8 + r() * 0.9 : 0.6 + r() * 0.8
           const item = { kind, x, z, s, yaw: r() * 6.283, tilt: r(), tint: r(), r: (kind === 'fern' ? 0.25 : kind === 'stick' ? 0.2 : 0.08) * s, h: kind === 'fern' ? 0.3 * s : 0.04 }
-          if (R.ok(x, z, item.r, item.h)) out.debris.push(item)
+          if (R.clutter(x, z, item.r, item.h)) out.debris.push(item)
         }
       }
     }
@@ -330,7 +344,7 @@ export function plan(ctx) {
       for (let j = 0; j < m; j++) {
         const x = cx + (r() - 0.5) * 0.8, z = cz + (r() - 0.5) * 0.8
         const item = make(x, z)
-        if (R.ok(x, z, item.r, item.h)) list.push(item)
+        if (R.clutter(x, z, item.r, item.h)) list.push(item)
       }
     }
     const tuft = (x, z) => {

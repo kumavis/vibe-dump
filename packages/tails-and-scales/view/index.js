@@ -314,6 +314,8 @@ export class View {
         // ((F7b) the walls in front of what the player is looking at)
         if (!this.fast) this.see()
         objectives.animate(dt, time, this.owners ?? mirror().owners)
+        // (the battlefield's dressing: its clutter hidden under the bases)
+        if (!this.fast) this.dressing?.animate(performance.now())
       },
       rig: this.rig,
       shake: () => effects.shake,

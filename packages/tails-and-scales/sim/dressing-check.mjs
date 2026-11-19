@@ -17,11 +17,17 @@
 //     points at its radius on walkable nav cells (not hard, not soft, on
 //     the ground). The rules are worked out here afresh (Math's own trig,
 //     a hair of slack for place.js's dmath), not asked of place.js.
+//   - (A) hidden under the bases: a scatter of bases over the plan's own
+//     clutter (its debris, tufts and flowers), the mask view/dressing/
+//     bases.js paints for them, and every item whose disc meets a base hidden
+//     by it, read at its centre's texel as the shaders read it.
 // --self-test plants, on a board that passes, a violation of each class
 // (low clutter in a zone, in an objective's range, by a piece, on a cell the
 // nav refuses; something tall on the open mat, and half on it) and two
 // unseeded placers (a copy of place.js drawing Math.random, and one keeping
-// a count between calls), and each must be caught.
+// a count between calls), and (A) two broken bases' masks (one painted
+// without its reach, one leaving the mat's far rows unpainted), and each
+// must be caught.
 //
 // --browser (Chromium; set CHROMIUM_PATH): a watched battle per board in
 // two fresh pages of a fresh build, one dressed and one with ?dress=0, both
@@ -64,6 +70,7 @@ for (const [m, M] of Object.entries(MISSIONS)) for (const s of M.sets) SETS.set(
 const LOW = 0.3, CLEAR = 1, EPS = 1e-6
 
 const place = (dir = PKG) => import(pathToFileURL(join(dir, 'view/dressing/place.js')).href)
+const bases = (dir = PKG) => import(pathToFileURL(join(dir, 'view/dressing/bases.js')).href)
 const matchOf = (board, mission, terrain) => createMatch({ board, dice: 0, mission, terrain, seats: SEATS }, { out: null })
 const ctxOf = (P, G) => ({
   seed: P.dressSeed(G.setup), set: G.setup.terrain, W: G.board.W, H: G.board.H, deploy: G.board.deploy,
@@ -133,7 +140,38 @@ function placementProblems(G, items) {
 }
 
 // one board: its two plans, the same, and their items where they may stand
-function board(P, set, seed) {
+// (A) The clutter under the bases: on the plan's own items, a scatter of
+// bases (radii 0.3-1.6 tails, half of them on an item), the mask painted for
+// them (bases.js, as the page paints it), and every item whose disc meets a
+// base must be hidden by it, read as the shaders read it (its centre's
+// texel). Items are held to the mask's reach (no clutter wider than the
+// mask was dilated for).
+function basesProblems(B, G, p) {
+  const { W, H } = G.board
+  const items = [...p.debris, ...p.tufts, ...p.flowers]
+  if (!items.length) return []
+  const out = []
+  let x = G.setup.board >>> 0
+  const rnd = () => {
+    x = (Math.imul(x, 1664525) + 1013904223) >>> 0
+    return x / 4294967296
+  }
+  const discs = []
+  for (let i = 0; i < 40; i++) {
+    const it = i % 2 ? items[Math.floor(rnd() * items.length)] : null
+    discs.push({ x: it ? it.x + (rnd() - 0.5) : (rnd() - 0.5) * W, z: it ? it.z + (rnd() - 0.5) : (rnd() - 0.5) * H, r: 0.3 + rnd() * 1.3 })
+  }
+  const { w, h } = B.maskSize(W, H)
+  const mask = B.paintBases(new Uint8Array(w * h), W, H, discs)
+  for (const it of items) {
+    if (it.r > B.REACH - Math.SQRT2 / (2 * B.RES) + 1e-9) out.push(`clutter at ${it.x.toFixed(2)},${it.z.toFixed(2)} wider (r ${it.r.toFixed(2)}) than the bases' mask reaches`)
+    const d = discs.find((d) => Math.hypot(it.x - d.x, it.z - d.z) < d.r + it.r)
+    if (d && !B.maskAt(mask, W, H, it.x, it.z)) out.push(`clutter at ${it.x.toFixed(2)},${it.z.toFixed(2)} (r ${it.r.toFixed(2)}) shows through a base at ${d.x.toFixed(2)},${d.z.toFixed(2)} (r ${d.r.toFixed(2)})`)
+  }
+  return out.slice(0, 3)
+}
+
+function board(P, set, seed, B = null) {
   const missions = SETS.get(set), mission = missions[seed % missions.length]
   const G = matchOf(seed, mission, set)
   let p1, p2
@@ -146,11 +184,12 @@ function board(P, set, seed) {
   const problems = []
   if (digest(p1) !== digest(p2)) problems.push(`${set} board ${seed} (${mission}): two runs placed it differently`)
   for (const t of placementProblems(G, P.standing(p1))) problems.push(`${set} board ${seed} (${mission}): ${t}`)
+  if (B) for (const t of basesProblems(B, G, p1)) problems.push(`${set} board ${seed} (${mission}): ${t}`)
   return { G, p: p1, problems }
 }
 
 async function nodeHalf() {
-  const P = await place()
+  const P = await place(), B = await bases()
   const sets = a.sets ? a.sets.split(',') : [...SETS.keys()]
   for (const s of sets) if (!SETS.has(s)) {
     console.error(`dressing-check: no set "${s}" (there are ${[...SETS.keys()].join(', ')})`)
@@ -162,12 +201,12 @@ async function nodeHalf() {
     const t0 = performance.now()
     let items = 0, bad = []
     for (let seed = 1; seed <= SEEDS; seed++) {
-      const r = board(P, set, seed)
+      const r = board(P, set, seed, B)
       if (r.p) items += P.standing(r.p).length
       bad.push(...r.problems)
     }
     failed += bad.length
-    console.log(`  ${set.padEnd(10)} ${bad.length ? `FAILED: ${bad.length} problems` : 'ok'}: ${SEEDS} boards, ${items} items stood, each placement seeded and the same twice (${((performance.now() - t0) / 1000).toFixed(1)} s)`)
+    console.log(`  ${set.padEnd(10)} ${bad.length ? `FAILED: ${bad.length} problems` : 'ok'}: ${SEEDS} boards, ${items} items stood, each placement seeded and the same twice, the clutter hidden under every base (${((performance.now() - t0) / 1000).toFixed(1)} s)`)
     for (const t of bad.slice(0, 12)) console.log(`    ${t}`)
   }
   console.log(failed ? `\ndressing-check FAILED` : `\ndressing-check passed`)
@@ -214,14 +253,14 @@ async function selfTest() {
   // keeping a count between calls
   const work = mkdtempSync(join(tmpdir(), 'dressing-check-'))
   try {
-    const copy = (name, edit) => {
+    const copy = (name, edit, file = 'place.js', editOther = null) => {
       const dir = join(work, name)
       mkdirSync(join(dir, 'view'), { recursive: true })
       cpSync(join(PKG, 'view/dressing'), join(dir, 'view/dressing'), { recursive: true })
       mkdirSync(join(dir, 'core'), { recursive: true })
       cpSync(join(PKG, 'core/dmath.js'), join(dir, 'core/dmath.js'))
-      const f = join(dir, 'view/dressing/place.js'), src = readFileSync(f, 'utf8')
-      const next = edit(src)
+      const f = join(dir, 'view/dressing', editOther ? file : 'place.js'), src = readFileSync(f, 'utf8')
+      const next = (editOther ?? edit)(src)
       if (next === src) throw new Error(`self-test: the ${name} edit changed nothing`)
       writeFileSync(f, next)
       return dir
@@ -230,6 +269,13 @@ async function selfTest() {
     verdict('a placer drawing Math.random', board(random, 'classic', 411).problems.length > 0)
     const counting = await place(copy('counting', (s) => s.replace('export function plan(ctx) {', 'let calls = 0\nexport function plan(ctx) {\n  calls++').replace("out.stakes.push({ x: sx * (W / 2 + 0.55),", "out.stakes.push({ x: sx * (W / 2 + 0.55 + calls * 0.01),")))
     verdict('a placer keeping a count between calls', board(counting, 'classic', 411).problems.length > 0)
+    // (A) a bases' mask painted without its reach: clutter by a base's rim
+    // shows through it
+    const tight = await bases(copy('tight', (s) => s, 'bases.js', (s) => s.replace('export const REACH = 0.45 + Math.SQRT2 / (2 * RES)', 'export const REACH = 0')))
+    verdict("a bases' mask painted without its reach", board(P, 'classic', 411, tight).problems.length > 0)
+    // and one that leaves the mat's far rows unpainted
+    const short = await bases(copy('short', (s) => s, 'bases.js', (s) => s.replace('j1 = Math.min(h - 1,', 'j1 = Math.min(h - 9,')))
+    verdict("a bases' mask that leaves the mat's far edge unpainted", [411, 7, 30].some((n) => board(P, 'classic', n, short).problems.length > 0))
   } finally {
     rmSync(work, { recursive: true, force: true })
   }

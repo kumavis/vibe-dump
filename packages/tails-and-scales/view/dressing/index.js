@@ -18,13 +18,17 @@
 //       ground, fields, hills, trees, long grass, the mat's edge and its
 //       stakes (surround.js); the wooden table put away
 //   S2: the pieces' footprints painted into the mat, their debris, the
-//       tufts and flowers in clumps (ground.js)
+//       tufts and flowers in clumps (ground.js); (A) the works' feet worn,
+//       the forest floors covered ragged, the clutter hidden under bases
+//       (bases.js)
 //
-// Draw calls: the sky 1, the surround 5, the debris 4: 10, against the 6
-// the wooden table, its frame and the box under the mat drew.
+// Draw calls: the sky 1, the surround 5, the debris 4, the floors' cover 1:
+// 11, against the 6 the wooden table, its frame and the box under the mat
+// drew.
 import { plan, dressSeed } from './place.js'
 import { Sky, SKIES, sunAt } from './sky.js'
 import { Surround } from './surround.js'
+import * as THREE from 'three'
 import { Ground, decalPainter, strewer } from './ground.js'
 
 // the share of the trees, grass and debris drawn at each quality: from the
@@ -39,6 +43,8 @@ export class Dressing {
     this.dressed = null
     this.plan = null
     this.sky = new Sky(scene)
+    // the clutter's uniforms (ground.js): the pointer, the bases' mask
+    this.hide = { cursor: { value: new THREE.Vector3() }, baseMask: { value: null }, matSize: { value: new THREE.Vector2(1, 1) } }
     table.woodShown(false)
     table.onPaint = (colors) => this.surround?.paint(colors)
     stage.onQuality = (name) => this.quality(name)
@@ -65,12 +71,18 @@ export class Dressing {
     if (this.table.colors) this.surround.paint(this.table.colors)
     // S2: the ground under the pieces, the debris, the tufts
     this.ground?.dispose()
-    this.ground = new Ground(this.scene, p, { camera: this.camera, canvas: this.renderer.domElement })
+    this.ground = new Ground(this.scene, p, { camera: this.camera, canvas: this.renderer.domElement, table: this.table, hide: this.hide })
     this.table.dress(decalPainter(p))
     this.table.strew = strewer(p)
     this.table.scatterTufts()
     this.quality(this.stage.quality)
     return true
+  }
+
+  // each frame (view/index.js run): the bases' mask kept to where the
+  // figures stand
+  animate(now) {
+    this.ground?.bases(this.scene, now)
   }
 
   // the trees, grass and debris at quality `name` (?lowfi: none)
