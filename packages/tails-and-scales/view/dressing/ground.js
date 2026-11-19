@@ -20,23 +20,89 @@
 // round where it meets the ground), so nothing stands through a base or
 // between the player and a click.
 import * as THREE from 'three'
-import { stream } from './place.js'
+import { stream, noise } from './place.js'
 import { RES, maskSize, paintBases } from './bases.js'
+import { lean } from './surround.js'
 
 const FADE = 1.6
 // each kind's worn-ground colours
 const WEAR = {
   stone: { earth: ['#6b5c40', '#5e5038'], speck: ['#8d877b', '#77716a', '#9a9488', '#5e5a52'], n: 60 },
   wood: { earth: ['#6b5636', '#5c4a2e'], speck: ['#b49a55', '#a08848', '#6f5634', '#c2a862'], n: 55 },
-  green: { earth: ['#4a5228', '#3e4a24'], speck: ['#6b4f2a', '#8a6a32', '#3d4f26', '#9a7a3a', '#a0602a'], n: 70 },
+  green: { earth: ['#5c4b2c', '#4f4a2a', '#56482c'], speck: ['#6b4f2a', '#8a6a32', '#3d4f26', '#9a7a3a', '#a0602a'], n: 70 },
   ash: { earth: ['#4a4038', '#3e3630'], speck: ['#6a625a', '#2e2824', '#8a8278'], n: 60 },
   trodden: { earth: ['#6a6a3a', '#73703e'], speck: ['#7d7a48', '#5f6a34'], n: 26 },
   fort: { earth: ['#6e5d3e', '#5f5034', '#77664a'], speck: ['#9a9488', '#8d877b', '#6e6a62', '#b0a99a'], n: 80 },
 }
 
+// how far out each kind's foot is worn, in tails (the works' farthest)
+const SKIRT = { fort: 1.9, wood: 1.15, stone: 1, green: 0.95, ash: 1.3 }
+
+// (S3) The lanes, painted into layers of their own (`L`: canvases the mat's
+// size), opaque, so where a lane's stamps overlap, or two lanes cross,
+// nothing darkens: each layer then goes onto the mat at one strength. A
+// lane is a walk of soft stamps along its points, its width wandering with
+// a noise along its length and thinning to nothing where it has no room
+// (place.js lanesOf: a piece's foot, its objective's marker, a zone); the
+// flattened grass first, broad; then the bare earth down it, narrower,
+// off its middle a little and broken into lengths, whole only where it is
+// worn hardest.
+function paintLanes(p, L, W, H) {
+  const pal = p.palette ?? {}
+  const [verge, earth] = L.map((l) => {
+    const g = l.getContext('2d')
+    g.clearRect(0, 0, l.width, l.height)
+    g.save()
+    const sx = l.width / W
+    g.translate((W / 2) * sx, (H / 2) * sx)
+    g.scale(sx, sx)
+    return g
+  })
+  const vc = pal.verge ?? '#7d8a48', ec = pal.lane ?? '#7a6846'
+  p.lanes?.forEach((pth, k) => {
+    const n0 = mixSeed(p.seed ?? 0, k)
+    let u = 0
+    for (let i = 0; i < pth.pts.length - 1; i++) {
+      const [x0, z0, w0, r0] = pth.pts[i], [x1, z1, w1, r1] = pth.pts[i + 1]
+      const len = Math.hypot(x1 - x0, z1 - z0), steps = Math.max(1, Math.ceil(len / 0.14))
+      const nx = -(z1 - z0) / (len || 1), nz = (x1 - x0) / (len || 1)
+      for (let j = 0; j < steps; j++, u += len / steps) {
+        const t = j / steps, x = x0 + (x1 - x0) * t, z = z0 + (z1 - z0) * t
+        const wear = w0 + (w1 - w0) * t, room = r0 + (r1 - r0) * t
+        if (room < 0.05) continue
+        const wv = pth.w * room * (0.5 + 0.55 * noise(n0, u / 3.1, 0.5)) * (0.85 + 0.2 * wear)
+        verge.fillStyle = (j & 3) === 0 ? shade(vc, 0.94) : vc
+        verge.beginPath()
+        verge.ellipse(x, z, wv * 0.62, wv * 0.5, Math.atan2(nz, nx), 0, Math.PI * 2)
+        verge.fill()
+        // the bare earth: broken, whole only where worn hardest
+        if (noise(n0 ^ 0x5eed, u / 1.9, 3.5) < 0.42 - 0.3 * (wear - 1)) continue
+        const we = pth.w * room * (0.16 + 0.22 * noise(n0 ^ 0xbead, u / 1.3, 1.5)) * (0.8 + 0.3 * wear)
+        const off = (noise(n0 ^ 0xf00d, u / 4, 7.5) - 0.5) * 0.5 * pth.w * room
+        earth.fillStyle = (j % 5) === 0 ? shade(ec, 1.08) : (j % 3) === 0 ? shade(ec, 0.93) : ec
+        earth.beginPath()
+        earth.ellipse(x + nx * off, z + nz * off, we, we * 0.8, 0, 0, Math.PI * 2)
+        earth.fill()
+      }
+    }
+  })
+  verge.restore()
+  earth.restore()
+}
+const mixSeed = (a, b) => (Math.imul(a ^ (b + 0x9e3779b9), 0x85ebca6b) ^ (a >>> 13)) >>> 0
+// a colour a little lighter or darker (k times)
+function shade(hex, k) {
+  const v = parseInt(hex.slice(1), 16)
+  const ch = (s) => Math.max(0, Math.min(255, Math.round(((v >> s) & 255) * k)))
+  return `rgb(${ch(16)},${ch(8)},${ch(0)})`
+}
+
 // the decals' paint, for the mat (view/table.js dress): `g` its canvas's 2D
 // context, `c` the canvas, the board W×H
 export function decalPainter(p) {
+  // (the lanes' layers, painted once and kept: the Powder Field's burns
+  // repaint the mat as its wrecks fall)
+  let lanes = null
   return (g, c, W, H) => {
     const sx = c.width / W
     // (S4) the theme's wash over the whole mat (a quarry's dust, a keep's
@@ -50,41 +116,38 @@ export function decalPainter(p) {
     if (pal.chalk) {
       const r = stream(p.seed ?? 0, 'chalk')
       for (let i = 0; i < 40 * (W * H) / 1120; i++) {
-        g.globalAlpha = 0.1 + r() * 0.12
+        g.globalAlpha = 0.05 + r() * 0.08
         g.fillStyle = pal.chalk
         g.beginPath()
         g.ellipse(r() * c.width, r() * c.height, (0.4 + r() * 1.2) * sx, (0.3 + r() * 0.8) * sx, r() * 3, 0, Math.PI * 2)
         g.fill()
       }
     }
-    // (S3) the lanes first, under everything: a broad band of flattened,
-    // paler grass, then the bare earth down its middle, both as heavy as the
-    // lane's wear (a gap, a ladder's foot), then stones kicked along it
+    // (S3) the lanes first, under everything (paintLanes), at one strength
+    // each, then a few stones kicked along where they run full width
+    if (!lanes || lanes[0].width !== c.width || lanes[0].height !== c.height) {
+      lanes = [0, 1].map(() => {
+        const l = document.createElement('canvas')
+        l.width = c.width
+        l.height = c.height
+        return l
+      })
+      paintLanes(p, lanes, W, H)
+    }
+    g.globalAlpha = 0.34
+    g.drawImage(lanes[0], 0, 0)
+    g.globalAlpha = 0.42
+    g.drawImage(lanes[1], 0, 0)
     g.save()
     g.translate((W / 2) * sx, (H / 2) * sx)
     g.scale(sx, sx)
-    g.lineCap = g.lineJoin = 'round'
-    const lane = (pth, width, colour, alpha) => {
-      for (let i = 0; i < pth.pts.length - 1; i++) {
-        const [x0, z0, w0] = pth.pts[i], [x1, z1, w1] = pth.pts[i + 1], wear = (w0 + w1) / 2
-        g.globalAlpha = Math.min(0.9, alpha * wear)
-        g.strokeStyle = colour
-        g.lineWidth = width * pth.w * (0.8 + 0.25 * wear)
-        g.beginPath()
-        g.moveTo(x0, z0)
-        g.lineTo(x1, z1)
-        g.stroke()
-      }
-    }
-    for (const pth of p.lanes ?? []) lane(pth, 1.25, p.palette?.verge ?? '#7d8a48', 0.1)
-    for (const pth of p.lanes ?? []) lane(pth, 0.55, p.palette?.lane ?? '#7a6846', 0.2)
     for (const pth of p.lanes ?? []) {
       const r = stream(Math.round(pth.pts[0][0] * 977) ^ Math.round(pth.pts[0][1] * 991), 'lane')
-      for (const [x, z, wear] of pth.pts) {
-        if (r() > 0.25 * wear) continue
-        g.globalAlpha = 0.4 + r() * 0.3
+      for (const [x, z, wear, room] of pth.pts) {
+        if (r() > 0.14 * wear * room) continue
+        g.globalAlpha = 0.3 + r() * 0.25
         g.fillStyle = ['#8d877b', '#6e5a3e', '#9a8a68'][Math.floor(r() * 3)]
-        const s2 = 0.04 + r() * 0.06
+        const s2 = 0.04 + r() * 0.05
         g.fillRect(x + (r() - 0.5) * 0.5 * pth.w, z + (r() - 0.5) * 0.5 * pth.w, s2, s2)
       }
     }
@@ -156,26 +219,44 @@ export function decalPainter(p) {
           g.fill()
         }
       }
-      // a ladder's foot: trodden bare
+      // a ladder's foot: scuffed, in small marks of the lane's earth (no
+      // blot: the short spur it starts, place.js lanesOf, carries the wear)
       if (d.heavy) {
-        for (let i = 0; i < 18; i++) {
-          g.globalAlpha = 0.3 + r() * 0.2
-          g.fillStyle = i % 2 ? '#6e5d3e' : '#5f5034'
+        for (let i = 0; i < 10; i++) {
+          g.globalAlpha = 0.1 + r() * 0.12
+          g.fillStyle = p.palette?.lane ?? '#6e5d3e'
           g.beginPath()
-          g.ellipse((r() - 0.5) * ex, (r() - 0.5) * ez, 0.25 + r() * 0.3, 0.18 + r() * 0.22, r() * 3, 0, Math.PI * 2)
+          g.ellipse((r() - 0.5) * ex * 1.2, (r() - 0.5) * ez * 1.2, 0.1 + r() * 0.16, 0.07 + r() * 0.1, r() * 3, 0, Math.PI * 2)
           g.fill()
         }
       }
       // a forest floor is round: its litter rings it
       const at = d.r ? (t) => ring(r, d.r, t) : (t) => round(r, ex, ez, t)
-      // worn earth, in patches close in
-      for (let i = 0; i < w.n * 0.35; i++) {
-        const [x, z] = at(r() * r() * 0.9)
-        g.globalAlpha = 0.16 + r() * 0.14
-        g.fillStyle = w.earth[i % w.earth.length]
-        g.beginPath()
-        g.ellipse(x, z, 0.18 + r() * 0.35, 0.12 + r() * 0.22, r() * 3, 0, Math.PI * 2)
-        g.fill()
+      // worn earth, a skirt round the foot: heaviest at the foot, thinning
+      // out to its kind's reach (SKIRT), its width wandering round the
+      // piece so it reads as trodden ground, not an outline (a forest
+      // floor and the trodden ground keep their few patches)
+      const reach = SKIRT[d.kind]
+      if (reach && d.piece !== 'floor') {
+        const m = Math.round((26 + 12 * (ex + ez)) * (d.kind === 'fort' ? 1.5 : 1))
+        for (let i = 0; i < m; i++) {
+          const t = reach * Math.pow(r(), 1.6)
+          const [x, z] = at(t - 0.06)
+          g.globalAlpha = (0.5 - 0.3 * (t / reach)) * (0.65 + 0.35 * r())
+          g.fillStyle = w.earth[i % w.earth.length]
+          g.beginPath()
+          g.ellipse(x, z, 0.16 + r() * 0.3 * (1 + t), 0.12 + r() * 0.2 * (1 + t), r() * 3, 0, Math.PI * 2)
+          g.fill()
+        }
+      } else {
+        for (let i = 0; i < w.n * 0.35; i++) {
+          const [x, z] = at(r() * r() * 0.9)
+          g.globalAlpha = 0.16 + r() * 0.14
+          g.fillStyle = w.earth[i % w.earth.length]
+          g.beginPath()
+          g.ellipse(x, z, 0.18 + r() * 0.35, 0.12 + r() * 0.22, r() * 3, 0, Math.PI * 2)
+          g.fill()
+        }
       }
       // specks: gravel, straw, litter, ash, thinning outward
       const n = Math.round(w.n * Math.min(3, 1 + (ex + ez) / 3))
@@ -217,7 +298,7 @@ function ring(r, rad, t) {
 
 // the debris' shapes
 const SHAPES = {
-  pebble: () => new THREE.IcosahedronGeometry(0.06, 0).scale(1, 0.55, 0.8).translate(0, 0.02, 0),
+  pebble: () => new THREE.OctahedronGeometry(0.065, 0).scale(1, 0.5, 0.8).translate(0, 0.02, 0),
   stick: () => new THREE.BoxGeometry(0.3, 0.025, 0.035).translate(0, 0.012, 0),
   leaf: () => new THREE.PlaneGeometry(0.1, 0.06).rotateX(-Math.PI / 2).translate(0, 0.006, 0),
   fern: () => {
@@ -225,7 +306,7 @@ const SHAPES = {
     for (let i = 0; i < 5; i++) parts.push(new THREE.ConeGeometry(0.035, 0.32, 3, 1, true).translate(0, 0.16, 0).rotateZ(0.55).rotateY((i / 5) * Math.PI * 2))
     const pos = []
     for (const g of parts) {
-      const a = g.toNonIndexed().attributes.position
+      const a = lean(g).attributes.position
       for (let i = 0; i < a.count; i++) pos.push(a.getX(i), a.getY(i), a.getZ(i))
     }
     const g = new THREE.BufferGeometry()
@@ -261,6 +342,39 @@ function hideUnder(mat, u, { cursor = true } = {}) {
   }`)
   }
   mat.customProgramCacheKey = () => (cursor ? 'tails-dressing-hide-cursor' : 'tails-dressing-hide')
+}
+
+// Every figure's base standing on the ground, as discs ([{x, z, r}]): each
+// figure's root (marked userData.fig) carries its base (userData.base:
+// view/models/cache.js), a group whose userData.discs says what it covers
+// in its own frame (kit.js base(): its plinth's foot; howdah.js longBase(): a
+// long hull's discs), carried to the ground by the base's world matrix. A
+// base without them (none today) is taken as the circle round its box. A
+// figure on a deck (its root above the ground) or whose base is hidden (a
+// rider's) stands on nothing of the mat's.
+const _p = new THREE.Vector3(), _q = new THREE.Vector3(), _s = new THREE.Vector3(), _box = new THREE.Box3()
+export function baseDiscs(scene) {
+  const discs = []
+  scene.traverseVisible((o) => {
+    const b = o.userData.base
+    if (!o.userData.fig || !b || !b.visible) return
+    o.getWorldPosition(_p)
+    if (_p.y > 0.2) return
+    b.getWorldScale(_s)
+    const k = Math.max(Math.abs(_s.x), Math.abs(_s.z))
+    const own = b.userData.discs
+    if (own) {
+      for (const [x, z, r] of own) {
+        b.localToWorld(_q.set(x, 0, z))
+        discs.push({ x: _q.x, z: _q.z, r: r * k })
+      }
+      return
+    }
+    _box.setFromObject(b)
+    _box.getCenter(_q)
+    discs.push({ x: _q.x, z: _q.z, r: Math.hypot(_box.max.x - _box.min.x, _box.max.z - _box.min.z) / 2 })
+  })
+  return discs
 }
 
 export class Ground {
@@ -340,23 +454,12 @@ export class Ground {
     canvas.addEventListener('pointerleave', this.leave)
   }
 
-  // The bases where the figures stand now (every figure's root, marked
-  // userData.fig, with its base, userData.base: view/models/cache.js), on
-  // the ground: the mask painted again when they have moved (at most ten
-  // times a second).
+  // The bases where the figures stand now, on the ground (baseDiscs): the
+  // mask painted again when they have moved (at most ten times a second).
   bases(scene, now) {
     if (now - this.lastBases < 100) return
     this.lastBases = now
-    const discs = [], p = new THREE.Vector3(), sc = new THREE.Vector3()
-    scene.traverseVisible((o) => {
-      const b = o.userData.base
-      if (!o.userData.fig || !b) return
-      o.getWorldPosition(p)
-      if (p.y > 0.2) return
-      b.geometry.boundingSphere ?? b.geometry.computeBoundingSphere()
-      b.getWorldScale(sc)
-      discs.push({ x: p.x, z: p.z, r: b.geometry.boundingSphere.radius * Math.max(sc.x, sc.z) })
-    })
+    const discs = baseDiscs(scene)
     const key = discs.map((d) => `${d.x.toFixed(2)},${d.z.toFixed(2)},${d.r.toFixed(2)}`).join('|')
     if (key === this.baseKey) return
     this.baseKey = key

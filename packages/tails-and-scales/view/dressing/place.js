@@ -28,7 +28,7 @@ export const LOW = 0.3
 export const CLEAR = 1
 // the most debris a board gets (the draw budget's triangles)
 export const DEBRIS = 900
-export const TREES = 380
+export const TREES = 320
 
 // ---- hashing: every value from (seed, salt, index), never drawn --------
 export function hashStr(s) {
@@ -286,8 +286,19 @@ function lanesOf(ctx, R, seed, trackSide) {
     for (let i = b; i >= 0; i = from[i]) cells.push(i)
     return cells.reverse()
   }
+  // how far a lane may run full width at a point: it thins to nothing
+  // before a rules piece's foot (clear: the gap to the nearest box), the
+  // objective's marker it serves, and a deployment zone, where the blocks
+  // stand: worn ground that stops short, never a road run under them
+  const zone = W / 2 - ctx.deploy
+  const room = (x, z, c) => {
+    let o = 9
+    for (const q of objectives) o = Math.min(o, hypot(x - q.x, z - q.z))
+    return smooth(c, 0.35, 1.5) * smooth(o, 0.8, 2.2) * smooth(zone - Math.abs(x), 0.2, 2.6)
+  }
   // a lane's points: the cells' centres, smoothed twice (Chaikin), each
-  // with its wear: more in a narrow gap, more yet at its `hard` ends
+  // with its wear (more in a narrow gap, more yet at its `hard` ends) and
+  // its room (above)
   const lane = (cells, w, hardA = false, hardB = false) => {
     let pts = cells.map((i) => [cx(i), cz(i), clear[i]])
     for (let k = 0; k < 2; k++) {
@@ -300,7 +311,7 @@ function lanesOf(ctx, R, seed, trackSide) {
       pts = next
     }
     const n = pts.length
-    return { w, pts: pts.map(([x, z, c], i) => [x, z, Math.min(2, 1 + 0.8 * Math.max(0, 1 - c / 1.4) + (hardA ? Math.max(0, 1 - i / 8) : 0) + (hardB ? Math.max(0, 1 - (n - 1 - i) / 8) : 0))]) }
+    return { w, pts: pts.map(([x, z, c], i) => [x, z, Math.min(1.6, 1 + 0.4 * Math.max(0, 1 - c / 1.4) + (hardA ? 0.4 * Math.max(0, 1 - i / 8) : 0) + (hardB ? 0.4 * Math.max(0, 1 - (n - 1 - i) / 8) : 0)), room(x, z, c)]) }
   }
   const out = { paths: [], roads: [], spur: null }
   const r = stream(seed, 'lanes')
@@ -340,16 +351,24 @@ function lanesOf(ctx, R, seed, trackSide) {
       out.spur = { x: cx(cells[cells.length - 1]), z: sz * H / 2, sz }
     }
   }
-  // each ladder's foot, worn hardest, to its nearest objective
+  // each ladder's foot, worn hardest: a short trodden spur out toward its
+  // nearest objective (the first LADDER tails of the way), fading as the
+  // climbers spread out
+  const LADDER = 4
   for (const c of ctx.chunks) {
     if (!c.link?.foot) continue
     const f = c.link.foot, a = open(f.x, f.z)
     const cells = find(a, objs[nearestObj(f.x, f.z)])
-    if (cells) out.paths.push(lane(cells, 0.7, true))
+    if (!cells) continue
+    const spur = lane(cells.slice(0, Math.round(LADDER / CELL) + 1), 0.6, true)
+    const m = spur.pts.length
+    spur.pts.forEach((q, i) => (q[3] *= 1 - smooth(i / Math.max(1, m - 1), 0.35, 1)))
+    out.paths.push(spur)
   }
   // the cells a lane covers (no clutter stands on a lane)
   const worn = new Uint8Array(N)
-  for (const pth of out.paths) for (const [x, z] of pth.pts) {
+  for (const pth of out.paths) for (const [x, z, , room] of pth.pts) {
+    if (room < 0.15) continue
     for (let dz = -1; dz <= 1; dz++) for (let dx = -1; dx <= 1; dx++) {
       const i = at(x + dx * CELL * 0.8, z + dz * CELL * 0.8)
       if (i >= 0) worn[i] = 1
@@ -381,11 +400,14 @@ export function themeOf(ctx) {
   }
   return stone > green * 1.2 ? 'quarry' : 'farm'
 }
+// (the lanes' earth pulled toward the mat's own turf, so a lane reads as
+// ground worn by feet, never as a drawn road; the washes light enough that
+// the mat stays the liveliest ground on screen)
 export const PALETTES = Object.freeze({
-  farm: Object.freeze({ wash: null, lane: '#7a6846', verge: '#7d8a48', meadow: '#74813f' }),
-  quarry: Object.freeze({ wash: '#a39b84', washA: 0.13, chalk: '#c2bcaa', lane: '#8d8572', verge: '#8a8a62', meadow: '#7d8048' }),
-  keep: Object.freeze({ wash: '#7f7a5c', washA: 0.07, lane: '#6e5d3e', verge: '#7a8048', meadow: '#6f7a3e' }),
-  burned: Object.freeze({ wash: null, lane: '#4a4038', verge: '#5a5236', meadow: '#5a5034', scorch: '#2e2820' }),
+  farm: Object.freeze({ wash: null, lane: '#776a44', verge: '#7c8a4a', meadow: '#6e7c42' }),
+  quarry: Object.freeze({ wash: '#a39b84', washA: 0.06, chalk: '#c2bcaa', lane: '#827c66', verge: '#7f8758', meadow: '#737a4c' }),
+  keep: Object.freeze({ wash: '#7f7a5c', washA: 0.035, lane: '#6f6a46', verge: '#76844a', meadow: '#6c7744' }),
+  burned: Object.freeze({ wash: null, lane: '#4c463a', verge: '#5a5638', meadow: '#4e4a3c', scorch: '#2e2820', ash: '#5e5a50' }),
 })
 // the board's name, from its theme's syllables
 const NAMES = {
@@ -400,101 +422,121 @@ export function nameOf(seed, theme) {
 }
 
 // The works: each a record (kind, place, turn yaw toward the mat, its
-// bounding radius r and height h, for the check), off the mat, on the side
-// the wood is not; their yards (trodden ground) painted round them.
-// view/dressing/works.js draws them, merged.
-function worksOf(out, seed, theme, woodSide) {
+// bounding radius r and height h, for the check), off the mat, on the far
+// side of the field, where every opening view looks: a battle watched or
+// played by two on one screen opens across the table from the near long
+// side (the broadside), so the far long side tops the view; a battle
+// against the AI on a classic board opens from behind one army, down the
+// table's length, and takes in the far corner beyond the other army; the
+// title's orbit opens toward the far corner on the east. So each theme
+// stands its landmark at a far corner and something of its own at the
+// other, FAR tails out (a few more on a larger board, whose views reach
+// farther), clear of the wood (never on the far side) and of the cart
+// track (on the near side). Their yards (trodden ground) painted round
+// them. view/dressing/works.js draws them, merged; sim/dressing-check.mjs
+// --browser holds a landmark of each theme inside the opening views.
+const FAR = (H) => 5 + 0.1 * H
+// the works each theme counts as its landmark (the check's)
+export const LANDMARKS = Object.freeze({ farm: ['house', 'barn'], quarry: ['cut', 'crane', 'spoil'], keep: ['gatehouse', 'tower', 'wall'], burned: ['shell', 'chimney'] })
+function worksOf(out, seed, theme) {
   const { W, H, k } = out
   const r = stream(seed, 'works')
-  const sides = [0, 1, 2, 3].filter((s) => s !== woodSide)
-  const side = sides[Math.floor(r() * sides.length)]
-  // a place `d` tails out from the mat's middle on `side`, `along` it, and
-  // the turn that faces the mat
-  const spot = (sd, d, along) => {
-    const [x, z] = sd === 0 ? [along, -(H / 2 + d)] : sd === 1 ? [along, H / 2 + d] : sd === 2 ? [-(W / 2 + d), along] : [W / 2 + d, along]
-    return { x, z, yaw: sd === 0 ? 0 : sd === 1 ? Math.PI : sd === 2 ? Math.PI / 2 : -Math.PI / 2 }
-  }
-  // a work at local (lx, lz) of a site
+  const b = FAR(H), a = 2 + 0.04 * W
+  // the far corner on side sx (-1 west, 1 east), `back` tails farther out,
+  // turned a little toward the mat
+  const corner = (sx, back = 0, along = 0) => ({ x: sx * (W / 2 + a + along), z: -(H / 2 + b + back), yaw: -sx * 0.35, sx })
+  // a work at local (lx, lz) of a site (lz toward the mat, lx along the
+  // far side, outward)
   const add = (site, kind, lx, lz, yaw, extra = {}) => {
-    const c = cos(site.yaw), sn = sin(site.yaw)
-    const x = site.x + lx * c + lz * sn, z = site.z - lx * sn + lz * c
+    const c = cos(site.yaw), sn = sin(site.yaw), ox = lx * (site.sx ?? 1)
+    const x = site.x + ox * c + lz * sn, z = site.z - ox * sn + lz * c
     const w = { kind, x, z, y: lift(seed, W, H, x, z) - 0.25, yaw: site.yaw + yaw, ...SIZE[kind], ...extra }
     out.works.push(w)
     return w
   }
   const yard = (site, lx, lz, rad) => {
-    const c = cos(site.yaw), sn = sin(site.yaw)
-    out.yards.push({ x: site.x + lx * c + lz * sn, z: site.z - lx * sn + lz * c, r: rad })
+    const c = cos(site.yaw), sn = sin(site.yaw), ox = lx * (site.sx ?? 1)
+    out.yards.push({ x: site.x + ox * c + lz * sn, z: site.z - ox * sn + lz * c, r: rad })
   }
-  const along = (sd) => (r() - 0.5) * (sd < 2 ? W * 0.7 : H * 0.6)
+  const sx = r() < 0.5 ? -1 : 1
   if (theme === 'farm') {
-    const site = spot(side, 16 + r() * 6, along(side))
+    // the farmstead at one far corner: the house at the corner, the barn
+    // and its paddock in along the far side, the hay stooks out beyond
+    const site = corner(sx)
     add(site, 'house', 0, 0, 0)
-    add(site, 'barn', 8.5, -1.5, 0.1 * (r() - 0.5))
-    add(site, 'well', 3.6, 3.4, 0)
-    add(site, 'cart', -4.2, 2.6, 0.6 + r())
-    yard(site, 3.5, 1, 7)
-    // the paddock by the barn
-    for (const [a, b] of [[[5, 3.5], [14, 3.5]], [[14, 3.5], [14, -7]], [[14, -7], [5, -7]]]) add(site, 'fence', (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, atan2(b[0] - a[0], b[1] - a[1]) - Math.PI / 2, { len: hypot(b[0] - a[0], b[1] - a[1]) })
-    // hay stooks in rows in the next field
-    const fx = -14 - r() * 4
-    for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) add(site, 'stook', fx + i * 2.6 + (r() - 0.5) * 0.6, -3 + j * 2.8 + (r() - 0.5) * 0.6, r() * 3)
-    // a second cottage down the lane
-    const s2 = spot(sides[(sides.indexOf(side) + 1) % sides.length], 20 + r() * 8, along(side))
+    add(site, 'barn', -8.5, -1.2, 0.1 * (r() - 0.5))
+    add(site, 'well', -3.6, 3, 0)
+    add(site, 'cart', 3.8, 2.4, 0.6 + r())
+    yard(site, -3.5, 1, 7)
+    for (const [p0, p1] of [[[-5, 3.2], [-14, 3.2]], [[-14, 3.2], [-14, -6]], [[-14, -6], [-11, -6]]]) {
+      const [x0, z0] = [p0[0] * sx, p0[1]], [x1, z1] = [p1[0] * sx, p1[1]]
+      add({ ...site, sx: 1 }, 'fence', (x0 + x1) / 2, (z0 + z1) / 2, atan2(x1 - x0, z1 - z0) - Math.PI / 2, { len: hypot(x1 - x0, z1 - z0) })
+    }
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) add(site, 'stook', 5 + i * 2.6 + (r() - 0.5) * 0.6, -4 - j * 2.8 + (r() - 0.5) * 0.6, r() * 3)
+    // a second cottage at the other far corner
+    const s2 = corner(-sx, 1 + r() * 2)
     add(s2, 'house', 0, 0, 0.3, { s: 0.8 })
+    add(s2, 'cart', -3.2, 2.2, r() * 3)
     yard(s2, 0, 0, 4)
   } else if (theme === 'quarry') {
-    const site = spot(side, 18 + r() * 5, along(side))
-    add(site, 'cut', 0, -4, 0)
-    add(site, 'crane', -6, 1.5, 0.5 + r())
-    add(site, 'hut', 7.5, 2.5, -0.2)
-    for (let i = 0; i < 3; i++) add(site, 'spoil', -11 + i * 3.5 + r(), -2 - r() * 3, r() * 3, { s: 0.8 + r() * 0.6 })
-    for (let i = 0; i < 6; i++) add(site, 'block', 2 + (i % 3) * 1.3, 5 + Math.floor(i / 3) * 1.1, 0)
-    add(site, 'cart', -2.5, 5.5, 1.2)
-    yard(site, 0, 1, 9)
+    // the cut and its crane at one far corner, the works hut by them; the
+    // spoil heaps and the dressed stone at the other
+    const site = corner(sx, 2)
+    add(site, 'cut', 1, -2, 0)
+    add(site, 'crane', -6.5, 2, 0.5 + r())
+    add(site, 'hut', -10, 3, -0.2)
+    yard(site, -3, 2, 9)
+    const s2 = corner(-sx, 1)
+    for (let i = 0; i < 3; i++) add(s2, 'spoil', -1 + i * 3.6 + r(), -1 - r() * 2.5, r() * 3, { s: 0.8 + r() * 0.6 })
+    for (let i = 0; i < 6; i++) add(s2, 'block', -6 + (i % 3) * 1.3, 2 + Math.floor(i / 3) * 1.1, 0)
+    add(s2, 'cart', -9.5, 2.5, 1.2)
+    yard(s2, -3, 1, 7)
   } else if (theme === 'keep') {
-    // the outer wall behind one army, its gate where that army's road goes
-    // through it; a beacon on the far side; the garrison's huts and tents
-    // inside the wall
-    const sx = r() < 0.5 ? -1 : 1, d = 22
+    // the keep's curtain along the far side, a tower at each far corner and
+    // its gatehouse at one army's end, where that army's road comes round
+    // to it (out.roads's gate); the garrison's huts and tents and a watch
+    // beacon behind it
+    const z = -(H / 2 + b + 1.5), ends = W / 2 + a + 1.5
+    const gx = sx * (W / 2 - 4)
+    const site = { x: 0, z, yaw: 0, sx: 1 }
+    add(site, 'gatehouse', gx, 0, 0)
+    for (const [x0, x1] of [[-ends + 1.6, gx - 3.4], [gx + 3.4, ends - 1.6]]) {
+      const n = Math.max(1, Math.ceil((x1 - x0) / 6)), len = (x1 - x0) / n
+      for (let i = 0; i < n; i++) add(site, 'wall', x0 + (i + 0.5) * len, 0, 0, { len, r: len / 2 + 0.6 })
+    }
+    add(site, 'tower', -ends, 0, 0)
+    add(site, 'tower', ends, 0, 0)
     const rd = out.roads.find((q) => q.sx === sx)
-    const gz = rd ? rd.z + 4 * sin(d / 17 + rd.z) : 0
-    const wall = spot(sx < 0 ? 2 : 3, d, gz)
-    add(wall, 'gatehouse', 0, 0, 0)
-    const half = H / 2 + 10
-    for (const dir of [-1, 1]) {
-      // two runs of wall from the gate to a tower at each end
-      // (in runs of at most 6 tails, each its own record)
-      const from = 3.2, to = dir < 0 ? half + gz : half - gz, n = Math.max(1, Math.ceil((to - from) / 6)), len = (to - from) / n
-      for (let i = 0; i < n; i++) add(wall, 'wall', dir * (from + (i + 0.5) * len), 0, 0, { len, r: len / 2 + 0.6 })
-      add(wall, 'tower', dir * (to + 1), 0, 0)
-    }
-    const camp = spot(sx < 0 ? 2 : 3, 14, gz + (r() < 0.5 ? -1 : 1) * (6 + r() * 4))
-    for (let i = 0; i < 3; i++) add(camp, 'hut', (i - 1) * 4.2, (r() - 0.5) * 1.5, (r() - 0.5) * 0.3, { s: 0.8 })
-    for (let i = 0; i < 4; i++) add(camp, 'tent', (i - 1.5) * 3 + (r() - 0.5), 4 + (r() - 0.5), r() * 3)
-    yard(camp, 0, 2, 8)
-    const far = spot(sx < 0 ? 3 : 2, 18 + r() * 8, (r() - 0.5) * H * 0.5)
-    add(far, 'beacon', 0, 0, 0)
-    yard(far, 0, 0, 2.5)
+    if (rd) rd.gate = { x: gx, z: z + 1.4 }
+    const camp = { x: gx * 0.4, z: z - 6, yaw: 0, sx: 1 }
+    for (let i = 0; i < 3; i++) add(camp, 'hut', (i - 1) * 4.6, (r() - 0.5) * 1.5, (r() - 0.5) * 0.3, { s: 0.8 })
+    for (let i = 0; i < 4; i++) add(camp, 'tent', (i - 1.5) * 3.2 + (r() - 0.5), -4 + (r() - 0.5), r() * 3)
+    yard(camp, 0, -2, 8)
+    yard({ ...site, x: gx }, 0, 2.5, 3.5)
+    add({ x: -sx * (W / 2 - 8), z: z - 7, yaw: 0, sx: 1 }, 'beacon', 0, 0, 0)
   } else {
-    // the burned hamlet: cottages burned to their walls, chimneys standing
-    const site = spot(side, 15 + r() * 6, along(side))
-    const n = 3 + Math.floor(r() * 3)
+    // the burned hamlet strung along the far side, a cottage at each far
+    // corner and more between: burned to their walls, chimneys standing
+    const n = Math.max(4, Math.round(W / 14)), span = W + 2 * a
     for (let i = 0; i < n; i++) {
-      const lx = (i - (n - 1) / 2) * 6.5 + (r() - 0.5) * 2, lz = (r() - 0.5) * 5
-      add(site, 'shell', lx, lz, (r() - 0.5) * 0.5)
-      if (r() < 0.7) add(site, 'chimney', lx + 1.6, lz - 1.1, 0)
+      const t = n === 1 ? 0 : i / (n - 1)
+      const site = { x: -span / 2 + t * span + (r() - 0.5) * 3, z: -(H / 2 + b + (r() - 0.3) * 3), yaw: (r() - 0.5) * 0.6, sx: 1 }
+      add(site, 'shell', 0, 0, 0)
+      if (r() < 0.75) add(site, 'chimney', 1.6, -1.1, 0)
+      yard(site, 0, 0, 4.5)
     }
-    add(site, 'cart', (r() - 0.5) * 10, 6, r() * 3, { burned: true })
-    yard(site, 0, 0, 14)
-    for (const f of out.fields) if (outside(W, H, f.x, f.z) < 40 * k && r() < 0.45) f.kind = 'charred'
+    add(corner(sx, -1, -6), 'cart', 0, 3, r() * 3, { burned: true })
+    for (const f of out.fields) {
+      const d = outside(W, H, f.x, f.z)
+      if (d < 26 * k || (d < 50 * k && r() < 0.6)) f.kind = d < 14 * k ? 'charred' : r() < 0.5 ? 'charred' : 'singed'
+    }
   }
 }
 // each work's bounding radius and height (works.js draws them to these)
 const SIZE = {
   house: { r: 3.2, h: 4.2 }, barn: { r: 4.4, h: 5.2 }, well: { r: 0.8, h: 1.6 }, cart: { r: 1.6, h: 1.2 }, stook: { r: 0.6, h: 1.1 },
   fence: { r: 6, h: 0.9 }, cut: { r: 7.5, h: 4 }, crane: { r: 4.5, h: 7 }, hut: { r: 2.4, h: 2.8 }, spoil: { r: 2.4, h: 2.2 }, block: { r: 0.7, h: 0.8 },
-  gatehouse: { r: 4, h: 6 }, wall: { r: 3.6, h: 3.6 }, tower: { r: 2, h: 6.5 }, tent: { r: 1.3, h: 1.6 }, beacon: { r: 1.2, h: 6 },
+  gatehouse: { r: 4, h: 6 }, wall: { r: 3.6, h: 3 }, tower: { r: 2, h: 6.5 }, tent: { r: 1.3, h: 1.6 }, beacon: { r: 1.2, h: 6 },
   shell: { r: 3, h: 2.6 }, chimney: { r: 0.7, h: 5 },
 }
 
@@ -544,7 +586,8 @@ export function plan(ctx) {
   // board's corner and away
   {
     const r = stream(seed, 'track')
-    const sz = r() < 0.5 ? -1 : 1, off = H / 2 + 4 + r() * 3
+    r()
+    const sz = 1, off = H / 2 + 4 + r() * 3
     const from = -W / 2 - 60 * k, to = W / 2 + 60 * k
     for (let i = 0; i <= 40; i++) {
       const x = from + ((to - from) * i) / 40
@@ -554,7 +597,7 @@ export function plan(ctx) {
 
   // ---- S3: the lanes, painted (ground.js); no clutter stands on one -----
   {
-    const L = lanesOf(ctx, R, seed, stream(seed, 'track')() < 0.5 ? -1 : 1)
+    const L = lanesOf(ctx, R, seed, 1)
     out.lanes = L.paths
     out.roads = L.roads
     out.spur = L.spur
@@ -567,7 +610,7 @@ export function plan(ctx) {
     const th = (out.theme = themeOf(ctx))
     out.palette = PALETTES[th]
     out.name = nameOf(seed, th)
-    worksOf(out, seed, th, Math.floor(stream(seed, 'trees')() * 4))
+    worksOf(out, seed, th)
   }
 
   // the trees: copses and a wood's edge, from 12 tails out (nothing tall near
@@ -584,7 +627,7 @@ export function plan(ctx) {
     // a wood along one side, in two or three stands with open ground
     // between them, from 20 tails back: never one wall of trunks across
     // the view (dressing-check projects it into the battle's views)
-    const side = Math.floor(r() * 4)
+    const side = 1 + Math.floor(r() * 3)
     const stands = 2 + Math.floor(r() * 2)
     for (let i = 0; i < 170; i++) {
       const j = i % stands, c = -1 + (2 * j + 1) / stands + (r() - 0.5) * 0.12

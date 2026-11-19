@@ -26,9 +26,11 @@
 //   S4: the board's theme: its palette, its own clutter, the works of the
 //       people round it (place.js themeOf and worksOf, works.js), its name
 //
-// Draw calls: the sky 1, the surround 6 (the works one of them), the debris
-// 4, the floors' cover 1: 12, the budget's cap, against the 6 the wooden
-// table, its frame and the box under the mat drew.
+// Draw calls: the sky 1, the surround 5 (the ground, the edge with its
+// stakes and long grass, the trees 2, the works), the debris 4, the floors'
+// cover 1: 11, under the budget's cap of 12, against the 6 the wooden table,
+// its frame and the box under the mat drew. sim/dressing-check.mjs
+// --browser counts the calls and triangles the renderer draws for it.
 import { plan, dressSeed } from './place.js'
 import { Sky, SKIES, sunAt } from './sky.js'
 import { Surround } from './surround.js'
