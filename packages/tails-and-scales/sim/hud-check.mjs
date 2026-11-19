@@ -129,6 +129,10 @@ import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { loadCorpus, select, buildApp, copyCode } from './lib.mjs'
 import { IDLE_MS } from './chromium.mjs'
 import { PKG } from './oracle/pin.mjs'
+import { lengthWords } from './lib.mjs'
+// (the units rename) how the build words a length: the working tree's LENGTH
+const { LENGTH, tails } = await import(pathToFileURL(`${PKG}/core/rules.js`).href)
+const LEN = lengthWords(LENGTH)
 import { humanDriver, jobSetup, pageStart, playedAs, missingHooks } from './oracle/human-bot.mjs'
 import { fortScene } from './fort-scene.mjs'
 
@@ -227,7 +231,7 @@ async function tips(browser, url) {
       await f.select(c.u)
       const at = await f.hover(g.x, 0, g.z)
       const t = await f.tip()
-      const m = t.text.match(/(\d+\.\d)" of (\d+)" \((\d+\.\d)" climbing\)/)
+      const m = t.text.match(new RegExp(`(\\d+\\.\\d)${LEN.mark} of (\\d+)${LEN.mark} \\((\\d+\\.\\d)${LEN.mark} climbing\\)`))
       const want = (2 * c.h).toFixed(1)
       if (at.on !== 'CANVAS') no(`the climb's point is under ${at.on}, not the table`)
       else if (!m) no(`hovering past ladder ${c.ladder}'s foot with unit ${c.u} picked up, the tooltip reads "${t.text}": no climbing breakdown`)
@@ -596,7 +600,7 @@ function wrong({ what, want, got }) {
     if (!got.shortest.show) bad.push('Shortest move down')
     down('end', 'End')
     down('auto', 'Auto')
-    if (!got.hint.startsWith(`Charge! Rolled ${want.rolled}"`)) bad.push(`the hint "${got.hint}"`)
+    if (!got.hint.startsWith(`Charge! Rolled ${tails(want.rolled)}`)) bad.push(`the hint "${got.hint}"`)
     if (!got.shading?.shown || !got.shading.orange) bad.push(`the charge's spots ${got.shading?.shown ? 'shaded, not in orange' : 'not shaded'}`)
     zones([0.05, 0.05])
   } else {

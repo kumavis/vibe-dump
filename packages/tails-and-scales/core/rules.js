@@ -9,7 +9,8 @@
 // and normalised by data/schema.js. This is consensus code (core/): pure, and
 // every die comes off the match's own stream.
 //
-// Distances are inches; one world unit is one inch on the table.
+// Distances are tails, the table's own unit (LENGTH, below); one world unit
+// is one tail on the table.
 // ---------------------------------------------------------------------------
 
 import { draw } from './rng.js'
@@ -20,6 +21,24 @@ export const CHARGE_RANGE = 12
 export const OBJECTIVE_RANGE = 3
 export const ROUNDS = 5
 export const AURA = 6 // heroes lend their Leadership to friends this close
+
+// (the units rename, DESIGN's Units section) The table's unit of length,
+// named in one place: the tail, a world unit exactly, so no number is ever
+// converted. Copy says it two ways: `tails(n)`, the word, in prose (a log
+// line, an ability, a hint, a refusal, the help: "6.3 tails", "1 tail",
+// "D6+1 tails"), and `tl(n)`, the mark, where room is tight (a dice row, a
+// tooltip, a label, the card: "6.3t"). A number prints as given when it is
+// a string (a caller's toFixed(1), a dice expression) and otherwise to at
+// most one decimal; the word is singular only for exactly "1".
+// Presentation only: RULES_ID hashes CONSTANTS, not this, and no rule
+// reads it.
+export const LENGTH = Object.freeze({ one: 'tail', many: 'tails', mark: 't' })
+const shown = (n) => (typeof n === 'string' ? n : String(+(+n).toFixed(1)))
+export const tails = (n) => {
+  const s = shown(n)
+  return `${s} ${s === '1' ? LENGTH.one : LENGTH.many}`
+}
+export const tl = (n) => `${shown(n)}${LENGTH.mark}`
 
 export const PHASES = Object.freeze([
   { key: 'move', name: 'Movement' },

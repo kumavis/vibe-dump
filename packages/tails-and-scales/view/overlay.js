@@ -34,6 +34,7 @@
 // shown, so a table with no long hull makes none of it.
 //
 // R7 moved it out of main.js unchanged.
+import { tl } from '../core/rules.js'
 import * as THREE from 'three'
 import { hullShapes } from './hull.js'
 
@@ -308,7 +309,7 @@ export class Overlay {
       const f = nav.index(c.link.foot.x, c.link.foot.z), t = nav.index(c.link.top.x, c.link.top.z)
       if (f < 0 || t < 0) continue
       const up = plan.res.prev[t] === f && isFinite(plan.res.dist[t]), down = plan.res.prev[f] === t && isFinite(plan.res.dist[f])
-      if (up || down) out.push({ x: c.link.foot.x, y: floorOf(nav, c.link.foot.x, c.link.foot.z), z: c.link.foot.z, text: `${up ? '⤒' : '⤓'} ${+(2 * c.link.h).toFixed(1)}"` })
+      if (up || down) out.push({ x: c.link.foot.x, y: floorOf(nav, c.link.foot.x, c.link.foot.z), z: c.link.foot.z, text: `${up ? '⤒' : '⤓'} ${tl(+(2 * c.link.h).toFixed(1))}` })
     }
     return out
   }

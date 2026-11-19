@@ -34,7 +34,7 @@
 //
 // Every mission is checked as this module loads (checkMission, as the
 // terrain sets are): a slip in a new one fails at once, on every board.
-import { BOARD, ROUNDS } from '../core/rules.js'
+import { BOARD, ROUNDS, tails } from '../core/rules.js'
 import { deepFreeze } from '../core/util.js'
 import { SETS } from '../core/terrain/sets.js'
 import { ROLES, RACES } from './schema.js'
@@ -299,8 +299,8 @@ export function checkMission(name, m) {
   }
   const even = (n) => Number.isInteger(n) && n > 0 && n % 2 === 0
   const { W, H } = m.board ?? {}
-  if (!even(W) || !even(H)) bad(`its board is ${W}×${H}, not two even whole numbers of inches`)
-  if (!(m.deploy > 0) || !(m.deploy < W / 2 - 6)) bad(`a zone ${m.deploy}" deep leaves under 6" to the centre line of a board ${W}" wide`)
+  if (!even(W) || !even(H)) bad(`its board is ${W}×${H}, not two even whole numbers of tails`)
+  if (!(m.deploy > 0) || !(m.deploy < W / 2 - 6)) bad(`a zone ${tails(m.deploy)} deep leaves under ${tails(6)} to the centre line of a board ${tails(W)} wide`)
   if (!Number.isInteger(m.rounds) || m.rounds < 1) bad(`a battle of ${m.rounds} rounds`)
   if (!Array.isArray(m.sets) || !m.sets.length || !m.sets.every((s) => typeof s === 'string' && s in SETS)) bad(`its sets ${JSON.stringify(m.sets)} aren't terrain sets (there are ${Object.keys(SETS).join(', ')})`)
   if (typeof m.army !== 'string' || !m.army) bad('its army has no name')
@@ -317,7 +317,7 @@ export function checkMission(name, m) {
   for (const o of m.objectives) {
     const at = `the objective at (${o.x}, ${o.z})`
     if (!Number.isFinite(o.x) || !Number.isFinite(o.z)) bad(`${at} isn't on the board`)
-    if (Math.abs(o.x) > W / 2 - 1 || Math.abs(o.z) > H / 2 - 1) bad(`${at} is less than 1" inside the board`)
+    if (Math.abs(o.x) > W / 2 - 1 || Math.abs(o.z) > H / 2 - 1) bad(`${at} is less than ${tails(1)} inside the board`)
     if (!(Math.abs(o.x) < W / 2 - m.deploy)) bad(`${at} is in a deployment zone`)
     if (!m.objectives.some((p) => p.x === -o.x && p.z === -o.z)) bad(`${at} has no point mirror`)
   }

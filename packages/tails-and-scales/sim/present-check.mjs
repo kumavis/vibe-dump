@@ -390,7 +390,10 @@ async function page(dir) {
     // (code older than either has no climb, and so no use for them)
     const { LADDER_MUL = 2 } = await import(pathToFileURL(join(dir, 'core', 'nav.js')).href).catch(() => ({}))
     const { hypot = Math.hypot } = await import(pathToFileURL(join(dir, 'core', 'dmath.js')).href).catch(() => ({}))
-    const order = eventOrder((id) => ts.G.units.find((u) => u.id === id), LADDER_MUL, hypot)
+    // ((the units rename) and how its copy words a length: LENGTH's)
+    const { LENGTH, tails = (n) => `${n}"` } = await import(pathToFileURL(join(dir, 'core', 'rules.js')).href).catch(() => ({}))
+    const { lengthWords } = await import('./lib.mjs')
+    const order = eventOrder((id) => ts.G.units.find((u) => u.id === id), LADDER_MUL, hypot, lengthWords(LENGTH))
     // ((F16) the fog's own checks, as each entry closes: fogWatch, below)
     const fogSeat = process.env.PRESENT_FOG_SEAT ? Number(process.env.PRESENT_FOG_SEAT) : mode === 'serpent' ? 1 : 0
     const fogW = FOG ? await fogWatch(dir, job, setup, fogSeat, mode !== 'hotseat', () => ts, miss) : null
@@ -462,7 +465,7 @@ async function page(dir) {
         const mu = M.units[u.id], t = u.t, f = facts?.[u.id]
         const want = [
           mu.alive > 0 ? (t.models > 1 ? `${mu.alive}/${t.models} models` : `${mu.models[0].w}/${t.W} wounds`) : 'destroyed',
-          ...(f?.moved ? [f.fellBack ? `${v3a ? '↩ ' : ''}fell back` : f.advanced ? `${v3a ? '💨 ' : ''}advanced +${f.advRoll}"` : v3a && f.rode ? '⤓ stepped off' : `${v3a ? '👣 ' : ''}moved`] : []),
+          ...(f?.moved ? [f.fellBack ? `${v3a ? '↩ ' : ''}fell back` : f.advanced ? `${v3a ? '💨 ' : ''}advanced +${tails(f.advRoll)}` : v3a && f.rode ? '⤓ stepped off' : `${v3a ? '👣 ' : ''}moved`] : []),
           ...(f?.shot ? [`${v3a ? '➹ ' : ''}shot`] : []),
           ...(f?.charged ? [`${v3a ? '⚡ ' : ''}charged`] : v3a && f?.chargeTried ? ['✖ charge failed'] : []),
           ...(mu.mesmerized ? ['🌀 mesmerized'] : []),
@@ -717,7 +720,12 @@ async function fogWatch(dir, job, setup, seat, solo, ts, miss) {
 // (core/nav.js's LADDER_MUL): with height a move's line says what the walk
 // cost, each climb (a path point marked `climb`) at its link's cost, not
 // the ground its segment spans, which is the walk's L (the view's).
-function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
+function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot, len = { word: '"', mark: '"' }) {
+  // ((the units rename) the charge's row and the move and advance lines, as
+  // the code under test words a length)
+  const chargeRow = new RegExp(`^Charge \\d+${len.mark} \\(2D6\\)$`)
+  const moveLine = new RegExp(`^<b>([^<]*)</b> (move|advance|fall back) (\\d+\\.\\d)${len.word}\\.$`)
+  const advLine = new RegExp(`^<b>([^<]*)</b> advance: \\+(\\d)${len.word}\\.$`)
   const nameOf = (id) => unitOf(id)?.t.short
   let p1, p2, p3, p4, melee, melees, pause, moving, vol, tmpl, thorns, casting, shot, shotW, roll, boarding
   // how many lines (or templates, or walks) of each kind were held to their
@@ -895,7 +903,7 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
     // ((V3c) or its roll, a miss, then that rolled again: Cold Blood's)
     const again = p2?.t === 'dice' && / rolled again \(2D6\)$/.test(p2.label)
     const [rl, tray] = again ? [p3, p4] : [p2, p3]
-    if (e.t === 'charge.result' && !(p1?.t === 'unit.face' && same(p1, e) && rl?.t === 'dice' && /^Charge \d+" \(2D6\)$/.test(rl.label) && (!again || rl.pass === false) && tray?.t === 'tray.open' && tray.title === `${nameOf(e.u)} charge ${nameOf(e.tg)}`)) {
+    if (e.t === 'charge.result' && !(p1?.t === 'unit.face' && same(p1, e) && rl?.t === 'dice' && chargeRow.test(rl.label) && (!again || rl.pass === false) && tray?.t === 'tray.open' && tray.title === `${nameOf(e.u)} charge ${nameOf(e.tg)}`)) {
       why ||= `a charge's result (${pair(e)}) not straight after its tray, its roll${again ? ' (missed), that rolled again' : ''} and the charger's turn to face (${[p4, p3, p2, p1].map((x) => x?.t).join(', ')})`
     }
     // a walk: a move's straight after its line (past the held-back lines it
@@ -955,13 +963,13 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
         why ||= `the charge line "${text(e.html)}" not straight after its charge.result (${p1?.t}${p1?.t === 'charge.result' ? ` ${pair(p1)}, ok ${p1.ok}` : ''})`
       }
       if (c) seen.charges++
-      const m = /^<b>([^<]*)<\/b> (move|advance|fall back) (\d+\.\d)"\.$/.exec(e.html)
+      const m = moveLine.exec(e.html)
       if (m) {
         moving = { name: m[1], len: m[3], text: text(e.html) }
         seen.moves++
       }
       // an advance: its tray, its roll, then straight on to its line
-      const adv = /^<b>([^<]*)<\/b> advance: \+(\d)"\.$/.exec(e.html)
+      const adv = advLine.exec(e.html)
       if (adv && !(p1?.t === 'dice' && p1.label === 'Advance D6' && p1.dice.length === 1 && p1.dice[0] === Number(adv[2]) && p2?.t === 'tray.open' && p2.title === `${adv[1]} — Advance`)) {
         why ||= `the advance line "${text(e.html)}" not straight after its tray and its roll (${[p2, p1].map((x) => x?.t).join(', ')})`
       }

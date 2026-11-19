@@ -29,7 +29,7 @@
 // No draw anywhere but the bail-out's dice (§4.1 rule 16), each rider's
 // roll in G.units order after its spot is found: every choice here is the
 // nearest or least of a set of cells, ties to the lowest cell index.
-import { ENGAGE, roll } from '../rules.js'
+import { ENGAGE, roll, tails } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
@@ -120,7 +120,7 @@ export function mayBoard(G, u, v, inPhase) {
   const tr = v.t.transport
   if (!tr) return `the ${v.t.short} carries nobody`
   if (v.aboard) return `the ${v.t.short} is aboard a vehicle itself`
-  if (u.t.base > tr.maxBase) return `${u.t.short}'s bases are too large for the ${v.t.short} (${u.t.base}" over its ${tr.maxBase}")`
+  if (u.t.base > tr.maxBase) return `${u.t.short}'s bases are too large for the ${v.t.short}`
   if (u.flags.moved) return `${u.t.short} has moved`
   if (u.snared) return `${u.t.short} is snared`
   if (isEngaged(G, u)) return `${u.t.short} is in combat`
@@ -187,7 +187,7 @@ export function doEmbark(G, u, v, inPhase) {
     emit(G, 'objectives', { owners: ownersOf(G) })
     emit(G, 'status', statusOf(G))
   }
-  log(G, u.side, `<b>${u.t.short}</b> board the ${v.t.short} (${L.toFixed(1)}").`)
+  log(G, u.side, `<b>${u.t.short}</b> board the ${v.t.short} (${tails(L.toFixed(1))}).`)
 }
 
 // ── Stepping off ────────────────────────────────────────────────────────────

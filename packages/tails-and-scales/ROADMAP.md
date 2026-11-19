@@ -334,6 +334,16 @@ the commit, and add whatever the work turned up.
 - **Repo conventions** (see the root `CLAUDE.md`): `npm run build` and
   `npm run verify` before every push, `dist/` committed, and lockfile changes
   in a commit of their own.
+- **Units.** Lengths are tails (DESIGN's Units section): copy words them with
+  `core/rules.js`'s `tails(n)` (prose) and `tl(n)` (where room is tight),
+  never an inch mark or the word inch, which `node sim/boundaries.mjs`'s copy
+  lint fails (and its `--self-test` plants). A change to the words of a
+  traced log line alone is re-recorded only with its proof: `node
+  sim/wording-proof.mjs` passing against the corpus as committed (every
+  shadow snapshot identical, only log lines differing, each by its words,
+  the proof's `WAS` the rewording's exact inverse), then `parity --record`
+  in a commit of its own with the PIN moved and `parity --pin` passing, and
+  no `CORE_VERSION` bump.
 
 ## Queue
 
@@ -2274,7 +2284,7 @@ answered; 35 (Escape) by the user: no change.
   needed porting; play-check's shot and unit hovers still tell the two
   apart. DESIGN's F17 notes, the fix's paragraph.)
 
-- [ ] **S1-S10 Battlefield dressing** (DESIGN §4.3): a seeded, view-only world round the board and ground under its pieces; S1 (the surround and the sky), S2 (the pieces in the ground), S3 (the lanes) and S4 (themes) built, `?dress=0` the old table, checks `sim/dressing-check.mjs` (Node; `--browser` owed) and `sim/boundaries.mjs` rule 5; S5-S10 to come, and the board's name on screen.
+- [ ] **S1-S10 Battlefield dressing** (DESIGN §4.3): a seeded, view-only world round the board and ground under its pieces; S1 (the surround and the sky), S2 (the pieces in the ground), S3 (the lanes) and S4 (themes) built, `?dress=0` the old table, checks `sim/dressing-check.mjs` (Node; `--browser` owed) and `sim/boundaries.mjs` rule 6; S5-S10 to come, and the board's name on screen.
 
 ### Open questions (building the defaults unless told otherwise)
 
@@ -2375,3 +2385,16 @@ answered; 35 (Escape) by the user: no change.
   closed.
 - Battles replay exactly (logic RNG, logical positions, sampled wrecking,
   trace, `?fast`), plus the parity tooling in `test/` (moved to `sim/` in R0).
+- [x] **Units: distances in tails** (the owner's ask: a unit of our own,
+  in round numbers, no conversion). The tail is the table's unit, exactly
+  the world unit the code measured in, so no number changed: `LENGTH` and
+  `tails()` / `tl()` in core/rules.js, every layer's copy worded by them
+  (the word in prose, the mark `t` where room is tight, singular for 1
+  alone), the help, the Howdah's "either end", the boarding refusal
+  without its base sizes, and the copy lint in boundaries.mjs.
+  (Wording only: no bump, `RULES_ID` unmoved. The corpus recorded again as
+  the parity rule's named exception, after `sim/wording-proof.mjs` showed
+  every battle's shadow identical and only its log lines reworded; the PIN
+  on that commit. data-check §1's `COPY_SINCE_R0` for the Grenadiers' line;
+  present-check, property, hud-check, input-check, play-check and fog-check
+  read `LENGTH` instead of the inch mark. DESIGN's Units section.)

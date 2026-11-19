@@ -55,6 +55,7 @@
 
 // a unit standing higher than this (the nav's 0.4" step: view/units.js's
 // RAISED) is on high ground
+import { tails } from '../core/rules.js'
 export const HIGH_GROUND = 0.4
 
 const any = (t, k) => !t || !!k
@@ -62,7 +63,6 @@ const any = (t, k) => !t || !!k
 const gun = (t) => (t?.ranged ? t.ranged.name : 'its weapon')
 // a list of verbs, "shoot or charge"
 const or = (xs) => xs.join(' or ')
-const inches = (n) => `${+(+n).toFixed(1)}"`
 
 export const CONDITIONS = Object.freeze({
   mesmerized: {
@@ -73,7 +73,7 @@ export const CONDITIONS = Object.freeze({
   engaged: {
     icon: '⚔', title: 'In combat', kind: 'state',
     blocks: () => ['shoot', 'charge'],
-    tip: () => `An enemy is within 1": it can't shoot or charge, and it fights in the Fight phase. It ends when the fight does, or when it falls back in its Movement.`,
+    tip: () => `An enemy is within ${tails(1)}: it can't shoot or charge, and it fights in the Fight phase. It ends when the fight does, or when it falls back in its Movement.`,
   },
   fellBack: {
     icon: '↩', title: 'Fell back', kind: 'deed',
@@ -88,7 +88,7 @@ export const CONDITIONS = Object.freeze({
     lifts: Object.freeze(['assault', 'chargeAfterAdvance']),
     tip: (t, c) => {
       const no = CONDITIONS.advanced.blocks(t)
-      const ran = `It ran ${c?.advRoll ? `${inches(c.advRoll)} farther (its D6)` : 'a D6" farther'} this turn`
+      const ran = `It ran ${c?.advRoll ? `${tails(c.advRoll)} farther (its D6)` : `${tails('D6')} farther`} this turn`
       const yet = [...(t?.ranged?.assault ? [`its ${gun(t)} may still shoot (assault)`] : []), ...(t?.chargeAfterAdvance ? ['it may still charge'] : [])]
       return no.length ? `${ran}, so it can't ${or(no)} until its next turn${yet.length ? `; ${yet.join(', and ')}` : ''}.` : `${ran}; ${yet.join(', and ') || 'it gives up nothing for it'}.`
     },
@@ -172,7 +172,7 @@ export const CONDITIONS = Object.freeze({
 // sets is a condition or here).
 export const HIDDEN = Object.freeze({
   riders: "(F9a) a transport's riders: its label and its card list them",
-  advRoll: "the advance's roll: told with `advanced`, its inches",
+  advRoll: "the advance's roll: told with `advanced`, its tails",
   chargeTarget: 'whom a charge reached: the fight strikes it first, as the battle log tells',
   fought: "the fight phase's own tally of who has struck, cleared as the phase ends",
   side: 'the seat: the label and the card are in its colour',
@@ -183,7 +183,7 @@ export const HIDDEN = Object.freeze({
 export function tipOf(k, t = null, ctx = {}) {
   const c = CONDITIONS[k]
   if (!c) return ''
-  const head = k === 'high' && ctx?.y > HIGH_GROUND ? `${c.title}, ${inches(ctx.y)} up` : k === 'advanced' && ctx?.advRoll ? `${c.title} +${ctx.advRoll}"` : c.title
+  const head = k === 'high' && ctx?.y > HIGH_GROUND ? `${c.title}, ${tails(ctx.y)} up` : k === 'advanced' && ctx?.advRoll ? `${c.title} +${tails(ctx.advRoll)}` : c.title
   const text = c.tip(t, ctx)
   return `<b>${c.icon ? `${c.icon} ` : ''}${head}</b> — ${text[0].toLowerCase()}${text.slice(1)}`
 }
@@ -240,7 +240,7 @@ export function unitTip(t, mu, ks = [], ctx = {}, extra = '') {
 export function cardConds(t, mu, f) {
   const out = []
   const put = (k, word) => out.push({ k, word: CONDITIONS[k]?.icon ? `${CONDITIONS[k].icon} ${word}` : word })
-  if (f?.moved) f.fellBack ? put('fellBack', 'fell back') : f.advanced ? put('advanced', `advanced +${f.advRoll}"`) : f.rode ? put('rode', 'stepped off') : put('moved', 'moved')
+  if (f?.moved) f.fellBack ? put('fellBack', 'fell back') : f.advanced ? put('advanced', `advanced +${tails(f.advRoll)}`) : f.rode ? put('rode', 'stepped off') : put('moved', 'moved')
   if (f?.shot) put('shot', 'shot')
   if (f?.charged) put('charged', 'charged')
   else if (f?.chargeTried) put('chargeTried', 'charge failed')

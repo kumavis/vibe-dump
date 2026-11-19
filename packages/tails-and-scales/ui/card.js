@@ -32,6 +32,7 @@
 // and the card with its unit (data-unit), so the tooltip (ui/tooltip.js)
 // tells the condition on a hover or a tap; a war machine's abilities end
 // with its never charging, marked so too.
+import { tl } from '../core/rules.js'
 import { factOf, cardStatus } from '../present/hud-model.js'
 import { CONDITIONS } from '../present/conditions.js'
 import { GLYPH, NAME } from '../present/standing.js'
@@ -48,17 +49,17 @@ const statKeys = ['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC']
 // each a line, numbered by the key that picks it (1-3), its effect in a
 // few words where it isn't a weapon's.
 export function statsHtml(t) {
-  const fmt = (k) => (k === 'M' ? `${t.M}"` : ['WS', 'BS', 'Sv'].includes(k) ? `${t[k]}+` : t[k])
+  const fmt = (k) => (k === 'M' ? tl(t.M) : ['WS', 'BS', 'Sv'].includes(k) ? `${t[k]}+` : t[k])
   const wpn = (w, icon) => {
     if (!w) return ''
-    if (w.mesmerize) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · D3 mortal + mesmerize</em></div>`
-    if (w.snare) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · no move or charge next turn</em></div>`
-    if (w.ward) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · a friend saves at +1</em></div>`
-    if (w.resolve) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${w.range}" · a friend: no morale, charge again</em></div>`
+    if (w.mesmerize) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${tl(w.range)} · D3 mortal + mesmerize</em></div>`
+    if (w.snare) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${tl(w.range)} · no move or charge next turn</em></div>`
+    if (w.ward) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${tl(w.range)} · a friend saves at +1</em></div>`
+    if (w.resolve) return `<div class="wpn"><span>${icon} ${w.name}</span><em>spell ${w.spell}+ · ${tl(w.range)} · a friend: no morale, charge again</em></div>`
     const bits = []
-    if (w.range) bits.push(`${w.range}"`)
+    if (w.range) bits.push(tl(w.range))
     if (w.spell) bits.push(`spell ${w.spell}+`)
-    if (w.blast) bits.push(`blast ${w.blast}" ×${w.shots}`)
+    if (w.blast) bits.push(`blast ${tl(w.blast)} ×${w.shots}`)
     else if (w.shots) bits.push(`A${w.shots}`)
     bits.push(`S${w.S}`, `AP-${w.AP}`, `D${w.D}`)
     if (w.poison) bits.push(`poison ${w.poison}+`)
@@ -162,7 +163,7 @@ export class Card {
   // ?debug card hook reads the line's text up to it).
   height(mu) {
     const y = mu?.y ?? 0
-    return mu?.alive > 0 && y > 0.4 ? `<span class="card-high"> · <span class="cond" data-cond="high">▲ high ground, ${+y.toFixed(1)}" up</span></span>` : ''
+    return mu?.alive > 0 && y > 0.4 ? `<span class="card-high"> · <span class="cond" data-cond="high">▲ high ground, ${tl(+y.toFixed(1))} up</span></span>` : ''
   }
 
   // (F10c) the unit's standing order, and while the player may change it,
