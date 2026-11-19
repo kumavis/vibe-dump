@@ -868,6 +868,27 @@ const FORT_PIECES = {
     g.add(mesh(boxAt(w, h, d, 0, h / 2, 0), mat(shade(color, 0.8))))
     return { obj: g }
   },
+  // (Breakthrough) The March Wall's gate, for now the plainest correct
+  // drawing: a timber box of its rules' size (w across its own x, d along
+  // its own z, h tall) in its colour. Its leaves, straps and studs are the
+  // look's to come.
+  gate(c) {
+    const { w, d, h, color } = c.look
+    const g = framed(c)
+    g.add(mesh(boxAt(w, h, d, 0, h / 2, 0), mat(color)))
+    return { obj: g }
+  },
+  // (Breakthrough) The March Wall's ditch: a flat dark strip on the turf,
+  // w × d (FLAT: it hides nothing). Its lip and stakes are the look's to
+  // come.
+  ditch(c) {
+    const { w, d, color } = c.look
+    const g = framed(c)
+    const m = mesh(new THREE.PlaneGeometry(w, d).rotateX(-Math.PI / 2), mat(color, { flatShading: false }), { shadow: false })
+    m.position.y = 0.012
+    g.add(m)
+    return { obj: g }
+  },
   // (F7b) A parapet: a thin crenellated wall standing on its deck's top
   // (def.base, the deck's y), w long along its own x, d thick, h tall, its
   // outer face its own −z (look.face '-z', on the deck's edge). In the
@@ -1947,6 +1968,13 @@ export class TerrainView {
         this.group.remove(v.obj)
         fx.debris(s.x, s.y, s.z, WOOD, 14, { from, power: 6, size: 0.12 })
         break
+      // (Breakthrough) the gate bursts in its own timbers (its pile of them
+      // the terrain.add that follows)
+      case 'gate':
+        this.group.remove(v.obj)
+        fx.debris(s.x, s.y, s.z, [c.look.chip, ...WOOD], 18, { from, power: 6, size: 0.14 })
+        fx.smoke({ x: s.x, y: s.y, z: s.z, size: 0.5, color: '#8a7458', life: 1.4 })
+        break
       // ((F9a) a wreck blown apart: charred splinters, a last cloud)
       case 'wreck':
         this.group.remove(v.obj)
@@ -2275,7 +2303,7 @@ function flipWinding(geo) {
 // once per material and kept (a scuffed chunk's own material's copy is
 // freed with it: free()). One program per kind of material (its cache key
 // names the dither), linked the first time something is seen through.
-const FLAT = new Set(['floor', 'rubble'])
+const FLAT = new Set(['floor', 'rubble', 'ditch'])
 const TALL = 1.0
 const FADE = 0.35
 const fades = new WeakMap()

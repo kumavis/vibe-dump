@@ -3944,6 +3944,99 @@ function kegTask(core, mods) {
   return counts
 }
 
+// ── P-ram (Breakthrough, the line set's gate) ──────────────────────────────
+// The March Wall's gate (core/terrain/breakthrough.js: the set's hp and ram)
+// rammed by a wrecker, on a scene of its own: a Field match, both seats
+// human, every unit gone but the one under test, the table cleared and a
+// wall built across it at x = 0, two hard pieces from the table's edges to a
+// gap of the gate's width with the gate in it (its def the generator's,
+// copied off a March Wall board). The wrecker (the Brute, the War-Cart, the
+// Howdah) stands 7 west of it facing it and walks (core/actions/move.js
+// doMove, each move a plan from where it stands): up to the gate, back two
+// tails from it, up to it again. Each walk takes exactly one ram's blow off
+// the gate, however many of its samples (and, the Howdah's, its discs) meet
+// it (`rammed`: once a walk): 12 → 8 → 4 → broken, the third walk breaking
+// it, in one terrain.hurt or terrain.destroy of the gate per walk; while
+// the gate stands no walk ends with any of the unit east of the wall. Then
+// the War-Cart and the Howdah each walk on through the broken gate (its
+// timbers difficult ground) to east of the wall (in two walks at most). A chunk without the field
+// (a crate the Brute walks into) still takes the smash's 99.
+function ramTask(core, mods) {
+  const q = core.q, out = { walks: 0, blows: 0, through: 0, crates: 0 }
+  const role = { flip: false, zones: { attack: { x: [-30, -20] }, defend: { x: [-18, 30] } }, line: -4.5 }
+  const scratch = new mods.terrain.Terrain(60, 40)
+  scratch.generate(1, [{ x: 9, z: 0 }, { x: 3, z: 13 }, { x: 3, z: -13 }], 12, 'march', null, role)
+  const gd = scratch.byId(scratch.plan.gate.id), M = mods.sets.SETS.march.gate
+  if (gd.hp !== M.hp || gd.ram !== M.ram || M.ram * 3 < M.hp || M.ram * 2 >= M.hp) throw new Error(`P-ram: the set's gate (hp ${M.hp}, ram ${M.ram}) is not three blows, or the board's (hp ${gd.hp}, ram ${gd.ram}) not the set's`)
+  const serpentList = core.army.listText(RACES_R.serpent.roster.map((k) => ({ hierophant: 1, brute: 1, scaleguard: 2, howdah: 1 })[k] ?? 0))
+  const scene = (race, key) => {
+    const seats = race === 'squirrel' ? [{ race: 'squirrel', ctrl: 'human', army: SCENE_LIST }, { race: 'serpent', ctrl: 'human', army: serpentList }] : [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human', army: serpentList }]
+    const G = core.createMatch({ board: 4242, dice: 99, mission: 'field', terrain: 'open', seats }, { out: [] })
+    const u = G.units.find((x) => x.key === key && x.alive > 0 && !x.aboard)
+    if (!u) throw new Error(`P-ram: no ${key} in the ${race} seat's list`)
+    for (const o of G.units) if (o !== u) o.alive = 0
+    u.aboard = null
+    G.terrain.clear()
+    const H = G.nav.H, w = gd.shape.hz
+    for (const k of [1, -1]) G.terrain.add({ kind: 'rock', hp: Infinity, shape: { x: 0, y: 1.5, z: (k * (H / 2 + w)) / 2, hx: 0.6, hy: 1.5, hz: (H / 2 - w) / 2 + 0.5, yaw: 0 }, navKind: 'hard', los: 'block', cover: true, look: { piece: 'boulder', size: 1, color: '#8c8880', scale: [1, 1, 1], rot: [0, 0, 0], y: 1, moss: false } })
+    const gate = G.terrain.add({ kind: gd.kind, hp: gd.hp, ram: gd.ram, shape: { x: 0, y: gd.shape.y, z: 0, hx: gd.shape.hx, hy: gd.shape.hy, hz: gd.shape.hz, yaw: 0 }, navKind: gd.navKind, los: gd.los, cover: gd.cover, look: gd.look })
+    G.terrain.dirty = true
+    mods.units.moveUnitTo(G, u, -7, 0)
+    if (u.t.fp) u.facing = 2
+    G.terrain.dirty = true
+    mods.match.refreshNav(G)
+    return { G, u, gate }
+  }
+  // the furthest east any of u stands (its discs, a long hull's)
+  const east = (u) => (u.t.fp ? Math.max(...q.discsOf(u).map((d) => d.x + d.r)) : u.pos.x + u.r)
+  // a walk to the valid end nearest (x, z)
+  const walk = (G, u, x, z, where) => {
+    const plan = q.movePlan(G, u, 0)
+    let best = -1, bd = Infinity
+    for (let i = 0; i < G.nav.N; i++) {
+      if (!(plan.fp ? plan.cells.dist[i] < Infinity : isFinite(plan.res.dist[i])) || !q.validEnd(G, plan, i)) continue
+      const d = Math.hypot(G.nav.x(i) - x, G.nav.z(i) - z)
+      if (d < bd) [bd, best] = [d, i]
+    }
+    if (best < 0) throw new Error(`${where}: no valid end`)
+    G.out.length = 0
+    mods.move.doMove(G, u, best, plan)
+    out.walks++
+    return G.out
+  }
+  const blowsOn = (ev, id) => ev.filter((e) => e.t === 'unit.move').flatMap((e) => e.smashes.flatMap((sm) => sm.ev)).filter((e) => (e.t === 'terrain.hurt' || e.t === 'terrain.destroy') && e.id === id).length
+  for (const [race, key] of [['serpent', 'brute'], ['squirrel', 'warcart'], ['serpent', 'howdah']]) {
+    const where = `P-ram, the ${key}`
+    const { G, u, gate } = scene(race, key)
+    const legs = [[8, 0], [-2 - u.r - (u.t.fp ? 2.5 : 0), 0], [8, 0]]
+    legs.forEach(([x, z], k) => {
+      const ev = walk(G, u, x, z, `${where}, walk ${k + 1}`)
+      const want = M.hp - M.ram * (k + 1)
+      const n = blowsOn(ev, gate.id)
+      if (n !== 1) throw new Error(`${where}, walk ${k + 1}: the gate hurt ${n} times in one walk, not once`)
+      if (want > 0 ? !(gate.alive && gate.hp === want) : gate.alive) throw new Error(`${where}, walk ${k + 1}: the gate at ${gate.alive ? `${gate.hp} hit points` : 'broken'}, not ${want > 0 ? `${want}` : 'broken'}`)
+      if (east(u) > -gate.shape.hx) throw new Error(`${where}, walk ${k + 1}: the ${key} reaches ${east(u).toFixed(2)}, past the wall's face, while the gate stood`)
+      out.blows++
+    })
+    const pile = G.terrain.chunks.find((c) => c.kind === 'rubble' && c.alive)
+    if (!pile || pile.shape.x !== gate.shape.x || pile.shape.hz !== gate.shape.hz || pile.navKind !== 'diff' || pile.look.style !== 'timber') throw new Error(`${where}: the broken gate left ${pile ? `a ${pile.navKind} pile` : 'no pile'}, not its timbers on its footprint`)
+    if (key !== 'brute') {
+      // (two walks at most: the Howdah's move is short)
+      for (let k = 0; k < 2 && !(u.pos.x > gate.shape.hx + u.r); k++) walk(G, u, 10, 0, `${where}, through`)
+      if (!(u.pos.x > gate.shape.hx + u.r)) throw new Error(`${where}: the ${key} stops at x ${u.pos.x.toFixed(2)}, not through the broken gate`)
+      out.through++
+    } else {
+      // a crate, which has no ram, takes the smash's 99
+      const crate = G.terrain.add({ kind: 'crate', hp: 1, shape: { x: u.pos.x - 2, y: 0.3, z: 0, hx: 0.36, hy: 0.3, hz: 0.36, yaw: 0 }, navKind: 'diff', los: 'obscure', cover: true, look: { piece: 'crate', s: 0.6, color: '#9a7048', stacked: false, yaw: 0, chip: '#9a7048' } })
+      G.terrain.dirty = true
+      walk(G, u, u.pos.x - 4, 0, `${where}, into a crate`)
+      if (crate.alive) throw new Error(`${where}: the crate stands after the Brute walked through it`)
+      out.crates++
+    }
+  }
+  return out
+}
+
 // ── P-spell (V3c, DESIGN §4.1 rule 29) ──────────────────────────────────────
 // The casters' spells, on scenes of their own: for each race's caster (the
 // Elder, the Hierophant) in either seat, on SPELL_BOARDS boards, a hotseat
@@ -4291,6 +4384,8 @@ let RACES_F = null
 
 // ((V3c) the races, for P-spell's coverage: the child's)
 let RACES_S = null
+// (Breakthrough) P-ram's race data, set in the child as RACES_S is
+let RACES_R = null
 
 // (the child's match/ modules that fold a log, R8's: refold's)
 // ── (F9a) P-riders (DESIGN §4.2.5's invariants; §4.2.9's P-riders, P-pilot
@@ -5830,6 +5925,12 @@ if (a.child) {
       const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
       const [shoot, recipes, terrain, score, matchMod, hazards] = await Promise.all([mod('core', 'actions', 'shoot.js'), mod('core', 'terrain', 'recipes.js'), mod('core', 'terrain', 'terrain.js'), mod('core', 'ai', 'score.js'), mod('core', 'match.js'), mod('data', 'hazards.js')])
       out = { ok: true, counts: kegTask(core, { rng, shoot, recipes, terrain, score, match: matchMod, hazards, MISSIONS: await missionsOf() }) }
+    } else if (task.kind === 'ram') {
+      // (Breakthrough: P-ram's scenes)
+      const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
+      const [move, terrain, sets, matchMod, units] = await Promise.all([mod('core', 'actions', 'move.js'), mod('core', 'terrain', 'terrain.js'), mod('core', 'terrain', 'sets.js'), mod('core', 'match.js'), mod('core', 'units.js')])
+      RACES_R = RACES
+      out = { ok: true, counts: ramTask(core, { move, terrain, sets, match: matchMod, units }) }
     } else if (task.kind === 'lattice') {
       // (F9b: P-lattice, against the reference beside this file)
       const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
@@ -6004,6 +6105,12 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     say(`  P-keg: ${r.ok ? `ok   no keg on ${r.counts.clean} boards of classic, open and fortified, one at (0, 0) on ${r.counts.kegBoards} keg boards, ${r.counts.powderKegs ?? 0} kegs every one a keg in its rules on ${r.counts.powderBoards ?? 0} Powder Field boards; ${r.counts.templates} templates setting the keg off once (${r.counts.once} again on the same spot setting nothing off), the setting-off blast's victims and scenery before the keg's line, fuse and blast, ${r.counts.rows} victims' rows held die for die in G.units order, the fallen the setter-off's; ${r.counts.chains} chains of four kegs going off in the line's order, each once; ${r.counts.walks} wreckers' walks setting it off once the walk ended; ${r.counts.values} AI keg values and ${r.counts.fears} cells in the blast feared` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
+  // (Breakthrough) P-ram's scenes, for code with the March Wall
+  if (existsSync(join(pkg, 'core', 'terrain', 'breakthrough.js'))) {
+    const r = await child({ kind: 'ram' }, pkg)
+    say(`  P-ram: ${r.ok ? `ok   ${r.counts.walks} wreckers' walks (the Brute, the War-Cart, the Howdah) at the March Wall's gate, ${r.counts.blows} of them one ram's blow each, never two in a walk, the third breaking it into its timbers, none ending past the wall while it stood; ${r.counts.through} hulls through it once broken; ${r.counts.crates} crate smashed for 99` : `FAIL ${r.error}`}`)
+    if (!r.ok) bad.push(r)
+  }
   // (V3c) P-spell's scenes, for code whose casters have several spells
   if (/export function bestCast/.test(readFileSync(join(pkg, 'core', 'ai', 'policy.js'), 'utf8'))) {
     const r = await child({ kind: 'spell' }, pkg)
@@ -6172,6 +6279,10 @@ const MUTATIONS = {
   'keg-depth-first': ['core/actions/shoot.js', '    for (const next of landing(G, u, at, w, at)) line.push(next)\n', '    line.splice(i + 1, 0, ...landing(G, u, at, w, at))\n'],
   'keg-walk-dud': ['core/commands.js', '    if (kegs.length) kegsGoOff(G, unit, kegs)\n', ''],
   'keg-on-classic': ['core/terrain/sets.js', "    centre: [['tower', 0.55], ['rockbox', 0.8]],\n    kinds: [\n      ['ruin', 3.2, 4],", "    centre: [['keg', 0.1], ['tower', 0.55], ['rockbox', 0.8]],\n    kinds: [\n      ['ruin', 3.2, 4],"],
+  // (Breakthrough) P-ram: the ram on every sample of a walk (the gate down
+  // in one), and no ram at all (the smash's 99)
+  'ram-every-sample': ['core/actions/move.js', '        if (rammed?.has(c.id)) continue\n        rammed?.add(c.id)\n', ''],
+  'ram-ignored': ['core/actions/move.js', 'G.terrain.hurt(c, c.ram === undefined ? 99 : Math.min(99, c.ram),', 'G.terrain.hurt(c, 99,'],
   'keg-ai-blind': ['core/ai/score.js', '    const more = keg + (pre ? pre.fall : fallGain(G, u, e, w))\n', '    const more = (pre ? pre.fall : fallGain(G, u, e, w))\n'],
   'friend-rows-first': ['core/actions/shoot.js', '  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n', '  if (stray) (strayHits(G, u, fight.onto, stray, w), stray = 0)\n  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n'],
   'stray-tie-last': ['core/queries.js', '    if (f.alive > onto.alive) onto = f\n', '    if (f.alive >= onto.alive) onto = f\n'],

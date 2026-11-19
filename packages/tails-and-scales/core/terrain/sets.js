@@ -239,5 +239,55 @@ export const SETS = deepFreeze(Object.assign(Object.create(null), {
     objectiveGap: 2.4,
     gap: 2.3,
   },
+  // (Breakthrough, DESIGN's line set) The March Wall: a stone border wall
+  // across a Field table where the road crosses into the March, its gate at
+  // the back of a V between two towers, one arm a walk with siege ladders
+  // against it, the other the breach (an old fall patched with stone and
+  // timber courses), ending at a crag where the Hollow Wood runs to the
+  // table's edge; a ditch along its foot, cover on the approach, a
+  // hedgebank and a watch platform behind it. Not scattered: built by its
+  // plan (core/terrain/breakthrough.js), in the attacker-west frame, for a
+  // role mission (generate's `role`), which names no other set. Every
+  // number here is that generator's (its header says what each does;
+  // recipes.js PLAN_FIELDS what each must hold). Distances in tails.
+  march: {
+    plan: 'wall',
+    // the gate: its passage `w` wide between the towers, its hit points and
+    // the ram's damage (a wrecker's smash, once a move), its middle's z, and
+    // its outer face's x about the role's line
+    gate: { w: 6, hp: 12, ram: 4, z: [-3, 3], face: [-1.5, 1.5] },
+    // the gate towers: s × s, h high
+    tower: { s: 5, h: 3 },
+    // the curtain walk: d deep, h high (5, not the forts' 4.5: a walk runs
+    // aslant the nav grid, and on a 4.5-deep one a ladder's top cell kept
+    // as little as 1.16 tails from the ledge, under a climber's 1.3); its
+    // siege ladders (how many, kept ladderGap from a walk's end or a tower
+    // and ladderApart from each other, on the walk arm within the share of
+    // its length ladderSpan names, from its tower out); a stair down its
+    // inner face per stairEvery of walk, from its far end in
+    walk: { d: 5, h: 2, ladders: [2, 3], ladderGap: 3, ladderApart: 3, ladderSpan: [0, 0.45], stairEvery: 8 },
+    // how far forward (west) of the gate's face each arm's end reaches
+    arms: { sweep: [6.5, 9] },
+    // the breach (the wood's arm, crag to tower): its outer row's stone
+    // courses and its inner row's timber ones, each column's drawn
+    breach: { stone: [2, 3], timber: [2, 2] },
+    // the Hollow Wood: the gap from the crag to the table's edge, the
+    // crag's half-width, the trees, the picket's spacing (a walker passes
+    // between two pickets, a round hull of r 1.5 never), how far the other
+    // trees keep off the track, and the forest floors in each gap's lane
+    // (how many, how wide)
+    flank: { gap: [7.5, 9], crag: [1.6, 2], trees: [5, 8], picket: 3, track: 2, floors: [1, 1], floorR: [3.2, 3.6] },
+    // the ditch: `out` from the outer face, `w` wide, broken at the gate
+    ditch: { out: 1.5, w: 2 },
+    // the cover on the approach, from `from` to `to` west of the outer
+    // face, clear of every route's mouth by mouthGap
+    glacis: { pieces: [4, 7], kinds: [['mantlet', 3], ['orchard', 1], ['rocks', 1.5]], from: 4, to: 12, mouthGap: 3 },
+    // the second line: the hedgebank's x, and the chance of the watch
+    // platform and of a ruin behind it
+    second: { x: [12, 14], platform: 1, ruin: 0.5 },
+    // what every optional piece keeps clear of each objective, beyond its
+    // own radius
+    objectiveGap: 2.2,
+  },
 }))
 for (const name of Object.keys(SETS)) checkSet(name, SETS[name])
