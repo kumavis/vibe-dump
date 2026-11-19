@@ -5820,8 +5820,11 @@ if (a.child) {
     } else if (task.kind === 'spell') {
       // (V3c: P-spell's scenes)
       const policy = await import(pathToFileURL(join(dir, 'core', 'ai', 'policy.js')).href)
+      // ((the units rename) and how the code under test words a length: its
+      // charge row's mark, LENGTH's)
+      const rules = await import(pathToFileURL(join(dir, 'core', 'rules.js')).href)
       RACES_S = RACES
-      out = { ok: true, counts: spellTask(core, { rng, policy }) }
+      out = { ok: true, counts: spellTask(core, { rng, policy, rules }) }
     } else if (task.kind === 'keg') {
       // (F19a: P-keg's scenes)
       const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
