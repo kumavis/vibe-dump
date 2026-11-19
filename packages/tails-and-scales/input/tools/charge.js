@@ -4,13 +4,13 @@
 // { t: 'charge', u, tg } (the match judges it: in range, a way there). Where
 // a charge that makes contact ends is the charge-end tool's
 // (charge-end.js).
-import { p2D6 } from '../../core/rules.js'
+import { p2D6, tl } from '../../core/rules.js'
 
 // Inside the caller's preview: what unit `sel` charging `target` needs.
 export function preview(G, q, sel, target) {
-  if (!q.chargeTargets(G, sel).includes(target)) return `✖ out of charge range (${q.gap(sel, target).toFixed(1)}")`
+  if (!q.chargeTargets(G, sel).includes(target)) return `✖ out of charge range (${tl(q.gap(sel, target).toFixed(1))})`
   const p = q.chargePlan(G, sel, target)
-  return p ? `Charge: need ${p.need}" on 2D6 — ${Math.round(p2D6(p.need) * 100)}%` : '✖ no route'
+  return p ? `Charge: need ${tl(p.need)} on 2D6 — ${Math.round(p2D6(p.need) * 100)}%` : '✖ no route'
 }
 
 // the command

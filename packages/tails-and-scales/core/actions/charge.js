@@ -21,7 +21,7 @@
 // finishAction (DESIGN §2.2's (R6a) note; the split the lead approved at
 // R6b). The AI's charge takes the same `charge` handler inside the fold,
 // where declareCharge finishes it the shortest way, opening no decision.
-import { CHARGE_RANGE, ENGAGE, roll } from '../rules.js'
+import { CHARGE_RANGE, ENGAGE, roll, tl } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit, log } from '../journal.js'
 import { refreshNav } from '../match.js'
@@ -246,13 +246,13 @@ export function declareCharge(G, u, target, via) {
   let r = roll(G, 2)
   let total = r[0] + r[1]
   let ok = total >= plan.need
-  emit(G, 'dice', { label: `Charge ${plan.need}" (2D6)`, dice: r, need: 0, sum: true, pass: ok })
+  emit(G, 'dice', { label: `Charge ${tl(plan.need)} (2D6)`, dice: r, need: 0, sum: true, pass: ok })
   const again = !ok && u.resolute
   if (again) {
     r = roll(G, 2)
     total = r[0] + r[1]
     ok = total >= plan.need
-    emit(G, 'dice', { label: `Charge ${plan.need}" rolled again (2D6)`, dice: r, need: 0, sum: true, pass: ok })
+    emit(G, 'dice', { label: `Charge ${tl(plan.need)} rolled again (2D6)`, dice: r, need: 0, sum: true, pass: ok })
   }
   const rolled = again ? `roll ${total} (again)` : `roll ${total}`
   emit(G, 'unit.face', { u: u.id, tg: target.id })

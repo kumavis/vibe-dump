@@ -9,7 +9,7 @@
 // regenerated on demand from the PIN code (sim/oracle/PIN).
 import { createHash } from 'node:crypto'
 import { spawn } from 'node:child_process'
-import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync, cpSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync, cpSync, mkdirSync, realpathSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { cpus } from 'node:os'
@@ -52,6 +52,13 @@ export function legacyDir() {
 
 export const h10 = (s) => createHash('sha256').update(s).digest('hex').slice(0, 10)
 export const hashLines = (lines) => lines.map(h10).join(' ')
+
+// (the units rename, DESIGN's Units section) A length as the code's copy
+// words it, as pattern source for a check: `word` the word after a number
+// (" tail" or " tails", core/rules.js LENGTH's), `mark` the short mark
+// ("t"). Code from before LENGTH wrote both as the inch mark.
+const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+export const lengthWords = (L) => (L ? { word: ` (?:${reEsc(L.one)}|${reEsc(L.many)})`, mark: reEsc(L.mark) } : { word: '"', mark: '"' })
 
 // Index of the first line whose hash differs (or that is missing on either
 // side), or -1 when every line matches.
@@ -340,6 +347,8 @@ export function copyCode(src, dst) {
 // package, so a copy outside the repo still finds node_modules. With
 // `keepIdentifiers` it minifies as shipped but renames nothing.
 export async function buildApp(root, outDir, { minify = true, keepIdentifiers = false } = {}) {
+  // (macOS: the temp dir is a symlink, and Vite names its output against the root's real path)
+  root = realpathSync(root)
   const { build } = await import('vite')
   const from = join(SIM, '..', 'main.js')
   const repoModules = {

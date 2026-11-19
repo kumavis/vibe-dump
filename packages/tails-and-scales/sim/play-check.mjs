@@ -92,6 +92,10 @@ import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { buildApp, pool } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
+import { lengthWords } from './lib.mjs'
+import { pathToFileURL } from 'node:url'
+// (the units rename) how the build words a length: the working tree's LENGTH
+const LEN = lengthWords((await import(pathToFileURL(`${PKG}/core/rules.js`).href)).LENGTH)
 
 const LANES = ['watch', 'bushtail', 'serpent', 'hotseat', 'grand', 'layout', 'cart']
 const DICE = { watch: 99, bushtail: 99, serpent: 7, hotseat: 1, grand: 5, layout: 1, cart: 99 }
@@ -341,7 +345,7 @@ async function lane(browser, url, name) {
         const dir = mine === 0 ? 1 : -1
         await page.mouse.move(p.x + dir * 60, p.y + 10)
         await sleep(400)
-        if (/"\s*of/.test(await tooltip())) {
+        if (new RegExp(`\\d${LEN.mark}\\s*of`).test(await tooltip())) {
           await page.mouse.click(p.x + dir * 60, p.y + 10)
           stats.moves++
           if ((await idle()) !== e.text) return

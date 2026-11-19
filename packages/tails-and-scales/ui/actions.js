@@ -18,6 +18,7 @@
 // merge) The spell bar stands on the row (--actions-row-h, the row's own
 // height), and while it shows --actions-h is the two together, so what
 // stands over the actions stands over it too.)
+import { tl } from '../core/rules.js'
 import { sfx, unlock } from '../view/sfx.js'
 
 const $ = (s) => document.querySelector(s)
@@ -91,8 +92,8 @@ export class Actions {
       // ((V3a) its words the page's one tooltip's, on a hover or a tap, as
       // a chip's: app/boot.js tipFor; no native title)
       b.dataset.tip = 'spell'
-      b.dataset.say = `<b>✦${x.key} ${x.name}</b> — cast ${x.cast}+ on 2D6 (${x.pct}%) · ${x.range}" · ${x.what}${x.can ? '' : ' · nothing to cast it on now'}`
-      b.innerHTML = `<kbd>${x.key}</kbd><b>${x.name}</b><small>${x.cast}+ · ${x.pct}% · ${x.range}"</small><em>${x.what}</em>`
+      b.dataset.say = `<b>✦${x.key} ${x.name}</b> — cast ${x.cast}+ on 2D6 (${x.pct}%) · ${tl(x.range)} · ${x.what}${x.can ? '' : ' · nothing to cast it on now'}`
+      b.innerHTML = `<kbd>${x.key}</kbd><b>${x.name}</b><small>${x.cast}+ · ${x.pct}% · ${tl(x.range)}</small><em>${x.what}</em>`
       b.onclick = () => {
         sfx.click()
         return this.human?.pickSpell(x.sp)

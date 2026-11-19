@@ -1,3 +1,4 @@
+import { tails } from './rules.js'
 import { hypot, sin, cos } from './dmath.js'
 
 // ---------------------------------------------------------------------------
@@ -889,7 +890,7 @@ export class NavGrid {
   // result reads the new plan from then on).
   hullReach(sx, sz, h0, fp, { max, mode = 'walk', forbid = null, into = null } = {}) {
     if (mode === 'fly') throw new Error('hullReach: a flier is round and never uses the lattice')
-    if (fp.cell !== this.cell) throw new Error(`hullReach: the footprint's offsets are in ${fp.cell}" cells, the grid's ${this.cell}"`)
+    if (fp.cell !== this.cell) throw new Error(`hullReach: the footprint's offsets are in cells of ${tails(fp.cell)}, the grid's of ${tails(this.cell)}`)
     if (!(Number.isInteger(h0) && h0 >= 0 && h0 < 8)) throw new Error(`hullReach: a heading is 0-7, not ${h0}`)
     hullMasks(forbid)
     const N8 = this.N * 8

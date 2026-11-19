@@ -11,6 +11,7 @@
 // every unit of it still to act. Drawn from input/group.js's model(). (F9b) And for a long hull picked
 // up alone with its ghost pinned (a group of one, DESIGN §4.2.6): its name, ✓ to send it and ✕ to drop
 // the pin, and what it would do (its inches, its heading, no room to turn).
+import { tails } from '../core/rules.js'
 const $ = (s) => document.querySelector(s)
 
 export class GroupBar {
@@ -87,7 +88,7 @@ export class GroupBar {
     for (const v of m.verbs) parts.push(el('span', `verb${v.on ? ' on' : ''}`, v.label))
     if (m.advance !== null && m.advance !== undefined) {
       const adv = el('button', `gadv${m.advance ? ' on' : ''}`, '+D6')
-      adv.title = m.advance ? 'Each member advances first (a D6 more inches; most can\'t shoot or charge after): on' : 'Advance first: each member rolls a D6 more inches (most can\'t shoot or charge after)'
+      adv.title = m.advance ? `Each member advances first (${tails('D6')} more; most can't shoot or charge after): on` : `Advance first: each member rolls ${tails('D6')} more (most can't shoot or charge after)`
       adv.onclick = () => this.on.advance()
       parts.push(adv)
     }

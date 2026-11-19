@@ -84,6 +84,7 @@
 // drawn along its facing, the box's yaw: the Howdah's split shell slumped
 // off its charred coils, longWreck().)
 // ---------------------------------------------------------------------------
+import { tails } from '../core/rules.js'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { pick, tween, easeIn, easeOut, bounce } from './clock.js'
@@ -1722,7 +1723,7 @@ export class TerrainView {
             worst = Math.max(worst, Math.abs(ref[r] - pos.getX(i)), Math.abs(ref[r + 1] - pos.getY(i)), Math.abs(ref[r + 2] - pos.getZ(i)))
             cworst = Math.max(cworst, Math.abs(ref[r + 3] - col.getX(i)), Math.abs(ref[r + 4] - col.getY(i)), Math.abs(ref[r + 5] - col.getZ(i)))
           }
-          if (worst > 1e-4) bad.push(`chunk ${id}: its tile ${t.at} draws it up to ${worst.toFixed(4)}" from its own mesh (class ${key})`)
+          if (worst > 1e-4) bad.push(`chunk ${id}: its tile ${t.at} draws it up to ${tails(worst.toFixed(4))} from its own mesh (class ${key})`)
           if (cworst > 1e-6) bad.push(`chunk ${id}: its tile ${t.at} draws it in another colour (class ${key}, off by ${cworst.toExponential(2)})`)
         }
         for (const key of got.keys()) if (!want.has(key)) bad.push(`chunk ${id}: its tile ${t.at} draws a class (${key}) its own mesh has none of`)

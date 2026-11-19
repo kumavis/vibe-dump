@@ -125,6 +125,7 @@
 // face its target (face(): a look yaw relative to the hull, `deckLook`),
 // until its hull's next move turns its riders back to the hull's front
 // (walk()) or it steps off.
+import { tl } from '../core/rules.js'
 import * as THREE from 'three'
 import { RACES } from '../data/schema.js'
 import { hypot } from '../core/dmath.js'
@@ -891,7 +892,7 @@ export class UnitViews {
     // (F7a) a raised unit's height ("▲2"": on a deck 2" up; at the Tactical
     // tier the ▲ alone)
     v.labelY = heightOf(mu)
-    for (const k of this.conds(id)) html += k === 'high' ? `<span class="st hi" data-cond="high">${CONDITIONS.high.icon}<i>${v.labelY}"</i></span>` : `<span class="st" data-cond="${k}">${CONDITIONS[k].icon}</span>`
+    for (const k of this.conds(id)) html += k === 'high' ? `<span class="st hi" data-cond="high">${CONDITIONS.high.icon}<i>${tl(v.labelY)}</i></span>` : `<span class="st" data-cond="${k}">${CONDITIONS[k].icon}</span>`
     // ((F9a) a transport: the models aboard of its capacity, and each squad
     // riding it as a chip that picks it up; its ring's pips lit to match)
     if (u.t.transport) html += this.cargo(v, u.t.transport)

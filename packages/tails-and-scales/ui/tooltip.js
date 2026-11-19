@@ -21,7 +21,7 @@
 // native title says any of it. ((V3c) A caster's spells are told through
 // the same tooltip: a shot's odds for the spell picked, each its own (its
 // cast, what it does, its range, a warded target's save): oddsText, below.)
-import { woundNeed, saveNeed, attackCount, expected, p2D6, pD6, svOf } from '../core/rules.js'
+import { woundNeed, saveNeed, attackCount, expected, p2D6, pD6, svOf, tl } from '../core/rules.js'
 
 // how far a tip keeps from each edge of the screen, and stands from the
 // pointer
@@ -207,18 +207,18 @@ export function oddsText(u, target, info, sp) {
   const w = sp === undefined ? u.t.ranged : u.t.spells[sp]
   const cast = `cast ${w.spell}+ on 2D6 (${Math.round(p2D6(w.spell) * 100)}%)`
   if (w.mesmerize) return `Mesmerize: ${cast} · D3 mortal wounds`
-  if (w.snare) return `${w.name}: ${cast} · it can't move or charge next turn<br>${info.range.toFixed(1)}" / ${w.range}"`
-  if (w.ward || w.resolve) return `${w.name} on ${target === u ? 'itself' : target.t.short}: ${cast} · ${w.ward ? '+1 to its saves' : 'no morale tests, a failed charge rolled again'} until your next turn<br>${info.range.toFixed(1)}" / ${w.range}"`
+  if (w.snare) return `${w.name}: ${cast} · it can't move or charge next turn<br>${tl(info.range.toFixed(1))} / ${tl(w.range)}`
+  if (w.ward || w.resolve) return `${w.name} on ${target === u ? 'itself' : target.t.short}: ${cast} · ${w.ward ? '+1 to its saves' : 'no morale tests, a failed charge rolled again'} until your next turn<br>${tl(info.range.toFixed(1))} / ${tl(w.range)}`
   const lines = []
   if (w.spell) lines.push(`${w.name}: ${cast}`)
   const n = attackCount(u, w, false)
   const wn = woundNeed(w.S, target.t.T, w.poison)
   const sn = saveNeed(svOf(target), w.AP, info.cover)
-  lines.push(`${n} ${w.blast ? `template${n > 1 ? 's' : ''} (${w.blast}")` : 'shots'} · hit ${w.spell ? 'auto' : info.need + '+'} · wound ${wn}+ (${woundWhy(w, target.t)}) · save ${sn > 6 ? '—' : sn + '+'} (${saveWhy(w, target.t, info.cover, target.warded)})`)
+  lines.push(`${n} ${w.blast ? `template${n > 1 ? 's' : ''} (${tl(w.blast)})` : 'shots'} · hit ${w.spell ? 'auto' : info.need + '+'} · wound ${wn}+ (${woundWhy(w, target.t)}) · save ${sn > 6 ? '—' : sn + '+'} (${saveWhy(w, target.t, info.cover, target.warded)})`)
   const flags = []
   const reach = info.reach ?? w.range
-  const lob = reach > w.range ? ` (${w.range}", lobbed down)` : reach < w.range ? ` (${w.range}", lobbed up)` : ''
-  flags.push(`${info.range.toFixed(1)}" / ${reach === w.range ? w.range : reach.toFixed(1)}"${lob}`)
+  const lob = reach > w.range ? ` (${tl(w.range)}, lobbed down)` : reach < w.range ? ` (${tl(w.range)}, lobbed up)` : ''
+  flags.push(`${tl(info.range.toFixed(1))} / ${tl(reach === w.range ? w.range : reach.toFixed(1))}${lob}`)
   if (info.cover) flags.push('cover')
   if (!info.visible) flags.push('unseen (indirect −1)')
   else if (info.seen < info.total) flags.push(`${info.seen}/${info.total} visible`)

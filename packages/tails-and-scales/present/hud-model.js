@@ -97,7 +97,7 @@
 // turn's start clearing its seat's (as the match's own turn start does).
 // What a fight or a morale phase changes without an action's end (a pile-in,
 // a model slain or fled) reaches it at the next action's end or stop.
-import { PHASES, p2D6 } from '../core/rules.js'
+import { PHASES, p2D6, tails, CHARGE_RANGE } from '../core/rules.js'
 import { inCover } from '../core/queries.js'
 import { cardConds } from './conditions.js'
 
@@ -156,7 +156,7 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     // ((F10a) none for a group: its +D6 is the bar's)
     // ((F9a) never a rider's: it steps off, it doesn't advance)
     show: !mine ? false : idle ? P.phase === 'move' && !!sel && group < 2 && !sel.aboard && !sel.flags.moved && !sel.flags.advanced && !ask((G, q) => q.isEngaged(G, sel)) : null,
-    label: !sel ? null : sel.t.chargeAfterAdvance ? 'Advance (+D6") — can still charge' : `Advance (+D6") — no ${sel.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`,
+    label: !sel ? null : sel.t.chargeAfterAdvance ? `Advance (+${tails('D6')}) — can still charge` : `Advance (+${tails('D6')}) — no ${sel.t.ranged?.assault ? 'charge' : 'shooting or charge'} after`,
     busy: !idle,
   }
   // hint line (a picked-up unit's kept as it was while the table plays its
@@ -165,7 +165,7 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
   // ((F13) a finger aiming: what its lift will do, and how to call it off)
   if (aim?.aiming === 'off') hint = 'Off the board: the aim is called off. Lift your finger.'
   else if (aim?.aiming) hint = `Aiming — lift your finger ${aimVerb(pk, deploying, group, P)}; a second finger calls it off.`
-  else if (pk) hint = `Charge! Rolled ${pk.rolled}" — click the orange area to place ${pk.u.t.short}, or take the shortest move.`
+  else if (pk) hint = `Charge! Rolled ${tails(pk.rolled)} — click the orange area to place ${pk.u.t.short}, or take the shortest move.`
   else if (deploying && group >= 2) hint = `Deployment — click inside your shaded zone to pin the ${group} units' formation there; Enter or its flag places them.`
   else if (deploying) hint = `Deployment — click one of your units, then click inside your shaded zone to move it there.`
   else if (g && phaseShown && M.stage === 'battle' && g.seats[M.active].ctrl !== 'human') hint = `${sides[M.active].name}${sides[M.active].mirror ? ', the AI,' : ' (AI)'} are taking their turn…`
@@ -185,14 +185,14 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     // ((V3c) a caster: the spell picked, and how to pick another)
     const w = sel?.t.spells && spell !== undefined ? sel.t.spells[spell] : null
     const casting = !w ? null : w.ward || w.resolve
-      ? `${w.name} — click a friend within ${w.range}" (or ${sel.t.short} itself) to cast it on. 1–${sel.t.spells.length} picks another spell.`
+      ? `${w.name} — click a friend within ${tails(w.range)} (or ${sel.t.short} itself) to cast it on. 1–${sel.t.spells.length} picks another spell.`
       : `${w.name} — click an enemy to cast it. Hover for the odds; 1–${sel.t.spells.length} picks another spell.`
     hint = {
       // ((F9a) a rider picked up steps off)
       move: sel ? sel.aboard ? `Click inside the blue area beside the ${ask((G, q) => q.hullOf(G, sel)).t.short} to step off: that is its move.` : (ask((G, q) => q.isEngaged(G, sel)) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
       // ((F9c) a rider shoots from its hull's deck: the slots it has left)
       shoot: casting ?? (sel ? sel.aboard ? deckHint(ask((G, q) => ({ v: q.hullOf(G, sel), n: q.ridersShot(G, q.hullOf(G, sel)), k: q.fireSlots(q.hullOf(G, sel)) }))) : 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.'),
-      charge: sel ? 'Click an enemy within 12" to declare a charge, then roll 2D6.' : 'Charge — pick a unit to charge with.',
+      charge: sel ? `Click an enemy within ${tails(CHARGE_RANGE)} to declare a charge, then roll 2D6.` : 'Charge — pick a unit to charge with.',
     }[P.phase] || ''
   } else if (!mine) hint = ''
   return {
@@ -229,7 +229,7 @@ const SPELL_LINE = (w) => w.mesmerize ? 'D3 mortal wounds; it can\'t shoot or ch
   : w.snare ? 'it can\'t move or charge next turn'
     : w.ward ? 'a friend saves at +1 until your next turn'
       : w.resolve ? 'a friend takes no morale test and rolls a failed charge again until your next turn'
-        : `a ${w.blast}" template under the enemy, S${w.S} AP${w.AP ? `-${w.AP}` : '0'}${w.poison ? `, poison ${w.poison}+` : ''}${w.scenery === 0 ? ', spares the scenery' : ''}`
+        : `a template of ${tails(w.blast)} under the enemy, S${w.S} AP${w.AP ? `-${w.AP}` : '0'}${w.poison ? `, poison ${w.poison}+` : ''}${w.scenery === 0 ? ', spares the scenery' : ''}`
 export function spellBar(u, picked, ask) {
   const can = ask((G, q) => u.t.spells.map((w, sp) => q.shootTargets(G, u, sp).length > 0))
   return {
