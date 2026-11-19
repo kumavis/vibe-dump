@@ -10,8 +10,10 @@ folder (or just never merge this branch) once the work has moved on: it is a car
 | Battlefields: a lived-in world | `wt/world` at `0b656695` | Five commits (surround and sky, grounding, fixes, lanes, themes). The last three have never been seen on screen. | Shoot the frames and judge them before building more. |
 | F5a: two new races | `wt/f5a` at `e5fdc905` | Built and recorded, sweep half run. Blocked on balance; the lab is mid phase 4 (prices by terrain set). | Finish the lab's phase 4, then decide and build. |
 
-`main` is at `681fcf5c` and none of the three is merged. Recommended order: units first (it is nearest done
-and the other two must absorb it), then battlefields, then F5a.
+`main` is at `7ca17bcd`: the three branches' base `681fcf5c` plus one docs-only merge (the design-bible report,
+pull request 92). None of the three is merged to main. Recommended order: units first (it is nearest done and the other two must
+absorb it), then battlefields, then F5a. A fourth item has no branch yet: most of the design-bible report's
+lessons have not been applied (see "Work item: apply the design-bible report" below).
 
 ## The owner's standing instructions
 
@@ -28,6 +30,9 @@ These were given in chat and still govern. Quoted where the wording matters.
   not hard to read numbers like 1.73469". The name was then confirmed: "tail works, go with it".
 - Battlefields: "more cinematic battlefields. so far most have just been decorated with a few props, but it
   doesnt sell a rich lived in world".
+- Balance between races, answered at the handoff: "approximately even but some terrain will be handled better by
+  certain races". So the HOME target below is the one that binds, and a race's home terrain is a trait to say out
+  loud, not a flaw to flatten.
 - No Grand price retune for the two original races; that is a roadmap item.
 - Browser checks run headless. (They already do: every check launches Chromium through Playwright with no
   window.)
@@ -99,8 +104,9 @@ woods, hills, a sky, a time of day) with the mat's edge kept crisp, instead of a
 - **At merge:** the title screen and the gallery thumbnail change, so the dressed title reference is pinned
   again and `thumbnail.jpg` re-shot. The seeded board name exists (`place.js` `nameOf`) and goes on screen only
   after units has merged.
-- **One wart:** commit `0f5462a7` has no blank line after its subject, so its subject runs on. Do not rewrite
-  history; either leave it or ask the owner whether to squash-merge that pull request.
+- **One wart:** commit `0f5462a7` has no blank line after its subject, so its subject runs on. The owner left
+  the call to the session, and the call is: leave the history as it is and merge that pull request normally.
+  One long subject costs less than losing the per-slice commits to a squash. Do not rewrite history.
 - **Still planned:** S5 camps behind each zone, S6 light moving over the rounds, S7 dressing at objectives, S8
   battle scars that persist, S9 ambient life, S10 an opening camera move and a slightly lower orbit.
 
@@ -146,20 +152,61 @@ On the branch: the two races with burrow, swarm and swoop, the view, prices, 14 
     instead.
   - Preset lists break under surcharges (the Aerie's presets go over the points limit); a preset must be legal
     on every set it can be fought on.
-  - Which target binds (see the owner's questions).
+  - HOME is the binding target (the owner's answer above). EVEN is still worth reporting beside it.
 - **Then the build, in `wt/f5a`:** H3b with its scene in the property checks, the set-price mechanism (cost
   lookup, mission validation, the muster and card showing the right price, data-check), the price data and
-  presets, docs, `races/` recorded again, the sweep, reviews, fixes, the units wording, gallery entry, pull
-  request.
+  presets, each race's terrain trait said on the Muster rows and the unit cards (what it crosses, what stops it,
+  where it is at home), docs, `races/` recorded again, the sweep, reviews, fixes, the units wording, gallery
+  entry, pull request.
 
-## Questions waiting on the owner
+## Questions for the owner
 
-1. **Even everywhere, or home terrain?** Must every pair of races be even on every board type (EVEN), or may a
-   race be somewhat better on its home terrain within a hard cap (HOME)? The recommendation given was HOME. The
-   lab's finding that terrain favours some armies by construction supports it. Not answered.
-2. **The design-bible research** (`bible/design-bible-for-tails-and-scales.md`) was delivered with six
-   questions of its own and an offer to commit it or publish it as a page. Not answered.
-3. **The squash question** for the battlefield commit above.
+Answered at the handoff:
+- **Even everywhere, or home terrain?** "approximately even but some terrain will be handled better by certain
+  races". HOME binds.
+- **The design-bible report:** commit it. Done; see the next section.
+- **The battlefield commit's run-on subject:** left to the session. Decided: leave it, merge normally.
+
+Still open:
+1. The report's own questions two to six: may the two original races gain counters to fliers and burrowers
+   (that moves their proven balance and the recorded battles); is "anything solid on the table is a rules piece"
+   the rule, and does the landscape direction stand; whose world each board is and whether the tail is explicitly
+   a Bushtail's; whether the default newcomer reads hit, wound and save; whether to prototype the three-battle
+   March and labelled AI handicaps.
+2. The rules numbers that are not round (blast templates, base sizes), listed above.
+
+## Work item: apply the design-bible report
+
+The report is `packages/tails-and-scales/DESIGN-BIBLE-NOTES.md` on main (pull request 92), with a status table
+dated 19 November 2026. Most of it has **not** been applied. Nothing from it is in `ROADMAP.md` yet, so the first
+step is to turn what the owner wants into roadmap items.
+
+| # | Recommendation | Status at the handoff |
+|---|---|---|
+| 1 | Define "balanced" per size and terrain set | Partly: the owner has decided and the lab judges per cell. Not in ROADMAP, not gated per cell in army-sim. |
+| 2 | Plot board measurements against win rates | Partly: done once by hand for the new races. No standing per-seed logging. |
+| 3 | Audit how the AI plays the new modes | Partly: swarm fights, perching and charges were measured. No choice-frequency table, free-loop counter or degenerate bots. |
+| 4 | Playtest F5a with strangers; log human battles | Not done |
+| 5 | A Threats overlay (where can I be shot or charged next turn) | Not done |
+| 6 | A seeded dressing layer with a no-touch check | Built on `wt/world`; the browser half of its check has never run |
+| 7 | One identity per board | Built on `wt/world`, unseen; the board name is not on screen |
+| 8 | An after-action report | Not done |
+| 9 | A live projected score | Not done |
+| 10 | A plain-verdict odds tip, and tips for the rule-breakers | Not done |
+| | A labelled AI points handicap | Not done |
+
+Smaller points from its three "in progress" sections that were also left out:
+- **Units:** distances still print one decimal (the report says whole or half tails by default); nothing says
+  in-world whose tail it is; no tail ticks on the range rings.
+- **Battlefields:** no per-piece tint and lean, no two-line history per board; camps, objectives and moving light
+  are planned slices, not built.
+- **Balance:** no free-loop audit, no count of objective turns held by a unit nobody could charge, no second
+  terrain-independent hook per mode, no luck measurement, no mode by terrain by hazard test matrix.
+- **Bigger bets:** the three-battle March, drills, and the board shown at Muster in every mode. None started.
+
+Suggested order once the three streams have merged: 9 and 10 (small, and they help every new player), then 5
+(it matters most for burrowers and fliers, so it pairs with F5a), then 8, then 4 before F5a's prices are called
+final.
 
 ## Running the checks on another machine
 
@@ -205,4 +252,4 @@ On the branch: the two races with burrow, swarm and swoop, the view, prices, 14 
 | `f5a/sweep/` | `summary.txt`, the as-built notes, lane scripts |
 | `f5a/build-workflow.js` | the build's prompts, for reference |
 | `f5a/uncommitted-property-aggressive.diff` | the untested edit left in the F5a work tree |
-| `bible/` | the design-bible research report and the game brief written for its readers |
+| `bible/` | the report as first delivered (the copy on main is the one to keep) and the game brief written for its readers |
