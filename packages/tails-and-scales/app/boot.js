@@ -196,6 +196,21 @@ function terrainPick(params, title, mission) {
   return null
 }
 
+// ((Breakthrough, S5d) The seat that attacks on a mission with roles, as the
+// page opens: ?attacker=0 or 1, else none (the battle-setup panel presses
+// the human's seat against the AI, seat 0 otherwise). It is the door sim/'s
+// runs start a role battle with either seat attacking by, as ?mission= is
+// for the mission: oracle/human-bot.mjs pageStart names it for every setup
+// with an attacker, so a log's battle is the same from the title screen's
+// button in Chromium and from __ts.start in Node. Any other value is none.
+function attackerPick(params) {
+  if (!params.has('attacker')) return null
+  const v = params.get('attacker').trim()
+  if (v === '0' || v === '1') return Number(v)
+  console.warn(`?attacker= takes 0 or 1, not "${params.get('attacker')}": the panel's own`)
+  return null
+}
+
 // (F16) The battle-setup panel's fog toggle as the page opens: ?fog (on;
 // ?fog=0 off), else the last choice this browser kept (localStorage, in
 // try/catch: a page that keeps nothing starts with it off).
@@ -323,6 +338,7 @@ export function boot(location) {
   const mission = missionPick(params, title)
   flow = new Flow({ view, ui, params, seed, races, mission, armies: armiesPick(params, title, races, mission), terrain: terrainPick(params, title, mission) })
   flow.fogPick = fogPick(params)
+  const attackerURL = attackerPick(params)
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
@@ -654,7 +670,7 @@ export function boot(location) {
   // (F8b) the panel's battle size defaults to the flow's mission (?mission=,
   // else classic; then the last chosen)
   const openSetup = (mode) => {
-    picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf(), fog: flow.fogPick, attacker: firstAttacker(mode) }
+    picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf(), fog: flow.fogPick, attacker: attackerURL ?? firstAttacker(mode) }
     picking.armies = [0, 1].map((s) => armyDefault(s, picking.races[s], picking.mission, mode))
     title.away()
     showSetup()
@@ -1283,7 +1299,8 @@ export function boot(location) {
       get roundLimit() {
         return human.mode() === 'roundLimit' ? human.voters() : null
       },
-      start: (mode) => flow.start(mode),
+      // ((S5d) on a mission with roles, ?attacker='s seat, as the panel)
+      start: (mode) => flow.start(mode, undefined, undefined, undefined, undefined, undefined, attackerURL ?? undefined),
       select: (u) => human.select(u),
       // ((F9b) a long hull's to heading f, when given: the pinned ghost's
       // turned heading, sent as the commit sends it)
@@ -1385,6 +1402,14 @@ export function boot(location) {
           return v ? qq.landing(g, u, v) : []
         }),
         mayBoard: (u, v) => asked((g, qq) => qq.mayBoard(g, u, v, g.pending?.k === 'phase')),
+        // ((Breakthrough, S5d) seat `side`'s deployment zone, the rules' own
+        // (core/queries.js zone): its x bounds, its z bounds where its role
+        // names them, and whether it lies behind a wall's face (the plan
+        // itself stays the table's): the human bot's deployment)
+        zone: (side) => asked((g, qq) => {
+          const b = qq.zone(g, side)
+          return { minX: b.minX, maxX: b.maxX, ...(b.minZ !== undefined ? { minZ: b.minZ, maxZ: b.maxZ } : {}), behind: !!b.plan }
+        }),
         rngState: () => (serving ? serving.rng : rngState(atTable().rng)),
       },
       screen(x, y, z) {

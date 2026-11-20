@@ -80,7 +80,10 @@ export function pageStart(setup) {
   const m = setup.mission ?? 'classic', preset = Object.hasOwn(PRESET, m) ? PRESET[m] : m
   const armies = setup.seats.some((s) => s.army != null) ? `&armies=${setup.seats.map((s) => s.army ?? preset).join(',')}` : ''
   const terrain = setup.terrain && setup.terrain !== (Object.hasOwn(FIRST_SET, m) ? FIRST_SET[m] : undefined) ? `&terrain=${setup.terrain}` : ''
-  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}${armies}${terrain}` }
+  // ((Breakthrough, S5d) and the attacking seat, wherever the setup names one:
+  // app/boot.js ?attacker=, the panel's press and __ts.start's alike)
+  const attacker = setup.attacker !== undefined ? `&attacker=${setup.attacker}` : ''
+  return { mode, query: `seed=${setup.board}&dice=${setup.dice}&races=${setup.seats.map((s) => s.race).join(',')}&overtime=${setup.overtime ?? 'never'}${setup.mission && setup.mission !== 'classic' ? `&mission=${setup.mission}` : ''}${armies}${terrain}${attacker}` }
 }
 
 // Why the page's battle (its G.setup) is not the setup asked for, or null:
@@ -528,13 +531,41 @@ export function makePolicy(name, seed) {
     }
     if (!placing.has(s)) placing.set(s, aggressive ? mine.slice() : Array.from({ length: Math.floor(rand() * 4) }, () => pick(mine)))
     const todo = placing.get(s)
+    // ((Breakthrough, S5d) the seat's zone as the rules have it, where the
+    // page says (?debug's q.zone, from S5d): a role's, when it is not the
+    // strip at the seat's edge (an attacker's rectangle, or a defender's
+    // ground behind the wall's face); on every other board the strip, as
+    // ever, so a log played again by its bot draws and places as it did)
+    const edge = s === 0 ? -1 : 1
+    const Z = typeof ts.q.zone === 'function' ? ts.q.zone(s) : null
+    const sx0 = Math.min(edge * (W / 2), edge * (W / 2 - depth)), sx1 = Math.max(edge * (W / 2), edge * (W / 2 - depth))
+    const role = Z && (Z.behind || Z.minZ !== undefined || Z.minX !== sx0 || Z.maxX !== sx1) ? Z : null
     while (todo.length) {
       const u = todo.shift()
-      const edge = s === 0 ? -1 : 1
+      const others = ts.units.filter((o) => o !== u)
+      if (role) {
+        // (a role's zone: random, anywhere in its bounds; aggressive, its
+        // front, the bound toward the enemy's edge, or, behind a wall, the
+        // first ground back from it toward the seat's own edge that a base
+        // fits, a tail at a time: the wall's face, its decks among it)
+        const front = edge < 0 ? role.maxX - u.r : role.minX + u.r, span = role.maxX - role.minX
+        const z = aggressive ? u.pos.z + (rand() - 0.5) * 2 : (rand() - 0.5) * (H - 2)
+        const xs = aggressive ? Array.from({ length: role.behind ? Math.ceil(span) + 1 : 1 }, (_, d) => front + edge * d) : [role.minX + rand() * span]
+        let put = null
+        for (const x of xs) {
+          const p = ts.q.freeSpot(u, x, z, s, others)
+          if (p && Math.hypot(p.x - x, p.z - z) < 2.5) {
+            put = p
+            break
+          }
+        }
+        if (!put) continue
+        return { s, t: 'place', u: u.id, c: nav.index(put.x, put.z) }
+      }
       // aggressive: the front of the zone; random: anywhere in it
       const x = aggressive ? edge * (W / 2 - depth + u.r) : edge * (W / 2 - rand() * depth)
       const z = aggressive ? u.pos.z + (rand() - 0.5) * 2 : (rand() - 0.5) * (H - 2)
-      const p = ts.q.freeSpot(u, x, z, s, ts.units.filter((o) => o !== u))
+      const p = ts.q.freeSpot(u, x, z, s, others)
       if (!p || Math.hypot(p.x - x, p.z - z) >= 2.5) continue
       return { s, t: 'place', u: u.id, c: nav.index(p.x, p.z) }
     }

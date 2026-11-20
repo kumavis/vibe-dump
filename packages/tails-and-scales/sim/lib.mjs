@@ -254,12 +254,14 @@ export const tag = (v, r) =>
 // a board, a mission; so pairs.json takes none of them), 'human' for a log
 // with a human seat. So
 // `--only ai` takes every AI battle, a pair or a log, and `--only army`,
-// `--only fort`, `--only scale`, `--only keg`, `--only vehicle`, `--only powder` or `--only hull` a set's whole; a consumer that needs a
+// `--only fort`, `--only scale`, `--only keg`, `--only vehicle`, `--only powder`, `--only hull` or (S5d) `--only breach` a set's whole; a consumer that needs a
 // pair's seeds reads `it.set` (undefined for a pair) or `it.job.seed`.
 // Whether the page can make the rest of a setup is found where it is
 // played: every page runner holds the battle the page started to the log's
 // setup (oracle/human-bot.mjs's playedAs).
-export const LOG_SETS = Object.freeze(['human', 'pilot', 'army', 'fort', 'scale', 'keg', 'vehicle', 'powder', 'hull'])
+// ((Breakthrough, S5d) and breach, the March Wall's: Breakthrough's battles,
+// each seat a role)
+export const LOG_SETS = Object.freeze(['human', 'pilot', 'army', 'fort', 'scale', 'keg', 'vehicle', 'powder', 'hull', 'breach'])
 export function loadCorpus() {
   const pairs = JSON.parse(readFileSync(join(BASE, 'pairs.json'), 'utf8'))
   const items = pairs.pairs.map((p) => ({ ...p, id: `${p.seed}-${p.dice}`, kind: 'ai', mode: 'watch', job: { seed: p.seed, dice: p.dice } }))

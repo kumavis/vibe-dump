@@ -27,6 +27,29 @@
 //   node sim/corpus-add.mjs --regen bushtail-random-6,hotseat-late-5 [--need …] [--dry]
 //   node sim/corpus-add.mjs --set keg --mission keg --mode watch --tag keg --need keg --count 2
 //   node sim/corpus-add.mjs --set powder --mission powder --mode watch --tag powder --need keg,climb --count 2
+//   node sim/corpus-add.mjs --set breach --mission breakthrough --mode watch --tag breach --need breakthrough,rammed --count 1
+//   node sim/corpus-add.mjs --set breach --mission breakthrough --mode serpent --policy aggressive --tag breach --races squirrel,serpent --need held
+//
+// (Breakthrough, S5d) A mission with roles (--mission breakthrough, the
+// `breach/` corpus's): the setup names `attacker`, --attacker <0|1>'s, else
+// the seat the title screen's battle-setup panel presses to attack for the
+// mode (app/boot.js firstAttacker: the human's seat in bushtail and
+// serpent, seat 0 in watch and hotseat), and the page is asked for it by
+// ?attacker= (oracle/human-bot.mjs pageStart); each
+// seat's army is its role's (core/army.js rulesFor, presetFor): --auto-
+// armies builds each under its own role's list rules at the percentage of
+// its own role's points, and with neither --armies nor --auto-armies each
+// seat names its role's preset (the assault, the garrison), so the page
+// is asked for them by name. Its needs, read off the match as the log is
+// folded again in Node on the PIN code with sim/wall-probe.mjs looking on:
+//   breakthrough  ended by the attacker reaching its target
+//   held          ended with the rounds run out, the attacker short of it
+//   rammed        the gate fell
+//   gatecross     an attacker crossed the wall's face by the gate
+//   breach        an attacker crossed by the breach
+//   wood          an attacker crossed by the wood
+// and, as on any board with height (sim/height-probe.mjs), climbup (a
+// ladder taken up) and deckfight (a blow struck with a unit on a deck).
 //
 // --regen <id>[,<id>…] (F18) plays again each named human-bot log of the
 // corpus, by the bot that made it (its own setup and its `bot`, the policy
@@ -169,6 +192,7 @@ import { heightProbe } from './height-probe.mjs'
 import { riderProbe } from './rider-probe.mjs'
 import { collapseProbe } from './collapse-probe.mjs'
 import { hullProbe } from './hull-probe.mjs'
+import { wallProbe } from './wall-probe.mjs'
 
 // (each played result's `entries` is a list, an AI pair's empty: below)
 const NEEDS = {
@@ -207,18 +231,36 @@ const NEEDS = {
   reverse: (r) => r.hulls.walks.some((w) => w.reverses > 0 && r.entries?.[w.entry]?.t === 'move' && r.entries[w.entry].u === w.u),
   hullcharge: (r) => (r.entries ?? []).some((e) => e.t === 'chargeEnd' && e.f !== undefined),
   hullbail: (r) => r.hulls.bailed > 0,
+  // ((Breakthrough, S5d) the end, read off the log's over (endOf, below);
+  // the wall's, the probe's, r.wall)
+  breakthrough: (r, c) => endOf(r, c.job.setup) === 'breakthrough',
+  held: (r, c) => endOf(r, c.job.setup) === 'held',
+  rammed: (r) => r.wall.gateFell !== null,
+  gatecross: (r) => r.wall.crossings.some((c) => c.route === 'gate'),
+  breach: (r) => r.wall.crossings.some((c) => c.route === 'breach'),
+  wood: (r) => r.wall.crossings.some((c) => c.route === 'wood'),
 }
 const HEIGHT_NEEDS = ['deck', 'climb', 'climbup', 'deckfight', 'works', 'keep', 'nokeep']
 const RIDE_NEEDS = ['bailout', 'rearranged', 'deckfire']
 const FALL_NEEDS = ['collapse', 'fall']
 const HULL_NEEDS = ['hullpivot', 'reverse', 'hullbail']
+const WALL_NEEDS = ['rammed', 'gatecross', 'breach', 'wood']
+// ((S5d) how a role battle ended, from the log's over (the page's runner
+// gives the wipe and the VP): a wipe, the attacker's target reached
+// ('breakthrough'), else the rounds run out ('held'); null without roles)
+const endOf = (r, setup) => {
+  const R = MISSIONS[setup.mission ?? 'classic']?.roles
+  if (!R || !r.over) return null
+  if (r.over.wiped >= 0) return 'wipe'
+  return r.over.vp[setup.attacker ?? 0] >= R.attack.target ? 'breakthrough' : 'held'
+}
 const { values: a } = parseArgs({
   options: {
     mode: { type: 'string' }, policy: { type: 'string' }, tag: { type: 'string' }, overtime: { type: 'string' }, need: { type: 'string' },
     count: { type: 'string' }, tries: { type: 'string' }, dry: { type: 'boolean' }, set: { type: 'string' },
     races: { type: 'string' }, armies: { type: 'string' }, 'auto-armies': { type: 'string' }, from: { type: 'string' },
     mission: { type: 'string' }, terrain: { type: 'string' }, ref: { type: 'string' }, dir: { type: 'string' }, carts: { type: 'string' },
-    regen: { type: 'string' },
+    regen: { type: 'string' }, attacker: { type: 'string' },
   },
 })
 // (F18) the logs --regen plays again, from the corpus as it stands
@@ -233,7 +275,7 @@ const armies = a.armies === undefined ? null : a.armies.split(',')
 const PCT = a['auto-armies'] === undefined ? null : Number(a['auto-armies'])
 const CARTS = a.carts === undefined ? 0 : Number(a.carts)
 // ((F9a) --carts draws a candidate's lists: a --regen log keeps its own)
-const SETUP_OPTS = ['mode', 'policy', 'tag', 'overtime', 'races', 'armies', 'auto-armies', 'from', 'mission', 'terrain', 'set', 'count', 'tries', 'carts']
+const SETUP_OPTS = ['mode', 'policy', 'tag', 'overtime', 'races', 'armies', 'auto-armies', 'from', 'mission', 'terrain', 'set', 'count', 'tries', 'carts', 'attacker']
 const bad = REGEN ? [
   !REGEN.length && '--regen takes the ids of corpus logs, comma-separated',
   ...REGEN.map((id, i) => !regenOf[i] ? `--regen: no log ${id} in the corpus (an AI pair of pairs.json is re-recorded by parity --record)` : !regenOf[i].bot ? `--regen: ${id} has no bot (an AI pair: parity --record re-records it)` : null),
@@ -258,6 +300,7 @@ const bad = REGEN ? [
   a.carts !== undefined && PCT === null && '--carts draws the lists --auto-armies builds: give both',
   (a.ref !== undefined || a.dir !== undefined) && !a.dry && '--ref and --dir take another code than the PIN only with --dry (a corpus is recorded on the PIN)',
   a.ref !== undefined && a.dir !== undefined && '--ref and --dir are one or the other',
+  a.attacker !== undefined && !['0', '1'].includes(a.attacker) && '--attacker takes 0 or 1 (the seat that attacks, on a mission with roles)',
 ].filter(Boolean)
 if (bad.length) {
   console.error(`corpus-add: ${bad.join('; ')}`)
@@ -294,10 +337,22 @@ if (a.terrain !== undefined && !sets.includes(a.terrain)) {
 }
 // A candidate's setup on the mission's board: classic's as setupFor makes
 // it (naming no mission), a larger mission's named, with its own rounds and
-// its terrain (setupFor's 'classic', the default's, replaced)
+// its terrain (setupFor's 'classic', the default's, replaced); ((S5d) and
+// on a mission with roles, the attacking seat: --attacker's, else the one
+// the battle-setup panel presses for the mode (the human's against the
+// AI, else seat 0: app/boot.js firstAttacker), which the page is asked
+// for by ?attacker= (oracle/human-bot.mjs pageStart); and a mission that
+// allows no vote fought without one)
+const ROLED = !!M.roles
+if (a.attacker !== undefined && !ROLED) {
+  console.error(`corpus-add: --attacker: the ${MISSION} mission has no roles`)
+  process.exit(2)
+}
+const ATTACKER = a.attacker !== undefined ? Number(a.attacker) : a.mode === 'serpent' ? 1 : 0
 const onMission = (setup) => {
   if (MISSION === 'classic') return a.terrain === undefined ? setup : { ...setup, terrain: a.terrain }
-  return { ...setup, mission: MISSION, terrain: a.terrain ?? sets[0], rounds: M.rounds }
+  const { overtime, ...rest } = setup
+  return { ...(M.overtime === false ? rest : setup), mission: MISSION, terrain: a.terrain ?? sets[0], rounds: M.rounds, ...(ROLED ? { attacker: ATTACKER } : {}) }
 }
 const unknown = races.filter((r) => !Object.hasOwn(RACES, r))
 if (unknown.length) {
@@ -328,6 +383,17 @@ const hullsOf = (log) => {
   return r.error ? { error: r.error, ...probe.result() } : probe.result()
 }
 
+// ((Breakthrough, S5d) the same for the wall: sim/wall-probe.mjs's counts,
+// on the PIN code's own breakthrough.js and route.js)
+const wallCore = ROLED ? (pinCore ?? await import(at('core/index.js'))) : null
+const wallMods = ROLED ? { BT: await import(at('core/terrain/breakthrough.js')), R: await import(at('core/ai/route.js')) } : null
+const wallMatch = ROLED ? (pinMatch ?? await loadMatch(dir)) : null
+const wallOf = (log) => {
+  const p = wallProbe(wallCore, wallMods, log.setup.attacker ?? 0)
+  const r = foldJob(wallCore, log, { match: wallMatch, probe: { trace: p.trace, events: () => {} } })
+  return r.error ? { error: r.error, ...p.result() } : p.result()
+}
+
 // (F7c) the same for the platforms: sim/collapse-probe.mjs's counts
 const fallsOf = (log) => {
   const probe = collapseProbe()
@@ -339,11 +405,15 @@ const fallsOf = (log) => {
 // autoList on k at PCT% of the mission's points, or none.
 const listsOf = (setup, k) => {
   if (armies) return armies
-  if (PCT === null) return null
-  const rules = MISSIONS[setup.mission ?? 'classic'].list, at = { ...rules, points: Math.floor((PCT * rules.points) / 100) }
+  // ((S5d) on a mission with roles: each seat its role's preset, named)
+  if (PCT === null) return ROLED ? [0, 1].map((s) => army.presetFor(setup, s)) : null
+  // ((S5d) and each seat's list under its own role's rules and points)
+  const ruled = (s) => (ROLED ? army.rulesFor(setup, s) : MISSIONS[setup.mission ?? 'classic'].list)
+  const atOf = (s) => ({ ...ruled(s), points: Math.floor((PCT * ruled(s).points) / 100) })
   // ((F9a) --carts: drawn again until a transport race's list holds them;
   // (F9b) every transport of its roster counted)
-  return races.map((race) => {
+  return races.map((race, s) => {
+    const at = atOf(s)
     const R = RACES[race], carts = R.roster.map((key, i) => (R.units[key].transport ? i : -1)).filter((i) => i >= 0)
     const held = (counts) => carts.reduce((n, i) => n + (counts[i] ?? 0), 0)
     let counts = army.autoList(R, at, k)
@@ -359,8 +429,9 @@ const costOf = (setup, i) => {
   const s = setup.seats[i]
   if (!army || s.army == null) return null
   const { counts } = army.armyOf(setup, i)
-  // (at the mission's prices, F8b: core/army.js priceOf)
-  return `${s.army} (${RACES[s.race].short ?? s.race} ${army.listCost(RACES[s.race], counts, MISSIONS[setup.mission ?? 'classic'].list)})`
+  // (at the mission's prices, F8b: core/army.js priceOf; (S5d) the seat's
+  // role's, on a mission with roles)
+  return `${s.army} (${RACES[s.race].short ?? s.race} ${army.listCost(RACES[s.race], counts, ROLED ? army.rulesFor(setup, i) : MISSIONS[setup.mission ?? 'classic'].list)})`
 }
 
 const json = (v) => JSON.stringify(v ?? null)
@@ -391,10 +462,12 @@ if (pinCore) played.forEach((r, i) => !r.error && (r.height = heightOf({ setup: 
 if (need.some((n) => RIDE_NEEDS.includes(n))) played.forEach((r, i) => !r.error && (r.rides = ridesOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 // (F9b) and with its long hulls, where a need asks, or the set is hull/
 if (pinCore && (need.some((n) => HULL_NEEDS.includes(n)) || a.set === 'hull')) played.forEach((r, i) => !r.error && (r.hulls = hullsOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
+// ((S5d) and with the wall, on a mission with roles)
+if (ROLED) played.forEach((r, i) => !r.error && (r.wall = wallOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 // (F7c) and with its platforms, where a need asks or the board is fortified
 if (pinCore) played.forEach((r, i) => !r.error && (r.falls = fallsOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 const fits = cands.map((c, i) => ({ ...c, res: played[i] })).filter((c) => {
-  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.hulls?.error ? `failed folding again for the long hulls' needs: ${c.res.hulls.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : c.res.rides?.error ? `failed folding again for the transports' needs: ${c.res.rides.error.split('\n')[0]}` : c.res.falls?.error ? `failed folding again for the platforms' needs: ${c.res.falls.error.split('\n')[0]}` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
+  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.hulls?.error ? `failed folding again for the long hulls' needs: ${c.res.hulls.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : c.res.rides?.error ? `failed folding again for the transports' needs: ${c.res.rides.error.split('\n')[0]}` : c.res.falls?.error ? `failed folding again for the platforms' needs: ${c.res.falls.error.split('\n')[0]}` : c.res.wall?.error ? `failed folding again for the wall's needs: ${c.res.wall.error.split('\n')[0]}` : need.some((n) => WALL_NEEDS.includes(n) || n === 'breakthrough' || n === 'held') && !ROLED ? `the needs ${need.join(', ')} are a mission with roles' (--mission breakthrough)` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
   const end = c.res.error ? '' : c.res.over.wiped >= 0 ? `seat ${c.res.over.wiped} wiped out` : `${c.res.over.vp.join('-')} on the score`
   console.log(`  ${c.label.padEnd(30)} ${miss ? (c.res.error ? miss : `lacks ${miss}`) : 'fits'}${end ? `  (${end}${c.job.setup.seats.some((s) => s.army != null) ? `; ${c.job.setup.seats.map((s) => s.army ?? '-').join(' v ')}` : ''})` : ''}  [played in ${c.res.secs.toFixed(1)} s]`)
   return !miss
@@ -443,7 +516,11 @@ for (const c of chosen) {
   const hl = c.res.hulls
   const named = entries.filter((e) => e.f !== undefined)
   const longs = hl && hl.hulls && [`long hulls ${hl.hulls}`, `walks ${hl.walks.length} (pivots ${hl.pivots}, ${hl.tight} tight; backing ${hl.reverses})`, `moves with room to pivot ${hl.roomy} of ${hl.moves}`, named.length && `headings named ${named.length} (${named.filter((e) => e.t === 'move').length} moves, ${named.filter((e) => e.t === 'chargeEnd').length} charge ends)`, hl.walks.some((w) => w.tight && entries[w.entry]?.f !== undefined && entries[w.entry]?.u === w.u) && `a tight pivot by a named heading`, hl.steps && `steps off a long hull ${hl.steps}`, hl.bailed && `bail-outs from a long hull ${hl.bailed}`].filter(Boolean).join(', ')
-  const why = [lists.length && `lists ${lists.join(' v ')}`, votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 ? `wipe ${c.res.over.wiped}` : `score ${c.res.over.vp.join('-')}`, high, rides, falls, longs, describe(features(c.res.trace))].filter(Boolean).join(', ')
+  // ((S5d) what it did at the wall: sim/wall-probe.mjs's counts, and the end)
+  const wl = c.res.wall
+  const routes = wl && Object.entries(wl.crossings.reduce((m, x) => ((m[x.route] = (m[x.route] ?? 0) + 1), m), {})).map(([k, n]) => `${k} ${n}`).join(' ')
+  const wall = wl && [`seat ${c.job.setup.attacker} attacking`, `ended ${endOf(c.res, c.job.setup)}`, wl.gateFell !== null && `the gate fell in round ${wl.gateFell} (rammed in ${wl.rams} movement phases)`, routes && `crossings ${routes}`, wl.behindBy !== null && `behind the face by round ${wl.behindBy}`].filter(Boolean).join(', ')
+  const why = [lists.length && `lists ${lists.join(' v ')}`, wall, votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 ? `wipe ${c.res.over.wiped}` : `score ${c.res.over.vp.join('-')}`, high, rides, falls, longs, describe(features(c.res.trace))].filter(Boolean).join(', ')
   console.log(`  ${c.label}: ${why}`)
   // ((F18) --regen writes all its logs or none: each over itself, in its set)
   if (!a.dry && !(REGEN && chosen.length < COUNT)) saveHuman(c.label, { setup: c.job.setup, bot: c.job.bot, why, n: c.res.trace.length, trace: hashLines(c.res.trace), shadow: hashLines(c.res.shadow), written: hashLines(c.res.written), entries }, c.set ?? a.set ?? 'human')
