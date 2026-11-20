@@ -2021,6 +2021,115 @@ function wallScenes(core, mods) {
   return { scenes: out }
 }
 
+// (Breakthrough) P-wall's term scenes: three of the wall's terms read
+// directly, each in a scene where it decides, beside the statistical rows
+// above (as the garrison now deploys and holds its posts, those battles
+// put these three terms in play too seldom to catch their mutants). Each
+// is a match of the mission on a fixed board, seat 0 the Bushtails
+// attacking the Coil, every unit the scene doesn't name stood off at its
+// own edge (attackers at x -28, defenders at x 28, a hull's riders with
+// it), the AI's own function read and nothing applied; the only dice drawn
+// are bestSpot's tie-breaks off the scene's own match, none a battle row's.
+// Each placement is the one with the widest margin of those tried:
+//   A. a held ladder is shut (core/ai/route.js heldLadders): on board 5001
+//      an Oak Guard squad 1.5 tails out from ladder 1's foot, where the
+//      ladders are its way; its route distance to the nearest objective
+//      with the heads free, then with a Spitters squad on ladder 1's top,
+//      a tail or more longer held (built 17.07 free, 53.31 held: the
+//      ladders' tops stand 3 tails apart, so one Spitters on either head
+//      shuts both to a base the Oak Guard's size, and the next way is the
+//      breach or the wood). Tried 1.5 and 3 tails out from either ladder on
+//      boards 4242, 5000-5003, 1 and 2: 25.79 to 36.24 longer every time
+//      (an Elder, whose base leaves the other ladder open: 0 to 4.46).
+//      With a held ladder left open, `wall-ladder-held`, the same both
+//      ways.
+//   B. a defender refuses the ground in front of the face (core/ai/score.js
+//      wallScore's FRONT_COST): on board 5000 a Brute a tail behind the
+//      breach's middle, a Trebuchet 10 tails out in front of it, the
+//      charge's odds better from the rubble's far side; the cell its move
+//      picks (bestSpot) behind the face, its middle's faceDist above 0 as
+//      wall-probe counts it (built 0.20). With the ground in front open,
+//      `wall-front-open`, it picks a cell 1.19 tails in front, scoring
+//      3.93 more than the built pick. Tried with the Trebuchet 8, 10 and 12
+//      tails out on boards 4242 and 5000-5004: built behind the face every
+//      time, the mutant 0.05 to 1.19 tails in front every time, 1.52 to
+//      3.93 better.
+//   C. a defender contests what the attacker holds (score.js wallObjective's
+//      DENY): on board 5001 an Oak Guard squad 2.4 tails from the yard's
+//      objective (the one nearest the gate), holding it, and a Spitters
+//      squad 6 tails from it on the far side (at 7 eighths of a turn from
+//      +x), within its move and the objective's range of contesting it;
+//      the cell its move picks within the objective's range and its radius
+//      of it (wallDeny's measure: built 2.15 from it, 1.97 inside). With no
+//      deny term, `wall-deny-off`, it goes off 10.61 from it. Tried 6 tails
+//      out at every bearing of eight with ground to stand on, boards 4242
+//      and 5000-5002 (21 placements): built 1.55 to 1.97 inside every time,
+//      the mutant 4.28 to 6.49 outside in 20 (on board 5000 at 4 eighths
+//      it contests all the same).
+function wallTermScenes(core, mods) {
+  const { U, R, S, BT, rules } = mods
+  const match = (board) => {
+    const G = core.createMatch({ board, dice: 99, mission: 'breakthrough', attacker: 0, seats: [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }] }, { out: [] })
+    G.units.forEach((x, n) => {
+      if (!x.aboard) U.moveUnitTo(G, x, x.side ? 28 : -28, -18 + (n % 14) * 2.6)
+    })
+    return G
+  }
+  const unit = (G, side, short) => G.units.find((x) => x.side === side && x.t.short === short && !x.aboard)
+  const at = (x, z) => `(${x.toFixed(2)}, ${z.toFixed(2)})`
+  const out = []
+  {
+    const G = match(5001), plan = G.terrain.plan, nav = G.nav, k = 1, l = plan.ladders[k]
+    const u = unit(G, 0, 'Oak Guard'), head = unit(G, 1, 'Spitters')
+    const ox = l.foot.x - l.top.x, oz = l.foot.z - l.top.z, L = Math.hypot(ox, oz)
+    const ux = l.foot.x + (ox / L) * 1.5, uz = l.foot.z + (oz / L) * 1.5, i = nav.index(ux, uz)
+    const where = `P-wall term scene A: the Oak Guard at ${at(ux, uz)} below ladder ${k} on board 5001`
+    if (i < 0 || !nav.standable(i, u.r, 'walk')) throw new Error(`${where}: no ground to stand on`)
+    U.setUnitPos(u, ux, uz)
+    const near = () => Math.min(...R.routeFields(G, u, plan).map((f) => f[i]))
+    const free = near()
+    U.setUnitPos(head, l.top.x, l.top.z)
+    const held = near()
+    if (!isFinite(free)) throw new Error(`${where}: no way to any objective with the ladder's head free`)
+    if (!(held >= free + 1)) throw new Error(`${where}: its way to the nearest objective ${free.toFixed(2)} with the head free, ${held.toFixed(2)} with a Spitters on it (a tail or more longer: a held ladder is shut)`)
+    out.push(`A (held ladder) ${free.toFixed(2)} free, ${held.toFixed(2)} held`)
+  }
+  {
+    const G = match(5000), plan = G.terrain.plan, nav = G.nav, br = plan.breach
+    const d = unit(G, 1, 'Brute'), t = unit(G, 0, 'Trebuchet')
+    const mx = (br.a.x + br.b.x) / 2, mz = (br.a.z + br.b.z) / 2, L = Math.hypot(br.b.x - br.a.x, br.b.z - br.a.z)
+    // (the breach's normal, pointing behind the face)
+    let nx = -(br.b.z - br.a.z) / L, nz = (br.b.x - br.a.x) / L
+    if (BT.faceDist(plan, mx + nx * 2, mz + nz * 2) < 0) [nx, nz] = [-nx, -nz]
+    U.setUnitPos(d, mx + nx, mz + nz)
+    U.setUnitPos(t, mx - nx * 10, mz - nz * 10)
+    const where = `P-wall term scene B: the Brute at ${at(d.pos.x, d.pos.z)} behind the breach on board 5000, the Trebuchet at ${at(t.pos.x, t.pos.z)} in front`
+    if (!(BT.faceDist(plan, d.pos.x, d.pos.z) > d.r) || !(BT.faceDist(plan, t.pos.x, t.pos.z) < 0)) throw new Error(`${where}: not either side of the face`)
+    const b = S.bestSpot(G, d, core.q.movePlan(G, d, 0), new Set(), d.t.ai)
+    const bx = b.cell >= 0 ? nav.x(b.cell) : d.pos.x, bz = b.cell >= 0 ? nav.z(b.cell) : d.pos.z, fd = BT.faceDist(plan, bx, bz)
+    if (!(fd > 0)) throw new Error(`${where}: its move picks ${at(bx, bz)}, ${(-fd).toFixed(2)} tails in front of the face (the ground in front refused)`)
+    out.push(`B (front refused) the pick ${fd.toFixed(2)} behind the face`)
+  }
+  {
+    const G = match(5001), plan = G.terrain.plan, nav = G.nav
+    let o = null
+    for (const p of G.objectives) if (!o || Math.hypot(p.x - plan.gate.x, p.z - plan.gate.z) < Math.hypot(o.x - plan.gate.x, o.z - plan.gate.z)) o = p
+    const h = unit(G, 0, 'Oak Guard'), d = unit(G, 1, 'Spitters')
+    const cx = Math.cos((7 * Math.PI) / 4), cz = Math.sin((7 * Math.PI) / 4)
+    U.setUnitPos(h, o.x - cx * 2.4, o.z - cz * 2.4)
+    U.setUnitPos(d, o.x + cx * 6, o.z + cz * 6)
+    const range = rules.OBJECTIVE_RANGE + d.r, from = Math.hypot(d.pos.x - o.x, d.pos.z - o.z)
+    const where = `P-wall term scene C: the Spitters at ${at(d.pos.x, d.pos.z)}, ${from.toFixed(2)} from the objective at ${at(o.x, o.z)} the Oak Guard holds, on board 5001`
+    if (core.q.controlOf(G, o) !== 0) throw new Error(`${where}: the attacker doesn't hold it`)
+    if (!(from > range && from - d.r <= d.t.M + rules.OBJECTIVE_RANGE) || !(BT.faceDist(plan, d.pos.x, d.pos.z) > d.r)) throw new Error(`${where}: not behind the face, out of its range and within its move of contesting it`)
+    const b = S.bestSpot(G, d, core.q.movePlan(G, d, 0), new Set(), d.t.ai)
+    const bx = b.cell >= 0 ? nav.x(b.cell) : d.pos.x, bz = b.cell >= 0 ? nav.z(b.cell) : d.pos.z, to = Math.hypot(bx - o.x, bz - o.z)
+    if (!(to <= range)) throw new Error(`${where}: its move picks ${at(bx, bz)}, ${to.toFixed(2)} from it, not within its range and radius (${range.toFixed(2)}: the objective contested)`)
+    out.push(`C (deny) the pick ${to.toFixed(2)} from the held objective, within ${range.toFixed(2)}`)
+  }
+  return { scenes: out }
+}
+
 function missionTask(core, MISSIONS, face = null) {
   let n = 0
   for (const [name, [change, want]] of Object.entries(BAD_MISSION_SETUPS)) {
@@ -6643,6 +6752,11 @@ if (a.child) {
       const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
       const [U, S, R, BT] = await Promise.all([at('core', 'units.js'), at('core', 'ai', 'score.js'), at('core', 'ai', 'route.js'), at('core', 'terrain', 'breakthrough.js')])
       out = { ok: true, counts: wallScenes(core, { U, S, R, BT }) }
+    } else if (task.kind === 'wallTerms') {
+      // ((Breakthrough) P-wall's term scenes)
+      const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
+      const [U, S, R, BT, rules] = await Promise.all([at('core', 'units.js'), at('core', 'ai', 'score.js'), at('core', 'ai', 'route.js'), at('core', 'terrain', 'breakthrough.js'), at('core', 'rules.js')])
+      out = { ok: true, counts: wallTermScenes(core, { U, S, R, BT, rules }) }
     } else if (task.kind === 'rolesDeploy') {
       // ((the March Wall) P-roles' deployment behind the wall)
       const mods = await ridesMods()
@@ -6754,14 +6868,17 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     if (existsSync(join(pkg, 'core', 'ai', 'route.js')) && army.wallPlay) for (let cell = 0; cell < 4; cell++) tasks.push({ kind: 'wallPlay', cell, n: army.wallPlay / 4 })
     // ((S5b) P-wall's charge scenes, on code with the charge's wallGap)
     if (existsSync(join(pkg, 'core', 'ai', 'route.js')) && /^export function wallGap\(/m.test(readFileSync(join(pkg, 'core', 'ai', 'score.js'), 'utf8'))) tasks.push({ kind: 'wallScene' })
+    // ((Breakthrough) P-wall's term scenes, on code with the AI's wall terms)
+    if (existsSync(join(pkg, 'core', 'ai', 'route.js'))) tasks.push({ kind: 'wallTerms' })
   }
   const t0 = Date.now()
   const res = await pool(tasks, CPUS, async (t) => {
     const r = await child(t, pkg)
     const c = r.counts
-    const label = t.kind === 'corpus' ? t.id : t.kind === 'wallPlay' ? `P-wall cell ${t.cell}` : t.kind === 'wallScene' ? 'P-wall charge scenes' : t.kind === 'roles' ? 'P-roles scenes' : t.kind === 'rolesGames' ? `P-roles #${t.seed}` : t.kind === 'rolesDeploy' ? `P-roles deployment #${t.seed}` : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.hulls ? `hull game ${t.seed}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
+    const label = t.kind === 'corpus' ? t.id : t.kind === 'wallPlay' ? `P-wall cell ${t.cell}` : t.kind === 'wallScene' ? 'P-wall charge scenes' : t.kind === 'wallTerms' ? 'P-wall term scenes' : t.kind === 'roles' ? 'P-roles scenes' : t.kind === 'rolesGames' ? `P-roles #${t.seed}` : t.kind === 'rolesDeploy' ? `P-roles deployment #${t.seed}` : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.hulls ? `hull game ${t.seed}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
     const what = !r.ok ? '' : t.kind === 'corpus' ? `${c.probes} decisions probed`
       : t.kind === 'wallScene' ? `the charge's gap across the wall, read against a straight walk: ${c.scenes.join(', ')}`
+      : t.kind === 'wallTerms' ? `the wall's terms read where each decides: ${c.scenes.join('; ')}`
       : t.kind === 'wallPlay' ? `${c.n} AI battles on the March Wall, ${WALL_CELLS[t.cell].races[WALL_CELLS[t.cell].attacker]} attacking from seat ${WALL_CELLS[t.cell].attacker}: behind the face by round 4 ${c.walk4}, scored by round 4 ${c.scored4}`
       : t.kind === 'roles' ? `${c.scenes} scenes with either seat attacking (the zones, the scoring, the ends), the attacker's first turn with no die drawn ${c.firsts} times`
       : t.kind === 'rolesGames' ? `${c.battles} breakthrough AI battles, none a draw (breakthrough ${c.ends.breakthrough}, held ${c.ends.held}, wipe ${c.ends.wipe})`

@@ -1299,7 +1299,9 @@ export function boot(location) {
       get roundLimit() {
         return human.mode() === 'roundLimit' ? human.voters() : null
       },
-      // ((S5d) on a mission with roles, ?attacker='s seat, as the panel)
+      // ((S5d) on a mission with roles, the address's ?attacker= seat,
+      // else seat 0: not the panel's own default, the human seat in a fog
+      // mode)
       start: (mode) => flow.start(mode, undefined, undefined, undefined, undefined, undefined, attackerURL ?? undefined),
       select: (u) => human.select(u),
       // ((F9b) a long hull's to heading f, when given: the pinned ghost's
