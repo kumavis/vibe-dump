@@ -17,6 +17,10 @@
 // (app/boot.js reads the missions), so this panel imports no rules data.
 // The size's sets are the terrain line's options.
 //
+// (S4) The battlefield's line, under the terrain line: the board's name
+// (app/board-name.js, seeded as the dressing is) and its seed, the title's
+// Battlefield; the name changes as the size and terrain do.
+//
 // (F16) The fog line, against the AI only (never hotseat: one screen; nor a
 // watched battle): a toggle for the courtesy fog of war (your units show
 // you only what they see of the other army; app/flow.js, present/fog.js),
@@ -110,8 +114,9 @@ export class SetupScreen {
   // (F7a) terrain: { sets, pick } (the mission's sets and the one picked),
   // (F16) fog: { offered, on } (the mode takes it, and the toggle's state),
   // (F11b) armies: each seat's army line (armyLine, below), and startWhy:
-  // why Start is disabled (null: it isn't) }
-  show({ title, seats, mirror, sizes = [], size = null, terrain = null, fog = null, armies = null, startWhy = null }) {
+  // why Start is disabled (null: it isn't), (S4) board: { seed, name } the
+  // board the battle is fought on (its name null: no line) }
+  show({ title, seats, mirror, sizes = [], size = null, terrain = null, fog = null, armies = null, startWhy = null, board = null }) {
     // (the pickers made once, as the panel first opens: nothing is drawn
     // before)
     this.pickers ??= [0, 1].map((s) => new RacePicker({ root: $(`#setup .setupSeat[data-seat="${s}"] .picker`), diorama: this.diorama(), pick: (race) => this.on.pick(s, race) }))
@@ -131,6 +136,7 @@ export class SetupScreen {
     this.sizes(sizes, size)
     $('#setupMirror').classList.toggle('hidden', !mirror)
     this.terrainLine(terrain)
+    this.boardLine(board)
     this.fogLine(fog)
     this.root.classList.remove('hidden')
   }
@@ -230,6 +236,13 @@ export class SetupScreen {
       return b
     }))
     $('#setupTerrain .what').textContent = TERRAINS[t.pick]?.what ?? ''
+  }
+
+  // (S4) the battlefield's line: the board's name and its seed
+  boardLine(b) {
+    $('#setupBoard').classList.toggle('hidden', !b?.name)
+    $('#setupBoard .name').textContent = b?.name ?? ''
+    $('#setupBoard .what').textContent = b?.name ? `board ${b.seed}` : ''
   }
 
   // (F8b) The size line: a button per size (its name, its board and points),

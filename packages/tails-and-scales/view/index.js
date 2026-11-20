@@ -27,6 +27,7 @@ import { FX } from './effects/fx.js'
 import { Shots } from './effects/shots.js'
 import { Diorama } from './diorama.js'
 import { Ghosts } from './fog.js'
+import { Dressing } from './dressing/index.js'
 import { wait } from './clock.js'
 
 // (F8a) what of a board the table is made for: its size, its zones' depth
@@ -42,8 +43,9 @@ export class View {
   // and `edges` the seats' edges (the zones), `objectives` their places and
   // `range` their reach, `colorOf(seat)` a seat's colour (each flag in its
   // holder's: the seats' look, ui/theme.js); (V2) `quality` the stage's
-  // (view/stage.js's QUALITY).
-  constructor({ lowfi = false, fast = false, quality = 'high', W, H, deploy, edges, objectives, range, colorOf }) {
+  // (view/stage.js's QUALITY); `dress` the battlefield's dressing (false
+  // under ?dress=0: the table as it always was).
+  constructor({ lowfi = false, fast = false, quality = 'high', dress = true, W, H, deploy, edges, objectives, range, colorOf }) {
     this.fast = fast
     // (F8a) the board shown (setBoard): classic's, the title's, as made
     this.boardKey = boardKey({ W, H, deploy }, objectives)
@@ -75,6 +77,10 @@ export class View {
         this.stage.mood(marks.some((m) => !m.powder))
       },
     })
+    // (The battlefield's dressing, view/dressing/: the world round the
+    // board and the ground under its pieces, dressed as each match's table
+    // is shown: rebuild)
+    this.dressing = dress ? new Dressing({ scene, renderer, stage: this.stage, table: this.table, camera: this.camera, range, lowfi }) : null
     // (F7b) the chunks seen through now (see()), and what they were worked
     // out for
     this.seen = new Set()
@@ -239,6 +245,8 @@ export class View {
     // another than the one shown (the presenter's: M.board; the zones'
     // depth and the objectives from the match)
     if (!to.units) this.setBoard({ ...g.board, ...M.board }, g.objectives, g.nav)
+    // (its dressing, once per setup: view/dressing/)
+    if (!to.units) this.dressing?.build(g)
     terrain.sync(chunks)
     // ((F7a) each objective's marker on the top it stands on: the keep's
     // centre objective is held from its top)
@@ -306,6 +314,8 @@ export class View {
         // ((F7b) the walls in front of what the player is looking at)
         if (!this.fast) this.see()
         objectives.animate(dt, time, this.owners ?? mirror().owners)
+        // (the battlefield's dressing: its clutter hidden under the bases)
+        if (!this.fast) this.dressing?.animate(performance.now())
       },
       rig: this.rig,
       shake: () => effects.shake,

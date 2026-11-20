@@ -47,7 +47,11 @@
 // from the player's queue before the snap drops it: who won, how, the score
 // and the rounds), End and Auto down; and nowhere else Shortest move, nor
 // the end screen or the vote's panel. The battle must then play on to its end with every log
-// entry played and no page error.
+// entry played and no page error. (S4) And after every snap the battle
+// log's header names the battle's board (app/board-name.js): the name the
+// dressing's plan gives it (view/dressing/place.js plan(…).name, of its
+// table as made, worked out here from the battle's setup), the name the
+// table was shown with, which a snap keeps.
 //
 // And the HUD model's end.ready, read off the ?debug block's `hud` (the
 // model last put on the page): after each snap in a phase, and wherever the
@@ -135,6 +139,18 @@ const { LENGTH, tails } = await import(pathToFileURL(`${PKG}/core/rules.js`).hre
 const LEN = lengthWords(LENGTH)
 import { humanDriver, jobSetup, pageStart, playedAs, missingHooks } from './oracle/human-bot.mjs'
 import { fortScene } from './fort-scene.mjs'
+// ((S4) the name the dressing's plan gives a battle's board (plan.name: the
+// plan of its table as made, its own races and armies at it, every seat
+// played here so it waits at its deployment), and the core that makes the
+// table: the code under test's)
+const { createMatch, fullSetup } = await import(pathToFileURL(`${PKG}/core/index.js`).href)
+const { OBJECTIVE_RANGE } = await import(pathToFileURL(`${PKG}/core/rules.js`).href)
+const P = await import(pathToFileURL(`${PKG}/view/dressing/place.js`).href)
+const boardOf = (setup) => {
+  const s = fullSetup(setup)
+  const G = createMatch({ ...s, seats: s.seats.map((x) => ({ ...x, ctrl: 'human' })) }, { out: null })
+  return P.plan({ seed: P.dressSeed(G.setup), set: G.setup.terrain, W: G.board.W, H: G.board.H, deploy: G.board.deploy, edges: G.seats.map((x) => x.edge), objectives: G.objectives, range: OBJECTIVE_RANGE, chunks: G.terrain.chunks, nav: G.nav }).name
+}
 
 let a
 try {
@@ -190,6 +206,9 @@ const MUTATIONS = {
   'ready-unlit': ['present/hud-model.js', '  end.lit = deploying || end.ready', '  end.lit = deploying'],
   // no end screen after a snap past the battle's end
   'over-unshown': ['app/flow.js', "    if (M.stage === 'over' && (!this.ui.result.up || this.ui.result.voting)) this.over(resultOf(G))", '    // (dropped)'],
+  // (S4; on DECK_LOG, a Field battle on open ground) the log's header
+  // keeps the first table's name, the title's
+  'board-stale': ['app/flow.js', '    this.boardName = boardNameOf(next.setup, next)\n', '    this.boardName ??= boardNameOf(next.setup, next)\n', DECK_LOG],
   // (F4) the round limit's vote panel never shown
   'vote-unshown': ['app/flow.js', "    if (this.player.idle && P?.k === 'roundLimit' && this.session.decisionFor() >= 0) {", '    if (false) {'],
   // a charge's spots left marked as shaded after a snap clears them: the
@@ -441,6 +460,8 @@ function pageHarness(job, mode, settle, names) {
     over: document.querySelector('#over').classList.contains('hidden') ? null : { title: document.querySelector('#overTitle').textContent, why: document.querySelector('#overWhy').textContent },
     // (F4) the panel showing the round limit's vote, not the end
     vote: !document.querySelector('#over').classList.contains('hidden') && !document.querySelector('#overVote').classList.contains('hidden'),
+    // (S4) the board the log's header names (null: none shown)
+    board: document.querySelector('#logBoard')?.classList.contains('hidden') === false ? document.querySelector('#logBoard').textContent : null,
   })
   // what the page must show once settled after the snap, by the match (and
   // past the end by its game.over event, which the snap drops)
@@ -564,7 +585,7 @@ async function run(browser, url, item) {
     // the battle played is the log's, field for field
     r.error ??= playedAs(r.setup, setup)
     if (!r.error && r.unused) r.error = `the battle ended with ${r.unused} log entries unplayed`
-    return { ...r, mode }
+    return { ...r, mode, board: boardOf(setup) }
   } finally {
     await ctx.close()
   }
@@ -625,7 +646,8 @@ function judge(item, r) {
   if (r.error) return r.error.split('\n')[0]
   const missing = needs(item, r.mode).filter((w) => !r.snaps.some((s) => s.what === w))
   if (missing.length) return `never snapped ${missing.join(', ')}`
-  const bad = r.snaps.map((s) => [s.what, wrong(s)]).filter(([, w]) => w)
+  // ((S4) the header's board name, the battle's, after every snap)
+  const bad = r.snaps.map((s) => [s.what, [wrong(s), s.got.board === r.board ? '' : `the log's header names ${s.got.board === null ? 'no board' : `"${s.got.board}"`}, not ${r.board}`].filter(Boolean).join('; ')]).filter(([, w]) => w)
   if (bad.length) return bad.map(([what, w]) => `snapped ${what}: ${w}`).join(' | ')
   return r.ready?.wrong ? `idle: ${r.ready.wrong}` : ''
 }
@@ -746,7 +768,7 @@ try {
       failed++
       console.log(`  FAIL: (F9c) ${ready.deck.able} frames with a rider able to shoot from a deck, ${ready.deck.only} with only riders able, ${ready.deck.hints} hints read: the default battles must have both`)
     }
-    console.log(failed ? `\nhud-check FAILED: ${failed} problem(s) over ${a.tips ? 0 : items.length} battles and the tooltips` : `\nhud-check passed: after every snap mid-battle the HUD is the snapped match's (Begin battle in the deployment, End and Auto up for a local seat's phase, Shortest move and the spots at a charge's end, the end screen past the end, worded as the match's game.over), and End's readiness is the match's at ${ready.checked} frames idle on a local seat's phase (${ready.ready} ready${ready.deck.able ? `; (F9c) ${ready.deck.able} of them in a shooting phase with a rider able to shoot from a deck, ${ready.deck.only} with only riders able, and a rider's hint its deck's and slots' ${ready.deck.hints} times` : ''}); (F7b) the tooltips read heights (a climb's cost, a rim, a shot past a parapet in cover, the ray in the verdict's colour)`)
+    console.log(failed ? `\nhud-check FAILED: ${failed} problem(s) over ${a.tips ? 0 : items.length} battles and the tooltips` : `\nhud-check passed: after every snap mid-battle the HUD is the snapped match's (Begin battle in the deployment, End and Auto up for a local seat's phase, Shortest move and the spots at a charge's end, the end screen past the end, worded as the match's game.over; (S4) the log's header naming the battle's board), and End's readiness is the match's at ${ready.checked} frames idle on a local seat's phase (${ready.ready} ready${ready.deck.able ? `; (F9c) ${ready.deck.able} of them in a shooting phase with a rider able to shoot from a deck, ${ready.deck.only} with only riders able, and a rider's hint its deck's and slots' ${ready.deck.hints} times` : ''}); (F7b) the tooltips read heights (a climb's cost, a rim, a shot past a parapet in cover, the ray in the verdict's colour)`)
   }
 } finally {
   await browser.close()

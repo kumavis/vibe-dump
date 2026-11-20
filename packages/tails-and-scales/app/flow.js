@@ -82,6 +82,7 @@ import { defOf } from '../view/terrain.js'
 import { clock } from '../view/clock.js'
 import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
 import { rewind } from './undo.js'
+import { boardNameOf } from './board-name.js'
 
 // who plays each seat, by the title screen's mode buttons
 export const MODES = { bushtail: ['human', 'ai'], serpent: ['ai', 'human'], hotseat: ['human', 'human'], watch: ['ai', 'ai'] }
@@ -724,6 +725,11 @@ export class Flow {
     human.group?.reset()
     view.overlay.clear()
     ui.log.clear()
+    // (S4) the board's name, the log's header's (app/board-name.js: the
+    // table just made, read before anything on it breaks; the replay bar
+    // names its battle's own)
+    this.boardName = boardNameOf(next.setup, next)
+    ui.log.board?.(this.boardName)
     ui.tray.hide()
     ui.armyBanner?.hide()
     // ((F16) no fog over a new table: a battle's own is set as it starts)

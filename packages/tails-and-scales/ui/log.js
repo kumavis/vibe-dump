@@ -4,7 +4,9 @@
 // until an attack ends following it. The newest line is on top, and the log
 // keeps the last 80. (F15) Each line knows the entry it was logged in (its
 // place among the battle's moves, `data-k`), and a click on it says so
-// (app/replay.js's before: the battle as it stood before that move).
+// (app/replay.js's before: the battle as it stood before that move). (S4)
+// Its header names the board on the table (app/board-name.js), after
+// "Battle log".
 export class BattleLog {
   // `listener()`: the ?debug block's trace listener, or null (app/flow.js)
   constructor(list, listener = () => null) {
@@ -47,5 +49,13 @@ export class BattleLog {
   // empty (a new table)
   clear() {
     this.list.innerHTML = ''
+  }
+
+  // (S4) the header's board name: the table's (null: none shown)
+  board(name) {
+    const b = document.querySelector('#logBoard')
+    if (!b) return
+    b.textContent = name ?? ''
+    b.classList.toggle('hidden', !name)
   }
 }
