@@ -7096,10 +7096,10 @@ const MUTATIONS = {
   // only the seat the match waits on may concede (§2.2: out of band)
   'concede-in-band': ['core/commands.js', '  return rule.ok(G, seat, body)\n}', '  return P?.seats.includes(seat) ? rule.ok(G, seat, body) : `seat ${seat} has no decision to make now`\n}'],
   // a concession crashes the engine
-  'concede-crash': ['core/engine.js', "const win = conceded >= 0 ? 1 - conceded :", 'const win = conceded >= 0 ? 1 - conceded.seat.x :'],
+  'concede-crash': ['core/engine.js', "let win = conceded >= 0 ? 1 - conceded :", 'let win = conceded >= 0 ? 1 - conceded.seat.x :'],
   // a quiet fold (G.out null) walks a wrecker without smashing anything: the
   // smash is skipped with the events nobody keeps
-  'quiet-smash': ['core/actions/move.js', 'if (smashAround(G, u, p, ev, broke) && ev)', 'if (ev && smashAround(G, u, p, ev, broke))'],
+  'quiet-smash': ['core/actions/move.js', 'if (smashAround(G, u, p, ev, broke, u.r, rammed) && ev)', 'if (ev && smashAround(G, u, p, ev, broke, u.r, rammed))'],
   // (F7c) P-height's collapse scenes: a deck falling at one post fewer than
   // its fallsAt, its ladders standing, no planks where it stood, its floor
   // kept by the nav, the units on it settled in the reverse of G.units

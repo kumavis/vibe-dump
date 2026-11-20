@@ -9,8 +9,8 @@
 // regenerated on demand from the PIN code (sim/oracle/PIN).
 import { createHash } from 'node:crypto'
 import { spawn } from 'node:child_process'
-import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync, cpSync, mkdirSync, realpathSync } from 'node:fs'
-import { join } from 'node:path'
+import { readFileSync, writeFileSync, readdirSync, existsSync, rmSync, cpSync, mkdirSync, realpathSync, symlinkSync } from 'node:fs'
+import { join, resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { cpus } from 'node:os'
 import { pageStart } from './oracle/human-bot.mjs'
@@ -341,7 +341,21 @@ export function features(trace) {
 export function copyCode(src, dst) {
   rmSync(dst, { recursive: true, force: true })
   cpSync(src, dst, { recursive: true, filter: (p) => !/^[\\/]?(dist|sim|node_modules)([\\/]|$)/.test(p.slice(src.length)) })
-  return dst
+  return linkModules(dst)
+}
+
+// A copy's bare imports (three, in the view) resolve wherever it is, the
+// OS temp dir included, which has no node_modules above it: `dst` links
+// node_modules to this checkout's own, the first found walking up from
+// this package (a workspace's sit at the repo's root). Returns `dst`.
+export function linkModules(dst) {
+  for (let d = resolve(SIM, '..'); ; d = dirname(d)) {
+    if (existsSync(join(d, 'node_modules'))) {
+      symlinkSync(join(d, 'node_modules'), join(dst, 'node_modules'), 'junction')
+      return dst
+    }
+    if (dirname(d) === d) return dst
+  }
 }
 
 // Build the app in `root` (any directory, e.g. a git archive under /tmp) the
