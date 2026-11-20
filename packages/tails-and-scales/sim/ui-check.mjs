@@ -103,6 +103,7 @@ import { tmpdir } from 'node:os'
 import { pathToFileURL } from 'node:url'
 import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
+import { glArgs, glConfirm } from './chromium.mjs'
 import { buildApp, copyCode } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 
@@ -859,7 +860,8 @@ async function runCases(browser, url, names) {
 }
 
 const work = mkdtempSync(join(tmpdir(), 'tails-and-scales-ui-'))
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: glArgs() })
+await glConfirm(browser, 'ui-check')
 let failed = 0
 try {
   if (a['self-test']) {

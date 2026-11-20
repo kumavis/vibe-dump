@@ -131,7 +131,7 @@ import { pathToFileURL } from 'node:url'
 import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { loadCorpus, select, buildApp, copyCode } from './lib.mjs'
-import { IDLE_MS } from './chromium.mjs'
+import { IDLE_MS, glArgs, glConfirm } from './chromium.mjs'
 import { PKG } from './oracle/pin.mjs'
 import { lengthWords } from './lib.mjs'
 // (the units rename) how the build words a length: the working tree's LENGTH
@@ -659,7 +659,8 @@ const deckSaid = (d) => (d?.able ? `; (F9c) ${d.able} frames of the shooting pha
 const say = (it, r, why) => `${why ? `FAIL: ${why.slice(0, 400)}` : `right after ${r.snaps.length} snap${r.snaps.length === 1 ? '' : 's'}: ${r.snaps.map(brief).join(', ')}${r.ready?.checked ? `; End's readiness right at ${r.ready.checked} frames idle on a local seat's phase (${r.ready.ready} ready)` : ''}${deckSaid(r.ready?.deck)}`}`
 
 const work = mkdtempSync(join(tmpdir(), 'tails-and-scales-hud-'))
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: glArgs() })
+await glConfirm(browser, 'hud-check')
 let failed = 0
 try {
   if (a['self-test']) {

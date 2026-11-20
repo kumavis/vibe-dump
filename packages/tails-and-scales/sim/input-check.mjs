@@ -181,7 +181,7 @@ import { lengthWords } from './lib.mjs'
 // (the units rename) how the build words a length: the working tree's LENGTH
 const { LENGTH, tl } = await import(pathToFileURL(`${PKG}/core/rules.js`).href)
 const LEN = lengthWords(LENGTH)
-import { IDLE_MS } from './chromium.mjs'
+import { IDLE_MS, glArgs, glConfirm } from './chromium.mjs'
 import { fortScene } from './fort-scene.mjs'
 
 const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, only: { type: 'string' }, carts: { type: 'boolean' }, fort: { type: 'boolean' }, hulls: { type: 'boolean' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } })
@@ -3228,7 +3228,8 @@ if (a['self-test']) {
     console.error(`input-check: no edit ${unknown.join(', ')} (${Object.keys(EDITS).join(', ')})`)
     process.exit(2)
   }
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: glArgs() })
+  await glConfirm(browser, 'input-check')
   let wrong = 0
   // ((F9c) the rows the edits name: the unedited code must pass each)
   const rows = [...new Set(names.map((n) => EDITS[n][3]))]
@@ -3282,7 +3283,8 @@ try {
   }
   const dist = a.dist ?? (await buildApp(PKG, join(work, 'dist')))
   const { url, close } = await startStaticServer(dist)
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: glArgs() })
+  await glConfirm(browser, 'input-check')
   try {
     let lanes = true, deckNext = false
     if (a.only !== 'tips' && !a.fort && !a.hulls) {

@@ -90,6 +90,7 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
+import { glArgs, glConfirm } from './chromium.mjs'
 import { buildApp, pool } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 import { lengthWords } from './lib.mjs'
@@ -737,7 +738,8 @@ const work = mkdtempSync(join(tmpdir(), 'ts-play-'))
 try {
   const dist = a.dist ?? (await buildApp(PKG, join(work, 'dist')))
   const { url, close } = await startStaticServer(dist)
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: glArgs() })
+  await glConfirm(browser, 'play-check')
   console.log(`play-check: ${a.dist ? dist : 'a fresh build of the working tree'} in Chromium ${browser.version()}, ${a.full ? 'full' : '?lowfi'}, lanes ${lanes.join(', ')}`)
   const res = await pool(lanes, PARALLEL, async (name) => {
     const r = name === 'layout' ? await layoutLane(browser, url) : await lane(browser, url, name)
