@@ -4,6 +4,7 @@ import { hypot } from './dmath.js'
 import { edgeOf, rolesOf, roleOf, flipped } from './match.js'
 import { setUnitPos, defaultFacing } from './units.js'
 import { STEP } from './nav.js'
+import { OBJECTIVE_RANGE } from './rules.js'
 import { groundOnly, climbs } from './actions/move.js'
 import { autoload } from './actions/transport.js'
 import { clearOf } from './footprint.js'
@@ -238,9 +239,20 @@ function hullSpot(G, u, x, z, side, others, f) {
 // fits takes the unit (so never in front of the face) at that floor; a
 // big unit or a vehicle never stands on a deck (floor above STEP). The
 // defender's posts are S2b's as they were (S3 tried no refinement of them).
+// ((S5c, DESIGN §4.2.12's As built (S5c)) The garrison mans the works: the
+// autoload boards no one onto such a seat's hulls (its squads stay on the
+// posts they took); in step 2 a unit with OC takes the holders' posts
+// first (holdPosts: the yard's objective, then behind the breach); and the
+// hulls (the Vehicle slot, or a long hull) stand last, on the second
+// line's ground posts clear of the hedgebank's gap at the breach
+// (hullPosts), else at the back row as before. On the presets over boards
+// 1-100 the defender's shooters stood on the works in 62.8% of round 1's
+// unit-rounds, against 34.7% with the squads aboard.)
 export function deployArmies(G) {
   const { W, H, deploy } = G.board
   const roles = !!rolesOf(G.setup)
+  // ((Breakthrough, S5c) the seats behind a wall, whose hulls board no one)
+  const walled = new Set()
   for (const side of [0, 1]) {
     const sx = edgeOf(G, side)
     const list = G.units.filter((u) => u.side === side)
@@ -248,6 +260,7 @@ export function deployArmies(G) {
     const wall = roles ? zone(G, side).plan : null
     if (wall) {
       postArmy(G, side, list, wall, placed)
+      walled.add(side)
       continue
     }
     const back = list.filter((u) => u.t.deployRow === 'back')
@@ -285,7 +298,7 @@ export function deployArmies(G) {
       })
     }
   }
-  autoload(G)
+  autoload(G, walled)
 }
 // (Breakthrough, the AI) Where along its rows an attacker facing a wall
 // (a seat whose zone is no wall's, on a board with a plan) puts each unit:
@@ -339,20 +352,37 @@ function postArmy(G, side, mine, plan, placed) {
     }
     return null
   }
+  // ((S5c) the hulls stand last, apart: hullPosts)
+  const hull = (u) => u.t.role === 'Vehicle' || !!u.t.fp
+  const holds = holdPosts(plan, G.objectives)
   const rest = []
   for (const u of mine) {
-    if (u.t.fp) continue
+    if (hull(u)) continue
     const c = decked(u) ? take(u, deck) : null
     if (c) put(u, c)
     else rest.push(u)
   }
   const behind = []
   for (const u of rest) {
-    const c = take(u, ground)
+    const c = take(u, u.t.OC > 0 ? [...holds, ...ground] : ground)
     if (c) put(u, c)
     else behind.push(u)
   }
-  const back = [...behind, ...mine.filter((u) => u.t.fp)]
+  const lot = hullPosts(plan), left = []
+  for (const u of mine.filter(hull)) {
+    let c = null
+    for (const p of lot) {
+      c = u.t.fp ? hullAt(G, u, p, side, placed) : postCell(G, u, p, box, placed)
+      if (c) break
+    }
+    if (!c) {
+      left.push(u)
+      continue
+    }
+    if (u.t.fp) u.facing = c.f
+    put(u, c)
+  }
+  const back = [...behind, ...left]
   back.forEach((u, i) => {
     const x = sx * (W / 2 - 2.4), z = ((i + 0.5) / back.length - 0.5) * (H - 6) * -sx
     if (u.t.fp) {
@@ -386,6 +416,47 @@ function postCell(G, u, p, box, others) {
   }
   return best
 }
+// (Breakthrough, S5c) The holders' posts, taken before the yard's and the
+// second line's by a unit with OC that the decks did not take: the yard's
+// objective (the one nearest the gate), a disc of OBJECTIVE_RANGE about
+// it, then the ground BREACH_BACK behind the breach's middle (the side of
+// its line where faceDist is the greater), a disc of BREACH_R. Read off
+// the plan and the objectives, both the table's (mirrored with the board),
+// so the posts are too, to the bit: no die, and the generator's own posts
+// stay as they were.
+export const BREACH_BACK = 3.5, BREACH_R = 2.5
+function holdPosts(plan, objectives) {
+  const g = plan.gate
+  let yard = null
+  for (const o of objectives) if (!yard || hypot(o.x - g.x, o.z - g.z) < hypot(yard.x - g.x, yard.z - g.z)) yard = o
+  const out = [{ x: yard.x, z: yard.z, y: 0, r: OBJECTIVE_RANGE, on: 'yard' }]
+  const b = plan.breach
+  if (b) {
+    const mx = (b.a.x + b.b.x) / 2, mz = (b.a.z + b.b.z) / 2, L = hypot(b.b.x - b.a.x, b.b.z - b.a.z)
+    const nx = (b.a.z - b.b.z) / L, nz = (b.b.x - b.a.x) / L
+    const k = faceDist(plan, mx + nx * BREACH_BACK, mz + nz * BREACH_BACK) >= faceDist(plan, mx - nx * BREACH_BACK, mz - nz * BREACH_BACK) ? BREACH_BACK : 0 - BREACH_BACK
+    out.push({ x: mx + nx * k, z: mz + nz * k, y: 0, r: BREACH_R, on: 'yard' })
+  }
+  return out
+}
+// (S5c) The hulls' posts: the second line's on the ground (behind the
+// hedgebank, never the watch platform's top), less any whose disc comes
+// within HULL_GAP of the hedgebank's gap at the breach's line (its road's
+// gap has no post), so a hull blocks neither way through the second line
+// its own side walks; a hull no post takes goes to the back row as ever.
+export const HULL_GAP = 2
+function hullPosts(plan) {
+  const b = plan.breach, zb = b ? (b.a.z + b.b.z) / 2 : null
+  return postsOf(plan, 'second').filter((p) => p.y <= STEP && (zb === null || Math.abs(p.z - zb) >= p.r + HULL_GAP))
+}
+// (S5c) A long hull's state at post p: freeSpot's at the edge rule's
+// heading from the post's middle, if it falls within the post's radius;
+// null otherwise
+function hullAt(G, u, p, side, others) {
+  const q = freeSpot(G, u, p.x, p.z, side, others, defaultFacing(G, side))
+  return q && hypot(q.x - p.x, q.z - p.z) <= p.r ? q : null
+}
+
 // freeSpot's nearest cell, on the ground (a floor of STEP or under)
 function groundSpot(G, u, x, z, box, others) {
   const nav = G.nav

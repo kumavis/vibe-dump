@@ -393,7 +393,13 @@ async function tips(browser, url) {
 // attacking, breaks through, 4 of 4 in round 5; board 1, seat 1
 // attacking, is held at 3. Boards 1, 2, 3 and 5 with seat 0 attacking
 // also break through, boards 1, 4, 5 and 6 with seat 1 attacking are
-// held.) Their numbers (the target, the rounds) and the races' names are
+// held.) ((S5c) The roles' presets are the attacker's assault and the
+// defender's garrison, the defender at 800 points, its squads on the works:
+// both old boards ended the other way (205 held at 3, 1 broken through in
+// round 5), so the pair was found again on boards 1-40 each way round:
+// board 7, seat 0 attacking, breaks through, 4 of 4 in round 5 (boards 3, 6
+// and 8 too, each in round 6); board 6, seat 1 attacking, is held at 1
+// (11, 19 and 24 too, at 3, 3 and 2).) Their numbers (the target, the rounds) and the races' names are
 // the code under test's own (data/mission.js, data/schema.js).
 const { MISSIONS: MISSIONS_UT } = await import(pathToFileURL(join(PKG, 'data', 'mission.js')).href)
 const { RACES: RACES_UT } = await import(pathToFileURL(join(PKG, 'data', 'schema.js')).href)
@@ -408,7 +414,7 @@ const roleBattle = (id, board, attacker, armies) => ({
   },
   click: `#setupRoles button[data-attacker="${attacker}"]`,
 })
-const ROLE_ITEMS = BT ? [roleBattle('breakthrough-205', 205, 0, ['field', 'garrison']), roleBattle('held-1', 1, 1, ['garrison', 'field'])] : []
+const ROLE_ITEMS = BT ? [roleBattle('breakthrough-7', 7, 0, ['assault', 'garrison']), roleBattle('held-6', 6, 1, ['garrison', 'assault'])] : []
 
 // The role lane: each role battle watched whole on a page of its own,
 // nothing snapped, and a battle against the AI at its deployment, each

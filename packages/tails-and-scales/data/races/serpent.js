@@ -22,8 +22,13 @@ export default {
   // two Spitter squads for the works and the yard, a Sidewinder squad, a
   // Venom Engine, and two Howdahs, whose hulls hold the gate's road: (S5b)
   // 600 points of 625, 11 units, 37 models (625 would cost the Engine or
-  // a twelfth unit, past the list's 11))
-  armies: { field: '224222', grand: '336333', garrison: '1132112' },
+  // a twelfth unit, past the list's 11)) ((S5c) Made again for the
+  // defender's 800 points and its own Howdah price, 135 (data/mission.js):
+  // the Hierophant, a Brute, two Scaleguard and two Spitter squads, a
+  // Sidewinder squad, a Venom Engine and two Howdahs, 795 points of 800,
+  // 10 units, 31 models. `assault`, the attacker's own preset: Field's ×2
+  // list as it is, its two Brutes the wreckers, 950 points.)
+  armies: { field: '224222', grand: '336333', garrison: '1122112', assault: '224222' },
   units: {
     scaleguard: {
       name: 'Scaleguard', short: 'Scaleguard', role: 'Troops', ai: 'line', models: 6, base: 0.32, pts: 10, cost: 70,

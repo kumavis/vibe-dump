@@ -2009,12 +2009,23 @@ follows N3.
       play-report's Breakthrough row passes; the role gates hold on seeds
       1111 and 2222; the gate falls in 95% of the battles where the
       attacker fields a wrecker. P-wall's charge scenes added.
-    - [ ] P-wall's `wall-ladder-held` and `wall-front-open` mutants are
-      missed since the garrison defends (S5a): on P-wall's boards no
-      garrison unit holds a ladder's head, nor ends a move in front of
-      the face with the ground there left free, so neither term has
-      anything to do; with Field's preset defending both are caught as
-      before. The workload or the garrison to be decided (S5b's report).
+    - [x] **S5c** The garrison on the wall (DESIGN §4.2.12, As built
+      (S5c)): nobody aboard a hull behind a wall, the holders on the
+      yard's objective and behind the breach, the hulls on the second
+      line; the defender holds its post (`HOLD_POST`) but for the line's
+      reasons to go; a defence's own hull prices (the War-Cart 90, the
+      Howdah 135); the attacker's own preset, the assault, a wrecker in
+      each; the defender at 800 points. Swap sides' rule for armies
+      settled (ui-check), lobby-rig's size row reads both roles' points.
+    - [ ] The Coil attacking the Coil wins 37.8% and 37.5% (seeds 1111,
+      2222), and the Coil attacking the Bushtails 66.8% on 2222: the
+      pair band (40-60%) is missed; one points figure cannot move the
+      defending races apart. A per-race lever to be decided.
+    - [ ] P-wall's `wall-ladder-held` (20 idling against 24 on the final
+      record) and `wall-front-open` (no garrison wants the ground in
+      front) mutants are missed; aiming rows 4 and 6 at a named list
+      ('11222') catches front-open and deny-off there, but that edit was
+      not made. The workload to be decided (S5c's report).
     - [ ] human-bot's role zones, the `breach/` corpus set (six battles)
       recorded on the final code with the PIN moved.
 - [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if

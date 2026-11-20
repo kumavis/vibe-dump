@@ -53,16 +53,14 @@ import {
 import { hold } from '../actions/move.js'
 import { chargeReach } from '../actions/charge.js'
 import { fireSlots, nearestCell } from '../actions/transport.js'
-import { worth, meleeValue, shotValue, riderShot, spellValue, bestSpot, fallbackSpot, bestLanding, budgetOf, nearestOf, wallRush, wallTerms, wallDeny } from './score.js'
+import { worth, meleeValue, shotValue, riderShot, spellValue, bestSpot, fallbackSpot, bestLanding, budgetOf, nearestOf, wallRush, wallTerms, wallDeny, CHARGE_OUT } from './score.js'
 import { wallOf, sideRole, faceAt } from './route.js'
 
-// (Breakthrough, DESIGN §4.2.12's AI) How far in front of a wall's outer
-// face a defender still charges an attacker: one whose middle stands within
-// CHARGE_OUT of it, so the charge ends a base or two from the face and the
-// next move takes it back behind the line. Chosen, not tuned: over 400 AI
-// battles no defender's charge ended in front of the face at all (S3's As
-// built, DESIGN §4.2.12)
-export const CHARGE_OUT = 2
+// (Breakthrough, DESIGN §4.2.12's AI) CHARGE_OUT, how far in front of a
+// wall's outer face a defender still charges an attacker, is core/ai/
+// score.js's (S5c: beside the hold term, which reads it too), named here as
+// ever
+export { CHARGE_OUT }
 
 // Each unit type names its AI role in the race data (`t.ai`); the roles act
 // in this order, brawlers first and the guns last. (F9a) The transports

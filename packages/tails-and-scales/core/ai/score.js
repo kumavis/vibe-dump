@@ -19,8 +19,8 @@ import { friendsUnder } from '../actions/shoot.js'
 import { inFootprint } from '../actions/settle.js'
 import { HAZARDS } from '../../data/hazards.js'
 import { MISSIONS } from '../../data/mission.js'
-import { wallOf, sideRole, routeFields, routeDist, faceGrid, gateOf, ramsAt, nearField } from './route.js'
-import { postsOf } from '../terrain/breakthrough.js'
+import { wallOf, sideRole, routeFields, routeDist, faceGrid, gateOf, ramsAt, nearField, HOLD, HOLD_Y } from './route.js'
+import { postsOf, faceDist } from '../terrain/breakthrough.js'
 import { STEP } from '../nav.js'
 
 // a unit's points still standing
@@ -773,9 +773,11 @@ export function score(G, u, x, z, ctx, moving) {
     if (ctx.kegDanger) for (const k of kegs) s -= kegFear(u, k, from, G) * KEG_FEAR
     if (moved) s += kegWalk(G, u, from, kegs) * KEG_SMASH
   }
-  // ((Breakthrough) the wall: the ram, and the line held)
+  // ((Breakthrough) the wall: the ram, and the line held; (S5c) and
+  // whether this spot is the post held, for wallRush)
+  ctx.held = false
   if (ctx.bt) s += wallScore(G, u, x, z, ctx, moved, canShoot, ci)
-  ctx.last = { onObjective, obj, canShoot }
+  ctx.last = ctx.held ? { onObjective, obj, canShoot, held: true } : { onObjective, obj, canShoot }
   return s
 }
 
@@ -817,6 +819,9 @@ export function score(G, u, x, z, ctx, moving) {
 // S3's measurements on S3's record; the gate's fall and the ram's way on
 // the final one are route.js RAM_STEP's.)
 export const ROUTE_REACH = 40, RAM_BLOW = 3, FRONT_COST = 30, DENY = 5, THREAT = 12, WALL_HOLD = 1, PROGRESS = 0.4, THIN = 6, DENY_GAIN = 40
+// (S5c) What staying on a post held is worth to a defender (holdOf, which
+// says when it holds one): measured below in DESIGN §4.2.12's As built (S5c)
+export const HOLD_POST = 8
 
 // What the wall's terms read of the match for `u`'s scan, once: for the
 // attacker its route fields and, for a wrecker, the gate standing; for the
@@ -851,7 +856,46 @@ export function wallTerms(G, u, wall, enemies, owners) {
   const lost = owners[yard.i] === foe
   let post = null
   for (const p of postsOf(wall, lost ? 'second' : 'yard')) if (!post || hypot(p.x - u.pos.x, p.z - u.pos.z) < hypot(post.x - u.pos.x, post.z - u.pos.z)) post = p
-  return { atk: false, face, across, threat, post }
+  return { atk: false, face, across, threat, post, hold: holdOf(G, u, wall, enemies, threat) }
+}
+
+// (Breakthrough, S5c) The post defender `u` holds where it stands, for
+// wallScore's HOLD_POST: 'post' at a siege ladder's head (its middle within
+// HEAD_R of the ladder's top, at its level within HOLD_Y) or, for a unit
+// with OC, in an objective's hold area (within HOLD, at its level); 'works'
+// on a deck (a floor above STEP), held only while it has a target from
+// there (wallScore's canShoot); null standing anywhere else, or when one of
+// the line's reasons to go applies: an objective the attacker holds that u
+// could contest this turn (OC, its middle within its move and the
+// objective's range of it, wall-probe's `able`), or, for a brawler, an
+// attacker behind the face its countercharge could reach (its middle
+// within u's move and CHARGE_RANGE and both radii). An attacker no more
+// than CHARGE_OUT in front of the face, at the wall's foot, is charged
+// from the post itself or not at all (the policy's charges, core/ai/
+// policy.js): counted too, it took the yard's brawlers off their posts
+// as the attack reached the wall (on the presets, the Oak Guard still
+// at its post in round 2 in 0 of 24 battles). A post whose
+// other terms (the brawlers' danger, the shot from elsewhere) outweigh
+// HOLD_POST is untenable by the score itself.
+//
+// (CHARGE_OUT: how far in front of a wall's outer face a defender still
+// charges an attacker, one whose middle stands within CHARGE_OUT of it, so
+// the charge ends a base or two from the face and the next move takes it
+// back behind the line. Chosen, not tuned: over 400 AI battles no
+// defender's charge ended in front of the face at all (S3's As built,
+// DESIGN §4.2.12). Here from S5c; core/ai/policy.js's charges read it.)
+export const HEAD_R = 1.5, CHARGE_OUT = 2
+function holdOf(G, u, wall, enemies, threat) {
+  const nav = G.nav, y = nav.hasHeight ? floorAt(G, u.pos.x, u.pos.z) : 0
+  const level = (x, z) => !nav.hasHeight || Math.abs(floorAt(G, x, z) - y) <= HOLD_Y
+  let hold = null
+  if (wall.ladders.some((l) => hypot(l.top.x - u.pos.x, l.top.z - u.pos.z) <= HEAD_R && level(l.top.x, l.top.z))) hold = 'post'
+  else if (u.t.OC > 0 && G.objectives.some((o) => hypot(o.x - u.pos.x, o.z - u.pos.z) <= HOLD && level(o.x, o.z))) hold = 'post'
+  else if (y > STEP) hold = 'works'
+  if (!hold) return null
+  if (u.t.OC > 0 && G.objectives.some((o) => threat[o.i] === 2 && hypot(o.x - u.pos.x, o.z - u.pos.z) - u.r <= u.t.M + OBJECTIVE_RANGE)) return null
+  if (u.t.brawler && enemies.some((e) => faceDist(wall, e.pos.x, e.pos.z) > 0 && hypot(e.pos.x - u.pos.x, e.pos.z - u.pos.z) - u.r - e.r <= u.t.M + CHARGE_RANGE)) return null
+  return hold
 }
 
 // The objective term on a wall's board: [its best value, whether (x, z) is
@@ -989,12 +1033,18 @@ function wallScore(G, u, x, z, ctx, moved, canShoot, ci) {
   const fd = ci >= 0 ? bt.face[ci] : -1
   if (fd < 0) s -= FRONT_COST
   else if (canShoot && G.nav.hasHeight && floorAt(G, x, z) > STEP) s += WALL_HOLD
+  // ((S5c) the post held: staying on it, holdOf's)
+  if (!moved && bt.hold && (bt.hold !== 'works' || canShoot)) {
+    s += HOLD_POST
+    ctx.held = true
+  }
   return s
 }
 
 // (Breakthrough) Whether an attacker on a wall's board advances (the
 // policy's Advance, core/ai/policy.js aiMoveOne), or null off a wall's
-// board and for a defender (the policy's own rule then, as ever): the
+// board and for a defender (the policy's own rule then, as ever, but (S5c)
+// false for a defender whose pick is staying on the post it holds): the
 // guns and the heroes never; a unit within its move and 2 of its nearest
 // objective by its route never (it arrives walking); a line unit on an
 // objective, and a raider or a shooter with a shot from its pick, never
@@ -1004,6 +1054,9 @@ function wallScore(G, u, x, z, ctx, moved, canShoot, ci) {
 // route is long and the wall's fire is on it while it walks. No draw.
 export function wallRush(G, u, role, pick) {
   const wall = wallOf(G)
+  // ((S5c) a defender whose pick is the post it holds never advances: it
+  // stays, its shot and its charge kept)
+  if (wall && sideRole(G, u) === 'defend' && pick.held) return false
   if (!wall || sideRole(G, u) !== 'attack') return null
   if (role === 'artillery' || role === 'hero') return false
   const f = routeFields(G, u, wall), nav = G.nav, i = nav.index(u.pos.x, u.pos.z)

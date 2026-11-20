@@ -2198,12 +2198,19 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
   // units and models, each scaled down with the points ((S5b) 625 of
   // 1,000: 11 of 18 units, 44 of 70 models), and its own preset, the
   // garrison)
-  const DEF_LIST = { ...MISSIONS.field.list, points: 625, units: 11, models: 44 }
-  check(isDeepStrictEqual(B?.roles, { attack: { zone: { x: [-30, -20] }, first: true, target: 4 }, defend: { zone: { behind: true, x: [-12, 30] }, line: -4.5, army: 'garrison', list: DEF_LIST } }), "its roles: the attacker within 10 tails of the west edge, first to move, 4 to win, on Field's list; the defender behind the wall and no nearer the attacker's edge than x -12 (8 tails from the attacker's zone), its line the gate face's nominal x (-4.5), its preset the garrison and its own list", JSON.stringify(B?.roles))
+  // ((S5c) 800 of 1,000: 14 of 18 units, 56 of 70 models; and the hulls'
+  // prices a defence's own, the War-Cart 90 and the Howdah 135, every
+  // other price Field's; the attacker's own preset, the assault)
+  const HULL_PRICES = { squirrel: { warcart: 90 }, serpent: { howdah: 135 } }
+  const F0 = MISSIONS.field.list
+  const DEF_LIST = { ...F0, points: 800, units: 14, models: 56, prices: Object.fromEntries(Object.entries(F0.prices).map(([r, p]) => [r, { ...p, ...HULL_PRICES[r] }])) }
+  check(isDeepStrictEqual(B?.roles, { attack: { zone: { x: [-30, -20] }, first: true, target: 4, army: 'assault' }, defend: { zone: { behind: true, x: [-12, 30] }, line: -4.5, army: 'garrison', list: DEF_LIST } }), "its roles: the attacker within 10 tails of the west edge, first to move, 4 to win, on Field's list, its preset the assault; the defender behind the wall and no nearer the attacker's edge than x -12 (8 tails from the attacker's zone), its line the gate face's nominal x (-4.5), its preset the garrison and its own list", JSON.stringify(B?.roles))
   {
-    const D = B?.roles.defend.list ?? {}, F = MISSIONS.field.list, own = ['points', 'units', 'models']
+    const D = B?.roles.defend.list ?? {}, F = MISSIONS.field.list, own = ['points', 'units', 'models', 'prices']
     const same = Object.keys(F).filter((k) => !own.includes(k)).every((k) => isDeepStrictEqual(D[k], F[k])) && Object.keys(D).every((k) => k in F)
-    check(same && D.points === 625 && D.units === Math.round(F.units * 625 / F.points) && D.models === Math.round(F.models * 625 / F.points), `the defender's list is Field's but for its own points, units and models (${own.map((k) => `${k} ${D[k]} of ${F[k]}`).join(', ')}: each Field's scaled by its points, rounded), its slots, perKind, prices and size Field's`, JSON.stringify(D))
+    // (its prices Field's but for the ones named its own, HULL_PRICES)
+    const priced = isDeepStrictEqual(Object.keys(D.prices ?? {}).sort(), Object.keys(F.prices).sort()) && Object.entries(F.prices).every(([r, p]) => Object.entries(D.prices[r]).every(([k, v]) => (k in (HULL_PRICES[r] ?? {}) ? v === HULL_PRICES[r][k] && !(k in p) : v === p[k])) && Object.keys(p).every((k) => k in D.prices[r]))
+    check(same && priced && D.points === 800 && D.units === Math.round(F.units * 800 / F.points) && D.models === Math.round(F.models * 800 / F.points), `the defender's list is Field's but for its own points, units and models (${own.slice(0, 3).map((k) => `${k} ${D[k]} of ${F[k]}`).join(', ')}: each Field's scaled by its points, rounded) and the prices named its own (${Object.entries(HULL_PRICES).map(([r, p]) => Object.entries(p).map(([k, v]) => `${r} ${k} ${v}`).join(', ')).join('; ')}); its slots, perKind, every other price and size Field's`, JSON.stringify(D))
     const pa = A.rulesFor({ mission: 'breakthrough', attacker: 0 }, 0).points, pd = A.rulesFor({ mission: 'breakthrough', attacker: 0 }, 1).points
     check(pa / pd >= 1.25 && pa / pd <= 2, `the attacker has the numbers: ${pa} points against the defender's ${pd} (${(pa / pd).toFixed(2)} times, from 1.25 to 2)`)
   }
@@ -2316,7 +2323,9 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
     ["an objective's scores (attack → both)", (m) => delete m.objectives[1].scores],
     ["an objective's worth (1 → 2)", (m) => (m.objectives[1].vp = 2)],
     ["a role's own list (the attacker at 1,100 points)", (m) => (m.roles.attack.list = { ...m.list, points: 1100 })],
-    ["the defender's points (625 → 650)", (m) => (m.roles.defend.list = { ...m.roles.defend.list, points: 650 })],
+    ["the defender's points (800 → 775)", (m) => (m.roles.defend.list = { ...m.roles.defend.list, points: 775 })],
+    ["a defence's own hull price (the Howdah 135 → 105)", (m) => (m.roles.defend.list.prices.serpent.howdah = 105)],
+    ["the attacker's preset (assault → field)", (m) => (m.roles.attack.army = 'field')],
     ["the defender's preset (garrison → field)", (m) => (m.roles.defend.army = 'field')],
   ]) check(bt(edit) !== RULES_ID, `RULES_ID moves on ${what}`)
   // rulesFor: each seat its role's list rules, the mission's where the role
@@ -2331,7 +2340,7 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
     // ((S5a) presetFor: the defending seat the garrison, the attacker the
     // mission's preset, every seat of a mission without roles its own)
     const pf = (attacker, s) => A.presetFor({ mission: 'breakthrough', attacker, seats }, s)
-    check(Object.keys(MISSIONS).filter((m) => m !== 'breakthrough').every((m) => [0, 1].every((s) => A.presetFor({ mission: m, seats }, s) === MISSIONS[m].army)) && pf(undefined, 0) === B.army && pf(undefined, 1) === 'garrison' && pf(1, 1) === B.army && pf(1, 0) === 'garrison', "presetFor hands every seat its mission's preset on every mission without roles; on breakthrough the defending seat its role's own, the garrison, the attacker the mission's")
+    check(Object.keys(MISSIONS).filter((m) => m !== 'breakthrough').every((m) => [0, 1].every((s) => A.presetFor({ mission: m, seats }, s) === MISSIONS[m].army)) && pf(undefined, 0) === 'assault' && pf(undefined, 1) === 'garrison' && pf(1, 1) === 'assault' && pf(1, 0) === 'garrison', "presetFor hands every seat its mission's preset on every mission without roles; on breakthrough each seat its role's own: the defending seat the garrison, (S5c) the attacker the assault")
     const own = { ...B.list, points: 1100 }
     const T2 = { ...MISSIONS, breakthrough: { ...B, roles: { ...B.roles, attack: { ...B.roles.attack, list: own }, defend: { ...B.roles.defend, list: undefined } } } }
     const at = (attacker, s) => A.rulesFor({ mission: 'breakthrough', attacker, seats }, s, T2)
@@ -2381,7 +2390,7 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
   check([G0, G1].every((G) => apart(G) >= 8 - 0.01), `every default defender's base stands 8 tails or more from the attacker's zone (the least ${apart(G0).toFixed(2)}, seat 1 attacking ${apart(G1).toFixed(2)})`)
   // ((S5a) each seat its role's preset: the attacker the mission's, the
   // defender the garrison, whichever seat attacks)
-  check(G0.setup.seats[0].army === B.army && G0.setup.seats[1].army === 'garrison' && G1.setup.seats[0].army === 'garrison' && G1.setup.seats[1].army === B.army && isDeepStrictEqual(core.army.armyOf(G0.setup, 1).keys, core.army.keysOf(RACES[seats[1].race], 'garrison')) && isDeepStrictEqual(core.army.armyOf(G1.setup, 0).keys, core.army.keysOf(RACES[seats[0].race], 'garrison')), "each seat fields its role's preset whichever seat attacks: the attacker the mission's, the defender its garrison", JSON.stringify([G0.setup.seats.map((s) => s.army), G1.setup.seats.map((s) => s.army)]))
+  check(G0.setup.seats[0].army === 'assault' && G0.setup.seats[1].army === 'garrison' && G1.setup.seats[0].army === 'garrison' && G1.setup.seats[1].army === 'assault' && isDeepStrictEqual(core.army.armyOf(G0.setup, 1).keys, core.army.keysOf(RACES[seats[1].race], 'garrison')) && isDeepStrictEqual(core.army.armyOf(G1.setup, 0).keys, core.army.keysOf(RACES[seats[0].race], 'garrison')), "each seat fields its role's preset whichever seat attacks: the attacker its assault, the defender its garrison", JSON.stringify([G0.setup.seats.map((s) => s.army), G1.setup.seats.map((s) => s.army)]))
   // the generator's sixth argument: the role record on breakthrough, in the
   // attacker frame; nothing on any other mission
   const T = Terrain.prototype, was = T.generate, heard = []

@@ -281,10 +281,15 @@ export function doDisembark(G, u, c) {
 // No draw (§4.1 rule 19): an army without a vehicle (every preset) deploys
 // exactly as it did. A human seat re-arranges in its deployment (a `place`
 // takes a rider off; an `embark` boards one).
-export function autoload(G) {
+//
+// ((Breakthrough, S5c) `skip`, the seats whose hulls board no one: those
+// deployArmies stood behind a wall, whose squads man the works instead of
+// riding at the back of the yard. Empty on every board without a wall, so
+// every other deployment boards as it did.)
+export function autoload(G, skip = null) {
   for (const v of G.units) {
     const tr = v.t.transport
-    if (!tr || !alive(v)) continue
+    if (!tr || !alive(v) || skip?.has(v.side)) continue
     let left = room(G, v)
     for (const u of G.units) {
       if (u.side !== v.side || u.t.role !== 'Troops' || u.aboard || !alive(u)) continue

@@ -2106,8 +2106,8 @@ const ARMY_REFUSALS = {
   // preset: either agreement passes)
   // ((F8b) every race's presets, named in their order: (Breakthrough, S5a)
   // four, the March Wall's garrison the last)
-  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there are classic, field, grand, garrison\)$/],
-  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there are classic, field, grand, garrison\)$/],
+  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there are classic, field, grand, garrison, assault\)$/],
+  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there are classic, field, grand, garrison, assault\)$/],
   // ('toString' has a capital: no preset's name, so not a list either)
   "toString": ['toString', NO, /^seat 0's army "toString" is neither a preset nor a list of counts$/],
   // ((F8b) a larger battle's preset is a preset like any, held to the
@@ -5381,12 +5381,15 @@ function bailWatch(core, mods) {
 // The units DESIGN §4.2.8.7's autoload boards, by id → hull id: each hull
 // in G.units order, its seat's Troops in G.units order, on the table, bases
 // within maxBase, neither big nor a wrecker, whole, while they fit (a squad
-// that doesn't is passed over)
+// that doesn't is passed over). ((Breakthrough, S5c) A hull of a seat that
+// deployed behind a wall boards no one: on a board with a plan, the seat
+// that does not attack, the only one whose zone is behind it.)
 function autoloadWant(G) {
   const want = new Map()
+  const walled = (s) => !!G.terrain.plan && G.setup.attacker !== undefined && s !== G.setup.attacker
   for (const v of G.units) {
     const tr = v.t.transport
-    if (!tr || v.alive <= 0) continue
+    if (!tr || v.alive <= 0 || walled(v.side)) continue
     let left = tr.capacity
     for (const u of G.units) {
       if (u.side !== v.side || u.t.role !== 'Troops' || want.has(u.id) || u.alive <= 0) continue

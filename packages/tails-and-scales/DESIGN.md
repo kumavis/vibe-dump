@@ -4423,6 +4423,79 @@ Breakthrough fought on the March Wall, on the S1 and S4a machinery as it was (`C
 - **The `breach/` corpus set.**
 - **human-bot's role zones.**
 
+##### As built (S5c)
+
+**What a defence is here.** The defenders have fewer points and the attackers more; the defenders get the works, and less need to move, as their advantage. So a defence stands on the wall from the first turn and holds what it stands on: its shooters on the tower tops and along the curtain walk, the ladders' heads among them, its holders on and round the yard's objective and behind the breach, its hulls back on the second line. It leaves a post only for a reason the line already had: an objective the attacker holds that it can contest, an attacker behind the face to countercharge, or a post its other terms make untenable. `CORE_VERSION` stays 17; parity is 97 of 97 byte-identical, nothing re-recorded.
+
+**The deployment** (`core/deploy.js` `postArmy`, `deployArmies`; `core/actions/transport.js` `autoload`). A seat whose zone is behind a wall starts nobody aboard a hull: `autoload(G, skip)` passes over the hulls of the seats `deployArmies` stood behind a wall (none on any other board, so every other deployment boards as it did). Its units take the posts in `G.units` order as before, with two changes. The holders (a unit with OC that the decks did not take) try `holdPosts` first: the yard's objective (the one nearest the gate, a disc of `OBJECTIVE_RANGE`), then the ground `BREACH_BACK` (3.5) tails behind the breach's middle (a disc of `BREACH_R`, 2.5). Then come the yard's posts and the second line's as before. The hulls (the Vehicle slot, or a long hull) stand last, on the second line's ground posts (`hullPosts`: never the platform's top, and none within `HULL_GAP`, 2, of the hedgebank's gap at the breach's line); a hull no post takes goes to the back row as before. The posts are read off the plan and the objectives, both the table's, so the layout stays the exact point mirror with seat 1 attacking. The generator and its posts are unchanged. The attacker's deployment is unchanged.
+
+**The hold** (`core/ai/score.js` `holdOf`, `HOLD_POST`; `wallRush`). The defender's scan reads, once, the post the unit holds where it stands. It is `'post'` at a siege ladder's head (within `HEAD_R`, 1.5, of its top, at its level) or, for a unit with OC, in an objective's hold area. It is `'works'` on a deck, held only while the unit has a target from there. Otherwise it is null. It is also null when one of the line's reasons to go applies:
+- an objective the attacker holds that the unit could contest this turn (wall-probe's `able`);
+- for a brawler, an attacker behind the face within its move and `CHARGE_RANGE`.
+
+An attacker at the wall's foot, within `CHARGE_OUT` in front of the face, is charged from the post or not at all. Counting those as a reason took the yard's brawlers off their posts as the attack reached the wall. Staying on a held post scores `HOLD_POST` (8) more, and a defender whose pick is that stay never advances (`wallRush`). A post whose danger outweighs `HOLD_POST` is untenable by the score itself. `CHARGE_OUT` moved beside the term (`core/ai/policy.js` re-exports it). The AI boards no hull after the deployment, as before.
+
+**What part 1 did** (seed 1111, boards 1-100; random legal lists are army-sim's own battles; before → after, before any re-tuning):
+- *Still* (the share of the defender's unit-moves under 1 tail, by round). On the presets: 17.6 / 36.5 / 35.3 / 31.4 / 33.8 / 40.4 → 66.7 / 50.2 / 55.6 / 58.9 / 63.2 / 68.5. Over random lists: 20.4 / 33.7 / 37.0 / 36.7 / 42.8 / 48.5 → 75.8 / 61.5 / 60.6 / 62.6 / 67.8 / 71.1.
+  - With the deployment alone (`HOLD_POST` 0), the presets read 20.4 / 19.2 / 27.3, and at `HOLD_POST` 2 and 4 they read 51.3 / 39.6 / 45.7 and 63.9 / 46.4 / 52.4. So 8 is the least tried that gives half or more in rounds 1-3.
+  - The hulls move every round (they ride nothing and play as line units); the rest stand still 77-100% of the time.
+- *Shooters on the works*, by round, on the presets: 34.7 / 29.5 / 26.3 / 19.0 / 10.9 / 9.4 → 62.8 / 55.6 / 46.9 / 39.8 / 42.9 / 51.9. Over random lists: 58.2 → 73.6 in round 1, 36.7 → 79.4 in round 6.
+- *Ladder heads.* When an attacker climbs, a defender at the walk's level is within 3 tails of the head in 45.0% → 64.3% of climbs on the presets, and in 20.4% → 34.4% over random lists. The ladders' share of crossings fell from 49.7% to 19.7% on the presets.
+- *In front of the face*: 0 of 12,954 → 4 of 14,513 defender unit-rounds on the presets; 0.06% → 0.03% over random lists.
+- *The attacker's share*: 48.3% → 51.8% on the presets, and 52.8% → 60.8% over random lists. Holding the works favoured the attacker until the points were re-tuned: it gave 53.9% with the deployment alone, and 56.5%, 58.9% and 60.4% at `HOLD_POST` 2, 4 and 8.
+
+**What the hulls do, and what they cost** (random legal lists, the tree after part 1, the defender at 625, 400 battles a cell; the attacker's share by the defender's hulls, 0 / 1 / 2):
+- A Bushtail defence: 84.3 / 72.5 / 64.5. A Coil defence: 70.3 / 52.5 / 38.5.
+- By the attacker's wreckers (0 / 1 / 2 or more): the Bushtails 43.0 / 51.0 / 59.0, the Coil 36.5 / 57.5 / 61.8.
+
+A crewless hull on the works' side is a tough body in the fight, not a carrier. Over 200 two-hull battles a race (Bushtails / Coil):
+- it is alive in 94.6% / 97.2% of its unit-rounds;
+- it draws 39.5% / 29.2% of the attack's blows but takes only 16.9% / 13.5% of the wounds the attack lands;
+- it is locked in melee 38.4% / 35.7% of rounds and charges about twice a battle;
+- it deals 17.0% / 14.0% of the defence's wounds;
+- it stands within 6 tails of the yard's objective 28.6% / 37.3% of the time and within 4 of the gate 8.5% / 13.1%, never in front of the face;
+- with no riders it has no firing deck and holds nothing (OC 0).
+
+At Field's 15 and 5 points that was the swing above, so the defender's list has its own prices for them (`roles.defend.list.prices`). These were searched: the War-Cart at 45, 90 and 135 swung 19.0, 6.8 and 5.0 points, and the Howdah at 45, 90, 105, 120 and 135 swung 29.0, 13.8, 7.7, 8.5 and 0.5. The War-Cart takes **90** (the lowest under 10) and the Howdah **135** (at the final points it left the Coil attacking the Coil at 37.8%, where 105 left it at 36.3%). data-check holds the defender's list to Field's rules but for its points, units, models and those two prices, each named.
+
+**The attack presets.** The attacker names its own preset, `roles.attack.army`, the **assault**. The Bushtails field Field's ×2 list and a War-Cart (`'2242221'`, 995 points), so their default attack can ram the gate (with Field's preset, 0 of 30 battles rammed it). The Coil field Field's ×2 as it is (`'224222'`, 950 points, its two Brutes the wreckers). The page offers each role's own preset first. The garrisons were made again for the list as it stands:
+- Bushtails `'1233101'`: the Elder, two Oak Guard, three Nutkin, three Grenadiers, a Glider Wing and a War-Cart, 800 of 800 points.
+- Coil `'1122112'`: the Hierophant, a Brute, two Scaleguard, two Spitters, a Sidewinder squad, a Venom Engine and two Howdahs, 795 points.
+
+**Swap sides** (`app/flow.js` `swapArmies`). A seat that named no army, or a preset, takes its new role's own preset. A seat with a list of its own keeps it where its new role's list rules take it. Otherwise it takes that role's preset, and a line under Swap sides (`#swapNote`) says so: "Swapped, the list of the Coil of Ssithra doesn't fit the defender's rules (950 points, over the Field limit of 800): they take the Garrison preset." ui-check's roles case holds both halves (mutants `swap-preset-kept`, `swap-list-unjudged`, `swap-note-unsaid`). lobby-rig's size row reads both roles' points from the record ("1,000 / 800 pts"; mutant `size-one-points`).
+
+**The points** (the defender's, in steps of 25; seed 1111, 1,600 battles). The ratio caps the defender at 800 (1.25).
+- 700 (13 units, 49 models): 65.6% pooled.
+- 750: 57.5%.
+- 775 with the Howdah at 135: 57.1% (the Bushtails attacking Bushtails 64.3, the Coil attacking Bushtails 67.0).
+- 800 with the Howdah at 105: 49.4% (the Coil attacking the Coil 36.3).
+- **800 with the Howdah at 135 (14 units, 56 models): 50.4%**, kept.
+
+The attacker's 1,000 points, the objectives, the target, the rounds and `RAM_STEP` are as they were.
+
+**The final numbers** (first boards 1-100 and seed 1111, then the fresh range, boards 1001-1200 and seed 2222, with the same code):
+- *Balance* (army-sim's role mode). Pooled: 50.4% and 51.9%. The ordered pairs, first range then fresh:
+  - the Bushtails attacking the Bushtails: 56.8 and 55.5;
+  - the Bushtails attacking the Coil: 47.3 and 47.8;
+  - the Coil attacking the Bushtails: 60.0 and **66.8**;
+  - the Coil attacking the Coil: **37.8** and **37.5**.
+
+  The pair band (40-60%) is missed: the Coil attacking the Coil on both ranges, and the Coil attacking the Bushtails on the fresh one. One points figure moves all four pairs together, and the defending races differ by about 15-20 points against the Coil's attack.
+- *Ends* (seed 1111, then 2222): breakthrough 40.6% and 42.1%, held 49.6% and 48.1%, the defender wiped 9.8% and 9.8%. On seed 1111, 86.2% of battles are decided in round 6 and 12.8% in round 5.
+- *Pace* (play-report's `bt`, the presets; exit 0 on both ranges): the attacker scores by round 4 in 74% and 75% of battles. On the first range, by cell: the Bushtails from seat 0 65%, the Coil from seat 0 78%, the Coil from seat 1 84%, the Bushtails from seat 1 70%. The attacker's wins by cell: 47 / 80 / 89 / 43% (fresh: 52 / 85 / 87 / 57%).
+- *Crossings* (the presets, first range then fresh): wood 35% and 35%, gate 28% and 29%, ladders 17% and 17%, flight 10% and 10%, breach 9% and 9%. Every preset now fields a wrecker: the gate falls in 93% and 89% of battles (median round 4), and is 28% and 29% of crossings.
+- *Still* on the final tree (the presets): 65.4 / 47.8 / 50.1 / 55.4 / 67.6 / 68.1. Over random lists: 77.1 / 65.4 / 65.1 / 67.5 / 68.1 / 67.8. The defender's shooters are on the works in 63% of their unit-rounds. In front of the face: 4 of 12,625 unit-rounds on the presets.
+- *Cost*: 227 ms a battle (median) and 399 ms (p90) in play-report; 220-330 ms in army-sim.
+
+**What holds it.**
+- P-wall (80 battles on the garrisons): its rows 1, 2, 4 and 6 hold (61 scored by round 4, 12 idling, 0 of 2,579 ends in front, OC up 49 over 121), and `wall-deny-off` is caught (26 over 79).
+- Two mutants are still missed:
+  - `wall-ladder-held` reads 20 idling against the row's 24. It was caught at 43 on the tree after part 1, before the attack presets and the points moved.
+  - `wall-front-open` plays the same battles as the built tree: a garrison that holds its posts never wants the ground in front.
+
+  An edit that would have aimed rows 4 and 6 at a second set of battles was not made (see the lane's report). With the defender on `'11222'` for both races, `wall-front-open` was caught there at 8 of 1,352 ends and `wall-deny-off` at 25 over 82, against 0 and 60 over 79 built. No threshold moved.
+- hud-check's role battles were re-picked on the assault and the garrison: board 7 with seat 0 attacking breaks through, 4 of 4 in round 5; board 6 with seat 1 attacking is held at 1.
+
 ### 4.3 Battlefield dressing (S1-S10)
 
 **The direction.** A battle should look like a moment in a real place seen from a little above: a lived-in borderland of fields, woods, quarries and keeps, at a time of day, where two armies have camped and met. The play area stays a game board (plain, readable ground; every solid thing on it a rules piece; zones, objectives and figures the loudest things on screen), and the mat's edge stays crisp, because the rules need it. Everything round the board and under its pieces tells the story. Of the two framings weighed, a landscape round the board and a deepened tabletop diorama (a room, a lamp, hobby clutter), the landscape was chosen; the diorama's cut board edge (soil strata under a turf top) is kept as the fallback border should the open edge ever read as unbounded. `?dress=0` draws the table as it was before (the wooden table, the dark room, the tufts strewn by `Math.random`), and the pixel gates (`sim/title-shot.mjs`, `sim/terrain-shots.mjs`) shoot with it.

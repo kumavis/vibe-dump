@@ -313,18 +313,22 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
   // defender wins when the rounds run out. No draw, no overtime. `deploy`
   // is the attacker's depth, 10: the view draws both zones by it until the
   // zones are drawn per seat (no rule reads it under roles: core/deploy.js
-  // zone). ((S5a, S5b) The armies are unequal: the attacker has the
-  // numbers, Field's 1,000 points and its preset, the ×2 list; the defender
-  // the works and the choice not to move, its own list of 625 points (11
-  // units, 44 models: Field's scaled by the points; its slots and prices
-  // Field's) and its own preset, the garrison. Balance (S5b's As built in
-  // DESIGN, the AI that rams the gate): random legal lists under each
-  // role's rules, 1,600 battles a seed, the attacker 52.8% on seed 1111
-  // and 52.8% on 2222 (each ordered race pair 42-59%), ended by
-  // breakthrough 45-46%, held 47%, the defender wiped 7-8%; on the presets
-  // the attacker scores by round 4 in 73% (boards 1-100) and 71% (1001-
-  // 1200). Tried: the defender at 600 points, 57.7%; at 650, 46.1%. The
-  // objectives are ones the generator's checks hold on every board
+  // zone). ((S5a, S5b, S5c) The armies are unequal: the attacker has the
+  // numbers, Field's 1,000 points and its own preset, the assault (Field's
+  // ×2 list, with a wrecker for each race); the defender the works and
+  // less need to move, its own list of 800 points (14 units, 56 models:
+  // Field's scaled by the points; its slots Field's, its prices Field's but
+  // the hulls', below) and its own preset, the garrison. (S5c) The
+  // defender's squads start on the works, nobody aboard a hull
+  // (core/deploy.js), and hold their posts (core/ai/score.js HOLD_POST).
+  // Balance (S5c's As built in DESIGN): random legal lists under each
+  // role's rules, 1,600 battles, seed 1111, the attacker 50.4% (the
+  // ordered race pairs 56.8%, 47.3%, 60.0% and 37.8%: the Coil attacking
+  // the Coil under the 40% the band asks), ended by breakthrough 40.6%,
+  // held 49.6%, the defender wiped 9.8%; on the presets (boards 1-100) the
+  // attacker scores by round 4 in 74.3%. Tried: the defender at 700
+  // points, 65.6%; at 750, 57.5%; at 775, 57.1%; 800 is the most the
+  // ratio allows (1.25). The objectives are ones the generator's checks hold on every board
   // measured (sim/terrain-check.mjs section 10): (5, 0) for the yard's
   // (S3's (9, 0); (3, 0) and (1, 0) fail them) and the arms' at (3, ±13),
   // the only one of those tried there that holds.)
@@ -346,15 +350,27 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     sets: ['march'],
     overtime: false,
     roles: {
-      attack: { zone: { x: [-30, -20] }, first: true, target: 4 },
+      attack: { zone: { x: [-30, -20] }, army: 'assault', first: true, target: 4 },
       defend: {
         zone: { behind: true, x: [-12, 30] }, line: -4.5, army: 'garrison',
         list: {
-          size: 'Field', points: 625, units: 11, models: 44, perKind: 5,
+          size: 'Field', points: 800, units: 14, models: 56, perKind: 5,
           roles: { Hero: [1, 2], Troops: [2, 10], Elite: [0, 3], Fast: [0, 3], Monster: [0, 2], Artillery: [0, 2], Vehicle: [0, 2] },
+          // ((S5c) Field's prices, but the hulls': a defence's own. At
+          // Field's (the War-Cart 15, the Howdah 5) a defence's hulls,
+          // crewless on the works' side, are tough bodies that draw a third
+          // of the attack's blows: over random legal lists (400 battles a
+          // cell, the defender at 625) the attacker won 84.3% / 72.5% /
+          // 64.5% against a Bushtail defence with 0 / 1 / 2 War-Carts, and
+          // 70.3% / 52.5% / 38.5% against a Coil one with 0 / 1 / 2 Howdahs.
+          // Searched: the War-Cart at 45, 90 and 135 swung 19.0, 6.8 and 5.0
+          // points; the Howdah at 45, 90, 105, 120 and 135 swung 29.0,
+          // 13.8, 7.7, 8.5 and 0.5. So the War-Cart 90, the lowest under 10;
+          // the Howdah 135, which at the defender's 800 left the Coil
+          // attacking the Coil at 37.8% where 105 left it at 36.3%)
           prices: {
-            squirrel: { elder: 75, oakguard: 115, nutkin: 70, grenadier: 45, glider: 60, trebuchet: 55 },
-            serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 45 },
+            squirrel: { elder: 75, oakguard: 115, nutkin: 70, grenadier: 45, glider: 60, trebuchet: 55, warcart: 90 },
+            serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 45, howdah: 135 },
           },
         },
       },

@@ -946,7 +946,7 @@ const BAD_LISTS = [
   ["'toString' as a preset", [null, 'toString'], /^start: seat 1's army "toString" is neither a preset nor a list of counts$/],
   ["'01121111'", ['01121111', null], /^start: seat 0's list "01121111" counts 8 kinds of unit; the Bushtail Clans muster 7 \(elder oakguard nutkin grenadier glider trebuchet warcart\)$/],
   // ((Breakthrough, S5a) the race's presets: the March Wall's garrison too)
-  ['a preset the race lacks', ['constructor', null], /^start: the Bushtail Clans have no army "constructor" \(there (is|are) classic(, field, grand(, garrison)?)?\)$/],
+  ['a preset the race lacks', ['constructor', null], /^start: the Bushtail Clans have no army "constructor" \(there (is|are) classic(, field, grand(, garrison(, assault)?)?)?\)$/],
   ['a number', [112111, '1121'], /^start: seat 0's army is a preset's name or a list of counts, not 112111$/],
   ["both seats' lists illegal: seat 0's reason", ['11', '2011'], /^start: seat 0's army: no Troops unit; a Skirmish army needs at least 1$/],
 ]

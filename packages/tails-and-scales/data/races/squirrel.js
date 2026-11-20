@@ -24,8 +24,14 @@ export default {
   // defender's own list: the Elder, an Oak Guard, three Nutkin and three
   // Grenadier squads for the works and the yard, a Trebuchet, and two
   // War-Carts, whose hulls hold the gate's road: (S5b) 620 points of 625,
-  // 11 units, 42 models)
-  armies: { field: '224222', grand: '336333', garrison: '1133012' },
+  // 11 units, 42 models) ((S5c) Made again for the defender's 800 points
+  // and its own War-Cart price, 90 (data/mission.js): the Elder, two Oak
+  // Guard, three Nutkin and three Grenadier squads, a Glider Wing and one
+  // War-Cart, 800 points of 800, 11 units, 49 models, its squads on the
+  // works. `assault`, the attacker's own preset: Field's ×2 list and a
+  // War-Cart, the clan's wrecker, so its default attack can ram the gate:
+  // 995 points of 1,000, 15 units, 57 models.)
+  armies: { field: '224222', grand: '336333', garrison: '1233101', assault: '2242221' },
   units: {
     nutkin: {
       name: 'Nutkin Skirmishers', short: 'Nutkin', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 7, cost: 75,
