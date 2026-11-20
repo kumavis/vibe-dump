@@ -706,8 +706,12 @@ const ROLE_MUTATIONS = {
   // ((Breakthrough, S4b) the table's Breakthrough drawing) the zones drawn
   // as the strips on a role battle
   'zones-strips': ['view/index.js', '    if (!to.units) this.table.zoneShapes(zoneShapes(g))', '    if (!to.units) this.table.zoneShapes(null)'],
-  // the zones not mirrored when seat 1 attacks
-  'zones-unmirrored': ['view/zones.js', '    const [x0, x1] = flip ? [0 - z.x[1], 0 - z.x[0]] : z.x', '    const [x0, x1] = z.x'],
+  // the zones not mirrored when seat 1 attacks ((S5d) the view reads the
+  // rules' zone, core/queries.js zone, so the edit reads it as if seat 0
+  // attacked: the attacker-west frame's bounds, unmirrored)
+  'zones-unmirrored': ['view/zones.js', '    const b = zone(G, s)', '    const b = zone({ ...G, setup: { ...G.setup, attacker: 0 } }, s)'],
+  // ((S5d) the plan's whole region drawn, not cut to the role's bounds)
+  'zones-uncut': ['view/zones.js', '    return b.plan ? clipBox(b.plan.region, x0, x1, z0, z1)', '    return b.plan ? b.plan.region'],
   // the minimap's zones the strips
   'minimap-strips': ['app/boot.js', 'edges: EDGES, zones: view.table.shapes ?? null,', 'edges: EDGES, zones: null,'],
   // the hurts handed no hit points: the gate never drawn broken

@@ -8,16 +8,19 @@
 // attacks. A mission without roles gives null, and the table and minimap
 // draw the strips `deploy` deep at each seat's edge, as they always have.
 //
-// It reads the rules' record through the doors the page already uses
-// (core/index.js rolesOf and roleOf, core/match.js flipped) and the plan's
-// points as the match made them; it decides nothing. core/deploy.js zone is
-// no door of the core's surface (sim/boundaries.mjs), so the shape is its
-// sums again, here: sim/hud-check.mjs's zones lane holds every point of a
-// grid over the board to `zone(G, side)` (inside one exactly when inside the
-// other, the wall's own band aside: a base must stand its radius behind the
-// face, a cell centre on it is in neither's), either seat attacking.
-import { rolesOf, roleOf } from '../core/index.js'
-import { flipped } from '../core/match.js'
+// ((S5d) One reader.) The zone is the rules' own, read through the core's
+// surface for views (core/queries.js re-exports core/deploy.js zone, as it
+// does freeSpot and placeOk): its x bounds (mirrored, and cut to the
+// board and the plan's reach, by the rules), its z bounds where the role
+// names them, and the plan where the zone lies behind the wall's face. The
+// polygon is all that is the view's: the bounds as a rectangle cut to the
+// board, or the plan's region cut to them. sim/hud-check.mjs's zones lane
+// still holds every point of a grid over the board to `zone(G, side)`
+// (inside one exactly when inside the other, the wall's own band aside: a
+// base must stand its radius behind the face, a cell centre on it is in
+// neither's), either seat attacking.
+import { rolesOf } from '../core/index.js'
+import { zone } from '../core/queries.js'
 
 // the polygon `pts` cut to x0 ≤ x ≤ x1 and z0 ≤ z ≤ z1 (Sutherland-Hodgman,
 // one half-plane at a time: the region is no convex shape, the box is)
@@ -44,19 +47,14 @@ const rect = (x0, x1, z0, z1) => [{ x: x0, z: z0 }, { x: x1, z: z0 }, { x: x1, z
 
 // [seat 0's polygon, seat 1's], or null on a mission without roles
 export function zoneShapes(G) {
-  const roles = rolesOf(G.setup)
-  if (!roles) return null
-  const { W, H } = G.board, flip = flipped(G.setup)
+  if (!rolesOf(G.setup)) return null
+  const { W, H } = G.board
   return [0, 1].map((s) => {
-    const z = roles[roleOf(G, s)].zone
-    const [x0, x1] = flip ? [0 - z.x[1], 0 - z.x[0]] : z.x
-    const [z0, z1] = z.z ? (flip ? [0 - z.z[1], 0 - z.z[0]] : z.z) : [-H / 2, H / 2]
-    const bx0 = Math.max(-W / 2, x0), bx1 = Math.min(W / 2, x1)
-    if (!z.behind) return rect(bx0, bx1, Math.max(-H / 2, z0), Math.min(H / 2, z1))
-    const plan = G.terrain.plan, line = roles[roleOf(G, s)].line
-    // (no plan: the line itself is the face, x from it to the seat's edge)
-    if (!plan) return flip ? rect(bx0, Math.min(bx1, 0 - line), -H / 2, H / 2) : rect(Math.max(bx0, line), bx1, -H / 2, H / 2)
-    return clipBox(plan.region, bx0, bx1, -H / 2, H / 2)
+    const b = zone(G, s)
+    const x0 = Math.max(-W / 2, b.minX), x1 = Math.min(W / 2, b.maxX)
+    const z0 = Math.max(-H / 2, b.minZ ?? -H / 2), z1 = Math.min(H / 2, b.maxZ ?? H / 2)
+    // (behind the wall's face: the plan's region inside the bounds)
+    return b.plan ? clipBox(b.plan.region, x0, x1, z0, z1) : rect(x0, x1, z0, z1)
   })
 }
 
