@@ -1444,8 +1444,11 @@ async function runCases(dist, cases) {
       // Breakthrough after them, by its own name)
       must(offered.join() === 'classic,field,grand,keg,powder,breakthrough', `the host's page offers every size, the Powder keg, the Powder Field and Breakthrough among them: ${offered.join(', ')}`)
       const named = await host.$$eval('#lobbySize option[value="keg"], #lobbySize option[value="powder"], #lobbySize option[value="breakthrough"]', (os) => os.map((o) => o.textContent))
-      const bt = MISSIONS.breakthrough
-      must(/^Powder keg · 40×28, 500 pts$/.test(named[0]) && /^Powder Field · 80×56, 1,500 pts$/.test(named[1]) && named[2] === `Breakthrough · ${bt.board.W}×${bt.board.H}, ${bt.list.points.toLocaleString('en')} pts`, `the Powder keg, the Powder Field and Breakthrough offered by their own names, their boards and points: ${JSON.stringify(named)}`)
+      // ((S5c) Breakthrough's by each role's points, the record's: the
+      // attacker's and the defender's, one figure where they are equal)
+      const bt = MISSIONS.breakthrough, pa = (bt.roles.attack.list ?? bt.list).points, pd = (bt.roles.defend.list ?? bt.list).points
+      const btPts = pa === pd ? pa.toLocaleString('en') : `${pa.toLocaleString('en')} / ${pd.toLocaleString('en')}`
+      must(/^Powder keg · 40×28, 500 pts$/.test(named[0]) && /^Powder Field · 80×56, 1,500 pts$/.test(named[1]) && named[2] === `Breakthrough · ${bt.board.W}×${bt.board.H}, ${btPts} pts`, `the Powder keg, the Powder Field and Breakthrough offered by their own names, their boards and points (Breakthrough's each role's): ${JSON.stringify(named)}`)
       await host.selectOption('#lobbySize', 'field')
       await until(guest, () => window.__ts.net.handle.doc().lobby.mission === 'field', null, 20000, "the size reaching the guest's page")
       const L = JSON.parse(await lobbyNow(guest))
@@ -1606,6 +1609,9 @@ const MUTANTS = {
   'no-ords': ['group', 'app/online.js', '    if (orders?.size) m.ords = Object.fromEntries([...orders].slice(0, 120).map(([id, o]) => [id, o.k]))\n', ''],
   // (F8b) a size change keeps the seats' armies, or never reaches the lobby
   'size-keeps-army': ['size', 'net/lobby.js', "      for (const k of SEAT_KEYS) if (d.lobby.seats[k] && 'army' in d.lobby.seats[k]) delete d.lobby.seats[k].army\n", ''],
+  // ((Breakthrough, S5c) a mission with roles offered by one points figure,
+  // the attacker's)
+  'size-one-points': ['size', 'ui/screens/lobby.js', "${s.defend != null && s.defend !== s.points ? `${s.points.toLocaleString('en')} / ${s.defend.toLocaleString('en')}` : s.points.toLocaleString('en')} pts", "${s.points.toLocaleString('en')} pts"],
   // (F14) a human opponent's lone move cued nowhere (the view's cue
   // handler gone), or the bookmark spent at the host's own fight phase
   'no-cue': ['follow', 'view/index.js', '      cue: (e, M) => rig.cue(e, { stage: M.stage, active: M.active, localSeats: localSeats() }),\n', ''],

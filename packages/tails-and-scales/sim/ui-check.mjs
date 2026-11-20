@@ -97,8 +97,13 @@
 //             Clans · …", "Defender · …"), a Skirmish's by none, ((S5b)
 //             and out of the role's own points, its own preset first and
 //             pressed: the defender's garrison, the attacker's Field); the start names the attacker picked,
-//             and its end screen's Swap sides starts the same board,
-//             races and lists with the other attacking; a Skirmish's end
+//             and its end screen's Swap sides starts the same board and
+//             races with the other attacking, ((S5c) a seat on a preset
+//             (Classic named, or none) on its new role's own, a list
+//             legal for its new role kept, one that is not replaced by
+//             the role's preset and named in a line under Swap sides:
+//             mutants swap-preset-kept, swap-list-unjudged,
+//             swap-note-unsaid); a Skirmish's end
 //             screen offers none; and at 360 px the line inside the screen
 //             ((S5b) and the help states each role's points, the target,
 //             the last round and the gate's moves, each the record's)
@@ -817,27 +822,50 @@ const CHECKS = {
       }
     }
     // the start names the attacker the panel picked; the end screen's Swap
-    // sides fights it again, the other seat attacking, on the same board,
-    // races and lists
+    // sides fights it again, the other seat attacking, on the same board
+    // and races, ((S5c) each seat's army by the rule (app/flow.js
+    // swapArmies): a seat that named no army or a preset takes its new
+    // role's own preset; a list of its own is kept where its new role's
+    // list rules take it, else that role's preset, and a line under Swap
+    // sides says so)
+    const own = (attacker, s) => (s === attacker ? ownPreset.attack : ownPreset.defend)
+    const same = (x) => JSON.stringify({ board: x.board, mission: x.mission, terrain: x.terrain, seats: x.seats.map((s) => [s.race, s.ctrl]) })
+    const armiesOf = (x) => JSON.stringify(x.seats.map((s) => s.army))
+    // the end screen's Swap sides and its note; pressed, the battle it
+    // starts (or the toast that says why none did)
+    const swapOf = async (page, a) => {
+      await page.evaluate(() => window.__ts.session.submit(0, { t: 'concede' }))
+      await page.waitForFunction(() => !document.querySelector('#over').classList.contains('hidden'), null, { timeout: 60000 })
+      const end = await page.evaluate(() => {
+        const shown = (q) => getComputedStyle(document.querySelector(q)).display !== 'none'
+        return { shown: shown('#swapSides'), text: document.querySelector('#swapSides').textContent, note: shown('#swapNote') ? document.querySelector('#swapNote').textContent : '' }
+      })
+      if (!end.shown || !end.text.includes('Swap sides')) return { end, b: null, why: `the end screen of a role battle: Swap sides ${end.shown ? `"${end.text}"` : 'hidden'}` }
+      await page.click('#swapSides')
+      await page.waitForFunction((d) => (window.__ts?.G?.setup?.dice !== d && window.__ts.G.units.length > 0 && document.body.classList.contains('playing')) || document.querySelector('#toast')?.classList.contains('show'), a.setup.dice, { timeout: 120000 })
+      const got = await page.evaluate(() => ({ setup: window.__ts.G.setup, toast: document.querySelector('#toast')?.classList.contains('show') ? document.querySelector('#toast').textContent : null }))
+      if (got.setup.dice === a.setup.dice) return { end, b: null, why: `Swap sides started no battle${got.toast ? `: "${got.toast}"` : ''}` }
+      return { end, b: got.setup, why: null }
+    }
+    // the presets' half: seat 0 (You, defending) names the Classic preset,
+    // seat 1 (The AI, attacking) none; swapped, each takes its new role's
+    // own
     {
       const { page, ctx, errors } = await panel(browser, url, { mode: 'bushtail' })
       try {
         await size(page, 'breakthrough')
         await page.click('#setupRoles button[data-attacker="1"]')
+        await page.selectOption('.setupSeat[data-seat="0"] .armyPick', 'classic')
         const a = await started(page)
+        const wantA = JSON.stringify(['classic', own(1, 1)]), wantB = JSON.stringify([own(0, 0), own(0, 1)])
         if (a.setup.attacker !== 1) out.why.push(`The AI picked to attack, the battle's attacker ${a.setup.attacker}`)
-        await page.evaluate(() => window.__ts.session.submit(0, { t: 'concede' }))
-        await page.waitForFunction(() => !document.querySelector('#over').classList.contains('hidden'), null, { timeout: 60000 })
-        const swap = await page.evaluate(() => ({ shown: getComputedStyle(document.querySelector('#swapSides')).display !== 'none', text: document.querySelector('#swapSides').textContent }))
-        if (!swap.shown || !swap.text.includes('Swap sides')) out.why.push(`the end screen of a role battle: Swap sides ${swap.shown ? `"${swap.text}"` : 'hidden'}`)
-        else {
-          await page.click('#swapSides')
-          await page.waitForFunction((d) => window.__ts?.G?.setup?.dice !== d && window.__ts.G.units.length > 0 && document.body.classList.contains('playing'), a.setup.dice, { timeout: 120000 })
-          const b = await page.evaluate(() => window.__ts.G.setup)
-          const same = (x) => JSON.stringify({ board: x.board, mission: x.mission, terrain: x.terrain, seats: x.seats.map((s) => [s.race, s.ctrl, s.army]) })
-          if (b.attacker !== 0 || same(a.setup) !== same(b)) out.why.push(`Swap sides started ${JSON.stringify({ attacker: b.attacker, ...JSON.parse(same(b)) })}, not attacker 0 on ${same(a.setup)}`)
-          else out.rows.push(`started with The AI attacking (attacker 1); Swap sides: attacker 0 on board ${b.board}, the same races and lists`)
-        }
+        else if (armiesOf(a.setup) !== wantA) out.why.push(`the battle before Swap sides fields ${armiesOf(a.setup)}, not ${wantA}`)
+        const { end, b, why } = await swapOf(page, a)
+        if (why) out.why.push(why)
+        else if (end.note) out.why.push(`Swap sides with no list of a seat's own, the note "${end.note}"`)
+        else if (b.attacker !== 0 || same(a.setup) !== same(b)) out.why.push(`Swap sides started ${JSON.stringify({ attacker: b.attacker, ...JSON.parse(same(b)) })}, not attacker 0 on ${same(a.setup)}`)
+        else if (armiesOf(b) !== wantB) out.why.push(`Swap sides fielded ${armiesOf(b)}, not each seat's new role's own preset ${wantB} (from ${armiesOf(a.setup)})`)
+        else out.rows.push(`started with The AI attacking (attacker 1) on ${armiesOf(a.setup)}; Swap sides: attacker 0 on board ${b.board}, the same races, each seat its new role's own preset ${armiesOf(b)}, no note`)
         // a battle without roles offers none
         await page.evaluate(() => window.__ts.session.submit(0, { t: 'concede' }))
         await page.waitForFunction(() => !document.querySelector('#over').classList.contains('hidden'), null, { timeout: 60000 })
@@ -853,6 +881,30 @@ const CHECKS = {
         if (await page.evaluate(() => getComputedStyle(document.querySelector('#swapSides')).display !== 'none')) out.why.push("a Skirmish's end screen offers Swap sides")
         else out.rows.push('none offered after a Skirmish')
         if (errors.length) out.why.push(`page errors: ${errors.join(' | ')}`)
+      } finally {
+        await ctx.close()
+      }
+    }
+    // ((S5c) the lists' half: seat 0 (You, defending) on a list legal for
+    // both roles, seat 1 (The AI, attacking) on one over the defender's
+    // points (the Classic ×2 counts, named as a list); swapped, seat 0's is
+    // kept, seat 1 takes the defender's own preset, and the note names it)
+    {
+      const keep = '112', over = '224222'
+      const { page, ctx, errors } = await panel(browser, url, { mode: 'bushtail', q: `&mission=breakthrough&armies=${keep},${over}` })
+      try {
+        await size(page, 'breakthrough')
+        await page.click('#setupRoles button[data-attacker="1"]')
+        const a = await started(page)
+        const wantA = JSON.stringify([keep, over]), wantB = JSON.stringify([keep, own(0, 1)])
+        if (a.setup.attacker !== 1 || armiesOf(a.setup) !== wantA) out.why.push(`the lists' battle started attacker ${a.setup.attacker} on ${armiesOf(a.setup)}, not attacker 1 on ${wantA}`)
+        const { end, b, why } = await swapOf(page, a)
+        const said = [name('serpent'), 'defender', `the ${own(0, 1).charAt(0).toUpperCase()}${own(0, 1).slice(1)} preset`]
+        if (why) out.why.push(`the lists' battle: ${why}`)
+        else if (!said.every((x) => end.note.includes(x)) || end.note.includes(name('squirrel'))) out.why.push(`the lists' battle: the note under Swap sides "${end.note}", not naming ${said.join(', ')} alone`)
+        else if (armiesOf(b) !== wantB) out.why.push(`the lists' battle: Swap sides fielded ${armiesOf(b)}, not ${wantB} (the list legal for both kept, the other the defender's own preset)`)
+        else out.rows.push(`lists ${armiesOf(a.setup)}, swapped ${armiesOf(b)}: "${end.note}"`)
+        if (errors.length) out.why.push(`the lists' battle: page errors: ${errors.join(' | ')}`)
       } finally {
         await ctx.close()
       }
@@ -968,7 +1020,7 @@ const MUTATIONS = {
   // (F11b's review: each assertion a case makes broken by an edit)
   // a line on its ?armies= value respelled: the size's own preset handed
   // on as none
-  'door-respelled': ['app/boot.js', '  const valueOf = (mission, a) => a.url ?? (a.counts ?', '  const valueOf = (mission, a) => (a.counts ?', ['door']],
+  'door-respelled': ['app/boot.js', '  const valueOf = (mission, a, s) => a.url ?? (a.counts ?', '  const valueOf = (mission, a, s) => (a.counts ?', ['door']],
   // the deployment's banner with the seats' totals swapped
   'banner-swapped': ['app/flow.js', '    return [0, 1].map((s) => {\n      const { counts } = army.armyOf(setup, s)', '    return [1, 0].map((s) => {\n      const { counts } = army.armyOf(setup, s)', ['field']],
   // a seat played here never defaults to its race's last list
@@ -997,7 +1049,7 @@ const MUTATIONS = {
   // edge
   'panel-wide': ['style.css', '  border-radius: 6px;\n  padding: 6px 7px;\n  min-width: 0;\n}\n.armyLine .armyTotal {', '  border-radius: 6px;\n  padding: 6px 7px;\n  min-width: 400px;\n}\n.armyLine .armyTotal {', ['phone']],
   // a line no ?armies= names handed on as its preset's name
-  'door-named': ['app/boot.js', ': a.preset && a.preset !== MISSIONS[mission].army ? a.preset : null)', ': a.preset ?? MISSIONS[mission].army)', ['door']],
+  'door-named': ['app/boot.js', ': a.preset && a.preset !== ownOf(mission, s) ? a.preset : null)', ': a.preset ?? ownOf(mission, s))', ['door']],
   // a built hotseat seat's Build… opens its list on the panel
   'hotseat-reopen': ['app/boot.js', "    if (mode === 'hotseat' && a.built && !handed) return pass.show(", "    if (false) return pass.show(", ['pass']],
   // a Random AI seat's race changed: its Random let go for the default,
@@ -1013,9 +1065,15 @@ const MUTATIONS = {
   // screen untitled by the role; Swap sides starting the same attacker)
   'roles-unshown': ['ui/screens/setup.js', "    this.roleRow.classList.toggle('hidden', !r)", "    this.roleRow.classList.toggle('hidden', true)", ['roles']],
   'roles-seat0': ['app/boot.js', "  const firstAttacker = (mode) => (FOG_MODES.includes(mode) ? MODES[mode].indexOf('human') : 0)", '  const firstAttacker = () => 0', ['roles']],
-  'roles-unstarted': ['app/boot.js', 'picking.armies.map((a) => valueOf(picking.mission, a)), picking.attacker)', 'picking.armies.map((a) => valueOf(picking.mission, a)))', ['roles']],
+  'roles-unstarted': ['app/boot.js', 'picking.armies.map((a, s) => valueOf(picking.mission, a, s)), picking.attacker)', 'picking.armies.map((a, s) => valueOf(picking.mission, a, s)))', ['roles']],
   'muster-roleless': ['ui/screens/muster.js', "    this.titleEl.textContent = `${at.role ? `${at.role} · ` : ''}${r.name}", '    this.titleEl.textContent = `${r.name}', ['roles']],
-  'swap-unswapped': ['app/flow.js', '    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, s.armies, 1 - s.attacker)', '    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, s.armies, s.attacker)', ['roles']],
+  'swap-unswapped': ['app/flow.js', '    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, this.swapArmies().armies, 1 - s.attacker)', '    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, this.swapArmies().armies, s.attacker)', ['roles']],
+  // ((S5c) Swap sides keeping a named preset instead of the new role's
+  // own; keeping a list its new role's rules refuse; and saying nothing of
+  // a list it replaced)
+  'swap-preset-kept': ['app/flow.js', '      if (a == null || /^[a-z]/.test(a)) return null\n', '      if (a == null) return null\n      if (/^[a-z]/.test(a)) return a\n', ['roles']],
+  'swap-list-unjudged': ['app/flow.js', '      if (!why) return a\n', '      if (true) return a\n', ['roles']],
+  'swap-note-unsaid': ['app/flow.js', "    this.ui.result.show(r, this.sides, this.ink(r.win), { roles, swap, swapNote: swap ? this.swapArmies().notes.join(' ') : '' })", "    this.ui.result.show(r, this.sides, this.ink(r.win), { roles, swap, swapNote: '' })", ['roles']],
   // a finger lifted on a marked element pins nothing (a hover's tip alone)
   'tap-unpinned': ['ui/tooltip.js', '      if (m) this.tip(m, { x: e.clientX, y: e.clientY }, true)\n', '', ['phone']],
   // (S4) the panel names the size's first set's board, whatever terrain is

@@ -17,8 +17,10 @@
 // "Breakthrough 5 of 5 in round 5.", or "The line holds: Coil of Ssithra
 // win!" over "The attackers scored 3 of the 5 they needed in 6 rounds."; a
 // wipe or a concession reads as on any battle. And Swap sides, for a role
-// battle played on this device (app/flow.js's swapSides: the same board,
-// races and lists, the other seat attacking).
+// battle played on this device (app/flow.js's swapSides: the same board
+// and races, the other seat attacking; (S5c) a seat on a preset takes its
+// new role's own, a list is kept where its new role's rules take it, and
+// a line under the button names each list that is not).
 import { sfx } from '../../view/sfx.js'
 
 const $ = (s) => document.querySelector(s)
@@ -36,8 +38,10 @@ export class ResultScreen {
   // `sides`: each seat's look (ui/theme.js); `ink`: the winner's colour in a
   // mirror match ('' for the stylesheet's); ((Breakthrough) `roles` a role
   // battle's own end as present/roles.js words it ({ title, line }, or
-  // null), `swap` whether Swap sides is offered)
-  show({ win, why, vp, rounds }, sides, ink, { roles = null, swap = false } = {}) {
+  // null), `swap` whether Swap sides is offered; (S5c) `swapNote` what it
+  // would change of the armies, a line under it ('' for nothing:
+  // app/flow.js swapArmies))
+  show({ win, why, vp, rounds }, sides, ink, { roles = null, swap = false, swapNote = '' } = {}) {
     const t = roles ? roles.title : win < 0 ? 'A bloody draw' : `${sides[win].name} win!`
     const when = rounds ? `in round ${rounds}` : 'in the deployment'
     const line = roles ? roles.line
@@ -50,6 +54,8 @@ export class ResultScreen {
     $('#overWhy').textContent = line
     this.parts(false)
     $('#swapSides').classList.toggle('hidden', !swap)
+    $('#swapNote').textContent = swap ? swapNote : ''
+    $('#swapNote').classList.toggle('hidden', !swap || !swapNote)
     $('#over').classList.remove('hidden')
     sfx.fanfare()
   }
@@ -83,7 +89,10 @@ export class ResultScreen {
     $('#overVotes').classList.toggle('hidden', !vote)
     $('#again').classList.toggle('hidden', vote)
     $('#watchReplay').classList.toggle('hidden', vote)
-    if (vote) $('#swapSides').classList.add('hidden')
+    if (vote) {
+      $('#swapSides').classList.add('hidden')
+      $('#swapNote').classList.add('hidden')
+    }
   }
 
   // Back to the war room: `back()`; (F4) the vote: `vote(more)`

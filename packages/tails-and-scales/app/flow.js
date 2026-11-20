@@ -82,6 +82,7 @@ import { EventPlayer } from '../view/player.js'
 import { defOf } from '../view/terrain.js'
 import { clock } from '../view/clock.js'
 import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
+import { presetName } from '../ui/screens/muster.js'
 import { rewind } from './undo.js'
 import { boardNameOf } from './board-name.js'
 
@@ -587,7 +588,8 @@ export class Flow {
     this.refreshUI()
     const setup = this.session?.G?.setup
     const roles = setup ? roleResult(setup, r, this.sides) : null
-    this.ui.result.show(r, this.sides, this.ink(r.win), { roles, swap: !!setup && !!rolesOf(setup) && this.canSwap() })
+    const swap = !!setup && !!rolesOf(setup) && this.canSwap()
+    this.ui.result.show(r, this.sides, this.ink(r.win), { roles, swap, swapNote: swap ? this.swapArmies().notes.join(' ') : '' })
   }
 
   // (Breakthrough) Whether the end screen's Swap sides is offered: the
@@ -598,13 +600,36 @@ export class Flow {
   }
   // (Breakthrough, DESIGN §4.2.12's "The page") Swap sides: the battle
   // last started here fought again on the same board seed, by the same
-  // mode, races, terrain and lists, the other seat attacking (its dice
-  // fresh, as any battle's). There is no score across the two.
+  // mode, races and terrain, the other seat attacking (its dice fresh, as
+  // any battle's), each seat's army by swapArmies. There is no score across
+  // the two.
   swapSides() {
     const s = this.lastStart
     if (!s || s.attacker === undefined) throw new Error('there is no battle with roles to swap sides in')
     this.S.seed = s.board
-    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, s.armies, 1 - s.attacker)
+    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, this.swapArmies().armies, 1 - s.attacker)
+  }
+  // (Breakthrough, S5c) The armies Swap sides fields, from what the battle
+  // last started here named: a seat that named no army or a preset takes
+  // its new role's own preset (it names none: core/army.js presetFor, the
+  // defender's garrison); a seat with a list of its own keeps it where it
+  // is legal under its new role's list rules (rulesFor), else takes that
+  // role's preset, and `notes` says so, a line a seat, which the end screen
+  // shows under Swap sides. { armies: [seat 0's | null, seat 1's | null],
+  // notes }
+  swapArmies() {
+    const s = this.lastStart, at = { mission: s.mission, attacker: 1 - s.attacker }
+    const notes = []
+    const armies = s.armies.map((a, i) => {
+      if (a == null || /^[a-z]/.test(a)) return null
+      const race = RACES[s.races[i]], counts = race.roster.map((k, j) => (j < a.length ? a.charCodeAt(j) - 48 : 0))
+      const why = army.checkList(race, army.rulesFor(at, i), counts)
+      if (!why) return a
+      const role = i === at.attacker ? 'attacker' : 'defender'
+      notes.push(`Swapped, the list of the ${race.name} doesn't fit the ${role}'s rules (${why}): they take the ${presetName(army.presetFor(at, i))} preset.`)
+      return null
+    })
+    return { armies, notes }
   }
 
   // The table has played everything: the trace catches up (?debug), a card
