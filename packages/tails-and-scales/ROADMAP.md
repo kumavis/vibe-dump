@@ -2019,17 +2019,23 @@ follows N3.
       Howdah 135); the attacker's own preset, the assault, a wrecker in
       each; the defender at 800 points. Swap sides' rule for armies
       settled (ui-check), lobby-rig's size row reads both roles' points.
-    - [ ] The Coil attacking the Coil wins 37.8% and 37.5% (seeds 1111,
-      2222), and the Coil attacking the Bushtails 66.8% on 2222: the
-      pair band (40-60%) is missed; one points figure cannot move the
-      defending races apart. A per-race lever to be decided.
+    - [x] **S5d** The pairs (DESIGN §4.2.12, As built (S5d)): the
+      defender's own prices for the Nutkin (55) and the Venom Engine (60),
+      the garrisons made again; every ordered pair inside 40-60% on seeds
+      1111 and 2222 (42.3-59.0), pooled 50.9% and 51.0%, the presets'
+      cells 57-66%. view/zones.js reads the rules' zone through
+      core/queries.js.
     - [ ] P-wall's `wall-ladder-held` (20 idling against 24 on the final
       record) and `wall-front-open` (no garrison wants the ground in
       front) mutants are missed; aiming rows 4 and 6 at a named list
       ('11222') catches front-open and deny-off there, but that edit was
       not made. The workload to be decided (S5c's report).
-    - [ ] human-bot's role zones, the `breach/` corpus set (six battles)
-      recorded on the final code with the PIN moved.
+    - [x] human-bot's role zones (`__ts.q.zone`; `?attacker=`), corpus-add
+      for a mission with roles and the `breach/` set's six battles picked
+      (S5d).
+    - [ ] The `breach/` set recorded on the final code with the PIN moved
+      (corpus-add on the PIN's commit, its Chromium admission), and
+      replayed by parity, `--pin`, replay-check and present-check.
 - [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if
   needed, publish.
 

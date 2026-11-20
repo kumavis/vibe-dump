@@ -321,14 +321,18 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
   // the hulls', below) and its own preset, the garrison. (S5c) The
   // defender's squads start on the works, nobody aboard a hull
   // (core/deploy.js), and hold their posts (core/ai/score.js HOLD_POST).
-  // Balance (S5c's As built in DESIGN): random legal lists under each
-  // role's rules, 1,600 battles, seed 1111, the attacker 50.4% (the
-  // ordered race pairs 56.8%, 47.3%, 60.0% and 37.8%: the Coil attacking
-  // the Coil under the 40% the band asks), ended by breakthrough 40.6%,
-  // held 49.6%, the defender wiped 9.8%; on the presets (boards 1-100) the
-  // attacker scores by round 4 in 74.3%. Tried: the defender at 700
-  // points, 65.6%; at 750, 57.5%; at 775, 57.1%; 800 is the most the
-  // ratio allows (1.25). The objectives are ones the generator's checks hold on every board
+  // Balance ((S5d) DESIGN's As built (S5d)): random legal lists under
+  // each role's rules, 1,600 battles, seed 1111, the attacker 50.9% (the
+  // ordered race pairs, attacker > defender, the Bushtails > the Bushtails
+  // 52.5%, > the Coil 50.2%, the Coil > the Bushtails 57.5%, > the Coil
+  // 43.5%; on seed 2222 51.0%: 53.8, 49.0, 59.0, 42.3), ended by
+  // breakthrough 41.8%, held 49.1%, the defender wiped 9.2%; on the
+  // presets (boards 1-100) the attacker scores by round 4 in 69% and wins
+  // 59-66% in every cell. ((S5c) Tried: the defender at 700 points, 65.6%;
+  // at 750, 57.5%; at 775, 57.1%; 800 is the most the ratio allows (1.25).
+  // (S5d) The defending races were 15-20 points apart at one points
+  // figure; the defender's own prices for two units moved them together,
+  // below.) The objectives are ones the generator's checks hold on every board
   // measured (sim/terrain-check.mjs section 10): (5, 0) for the yard's
   // (S3's (9, 0); (3, 0) and (1, 0) fail them) and the arms' at (3, ±13),
   // the only one of those tried there that holds.)
@@ -368,9 +372,25 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
           // 13.8, 7.7, 8.5 and 0.5. So the War-Cart 90, the lowest under 10;
           // the Howdah 135, which at the defender's 800 left the Coil
           // attacking the Coil at 37.8% where 105 left it at 36.3%)
+          // ((S5d, Breakthrough) and two of Field's own prices moved, one a
+          // race, for what each defends: over random legal lists (400
+          // battles a cell, seed 1111, the tree before) the attacker won
+          // 43.3% / 46.0% / 67.0% against a Bushtail defence with 0 / 1 / 2
+          // or more Nutkin squads (the rest of it 0 to 18 points either
+          // way), and 52.3% / 48.8% / 35.5% against a Coil one with 0 / 1 / 2
+          // or more Venom Engines. So the Nutkin 55 (Field's 70), and the
+          // Engine 60 (Field's 45). Army-sim's pairs (seed 1111; the
+          // Bushtails > the Bushtails, > the Coil, the Coil > the
+          // Bushtails, > the Coil): before 56.8 / 47.3 / 60.0 / 37.8; the
+          // Nutkin 55 alone 52.5 / 47.3 / 57.5 / 37.8 (the last still under
+          // 40); the Engine 60 alone 56.8 / 50.2 / 60.0 / 43.5; both 52.5 /
+          // 50.2 / 57.5 / 43.5, kept; the Nutkin 45 with the Engine 60 46.8 /
+          // 50.2 / 56.8 / 43.5, the Nutkin 55 with the Engine 75 52.5 / 49.5
+          // / 57.5 / 45.5: each passing too, a step further for no pair
+          // that needed it)
           prices: {
-            squirrel: { elder: 75, oakguard: 115, nutkin: 70, grenadier: 45, glider: 60, trebuchet: 55, warcart: 90 },
-            serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 45, howdah: 135 },
+            squirrel: { elder: 75, oakguard: 115, nutkin: 55, grenadier: 45, glider: 60, trebuchet: 55, warcart: 90 },
+            serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 60, howdah: 135 },
           },
         },
       },

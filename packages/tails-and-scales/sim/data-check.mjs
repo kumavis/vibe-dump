@@ -2201,16 +2201,22 @@ console.log('\n17. asymmetric missions: the roles, the breakthrough record and t
   // ((S5c) 800 of 1,000: 14 of 18 units, 56 of 70 models; and the hulls'
   // prices a defence's own, the War-Cart 90 and the Howdah 135, every
   // other price Field's; the attacker's own preset, the assault)
+  // ((S5d) and two of Field's own prices moved for a defence, the race
+  // apart (data/mission.js): the Nutkin 55 (Field's 70), the weakest of a
+  // Bushtail defence, and the Venom Engine 60 (Field's 45), the strongest
+  // of a Coil one; each must be one of Field's prices and differ from it)
   const HULL_PRICES = { squirrel: { warcart: 90 }, serpent: { howdah: 135 } }
+  const DEF_PRICES = { squirrel: { nutkin: 55 }, serpent: { engine: 60 } }
   const F0 = MISSIONS.field.list
-  const DEF_LIST = { ...F0, points: 800, units: 14, models: 56, prices: Object.fromEntries(Object.entries(F0.prices).map(([r, p]) => [r, { ...p, ...HULL_PRICES[r] }])) }
+  const DEF_LIST = { ...F0, points: 800, units: 14, models: 56, prices: Object.fromEntries(Object.entries(F0.prices).map(([r, p]) => [r, { ...p, ...DEF_PRICES[r], ...HULL_PRICES[r] }])) }
   check(isDeepStrictEqual(B?.roles, { attack: { zone: { x: [-30, -20] }, first: true, target: 4, army: 'assault' }, defend: { zone: { behind: true, x: [-12, 30] }, line: -4.5, army: 'garrison', list: DEF_LIST } }), "its roles: the attacker within 10 tails of the west edge, first to move, 4 to win, on Field's list, its preset the assault; the defender behind the wall and no nearer the attacker's edge than x -12 (8 tails from the attacker's zone), its line the gate face's nominal x (-4.5), its preset the garrison and its own list", JSON.stringify(B?.roles))
   {
     const D = B?.roles.defend.list ?? {}, F = MISSIONS.field.list, own = ['points', 'units', 'models', 'prices']
     const same = Object.keys(F).filter((k) => !own.includes(k)).every((k) => isDeepStrictEqual(D[k], F[k])) && Object.keys(D).every((k) => k in F)
     // (its prices Field's but for the ones named its own, HULL_PRICES)
-    const priced = isDeepStrictEqual(Object.keys(D.prices ?? {}).sort(), Object.keys(F.prices).sort()) && Object.entries(F.prices).every(([r, p]) => Object.entries(D.prices[r]).every(([k, v]) => (k in (HULL_PRICES[r] ?? {}) ? v === HULL_PRICES[r][k] && !(k in p) : v === p[k])) && Object.keys(p).every((k) => k in D.prices[r]))
-    check(same && priced && D.points === 800 && D.units === Math.round(F.units * 800 / F.points) && D.models === Math.round(F.models * 800 / F.points), `the defender's list is Field's but for its own points, units and models (${own.slice(0, 3).map((k) => `${k} ${D[k]} of ${F[k]}`).join(', ')}: each Field's scaled by its points, rounded) and the prices named its own (${Object.entries(HULL_PRICES).map(([r, p]) => Object.entries(p).map(([k, v]) => `${r} ${k} ${v}`).join(', ')).join('; ')}); its slots, perKind, every other price and size Field's`, JSON.stringify(D))
+    const priced = isDeepStrictEqual(Object.keys(D.prices ?? {}).sort(), Object.keys(F.prices).sort()) && Object.entries(F.prices).every(([r, p]) => Object.entries(D.prices[r]).every(([k, v]) => (k in (HULL_PRICES[r] ?? {}) ? v === HULL_PRICES[r][k] && !(k in p) : k in (DEF_PRICES[r] ?? {}) ? v === DEF_PRICES[r][k] && k in p && v !== p[k] : v === p[k])) && Object.keys(p).every((k) => k in D.prices[r]))
+    const named = (P) => Object.entries(P).map(([r, p]) => Object.entries(p).map(([k, v]) => `${r} ${k} ${v}`).join(', ')).join('; ')
+    check(same && priced && D.points === 800 && D.units === Math.round(F.units * 800 / F.points) && D.models === Math.round(F.models * 800 / F.points), `the defender's list is Field's but for its own points, units and models (${own.slice(0, 3).map((k) => `${k} ${D[k]} of ${F[k]}`).join(', ')}: each Field's scaled by its points, rounded) and the prices named its own (the hulls: ${named(HULL_PRICES)}; (S5d) Field's moved: ${named(DEF_PRICES)}); its slots, perKind, every other price and size Field's`, JSON.stringify(D))
     const pa = A.rulesFor({ mission: 'breakthrough', attacker: 0 }, 0).points, pd = A.rulesFor({ mission: 'breakthrough', attacker: 0 }, 1).points
     check(pa / pd >= 1.25 && pa / pd <= 2, `the attacker has the numbers: ${pa} points against the defender's ${pd} (${(pa / pd).toFixed(2)} times, from 1.25 to 2)`)
   }

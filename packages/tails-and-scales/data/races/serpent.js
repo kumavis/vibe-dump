@@ -27,8 +27,12 @@ export default {
   // the Hierophant, a Brute, two Scaleguard and two Spitter squads, a
   // Sidewinder squad, a Venom Engine and two Howdahs, 795 points of 800,
   // 10 units, 31 models. `assault`, the attacker's own preset: Field's ×2
-  // list as it is, its two Brutes the wreckers, 950 points.)
-  armies: { field: '224222', grand: '336333', garrison: '1122112', assault: '224222' },
+  // list as it is, its two Brutes the wreckers, 950 points.) ((S5d) Made
+  // again for the defender's Venom Engine at 60: the Hierophant, a Brute,
+  // a Scaleguard squad, three Spitter squads, a Sidewinder squad, a Venom
+  // Engine and two Howdahs, 795 points of 800, 10 units, 30 models (the
+  // old list, a Scaleguard squad for a Spitter one, 810 at the new price).)
+  armies: { field: '224222', grand: '336333', garrison: '1113112', assault: '224222' },
   units: {
     scaleguard: {
       name: 'Scaleguard', short: 'Scaleguard', role: 'Troops', ai: 'line', models: 6, base: 0.32, pts: 10, cost: 70,

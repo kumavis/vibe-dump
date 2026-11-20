@@ -30,8 +30,15 @@ export default {
   // War-Cart, 800 points of 800, 11 units, 49 models, its squads on the
   // works. `assault`, the attacker's own preset: Field's ×2 list and a
   // War-Cart, the clan's wrecker, so its default attack can ram the gate:
-  // 995 points of 1,000, 15 units, 57 models.)
-  armies: { field: '224222', grand: '336333', garrison: '1233101', assault: '2242221' },
+  // 995 points of 1,000, 15 units, 57 models.) ((S5d) The garrison made
+  // again for the defender's Nutkin at 55: the Elder, three Oak Guard, a
+  // Nutkin squad, four Grenadier squads, a Trebuchet and a War-Cart, 800
+  // points of 800, 11 units, 44 models. Of the lists tried at 800 against
+  // the Coil's assault (boards 1-100, either seat), '1234101' (the old one
+  // and a Grenadier squad) let it win 85% and 84%, '1234011' 79% and 76%,
+  // '1224111' 74% and 71%, this one 64% and 66%: the strong defenders
+  // (the Oak Guard, the Trebuchet) for the weak one, the Nutkin.)
+  armies: { field: '224222', grand: '336333', garrison: '1314011', assault: '2242221' },
   units: {
     nutkin: {
       name: 'Nutkin Skirmishers', short: 'Nutkin', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 7, cost: 75,

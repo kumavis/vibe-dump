@@ -4496,11 +4496,78 @@ The attacker's 1,000 points, the objectives, the target, the rounds and `RAM_STE
   An edit that would have aimed rows 4 and 6 at a second set of battles was not made (see the lane's report). With the defender on `'11222'` for both races, `wall-front-open` was caught there at 8 of 1,352 ends and `wall-deny-off` at 25 over 82, against 0 and 60 over 79 built. No threshold moved.
 - hud-check's role battles were re-picked on the assault and the garrison: board 7 with seat 0 attacking breaks through, 4 of 4 in round 5; board 6 with seat 1 attacking is held at 1.
 
+##### As built (S5d)
+
+**What carried the difference.** At the defender's one points figure the two defending races were 15 to 20 points apart: against a Bushtail defence the attacker won 57-67%, against a Coil one 38-47%. Over random legal lists (the tree before, 400 battles a cell, seed 1111, the attacker's race and seat alternating), the attacker's share by the defender's count of each unit, 0 / 1 / 2 or more (the Hero 1 / 2):
+
+| Defence | Unit | Attacker's share | Swing |
+|---|---|---|---|
+| Bushtails | Nutkin Skirmishers | 43.3 / 46.0 / 67.0 | +23.8 |
+| Bushtails | Pinecone Trebuchet | 71.8 / 62.3 / 53.5 | −18.3 |
+| Bushtails | Oak Guard | 67.0 / 58.8 / 54.0 | −13.0 |
+| Bushtails | Elder | 66.0 / 59.5 | −6.5 |
+| Bushtails | Grenadiers, Gliders, War-Cart | flat | −0.8, −0.3, −0.8 |
+| Coil | Basilisk Venom Engine | 52.3 / 48.8 / 35.5 | −16.8 |
+| Coil | Scaleguard | 37.5 / 41.0 / 46.0 | +8.5 |
+| Coil | Hierophant | 47.8 / 41.8 | −6.0 |
+| Coil | Howdah | 41.0 / 41.0 / 46.0 | +5.0 |
+| Coil | Brute, Spitters, Sidewinders | flat | +0.8, −0.5, +1.3 |
+
+A Bushtail defence heavy in Nutkin, at Field's 70, is the weak one; a Coil defence with two Venom Engines, at Field's 45, the strong one.
+
+**The prices moved** (the defender's own list, `roles.defend.list.prices`; data-check names each; army-sim's ordered pairs on seed 1111, the Bushtails attacking the Bushtails / the Coil, the Coil attacking the Bushtails / the Coil, then pooled):
+- before: 56.8 / 47.3 / 60.0 / **37.8**, 50.4;
+- the Nutkin 55 alone: 52.5 / 47.3 / 57.5 / **37.8**, 48.8;
+- the Engine 60 alone: 56.8 / 50.2 / 60.0 / 43.5, 52.6;
+- **the Nutkin 55 and the Engine 60: 52.5 / 50.2 / 57.5 / 43.5, 50.9, kept** (the fewest units and the smallest steps that pass);
+- the Nutkin 45 with the Engine 60: 46.8 / 50.2 / 56.8 / 43.5, 49.3; the Nutkin 55 with the Engine 75: 52.5 / 49.5 / 57.5 / 45.5, 51.2.
+
+The weak defence's unit is made cheaper; the strong defence's Engine dearer, since no cheaper unit weakens a defence. The defender's points stay 800; the attacker's, the objectives, the target and the rounds are as they were. Every other mission's prices are unchanged.
+
+**The garrisons**, made again for the list:
+- Bushtails `'1314011'`: the Elder, three Oak Guard, a Nutkin squad, four Grenadier squads, a Trebuchet and a War-Cart, 800 of 800 points, 11 units, 44 models. Against the Coil's assault on boards 1-100, either seat: the old list with a Grenadier squad added (`'1234101'`) let it win 85% and 84%, `'1234011'` 79% and 76%, `'1224111'` 74% and 71%, this one 64% and 66%.
+- Coil `'1113112'`: the Hierophant, a Brute, a Scaleguard squad, three Spitter squads, a Sidewinder squad, a Venom Engine and two Howdahs, 795 points, 10 units, 30 models (the old list costs 810 at the Engine's new price).
+
+**The final numbers** (first boards 1-100 and seed 1111, then boards 1001-1200 and seed 2222, the same code):
+- *Balance* (army-sim's role mode): pooled 50.9% and 51.0%. The pairs: the Bushtails attacking the Bushtails 52.5 and 53.8, the Bushtails attacking the Coil 50.2 and 49.0, the Coil attacking the Bushtails 57.5 and 59.0, the Coil attacking the Coil 43.5 and 42.3. By attacking seat, seat 0 54.4% and seat 1 47.5% (50.4% and 51.6%).
+- *Ends*: breakthrough 41.8% and 41.3%, held 49.1% and 49.0%, the defender wiped 9.2% and 9.8%, the attacker never. Decided in round 6 in 88.2% and 86.8%, in round 5 in 11.1% and 12.5%.
+- *Pace* (play-report's `bt`, the presets; exit 0 on both): scored by round 4 in 69% and 68%; by cell (the Bushtails from seat 0, the Coil from seat 0, the Coil from seat 1, the Bushtails from seat 1) 70 / 63 / 73 / 68% and 72 / 69 / 65 / 68%.
+- *The presets' wins*: 63 / 64 / 66 / 59% and 59.5 / 61 / 61 / 57%, every cell inside 30-70%.
+- *The gate*: on the presets it falls in 93% and 91% of battles (median round 4) and is 29% and 28% of crossings; over random legal lists, where the attacker fields a wrecker (1,559 of 1,600 battles), it falls in 96.7% and is 27.6% of their crossings.
+- *Crossings by route* (the presets): wood 33% and 35%, gate 29% and 28%, ladders 19% and 19%, flight 11% and 11%, breach 8% and 8%.
+
+**One reader for a seat's zone** (part 2). `core/queries.js` re-exports `core/deploy.js` `zone` beside `freeSpot` and `placeOk`, and `view/zones.js` `zoneShapes` reads it: the bounds as a rectangle cut to the board, or, behind the wall, the plan's region cut to them. Its own mirroring and bounds are gone. Over 120 Breakthrough tables (boards 1-60, either seat attacking) and 12 of other missions, the polygons are the old ones exactly. hud-check's `zones-unmirrored` edit reads the zone as if seat 0 attacked, and `zones-uncut` draws the region uncut.
+
+**The `breach/` corpus set** (part 4). The tooling:
+- `sim/lib.mjs` `LOG_SETS` gains `breach`.
+- `sim/corpus-add.mjs` plays a mission with roles: the setup names `attacker` (`--attacker`, else the seat the battle-setup panel presses for the mode), each seat names its role's preset or a list under its role's rules, and it gains the needs `breakthrough`, `held`, `rammed`, `gatecross`, `breach` and `wood`, read off a fold with `sim/wall-probe.mjs`.
+- The page takes `?attacker=0|1` (`app/boot.js`: the panel's default and `__ts.start`), and `oracle/human-bot.mjs` `pageStart` names it, so a log with seat 1 attacking starts the same battle from the title screen in Chromium and in Node.
+- **human-bot's role zones.** Its deployment aimed at the strip at its seat's edge. For an attacker that is the role's zone; for a defender it was the back 10 tails of the yard, legal but not the works. It now reads the zone (`__ts.q.zone`, the rules' own) where that is not the strip: random places anywhere in the bounds, aggressive at the front, behind a wall the first ground back from the bounds' front that a base fits. On every other board it draws and places exactly as before.
+
+The six battles, picked from a Node scan of corpus-add's own candidates on the final code (each seat naming its role's preset):
+
+| Log | Attacker | Seat | How it ends | What it shows |
+|---|---|---|---|---|
+| `watch-breach-bushtails-3` | Bushtails | 0 | breakthrough, 5-0 | the gate rammed down in round 4, the breach, the wood, ladders climbed (2) |
+| `watch-breach-coil-7` | Coil | 0 | the defender wiped | the gate down in round 3, the wood, ladders (3) |
+| `watch-breach-coil-east-8` | Coil | 1 | breakthrough, 4 | the gate down in round 3, ladders climbed and fought over (17 blows struck on a deck) |
+| `watch-breach-bushtails-east-10` | Bushtails | 1 | held at 3 | the gate down in round 4, ladders climbed (3), the wood |
+| `serpent-aggressive-breach-1` | Coil (the human bot) | 1 | held | the gate down in round 5, the wood (4), a ladder fought over (4 blows on a deck) |
+| `hotseat-aggressive-breach-1` | Bushtails (the human bot) | 0 | held | the bot deploying the defence into its zone behind the wall; the gate down in round 4, a ladder climbed and fought over |
+
+Between them they show both ends and a wipe, both seats and both races attacking, the gate rammed, a ladder climbed and fought over, the breach and the wood crossed, and two human logs. The human bot attacks poorly: none of the 26 human-bot candidates scanned reached the target.
+
+**Not done.**
+- The six are not yet recorded. corpus-add records on the PIN, a commit, so the record, its Chromium admission, the PIN's move and the replays (`parity`, `parity --pin`, `replay-check`, `present-check`) follow the commit (the lane's report).
+- P-wall's `wall-ladder-held` and `wall-front-open` are still missed by `property --self-test` (the owner's decision, S5c's report). On the new garrisons `wall-deny-off` is missed too: row 6 reads the defender's OC up 75 over 116 built and 65 over 83 with the edit, both above the row's 0.4 a case (on S5c's garrisons, 49 over 121 built and 26 over 79 with the edit). No P-wall row, board, army or threshold moved.
+
+**What holds it.** army-sim's role mode and its self-test (seeds 1111 and 2222); data-check's defender list (the hulls' prices and the two moved, each named); play-report's `bt` row on both ranges; P-wall's rows 1, 2, 4 and 6 (80 battles on the garrisons: 59 scored by round 4, 13 idling, 1 of 2,551 unit-rounds in front, OC up 75 over 116); hud-check's role battles, still board 7 with seat 0 attacking (a breakthrough, 4 of 4 in round 4, the gate struck) and board 6 with seat 1 attacking (held at 3), its 15 role edits caught.
+
 ##### As built (S4b): the view
 
 A player who opens a Breakthrough battle sees a walled border post under assault. Every mission without roles, and every other set, draws what it drew: each piece of this is reached only through a mission's roles or a board's plan (`G.terrain.plan`, the March Wall's alone).
 
-- **The zones** (`view/zones.js` `zoneShapes(G)`): each seat's zone as a polygon, its role's (`core/deploy.js` `zone`, whose sums it repeats: `zone` is no door of the core's surface): the attacker's rectangle, and for a zone behind the line the plan's `region` cut to the role's x bounds and the table, point-mirrored when seat 1 attacks; null on a mission without roles. `view/index.js` rebuild hands them to the table (`Table.zoneShapes`: a flat shape and its dashed edge in the seat's colour, the strips put back for null) and the dressing; the minimap fills the same polygons (its terrain key carries them, so a battle with sides swapped repaints). Lit as ever (the deploying seat's 0.2).
+- **The zones** (`view/zones.js` `zoneShapes(G)`): each seat's zone as a polygon, its role's (`core/deploy.js` `zone`, read through `core/queries.js`, which re-exports it for the view since S5d: one reader, the polygon alone the view's): the attacker's rectangle, and for a zone behind the line the plan's `region` cut to the role's x bounds and the table, point-mirrored when seat 1 attacks; null on a mission without roles. `view/index.js` rebuild hands them to the table (`Table.zoneShapes`: a flat shape and its dashed edge in the seat's colour, the strips put back for null) and the dressing; the minimap fills the same polygons (its terrain key carries them, so a battle with sides swapped repaints). Lit as ever (the deploying seat's 0.2).
 - **The gate** (`view/terrain.js` `FORT_PIECES.gate`): two leaves of upright boards in an old oak's brown, three iron straps and studs on the outer face, the drop-bar on its brackets inside, a lintel into the towers. `gateStage(hp, of)`: 0 above two thirds of its hit points, 1 above a third, 2 below (the March Wall's 12, 8 after the first ram, 4 after the second): a ragged hole through the middle boards, the straps snapped across it, splinters at its foot; at 2 a larger hole, the leaves pushed in, the bar cracked. A hurt carries no hit points, so `app/flow.js` `wornEntry` hands each hurt to a chunk with a ram (top-level, or in a walk's smashes: `ram`) the hit points it leaves and its whole (`hp`, `of`), from the match as each action ended (kept with the act's facts as the trace says it: a watched battle is one entry, its acts keep each step exact); several hurts in one action share its fall. The table draws the new stage as the gate is struck (`hurt`), a snap from the chunk's own hit points (`sync`'s `wear`). Its fall is its burst as before.
 - **The ditch**: a lip of thrown-up earth round its footprint, banks sloping in, a dark wet floor; its footprint and FLAT as they were.
 - **The mat's edge**: on a board with a plan (`TerrainView.clipTo`, set before any piece is built: `showTable` and `rebuild`), each mesh of a piece reaching past the mat (the curtain walk and its parapet, which run on off the table) is cut at the four edge planes and each cut faced with the hull of its points, so the wall ends cleanly at the mat; a piece built before the mat was set is cut again by the next sync.
