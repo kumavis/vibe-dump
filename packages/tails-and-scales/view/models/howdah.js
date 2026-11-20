@@ -247,6 +247,10 @@ export function longBase(fp, sideColor, rim = 1) {
   const pts = outline(fp, 0.03, 32).map(([x, z]) => new THREE.Vector3(x, 0, z))
   const ring = part(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), pts.length * 2, 0.028 * rim, 4, true), M(sideColor, { emissive: sideColor, emissiveIntensity: 0.35 }), 0, 0.07, 0)
   g.add(b, top, ring)
+  // (what it covers on the ground, in its own frame: its discs out to the
+  // plinth's pad, where the battlefield's dressing hides its clutter,
+  // view/dressing/)
+  g.userData.discs = discs0(fp).map(([x, z, r]) => [x, z, r + 0.04])
   // flock: a few tufts of static grass on each disc
   for (const [x, z, r] of discs0(fp)) for (let i = 0; i < Math.round(r * 6); i++) {
     const a = Math.random() * 6, d = Math.sqrt(Math.random()) * r * 0.85

@@ -72,6 +72,18 @@
 //             URL's values as given (the door every Chromium harness starts
 //             a battle with lists by); without it the start entry names
 //             none
+//   name      (S4) the board's name (app/board-name.js), the name the
+//             dressing's plan gives it (view/dressing/place.js plan(…).name,
+//             of its table as made: worked out here from the code under
+//             test): on the panel's battlefield line
+//             for every size and terrain set (the name and "board 4242"),
+//             changing as they do; once a Field battle on fortified ground
+//             starts, the battle log's header names its board, and a click
+//             on a line of the log puts up the replay bar naming it too;
+//             at 1280×800 with the dressing drawn, on a 390×844 phone under
+//             ?dress=0 (and there nothing sideways: the page's width, and
+//             the line and the bar inside the screen) and at the 'low'
+//             quality: the name never waits on the dressing being drawn
 //
 //   roles     (Breakthrough, DESIGN §4.2.12's "The page") Who attacks on
 //             the panel: none on a Skirmish; on Breakthrough in each mode
@@ -109,10 +121,11 @@ import { tmpdir } from 'node:os'
 import { pathToFileURL } from 'node:url'
 import { chromium } from 'playwright'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
+import { glArgs, glConfirm } from './chromium.mjs'
 import { buildApp, copyCode } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 
-const CASES = ['plus', 'ready', 'random', 'saved', 'over', 'race', 'phone', 'pass', 'field', 'door', 'roles']
+const CASES = ['plus', 'ready', 'random', 'saved', 'over', 'race', 'phone', 'pass', 'field', 'door', 'roles', 'name']
 let a
 try {
   ({ values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
@@ -129,6 +142,16 @@ const { RACES } = await imp('data/schema.js')
 const { SETS } = await imp('core/terrain/sets.js')
 const { MISSIONS } = await imp('data/mission.js')
 const { checkList, listCost, listText, keysOf } = await imp('core/army.js')
+// ((S4) and the name the dressing's plan gives a board (plan.name: the
+// plan of its table as made, as view/dressing/index.js builds it), and the
+// core that makes the table)
+const { createMatch } = await imp('core/index.js')
+const { OBJECTIVE_RANGE } = await imp('core/rules.js')
+const P = await imp('view/dressing/place.js')
+const nameFor = (board, mission, terrain) => {
+  const G = createMatch({ board, dice: 0, mission, terrain, seats: [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }] }, { out: null })
+  return P.plan({ seed: P.dressSeed(G.setup), set: G.setup.terrain, W: G.board.W, H: G.board.H, deploy: G.board.deploy, edges: G.seats.map((s) => s.edge), objectives: G.objectives, range: OBJECTIVE_RANGE, chunks: G.terrain.chunks, nav: G.nav }).name
+}
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1)
 const counts = (race, rec) => RACES[race].roster.map((k) => rec[k] ?? 0)
 const cost = (race, mission, c) => listCost(RACES[race], c, MISSIONS[mission].list)
@@ -858,6 +881,62 @@ const CHECKS = {
     }
     return out
   },
+
+  // (S4) the board's name on the panel, in the log's header and on the
+  // replay bar (the header)
+  async name(browser, url) {
+    const out = { rows: [], why: [] }
+    const PAGES = [
+      ['dressed at 1280×800', '', { width: 1280, height: 800 }],
+      ['?dress=0 on a 390 px phone', '&dress=0', { width: 390, height: 844, touch: true }],
+      ["the 'low' quality", '&quality=low', { width: 1280, height: 800 }],
+    ]
+    for (const [where, q, vp] of PAGES) {
+      const { page, ctx, errors } = await panel(browser, url, { mode: 'hotseat', q, vp })
+      try {
+        // (a box inside the screen's width, and nothing sideways)
+        const inside = (sel) => page.evaluate((sel) => {
+          const e = document.querySelector(sel), r = e.getBoundingClientRect(), W = document.documentElement.clientWidth
+          return { shown: !!r.width && getComputedStyle(e).display !== 'none' && !e.closest('.hidden'), text: e.textContent, inW: r.left >= -0.5 && r.right <= W + 0.5, sw: document.scrollingElement.scrollWidth, W }
+        }, sel)
+        let n = 0
+        const names = new Set()
+        for (const [mission, m] of Object.entries(MISSIONS)) {
+          await size(page, mission)
+          for (const set of m.sets) {
+            if (m.sets.length > 1) await page.click(`#setupTerrain button[data-terrain="${set}"]`)
+            const want = nameFor(4242, mission, set), line = await inside('#setupBoard'), name = await inside('#setupBoard .name'), what = await inside('#setupBoard .what')
+            if (!line.shown || name.text !== want || what.text !== 'board 4242') out.why.push(`${where}: ${mission} on ${set}, the battlefield line ${line.shown ? `"${name.text}" (${what.text})` : 'not shown'}, not ${want} (board 4242)`)
+            else if (!line.inW || !name.inW || !what.inW || line.sw > line.W) out.why.push(`${where}: ${mission} on ${set}, the battlefield line runs past the screen (${[['the line', line], ['the name', name], ['the seed', what]].filter(([, x]) => !x.inW).map(([k]) => k).join(', ') || 'the page'} past ${line.W} px; the page ${line.sw} px wide)`)
+            else (n++, names.add(want))
+          }
+        }
+        if (n) out.rows.push(`${where}: the panel names the board on ${n} sizes and sets (${[...names].join(', ')})`)
+        // a Field battle on fortified ground: the log's header, then the
+        // replay bar over a line of it
+        await size(page, 'field')
+        await page.click('#setupTerrain button[data-terrain="fortified"]')
+        const want = nameFor(4242, 'field', 'fortified')
+        const b = await started(page)
+        if (b.setup.mission !== 'field' || b.setup.terrain !== 'fortified') out.why.push(`${where}: the battle started is ${b.setup.mission} on ${b.setup.terrain}`)
+        await page.waitForSelector('#logList .entry[data-k]', { state: 'attached' })
+        const head = await inside('#logBoard')
+        if (!head.shown || head.text !== want) out.why.push(`${where}: the battle log's header ${head.shown ? `names "${head.text}"` : 'names no board'}, not ${want}`)
+        else if (!head.inW) out.why.push(`${where}: the battle log's header runs its board's name past the screen`)
+        else out.rows.push(`the log's header "${want}"`)
+        await page.evaluate(() => document.querySelector('#logList .entry[data-k]').click())
+        await page.waitForSelector('#replay:not(.hidden)')
+        const bar = await inside('#rpBoard'), all = await inside('#replay')
+        if (!bar.shown || bar.text !== want) out.why.push(`${where}: the replay bar ${bar.shown ? `names "${bar.text}"` : 'names no board'}, not ${want}`)
+        else if (!all.inW || !bar.inW || all.sw > all.W) out.why.push(`${where}: the replay bar runs past the screen (the page ${all.sw} px wide on ${all.W})`)
+        else out.rows.push(`the replay bar "${want}"`)
+        if (errors.length) out.why.push(`${where}: page errors: ${errors.join(' | ')}`)
+      } finally {
+        await ctx.close()
+      }
+    }
+    return out
+  },
 }
 
 // ── The self-test's edits: [file, text, replacement, the cases that must
@@ -939,6 +1018,17 @@ const MUTATIONS = {
   'swap-unswapped': ['app/flow.js', '    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, s.armies, 1 - s.attacker)', '    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, s.armies, s.attacker)', ['roles']],
   // a finger lifted on a marked element pins nothing (a hover's tip alone)
   'tap-unpinned': ['ui/tooltip.js', '      if (m) this.tip(m, { x: e.clientX, y: e.clientY }, true)\n', '', ['phone']],
+  // (S4) the panel names the size's first set's board, whatever terrain is
+  // picked
+  'name-set-lost': ['app/boot.js', 'boardNameOf({ board: flow.S.seed, mission, terrain: picking.terrain })', 'boardNameOf({ board: flow.S.seed, mission })', ['name']],
+  // (S4) the log's header named from the dressing's plan: the last table's
+  // as a new one is shown, and none at all under ?dress=0
+  'name-from-dressing': ['app/flow.js', '    this.boardName = boardNameOf(next.setup, next)\n', '    this.boardName = this.view.dressing?.plan?.name ?? null\n', ['name']],
+  // (S4) the replay bar never names the board
+  'bar-unnamed': ['ui/replaybar.js', "    board.textContent = m.board ?? ''\n", "    board.textContent = ''\n", ['name']],
+  // (S4) the name on the battlefield line held 420 px wide: past a phone's
+  // edge
+  'name-wide': ['style.css', '#setup #setupBoard .name {\n  color: var(--ink);\n}', '#setup #setupBoard .name {\n  color: var(--ink);\n  display: inline-block;\n  min-width: 420px;\n}', ['name']],
 }
 
 async function runCases(browser, url, names) {
@@ -958,7 +1048,8 @@ async function runCases(browser, url, names) {
 }
 
 const work = mkdtempSync(join(tmpdir(), 'tails-and-scales-ui-'))
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: glArgs() })
+await glConfirm(browser, 'ui-check')
 let failed = 0
 try {
   if (a['self-test']) {

@@ -263,6 +263,8 @@ export class Table {
     table.position.y = -0.62
     table.receiveShadow = true
     scene.add(table)
+    // ((S1) what the battlefield's dressing puts away: woodShown())
+    this.wood = table
     {
       const frameMat = new THREE.MeshStandardMaterial({ color: '#5a3a22', roughness: 0.6 })
       const parts = [
@@ -375,7 +377,8 @@ export class Table {
     this.scatterTufts()
     // ((V3d) the new paint is clean: its burns, if any, painted on it again)
     this.clean = null
-    if (this.marks?.length) this.scorch(this.marks)
+    // ((S2) and the dressing's ground painted in again: dress())
+    if (this.marks?.length || this.dresser) this.scorch(this.marks ?? [])
   }
 
   // (V3d) The turf burned round the Powder Field's wrecks, painted into the
@@ -388,7 +391,7 @@ export class Table {
     this.marks = marks
     const map = this.board.material.map, c = map.image
     if (!this.clean) {
-      if (!marks.length) return
+      if (!marks.length && !this.dresser) return
       this.clean = document.createElement('canvas')
       this.clean.width = c.width
       this.clean.height = c.height
@@ -397,6 +400,8 @@ export class Table {
     const g = c.getContext('2d')
     g.globalAlpha = 1
     g.drawImage(this.clean, 0, 0)
+    // ((S2) the battlefield's dressing's ground, under the scorch)
+    this.dresser?.(g, c, this.W, this.H)
     if (marks.length) paintScorch(g, c, this.W, this.H, marks)
     map.needsUpdate = true
   }
@@ -407,6 +412,24 @@ export class Table {
       this.zoneMats[s].color.set(colors[s])
       this.zoneLineMats[s].color.set(colors[s])
     }
+    // ((S1) and the dressing's pennants)
+    this.colors = colors
+    this.onPaint?.(colors)
+  }
+
+  // (The battlefield's dressing, view/dressing/: none under ?dress=0, where
+  // none of this is called and the table is as it always was.) (S1) The
+  // wooden table, its frame and the box under the mat put away (`on`
+  // false), the world round the board drawn in their place.
+  woodShown(on) {
+    for (const m of [this.wood, ...this.frame, this.under]) m.visible = on
+  }
+
+  // (S2) The dressing's ground painted into the mat under the scorch, by
+  // `fn(g, canvas, W, H)` (null: none), from the mat's own paint each time.
+  dress(fn) {
+    this.dresser = fn
+    this.scorch(this.marks ?? [])
   }
 
   // how strongly each seat's zone shows
@@ -416,6 +439,8 @@ export class Table {
 
   // the tufts and flowers strewn anew (a new table)
   scatterTufts() {
+    // ((S2) the dressing's own, seeded, clumped where it may stand)
+    if (this.strew) return this.strew(this)
     const { W, H, tufts, flowers } = this
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler()
     const col = new THREE.Color()

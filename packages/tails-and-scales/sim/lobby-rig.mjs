@@ -210,7 +210,7 @@ import { ImmutableString } from '@automerge/automerge/slim'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 import { startSyncServer } from './sync-server.mjs'
 import { buildApp, copyCode } from './lib.mjs'
-import { IDLE_MS } from './chromium.mjs'
+import { IDLE_MS, glArgs, glConfirm } from './chromium.mjs'
 import { makeMatch, autoplay } from './online-fixture.mjs'
 import { AutomergeStore } from '../net/automerge-store.js'
 import { lobbyOf, startSeat } from '../net/lobby.js'
@@ -238,7 +238,8 @@ const must = (ok, what) => {
 async function runCases(dist, cases) {
   const web = await startStaticServer(dist)
   const sync = await startSyncServer()
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: glArgs() })
+  await glConfirm(browser, 'lobby-rig')
   const base = `${web.url}/?debug&lowfi&fast&sync=${encodeURIComponent(sync.url)}`
   const contexts = []
   const errors = []

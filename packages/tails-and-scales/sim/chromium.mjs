@@ -31,6 +31,82 @@ export const DIST = fileURLToPath(new URL('../dist', import.meta.url))
 export const IDLE_MS = 120000
 const CAP_MS = 900000
 
+// The renderer a behaviour check draws with. By default every browser check
+// draws in software (SwiftShader), the three flags below, as each launch
+// site wrote them out. Under software a loaded machine draws the game at
+// under a frame a second, and the long checks take up to an hour. Opt in to
+// the machine's GPU with TS_GL, the ANGLE backend's name (`TS_GL=metal` on
+// a Mac): the flags are then `--use-gl=angle --use-angle=<TS_GL>`. TS_GL
+// unset or empty is software; anything but one lowercase word (letters,
+// digits, hyphens) is refused, so a typo can't pass a flag of its own.
+//
+// Five checks read it: ui-check, hud-check, play-check, input-check (both
+// of its launches) and lobby-rig. Each was run under both renderers on the
+// same tree and passes alike, with the same cases. Measured on one machine,
+// loaded, software against the GPU: ui-check 79 s and 18 s, hud-check 155 s
+// and 34 s, play-check's watch lane 509 s and 39 s, its six play lanes
+// 2,354 s and 417 s, input-check 3,582 s and 468 s; lobby-rig 115 s on the
+// GPU (software not measured). Each says at its start which renderer it
+// draws with, and with TS_GL set, glConfirm stops it unless the browser's
+// WebGL renderer names that backend and is no software one (a machine
+// without it would otherwise fall back to software, or to no WebGL at all,
+// without a word).
+//
+// The rest stay on software, launched as they were: title-shot and
+// terrain-shots read pixels back and compare them exactly; render-bench
+// judges frame time and draw calls, and it, powder-shots and dmath-check
+// launch with no renderer flags at all; snap-check fails one of its 15 rows
+// on the GPU (hotseat-collapse-8: a figure reads 0.000025 tails off its
+// resting spot at the higher frame rate), an open finding, so it stays on
+// software until that is understood; dressing-check gains nothing (361 s
+// on the GPU against 294 s); and board-check, playback-check,
+// rematch-memory, undo-check and runBrowser below were not tried.
+const SOFTWARE = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader']
+function glBackend() {
+  const v = process.env.TS_GL
+  if (v === undefined || v === '') return null
+  if (!/^[a-z0-9-]+$/.test(v)) throw new Error(`TS_GL=${JSON.stringify(v)} is not an ANGLE backend's name: one lowercase word of letters, digits and hyphens, such as metal (unset it to draw in software)`)
+  return v
+}
+// the launch flags
+export function glArgs() {
+  const b = glBackend()
+  return b ? ['--use-gl=angle', `--use-angle=${b}`] : SOFTWARE.slice()
+}
+// the renderer in use, in a line's words
+export function glSays() {
+  const b = glBackend()
+  return b ? `the GPU (ANGLE ${b}, TS_GL)` : 'software (SwiftShader)'
+}
+// With TS_GL set, read UNMASKED_RENDERER_WEBGL once from a blank page of
+// `browser` and stop (closing it) unless it names the backend; then print,
+// once a run, `<name>: drawing with <renderer>`.
+let glSaid = false
+export async function glConfirm(browser, name) {
+  const b = glBackend()
+  let got = ''
+  if (b) {
+    const ctx = await browser.newContext()
+    try {
+      got = await (await ctx.newPage()).evaluate(() => {
+        const gl = document.createElement('canvas').getContext('webgl')
+        const ext = gl?.getExtension('WEBGL_debug_renderer_info')
+        return gl ? String(gl.getParameter(ext ? ext.UNMASKED_RENDERER_WEBGL : gl.RENDERER)) : ''
+      })
+    } finally {
+      await ctx.close()
+    }
+    // (a software renderer may name the backend too: SwiftShader's own
+    // string says Vulkan, so asking for one a machine lacks must not pass)
+    if (!got.toLowerCase().includes(b.toLowerCase()) || /swiftshader|llvmpipe|software/i.test(got)) {
+      await browser.close()
+      throw new Error(`${name}: TS_GL=${b}, but the browser's WebGL renderer is ${got ? `"${got}"` : 'missing (no WebGL)'}, not ANGLE ${b}: this machine lacks that backend (unset TS_GL to draw in software)`)
+    }
+  }
+  if (!glSaid) console.log(`${name}: drawing with ${glSays()}${got ? `: ${got}` : ''}`)
+  glSaid = true
+}
+
 // Runs in the page, before main.js: catch window.__ts as it is published,
 // record, and for a human log drive the seats once per frame (the driver
 // waits while the title is up: no decision is pending there).

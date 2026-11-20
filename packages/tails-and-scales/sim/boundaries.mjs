@@ -110,6 +110,10 @@
 //      table's unit is the tail, worded by core/rules.js's tails() and tl()
 //      (LENGTH), so a stray mark can't come back. Comments are not copy and
 //      are not read; nor is sim/.
+//   6. (S1) the battlefield's dressing, view/dressing/: it imports three,
+//      its own modules and core/dmath.js and nothing else, and holds no
+//      Math.random, Date, performance or crypto (every value a hash of its
+//      seed: DESIGN's "Battlefield dressing").
 // The top level is told by indentation (the code puts module-level
 // declarations at column 0, and everything nested deeper).
 //
@@ -229,6 +233,15 @@ const TOKENS = {
   present: DOM,
 }
 TOKENS.data = TOKENS.core
+// (S1) The battlefield's dressing (view/dressing/, DESIGN's "Battlefield
+// dressing" rule 1): placed from the board's seed by hashing alone, so both
+// players and every replay see the same place and the match never feels it.
+// It imports three.js, its own modules and core/dmath.js (the same trig on
+// every engine) and nothing else, so no stream of the core's can reach it;
+// and it draws nothing of the host's: no Math.random, clock or crypto.
+const DRESSING = 'view/dressing/'
+const DRESSING_CORE = ['core/dmath.js']
+const DRESSING_TOKENS = [HOST[0], HOST[3], HOST[4], HOST[6]]
 // how a problem names the token it found
 const TOKEN_NAME = new Map([
   [HOST[0], 'Math.random'], [HOST[1], 'Math.hypot'], [HOST[2], 'Math other than as Math.<member> (computed, aliased, destructured or passed on)'],
@@ -519,6 +532,20 @@ export function check(files) {
         for (const re of TOKENS[layer]) if (re.test(l)) say(f, i + 1, `${layer}/ contains ${tokenName(re)}: ${l.trim().slice(0, 100)}`)
       })
     }
+    // 6. (S1) the battlefield's dressing: seeded, the view's alone
+    if (f.startsWith(DRESSING)) {
+      for (const { spec, line } of imports) {
+        if (!spec.startsWith('.')) {
+          if (spec !== 'three') say(f, line, `imports the package ${spec}: ${DRESSING} imports no package but three`)
+          continue
+        }
+        const to = posix.normalize(posix.join(posix.dirname(f), spec))
+        if (!to.startsWith(DRESSING) && !DRESSING_CORE.includes(to)) say(f, line, `imports ${to}: ${DRESSING} imports only its own modules and ${DRESSING_CORE.join(', ')} (the dressing is placed from its seed alone, never from the core's streams)`)
+      }
+      lines.forEach((l, i) => {
+        for (const re of DRESSING_TOKENS) if (re.test(l)) say(f, i + 1, `${DRESSING} contains ${tokenName(re)}: every value of the dressing is a hash of its seed: ${l.trim().slice(0, 100)}`)
+      })
+    }
     if (layer === 'core' || layer === 'data' || layer === 'match') {
       lines.forEach((l, i) => {
         if (LET.test(l)) say(f, i + 1, `a module-level let or var in consensus code: ${l.trim().slice(0, 100)}`)
@@ -608,6 +635,12 @@ if (a['self-test']) {
     ['present/ importing data/', append('present/mirror.js', "import { RACES } from '../data/schema.js'"), true, /present\/ may import only/],
     ['present/ touching the DOM', append('present/pace.js', 'export const p = () => requestAnimationFrame(() => {})'), true, /contains requestAnimationFrame/],
     ['the view importing core/rng.js', append('view/player.js', "import { draw } from '../core/rng.js'"), true, /imports core\/rng\.js/],
+    // (S1) the dressing: seeded, its own
+    ['the dressing drawing Math.random', append('view/dressing/place.js', 'export const jitter = () => Math.random()'), true, /view\/dressing\/ contains Math\.random/],
+    ['the dressing reading the clock', append('view/dressing/sky.js', 'export const now = () => performance.now()'), true, /view\/dressing\/ contains performance/],
+    ['the dressing importing the terrain recipes (a door for the rest of the view)', append('view/dressing/place.js', "import { STYLES } from '../../core/terrain/recipes.js'"), true, /view\/dressing\/ imports only its own modules/],
+    ['the dressing importing core/rng.js', append('view/dressing/ground.js', "import { draw } from '../../core/rng.js'"), true, /imports core\/rng\.js/],
+    ['the dressing importing dmath and three', append('view/dressing/place.js', "import { atan2 } from '../../core/dmath.js'\nimport { Color } from 'three'"), false],
     ['main.js importing core/rng.js', append('main.js', "import { createRng } from './core/rng.js'"), true, /imports core\/rng\.js/],
     ['match/ importing core/rng.js', append('match/session.js', "import { draw } from '../core/rng.js'"), true, /imports core\/rng\.js/],
     ['present/ importing core/rng.js', append('present/mirror.js', "import { createRng } from '../core/rng.js'"), true, /imports core\/rng\.js/],

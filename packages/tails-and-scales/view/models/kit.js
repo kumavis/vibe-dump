@@ -63,6 +63,9 @@ export function base(r, sideColor, rim = 1) {
   top.receiveShadow = true
   const ring = part(new THREE.TorusGeometry(r * 1.02, 0.028 * rim, 4, 32).rotateX(Math.PI / 2), M(sideColor, { emissive: sideColor, emissiveIntensity: 0.35 }), 0, 0.07, 0)
   g.add(b, top, ring)
+  // (what it covers on the ground, in its own frame: its plinth's foot, the
+  // disc the battlefield's dressing hides its clutter under, view/dressing/)
+  g.userData.discs = [[0, 0, r * 1.05]]
   // flock: a few tufts of static grass
   for (let i = 0; i < Math.round(r * 9); i++) {
     const a = Math.random() * 6, d = Math.sqrt(Math.random()) * r * 0.85

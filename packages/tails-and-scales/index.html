@@ -39,7 +39,7 @@
     <div id="tray"></div>
 
     <aside id="log">
-      <h3 id="logToggle">Battle log <span>▾</span></h3>
+      <h3 id="logToggle"><b class="logHead">Battle log <small id="logBoard" class="hidden"></small></b><span>▾</span></h3>
       <div id="logList"></div>
     </aside>
 
@@ -93,6 +93,7 @@
         </div>
         <p id="setupMirror" class="small hidden">A mirror match: the east army takes its race's other colours.</p>
         <div id="setupTerrain" class="terrainLine hidden"><span class="lbl">Terrain</span><span class="opts"></span><span class="what small"></span></div>
+        <div id="setupBoard" class="terrainLine hidden"><span class="lbl">Battlefield</span><b class="name"></b><span class="what small"></span></div>
         <div class="row">
           <span id="setupWhy" class="small hidden"></span>
           <button id="setupBack">Back</button>
@@ -236,7 +237,7 @@
       <button id="rpStart" title="Watch from the start">⏮</button>
       <button id="rpPlay" title="Play on from here">▶</button>
       <input id="rpAt" type="range" min="-1" max="0" step="1" value="0" aria-label="The move shown" />
-      <span id="rpLabel"></span>
+      <span class="rpWhere"><b id="rpBoard" class="hidden"></b><span id="rpLabel"></span></span>
       <button id="rpLive" title="The battle as it stands">● Live</button>
       <button id="rpSave" title="Save the battle as a replay file">💾</button>
       <button id="rpClose" title="Put the replay away">✕</button>
