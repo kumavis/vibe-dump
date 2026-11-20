@@ -808,12 +808,14 @@ function hullWrong(core, G, seat, b) {
         // ((the March Wall) behind the line: on a board with a plan, the
         // defender's side's x bounds on the table and every disc wholly
         // behind the outer face (faceGap, measured here); else x from the
-        // line to the seat's edge)
+        // line to the seat's edge; either way within the role's own x
+        // bounds, mirrored with seat 1 attacking)
         wall = G.terrain.plan
+        const [b0, b1] = atk === 1 ? [-z.x[1], -z.x[0]] : z.x
         if (wall) {
           const xs = wall.region.map((p) => p.x)
-          ;[lo, hi] = [Math.max(-W / 2, Math.min(...xs)), Math.min(W / 2, Math.max(...xs))]
-        } else [lo, hi] = atk === 1 ? [-W / 2, 0 - role.line] : [role.line, W / 2]
+          ;[lo, hi] = [Math.max(-W / 2, Math.min(...xs), b0), Math.min(W / 2, Math.max(...xs), b1)]
+        } else [lo, hi] = atk === 1 ? [Math.max(-W / 2, b0), Math.min(0 - role.line, b1)] : [Math.max(role.line, b0), Math.min(W / 2, b1)]
       } else {
         const zz = z.z ?? [-Infinity, Infinity]
         ;[lo, hi, zlo, zhi] = atk === 1 ? [-z.x[1], -z.x[0], -zz[1], -zz[0]] : [z.x[0], z.x[1], zz[0], zz[1]]
@@ -1466,11 +1468,13 @@ const BAD_MISSION_SETUPS = {
 // their point mirror (seat 1), negated to the bit, each with its scores
 // and worth, and every unit of the default deployment inside its role's
 // zone (the attacker's zone the mission's, the defender's too, or their
-// mirror). ((the March Wall) A defender's zone behind the line: the
-// attacker zone's front 12 tails or more from the line, and every default
-// unit of the defender's standing wholly behind the board's outer face,
-// its signed distance (`face`: core/terrain/breakthrough.js faceDist) its
-// radius or more, every disc of a long hull's.)
+// mirror). ((the March Wall) A defender's zone behind the line: its x
+// bounds inside the board, its near bound 8 tails or more from the
+// attacker zone's front and the line inside them, and every default unit
+// of the defender's standing wholly behind the board's outer face, its
+// signed distance (`face`: core/terrain/breakthrough.js faceDist) its
+// radius or more, every disc of a long hull's, and inside the bounds:
+// every one 8 tails or more from the attacker's zone.)
 function roleRows(core, name, m, face = null) {
   const { W, H } = m.board
   const { attack, defend } = m.roles
@@ -1482,7 +1486,12 @@ function roleRows(core, name, m, face = null) {
   }
   if (!A) throw new Error(`P-mission: ${name}'s attack zone is behind the line`)
   const gap = (p, q) => Math.max(q[0] - p[1], p[0] - q[1])
-  if (!D && !(defend.line - A.x[1] >= 12)) throw new Error(`P-mission: ${name}'s attack zone's front is under 12 tails from the line`)
+  if (!D) {
+    const bx = defend.zone.x
+    if (!(Array.isArray(bx) && bx[0] >= -W / 2 && bx[0] < bx[1] && bx[1] <= W / 2)) throw new Error(`P-mission: ${name}'s defend zone behind the line has x bounds ${JSON.stringify(bx)}, not inside its ${W}-wide board`)
+    if (!(bx[0] - A.x[1] >= 8)) throw new Error(`P-mission: ${name}'s defend zone behind the line starts under 8 tails from the attack zone's front`)
+    if (!(defend.line >= bx[0] && defend.line <= bx[1])) throw new Error(`P-mission: ${name}'s line at x ${defend.line} is outside its defend zone's bounds ${JSON.stringify(bx)}`)
+  }
   if (D && !(gap(A.x, D.x) >= 12 || gap(A.z, D.z) >= 12)) throw new Error(`P-mission: ${name}'s zones are under 12 tails apart`)
   if (!(A.x[1] <= 0)) throw new Error(`P-mission: ${name}'s attack zone reaches past the centre line`)
   for (const o of m.objectives) {
@@ -1510,6 +1519,9 @@ function roleRows(core, name, m, face = null) {
         const discs = u.t.fp ? u.t.fp.H[u.facing].map((d) => ({ x: u.pos.x + d.ix * u.t.fp.cell, z: u.pos.z + d.iz * u.t.fp.cell, r: d.r })) : [{ x: u.pos.x, z: u.pos.z, r: u.r }]
         const off = discs.find((d) => !(face(G.terrain.plan, d.x, d.z) >= d.r - 0.01))
         if (off) throw new Error(`P-mission: a match of ${name} with seat ${attacker} attacking deploys the defender's ${u.t.short} ${u.id} at (${u.pos.x}, ${u.pos.z}), a disc ${face(G.terrain.plan, off.x, off.z).toFixed(3)} from the wall's face (r ${off.r}): not wholly behind it`)
+        const bx = defend.zone.x, b0 = attacker ? -bx[1] : bx[0], b1 = attacker ? -bx[0] : bx[1]
+        const out = discs.find((d) => d.x - d.r < b0 - 0.01 || d.x + d.r > b1 + 0.01)
+        if (out) throw new Error(`P-mission: a match of ${name} with seat ${attacker} attacking deploys the defender's ${u.t.short} ${u.id} at (${u.pos.x}, ${u.pos.z}), a disc outside its zone's x bounds ${b0}..${b1}`)
         continue
       }
       const lo = attacker ? -role.x[1] : role.x[0], hi = attacker ? -role.x[0] : role.x[1]
@@ -1576,9 +1588,10 @@ function rolesScenes(core, mods) {
       const W = G.board.W, plan = G.terrain.plan
       // ((the March Wall) behind the line: the plan, and the defender's side's
       // x bounds on the table)
+      // (within the role's own x bounds, mirrored with seat 1 attacking)
       const behind = () => {
-        const xs = plan.region.map((p) => p.x)
-        return attacker ? { minX: -W / 2, maxX: Math.min(W / 2, Math.max(...xs)) } : { minX: Math.max(-W / 2, Math.min(...xs)), maxX: W / 2 }
+        const xs = plan.region.map((p) => p.x), bx = m.roles.defend.zone.x
+        return attacker ? { minX: Math.max(-W / 2, -bx[1]), maxX: Math.min(W / 2, Math.max(...xs), -bx[0]) } : { minX: Math.max(-W / 2, Math.min(...xs), bx[0]), maxX: Math.min(W / 2, bx[1]) }
       }
       for (const [s, role] of [[attacker, 'attack'], [def, 'defend']]) {
         if (core.roleOf(G, s) !== role) throw new Error(`${where}: seat ${s}'s role is ${core.roleOf(G, s)}, not ${role}`)
@@ -1747,6 +1760,10 @@ function rolesGames(core, RACES, n, seed) {
 //     of each disc its radius or more: the rule judged again by the
 //     plan's own reader, not by fits), and no big unit, vehicle or long
 //     hull of the defender's on a deck (a floor above STEP);
+//   - (Breakthrough) every defender at least 8 tails from the attacker's
+//     zone: each disc's edge 8 tails or more along x from the attack
+//     zone's front, as the mission writes it (mirrored with seat 1
+//     attacking), whatever the face's shape (the least seen, `apart`);
 //   - the deployment deterministic and drawing nothing: deployArmies run
 //     again over the same match (the riders put down first) puts every unit
 //     where it was, at its facing, aboard what it rode, the dice unmoved;
@@ -1758,7 +1775,7 @@ function rolesDeployTask(core, mods, RACES, MISSIONS, n, seed) {
   const A = core.army, rand = mulberry32(seed * 69069 + 5)
   const STEP_ = mods.move.STEP
   const face = mods.wall.faceDist
-  const c = { boards: 0, matches: 0, units: 0, decks: 0, defenders: 0, astride: 0, longs: 0, hulls: 0 }
+  const c = { boards: 0, matches: 0, units: 0, decks: 0, defenders: 0, astride: 0, longs: 0, hulls: 0, apart: Infinity }
   const walls = Object.entries(MISSIONS).filter(([, m]) => m.roles?.defend?.zone?.behind)
   const discsOf = (u, x = u.pos.x, z = u.pos.z, f = u.facing) => (u.t.fp ? u.t.fp.H[f].map((d) => ({ x: x + d.ix * u.t.fp.cell, z: z + d.iz * u.t.fp.cell, r: d.r })) : [{ x, z, r: u.r }])
   const judge = (G, where) => {
@@ -1775,6 +1792,11 @@ function rolesDeployTask(core, mods, RACES, MISSIONS, n, seed) {
       c.defenders++
       const off = discsOf(u).find((d) => !(face(plan, d.x, d.z) >= d.r - 0.01))
       if (off) throw new Error(`${where}: the defender's ${u.t.short} ${u.id} at (${u.pos.x}, ${u.pos.z}) has a disc ${face(plan, off.x, off.z).toFixed(3)} from the wall's face (r ${off.r}): in front of it or over it`)
+      // ((Breakthrough) 8 tails or more from the attacker's zone)
+      const front = core.rolesOf(G.setup).attack.zone.x[1], sx = G.setup.attacker ? -1 : 1
+      const ap = Math.min(...discsOf(u).map((d) => sx * d.x - d.r - front))
+      if (!(ap >= 8 - 0.01)) throw new Error(`${where}: the defender's ${u.t.short} ${u.id} at (${u.pos.x}, ${u.pos.z}) stands ${ap.toFixed(3)} tails from the attacker's zone, under 8`)
+      c.apart = Math.min(c.apart, ap)
       const up = nav.hasHeight && nav.floor[cell] > STEP_
       if (up && (u.t.big || u.t.vehicle || u.t.fp)) throw new Error(`${where}: the defender's ${u.t.short} ${u.id} (${u.t.big ? 'big' : u.t.vehicle ? 'a vehicle' : 'a long hull'}) stands on a deck (floor ${nav.floor[cell]})`)
       if (up) c.decks++
@@ -6741,7 +6763,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     for (const c of bs) for (const [r, e] of Object.entries(c.byRace ?? {})) for (const [k, v] of Object.entries(e)) (byRace[r] ??= {})[k] = (byRace[r][k] ?? 0) + v
     const races = Object.entries(byRace).sort(([a], [b]) => (a < b ? -1 : 1)).map(([r, e]) => `${r} attacking: breakthrough ${e.breakthrough ?? 0}, held ${e.held ?? 0}, wipe ${e.wipe ?? 0}, past the target ${e.over ?? 0}`).join('; ')
     rolesSaid = `; (P-roles) ${sc?.scenes ?? 0} scenes and ${n} breakthrough battles on the March Wall, none drawn, every end one the rules allow (breakthrough ${sum('breakthrough')}, held ${sum('held')}, wipe ${sum('wipe')}; ${races})`
-    if (ds.length) rolesSaid += `; (P-roles, the March Wall) ${dsum('boards')} boards' deployments, either seat attacking, each race order and at the caps (${dsum('matches')} in all): ${dsum('units')} units where place takes them, none overlapping, ${dsum('defenders')} defenders wholly behind the wall's face, ${dsum('decks')} of them on a deck, no big unit, vehicle or long hull on one, every deployment the same again and drawing nothing; ${dsum('astride')} bases astride a face refused (${dsum('longs')} of ${dsum('hulls')} long hulls)`
+    if (ds.length) rolesSaid += `; (P-roles, the March Wall) ${dsum('boards')} boards' deployments, either seat attacking, each race order and at the caps (${dsum('matches')} in all): ${dsum('units')} units where place takes them, none overlapping, ${dsum('defenders')} defenders wholly behind the wall's face and 8 tails or more from the attacker's zone (the least ${Math.min(...ds.map((c) => c.apart)).toFixed(2)}), ${dsum('decks')} of them on a deck, no big unit, vehicle or long hull on one, every deployment the same again and drawing nothing; ${dsum('astride')} bases astride a face refused (${dsum('longs')} of ${dsum('hulls')} long hulls)`
   }
   say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}${Object.keys(cast).length ? `; spells cast by a human seat: ${Object.entries(cast).map(([k, n]) => `${k} ${n}`).join(', ')}` : ''}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid}${ridesSaid}${hullSaid}${rolesSaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
@@ -7113,6 +7135,10 @@ const MUTATIONS = {
   'roles-wall-face': ['core/deploy.js', '  if (box.plan && !(faceDist(box.plan, cx, cz) >= u.r - 0.01)) return false\n', ''],
   'roles-wall-hull-face': ['core/deploy.js', '  if (plan) for (const d of row) if (!(faceDist(plan, cx + d.ix * fp.cell, cz + d.iz * fp.cell) >= d.r - 0.01)) return false\n', ''],
   'roles-wall-big-on-deck': ['core/deploy.js', '  const decked = (u) => !!u.t.ranged && !u.t.big && !groundOnly(u) && !u.t.fp\n', '  const decked = (u) => !groundOnly(u) && !u.t.fp\n'],
+  // ((Breakthrough) the zone behind the line without its x bounds: the
+  // defender's side alone, so a defender may start in the wood's east
+  // mouth a tail and a quarter from the attacker's zone)
+  'roles-wall-unbounded': ['core/deploy.js', '  return { minX: Math.max(-W / 2, lo, b0), maxX: Math.min(W / 2, hi, b1), plan }\n', '  return { minX: Math.max(-W / 2, lo), maxX: Math.min(W / 2, hi), plan }\n'],
   'roles-wall-post-unjudged': ['core/deploy.js', '    if (nav.hasHeight && Math.abs(nav.floor[i] - p.y) > STEP) continue\n    if (!fits(G, u, i, box, others)) continue\n', '    if (nav.hasHeight && Math.abs(nav.floor[i] - p.y) > STEP) continue\n'],
   'roles-attacker-anywhere': ['core/index.js', "  } else if (s.attacker !== undefined) throw new Error(`the ${s.mission} mission has no attacker`)\n", '  }\n'],
   'lattice-ties-reordered': ['core/nav.js', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] <= key) break\n', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] < key) break\n'],

@@ -1842,7 +1842,9 @@ Math.random = realRandom
 //    the defender's side; (S2b) the least distance from the attacker's
 //    zone to the wall's outer face on the table (its polyline cut to the
 //    table's depth) at least FACE_FLOOR, its minimum, median and maximum
-//    reported; (Breakthrough) no cell of the wood on the attacker's side
+//    reported; (Breakthrough) the defender's zone (core/deploy.js zone)
+//    and every base of its default deployment the role's bound, 8 tails,
+//    or more from the attacker's zone; no cell of the wood on the attacker's side
 //    of the picket's column, and none of the crag, behind the line, and no
 //    defender's base there in the match's default deployment;
 //  - the plan's readers: behindLine true at every objective and ground post
@@ -1857,7 +1859,7 @@ Math.random = realRandom
 // behind; the firing positions; the trebuchet's reach; the wall's shape and
 // counts; as a table and, with --march-json <file>, as JSON.
 const MARCH = SETS.march
-const mw = { boards: 0, failed: 0, rows: {}, south: 0, chunks: [], decks: [], ladders: [], faceGap: [], dist: { gate: [], ladders: [], breach: [], wood: [] }, width: { gate: [], breach: [], wood: [] }, seen: { gate: [], ladders: [], breach: [], wood: [] }, report: [] }
+const mw = { boards: 0, failed: 0, rows: {}, south: 0, chunks: [], decks: [], ladders: [], faceGap: [], zoneGap: [], dist: { gate: [], ladders: [], breach: [], wood: [] }, width: { gate: [], breach: [], wood: [] }, seen: { gate: [], ladders: [], breach: [], wood: [] }, report: [] }
 const mwShown = []
 const mwRow = (name, ok, where, what) => {
   const r = (mw.rows[name] ??= { pass: 0, fail: 0 })
@@ -1906,6 +1908,10 @@ if (MARCH) {
   // so the column, on the centres a quarter off the whole tails, never
   // nearer than 1.25: the floor)
   const FACE_FLOOR = 1.25
+  // ((Breakthrough) the defender's zone's bound: its near x 8 tails from
+  // the attacker zone's front, as the record writes it)
+  const ZONE_APART = BTM.roles.defend.zone.x[0] + FRONT
+  const { zone: mwZone } = await imp(PKG, 'core/deploy.js')
   // ((Breakthrough) the match newState builds for a board: the default
   // deployment's, each seat its preset)
   const { createMatch: mwCreate } = await imp(PKG, 'core/index.js')
@@ -2222,6 +2228,18 @@ if (MARCH) {
       rep.zoneToFace = +least.toFixed(3)
       mwRow(`the attacker's zone ${FACE_FLOOR} tails or more from the wall's outer face`, least >= FACE_FLOOR, where, `${least.toFixed(3)} tails`)
     }
+    // ((Breakthrough) and the zones themselves apart, whatever the face:
+    // the defender's zone (core/deploy.js zone, on the match newState
+    // builds for this board) no nearer the attacker's front than ZONE_APART,
+    // the role's x bound, and no default defender's base nearer either)
+    const mG = mwMatch(seed, flip), mDef = flip ? 0 : 1
+    {
+      const dz = mwZone(mG, mDef), near = flip ? FRONT - dz.maxX : dz.minX + FRONT
+      const bases = mG.units.filter((u) => u.side === mDef && !u.aboard).map((u) => ({ u, g: (flip ? -u.pos.x : u.pos.x) - u.r + FRONT }))
+      const least = Math.min(...bases.map((b) => b.g)), worst = bases.find((b) => b.g === least)
+      mw.zoneGap.push(least)
+      mwRow(`the defender's zone and every default defender ${ZONE_APART} tails or more from the attacker's zone`, near >= ZONE_APART - 1e-9 && least >= ZONE_APART - 0.01, where, `the zone ${near.toFixed(3)}, the nearest base ${least.toFixed(3)} (${worst?.u.key})`)
+    }
     // ((Breakthrough) the wood in front of the line: no cell of the Hollow
     // Wood on the attacker's side of the picket's column (past the crag's
     // top, from the column to the zone's front) and no cell of the crag's
@@ -2237,7 +2255,7 @@ if (MARCH) {
       for (let x = -MW / 2 + NAV_CELL / 2; x < MW / 2; x += NAV_CELL) for (let z = -MH / 2 + NAV_CELL / 2; z < MH / 2; z += NAV_CELL) {
         if ((inWood(x, z) || inCrag(x, z)) && BT.behindLine(plan, x, z)) wrong.push(`(${x}, ${z}) ${inCrag(x, z) ? 'the crag' : 'the wood'}`)
       }
-      const G = mwMatch(seed, flip), def = flip ? 0 : 1
+      const G = mG, def = mDef
       const there = G.units.filter((u) => u.side === def && !u.aboard && (inWood(u.pos.x, u.pos.z, u.r - 0.01) || inCrag(u.pos.x, u.pos.z, u.r)))
       const same = sameJSON(G.terrain.plan, plan)
       mwRow("the wood west of the picket and the crag in front of the line, no defender there", same && !wrong.length && !there.length, where, `${same ? '' : "the match's board is not this one; "}${wrong.length} cells behind the line: ${wrong.slice(0, 3).join(', ')}; ${there.map((u) => `${u.key} at (${u.pos.x.toFixed(2)}, ${u.pos.z.toFixed(2)}) r ${u.r}`).join('; ')}`)
@@ -2495,7 +2513,7 @@ if (MARCH) {
   // the rate: the wood south on 40-60% of boards
   const unflipped = mhi - mlo + 1
   if (unflipped >= 100) mwRow('the wood south on 40-60% of boards', mw.south >= 0.4 * unflipped && mw.south <= 0.6 * unflipped, `seeds ${mlo}-${mhi}`, `${mw.south} of ${unflipped}`)
-  console.log(`\nthe March Wall (Breakthrough): ${n} boards, seeds ${mlo}-${mhi} each with seat 0 and seat 1 attacking (${((Date.now() - tm0) / 1000).toFixed(1)} s): the wood south on ${mw.south} of ${unflipped}; chunks ${pct(mw.chunks)}, decks ${pct(mw.decks)}, ladders ${pct(mw.ladders)} (min / median / max); (S2b) the attacker's zone to the outer face ${mw.faceGap.length ? `${Math.min(...mw.faceGap).toFixed(3)} / ${[...mw.faceGap].sort((a, b) => a - b)[mw.faceGap.length >> 1].toFixed(3)} / ${Math.max(...mw.faceGap).toFixed(3)}` : '-'} tails (min / median / max, the floor ${FACE_FLOOR}); the view: ${mwView.synced} chunks synced, ${mwView.tops} walkable tops, ${mwView.taken} meshes taken back`)
+  console.log(`\nthe March Wall (Breakthrough): ${n} boards, seeds ${mlo}-${mhi} each with seat 0 and seat 1 attacking (${((Date.now() - tm0) / 1000).toFixed(1)} s): the wood south on ${mw.south} of ${unflipped}; chunks ${pct(mw.chunks)}, decks ${pct(mw.decks)}, ladders ${pct(mw.ladders)} (min / median / max); (S2b) the attacker's zone to the outer face ${mw.faceGap.length ? `${Math.min(...mw.faceGap).toFixed(3)} / ${[...mw.faceGap].sort((a, b) => a - b)[mw.faceGap.length >> 1].toFixed(3)} / ${Math.max(...mw.faceGap).toFixed(3)}` : '-'} tails (min / median / max, the floor ${FACE_FLOOR}); (Breakthrough) every default defender ${mw.zoneGap.length ? Math.min(...mw.zoneGap).toFixed(3) : '-'} tails or more from the attacker's zone (the bound ${ZONE_APART}); the view: ${mwView.synced} chunks synced, ${mwView.tops} walkable tops, ${mwView.taken} meshes taken back`)
   console.log(`  routes' distances to the nearest objective (min / median / max): ${Object.entries(mw.dist).map(([k, v]) => `${k} ${pct(v)}`).join('; ')}`)
   console.log(`  bottlenecks: gate broken ${pct(mw.width.gate)}, breach broken ${pct(mw.width.breach)}, wood ${pct(mw.width.wood)}; tails of each route seen: ${Object.entries(mw.seen).map(([k, v]) => `${k} ${pct(v)}`).join('; ')}`)
   for (const [k, r] of Object.entries(mw.rows)) console.log(`  ${r.fail ? 'FAIL' : 'ok  '} ${k}: ${r.pass} of ${r.pass + r.fail}`)

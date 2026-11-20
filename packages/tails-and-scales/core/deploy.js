@@ -23,9 +23,14 @@ import { faceDist, postsOf } from './terrain/breakthrough.js'
 // face, the wall's own decks and towers included: `plan` rides in the zone
 // and fits holds every base (every disc of a long hull) wholly behind the
 // face (core/terrain/breakthrough.js faceDist ≥ its radius); its x bounds
-// are the defender's side's on the table (freeSpot's columns). On a board
-// with no plan, the line itself is the face: x from the line (mirrored
-// when seat 1 attacks) to the seat's edge.
+// are the defender's side's on the table (freeSpot's columns), within the
+// role zone's own `x` (its bounds in the attacker-west frame, mirrored when
+// seat 1 attacks: (Breakthrough) they keep the defender 8 tails from the
+// attacker's zone where the wall's tip runs near it), so fits holds every
+// base inside them too and a post whose cell falls outside is passed over
+// as a full one is. On a board with no plan, the line itself is the face:
+// x from the line (mirrored when seat 1 attacks) to the seat's edge,
+// within the same bounds.
 export function zone(G, side) {
   if (rolesOf(G.setup)) return roleZone(G, side)
   const { W, deploy } = G.board
@@ -34,22 +39,24 @@ export function zone(G, side) {
 }
 function roleZone(G, side) {
   const role = rolesOf(G.setup)[roleOf(G, side)], z = role.zone
-  if (z.behind) return behindZone(G, role.line)
+  if (z.behind) return behindZone(G, role.line, z.x)
   const [x0, x1] = z.x
   if (!z.z) return flipped(G.setup) ? { minX: -x1, maxX: -x0 } : { minX: x0, maxX: x1 }
   const [z0, z1] = z.z
   return flipped(G.setup) ? { minX: -x1, maxX: -x0, minZ: -z1, maxZ: -z0 } : { minX: x0, maxX: x1, minZ: z0, maxZ: z1 }
 }
 
-function behindZone(G, line) {
-  const { W } = G.board, plan = G.terrain.plan
-  if (!plan) return flipped(G.setup) ? { minX: -W / 2, maxX: 0 - line } : { minX: line, maxX: W / 2 }
+function behindZone(G, line, [x0, x1]) {
+  const { W } = G.board, plan = G.terrain.plan, flip = flipped(G.setup)
+  // (the role's bounds on the table)
+  const b0 = flip ? 0 - x1 : x0, b1 = flip ? 0 - x0 : x1
+  if (!plan) return flip ? { minX: Math.max(-W / 2, b0), maxX: Math.min(0 - line, b1) } : { minX: Math.max(line, b0), maxX: Math.min(W / 2, b1) }
   let lo = Infinity, hi = -Infinity
   for (const p of plan.region) {
     lo = Math.min(lo, p.x)
     hi = Math.max(hi, p.x)
   }
-  return { minX: Math.max(-W / 2, lo), maxX: Math.min(W / 2, hi), plan }
+  return { minX: Math.max(-W / 2, lo, b0), maxX: Math.min(W / 2, hi, b1), plan }
 }
 
 // May `u` be put on nav cell i during seat `side`'s deployment, with

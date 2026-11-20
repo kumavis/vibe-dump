@@ -300,8 +300,13 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
   // tails of its own edge and takes the first turn with no roll-off; the
   // defender anywhere behind the wall's outer face (`behind`: the wall's
   // own decks and towers included, never in front of it; core/deploy.js
-  // zone), the face drawn within 1.5 tails of `line`, the gate face's
-  // nominal x. Every objective stands behind the wall (the road in the yard
+  // zone) and inside its x bounds, x −12 to the far edge, the face drawn
+  // within 1.5 tails of `line`, the gate face's nominal x. ((Breakthrough)
+  // The bounds keep the defender 8 tails from the attacker's zone whatever
+  // the seed: the wall's west tip, the crag and the wood's picket, stands
+  // as little as 1.25 tails from it, so behind the face alone a defender
+  // might start in the wood's east mouth or on the walk's far end a tail
+  // and a quarter from the attacker.) Every objective stands behind the wall (the road in the yard
   // behind the gate, and behind each arm) and scores for the attacker
   // alone: at each round's end the attacker scores 1 for each it holds, and
   // 5 wins at once; otherwise the defender wins when the rounds run out. No
@@ -329,7 +334,7 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     overtime: false,
     roles: {
       attack: { zone: { x: [-30, -20] }, first: true, target: 5 },
-      defend: { zone: { behind: true }, line: -4.5 },
+      defend: { zone: { behind: true, x: [-12, 30] }, line: -4.5 },
     },
     objectives: [
       { x: 9, z: 0, scores: 'attack' },
@@ -395,10 +400,14 @@ export function checkMission(name, m) {
 // apart along x or z. ((Breakthrough, the March Wall) Or the defender's
 // zone is `{ behind: true }`: everything behind the wall's outer face
 // (core/deploy.js zone: the board's plan, or, on a board with none, x
-// past the line), so the defender needs a `line`; the arms of a wall sweep
-// forward of it, so the zones' 12 tails are then the attacker zone's front
-// to the line.) The attacker's `target`, a whole number of VP from 1,
-// and `first` (true: it takes the first turn, no roll-off); the defender's
+// past the line), so the defender needs a `line`; and `x: [a, b]`, its x
+// bounds: a base behind the face and inside them. The wall stands between
+// the zones, so its near bound is held BEHIND_APART (8) tails or more from
+// the attacker zone's front, not 12, and the line inside the bounds; the
+// arms of a wall sweep forward of the line, and the bounds are what keep a
+// defender off the attacker whatever the face's shape.) The attacker's
+// `target`, a whole number of VP from 1, and `first` (true: it takes the
+// first turn, no roll-off); the defender's
 // `line` (the x of its line's front face) inside the board. `overtime`
 // false (a role battle ends on its rounds or its target, never by a vote).
 // Each objective inside the board by 1 tail, outside the attacker's zone
@@ -408,6 +417,9 @@ export function checkMission(name, m) {
 // VP the attacker's objectives are worth.
 const ROLE_KEYS = Object.freeze({ attack: ['zone', 'list', 'first', 'target'], defend: ['zone', 'list', 'line'] })
 const APART = 12
+// ((Breakthrough, the March Wall) a zone behind the line's near bound to the
+// attacker zone's front: 8 tails, the wall between them)
+const BEHIND_APART = 8
 function checkRoles(m, bad) {
   const { W, H } = m.board
   const roles = m.roles
@@ -422,7 +434,9 @@ function checkRoles(m, bad) {
     // ((the March Wall) the defender's zone behind the line: { behind: true }
     // and nothing else, held to the line below; its list as any role's)
     if (k === 'defend' && record(z) && 'behind' in z) {
-      if (Object.keys(z).join() !== 'behind' || z.behind !== true) bad(`its defend zone is ${JSON.stringify(z)}, not { behind: true } (behind the line, and nothing else)`)
+      if (Object.keys(z).sort().join() !== 'behind,x' || z.behind !== true) bad(`its defend zone is ${JSON.stringify(z)}, not { behind: true, x: [a, b] } (behind the line inside x bounds, and nothing else)`)
+      if (!span(z.x, -W / 2, W / 2)) bad(`its defend zone's x is ${JSON.stringify(z.x)}, not [a, b] with a < b inside a board ${tails(W)} wide`)
+      box.behind = { x: z.x }
     } else {
       if (!record(z) || Object.keys(z).some((f) => f !== 'x' && f !== 'z')) bad(`its ${k} zone is ${JSON.stringify(z)}, not { x: [a, b], z?: [c, d] }${k === 'defend' ? ' or { behind: true }' : ''}`)
       if (!span(z.x, -W / 2, W / 2)) bad(`its ${k} zone's x is ${JSON.stringify(z.x)}, not [a, b] with a < b inside a board ${tails(W)} wide`)
@@ -436,9 +450,12 @@ function checkRoles(m, bad) {
   const atk = roles.attack, line = roles.defend.line
   const gap = (p, q) => Math.max(q[0] - p[1], p[0] - q[1])
   if (!D) {
-    // ((the March Wall) behind the line: the attacker zone's front to it)
+    // ((the March Wall) behind the line: its near bound to the attacker
+    // zone's front, and the line inside its bounds)
+    const [b0, b1] = box.behind.x
     if (!Number.isFinite(line)) bad('its defend zone is behind the line, but the defender has no line')
-    else if (!(line - A.x[1] >= APART)) bad(`its attacker's zone front is ${line - A.x[1]} tails from the defender's line, under ${tails(APART)}`)
+    else if (!(b0 - A.x[1] >= BEHIND_APART)) bad(`its defend zone behind the line starts ${b0 - A.x[1]} tails from the attacker's zone front, under ${tails(BEHIND_APART)}`)
+    else if (!(line >= b0 && line <= b1)) bad(`its defender's line at x ${line} is outside its zone's x bounds [${b0}, ${b1}]`)
   } else if (!(gap(A.x, D.x) >= APART || gap(A.z, D.z) >= APART)) bad(`its zones are ${Math.max(gap(A.x, D.x), gap(A.z, D.z))} tails apart, under ${tails(APART)}`)
   if (!Number.isInteger(atk.target) || atk.target < 1) bad(`its attacker's target is ${JSON.stringify(atk.target)}, not a whole number of VP from 1`)
   if (atk.first !== undefined && atk.first !== true) bad(`its attacker's first is ${JSON.stringify(atk.first)}, not true (left out: the roll-off)`)

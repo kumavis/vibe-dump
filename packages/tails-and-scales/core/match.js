@@ -170,10 +170,11 @@ export function roleObjectives(mission, flip) {
 // mirrors what it builds itself on a flip; the objectives it is handed are
 // the table's, already mirrored). `line` is null for a mission without one.
 // ((the March Wall) A zone behind the line goes as it is written,
-// { behind: true }: the generator reads the attacker's front and the line.)
+// { behind: true, x: [a, b] }: the generator reads the attacker's front and
+// the line, never the defender's zone.)
 // Exported for sim/'s rows, which build the boards as newState does.
 export function roleFrame({ attack, defend }, flip) {
-  const zone = (z) => (z.behind ? { behind: true } : z.z ? { x: [...z.x], z: [...z.z] } : { x: [...z.x] })
+  const zone = (z) => (z.behind ? { behind: true, x: [...z.x] } : z.z ? { x: [...z.x], z: [...z.z] } : { x: [...z.x] })
   return { flip, zones: { attack: zone(attack.zone), defend: zone(defend.zone) }, line: defend.line ?? null }
 }
 
