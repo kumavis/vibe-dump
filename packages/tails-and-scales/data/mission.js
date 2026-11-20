@@ -290,8 +290,8 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     ],
   },
   // (Breakthrough, DESIGN §4.2.12) The first asymmetric mission: a Field
-  // battle (60×40, 6 rounds, 1,000 points a side and Field's list rules
-  // and prices, the ×2 presets) in which one seat attacks and the other
+  // battle (60×40, 6 rounds, Field's list rules and prices) in which one
+  // seat attacks and the other
   // defends the March Wall (the line set, sets.js `march`: a walled line
   // across the table, its gate, its breach, its siege ladders and a wood on
   // its flank). Written in the attacker-west frame (the attacker in seat
@@ -306,15 +306,28 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
   // the seed: the wall's west tip, the crag and the wood's picket, stands
   // as little as 1.25 tails from it, so behind the face alone a defender
   // might start in the wood's east mouth or on the walk's far end a tail
-  // and a quarter from the attacker.) Every objective stands behind the wall (the road in the yard
-  // behind the gate, and behind each arm) and scores for the attacker
-  // alone: at each round's end the attacker scores 1 for each it holds, and
-  // 5 wins at once; otherwise the defender wins when the rounds run out. No
-  // draw, no overtime. `deploy` is the attacker's depth, 10: the view draws
-  // both zones by it until the zones are drawn per seat (no rule reads it
-  // under roles: core/deploy.js zone). The numbers are the balance sweep's
-  // starting values; the objectives are the ones the generator's checks
-  // held on every board measured (sim/terrain-check.mjs section 10).
+  // and a quarter from the attacker.) Every objective stands behind the
+  // wall (the road in the yard 9.5 tails behind the gate's line, and behind
+  // each arm) and scores for the attacker alone: at each round's end the
+  // attacker scores 1 for each it holds, and 4 wins at once; otherwise the
+  // defender wins when the rounds run out. No draw, no overtime. `deploy`
+  // is the attacker's depth, 10: the view draws both zones by it until the
+  // zones are drawn per seat (no rule reads it under roles: core/deploy.js
+  // zone). ((S5a, S5b) The armies are unequal: the attacker has the
+  // numbers, Field's 1,000 points and its preset, the ×2 list; the defender
+  // the works and the choice not to move, its own list of 625 points (11
+  // units, 44 models: Field's scaled by the points; its slots and prices
+  // Field's) and its own preset, the garrison. Balance (S5b's As built in
+  // DESIGN, the AI that rams the gate): random legal lists under each
+  // role's rules, 1,600 battles a seed, the attacker 52.8% on seed 1111
+  // and 52.8% on 2222 (each ordered race pair 42-59%), ended by
+  // breakthrough 45-46%, held 47%, the defender wiped 7-8%; on the presets
+  // the attacker scores by round 4 in 73% (boards 1-100) and 71% (1001-
+  // 1200). Tried: the defender at 600 points, 57.7%; at 650, 46.1%. The
+  // objectives are ones the generator's checks hold on every board
+  // measured (sim/terrain-check.mjs section 10): (5, 0) for the yard's
+  // (S3's (9, 0); (3, 0) and (1, 0) fail them) and the arms' at (3, ±13),
+  // the only one of those tried there that holds.)
   breakthrough: {
     board: { W: 60, H: 40 },
     deploy: 10,
@@ -333,11 +346,21 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     sets: ['march'],
     overtime: false,
     roles: {
-      attack: { zone: { x: [-30, -20] }, first: true, target: 5 },
-      defend: { zone: { behind: true, x: [-12, 30] }, line: -4.5 },
+      attack: { zone: { x: [-30, -20] }, first: true, target: 4 },
+      defend: {
+        zone: { behind: true, x: [-12, 30] }, line: -4.5, army: 'garrison',
+        list: {
+          size: 'Field', points: 625, units: 11, models: 44, perKind: 5,
+          roles: { Hero: [1, 2], Troops: [2, 10], Elite: [0, 3], Fast: [0, 3], Monster: [0, 2], Artillery: [0, 2], Vehicle: [0, 2] },
+          prices: {
+            squirrel: { elder: 75, oakguard: 115, nutkin: 70, grenadier: 45, glider: 60, trebuchet: 55 },
+            serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 45 },
+          },
+        },
+      },
     },
     objectives: [
-      { x: 9, z: 0, scores: 'attack' },
+      { x: 5, z: 0, scores: 'attack' },
       { x: 3, z: 13, scores: 'attack' },
       { x: 3, z: -13, scores: 'attack' },
     ],
@@ -395,7 +418,9 @@ export function checkMission(name, m) {
 // attacks): `roles` holds `attack` and `defend` and nothing else; each a
 // `zone` { x: [a, b], z?: [c, d] }, a rectangle inside the board (z left
 // out: the board's whole depth), and optionally its own `list` (the list
-// rules its seat's army is held to, checkListRules; absent, the mission's);
+// rules its seat's army is held to, checkListRules; absent, the mission's)
+// and ((S5a) its own `army`, the preset's name a seat of that role naming
+// no army takes: core/army.js presetFor; absent, the mission's);
 // the attacker's zone in the west half, the two zones at least 12 tails
 // apart along x or z. ((Breakthrough, the March Wall) Or the defender's
 // zone is `{ behind: true }`: everything behind the wall's outer face
@@ -415,7 +440,7 @@ export function checkMission(name, m) {
 // 'defend' (absent: both seats score it), `vp` a whole number from 1
 // (absent: 1); and the target within reach: at most the rounds times the
 // VP the attacker's objectives are worth.
-const ROLE_KEYS = Object.freeze({ attack: ['zone', 'list', 'first', 'target'], defend: ['zone', 'list', 'line'] })
+const ROLE_KEYS = Object.freeze({ attack: ['zone', 'list', 'army', 'first', 'target'], defend: ['zone', 'list', 'army', 'line'] })
 const APART = 12
 // ((Breakthrough, the March Wall) a zone behind the line's near bound to the
 // attacker zone's front: 8 tails, the wall between them)
@@ -444,6 +469,7 @@ function checkRoles(m, bad) {
       box[k] = { x: z.x, z: z.z ?? [-H / 2, H / 2] }
     }
     if (r.list !== undefined) checkListRules(r.list, (why) => bad(`its ${k} role's list: ${why.replace(/^its list('s)? ?/, '')}`))
+    if (r.army !== undefined && (typeof r.army !== 'string' || !r.army)) bad(`its ${k} role's army is ${JSON.stringify(r.army)}, not a preset's name`)
   }
   const A = box.attack, D = box.defend
   if (!(A.x[1] <= 0)) bad(`its attack zone reaches x ${A.x[1]}, past the centre line (the roles are written with the attacker in the west)`)

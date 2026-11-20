@@ -44,7 +44,7 @@
 // and throws on one that isn't (sim/'s P-prop). Each is I/O, never match
 // state: the rules don't read them, and stateHash leaves them out.
 import { newState, missionOf, rolesOf, seatName, makeSeats, SETUP_KEYS, SEAT_KEYS } from './match.js'
-import { armyOf } from './army.js'
+import { armyOf, presetFor } from './army.js'
 import { MISSIONS } from '../data/mission.js'
 import { lock, unlock } from './rng.js'
 import { emit, log } from './journal.js'
@@ -138,7 +138,8 @@ export function fullSetup(setup) {
   if (s.diceMode !== 'shared') throw new Error(`dice mode "${s.diceMode}": only 'shared' dice so far`)
   if (!Array.isArray(s.seats)) throw new Error('a setup names its seats')
   makeSeats(s.seats.map((x) => x.race), s.seats.map((x) => x.ctrl))
-  s.seats = s.seats.map((x) => ({ ...x, army: x.army ?? mission.army }))
+  // ((Breakthrough) a seat's role's own preset where it names one)
+  s.seats = s.seats.map((x, i) => ({ ...x, army: x.army ?? presetFor(s, i) }))
   for (let i = 0; i < s.seats.length; i++) armyOf(s, i)
   return s
 }

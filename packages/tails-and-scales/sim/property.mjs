@@ -1158,9 +1158,12 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     // every other seed, each Coil list holding two Howdahs where its
     // budget lets it, one at least)
     if (lists.hulls) setup.seats.forEach((x, i) => (x.race = i === 1 || seed % 2 === 0 ? 'serpent' : 'squirrel'))
-    for (const x of setup.seats) {
-      const budget = rules.points - 5 * Math.floor(pickList() * (rules.points / 12.5))
-      const at = { ...rules, points: budget }
+    // ((Breakthrough, S5a) a role mission's seat at its role's list rules,
+    // core/army.js rulesFor: the attacker below is seed % 2, no draw)
+    const seatRules = (i) => (lists.MISSIONS[lists.mission].roles && core.army.rulesFor ? core.army.rulesFor({ mission: lists.mission, attacker: seed % 2 }, i) : rules)
+    for (const [i, x] of setup.seats.entries()) {
+      const own = seatRules(i), budget = own.points - 5 * Math.floor(pickList() * (own.points / 12.5))
+      const at = { ...own, points: budget }
       x.army = (lists.hulls && x.race === 'serpent' && (cartList(core.army, lists.RACES[x.race], at, pickList, 2) || cartList(core.army, lists.RACES[x.race], at, pickList))) ||
         (lists.rides && cartList(core.army, lists.RACES[x.race], at, pickList)) || core.army.listText(core.army.autoList(lists.RACES[x.race], at, Math.floor(pickList() * 2 ** 32)))
     }
@@ -1951,6 +1954,73 @@ function wallJudge(ws) {
   return { said, error: failed.length ? `P-wall: ${failed.map(([, w]) => w).join('; ')}` : null }
 }
 
+// (Breakthrough, S5b) P-wall's charge scenes: the gap the attacker's charge
+// term reads to a defender across the wall (core/ai/score.js wallGap, its
+// route fields' lower bound on the walk to base contact), on board 4242
+// with seat 0 the Bushtails attacking, an Oak Guard squad charging, each
+// on a straight walk in the open toward an enemy with the field's
+// objective beyond it, D (5) tails apart middle to middle, the first such
+// place a fixed scan of the yard finds:
+//   A. a Scaleguard squad whose own cell is on the attacker's field, the
+//      walk straight on past it: the gap within half a tail of the
+//      straight one (D less both radii; built: 2.70 of 2.70); S5a's form,
+//      the least field value over the cells in base contact,
+//      `wall-contact-least`, reads it both radii and the pad too long
+//      (5.41);
+//   B. a Hierophant whose own cell is off the field (a wider base has no
+//      clearance there): the charge weighed all the same, by a gap no
+//      longer than the straight one and within half a tail of it (built:
+//      3.00 of 3.37); S3's form, the enemy's own cell alone,
+//      `wall-contact-own`, reads Infinity there.
+function wallScenes(core, mods) {
+  const { U, S, R, BT } = mods
+  const G = core.createMatch({ board: 4242, dice: 99, mission: 'breakthrough', attacker: 0, seats: [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }] }, { out: [] })
+  const plan = G.terrain.plan, nav = G.nav, D = 5
+  const u = G.units.find((x) => x.side === 0 && x.t.short === 'Oak Guard')
+  const f = R.routeFields(G, u, plan)
+  // (the field drops by the walk all along the segment: the way is straight)
+  const straight = (k, x0, z0, x1, z1) => {
+    const L = Math.hypot(x1 - x0, z1 - z0), n = Math.ceil(L / 0.25), a = f[k][nav.index(x0, z0)]
+    for (let s = 0; s <= n; s++) {
+      const t = s / n, i = nav.index(x0 + (x1 - x0) * t, z0 + (z1 - z0) * t)
+      if (i < 0 || !(Math.abs(a - f[k][i] - L * t) <= 0.3)) return false
+    }
+    return true
+  }
+  const out = []
+  for (const [scene, short, own] of [['A', 'Scaleguard', true], ['B', 'Hierophant', false]]) {
+    const e = G.units.find((x) => x.side === 1 && x.t.short === short)
+    let found = null
+    for (let q = 0; q < nav.N && !found; q++) {
+      const j = (Math.floor(nav.N / 2) + q * 37) % nav.N, ex = nav.x(j), ez = nav.z(j)
+      if (BT.faceDist(plan, ex, ez) < 3 || (nav.hasHeight && nav.floor[j] !== 0) || !nav.standable(j, e.r, 'walk')) continue
+      if (own ? !f.every((d) => isFinite(d[j])) : f.some((d) => isFinite(d[j]))) continue
+      for (const [dx, dz] of [[1, 0], [0, 1], [-1, 0], [0, -1]]) {
+        const ux = ex + dx * D, uz = ez + dz * D, i = nav.index(ux, uz)
+        if (i < 0) continue
+        const g = D - u.r - e.r, cx = ex + dx * (u.r + e.r), cz = ez + dz * (u.r + e.r)
+        // (and on past e by its radii and a tail, where scene A's own cell is on
+        // the field: the objective beyond it, not under it)
+        const bx = ex - dx * (u.r + e.r + 1), bz = ez - dz * (u.r + e.r + 1)
+        if (!f.some((d, k) => straight(k, ux, uz, own ? bx : cx, own ? bz : cz) && d[i] - d[nav.index(cx, cz)] > g - 0.3)) continue
+        found = { ex, ez, ux, uz, g }
+        break
+      }
+    }
+    if (!found) throw new Error(`P-wall charge scene ${scene}: no straight walk to a ${short} ${own ? 'on' : 'off'} the field on board 4242`)
+    const { ex, ez, ux, uz, g } = found
+    U.setUnitPos(u, ux, uz)
+    U.setUnitPos(e, ex, ez)
+    const bt = S.wallTerms(G, u, plan, [e], G.objectives.map(() => -1))
+    const got = S.wallGap(G, bt, u, e, ux, uz)
+    const where = `P-wall charge scene ${scene}: the Oak Guard at (${ux}, ${uz}) charging the ${short} at (${ex}, ${ez}) ${own ? 'on' : 'off'} its field`
+    if (!isFinite(got)) throw new Error(`${where}: the charge term reads a gap of ${got}, not weighed (a straight ${g.toFixed(2)})`)
+    if (!(Math.abs(got - g) <= 0.5) || (!own && got > g + 1e-9)) throw new Error(`${where}: the charge term reads a gap of ${got.toFixed(2)}, the straight walk ${g.toFixed(2)} (${own ? 'within half a tail' : 'no longer, and within half a tail'})`)
+    out.push(`${scene} ${got.toFixed(2)} of ${g.toFixed(2)}`)
+  }
+  return { scenes: out }
+}
+
 function missionTask(core, MISSIONS, face = null) {
   let n = 0
   for (const [name, [change, want]] of Object.entries(BAD_MISSION_SETUPS)) {
@@ -1999,11 +2069,14 @@ function missionTask(core, MISSIONS, face = null) {
       const keys = (X) => X.units.map((u) => `${u.side}:${u.key}`).join(' ')
       for (const [s, { race }] of SETUP.seats.entries()) {
         const want = G.units.filter((u) => u.side === s).map((u) => u.key).join(' ')
-        if (G.setup.seats[s].army !== m.army) throw new Error(`P-mission: a match of ${name} fills seat ${s}'s army in as ${JSON.stringify(G.setup.seats[s].army)}, not its preset ${m.army}`)
+        // ((Breakthrough, S5a) on a mission with roles, the seat's role's
+        // preset (core/army.js presetFor), and the other seat naming none)
+        const own = core.army.presetFor ? core.army.presetFor(G.setup, s) : m.army
+        if (G.setup.seats[s].army !== own) throw new Error(`P-mission: a match of ${name} fills seat ${s}'s army in as ${JSON.stringify(G.setup.seats[s].army)}, not its preset ${own}`)
         const text = core.army.listText(core.army.armyOf(G.setup, s).counts)
         if (want !== core.army.armyOf(G.setup, s).keys.join(' ')) throw new Error(`P-mission: a match of ${name} fields ${want} for seat ${s}, not its preset's units`)
-        for (const army of [m.army, text]) {
-          const H2 = core.createMatch({ ...SETUP, mission: name, seats: SETUP.seats.map((x) => ({ ...x, army })) })
+        for (const army of [own, text]) {
+          const H2 = core.createMatch({ ...SETUP, mission: name, seats: SETUP.seats.map((x, t) => (m.roles && t !== s ? x : { ...x, army })) })
           if (keys(H2) !== keys(G) || core.stateHash(H2) !== core.stateHash(G)) throw new Error(`P-mission: a match of ${name} with every seat naming ${JSON.stringify(army)} differs from one naming no army (${race}'s preset)`)
         }
         n++
@@ -2031,9 +2104,10 @@ const ARMY_REFUSALS = {
   'true': [true, NO, /^seat 0's army is a preset's name or a list of counts, not true$/],
   // (the plural is the orchestrator's call while each race has one
   // preset: either agreement passes)
-  // ((F8b) every race's three presets, named in their order)
-  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there are classic, field, grand\)$/],
-  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there are classic, field, grand\)$/],
+  // ((F8b) every race's presets, named in their order: (Breakthrough, S5a)
+  // four, the March Wall's garrison the last)
+  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there are classic, field, grand, garrison\)$/],
+  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there are classic, field, grand, garrison\)$/],
   // ('toString' has a capital: no preset's name, so not a list either)
   "toString": ['toString', NO, /^seat 0's army "toString" is neither a preset nor a list of counts$/],
   // ((F8b) a larger battle's preset is a preset like any, held to the
@@ -2348,9 +2422,15 @@ function fuzzTask(core, RACES, MISSIONS, n, seed) {
   const races = Object.keys(RACES), missions = Object.keys(MISSIONS)
   const int = (k) => Math.floor(rand() * k)
   const counts = { fuzzed: 0, refused: 0, taken: 0, roundTrips: 0, both: 0, made: 0 }
-  // a legal list of `race` at `mission`, as text (from 60% of the limit)
-  const legal = (race, mission) => {
-    const rules = MISSIONS[mission].list
+  // ((Breakthrough, S5a) each seat's list rules and preset its role's on a
+  // mission with roles: core/army.js rulesFor and presetFor, where the
+  // code has them; the seats name no attacker, so seat 0 attacks)
+  const rulesOf = (mission, seat) => (A.rulesFor ? A.rulesFor({ mission }, seat) : MISSIONS[mission].list)
+  const presetOf = (mission, seat) => (A.presetFor ? A.presetFor({ mission }, seat) : MISSIONS[mission].army)
+  // a legal list of `race` at `mission` for `seat`, as text (from 60% of
+  // the limit)
+  const legal = (race, mission, seat) => {
+    const rules = rulesOf(mission, seat)
     return A.listText(A.autoList(RACES[race], { ...rules, points: rules.points - 5 * int(rules.points / 12.5) }, int(2 ** 32)))
   }
   // fullSetup's verdict: the setup, or the error thrown
@@ -2371,7 +2451,7 @@ function fuzzTask(core, RACES, MISSIONS, n, seed) {
   for (let k = 0; k < n; k++) {
     const mission = missions[int(missions.length)]
     const race = [0, 1].map(() => (rand() < 0.6 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)]))
-    const lists = race.map((r) => legal(r, mission))
+    const lists = race.map((r, i) => legal(r, mission, i))
     const seat = int(2), both = rand() < 0.2
     const army = [0, 1].map((i) => (i === seat || both ? fuzzValue(rand, lists[i]) : rand() < 0.5 ? lists[i] : undefined))
     const setupOf = (a) => ({ board: 1 + int(1e6), dice: 1 + int(1e9), mission, seats: [0, 1].map((i) => ({ race: race[i], ctrl: 'human', ...(a[i] === undefined && rand() < 0.5 ? {} : { army: a[i] }) })) })
@@ -2402,7 +2482,7 @@ function fuzzTask(core, RACES, MISSIONS, n, seed) {
     for (const i of [0, 1]) {
       const r = RACES[race[i]], given = army[i], filled = v.s.seats[i].army
       if (given != null && typeof given !== 'string') throw new Error(`${where}: fullSetup takes seat ${i}'s army ${show(given)}, which is no string`)
-      if (filled !== (given ?? MISSIONS[mission].army)) throw new Error(`${where}: seat ${i}'s army filled in as ${show(filled)}`)
+      if (filled !== (given ?? presetOf(mission, i))) throw new Error(`${where}: seat ${i}'s army filled in as ${show(filled)}`)
       const got = A.armyOf(v.s, i)
       const text = A.listText(got.counts)
       const preset = Object.hasOwn(r.armies, filled) ? filled : null
@@ -2410,7 +2490,7 @@ function fuzzTask(core, RACES, MISSIONS, n, seed) {
       const sum = [...text].reduce((s, d) => s + Number(d), 0)
       const order = got.keys.map((key) => r.roster.indexOf(key))
       if (got.keys.length !== sum || order.some((x, j) => x < 0 || (j && x < order[j - 1]))) throw new Error(`${where}: seat ${i}'s '${text}' fields ${got.keys.join(' ')}: not ${sum} units in roster order`)
-      if (A.checkList(r, MISSIONS[mission].list, got.counts) !== null) throw new Error(`${where}: seat ${i}'s '${text}' is taken, but checkList says ${A.checkList(r, MISSIONS[mission].list, got.counts)}`)
+      if (A.checkList(r, rulesOf(mission, i), got.counts) !== null) throw new Error(`${where}: seat ${i}'s '${text}' is taken, but checkList says ${A.checkList(r, rulesOf(mission, i), got.counts)}`)
       counts.roundTrips++
     }
     // the first lists taken, made into matches (human seats: each stops at
@@ -2500,10 +2580,13 @@ function armyGamesTask(core, RACES, MISSIONS, mission, n, seed, mods = null) {
   let hulls = 0, bailed = 0
   for (let k = 0; k < n; k++) {
     const race = [0, 1].map(() => (rand() < 0.7 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)]))
-    const army = race.map((r) => {
-      const budget = rules.points - 5 * int(rules.points / 12.5)
+    // ((Breakthrough, S5a) a role mission's seat at its role's list rules,
+    // core/army.js rulesFor, the attacker k % 2 as below)
+    const own = (i) => (MISSIONS[mission].roles && A.rulesFor ? A.rulesFor({ mission, attacker: k % 2 }, i) : rules)
+    const army = race.map((r, i) => {
+      const at = own(i), budget = at.points - 5 * int(at.points / 12.5)
       budgets.push(budget)
-      return A.listText(A.autoList(RACES[r], { ...rules, points: budget }, int(2 ** 32)))
+      return A.listText(A.autoList(RACES[r], { ...at, points: budget }, int(2 ** 32)))
     })
     const setup = { board: int(2 ** 32), dice: int(2 ** 32), mission, seats: [0, 1].map((i) => ({ race: race[i], ctrl: 'ai', army: army[i] })) }
     // ((Breakthrough) either seat attacking, by the game)
@@ -6552,6 +6635,11 @@ if (a.child) {
       const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
       const [BT, R, probe] = await Promise.all([at('core', 'terrain', 'breakthrough.js'), at('core', 'ai', 'route.js'), import(new URL('./wall-probe.mjs', import.meta.url).href)])
       out = { ok: true, counts: wallPlayTask(core, { BT, R }, probe, task.cell, task.n) }
+    } else if (task.kind === 'wallScene') {
+      // ((Breakthrough, S5b) P-wall's charge scenes)
+      const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
+      const [U, S, R, BT] = await Promise.all([at('core', 'units.js'), at('core', 'ai', 'score.js'), at('core', 'ai', 'route.js'), at('core', 'terrain', 'breakthrough.js')])
+      out = { ok: true, counts: wallScenes(core, { U, S, R, BT }) }
     } else if (task.kind === 'rolesDeploy') {
       // ((the March Wall) P-roles' deployment behind the wall)
       const mods = await ridesMods()
@@ -6661,13 +6749,16 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     // ((Breakthrough, S3) P-wall's battles, on code with the AI's wall terms:
     // a quarter a cell, on the fixed boards WALL_BOARDS, whatever the seed)
     if (existsSync(join(pkg, 'core', 'ai', 'route.js')) && army.wallPlay) for (let cell = 0; cell < 4; cell++) tasks.push({ kind: 'wallPlay', cell, n: army.wallPlay / 4 })
+    // ((S5b) P-wall's charge scenes, on code with the charge's wallGap)
+    if (existsSync(join(pkg, 'core', 'ai', 'route.js')) && /^export function wallGap\(/m.test(readFileSync(join(pkg, 'core', 'ai', 'score.js'), 'utf8'))) tasks.push({ kind: 'wallScene' })
   }
   const t0 = Date.now()
   const res = await pool(tasks, CPUS, async (t) => {
     const r = await child(t, pkg)
     const c = r.counts
-    const label = t.kind === 'corpus' ? t.id : t.kind === 'wallPlay' ? `P-wall cell ${t.cell}` : t.kind === 'roles' ? 'P-roles scenes' : t.kind === 'rolesGames' ? `P-roles #${t.seed}` : t.kind === 'rolesDeploy' ? `P-roles deployment #${t.seed}` : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.hulls ? `hull game ${t.seed}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
+    const label = t.kind === 'corpus' ? t.id : t.kind === 'wallPlay' ? `P-wall cell ${t.cell}` : t.kind === 'wallScene' ? 'P-wall charge scenes' : t.kind === 'roles' ? 'P-roles scenes' : t.kind === 'rolesGames' ? `P-roles #${t.seed}` : t.kind === 'rolesDeploy' ? `P-roles deployment #${t.seed}` : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.hulls ? `hull game ${t.seed}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
     const what = !r.ok ? '' : t.kind === 'corpus' ? `${c.probes} decisions probed`
+      : t.kind === 'wallScene' ? `the charge's gap across the wall, read against a straight walk: ${c.scenes.join(', ')}`
       : t.kind === 'wallPlay' ? `${c.n} AI battles on the March Wall, ${WALL_CELLS[t.cell].races[WALL_CELLS[t.cell].attacker]} attacking from seat ${WALL_CELLS[t.cell].attacker}: behind the face by round 4 ${c.walk4}, scored by round 4 ${c.scored4}`
       : t.kind === 'roles' ? `${c.scenes} scenes with either seat attacking (the zones, the scoring, the ends), the attacker's first turn with no die drawn ${c.firsts} times`
       : t.kind === 'rolesGames' ? `${c.battles} breakthrough AI battles, none a draw (breakthrough ${c.ends.breakthrough}, held ${c.ends.held}, wipe ${c.ends.wipe})`
@@ -7243,6 +7334,16 @@ const MUTATIONS = {
     ['core/ai/score.js', 'DENY = 5, THREAT', 'DENY = 1, THREAT'],
     ['core/ai/score.js', 'DENY_GAIN = 40', 'DENY_GAIN = 0'],
   ],
+  // ((S5b) P-wall's charge scenes: S5a's bound (the least field value
+  // over the cells in base contact, both radii taken off again) and S3's
+  // (the enemy's own cell alone, Infinity where it is off the field))
+  'wall-contact-least': [
+    ['core/ai/route.js', '  const nav = G.nav, out = f.map(() => -Infinity)\n', '  const nav = G.nav, out = f.map(() => Infinity)\n'],
+    ['core/ai/route.js', 'if (isFinite(f[k][i]) && f[k][i] > out[k]) out[k] = f[k][i]', 'if (f[k][i] < out[k]) out[k] = f[k][i]'],
+    ['core/ai/score.js', '  const own = f.map((d) => (j >= 0 ? d[j] : Infinity))\n', '  const own = f.map(() => Infinity)\n'],
+    ['core/ai/score.js', ': c.far && isFinite(c.far[k]) ? f[k][i] - c.far[k] : NaN', ': c.far && isFinite(c.far[k]) ? f[k][i] - c.far[k] - u.r - e.r : NaN'],
+  ],
+  'wall-contact-own': ['core/ai/score.js', '  return { own, far: own.every(isFinite) ? null : nearField(', '  return { own, far: true ? null : nearField('],
   'roles-attacker-anywhere': ['core/index.js', "  } else if (s.attacker !== undefined) throw new Error(`the ${s.mission} mission has no attacker`)\n", '  }\n'],
   'lattice-ties-reordered': ['core/nav.js', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] <= key) break\n', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] < key) break\n'],
 }

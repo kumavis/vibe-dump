@@ -4356,6 +4356,73 @@ Breakthrough fought on the March Wall, on the S1 and S4a machinery as it was (`C
   - *What holds it*: P-wall (`sim/property.mjs`, 80 battles on boards 5000-5019 in each cell, watched by `sim/wall-probe.mjs`): rows 1 (a walker behind by round 4 in 90%, scored by round 4 in 18 or more, 5.4 crossings a battle by then), 2 (0.3 attackers idling at the face a battle at most), 4 (under 2% of defender unit-rounds in front, 0.25% of its free movement-phase ends) and 6 (the defender's OC up 0.4 a contestable case or more), each caught by its mutant (`wall-route-straight`, `wall-ladder-held`, `wall-front-open`, `wall-deny-off`); play-report's Breakthrough row, judged at the acceptance rows' own thresholds (it misses the 60%); hud-check's role battles kept (205 breaks through in round 5, 1 is held at 1).
   - *Not done*: the blast term for the gate and the breach (not tried); the defender's post mapping; the wreckers take the breach far more than the gate (the gate's 4 tails a blow); a tiny list is still wiped before either role end, so hud-check's battles are searched, not lopsided by construction.
 
+##### As built (S5a, S5b)
+
+**The principle.** The armies are unequal. The attacker has the numbers: Field's 1,000 points and its preset. The defender has the works and the choice not to move: its own list of 625 points (11 units, 44 models, Field's scaled by the points, with Field's slots and prices) and its own preset, the garrison. The attacker's points are 1.6 times the defender's (data-check holds the ratio to 1.25-2). A role names its own `list` and `army` (`checkRoles`; `core/army.js` `rulesFor` and `presetFor`), and the page reads both: the size line ("1,000 points to attack and 625 to defend", the lobby's "1,000 / 625 pts"), the Muster screen (each seat out of its role's points, its role's preset first) and the help ("The attacker musters 1,000 points and the defender 625"). `CORE_VERSION` stays 17. Parity is 97 of 97 byte-identical, nothing re-recorded, and no recorded battle is a role battle.
+
+**Why the attacker was late (S5a, before any change).** 400 AI battles on the presets, boards 1-100, every cell; the scoring rounds each cause cost:
+1. The defender's fire, on the approach and in the yard: 345. By the end of round 4 the attacker had lost 56% of its OC, and 69-75% of those losses were to shooting (artillery in the yard 171, the works 139).
+2. The walk itself: moving the objectives 4 tails nearer bought 301 scoring rounds, because the scorers make 3-5 tails a move over 23-29 tails of route.
+3. The attack arrived piecemeal. The fast units went in alone and died: the Gliders had lost 7.4 of their 8 OC by round 2.
+4. Out-OC'd on an objective: 102 round ends, an upper bound.
+5. The gate: the wreckers took the breach, and the gate fell in 33% of battles. A one-blow gate bought 44 scoring rounds.
+6. Shooting instead of walking: never stopping to shoot changed the total by −22, so it is not a cause in aggregate.
+
+**The levers kept, each measured on the final tree.** Win shares are army-sim's role mode, seed 1111, 1,600 battles, where the final tree gives 52.8% pooled. The ordered pairs (attacking race > defending race) are B>B 51.5, B>C 52.3, C>B 59.3 and C>C 48.0. The presets are play-report's `bt` row.
+- **The roles' points** (the owner's design). The defender at 625. On the AI that rams, 600 points gave 57.7% (it fails the 45-55% band) and 650 gave 46.1% (it passes, at the band's edge). On S5a's AI, without the ram, the attacker at 1,000 won 0.5% against a 1,000-point defence, 24.3% against 600 and 49.6% against 500. Every battle was decided in round 6: pace, not points, was what held the attack, so pace levers came first.
+- **The yard's objective at (5, 0) and the target 4** (S5a). The yard's objective was at (9, 0) and the target 5. These were the pace levers that held the race spread. Rejected:
+  - objectives at (5, 0) and (−1, ±13): they fail terrain-check section 10 (objective-clear 1,410 of 1,800). Of the arms' places tried, only (3, ±13) holds, and of the yard's, (3, 0) and (1, 0) fail;
+  - 7 rounds: the race spread widened to 31-76%;
+  - objectives at (3, 0) and (−3, ±12): 81%, and invalid anyway.
+- **The garrison presets**, each with two hulls on the gate's road. The Bushtails field '1133012', 620 points; the Coil field '1132112', 600 points (625 would cost the Venom Engine, or a twelfth unit past the list's 11). In S5a, a garrison with no hulls let the Coil attack win 91-94% on the presets, with 35% wipes. In S5b, the hull-less '113211' and '114111' gave the Coil 91% and 93%, with 41% and 47% wipes.
+- **`RAM_STEP` 1** (`core/ai/route.js`; S5b): a blow still to strike adds 1 tail to a wrecker's way, so the AI's wreckers take the gate. Where the attacker fields a wrecker, the gate falls in 95.5% of battles and makes up 26.2% of their crossings. At 4 those figures were 12.0% and 1.0%. Pooled, 1 gives 52.8% and 4 gives 46.6%. RAM_STEP 2 was not run, because at 1 the gate is not the only way in (the ladders still carry half the crossings).
+- **The charge's bound by the route fields** (`wallGap`, `contactGap` in `core/ai/score.js`; S5b's correction of S5a's). For each objective's field, the bound is the field's drop to the enemy's own cell, less both radii, which is exact on a straight walk. Where the enemy's cell is off that field, the bound is the drop to the contact cell where the field is greatest (`route.js` `nearField`), with no radii taken off again. It is Infinity only when no contact cell is on any field. `wallRush` reads the same bound.
+  - The earlier forms: S3 took the enemy's own cell alone, which gives Infinity for a defender hard against a wall. S5a took the least field value over the contact cells. On a straight walk with the objective beyond the enemy, that least value lies on the enemy's far side, so the gap came out both radii and the pad too long.
+  - Measured: S3's form gives 54.0%, with C>B at 61.0% (it fails its band); this form gives 52.8% and 59.3%. On S5a's record, its scoring round-ends were 474 and 473 against S3's 473 and 478 (the Bushtails' and the Coil's attacks).
+  - P-wall's charge scenes hold it (board 4242). Scene A, an Oak Guard charging a Scaleguard on its field: 2.70 tails, the straight walk being 2.70; S5a's form, the mutant `wall-contact-least`, reads 5.41. Scene B, a charge at a Hierophant off its field: 3.00 of 3.37; S3's form, `wall-contact-own`, reads Infinity.
+- **An attacking hull's riders step off before it first moves** (`core/ai/policy.js` `aiTransport`; S5a). With the riders kept aboard, the attacker wins 56.5%. The Bushtails attacking reach 67.5% and 66.3%, because their War-Carts carry the riders through the rammed gate; the Coil reach 46.0% and 46.3%. With the riders stepping off the totals are those above. The presets field no attacking hull, so play-report does not see the term.
+- **Tried and dropped (S5a, on its own tree).** Each change is followed by the scoring round-ends for the Bushtails' attack and the Coil's (baseline 101 and 389):
+  - no shot weight in front of the face while nothing is held: 108 and 344, with the Coil's wins falling from 30 to 5;
+  - the same, only at the wall's foot: 107 and 409;
+  - one objective for the whole army: 87 and 413, with the Coil's wins falling from 30 to 5;
+  - a wave held to the median scorer: 83 and 301;
+  - counter-battery fire: 55 and 416.
+
+**The final numbers.** First on boards 1-100 and seed 1111, then on the fresh range, boards 1001-1200 and seed 2222, with the same code:
+- **Pace** (play-report `bt` on the presets, exit 0 on both). The attacker scores by round 4 in 73% of battles on the first range and 71% on the fresh one. By cell, first range then fresh:
+
+  | Attacker | Seat | Scored by round 4 (first / fresh) | Wins (first / fresh) |
+  |---|---|---|---|
+  | Bushtails | 0 | 78% / 76.5% | 37% / 38% |
+  | Coil | 0 | 67% / 64% | 58% / 55.5% |
+  | Coil | 1 | 64% / 65% | 57% / 56% |
+  | Bushtails | 1 | 83% / 77% | 41% / 38% |
+
+- **Balance** (random legal lists). Pooled, 52.8% on both seeds (± 1.2). The ordered pairs on seed 1111 are given above; on seed 2222 they are 57.8, 51.7, 59.3 and 42.3. The largest change between seeds is 6.3 points, against a standard error of 3.5 for the difference, so the seeds agree within the noise. By attacking seat: seat 0 wins 53.3% and seat 1 52.3% (seed 2222: 49.8% and 55.8%).
+- **The ends** (seed 1111; seed 2222 in brackets): breakthrough 44.6% (46.1%), held 47.3% (47.3%), the defender wiped 8.2% (6.7%), the attacker wiped 0. Battles decided in round 6: 82.8% (82.8%); in round 5: 15.6% (14.9%).
+- **Crossings by route** (the presets): ladders 50% (49%), wood 26% (26%), gate 13% (12%), flight 9% (9%), breach 3% (3%). The gate falls in 48% of all battles, in median round 3. Where the attacker fields a wrecker, it falls in 95.5% (95.5%) and makes up 26.2% (26.1%) of their crossings.
+- **What the works are worth** (S5b, for the owner, reported, not judged; random legal lists, 400 battles, the same boards, seats and draws). With the wall the smaller army (the defender's 625 points against 1,000) wins 45.7%; attacking with the smaller army (the roles' points swapped: 625 attacking a 1,000-point defence) it wins 0.5% (held 94.5%, the attacker wiped 5.0%). How little the defender moves: the share of its living units' movement phases ending under 1 tail from where they began, by round, 19.1%, 33.8%, 37.4%, 36.0%, 41.9%, 50.9%; of its units alive at the end, 20.8% stand within 3 tails of where they deployed (5.9% of all it fielded).
+- **Cost.** A battle takes 207 ms (median) and 309 ms (p90) in play-report on this machine, against 188 ms at S3.
+
+**What holds it.**
+- **army-sim's role mode** (`--check --mission breakthrough`). Its `--self-test` checks three copies: the sound control, a target of 1 that fails high, and a target of 30 that fails low.
+- **data-check section 17:** the defender's 625-point list, the ratio, `presetFor`, the garrison, and `RULES_ID` moving on the points and on the preset.
+- **property.**
+  - P-army's fuzz and list games, P-mission's preset rows, and the refusal messages read each seat's role rules and preset.
+  - P-wall's charge scenes.
+  - P-wall's four rows on the garrison: 80 of 80 battles with an attacker behind the face, scored by round 4 in 55, 8.13 crossings a battle; 7 attackers idling; 0 of 2,650 defender unit-rounds in front of the face; OC up 141 over 140 contestable cases.
+- **hud-check's role battles,** now on the named presets: board 205 with seat 0 attacking breaks through, 4 of 4 in round 5; board 1 with seat 1 attacking is held at 3.
+- **ui-check's roles case:** the size line's points per role, the Muster screen's points and its own preset per role, and the help's points, target, rounds and the gate's moves.
+
+**Not done.**
+- **P-wall's `wall-ladder-held` and `wall-front-open` mutants are missed on the garrison.** On P-wall's boards no garrison unit holds a ladder's head, and none ends a move in front of the face even with the ground there left free. Both mutants play the same 80 battles as the sound tree (7 attackers idling against 7; 2 movement-phase ends in front against 0).
+  - With Field's preset defending, they are caught as at S3: 63 idling against 5, and 95 ends in front against 1.
+  - A garrison without hulls is caught too, but it is lopsided on the presets.
+  - With the defending riders stepping off as well, the mutants are still missed.
+  - The workload or the garrison is the owner's to choose.
+- **The `breach/` corpus set.**
+- **human-bot's role zones.**
+
 ## 5. Explicit non-goals (v1)
 
 - No game server, no state snapshots in the doc, no derived state in Automerge.

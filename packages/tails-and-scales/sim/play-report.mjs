@@ -165,7 +165,9 @@
 //
 // (Breakthrough, S3) The Breakthrough row (`bt`), over a sweep of AI
 // battles on the March Wall (400 by default, --sweep N for N: a quarter in
-// each cell, either seat attacking and each race order on the presets,
+// each cell, either seat attacking and each race order on the presets
+// ((S5a) each role's own: the attacker's the mission's, the defender's its
+// garrison, core/army.js presetFor),
 // board k from --seed's 1 and dice 7·k + 3), each watched by
 // sim/wall-probe.mjs (DESIGN §4.2.12's AI, its acceptance rows):
 //   - judged: an attacking unit behind the wall's outer face at a round's

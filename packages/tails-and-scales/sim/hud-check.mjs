@@ -364,9 +364,18 @@ async function tips(browser, url) {
 // lopsided by construction shows; both are kept as searched, re-measured
 // on S3's AI: against the seven-unit defence the Bushtails break through
 // on 3 of boards 1-60 (51 wiped, 6 held), and on 205; the presets with
-// seat 1 attacking are held on 17 of boards 1-20. Their
-// numbers (the target, the rounds) and the races' names are the code under
-// test's own (data/mission.js, data/schema.js).
+// seat 1 attacking are held on 17 of boards 1-20. ((Breakthrough, S5b)
+// The defender musters its own, smaller list now (625 points), so the
+// seven-unit Coil list and a Field preset defending are no longer what a
+// defender may field: both battles are the roles' presets, each named (the
+// attacker 'field', the defender 'garrison', what a seat naming none
+// takes), found by playing boards 1-40 each way round on the tree and
+// keeping the old boards, which still end each way: board 205, seat 0
+// attacking, breaks through, 4 of 4 in round 5; board 1, seat 1
+// attacking, is held at 3. Boards 1, 2, 3 and 5 with seat 0 attacking
+// also break through, boards 1, 4, 5 and 6 with seat 1 attacking are
+// held.) Their numbers (the target, the rounds) and the races' names are
+// the code under test's own (data/mission.js, data/schema.js).
 const { MISSIONS: MISSIONS_UT } = await import(pathToFileURL(join(PKG, 'data', 'mission.js')).href)
 const { RACES: RACES_UT } = await import(pathToFileURL(join(PKG, 'data', 'schema.js')).href)
 const BT = MISSIONS_UT.breakthrough
@@ -380,7 +389,7 @@ const roleBattle = (id, board, attacker, armies) => ({
   },
   click: `#setupRoles button[data-attacker="${attacker}"]`,
 })
-const ROLE_ITEMS = BT ? [roleBattle('breakthrough-205', 205, 0, ['field', '1033']), roleBattle('held-1', 1, 1, ['field', 'field'])] : []
+const ROLE_ITEMS = BT ? [roleBattle('breakthrough-205', 205, 0, ['field', 'garrison']), roleBattle('held-1', 1, 1, ['garrison', 'field'])] : []
 
 // The role lane: each role battle watched whole on a page of its own,
 // nothing snapped, and a battle against the AI at its deployment, each

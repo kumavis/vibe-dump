@@ -78,13 +78,18 @@
 //             its buttons in order (against the AI [You] [The AI], the
 //             player's own seat pressed, the Serpents' too; hotseat
 //             [Player 1] [Player 2]; watched the races), its note, and
-//             the size line's target and rounds the mission's; the other
-//             pressed; the Muster screen titled by the seat's role
-//             ("Attacker · Bushtail Clans · …", "Defender · …"), a
-//             Skirmish's by none; the start names the attacker picked,
+//             the size line's target and rounds the mission's ((S5a)
+//             and each role's points, "1,000 points to attack and 625 to
+//             defend", the record's); the other pressed; the Muster
+//             screen titled by the seat's role ("Attacker · Bushtail
+//             Clans · …", "Defender · …"), a Skirmish's by none, ((S5b)
+//             and out of the role's own points, its own preset first and
+//             pressed: the defender's garrison, the attacker's Field); the start names the attacker picked,
 //             and its end screen's Swap sides starts the same board,
 //             races and lists with the other attacking; a Skirmish's end
 //             screen offers none; and at 360 px the line inside the screen
+//             ((S5b) and the help states each role's points, the target,
+//             the last round and the gate's moves, each the record's)
 //
 //   node sim/ui-check.mjs [--only <cases>] [--dist <dir>]
 //   node sim/ui-check.mjs --self-test     each edit of MUTATIONS (a page
@@ -120,6 +125,8 @@ try {
 // the code under test's own army rules and data
 const imp = (f) => import(pathToFileURL(join(PKG, f)).href)
 const { RACES } = await imp('data/schema.js')
+// ((S5b) the March Wall's gate, for the help's row)
+const { SETS } = await imp('core/terrain/sets.js')
 const { MISSIONS } = await imp('data/mission.js')
 const { checkList, listCost, listText, keysOf } = await imp('core/army.js')
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1)
@@ -709,6 +716,21 @@ const CHECKS = {
       }
     })
     const titleOf = (page) => page.evaluate(() => document.querySelector('#muster .mTitle').textContent)
+    // ((S5a, S5b) each role's points, its own list's or the mission's, and
+    // what the Muster screen shows of them: its points line and its presets
+    // (the first its own), the one pressed)
+    const pa = (m.roles.attack.list ?? m.list).points, pd = (m.roles.defend.list ?? m.list).points
+    const ownPreset = { attack: m.roles.attack.army ?? m.army, defend: m.roles.defend.army ?? m.army }
+    const musterNow = (page) => page.evaluate(() => ({
+      pts: document.querySelector('#musterPts').textContent,
+      presets: [...document.querySelectorAll('#muster .mPreset')].map((b) => [b.dataset.preset, b.getAttribute('aria-pressed') === 'true']),
+    }))
+    const musterWhy = (got, role) => {
+      const P = role === 'attack' ? pa : pd, own = ownPreset[role]
+      if (!got.pts.endsWith(` / ${P.toLocaleString('en')} pts`)) return `its points line "${got.pts}", not out of the ${role === 'attack' ? "attacker's" : "defender's"} ${P}`
+      if (got.presets[0]?.[0] !== own || !got.presets[0][1]) return `its presets ${JSON.stringify(got.presets)}, not its own (${own}) first and pressed`
+      return null
+    }
     const name = (race) => RACES[race].name
     // each mode's buttons, in order: [seat, label], and the seat pressed as
     // the panel opens
@@ -729,6 +751,8 @@ const CHECKS = {
         if (!r.shown || JSON.stringify(r.buttons) !== JSON.stringify(want)) out.why.push(`${mode}: Who attacks ${r.shown ? JSON.stringify(r.buttons) : 'hidden'}, not ${JSON.stringify(want)}`)
         else if (r.note !== `${name(races[w.first])} attack and move first; ${name(races[1 - w.first])} hold the line.`) out.why.push(`${mode}: the role line's note "${r.note}"`)
         else if (!r.size.includes(`wins on ${need}.`) || !r.size.includes(`for ${m.rounds} rounds.`)) out.why.push(`${mode}: the size line "${r.size}" names no target of ${need} or ${m.rounds} rounds (the mission's)`)
+        // ((S5a) each role's points, the attacker's and the defender's own)
+        else if (!r.size.includes(`${pa.toLocaleString('en')} points to attack and ${pd.toLocaleString('en')} to defend`)) out.why.push(`${mode}: the size line "${r.size}" names not the roles' points (${pa} to attack, ${pd} to defend)`)
         else out.rows.push(`${mode} [${w.buttons.map(([, l]) => l).join('] [')}], ${w.buttons.find(([s]) => s === w.first)[1]} by default`)
         // the other seat pressed
         await page.click(`#setupRoles button[data-attacker="${1 - w.first}"]`)
@@ -741,14 +765,20 @@ const CHECKS = {
           const role = (mode === 'hotseat' ? w.first : 1 - w.first) === s ? 'Attacker' : 'Defender'
           await build(page, s)
           const t = await titleOf(page)
+          const mu = await musterNow(page), mwhy = musterWhy(mu, role === 'Attacker' ? 'attack' : 'defend')
           if (!t.startsWith(`${role} · ${name(races[s])} · `)) out.why.push(`${mode}: seat ${s}'s Muster screen titled "${t}", not "${role} · ${name(races[s])} · …"`)
-          else out.rows.push(`the Muster screen "${t}"`)
+          // ((S5b) the Muster screen offers the seat its role's own points and preset: the defender's garrison)
+          else if (mwhy) out.why.push(`${mode}: seat ${s}'s Muster screen (${role}): ${mwhy}`)
+          else out.rows.push(`the Muster screen "${t}": "${mu.pts}", ${mu.presets[0][0]} first and pressed`)
           await page.click('#musterClose')
           if (mode === 'bushtail') {
             await page.click('#setupRoles button[data-attacker="0"]')
             await build(page, 0)
             const t2 = await titleOf(page)
+            const mu2 = await musterNow(page), mwhy2 = musterWhy(mu2, 'attack')
             if (!t2.startsWith(`Attacker · ${name('squirrel')} · `)) out.why.push(`bushtail: You attacking, the Muster screen titled "${t2}"`)
+            else if (mwhy2) out.why.push(`bushtail: You attacking, the Muster screen: ${mwhy2}`)
+            else out.rows.push(`You attacking, the Muster screen: "${mu2.pts}", ${mu2.presets[0][0]} first and pressed`)
             await page.click('#musterClose')
             await size(page, 'classic')
             await build(page, 0)
@@ -812,6 +842,15 @@ const CHECKS = {
         const box = await page.evaluate(() => ({ page: document.documentElement.scrollWidth, w: innerWidth, right: Math.max(...[...document.querySelectorAll('#setupRoles, #setupRoles button')].map((e) => e.getBoundingClientRect().right)) }))
         if (box.page > box.w || box.right > box.w) out.why.push(`at 360 px the role line reaches ${box.right.toFixed(0)} px (the page ${box.page})`)
         else out.rows.push(`at 360 px inside the screen (${box.right.toFixed(0)} px)`)
+        // ((S5b) the help, written at boot from the record: each role's
+        // points, the target, the last round and the moves the gate takes,
+        // its hit points over the ram's blow, rounded up, from the set)
+        const help = await page.evaluate(() => document.querySelector('#helpBreakthrough')?.textContent ?? '')
+        const g = SETS[m.sets[0]].gate, blows = Math.ceil(g.hp / g.ram)
+        const says = [`musters ${pa.toLocaleString('en')} points and the defender ${pd.toLocaleString('en')}`, `Reaching ${need} wins at once`, `when round ${m.rounds} ends`, `so it takes ${blows} moves`]
+        const missing = says.filter((x) => !help.includes(x))
+        if (missing.length) out.why.push(`the help says none of ${missing.map((x) => `"${x}"`).join(', ')} (the record's): "${help.slice(0, 160)}…"`)
+        else out.rows.push(`the help: ${says.map((x) => `"${x}"`).join(', ')}`)
         if (errors.length) out.why.push(`phone: page errors: ${errors.join(' | ')}`)
       } finally {
         await ctx.close()

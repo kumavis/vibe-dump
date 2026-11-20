@@ -224,7 +224,8 @@ export const ALLOW = [
   ['data/mission.js', 'const roles = m.roles', 1, "(Breakthrough) checkRoles reads the mission's roles to check them"],
   ['data/mission.js', 'const roles = l.roles', 1, "checkListRules reads a list's role slots (the army builder's own `roles`, not a mission's) to check them"],
   ['data/mission.js', 'if (r.list !== undefined) checkListRules(r.list, ', 1, "(Breakthrough) checkRoles hands a role's own list rules to their check"],
-  ['core/index.js', 'army: x.army ?? mission.army', 1, "fullSetup fills in a seat's army, the mission's preset when it names none (core/army.js judges it)"],
+  ['data/mission.js', 'r.army', 1, "(Breakthrough, S5a) checkRoles: a role names its own preset (core/army.js presetFor reads it)"],
+  ['core/index.js', 'army: x.army ?? presetFor(s, i)', 1, "fullSetup fills in a seat's army, the preset core/army.js presetFor names when it names none (its role's, else the mission's; core/army.js judges it)"],
   ['core/version.js', '(m.list ? { ...m, list: listRules(m.list) } : m)', 1, "rulesData hashes a mission's list rules without the size's name (presentation)"],
   ['core/rules.js', 'value: kills * t.pts', 1, "expected(): the AI's value of a shot, per model killed (a legacy reading of pts, kept)"],
   // (F7a, met at its merge onto F11a) a ladder's climbing cost, the nav's
@@ -491,7 +492,7 @@ if (main && args['self-test']) {
     ['core/army.js', 'const army = rec.army ?? mission.army'],
     ['core/ai/score.js', 'export const worth = (u) => (u.t.pts * u.alive) / u.t.models'],
     ['core/rules.js', '  return { wounds, kills, value: kills * t.pts }'],
-    ['core/index.js', '  s.seats = s.seats.map((x) => ({ ...x, army: x.army ?? mission.army }))'],
+    ['core/index.js', '  s.seats = s.seats.map((x, i) => ({ ...x, army: x.army ?? presetFor(s, i) }))'],
     ['data/schema.js', "  if (!Number.isInteger(def.cost) || def.cost <= 0 || def.cost % 5 !== 0) throw bad('cost')"],
     ['ui/card.js', 'el.textContent = `${u.t.cost} pts`'],
     ['ui/screens/muster.js', 'const left = mission.list.points - army.listCost(race, counts)'],

@@ -54,7 +54,8 @@ export function roleResult(setup, { win, why, vp, rounds }, sides) {
 // record: data/mission.js, handed over by the page, as present/ reads no
 // data module), as HTML: its numbers the record's (the attacker's zone
 // depth from its own edge, (Breakthrough) the defender's zone's distance
-// from it behind a wall, its target, the rounds; the objective's reach
+// from it behind a wall, its target, the rounds, (S5a) each role's points
+// where they differ; the objective's reach
 // the rules'), so the help never states a number the mission doesn't.
 // (The March Wall) And the battlefield as its set has it, nothing a seed
 // moves: `field` { name, set, races }, handed over by the page too: the
@@ -69,7 +70,12 @@ export function rolesHelp(m, field = null) {
   // ((Breakthrough) a zone behind the line keeps its x bounds' distance
   // from the attacker's zone, the record's number)
   const apart = defend.zone.behind && defend.zone.x ? defend.zone.x[0] - attack.zone.x[1] : null
-  const head = `<b>Breakthrough</b> (a ${m.list?.size ?? 'Field'} battle of its own${field?.name ? `, fought on the <b>${field.name}</b>` : ''}). One army holds a walled line across the table; the other must break through it. Who attacks is chosen before the battle (the battle-setup panel's <b>Who attacks</b>, or the host's in an online lobby), and the end screen's <b>Swap sides</b> fights the same battlefield again with the roles the other way round. The defender deploys anywhere behind the wall's outer face, on its walk and its towers too, never in front of it${apart !== null ? ` and never within ${tails(apart)} of the attacker's zone` : ''}; the attacker within ${tails(depth)} of its own edge, and moves first, with no roll-off. At the end of every round the attacker scores 1 for each objective behind the wall it holds (the most OC within ${tails(OBJECTIVE_RANGE)}); the defender scores nothing, and holds them off by standing on them. Reaching ${attack.target} wins at once; otherwise the defender wins when round ${m.rounds} ends. There are no draws and no extra rounds.`
+  // ((S5a) each role's points, its own list's where it has one, else the
+  // mission's: the attacker has the numbers, the defender the works)
+  const points = (r) => (r.list ?? m.list)?.points
+  const pa = points(attack), pd = points(defend)
+  const armies = pa && pd && pa !== pd ? ` The attacker musters ${pa.toLocaleString('en')} points and the defender ${pd.toLocaleString('en')}: the attacker has the numbers, the defender the works and the choice not to move.` : ''
+  const head = `<b>Breakthrough</b> (a ${m.list?.size ?? 'Field'} battle of its own${field?.name ? `, fought on the <b>${field.name}</b>` : ''}). One army holds a walled line across the table; the other must break through it.${armies} Who attacks is chosen before the battle (the battle-setup panel's <b>Who attacks</b>, or the host's in an online lobby), and the end screen's <b>Swap sides</b> fights the same battlefield again with the roles the other way round. The defender deploys anywhere behind the wall's outer face, on its walk and its towers too, never in front of it${apart !== null ? ` and never within ${tails(apart)} of the attacker's zone` : ''}; the attacker within ${tails(depth)} of its own edge, and moves first, with no roll-off. At the end of every round the attacker scores 1 for each objective behind the wall it holds (the most OC within ${tails(OBJECTIVE_RANGE)}); the defender scores nothing, and holds them off by standing on them. Reaching ${attack.target} wins at once; otherwise the defender wins when round ${m.rounds} ends. There are no draws and no extra rounds.`
   const gate = field?.set?.gate
   if (!gate || !field.races) return `${head} Infantry climb the ladders onto the wall; big units and vehicles need the gate, which blasts chip.`
   const rams = wreckersOf(field.races), blows = Math.ceil(gate.hp / gate.ram)

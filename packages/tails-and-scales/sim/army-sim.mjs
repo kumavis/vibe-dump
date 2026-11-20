@@ -63,6 +63,32 @@
 // loudly when the anchor is gone. Exit 0 when every case gets its verdict.
 // (WIP merge: the self-test runs the Skirmish alone, --mission classic.)
 //
+// (Breakthrough, S5a: DESIGN §4.2.12's balance) The role mode. A mission
+// with roles has no mirror to score, so --check --mission <it> judges the
+// attacker's share instead: for every ordered race pair (the attacker's
+// race, the defender's: the mirrors and both crosses), ROLE_N battles (400
+// by default, --n N for N) on each set the mission offers, each seat
+// attacking in alternate battles (the attacker seat 0 on even battles,
+// seat 1 on odd), each seat's list autoList's under its own role's list
+// rules (core/army.js rulesFor: the attacker's and the defender's own
+// points), the board and dice and both lists from the battle's own draw
+// under the stream `<mission>:role:<attacker race>><defender race>:<set>`.
+// The gates: the attacker's win share 45-55% pooled over every pair and
+// 40-60% for each ordered pair (ROLE_BAND), each its own line; reported
+// beside them, never judged: the share by attacking seat, the ends by kind
+// (the target reached, held, a wipe of either side) and the round each
+// battle was decided in. A mission with roles takes no --fit (exit 2), and
+// a run naming no mission still leaves it out, so every other mode plays
+// exactly the battles it did. The lists' gates (c) and (d) read each
+// role's own preset and list rules (core/army.js presetFor, rulesFor).
+//   node sim/army-sim.mjs --check --mission breakthrough [--n N] [--jobs 2] [--seed S]
+//   node sim/army-sim.mjs --self-test --mission breakthrough [--jobs 2]
+// Its self-test holds the role gates to three copies: `sound` (the working
+// tree, ROLE_SELF_N battles a pair: every gate holds), `target-1` (the
+// attacker's target 1: it wins nearly every battle, the pooled gate fails
+// high) and `target-30` (the target 30, each objective worth 2 so the
+// record stays within reach: it never wins, the gate fails low).
+//
 // A battle: a board seed and a dice seed, the mission, one of the sets it
 // offers, both seats `ai`, each seat's `army` a count string that
 // core/army.js's autoList built for the seat's race under the mission's
@@ -202,10 +228,23 @@ const A = core.army
 // `budget` 'limit' builds both lists at the mission's limit (a Random
 // seat's); 'fit' draws each side's from 80-120% of it, played at most at it
 // (the header's "budgets of the fit").
-function battleOf({ seed, stream, i, mission, set, pair, budget }) {
+function battleOf({ seed, stream, i, mission, set, pair, budget, role }) {
   const rng = mulberry32(cyrb53(`${seed}:${stream}:${i}`))
   const u32 = () => Math.floor(rng() * 4294967296)
   const board = u32(), dice = u32()
+  // ((S5a) the role mode: `pair` [the attacker's race, the defender's], the
+  // attacker seat 0 on even battles and seat 1 on odd, each list its role's)
+  if (role) {
+    const attacker = i % 2, seats = [null, null], lists = []
+    for (const [k, race] of pair.entries()) {
+      const s = k === 0 ? attacker : 1 - attacker
+      const rules = A.rulesFor({ mission, attacker }, s)
+      const counts = A.autoList(RACES[race], rules, u32())
+      seats[s] = { race, ctrl: 'ai', army: A.listText(counts) }
+      lists.push({ race, counts, points: A.listCost(RACES[race], counts, rules) })
+    }
+    return { setup: { board, dice, mission, terrain: set, attacker, seats }, attacker, lists }
+  }
   const rules = MISSIONS[mission].list
   const lists = pair.map((race) => {
     const points = budget === 'fit' ? Math.min(rules.points, Math.round(rules.points * (0.8 + 0.4 * rng()))) : rules.points
@@ -221,6 +260,7 @@ function battleOf({ seed, stream, i, mission, set, pair, budget }) {
 
 // Play one battle to its end; the first race's score and what the fit reads.
 function play(task) {
+  if (task.role) return playRole(task)
   const { setup, swap, lists } = battleOf(task)
   const t0 = performance.now()
   let G, error = null
@@ -237,6 +277,21 @@ function play(task) {
   const mine = swap ? 1 : 0
   const y = win === -1 ? 0.5 : win === mine ? 1 : 0
   return { i: task.i, seed: task.seed, y, swap, counts: lists.map((l) => l.counts), spent: lists.map((l) => A.listCost(RACES[l.race], l.counts, MISSIONS[task.mission].list)), why: G.turn.result.why, ms }
+}
+
+// (S5a) One role battle: whether the attacker won, how it ended, the round
+function playRole(task) {
+  const { setup, attacker, lists } = battleOf(task)
+  const t0 = performance.now()
+  let G
+  try {
+    G = core.createMatch(setup)
+    if (G.turn.stage !== 'over' || !G.turn.result) throw new Error(`an AI battle stopped short of its end (stage ${G.turn.stage})`)
+  } catch (e) {
+    return { i: task.i, error: `battle ${task.stream} #${task.i}, seed ${task.seed} (${JSON.stringify(setup)}): ${String(e?.stack ?? e)}`, ms: performance.now() - t0 }
+  }
+  const { win, why } = G.turn.result
+  return { i: task.i, seed: task.seed, attacker, y: win === attacker ? 1 : 0, why: why === 'wipe' ? (win === attacker ? 'wipe (the defender)' : 'wipe (the attacker)') : why, round: G.turn.round, points: lists.map((l) => l.points), ms: performance.now() - t0 }
 }
 
 // Play `tasks` over `jobs` processes (in this one with jobs 1), in chunks;
@@ -519,10 +574,10 @@ function setsOf(mission, name) {
 async function main() {
   // (F8b) every mission by default, in MISSIONS order; --mission names one
   // or a comma-separated few
-  // ((Breakthrough) but for a mission with roles: its gates are a role
-  // mode's, the attacker's share by ordered race pair (DESIGN §4.2.12),
-  // which this harness doesn't have yet; a default run leaves it out and
-  // says so, and --mission naming one is a bad command line)
+  // ((Breakthrough) but for a mission with roles: its gates are the role
+  // mode's (S5a), the attacker's share by ordered race pair (DESIGN
+  // §4.2.12); a default run leaves it out and says so, so every other
+  // mode's battles are the ones it played, and it takes no --fit)
   const roled = Object.keys(MISSIONS).filter((m) => MISSIONS[m].roles)
   const names = a.mission === undefined ? Object.keys(MISSIONS).filter((m) => !MISSIONS[m].roles) : a.mission.split(',').map((s) => s.trim())
   const unknown = names.filter((m) => !MISSIONS[m])
@@ -531,11 +586,11 @@ async function main() {
     process.exit(2)
   }
   const asked = names.filter((m) => MISSIONS[m].roles)
-  if (asked.length) {
-    console.error(`army-sim: the ${asked.join(', ')} mission has roles, and its gates (the attacker's share by race pair) are a role mode still to come`)
+  if (asked.length && a.fit) {
+    console.error(`army-sim: the ${asked.join(', ')} mission has roles: its gates are the role mode's (--check), and it takes no --fit`)
     process.exit(2)
   }
-  if (a.mission === undefined && roled.length) console.log(`army-sim: the ${roled.join(', ')} mission${roled.length === 1 ? ' has' : 's have'} roles, left out: a role mode's gates, still to come`)
+  if (a.mission === undefined && roled.length) console.log(`army-sim: the ${roled.join(', ')} mission${roled.length === 1 ? ' has' : 's have'} roles, left out: the role mode plays ${roled.length === 1 ? 'it' : 'them'} (--mission ${roled.join(',')})`)
   if (!a.check && !a.fit) {
     console.error('army-sim: --check (the gates), --fit (the fitted price table) or --self-test')
     process.exit(2)
@@ -565,34 +620,52 @@ async function main() {
       const c = A.listCost(race, counts)
       gate(c <= MISSIONS.classic.list.points, `${race.name}: the classic list (${A.listText(counts)}) costs ${c}, the Skirmish limit ${MISSIONS.classic.list.points}`)
     }
+    // ((S5a) on a mission with roles, each role's: the seat attacking
+    // (seat 0) and the seat defending (seat 1), each its role's preset
+    // (presetFor) under its role's list rules (rulesFor))
     for (const [m, M] of Object.entries(MISSIONS)) {
+      const seatsOf = M.roles ? [[0, 'the attacker'], [1, 'the defender']] : [[0, null]]
       for (const race of Object.keys(RACES)) {
-        // (a seat naming none, then one naming the preset)
-        for (const army of [undefined, M.army]) {
-          let why = null, cost = null
-          try {
-            cost = A.listCost(RACES[race], A.armyOf({ mission: m, seats: [{ race, ctrl: 'ai', ...(army ? { army } : {}) }] }, 0).counts, M.list)
-          } catch (e) {
-            why = e.message
+        for (const [s, who] of seatsOf) {
+          const at = { mission: m, ...(M.roles ? { attacker: 0 } : {}) }, own = A.presetFor(at, s), rules = A.rulesFor(at, s)
+          // (a seat naming none, then one naming the preset)
+          for (const army of [undefined, own]) {
+            let why = null, cost = null
+            const seats = [{ race, ctrl: 'ai' }, { race, ctrl: 'ai' }]
+            seats[s] = { race, ctrl: 'ai', ...(army ? { army } : {}) }
+            try {
+              cost = A.listCost(RACES[race], A.armyOf({ ...at, seats }, s).counts, rules)
+            } catch (e) {
+              why = e.message
+            }
+            gate(!why, `the ${m} mission's preset${who ? ` for ${who}` : ''}, ${JSON.stringify(own)}, is legal for the ${RACES[race].name}${army ? ' named' : ' (a seat naming none)'}${why ? `: ${why}` : `: ${cost} of ${rules.points} points`}`)
           }
-          gate(!why, `the ${m} mission's preset, ${JSON.stringify(M.army)}, is legal for the ${RACES[race].name}${army ? ' named' : ' (a seat naming none)'}${why ? `: ${why}` : `: ${cost} of ${M.list.points} points`}`)
         }
       }
     }
     // (F8b) every preset of every race, at the missions whose army names it
+    // ((S5a) or one of whose roles' does, under that role's list rules)
     for (const r of Object.values(RACES)) {
       for (const name of Object.keys(r.armies)) {
-        const at = Object.entries(MISSIONS).filter(([, M]) => M.army === name).map(([m]) => m)
-        gate(at.length > 0, `the ${r.name}' preset ${name} is some mission's army${at.length ? ` (${at.join(', ')})` : ': no mission plays it'}`)
-        for (const m of at) {
-          const why = A.checkList(r, MISSIONS[m].list, [...r.armies[name]].map(Number))
-          gate(why === null, `the ${r.name}' preset ${name} ('${r.armies[name]}') passes the ${m} mission's list rules${why ? `: ${why}` : ''}`)
+        const at = Object.entries(MISSIONS).flatMap(([m, M]) => [
+          ...(M.army === name ? [[m, M.list, `the ${m} mission's`]] : []),
+          ...(M.roles ? Object.entries(M.roles).filter(([, R]) => R.army === name).map(([k, R]) => [m, R.list ?? M.list, `the ${m} mission's ${k} role's`]) : []),
+        ])
+        gate(at.length > 0, `the ${r.name}' preset ${name} is some mission's army${at.length ? ` (${at.map(([, , w]) => w.replace(/^the | mission's$/g, '').replace(" mission's", '')).join(', ')})` : ': no mission plays it'}`)
+        for (const [, rules, w] of at) {
+          const why = A.checkList(r, rules, [...r.armies[name]].map(Number))
+          gate(why === null, `the ${r.name}' preset ${name} ('${r.armies[name]}') passes ${w} list rules${why ? `: ${why}` : ''}`)
         }
       }
     }
   }
 
   for (const name of names) {
+    // ((S5a) a mission with roles: the role mode's gates alone)
+    if (MISSIONS[name].roles) {
+      await roleGates(name, gate, verdicts)
+      continue
+    }
     const mission = MISSIONS[name], rules = mission.list, sets = setsOf(mission, name)
     const ns = NS[size(rules)] ?? NS.Skirmish
     const N = Number(a.n) || ns.n
@@ -677,6 +750,54 @@ async function main() {
   process.exit(failed ? 1 : 0)
 }
 
+// ── (Breakthrough, S5a) The role mode ───────────────────────────────────────
+// The header's role gates on mission `name`: ROLE_N battles (--n's) per
+// ordered race pair and set, each seat attacking in alternate battles; the
+// attacker's share judged pooled (ROLE_BAND.pooled) and per pair
+// (ROLE_BAND.pair), the rest reported; gate() counts each failed gate.
+const ROLE_N = 400
+const ROLE_BAND = { pooled: [45, 55], pair: [40, 60] }
+async function roleGates(name, gate, verdicts) {
+  const mission = MISSIONS[name], sets = setsOf(mission, name), N = Number(a.n) || ROLE_N
+  const races = Object.keys(RACES), ordered = races.flatMap((x) => races.map((y) => [x, y]))
+  const R = mission.roles, at = { mission: name, attacker: 0 }
+  console.log(`
+━━ the ${name} mission, the role mode: ${mission.board.W}×${mission.board.H}, ${mission.rounds} rounds, the target ${R.attack.target}; the attacker's list ${A.rulesFor(at, 0).points} points, the defender's ${A.rulesFor(at, 1).points}; on ${sets.join(', ')}${a.terrain ? ' (--terrain)' : ''} ━━`)
+  const all = []
+  const pct1 = (x, n) => (n ? (100 * x / n).toFixed(1) : '-')
+  const share = (rs) => {
+    const n = rs.length, w = rs.reduce((s, r) => s + r.y, 0), p = n ? w / n : 0
+    return { n, w, p: 100 * p, se: n > 1 ? 100 * Math.sqrt(p * (1 - p) / n) : 0 }
+  }
+  const tally = (rs, key) => Object.entries(rs.reduce((m, r) => ((m[r[key]] = (m[r[key]] ?? 0) + 1), m), {})).sort((x, y) => String(x[0]).localeCompare(String(y[0]))).map(([k, v]) => `${k} ${v} (${pct1(v, rs.length)}%)`).join(', ')
+  for (const pair of ordered) {
+    for (const set of sets) {
+      const what = `${RACES[pair[0]].short} attacking ${RACES[pair[1]].short} on ${set}`
+      const tasks = SEEDS.flatMap((seed) => Array.from({ length: N }, (_, i) => ({ seed, stream: `${name}:role:${pair.join('>')}:${set}`, i, mission: name, set, pair, role: true })))
+      const r = await playAll(tasks, `${name} role ${pair.join('>')} ${set}`)
+      if (failErrors(r)) process.exit(1)
+      const s = share(r.results), [lo, hi] = ROLE_BAND.pair
+      const seats = [0, 1].map((k) => share(r.results.filter((x) => x.attacker === k)))
+      console.log(`
+the role gate (${name}): ${what}, random legal lists under each role's rules, the attacker's share in ${lo}-${hi}%`)
+      console.log(`  the attacker won ${s.w} of ${s.n}: ${s.p.toFixed(1)}% ± ${s.se.toFixed(1)}; attacking from seat 0 ${seats[0].p.toFixed(1)}%, from seat 1 ${seats[1].p.toFixed(1)}%; ${runtime(r)}`)
+      console.log(`  ends: ${tally(r.results, 'why')}; decided in round ${tally(r.results, 'round')}`)
+      const ok = s.p >= lo && s.p <= hi
+      gate(ok, `the role gate, ${name}, ${what}: the attacker ${s.p.toFixed(1)}% (${lo}-${hi}%)`)
+      verdicts.push(`${ok ? 'ok  ' : 'FAIL'} ${name} role ${what}: the attacker ${s.p.toFixed(1)}% ± ${s.se.toFixed(1)} (N = ${s.n}, ${lo}-${hi}%)`)
+      all.push(...r.results)
+    }
+  }
+  const s = share(all), [lo, hi] = ROLE_BAND.pooled
+  const seats = [0, 1].map((k) => share(all.filter((x) => x.attacker === k)))
+  console.log(`
+the role gate (${name}), pooled over every ordered pair: the attacker won ${s.w} of ${s.n}, ${s.p.toFixed(1)}% ± ${s.se.toFixed(1)} (${lo}-${hi}%); from seat 0 ${seats[0].p.toFixed(1)}%, from seat 1 ${seats[1].p.toFixed(1)}%`)
+  console.log(`  ends: ${tally(all, 'why')}; decided in round ${tally(all, 'round')}`)
+  const ok = s.p >= lo && s.p <= hi
+  gate(ok, `the role gate, ${name}, pooled: the attacker ${s.p.toFixed(1)}% (${lo}-${hi}%)`)
+  verdicts.push(`${ok ? 'ok  ' : 'FAIL'} ${name} role pooled: the attacker ${s.p.toFixed(1)}% ± ${s.se.toFixed(1)} (N = ${s.n}, ${lo}-${hi}%)`)
+}
+
 // ── The self-test ───────────────────────────────────────────────────────────
 // The header's three cases: each a copy of the package's code, mutated by an
 // exact anchor, run with --check, and held to its exit code and the
@@ -686,6 +807,31 @@ const GATE_LINES = {
   d: / mission's preset, /,
   a: / the score gate, /,
   b: / the per-unit gate, /,
+  // ((S5a) the role mode's: pooled, and each ordered pair)
+  p: / the role gate, [^:]*, pooled: /,
+  q: / the role gate, [^:]* attacking [^:]*: /,
+}
+// ((S5a) the role mode's cases, on a mission with roles (`m`, its record):
+// the sound control, the attacker's target 1 (it wins nearly always: the
+// pooled gate fails high) and 30 (each objective worth 2, so the record
+// stays within reach: it never wins, the gate fails low). The anchors are
+// the record's own target line and each objective's `scores`, read from it.
+// `pooled` holds the pooled share the run printed to its side of the band.)
+const pooledOf = (lines) => {
+  const l = lines.find((x) => / the role gate, [^:]*, pooled: the attacker /.test(x))
+  return l ? Number(/the attacker ([\d.]+)%/.exec(l)[1]) : null
+}
+const roleTests = (m) => {
+  const T = m.roles.attack.target, anchor = `first: true, target: ${T} }`, n = 150
+  return [
+    // ((S5b) the sound control at the gate's own N, ROLE_N: at 150 a pair
+    // the gate itself measures at 59.3% ± 2.5 (the Coil attacking the
+    // Bushtails, seed 1111) came out 64.0% ± 3.9, outside its band by
+    // the noise of the smaller sample; the broken copies stay at 150)
+    { name: 'sound', n: ROLE_N, exit: 0, want: { c: 'ok', d: 'ok', p: 'ok', q: 'ok' } },
+    { name: 'target-1', n, exit: 1, want: { c: 'ok', d: 'ok', p: 'FAIL' }, edits: [['data/mission.js', anchor, 'first: true, target: 1 }', 1]], pooled: [(x) => x > ROLE_BAND.pooled[1], 'the pooled share fails high'] },
+    { name: 'target-30', n, exit: 1, want: { c: 'ok', d: 'ok', p: 'FAIL' }, edits: [['data/mission.js', anchor, 'first: true, target: 30 }', 1], ['data/mission.js', "scores: 'attack' }", "scores: 'attack', vp: 2 }", m.objectives.length]], pooled: [(x) => x < ROLE_BAND.pooled[0], 'the pooled share fails low'] },
+  ]
 }
 const SELF_TESTS = [
   { name: 'sound', n: 300, fitN: 600, exit: 0, want: { c: 'ok', d: 'ok', a: 'ok', b: 'ok' } },
@@ -712,17 +858,20 @@ async function selfTest() {
     console.log(`  ${ok ? 'ok  ' : 'BAD '} ${what}`)
   }
   const T0 = performance.now()
-  console.log(`army-sim self-test: ${SELF_TESTS.length} copies of the code under --check on ${set}, seed ${a.seed}, ${a.jobs} job(s)`)
+  const tests = mission.roles ? roleTests(mission) : SELF_TESTS
+  console.log(`army-sim self-test: ${tests.length} copies of the code under --check on ${set}, seed ${a.seed}, ${a.jobs} job(s)`)
   try {
-    for (const t of SELF_TESTS) {
+    for (const t of tests) {
       const dir = copyCode(PKG, join(work, t.name))
-      if (t.edit) {
-        const [file, from, to] = t.edit, path = join(dir, file), text = readFileSync(path, 'utf8')
+      // ((S5a) each edit [file, from, to, times]: the anchor exactly that
+      // many times, every one replaced)
+      for (const [file, from, to, times = 1] of t.edits ?? (t.edit ? [t.edit] : [])) {
+        const path = join(dir, file), text = readFileSync(path, 'utf8')
         const at = text.split(from).length - 1
-        if (at !== 1) throw new Error(`self-test ${t.name}: the anchor ${JSON.stringify(from)} is in ${file} ${at} time(s), not once: port the mutation`)
-        writeFileSync(path, text.replace(from, to))
+        if (at !== times) throw new Error(`self-test ${t.name}: the anchor ${JSON.stringify(from)} is in ${file} ${at} time(s), not ${times}: port the mutation`)
+        writeFileSync(path, text.replaceAll(from, to))
       }
-      const args = [SELF, '--check', '--dir', dir, '--n', String(t.n), '--fit-n', String(t.fitN), '--jobs', a.jobs, '--seed', a.seed, '--mission', a.mission ?? 'classic', '--terrain', set]
+      const args = [SELF, '--check', '--dir', dir, '--n', String(t.n), ...(t.fitN ? ['--fit-n', String(t.fitN)] : []), '--jobs', a.jobs, '--seed', a.seed, '--mission', a.mission ?? 'classic', '--terrain', set]
       const t1 = performance.now()
       const { code, out } = await new Promise((done) => {
         const child = spawn(process.execPath, args, { stdio: ['ignore', 'pipe', 'inherit'] })
@@ -731,7 +880,8 @@ async function selfTest() {
         child.on('close', (code) => done({ code, out }))
       })
       const lines = out.split('\n')
-      console.log(`\n${t.name}${t.edit ? ` (${t.edit[0]}: ${t.edit[1]} → ${t.edit[2]})` : ' (unmutated)'}, N ${t.n} / ${t.fitN}: exit ${code}, ${((performance.now() - t1) / 1000).toFixed(0)} s`)
+      const edits = t.edits ?? (t.edit ? [t.edit] : [])
+      console.log(`\n${t.name}${edits.length ? ` (${edits.map(([f, x, y]) => `${f}: ${x} → ${y}`).join('; ')})` : ' (unmutated)'}, N ${t.n}${t.fitN ? ` / ${t.fitN}` : ''}: exit ${code}, ${((performance.now() - t1) / 1000).toFixed(0)} s`)
       say(code === t.exit, `exits ${t.exit}${code === t.exit ? '' : `, not ${code}`}`)
       for (const [g, verdict] of Object.entries(t.want)) {
         const got = lines.filter((l) => /^ {2}(ok {2}|FAIL) /.test(l) && GATE_LINES[g].test(l)).map((l) => l.slice(2, 6).trim())
@@ -739,13 +889,17 @@ async function selfTest() {
         say(ok, `gate (${g}): ${verdict === 'ok' ? 'holds' : 'fails'} (${got.length ? got.join(', ') : 'no gate line printed'})`)
       }
       if (t.also) say(lines.some((l) => t.also[0].test(l)), t.also[1])
+      if (t.pooled) {
+        const x = pooledOf(lines)
+        say(x !== null && t.pooled[0](x), `${t.pooled[1]} (${x ?? 'no pooled line'}%)`)
+      }
       if (bad) console.log(out.split('\n').filter((l) => /^ {2}(ok {2}|FAIL) |threw/.test(l)).map((l) => `      | ${l}`).join('\n'))
     }
   } finally {
     rmSync(work, { recursive: true, force: true })
   }
   const secs = ((performance.now() - T0) / 1000).toFixed(0)
-  console.log(bad ? `\narmy-sim self-test FAILED: ${bad} wrong verdict(s) (${secs} s)` : `\narmy-sim self-test passed: the gates hold on the sound table and fail on both broken ones (${secs} s)`)
+  console.log(bad ? `\narmy-sim self-test FAILED: ${bad} wrong verdict(s) (${secs} s)` : `\narmy-sim self-test passed: the gates hold on the sound ${mission.roles ? 'record' : 'table'} and fail on both broken ones (${secs} s)`)
   process.exit(bad ? 1 : 0)
 }
 

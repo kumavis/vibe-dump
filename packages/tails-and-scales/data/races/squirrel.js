@@ -19,8 +19,13 @@ export default {
   roster: ['elder', 'oakguard', 'nutkin', 'grenadier', 'glider', 'trebuchet', 'warcart'],
   // (F8b) the presets of the larger battles, as counts in roster order: the
   // classic list twice over for a Field battle, three times for a Grand one
-  // (data/mission.js names them; sim/data-check.mjs holds each legal there)
-  armies: { field: '224222', grand: '336333' },
+  // (data/mission.js names them; sim/data-check.mjs holds each legal there).
+  // ((Breakthrough, S5a) `garrison`, the March Wall's defence, under the
+  // defender's own list: the Elder, an Oak Guard, three Nutkin and three
+  // Grenadier squads for the works and the yard, a Trebuchet, and two
+  // War-Carts, whose hulls hold the gate's road: (S5b) 620 points of 625,
+  // 11 units, 42 models)
+  armies: { field: '224222', grand: '336333', garrison: '1133012' },
   units: {
     nutkin: {
       name: 'Nutkin Skirmishers', short: 'Nutkin', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 7, cost: 75,

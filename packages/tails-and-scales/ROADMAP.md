@@ -1983,12 +1983,29 @@ follows N3.
     (drawn from `zone`, the defender's behind the wall's face, not
     `G.board.deploy`), the gate's, breach's and ditch's look;
     input-check's breakthrough page.
-  - [ ] **S5** Balance and the corpus: army-sim's role mode (the attacker's
-    share per ordered race pair, 40-60% each and 45-55% pooled, each seat
-    attacking in alternate battles; its `--self-test` planting a target of
-    1 and of 30), the sweep and its tuning (target, rounds, objectives,
-    then role points), human-bot's role zones, the `breach/` corpus set
-    (six battles) recorded on the final code with the PIN moved.
+  - [ ] **S5** Balance and the corpus (DESIGN §4.2.12, As built (S5a,
+    S5b)).
+    - [x] **S5a, S5b** Pace and balance: army-sim's role mode (the
+      attacker's share per ordered race pair, 40-60% each and 45-55%
+      pooled, each seat attacking in alternate battles, random legal lists
+      under each role's own list rules; its `--self-test` planting a
+      target of 1 and of 30), the sweep and its tuning: the roles' points
+      first (the attacker the numbers, 1,000; the defender the works, its
+      own `list` of 625 and `army`, the garrison presets, `presetFor`),
+      the yard's objective at (5, 0) and the target 4; the AI's part (a
+      charge's bound by the route fields, `wallGap`; an attacking hull's
+      riders stepping off; the wreckers ramming the gate, `RAM_STEP` 1).
+      play-report's Breakthrough row passes; the role gates hold on seeds
+      1111 and 2222; the gate falls in 95% of the battles where the
+      attacker fields a wrecker. P-wall's charge scenes added.
+    - [ ] P-wall's `wall-ladder-held` and `wall-front-open` mutants are
+      missed since the garrison defends (S5a): on P-wall's boards no
+      garrison unit holds a ladder's head, nor ends a move in front of
+      the face with the ground there left free, so neither term has
+      anything to do; with Field's preset defending both are caught as
+      before. The workload or the garrison to be decided (S5b's report).
+    - [ ] human-bot's role zones, the `breach/` corpus set (six battles)
+      recorded on the final code with the PIN moved.
 - [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if
   needed, publish.
 

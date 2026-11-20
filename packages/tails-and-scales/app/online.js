@@ -104,7 +104,7 @@ import { sizeName } from '../ui/screens/setup.js'
 import { sidesFor, seatsOf } from '../ui/theme.js'
 import { NetDialog } from '../ui/screens/netdialog.js'
 import { NetBadge } from '../ui/netbadge.js'
-import { checkList, listCost, listText, autoList, rulesFor, LIST } from '../core/army.js'
+import { checkList, listCost, listText, autoList, rulesFor, presetFor, LIST } from '../core/army.js'
 import { ROLE_VERB } from '../present/roles.js'
 import { presetsFor, presetName, presetCounts } from '../ui/screens/muster.js'
 
@@ -165,7 +165,9 @@ const FROZEN = {
 // vote, unless the mission allows none
 const overtimeOf = (name) => (MISSIONS[name]?.overtime === false ? 'never' : 'vote')
 const keptTerrain = (L, name) => (L.terrain && MISSIONS[name].sets.includes(L.terrain) ? { terrain: L.terrain } : {})
-const SIZES = Object.entries(MISSIONS).map(([mission, m]) => ({ mission, name: sizeName(mission, m), W: m.board.W, H: m.board.H, points: m.list?.points ?? 0 }))
+// ((S5a) on a mission with roles `points` is the attacker's, `defend` the
+// defender's: each role's own list's, else the mission's)
+const SIZES = Object.entries(MISSIONS).map(([mission, m]) => ({ mission, name: sizeName(mission, m), W: m.board.W, H: m.board.H, points: (m.roles?.attack.list ?? m.list)?.points ?? 0, defend: m.roles ? (m.roles.defend.list ?? m.list)?.points ?? 0 : null }))
 
 // (F11b) A seat's army as the lobby holds it (`army`: a preset's name, a
 // list's digits, or undefined for the mission's own preset), judged for its
@@ -182,7 +184,8 @@ const plural = (n, one) => `${n} ${one}${n === 1 ? '' : 's'}`
 export function judgeArmy(race, mission, army, seat = 0, attacker = 0) {
   const r = Object.hasOwn(RACES, race) ? RACES[race] : null, m = Object.hasOwn(MISSIONS, mission) ? MISSIONS[mission] : null
   if (!r || !m) return null
-  const text = army ?? m.army
+  // ((S5a) a seat naming none takes its role's own preset where it has one)
+  const text = army ?? presetFor(m.roles ? { mission, attacker } : { mission }, seat)
   let preset = null, counts = null, why = null
   if (typeof text === 'string' && PRESET_NAME.test(text)) {
     if (Object.hasOwn(r.armies, text)) [preset, counts] = [text, presetCounts(race, text)]
@@ -498,8 +501,9 @@ export class Online {
   armyLine(r, mission, ai = null, i = 0, attacker = 0) {
     const j = judgeArmy(r.race, mission, r.army, i, attacker)
     if (!j) return { options: [], value: '', total: '', why: 'This game knows no such race or battle size' }
-    const own = MISSIONS[mission].army
-    const options = presetsFor(r.race, mission, rulesFor(MISSIONS[mission].roles ? { mission, attacker } : { mission }, i)).map((p) => ({ value: p, label: presetName(p) }))
+    const at = MISSIONS[mission].roles ? { mission, attacker } : { mission }
+    const own = presetFor(at, i)
+    const options = presetsFor(r.race, mission, rulesFor(at, i), own).map((p) => ({ value: p, label: presetName(p) }))
     if (j.preset && !options.some((o) => o.value === j.preset)) options.push({ value: j.preset, label: presetName(j.preset) })
     if (!j.preset) options.push({ value: 'list', label: ai?.random ? 'Random list' : 'List' })
     return { options, value: j.preset ?? (j.counts ? 'list' : own), total: j.counts ? `${j.cost.toLocaleString('en')} pts · ${plural(j.units, 'unit')}` : '', why: whyShown(j), ...(ai ? { random: !!ai.random } : {}) }
@@ -516,7 +520,8 @@ export class Online {
   // a preset chosen on a line, as the seat holds it: the size's own as no
   // army named (the setup naming none, as every battle before lists did)
   presetValue(value) {
-    const own = MISSIONS[N.lobbyOf(this.handle.doc()).mission]?.army
+    const L = N.lobbyOf(this.handle.doc()), m = MISSIONS[L.mission]
+    const own = m && presetFor(m.roles ? { mission: L.mission, attacker: L.attacker === 1 ? 1 : 0 } : { mission: L.mission }, N.seatOf(L, this.dev))
     return value === own ? null : value
   }
   // The army a race change writes (§4.2.8.9, as the panel does): the race's
@@ -526,9 +531,11 @@ export class Online {
     const L = N.lobbyOf(this.handle.doc()), mission = L.mission
     if (!Object.hasOwn(RACES, race) || !Object.hasOwn(MISSIONS, mission)) return null
     const last = this.lists?.last(race, mission)
-    const own = presetCounts(race, MISSIONS[mission].army)
-    // ((Breakthrough) judged by this seat's role's list rules)
-    const rules = rulesFor(MISSIONS[mission].roles ? { mission, attacker: L.attacker === 1 ? 1 : 0 } : { mission }, N.seatOf(L, this.dev))
+    // ((Breakthrough) judged by this seat's role's list rules, (S5a) its
+    // own preset its role's where it has one)
+    const at = MISSIONS[mission].roles ? { mission, attacker: L.attacker === 1 ? 1 : 0 } : { mission }
+    const own = presetCounts(race, presetFor(at, N.seatOf(L, this.dev)))
+    const rules = rulesFor(at, N.seatOf(L, this.dev))
     if (!last || checkList(RACES[race], rules, last.counts) || last.counts.every((n, i) => n === own[i])) return null
     return listText(last.counts)
   }
@@ -550,8 +557,8 @@ export class Online {
     const role = this.roleAt(L, me)
     this.mustering = { at: `${mission} ${race}${role ? ` ${role}` : ''}` }
     this.muster.open({
-      race, mission, counts: j.counts ?? presetCounts(race, MISSIONS[mission].army),
-      rules: rulesFor(role ? { mission, attacker: L.attacker === 1 ? 1 : 0 } : { mission }, me), role: role === 'attack' ? 'Attacker' : role === 'defend' ? 'Defender' : null,
+      race, mission, counts: j.counts ?? presetCounts(race, presetFor(role ? { mission, attacker: L.attacker === 1 ? 1 : 0 } : { mission }, me)),
+      rules: rulesFor(role ? { mission, attacker: L.attacker === 1 ? 1 : 0 } : { mission }, me), own: presetFor(role ? { mission, attacker: L.attacker === 1 ? 1 : 0 } : { mission }, me), role: role === 'attack' ? 'Attacker' : role === 'defend' ? 'Defender' : null,
       onReady: (counts) => {
         this.mustering = null
         this.lists?.keep(race, mission, counts)

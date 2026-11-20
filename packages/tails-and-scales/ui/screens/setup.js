@@ -98,6 +98,11 @@ export const sizeName = (mission, m) => MISSION_NAMES[mission]?.name ?? m.list?.
 // a phone's screen: narrow, or a coarse pointer on a small one
 export const phoneScreen = () => innerWidth < 700 || (!!globalThis.matchMedia?.('(pointer: coarse)').matches && Math.min(innerWidth, innerHeight) < 600)
 
+// ((Breakthrough, S5a) a size's points as its line says them: the
+// attacker's and the defender's where a mission with roles gives them their
+// own, "1,000 / 600"; otherwise the one number a side)
+const ptsOf = (s) => (s.defend != null && s.defend !== s.points ? `${s.points.toLocaleString('en')} / ${s.defend.toLocaleString('en')}` : s.points.toLocaleString('en'))
+
 export class SetupScreen {
   // `diorama()`: the race showcase (view/diorama.js), asked for only as the
   // panel first opens
@@ -314,7 +319,7 @@ export class SetupScreen {
       b.setAttribute('aria-checked', String(s.mission === size))
       b.append(s.name)
       const small = document.createElement('small')
-      small.textContent = `${s.W}×${s.H} · ${s.points.toLocaleString('en')} pts`
+      small.textContent = `${s.W}×${s.H} · ${ptsOf(s)} pts`
       b.append(small)
       b.onclick = () => this.on.size?.(s.mission)
       return b
@@ -323,7 +328,7 @@ export class SetupScreen {
     const at = sizes.find((s) => s.mission === size) ?? sizes[0]
     const big = phone && at.W * at.H > 60 * 40
     const what = missionWhat(at)
-    $('#setupSizeNote').textContent = `${at.name}: ${/^8/.test(String(at.W)) ? 'an' : 'a'} ${at.W}×${at.H} board, ${at.points.toLocaleString('en')} points a side, ${at.rounds} rounds.${what ? ` ${what}` : ''}${big ? ' Best on a larger screen.' : ''}`
+    $('#setupSizeNote').textContent = `${at.name}: ${/^8/.test(String(at.W)) ? 'an' : 'a'} ${at.W}×${at.H} board, ${at.defend !== null && at.defend !== undefined && at.defend !== at.points ? `${at.points.toLocaleString('en')} points to attack and ${at.defend.toLocaleString('en')} to defend` : `${at.points.toLocaleString('en')} points a side`}, ${at.rounds} rounds.${what ? ` ${what}` : ''}${big ? ' Best on a larger screen.' : ''}`
   }
 
   hide() {

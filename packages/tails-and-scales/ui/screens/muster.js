@@ -67,6 +67,7 @@
 //
 //   new MusterScreen({ lists })   `lists`: app/lists.js's Lists
 //   muster.open({ race, mission, counts | preset, notes, onReady(counts),
+//   ((S5a) own: the seat's own preset, its role's where it has one),
 //                 onClose(), rules, role })
 //
 // (Breakthrough, DESIGN §4.2.12's "The page") On a mission with roles the
@@ -118,9 +119,10 @@ export const presetCounts = (race, p) => {
 // The presets of `race` a battle of `mission` offers: its own first, then
 // every other the race has that its list rules allow, the costliest first.
 // ((Breakthrough) under `rules`, a seat's role's list rules where it has
-// its own: core/army.js rulesFor)
-export function presetsFor(race, mission, rules = MISSIONS[mission].list) {
-  const r = RACES[race], own = MISSIONS[mission].army
+// its own: core/army.js rulesFor; (S5a) and `own` its role's own preset
+// where it has one, core/army.js presetFor)
+export function presetsFor(race, mission, rules = MISSIONS[mission].list, own = MISSIONS[mission].army) {
+  const r = RACES[race]
   const others = Object.keys(r.armies).filter((p) => p !== own && !checkList(r, rules, presetCounts(race, p)))
   others.sort((a, b) => listCost(r, presetCounts(race, b), rules) - listCost(r, presetCounts(race, a), rules))
   return [own, ...others]
@@ -176,11 +178,11 @@ export class MusterScreen {
   // onReady(counts) for Ready, onClose() for ✕. ((Breakthrough) `rules`
   // the seat's list rules (left out: the mission's), `role` its role's
   // title on a mission with roles (null: none))
-  open({ race, mission, counts = null, preset = null, notes = [], onReady, onClose, rules = null, role = null }) {
+  open({ race, mission, counts = null, preset = null, notes = [], onReady, onClose, rules = null, role = null, own = null }) {
     const r = RACES[race], m = MISSIONS[mission]
     this.at = {
-      race, mission, r, rules: rules ?? m.list, role, onReady, onClose,
-      counts: r.roster.map((k, i) => (counts ? counts[i] ?? 0 : presetCounts(race, preset ?? m.army)[i])),
+      race, mission, r, rules: rules ?? m.list, role, onReady, onClose, own: own ?? m.army,
+      counts: r.roster.map((k, i) => (counts ? counts[i] ?? 0 : presetCounts(race, preset ?? own ?? m.army)[i])),
       notes: [...notes],
     }
     this.build()
@@ -405,7 +407,7 @@ export class MusterScreen {
     }))
     // the tools: the presets, Random, Clear, Saved
     const same = (a) => a.every((n, i) => n === (counts[i] ?? 0))
-    const tools = presetsFor(at.race, at.mission, at.rules).map((p) => {
+    const tools = presetsFor(at.race, at.mission, at.rules, at.own).map((p) => {
       const b = el('button', 'mPreset', presetName(p))
       b.dataset.preset = p
       b.setAttribute('aria-pressed', String(same(presetCounts(at.race, p))))

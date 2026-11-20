@@ -183,7 +183,7 @@ export class LobbyScreen {
     const opts = sizes.some((s) => s.mission === m.mission) ? sizes : [...sizes, { mission: m.mission, name: String(m.mission) }]
     if (size.dataset.shown !== JSON.stringify(opts)) {
       size.replaceChildren(...opts.map((s) => {
-        const o = el('option', '', s.W ? `${s.name} · ${s.W}×${s.H}, ${s.points.toLocaleString('en')} pts` : s.name)
+        const o = el('option', '', s.W ? `${s.name} · ${s.W}×${s.H}, ${s.defend != null && s.defend !== s.points ? `${s.points.toLocaleString('en')} / ${s.defend.toLocaleString('en')}` : s.points.toLocaleString('en')} pts` : s.name)
         o.value = s.mission
         return o
       }))
