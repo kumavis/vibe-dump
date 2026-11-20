@@ -322,6 +322,17 @@ the commit, and add whatever the work turned up.
   seat and its list, nor the panel after a size change refuses a sealed
   list, and a list built on the screen fielded unit for unit). A step that changes what one of them reads ports it in the same
   step (DESIGN's §4 rows and notes say which).
+- **Drawing on the GPU.** The Chromium checks draw in software
+  (SwiftShader) by default. Five of them, `ui-check`, `hud-check`,
+  `play-check`, `input-check` and `lobby-rig`, draw on the machine's GPU
+  instead with `TS_GL` set to the ANGLE backend's name (`TS_GL=metal` on a
+  Mac): each passes alike under both, several times faster on the GPU
+  (input-check 468 s against 3,582, measured on one machine, loaded), says
+  at its start which renderer it draws with, and stops if the browser
+  didn't get the backend asked for. Opt-in only; the rest stay on software
+  (title-shot and terrain-shots compare pixels exactly, snap-check fails
+  its `hotseat-collapse-8` row on the GPU, an open finding);
+  `sim/chromium.mjs`'s `glArgs` says why for each.
 - **Determinism.** Everything that can change an outcome draws from the logic
   RNG (the match's `G.rng`, `core/rng.js`), never `Math.random`; measures
   distances and angles with `core/dmath.js` (`hypot`, `hypot3`, and since N0
