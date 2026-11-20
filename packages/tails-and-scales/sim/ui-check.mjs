@@ -85,6 +85,29 @@
 //             the line and the bar inside the screen) and at the 'low'
 //             quality: the name never waits on the dressing being drawn
 //
+//   roles     (Breakthrough, DESIGN §4.2.12's "The page") Who attacks on
+//             the panel: none on a Skirmish; on Breakthrough in each mode
+//             its buttons in order (against the AI [You] [The AI], the
+//             player's own seat pressed, the Serpents' too; hotseat
+//             [Player 1] [Player 2]; watched the races), its note, and
+//             the size line's target and rounds the mission's ((S5a)
+//             and each role's points, "1,000 points to attack and 625 to
+//             defend", the record's); the other pressed; the Muster
+//             screen titled by the seat's role ("Attacker · Bushtail
+//             Clans · …", "Defender · …"), a Skirmish's by none, ((S5b)
+//             and out of the role's own points, its own preset first and
+//             pressed: the defender's garrison, the attacker's Field); the start names the attacker picked,
+//             and its end screen's Swap sides starts the same board and
+//             races with the other attacking, ((S5c) a seat on a preset
+//             (Classic named, or none) on its new role's own, a list
+//             legal for its new role kept, one that is not replaced by
+//             the role's preset and named in a line under Swap sides:
+//             mutants swap-preset-kept, swap-list-unjudged,
+//             swap-note-unsaid); a Skirmish's end
+//             screen offers none; and at 360 px the line inside the screen
+//             ((S5b) and the help states each role's points, the target,
+//             the last round and the gate's moves, each the record's)
+//
 //   node sim/ui-check.mjs [--only <cases>] [--dist <dir>]
 //   node sim/ui-check.mjs --self-test     each edit of MUTATIONS (a page
 //                                         that breaks one thing the cases
@@ -107,7 +130,7 @@ import { glArgs, glConfirm } from './chromium.mjs'
 import { buildApp, copyCode } from './lib.mjs'
 import { PKG } from './oracle/pin.mjs'
 
-const CASES = ['plus', 'ready', 'random', 'saved', 'over', 'race', 'phone', 'pass', 'field', 'door', 'name']
+const CASES = ['plus', 'ready', 'random', 'saved', 'over', 'race', 'phone', 'pass', 'field', 'door', 'roles', 'name']
 let a
 try {
   ({ values: a } = parseArgs({ options: { only: { type: 'string' }, dist: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
@@ -120,6 +143,8 @@ try {
 // the code under test's own army rules and data
 const imp = (f) => import(pathToFileURL(join(PKG, f)).href)
 const { RACES } = await imp('data/schema.js')
+// ((S5b) the March Wall's gate, for the help's row)
+const { SETS } = await imp('core/terrain/sets.js')
 const { MISSIONS } = await imp('data/mission.js')
 const { checkList, listCost, listText, keysOf } = await imp('core/army.js')
 // ((S4) and the name the dressing's plan gives a board (plan.name: the
@@ -703,6 +728,211 @@ const CHECKS = {
     }
     return out
   },
+  // (Breakthrough, DESIGN §4.2.12's "The page") Who attacks on the panel,
+  // the Muster screen's role, the start's attacker and the end screen's
+  // Swap sides.
+  async roles(browser, url) {
+    const out = { rows: [], why: [] }
+    const m = MISSIONS.breakthrough, need = m.roles.attack.target
+    const lineNow = (page) => page.evaluate(() => {
+      const r = document.querySelector('#setupRoles')
+      return {
+        shown: !!r && getComputedStyle(r).display !== 'none',
+        buttons: r ? [...r.querySelectorAll('button')].map((b) => [Number(b.dataset.attacker), b.textContent, b.getAttribute('aria-checked') === 'true']) : [],
+        note: document.querySelector('#setupRolesNote')?.textContent ?? '',
+        size: document.querySelector('#setupSizeNote')?.textContent ?? '',
+      }
+    })
+    const titleOf = (page) => page.evaluate(() => document.querySelector('#muster .mTitle').textContent)
+    // ((S5a, S5b) each role's points, its own list's or the mission's, and
+    // what the Muster screen shows of them: its points line and its presets
+    // (the first its own), the one pressed)
+    const pa = (m.roles.attack.list ?? m.list).points, pd = (m.roles.defend.list ?? m.list).points
+    const ownPreset = { attack: m.roles.attack.army ?? m.army, defend: m.roles.defend.army ?? m.army }
+    const musterNow = (page) => page.evaluate(() => ({
+      pts: document.querySelector('#musterPts').textContent,
+      presets: [...document.querySelectorAll('#muster .mPreset')].map((b) => [b.dataset.preset, b.getAttribute('aria-pressed') === 'true']),
+    }))
+    const musterWhy = (got, role) => {
+      const P = role === 'attack' ? pa : pd, own = ownPreset[role]
+      if (!got.pts.endsWith(` / ${P.toLocaleString('en')} pts`)) return `its points line "${got.pts}", not out of the ${role === 'attack' ? "attacker's" : "defender's"} ${P}`
+      if (got.presets[0]?.[0] !== own || !got.presets[0][1]) return `its presets ${JSON.stringify(got.presets)}, not its own (${own}) first and pressed`
+      return null
+    }
+    const name = (race) => RACES[race].name
+    // each mode's buttons, in order: [seat, label], and the seat pressed as
+    // the panel opens
+    const MODES = {
+      bushtail: { buttons: [[0, 'You'], [1, 'The AI']], first: 0 },
+      serpent: { buttons: [[1, 'You'], [0, 'The AI']], first: 1 },
+      hotseat: { buttons: [[0, 'Player 1'], [1, 'Player 2']], first: 0 },
+      watch: { buttons: [[0, name('squirrel')], [1, name('serpent')]], first: 0 },
+    }
+    for (const [mode, w] of Object.entries(MODES)) {
+      const { page, ctx, errors } = await panel(browser, url, { mode })
+      try {
+        if ((await lineNow(page)).shown) out.why.push(`${mode}: Who attacks shown on a Skirmish`)
+        await size(page, 'breakthrough')
+        const r = await lineNow(page)
+        const want = w.buttons.map(([s, l]) => [s, l, s === w.first])
+        const races = ['squirrel', 'serpent']
+        if (!r.shown || JSON.stringify(r.buttons) !== JSON.stringify(want)) out.why.push(`${mode}: Who attacks ${r.shown ? JSON.stringify(r.buttons) : 'hidden'}, not ${JSON.stringify(want)}`)
+        else if (r.note !== `${name(races[w.first])} attack and move first; ${name(races[1 - w.first])} hold the line.`) out.why.push(`${mode}: the role line's note "${r.note}"`)
+        else if (!r.size.includes(`wins on ${need}.`) || !r.size.includes(`for ${m.rounds} rounds.`)) out.why.push(`${mode}: the size line "${r.size}" names no target of ${need} or ${m.rounds} rounds (the mission's)`)
+        // ((S5a) each role's points, the attacker's and the defender's own)
+        else if (!r.size.includes(`${pa.toLocaleString('en')} points to attack and ${pd.toLocaleString('en')} to defend`)) out.why.push(`${mode}: the size line "${r.size}" names not the roles' points (${pa} to attack, ${pd} to defend)`)
+        else out.rows.push(`${mode} [${w.buttons.map(([, l]) => l).join('] [')}], ${w.buttons.find(([s]) => s === w.first)[1]} by default`)
+        // the other seat pressed
+        await page.click(`#setupRoles button[data-attacker="${1 - w.first}"]`)
+        const r2 = await lineNow(page)
+        if (!r2.buttons.every(([s, , on]) => on === (s === 1 - w.first))) out.why.push(`${mode}: seat ${1 - w.first} pressed, the line ${JSON.stringify(r2.buttons)}`)
+        // the Muster screen's role: a seat played here
+        if (mode === 'bushtail' || mode === 'hotseat') {
+          const s = mode === 'hotseat' ? 1 : 0
+          if (mode === 'hotseat') await page.click(`#setupRoles button[data-attacker="${w.first}"]`)
+          const role = (mode === 'hotseat' ? w.first : 1 - w.first) === s ? 'Attacker' : 'Defender'
+          await build(page, s)
+          const t = await titleOf(page)
+          const mu = await musterNow(page), mwhy = musterWhy(mu, role === 'Attacker' ? 'attack' : 'defend')
+          if (!t.startsWith(`${role} · ${name(races[s])} · `)) out.why.push(`${mode}: seat ${s}'s Muster screen titled "${t}", not "${role} · ${name(races[s])} · …"`)
+          // ((S5b) the Muster screen offers the seat its role's own points and preset: the defender's garrison)
+          else if (mwhy) out.why.push(`${mode}: seat ${s}'s Muster screen (${role}): ${mwhy}`)
+          else out.rows.push(`the Muster screen "${t}": "${mu.pts}", ${mu.presets[0][0]} first and pressed`)
+          await page.click('#musterClose')
+          if (mode === 'bushtail') {
+            await page.click('#setupRoles button[data-attacker="0"]')
+            await build(page, 0)
+            const t2 = await titleOf(page)
+            const mu2 = await musterNow(page), mwhy2 = musterWhy(mu2, 'attack')
+            if (!t2.startsWith(`Attacker · ${name('squirrel')} · `)) out.why.push(`bushtail: You attacking, the Muster screen titled "${t2}"`)
+            else if (mwhy2) out.why.push(`bushtail: You attacking, the Muster screen: ${mwhy2}`)
+            else out.rows.push(`You attacking, the Muster screen: "${mu2.pts}", ${mu2.presets[0][0]} first and pressed`)
+            await page.click('#musterClose')
+            await size(page, 'classic')
+            await build(page, 0)
+            const t3 = await titleOf(page)
+            if (!t3.startsWith(`${name('squirrel')} · `)) out.why.push(`bushtail: a Skirmish's Muster screen titled "${t3}" (a role)`)
+            await page.click('#musterClose')
+            if ((await lineNow(page)).shown) out.why.push('bushtail: Who attacks still shown back on a Skirmish')
+          }
+        }
+        if (errors.length) out.why.push(`${mode}: page errors: ${errors.join(' | ')}`)
+      } finally {
+        await ctx.close()
+      }
+    }
+    // the start names the attacker the panel picked; the end screen's Swap
+    // sides fights it again, the other seat attacking, on the same board
+    // and races, ((S5c) each seat's army by the rule (app/flow.js
+    // swapArmies): a seat that named no army or a preset takes its new
+    // role's own preset; a list of its own is kept where its new role's
+    // list rules take it, else that role's preset, and a line under Swap
+    // sides says so)
+    const own = (attacker, s) => (s === attacker ? ownPreset.attack : ownPreset.defend)
+    const same = (x) => JSON.stringify({ board: x.board, mission: x.mission, terrain: x.terrain, seats: x.seats.map((s) => [s.race, s.ctrl]) })
+    const armiesOf = (x) => JSON.stringify(x.seats.map((s) => s.army))
+    // the end screen's Swap sides and its note; pressed, the battle it
+    // starts (or the toast that says why none did)
+    const swapOf = async (page, a) => {
+      await page.evaluate(() => window.__ts.session.submit(0, { t: 'concede' }))
+      await page.waitForFunction(() => !document.querySelector('#over').classList.contains('hidden'), null, { timeout: 60000 })
+      const end = await page.evaluate(() => {
+        const shown = (q) => getComputedStyle(document.querySelector(q)).display !== 'none'
+        return { shown: shown('#swapSides'), text: document.querySelector('#swapSides').textContent, note: shown('#swapNote') ? document.querySelector('#swapNote').textContent : '' }
+      })
+      if (!end.shown || !end.text.includes('Swap sides')) return { end, b: null, why: `the end screen of a role battle: Swap sides ${end.shown ? `"${end.text}"` : 'hidden'}` }
+      await page.click('#swapSides')
+      await page.waitForFunction((d) => (window.__ts?.G?.setup?.dice !== d && window.__ts.G.units.length > 0 && document.body.classList.contains('playing')) || document.querySelector('#toast')?.classList.contains('show'), a.setup.dice, { timeout: 120000 })
+      const got = await page.evaluate(() => ({ setup: window.__ts.G.setup, toast: document.querySelector('#toast')?.classList.contains('show') ? document.querySelector('#toast').textContent : null }))
+      if (got.setup.dice === a.setup.dice) return { end, b: null, why: `Swap sides started no battle${got.toast ? `: "${got.toast}"` : ''}` }
+      return { end, b: got.setup, why: null }
+    }
+    // the presets' half: seat 0 (You, defending) names the Classic preset,
+    // seat 1 (The AI, attacking) none; swapped, each takes its new role's
+    // own
+    {
+      const { page, ctx, errors } = await panel(browser, url, { mode: 'bushtail' })
+      try {
+        await size(page, 'breakthrough')
+        await page.click('#setupRoles button[data-attacker="1"]')
+        await page.selectOption('.setupSeat[data-seat="0"] .armyPick', 'classic')
+        const a = await started(page)
+        const wantA = JSON.stringify(['classic', own(1, 1)]), wantB = JSON.stringify([own(0, 0), own(0, 1)])
+        if (a.setup.attacker !== 1) out.why.push(`The AI picked to attack, the battle's attacker ${a.setup.attacker}`)
+        else if (armiesOf(a.setup) !== wantA) out.why.push(`the battle before Swap sides fields ${armiesOf(a.setup)}, not ${wantA}`)
+        const { end, b, why } = await swapOf(page, a)
+        if (why) out.why.push(why)
+        else if (end.note) out.why.push(`Swap sides with no list of a seat's own, the note "${end.note}"`)
+        else if (b.attacker !== 0 || same(a.setup) !== same(b)) out.why.push(`Swap sides started ${JSON.stringify({ attacker: b.attacker, ...JSON.parse(same(b)) })}, not attacker 0 on ${same(a.setup)}`)
+        else if (armiesOf(b) !== wantB) out.why.push(`Swap sides fielded ${armiesOf(b)}, not each seat's new role's own preset ${wantB} (from ${armiesOf(a.setup)})`)
+        else out.rows.push(`started with The AI attacking (attacker 1) on ${armiesOf(a.setup)}; Swap sides: attacker 0 on board ${b.board}, the same races, each seat its new role's own preset ${armiesOf(b)}, no note`)
+        // a battle without roles offers none
+        await page.evaluate(() => window.__ts.session.submit(0, { t: 'concede' }))
+        await page.waitForFunction(() => !document.querySelector('#over').classList.contains('hidden'), null, { timeout: 60000 })
+        await page.click('#again')
+        await page.waitForSelector('#title:not(.hidden)')
+        await page.click('[data-mode="bushtail"]')
+        await page.waitForSelector('#setup:not(.hidden) #setupStart')
+        await size(page, 'classic')
+        const c = await started(page)
+        if (c.setup.attacker !== undefined) out.why.push(`a Skirmish's setup names an attacker: ${c.setup.attacker}`)
+        await page.evaluate(() => window.__ts.session.submit(0, { t: 'concede' }))
+        await page.waitForFunction(() => !document.querySelector('#over').classList.contains('hidden'), null, { timeout: 60000 })
+        if (await page.evaluate(() => getComputedStyle(document.querySelector('#swapSides')).display !== 'none')) out.why.push("a Skirmish's end screen offers Swap sides")
+        else out.rows.push('none offered after a Skirmish')
+        if (errors.length) out.why.push(`page errors: ${errors.join(' | ')}`)
+      } finally {
+        await ctx.close()
+      }
+    }
+    // ((S5c) the lists' half: seat 0 (You, defending) on a list legal for
+    // both roles, seat 1 (The AI, attacking) on one over the defender's
+    // points (the Classic ×2 counts, named as a list); swapped, seat 0's is
+    // kept, seat 1 takes the defender's own preset, and the note names it)
+    {
+      const keep = '112', over = '224222'
+      const { page, ctx, errors } = await panel(browser, url, { mode: 'bushtail', q: `&mission=breakthrough&armies=${keep},${over}` })
+      try {
+        await size(page, 'breakthrough')
+        await page.click('#setupRoles button[data-attacker="1"]')
+        const a = await started(page)
+        const wantA = JSON.stringify([keep, over]), wantB = JSON.stringify([keep, own(0, 1)])
+        if (a.setup.attacker !== 1 || armiesOf(a.setup) !== wantA) out.why.push(`the lists' battle started attacker ${a.setup.attacker} on ${armiesOf(a.setup)}, not attacker 1 on ${wantA}`)
+        const { end, b, why } = await swapOf(page, a)
+        const said = [name('serpent'), 'defender', `the ${own(0, 1).charAt(0).toUpperCase()}${own(0, 1).slice(1)} preset`]
+        if (why) out.why.push(`the lists' battle: ${why}`)
+        else if (!said.every((x) => end.note.includes(x)) || end.note.includes(name('squirrel'))) out.why.push(`the lists' battle: the note under Swap sides "${end.note}", not naming ${said.join(', ')} alone`)
+        else if (armiesOf(b) !== wantB) out.why.push(`the lists' battle: Swap sides fielded ${armiesOf(b)}, not ${wantB} (the list legal for both kept, the other the defender's own preset)`)
+        else out.rows.push(`lists ${armiesOf(a.setup)}, swapped ${armiesOf(b)}: "${end.note}"`)
+        if (errors.length) out.why.push(`the lists' battle: page errors: ${errors.join(' | ')}`)
+      } finally {
+        await ctx.close()
+      }
+    }
+    // on a phone the line scrolls nothing sideways
+    {
+      const { page, ctx, errors } = await panel(browser, url, { mode: 'watch', vp: { width: 360, height: 780, touch: true } })
+      try {
+        await size(page, 'breakthrough')
+        const box = await page.evaluate(() => ({ page: document.documentElement.scrollWidth, w: innerWidth, right: Math.max(...[...document.querySelectorAll('#setupRoles, #setupRoles button')].map((e) => e.getBoundingClientRect().right)) }))
+        if (box.page > box.w || box.right > box.w) out.why.push(`at 360 px the role line reaches ${box.right.toFixed(0)} px (the page ${box.page})`)
+        else out.rows.push(`at 360 px inside the screen (${box.right.toFixed(0)} px)`)
+        // ((S5b) the help, written at boot from the record: each role's
+        // points, the target, the last round and the moves the gate takes,
+        // its hit points over the ram's blow, rounded up, from the set)
+        const help = await page.evaluate(() => document.querySelector('#helpBreakthrough')?.textContent ?? '')
+        const g = SETS[m.sets[0]].gate, blows = Math.ceil(g.hp / g.ram)
+        const says = [`musters ${pa.toLocaleString('en')} points and the defender ${pd.toLocaleString('en')}`, `Reaching ${need} wins at once`, `when round ${m.rounds} ends`, `so it takes ${blows} moves`]
+        const missing = says.filter((x) => !help.includes(x))
+        if (missing.length) out.why.push(`the help says none of ${missing.map((x) => `"${x}"`).join(', ')} (the record's): "${help.slice(0, 160)}…"`)
+        else out.rows.push(`the help: ${says.map((x) => `"${x}"`).join(', ')}`)
+        if (errors.length) out.why.push(`phone: page errors: ${errors.join(' | ')}`)
+      } finally {
+        await ctx.close()
+      }
+    }
+    return out
+  },
 
   // (S4) the board's name on the panel, in the log's header and on the
   // replay bar (the header)
@@ -790,7 +1020,7 @@ const MUTATIONS = {
   // (F11b's review: each assertion a case makes broken by an edit)
   // a line on its ?armies= value respelled: the size's own preset handed
   // on as none
-  'door-respelled': ['app/boot.js', '  const valueOf = (mission, a) => a.url ?? (a.counts ?', '  const valueOf = (mission, a) => (a.counts ?', ['door']],
+  'door-respelled': ['app/boot.js', '  const valueOf = (mission, a, s) => a.url ?? (a.counts ?', '  const valueOf = (mission, a, s) => (a.counts ?', ['door']],
   // the deployment's banner with the seats' totals swapped
   'banner-swapped': ['app/flow.js', '    return [0, 1].map((s) => {\n      const { counts } = army.armyOf(setup, s)', '    return [1, 0].map((s) => {\n      const { counts } = army.armyOf(setup, s)', ['field']],
   // a seat played here never defaults to its race's last list
@@ -819,7 +1049,7 @@ const MUTATIONS = {
   // edge
   'panel-wide': ['style.css', '  border-radius: 6px;\n  padding: 6px 7px;\n  min-width: 0;\n}\n.armyLine .armyTotal {', '  border-radius: 6px;\n  padding: 6px 7px;\n  min-width: 400px;\n}\n.armyLine .armyTotal {', ['phone']],
   // a line no ?armies= names handed on as its preset's name
-  'door-named': ['app/boot.js', ': a.preset && a.preset !== MISSIONS[mission].army ? a.preset : null)', ': a.preset ?? MISSIONS[mission].army)', ['door']],
+  'door-named': ['app/boot.js', ': a.preset && a.preset !== ownOf(mission, s) ? a.preset : null)', ': a.preset ?? ownOf(mission, s))', ['door']],
   // a built hotseat seat's Build… opens its list on the panel
   'hotseat-reopen': ['app/boot.js', "    if (mode === 'hotseat' && a.built && !handed) return pass.show(", "    if (false) return pass.show(", ['pass']],
   // a Random AI seat's race changed: its Random let go for the default,
@@ -830,6 +1060,20 @@ const MUTATIONS = {
   // (F9c) the fire slots' tip counting the hull's capacity in models for
   // the units that fit
   'fire-miscounted': ['ui/screens/muster.js', '    const ns = [...new Set(hulls.map((h) => h.riders.length))]\n', '    const ns = [...new Set(hulls.map((h) => h.models))]\n', ['phone']],
+  // ((Breakthrough) Who attacks never shown; seat 0 attacking whoever the
+  // player is; the panel's pick never reaching the start; the Muster
+  // screen untitled by the role; Swap sides starting the same attacker)
+  'roles-unshown': ['ui/screens/setup.js', "    this.roleRow.classList.toggle('hidden', !r)", "    this.roleRow.classList.toggle('hidden', true)", ['roles']],
+  'roles-seat0': ['app/boot.js', "  const firstAttacker = (mode) => (FOG_MODES.includes(mode) ? MODES[mode].indexOf('human') : 0)", '  const firstAttacker = () => 0', ['roles']],
+  'roles-unstarted': ['app/boot.js', 'picking.armies.map((a, s) => valueOf(picking.mission, a, s)), picking.attacker)', 'picking.armies.map((a, s) => valueOf(picking.mission, a, s)))', ['roles']],
+  'muster-roleless': ['ui/screens/muster.js', "    this.titleEl.textContent = `${at.role ? `${at.role} · ` : ''}${r.name}", '    this.titleEl.textContent = `${r.name}', ['roles']],
+  'swap-unswapped': ['app/flow.js', '    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, this.swapArmies().armies, 1 - s.attacker)', '    this.start(s.mode, s.races, s.mission, s.terrain, s.fog, this.swapArmies().armies, s.attacker)', ['roles']],
+  // ((S5c) Swap sides keeping a named preset instead of the new role's
+  // own; keeping a list its new role's rules refuse; and saying nothing of
+  // a list it replaced)
+  'swap-preset-kept': ['app/flow.js', '      if (a == null || /^[a-z]/.test(a)) return null\n', '      if (a == null) return null\n      if (/^[a-z]/.test(a)) return a\n', ['roles']],
+  'swap-list-unjudged': ['app/flow.js', '      if (!why) return a\n', '      if (true) return a\n', ['roles']],
+  'swap-note-unsaid': ['app/flow.js', "    this.ui.result.show(r, this.sides, this.ink(r.win), { roles, swap, swapNote: swap ? this.swapArmies().notes.join(' ') : '' })", "    this.ui.result.show(r, this.sides, this.ink(r.win), { roles, swap, swapNote: '' })", ['roles']],
   // a finger lifted on a marked element pins nothing (a hover's tip alone)
   'tap-unpinned': ['ui/tooltip.js', '      if (m) this.tip(m, { x: e.clientX, y: e.clientY }, true)\n', '', ['phone']],
   // (S4) the panel names the size's first set's board, whatever terrain is
@@ -852,7 +1096,9 @@ async function runCases(browser, url, names) {
     try {
       r = await CHECKS[name](browser, url)
     } catch (e) {
-      r = { rows: [], why: [`threw: ${e.message.split('\n')[0]}`] }
+      // (a thrown step says what it waited on: the head of the browser's
+      // call log, so a stalled click names its element)
+      r = { rows: [], why: [`threw: ${e.message.split('\n').map((l) => l.trim()).filter(Boolean).slice(0, 8).join(' | ')}`] }
     }
     res.push([name, r])
   }

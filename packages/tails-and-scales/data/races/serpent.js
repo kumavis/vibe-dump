@@ -16,8 +16,23 @@ export default {
   roster: ['hierophant', 'brute', 'scaleguard', 'spitter', 'sidewinder', 'engine', 'howdah'],
   // (F8b) the presets of the larger battles, as counts in roster order: the
   // classic list twice over for a Field battle, three times for a Grand one
-  // (data/mission.js names them; sim/data-check.mjs holds each legal there)
-  armies: { field: '224222', grand: '336333' },
+  // (data/mission.js names them; sim/data-check.mjs holds each legal there).
+  // ((Breakthrough, S5a) `garrison`, the March Wall's defence, under the
+  // defender's own list: the Hierophant, a Brute, three Scaleguard and
+  // two Spitter squads for the works and the yard, a Sidewinder squad, a
+  // Venom Engine, and two Howdahs, whose hulls hold the gate's road: (S5b)
+  // 600 points of 625, 11 units, 37 models (625 would cost the Engine or
+  // a twelfth unit, past the list's 11)) ((S5c) Made again for the
+  // defender's 800 points and its own Howdah price, 135 (data/mission.js):
+  // the Hierophant, a Brute, two Scaleguard and two Spitter squads, a
+  // Sidewinder squad, a Venom Engine and two Howdahs, 795 points of 800,
+  // 10 units, 31 models. `assault`, the attacker's own preset: Field's ×2
+  // list as it is, its two Brutes the wreckers, 950 points.) ((S5d) Made
+  // again for the defender's Venom Engine at 60: the Hierophant, a Brute,
+  // a Scaleguard squad, three Spitter squads, a Sidewinder squad, a Venom
+  // Engine and two Howdahs, 795 points of 800, 10 units, 30 models (the
+  // old list, a Scaleguard squad for a Spitter one, 810 at the new price).)
+  armies: { field: '224222', grand: '336333', garrison: '1113112', assault: '224222' },
   units: {
     scaleguard: {
       name: 'Scaleguard', short: 'Scaleguard', role: 'Troops', ai: 'line', models: 6, base: 0.32, pts: 10, cost: 70,

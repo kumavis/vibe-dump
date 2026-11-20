@@ -17,6 +17,15 @@
 // (app/boot.js reads the missions), so this panel imports no rules data.
 // The size's sets are the terrain line's options.
 //
+// (Breakthrough, DESIGN §4.2.12's "The page") The Who attacks line, under
+// the size line, for a mission with roles only: a button per seat (against
+// the AI "You" and "The AI", in hotseat "Player 1" and "Player 2", watched
+// the seats' races), the attacking seat pressed (app/boot.js's picking:
+// the player's own against the AI, else seat 0), and a line saying who
+// attacks and who holds. A mission with roles says what it is about from
+// its own numbers (its `what` a function of the size's record: the
+// attacker's target, the rounds), never a number of the copy's.
+//
 // (S4) The battlefield's line, under the terrain line: the board's name
 // (app/board-name.js, seeded as the dressing is) and its seed, the title's
 // Battlefield; the name changes as the size and terrain do.
@@ -65,6 +74,8 @@ export const TERRAINS = Object.freeze({
   keg: { name: 'Powder keg', what: 'ruins, woods, hedges and walls round a powder keg' },
   // (V3d's, the Powder Field's only one)
   powder: { name: 'Powder Field', what: 'a battlefield still burning: wrecks to climb, shell holes, and powder everywhere' },
+  // ((Breakthrough) the line set's, Breakthrough's only one)
+  march: { name: 'March Wall', what: 'a walled line across the field: a gate to ram, siege ladders, a breach, and a wood on its flank' },
 })
 export const terrainName = (set) => TERRAINS[set]?.name ?? set
 
@@ -75,12 +86,26 @@ export const MISSION_NAMES = Object.freeze({
   keg: { name: 'Powder keg', what: 'Four objectives round a powder keg at the centre: hold them while it stands, and whoever sets it off (a template, acid or the Brute) catches everyone near it.' },
   // (V3d) a Grand battle of its own
   powder: { name: 'Powder Field', what: 'A Grand battle on the wreckage of the day\'s fighting, still burning: the objectives on a burned farmstead, wrecked trebuchets and venom engines, and among heaps of powder kegs. Climb the wrecks; a blast that touches the powder sets off every keg in reach.' },
+  // (Breakthrough) the first asymmetric mission, a Field battle of its own:
+  // its target and rounds the size's own (SIZES, app/boot.js)
+  breakthrough: { name: 'Breakthrough', what: (at) => `One army holds a walled line across the field; the other must break through it. The attacker scores for each objective it holds behind the wall at the end of each round, and wins on ${at.target}. The defender wins by holding them off for ${at.rounds} rounds.` },
 })
+// what a mission of its own is about, for size `at` (a SIZES record), or
+// null for a plain size
+export const missionWhat = (at) => {
+  const w = MISSION_NAMES[at.mission]?.what
+  return typeof w === 'function' ? w(at) : w ?? null
+}
 // a mission's name on the size line: its own, else its list's size
 export const sizeName = (mission, m) => MISSION_NAMES[mission]?.name ?? m.list?.size ?? mission
 
 // a phone's screen: narrow, or a coarse pointer on a small one
 export const phoneScreen = () => innerWidth < 700 || (!!globalThis.matchMedia?.('(pointer: coarse)').matches && Math.min(innerWidth, innerHeight) < 600)
+
+// ((Breakthrough, S5a) a size's points as its line says them: the
+// attacker's and the defender's where a mission with roles gives them their
+// own, "1,000 / 600"; otherwise the one number a side)
+const ptsOf = (s) => (s.defend != null && s.defend !== s.points ? `${s.points.toLocaleString('en')} / ${s.defend.toLocaleString('en')}` : s.points.toLocaleString('en'))
 
 export class SetupScreen {
   // `diorama()`: the race showcase (view/diorama.js), asked for only as the
@@ -94,6 +119,8 @@ export class SetupScreen {
     this.sizeRow = null
     // (F16) the fog line, likewise
     this.fogRow = null
+    // ((Breakthrough) the Who attacks line, likewise)
+    this.roleRow = null
   }
 
   get up() {
@@ -102,7 +129,8 @@ export class SetupScreen {
 
   // { pick(seat, race), terrain(set), size(mission), (F16) fog(on), start(),
   // back(), (F11b) army(seat, value) (the line's select: a preset's name,
-  // or 'list'), build(seat) (Build…), random(seat) (an AI seat's Random) }
+  // or 'list'), build(seat) (Build…), random(seat) (an AI seat's Random),
+  // (Breakthrough) attacker(seat) (Who attacks) }
   wire(on) {
     this.on = on
     $('#setupStart').onclick = () => on.start()
@@ -114,9 +142,10 @@ export class SetupScreen {
   // (F7a) terrain: { sets, pick } (the mission's sets and the one picked),
   // (F16) fog: { offered, on } (the mode takes it, and the toggle's state),
   // (F11b) armies: each seat's army line (armyLine, below), and startWhy:
-  // why Start is disabled (null: it isn't), (S4) board: { seed, name } the
-  // board the battle is fought on (its name null: no line) }
-  show({ title, seats, mirror, sizes = [], size = null, terrain = null, fog = null, armies = null, startWhy = null, board = null }) {
+  // why Start is disabled (null: it isn't), (Breakthrough) roles: the Who
+  // attacks line (rolesLine, below; null: none), (S4) board: { seed, name }
+  // the board the battle is fought on (its name null: no line) }
+  show({ title, seats, mirror, sizes = [], size = null, roles = null, terrain = null, fog = null, armies = null, startWhy = null, board = null }) {
     // (the pickers made once, as the panel first opens: nothing is drawn
     // before)
     this.pickers ??= [0, 1].map((s) => new RacePicker({ root: $(`#setup .setupSeat[data-seat="${s}"] .picker`), diorama: this.diorama(), pick: (race) => this.on.pick(s, race) }))
@@ -134,6 +163,7 @@ export class SetupScreen {
       why.classList.toggle('hidden', !startWhy)
     }
     this.sizes(sizes, size)
+    this.rolesLine(roles)
     $('#setupMirror').classList.toggle('hidden', !mirror)
     this.terrainLine(terrain)
     this.boardLine(board)
@@ -219,6 +249,37 @@ export class SetupScreen {
     btn.setAttribute('aria-checked', String(on))
   }
 
+  // (Breakthrough) The Who attacks line: `r` { options: [{ seat, label }]
+  // in the order shown, pick (the attacking seat), note (who attacks, who
+  // holds) }, or null (a mission without roles: hidden). Made once, under
+  // the size line.
+  rolesLine(r) {
+    if (!this.roleRow) {
+      const row = (this.roleRow = el('div'))
+      row.id = 'setupRoles'
+      row.setAttribute('role', 'radiogroup')
+      row.setAttribute('aria-label', 'Who attacks')
+      const note = el('p', 'small')
+      note.id = 'setupRolesNote'
+      const after = $('#setupSizeNote')
+      if (after) after.after(row, note)
+      else $('#setupMirror').before(row, note)
+    }
+    const note = $('#setupRolesNote')
+    this.roleRow.classList.toggle('hidden', !r)
+    note.classList.toggle('hidden', !r)
+    if (!r) return
+    this.roleRow.replaceChildren(el('span', 'lbl', 'Who attacks'), ...r.options.map(({ seat, label }) => {
+      const b = el('button', seat === r.pick ? 'on' : '', label)
+      b.dataset.attacker = String(seat)
+      b.setAttribute('role', 'radio')
+      b.setAttribute('aria-checked', String(seat === r.pick))
+      b.onclick = () => this.on.attacker?.(seat)
+      return b
+    }))
+    note.textContent = r.note
+  }
+
   // (F7a) the terrain line: a button per set the mission is fought on, the
   // one picked pressed, and what is on it (none for a mission with one set)
   terrainLine(t) {
@@ -271,7 +332,7 @@ export class SetupScreen {
       b.setAttribute('aria-checked', String(s.mission === size))
       b.append(s.name)
       const small = document.createElement('small')
-      small.textContent = `${s.W}×${s.H} · ${s.points.toLocaleString('en')} pts`
+      small.textContent = `${s.W}×${s.H} · ${ptsOf(s)} pts`
       b.append(small)
       b.onclick = () => this.on.size?.(s.mission)
       return b
@@ -279,8 +340,8 @@ export class SetupScreen {
     this.sizeRow.replaceChildren(lbl, ...buttons)
     const at = sizes.find((s) => s.mission === size) ?? sizes[0]
     const big = phone && at.W * at.H > 60 * 40
-    const what = MISSION_NAMES[at.mission]?.what
-    $('#setupSizeNote').textContent = `${at.name}: ${/^8/.test(String(at.W)) ? 'an' : 'a'} ${at.W}×${at.H} board, ${at.points.toLocaleString('en')} points a side, ${at.rounds} rounds.${what ? ` ${what}` : ''}${big ? ' Best on a larger screen.' : ''}`
+    const what = missionWhat(at)
+    $('#setupSizeNote').textContent = `${at.name}: ${/^8/.test(String(at.W)) ? 'an' : 'a'} ${at.W}×${at.H} board, ${at.defend !== null && at.defend !== undefined && at.defend !== at.points ? `${at.points.toLocaleString('en')} points to attack and ${at.defend.toLocaleString('en')} to defend` : `${at.points.toLocaleString('en')} points a side`}, ${at.rounds} rounds.${what ? ` ${what}` : ''}${big ? ' Best on a larger screen.' : ''}`
   }
 
   hide() {

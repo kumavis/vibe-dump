@@ -189,20 +189,32 @@ async function parent() {
     // overtime, so the third battle has them too: a watched one never votes;
     // (F7a) and its terrain, ?terrain=, which the battle-setup panel keeps,
     // and (F8b) its mission, ?mission=, and (F11a) its seats' armies,
-    // ?armies=, each written out as pageStart writes them)
-    const armies = /&armies=([^&]*)/.exec(pageStart(setup).query)?.[1].split(',') ?? null
-    return { from, dice: setup.dice, races: setup.seats.map((s) => s.race), overtime: setup.overtime ?? 'never', terrain: setup.terrain ?? null, mission: setup.mission ?? 'classic', armies, mode: others[i % 3], policy: POLICIES[(i >> 1) % 3], seed: 7001 + i, how: i % 2 ? 'reroll' : 'seed', board: 100003 + i * 7919 }
+    // ?armies=, each written out as pageStart writes them; (Breakthrough)
+    // and the attacking seat, ?attacker=, where pageStart wrote one)
+    const { query } = pageStart(setup)
+    const armies = /&armies=([^&]*)/.exec(query)?.[1].split(',') ?? null
+    const attacker = /&attacker=([01])(?:&|$)/.exec(query)?.[1]
+    return { from, dice: setup.dice, races: setup.seats.map((s) => s.race), overtime: setup.overtime ?? 'never', terrain: setup.terrain ?? null, mission: setup.mission ?? 'classic', armies, attacker: attacker === undefined ? null : Number(attacker), mode: others[i % 3], policy: POLICIES[(i >> 1) % 3], seed: 7001 + i, how: i % 2 ? 'reroll' : 'seed', board: 100003 + i * 7919 }
   }
   // the setup the third battle must be played under: (F8b) on the first
   // battle's mission (its rounds, as the page's start names them), (F7a) on
   // its terrain (else the mission's first set), (F11a) each seat the army
-  // the URL names
+  // the URL names. (Breakthrough) On a mission with roles, the attacker is
+  // the URL's, ?attacker=, else the seat __ts.start hands the flow, none, so
+  // the flow's own 0 (app/boot.js: the panel's press for the mode is not
+  // asked; app/flow.js start); and a seat the URL names no army for takes
+  // its role's preset under that attacker (core/army.js presetFor), as the
+  // page's G.setup names it: playedAs fills an absent army with the
+  // mission's own name, which no role plays.
   const { MISSIONS } = await import(pathToFileURL(join(dir, 'data', 'mission.js')).href)
+  const { presetFor } = await import(pathToFileURL(join(dir, 'core', 'army.js')).href).catch(() => ({}))
   const thirdSetup = (sw, board) => {
     const terrain = sw.terrain ?? MISSIONS[sw.mission].sets[0]
     const s = jobSetup({ setup: { ...setupFor(sw.mode, board, sw.dice, sw.mode === 'watch' ? undefined : sw.overtime), terrain }, races: sw.races })
     const m = sw.mission !== 'classic' ? { mission: sw.mission, terrain, rounds: MISSIONS[sw.mission].rounds } : {}
-    return { ...s, ...m, seats: s.seats.map((x, i) => (sw.armies ? { ...x, army: sw.armies[i] } : x)) }
+    if (!MISSIONS[sw.mission].roles) return { ...s, ...m, seats: s.seats.map((x, i) => (sw.armies ? { ...x, army: sw.armies[i] } : x)) }
+    const attacker = sw.attacker ?? 0
+    return { ...s, ...m, attacker, seats: s.seats.map((x, i) => ({ ...x, army: sw.armies?.[i] ?? presetFor({ mission: sw.mission, attacker }, i) })) }
   }
 
   console.log(`rematch-check: ${items.length} battles, each played twice in one page (Again between them), then a third on a new board in another mode; on ${a.dir ? dir : a.ref ? `ref ${a.ref}` : 'the working tree'}`)

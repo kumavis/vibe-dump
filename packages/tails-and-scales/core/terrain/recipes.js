@@ -759,7 +759,10 @@ const TIMBER = Object.freeze(['#8a6038', '#7a5232', '#9a7048'])
 // what the recipe decided, and adds one chunk. `look` carries what the view
 // builds the mesh from: the piece, the recipe it belongs to, its material
 // and colour, and its size in its own frame (w along its own x, d along its
-// own z, h tall).
+// own z, h tall). (Breakthrough) The deck, stair, ladder, post and parapet
+// run are exported, unchanged, for the March Wall's generator
+// (core/terrain/breakthrough.js), which builds its walks and towers with
+// exactly these defs.
 
 // A deck: a walkable top h high over a solid body (line of sight runs into
 // it: the "dead ground" at the foot of a wall), w × d, its own frame the
@@ -769,7 +772,7 @@ const TIMBER = Object.freeze(['#8a6038', '#7a5232', '#9a7048'])
 // (F7c) `supports`, a timber deck's posts' ids, and `fallsAt`, how many of
 // them down bring it down (a deck with supports and no fallsAt, the barn's,
 // never falls): fields on the def, never draws.
-function deck(T, F, { lx, lz, ly = 0, w, d, h, material, color, recipe, supports, fallsAt, extra }) {
+export function deck(T, F, { lx, lz, ly = 0, w, d, h, material, color, recipe, supports, fallsAt, extra }) {
   const p = F.p(lx, lz)
   const def = {
     kind: 'deck', hp: Infinity,
@@ -786,7 +789,7 @@ function deck(T, F, { lx, lz, ly = 0, w, d, h, material, color, recipe, supports
 // A stair: a ramp len long and w wide, rising from the ground at its own −x
 // end to h at its own +x end (`look.rise` says so: '+x'); ly turns its own
 // frame so its own +x points up the stair.
-function stair(T, F, { lx, lz, ly, len, w, h, material, color, recipe, extra }) {
+export function stair(T, F, { lx, lz, ly, len, w, h, material, color, recipe, extra }) {
   const p = F.p(lx, lz)
   return T.add({
     kind: 'stair', hp: Infinity,
@@ -803,7 +806,7 @@ function stair(T, F, { lx, lz, ly, len, w, h, material, color, recipe, extra }) 
 // foot stands on). Its link joins `foot` (LADDER_OUT out from the face) to
 // `top` (on the deck, at its centreline), both on the table, climbing h;
 // `on` is its deck's id.
-function ladder(T, F, { lx, lz, ly, h, color, recipe, foot, top, on }) {
+export function ladder(T, F, { lx, lz, ly, h, color, recipe, foot, top, on }) {
   // (the strip's centre, half its thickness out from the face)
   const out = ly === 0 ? -1 : 1
   const p = F.p(lx, lz + out * (LADDER_T / 2))
@@ -822,7 +825,7 @@ function ladder(T, F, { lx, lz, ly, h, color, recipe, foot, top, on }) {
 // `hp`: a platform's POST_HP, so a blast chips it and a wrecker's smash
 // breaks it (core/terrain/terrain.js's cascade takes its deck down at
 // fallsAt); the barn's Infinity, F7a's.
-function post(T, F, lx, lz, h, color, recipe, hp = Infinity) {
+export function post(T, F, lx, lz, h, color, recipe, hp = Infinity) {
   const p = F.p(lx, lz)
   return T.add({
     kind: 'post', hp,
@@ -894,7 +897,7 @@ function parapet(T, F, deck, { lx, lz, len, face, recipe }) {
 // parapets parted by crenels. With `twin` each is followed by its point
 // mirror through the recipe's origin, on the opposite face (the keep, its
 // own mirror: the negated places to the bit, as its second stair is).
-function parapetRun(T, F, deck, { face, at, a, b, k, recipe, twin = false }) {
+export function parapetRun(T, F, deck, { face, at, a, b, k, recipe, twin = false }) {
   const len = (b - a - (k - 1) * CRENEL) / k
   const along = face === '-z' || face === '+z'
   const inset = face[0] === '-' ? PARAPET_T / 2 : -PARAPET_T / 2
@@ -1539,6 +1542,9 @@ export function checkSet(name, S) {
   const num = (v) => typeof v === 'number' && Number.isFinite(v)
   const int = (v) => Number.isInteger(v) && v >= 0
   if (!S || typeof S !== 'object') bad('is not a table')
+  // (Breakthrough) a set with a plan is built by its plan's generator, not
+  // scattered: it has the plan's fields and none of scatter's
+  if ('plan' in S) return checkPlan(S, bad, num)
   for (const k of Object.keys(S)) if (!SET_FIELDS.includes(k) && !OPTIONAL_FIELDS.includes(k)) bad(`unknown field "${k}"`)
   for (const k of SET_FIELDS) if (!(k in S)) bad(`no "${k}"`)
   if (!Array.isArray(S.kinds) || !S.kinds.length) bad('kinds must list at least one feature')
@@ -1603,3 +1609,65 @@ export function checkSet(name, S) {
 }
 // (V3d) what a fort phase may scatter: F7a's fortifications and the wrecks
 const SCATTERED = Object.freeze([...FORT_KINDS, ...WRECK_KINDS])
+
+// (Breakthrough, DESIGN's line set) The plans a set may name instead of
+// scatter's fields, and each plan's fields: the generator that reads them
+// (core/terrain/terrain.js generate routes a set with `plan` to it, and
+// scatter never sees the set) and, for each field, what it must hold. A
+// field is a table of its own sub-fields, or one of:
+//   'pos'    a finite number above 0
+//   'num'    a finite number, 0 or more
+//   'prob'   a number from 0 to 1
+//   'count'  a whole number above 0
+//   'range'  [a, b], finite numbers, a <= b (a draw between them)
+//   'counts' [a, b], whole numbers, 0 <= a <= b (a whole draw between them)
+//   'weights' a list of [name, weight], the name one of the plan's own
+//             (GLACIS_KINDS), the weight above 0
+// Every field named is required and no other is taken, so a misspelt field
+// fails as every set's does, and a plan set carrying scatter's fields
+// (mirror, kinds and the rest) fails as unknown: they would be read by no
+// one. core/terrain/breakthrough.js says what each number does.
+export const GLACIS_KINDS = Object.freeze(['mantlet', 'orchard', 'rocks'])
+export const PLAN_FIELDS = deepFreeze(Object.assign(Object.create(null), {
+  wall: {
+    gate: { w: 'pos', hp: 'count', ram: 'count', z: 'range', face: 'range' },
+    tower: { s: 'pos', h: 'pos' },
+    walk: { d: 'pos', h: 'pos', ladders: 'counts', ladderGap: 'num', ladderApart: 'pos', ladderSpan: 'range', stairEvery: 'pos' },
+    arms: { sweep: 'range' },
+    breach: { stone: 'counts', timber: 'counts' },
+    flank: { gap: 'range', crag: 'range', trees: 'counts', picket: 'pos', track: 'pos', floors: 'counts', floorR: 'range' },
+    ditch: { out: 'num', w: 'pos' },
+    glacis: { pieces: 'counts', kinds: 'weights', from: 'num', to: 'num', mouthGap: 'num' },
+    second: { x: 'range', platform: 'prob', ruin: 'prob' },
+    objectiveGap: 'num',
+  },
+}))
+function checkPlan(S, bad, num) {
+  if (typeof S.plan !== 'string' || !(S.plan in PLAN_FIELDS)) bad(`plan "${S.plan}" is not one terrain.js knows (${Object.keys(PLAN_FIELDS).join(', ')})`)
+  const fields = { plan: 'plan', ...PLAN_FIELDS[S.plan] }
+  const pair = (v) => Array.isArray(v) && v.length === 2 && num(v[0]) && num(v[1]) && v[0] <= v[1]
+  const kinds = {
+    plan: () => true,
+    pos: (v) => num(v) && v > 0,
+    num: (v) => num(v) && v >= 0,
+    prob: (v) => num(v) && v >= 0 && v <= 1,
+    count: (v) => Number.isInteger(v) && v > 0,
+    range: pair,
+    counts: (v) => pair(v) && Number.isInteger(v[0]) && Number.isInteger(v[1]) && v[0] >= 0,
+    weights: (v) => Array.isArray(v) && v.length > 0 && v.every((k) => Array.isArray(k) && k.length === 2 && GLACIS_KINDS.includes(k[0]) && num(k[1]) && k[1] > 0),
+  }
+  const walk = (at, spec, v) => {
+    if (typeof spec === 'string') {
+      if (!kinds[spec](v)) bad(`${at} ${JSON.stringify(v)} must be ${spec === 'weights' ? `a list of [piece, weight], each piece one of ${GLACIS_KINDS.join(', ')}` : `a ${spec}`} (recipes.js PLAN_FIELDS)`)
+      return
+    }
+    if (!v || typeof v !== 'object' || Array.isArray(v)) bad(`${at} must be a table`)
+    for (const k of Object.keys(v)) if (!(k in spec)) bad(`unknown field "${at ? `${at}.` : ''}${k}"`)
+    for (const k of Object.keys(spec)) {
+      if (!(k in v)) bad(`no "${at ? `${at}.` : ''}${k}"`)
+      walk(at ? `${at}.${k}` : k, spec[k], v[k])
+    }
+  }
+  walk('', fields, S)
+  return S
+}

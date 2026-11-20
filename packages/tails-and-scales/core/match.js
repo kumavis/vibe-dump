@@ -23,6 +23,7 @@ import { createRng } from './rng.js'
 import { deepFreeze } from './util.js'
 import { NavGrid } from './nav.js'
 import { Terrain } from './terrain/terrain.js'
+import { SETS } from './terrain/sets.js'
 import { makeUnit } from './units.js'
 import { deployArmies } from './deploy.js'
 import { armyOf } from './army.js'
@@ -35,6 +36,27 @@ export const EDGES = Object.freeze([-1, 1])
 // `classic`, as every setup did before F8a. (fullSetup has refused a name
 // MISSIONS lacks by the time a match reads it.)
 export const missionOf = (setup) => MISSIONS[setup?.mission ?? 'classic']
+// (Breakthrough, the March Wall) A terrain set's record by name, or null:
+// the page's door to a set's numbers (the help's gate: its hit points and
+// the ram's blow), read as the rules read them, never copied into the copy
+export const setOf = (name) => (Object.hasOwn(SETS, name) ? SETS[name] : null)
+
+// (Breakthrough, DESIGN §4.2.12) The roles of the mission `setup` is fought
+// for (data/mission.js `roles`: { attack, defend }, each with its zone, and
+// the attacker's target), or null on a mission without them: every rule a
+// role mission plays otherwise asks here (and core/army.js's rulesFor, which
+// may import nothing of the core's), so a battle on any other mission takes
+// exactly the code it took before roles.
+export const rolesOf = (setup) => missionOf(setup)?.roles ?? null
+// The attacking seat of a setup on a mission with roles (setup.attacker,
+// 0 or 1, 0 by default: core/index.js fullSetup fills it in), and a seat's
+// role, 'attack' or 'defend', or null without roles.
+export const attackerOf = (setup) => setup.attacker ?? 0
+export const roleOf = (G, s) => (rolesOf(G.setup) ? (s === attackerOf(G.setup) ? 'attack' : 'defend') : null)
+// Whether the table is the point mirror of the mission's frame: its roles
+// are written with the attacker west, in seat 0, so seat 1 attacking flips
+// the board, the zones and the objectives (false without roles).
+export const flipped = (setup) => !!rolesOf(setup) && attackerOf(setup) === 1
 
 // (F8a) The fields a setup may have, and a seat's record: core/index.js
 // fullSetup refuses any other, so a field a newer build adds (an army list,
@@ -42,7 +64,8 @@ export const missionOf = (setup) => MISSIONS[setup?.mission ?? 'classic']
 // another battle (DESIGN §4.2.10 item 8). (F11a) A seat's `army` names the
 // army it fields: a preset of its race or a list of counts (core/army.js;
 // none, the mission's preset).
-export const SETUP_KEYS = Object.freeze(['board', 'dice', 'terrain', 'rounds', 'overtime', 'diceMode', 'seats', 'mission'])
+// (Breakthrough) And `attacker`, the attacking seat on a mission with roles.
+export const SETUP_KEYS = Object.freeze(['board', 'dice', 'terrain', 'rounds', 'overtime', 'diceMode', 'seats', 'mission', 'attacker'])
 export const SEAT_KEYS = Object.freeze(['race', 'ctrl', 'dev', 'name', 'nonce', 'army'])
 
 // the nav grid's cell, in inches
@@ -103,7 +126,7 @@ export function newState(setup, { out = null, onTrace = null } = {}) {
     seats: makeSeats(setup.seats.map((s) => s.race), setup.seats.map((s) => s.ctrl)),
     units: [],
     nextUnitId: 1,
-    objectives: mission.objectives.map((p, i) => ({ i, x: p.x, z: p.z })),
+    objectives: rolesOf(setup) ? roleObjectives(mission, flipped(setup)) : mission.objectives.map((p, i) => ({ i, x: p.x, z: p.z })),
     terrain: new Terrain(W, H),
     // derived from the terrain; rebuilt only at refreshNav's call sites
     nav: new NavGrid(W, H, NAV_CELL),
@@ -126,11 +149,33 @@ export function newState(setup, { out = null, onTrace = null } = {}) {
     // (core/index.js's createMatch sets it; I/O, never read by the rules)
     strict: false,
   }
-  G.terrain.generate(setup.board, G.objectives, mission.deploy, setup.terrain, out)
+  if (rolesOf(setup)) G.terrain.generate(setup.board, G.objectives, mission.deploy, setup.terrain, out, roleFrame(rolesOf(setup), flipped(setup)))
+  else G.terrain.generate(setup.board, G.objectives, mission.deploy, setup.terrain, out)
   refreshNav(G)
   for (const side of [0, 1]) for (const key of armyOf(G.setup, side).keys) G.units.push(makeUnit(G, key, side))
   deployArmies(G)
   return G
+}
+
+// (Breakthrough, DESIGN §4.2.12) A role mission's objectives on the table:
+// each with whom it scores for (`scores`: 'attack', 'defend', or null for
+// both) and its worth (`vp`, 1 by default), and, when `flip` (seat 1
+// attacks), at the point mirror of where the mission's frame stands it.
+export function roleObjectives(mission, flip) {
+  return mission.objectives.map((p, i) => ({ i, x: flip ? -p.x : p.x, z: flip ? -p.z : p.z, scores: p.scores ?? null, vp: p.vp ?? 1 }))
+}
+// What the terrain's generator is told of the roles (core/terrain/
+// terrain.js generate's `role`): the flip, each role's zone and the
+// defender's line, all in the mission's attacker-west frame (the generator
+// mirrors what it builds itself on a flip; the objectives it is handed are
+// the table's, already mirrored). `line` is null for a mission without one.
+// ((the March Wall) A zone behind the line goes as it is written,
+// { behind: true, x: [a, b] }: the generator reads the attacker's front and
+// the line, never the defender's zone.)
+// Exported for sim/'s rows, which build the boards as newState does.
+export function roleFrame({ attack, defend }, flip) {
+  const zone = (z) => (z.behind ? { behind: true, x: [...z.x] } : z.z ? { x: [...z.x], z: [...z.z] } : { x: [...z.x] })
+  return { flip, zones: { attack: zone(attack.zone), defend: zone(defend.zone) }, line: defend.line ?? null }
 }
 
 // The nav grid follows the terrain: rebuilt when a chunk changed shape since

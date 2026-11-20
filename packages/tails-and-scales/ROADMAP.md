@@ -1907,6 +1907,135 @@ follows N3.
   timber platform, if ever allowed, puts its riders on a deck that can
   fall under them, and `settle` then moves them as any unit, the tower
   untouched.)
+- [ ] **Breakthrough** The first asymmetric mission (DESIGN §4.2.12): one
+  army holds a line across the table, the other must break through it. The
+  attacker deploys deep on its own edge, moves first and scores at each
+  round's end for every objective it holds beyond the line; reaching its
+  target wins at once, and otherwise the defender wins when the rounds run
+  out. No draws, no overtime. A Field battle, equal points, the ground and
+  the initiative the asymmetry. Its machinery (roles as mission data, the
+  one-frame flip, per-role zones, lists and scoring, the win condition) is
+  what Siege (after F9d) and Raid reuse. Five slices; S1-S3 land as one
+  consensus merge under one `CORE_VERSION` bump (S1's), S4 with them or
+  just after, S5 last.
+  - [x] **S1** The roles in the core. A mission's `roles` (`attack`,
+    `defend`: each a zone `{ x, z? }` in the attacker-west frame and an
+    optional `list`; the attacker's `target` and `first`, the defender's
+    `line`), `overtime: false`, an objective's `scores` and `vp`, all
+    checked by `checkMission`; the setup's `attacker` (0 by default on a
+    role mission, refused on any other); `rolesOf`, `roleOf`, `attackerOf`
+    and `flipped` (`core/match.js`) the one reader, with `army.rulesFor`
+    its twin; the objectives point-mirrored when seat 1 attacks and
+    `Terrain.generate`'s sixth argument, `role` (taken, not read); the role
+    zones in `zone`, `fits` and the default rows; the attacker's first turn
+    with no roll-off; `scoreRoles`, the target's early end and the result
+    with no draw ('breakthrough', 'held'); a provisional `breakthrough`
+    mission on `open`. (`CORE_VERSION` 17, `RULES_ID` `1rx0d67ozvb` →
+    `1gulci4w30x` with the mission, `stateHash`'s format unchanged; parity
+    97 of 97 byte-identical, no re-record, the PIN unmoved.) The page's
+    minimum: "Breakthrough" on the size line (seat 0 attacks), no vote on
+    it here or in the lobby, an end-screen line for each new end; army-sim
+    leaves a role mission out of a default run. The checks: data-check's
+    section 17 and its envelope row, P-mission's role rows and refusals,
+    P-roles (scenes and 300 AI battles never drawn), seven `roles-*`
+    self-test mutants, flag-lint's `roles` row.
+  - [x] **S2** The line set: the March Wall (`sets.js` `march`, plan
+    `'wall'`, `core/terrain/breakthrough.js` `wallPlan`), built to a plan
+    instead of scattered, so no other set's draws move: the gatehouse and
+    its gate (hp 12, `ram` 4: three moves of a wrecker), the curtain walk
+    with its siege ladders and stair, the breach to the crag, the Hollow
+    Wood with its picket on the nav grid's cells, the ditch, the glacis and
+    the second line; seat 1 attacking the exact point mirror, the wood's
+    side the exact z mirror; the plan record `T.plan` and its readers
+    (`behindLine`, `faceDist`, `gateCells`, `postsOf`). terrain-check's
+    section 10 (each route alone, the distances within 15%, no route free
+    of fire, the works, the mirrors), data-check's section 18, P-ram.
+  - [x] **S2b** Breakthrough fought on the March Wall: the record on
+    `march` (the attacker's zone 10 deep, the defender's `{ behind: true }`
+    with its line at −4.5, the three objectives behind the wall, `deploy`
+    10); `checkRoles` taking a zone behind the line (the attacker's front
+    12 tails from the line); `core/deploy.js` `zone`/`fits` holding every
+    defender's base wholly behind the wall's outer face (`faceDist`), and
+    the defender's default deployment on the plan's posts (shooters on the
+    towers and the walk, the rest in the yard, then the second line, then
+    behind it); the help's four ways through and the gate's moves from the
+    set and the race data, the panel's "March Wall"; `roleFrame` and
+    `roleObjectives` exported for the checks, `setOf` the page's door to a
+    set. The checks moved to the real board: data-check 17 and 18, the
+    envelope and P-keg's boards, terrain-check's section 10 from the record
+    with its zone-to-face row and the connectivity rows per role, P-mission's
+    role rows, P-roles' scenes, its AI battles held to the ends the rules
+    allow and its deployment row (300 boards × each attacker × each race
+    order and at the caps), four `roles-wall-*` mutants, hud-check's two
+    role battles re-picked on the wall. Parity 97 of 97, nothing
+    re-recorded; `CORE_VERSION` 17 as S1's.
+  - [x] **S3** The AI plays the wall (DESIGN §4.2.12, As built (S3)).
+    Step 0: the defender's zone behind the line carries x bounds
+    (`{ behind: true, x: [-12, 30] }`: 8 tails from the attacker's zone
+    whatever the seed; `checkRoles`, `behindZone`, the checks, the help).
+    Then the route field (`core/ai/route.js`: walking distance to each
+    objective per movement class, the gate a wrecker's at a price per blow,
+    a held ladder shut, cached per nav epoch), the attacker's route-led
+    objective pull, walk-on, advance, waypoints and ram, the defender's
+    refused front, deny and posts, and route-aware attacker rows, all under
+    `wallOf` (`rolesOf` and the plan). P-wall's four rows and mutants,
+    play-report's Breakthrough row. Over 400 AI battles: an attacker
+    behind the face by round 4 in 100%, scoring by round 4 in 24% (the
+    row's 60% missed: the Coil 42-46%, the Bushtails 3-5%), the defender
+    in front of the face 0.13% of its unit-rounds, the attacker winning 8%.
+    Parity 97 of 97, nothing re-recorded; `CORE_VERSION` 17.
+  - [x] **S4a** The page: the setup panel's "Who attacks" line (and
+    `attacker` in the setup it builds), the Muster screen's role and its
+    `rulesFor` points (with the panel's and the lobby's judges), the HUD's
+    tally ("Breakthrough 3 of 5"), the opening banners, the end screen's
+    wording and Swap sides, the help's paragraph, the lobby's `attacker`
+    field. ui-check, hud-check, lobby-rig.
+  - [x] **S4b** The view: the per-seat zones on the table and the minimap
+    (drawn from `zone`, the defender's behind the wall's face, not
+    `G.board.deploy`), the gate's and ditch's look, the wall cut at the
+    mat, the siege's lines, the ways marked, the dressing's march theme;
+    input-check's breakthrough page (placement; the ram and the climb not
+    yet). DESIGN §4.2.12, As built (S4b).
+  - [ ] **S5** Balance and the corpus (DESIGN §4.2.12, As built (S5a,
+    S5b)).
+    - [x] **S5a, S5b** Pace and balance: army-sim's role mode (the
+      attacker's share per ordered race pair, 40-60% each and 45-55%
+      pooled, each seat attacking in alternate battles, random legal lists
+      under each role's own list rules; its `--self-test` planting a
+      target of 1 and of 30), the sweep and its tuning: the roles' points
+      first (the attacker the numbers, 1,000; the defender the works, its
+      own `list` of 625 and `army`, the garrison presets, `presetFor`),
+      the yard's objective at (5, 0) and the target 4; the AI's part (a
+      charge's bound by the route fields, `wallGap`; an attacking hull's
+      riders stepping off; the wreckers ramming the gate, `RAM_STEP` 1).
+      play-report's Breakthrough row passes; the role gates hold on seeds
+      1111 and 2222; the gate falls in 95% of the battles where the
+      attacker fields a wrecker. P-wall's charge scenes added.
+    - [x] **S5c** The garrison on the wall (DESIGN §4.2.12, As built
+      (S5c)): nobody aboard a hull behind a wall, the holders on the
+      yard's objective and behind the breach, the hulls on the second
+      line; the defender holds its post (`HOLD_POST`) but for the line's
+      reasons to go; a defence's own hull prices (the War-Cart 90, the
+      Howdah 135); the attacker's own preset, the assault, a wrecker in
+      each; the defender at 800 points. Swap sides' rule for armies
+      settled (ui-check), lobby-rig's size row reads both roles' points.
+    - [x] **S5d** The pairs (DESIGN §4.2.12, As built (S5d)): the
+      defender's own prices for the Nutkin (55) and the Venom Engine (60),
+      the garrisons made again; every ordered pair inside 40-60% on seeds
+      1111 and 2222 (42.3-59.0), pooled 50.9% and 51.0%, the presets'
+      cells 57-66%. view/zones.js reads the rules' zone through
+      core/queries.js.
+    - [ ] P-wall's `wall-ladder-held` (20 idling against 24 on the final
+      record) and `wall-front-open` (no garrison wants the ground in
+      front) mutants are missed; aiming rows 4 and 6 at a named list
+      ('11222') catches front-open and deny-off there, but that edit was
+      not made. The workload to be decided (S5c's report).
+    - [x] human-bot's role zones (`__ts.q.zone`; `?attacker=`), corpus-add
+      for a mission with roles and the `breach/` set's six battles picked
+      (S5d).
+    - [ ] The `breach/` set recorded on the final code with the PIN moved
+      (corpus-add on the PIN's commit, its Chromium admission), and
+      replayed by parity, `--pin`, replay-check and present-check.
 - [ ] **Ship.** Verify everything, rebuild, re-shoot the thumbnail if
   needed, publish.
 

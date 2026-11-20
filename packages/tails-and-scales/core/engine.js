@@ -28,7 +28,7 @@
 // what the view shows is events in G.out (§2.3), never awaited.
 import { PHASES, roll } from './rules.js'
 import { emit, log, flush, traceState } from './journal.js'
-import { ctrl, seatName } from './match.js'
+import { ctrl, seatName, rolesOf, attackerOf } from './match.js'
 import { alive, isEngaged, anyCanAct, ownersOf, statusOf, phaseKey } from './queries.js'
 import { fightPhase } from './actions/fight.js'
 import { moralePhase } from './actions/morale.js'
@@ -50,7 +50,10 @@ export function advance(G) {
         T.stage = 'battle'
         emit(G, 'stage', { stage: 'battle' })
         if (G.out) emit(G, 'objectives', { owners: ownersOf(G) })
-        rollOff(G)
+        // ((Breakthrough) a role mission's attacker may take the first turn
+        // by right, and no die is rolled)
+        if (rolesOf(G.setup)?.attack.first) attackFirst(G)
+        else rollOff(G)
         T.round = 1
         T.t = 0
         T.step = 'turnStart'
@@ -89,7 +92,10 @@ export function advance(G) {
         break
       case 'score':
         scoreRound(G)
-        if (T.round < G.setup.rounds) {
+        // ((Breakthrough) a role mission's attacker reaching its target ends
+        // the battle at once)
+        if (rolesOf(G.setup) && broken(G)) gameOver(G)
+        else if (T.round < G.setup.rounds) {
           T.round++
           T.t = 0
           T.step = 'turnStart'
@@ -123,6 +129,17 @@ export function rollOff(G) {
   T.first = a[0] > b[0] ? 0 : 1
   log(G, T.first, `<b>${seatName(G, T.first)}</b> win the roll-off and take the first turn.`, 'big')
 }
+
+// (Breakthrough, DESIGN §4.2.12) A role mission whose attacker moves first:
+// the attacking seat takes the first turn, no roll-off (no tray, no die).
+export function attackFirst(G) {
+  const T = G.turn
+  T.first = attackerOf(G.setup)
+  log(G, T.first, `<b>${seatName(G, T.first)}</b> attack, and take the first turn.`, 'big')
+}
+
+// Whether a role mission's attacker has reached its target
+const broken = (G) => G.turn.vp[attackerOf(G.setup)] >= rolesOf(G.setup).attack.target
 
 // A seat's turn begins: every unit's losses this turn are forgotten, and the
 // seat's own units may act again. (V3c, DESIGN §4.1 rule 29) And the spells
@@ -183,6 +200,7 @@ export function checkWipe(G) {
 // The round's end: one victory point per objective held, then its state line
 // and the score in the battle log.
 export function scoreRound(G) {
+  if (rolesOf(G.setup)) return scoreRoles(G)
   const T = G.turn
   const owners = ownersOf(G)
   const held = [0, 0]
@@ -193,6 +211,30 @@ export function scoreRound(G) {
   const a = seatName(G, 0, 'short'), b = seatName(G, 1, 'short')
   log(G, -1, `End of round ${T.round}: ${a} hold ${held[0]} objective${held[0] === 1 ? '' : 's'}, ${b} hold ${held[1]}. Score ${T.vp[0]}–${T.vp[1]}.`, 'big')
   emit(G, 'round.scored', { round: T.round, held: [...held], vp: [...T.vp], owners })
+}
+
+// (Breakthrough, DESIGN §4.2.12) A role mission's round end: each seat
+// scores the objectives it holds that score for its role (an objective's
+// `scores`, null for both), each its `vp`; `held` counts those objectives
+// a seat holds. The log reads the attacker's tally against its target (and
+// the defender's score, on a mission whose objectives score for it), and
+// round.scored carries `need`, the target.
+function scoreRoles(G) {
+  const T = G.turn
+  const owners = ownersOf(G)
+  const atk = attackerOf(G.setup), need = rolesOf(G.setup).attack.target
+  const held = [0, 0]
+  for (const o of G.objectives) {
+    const c = owners[o.i]
+    if (c < 0 || (o.scores !== null && o.scores !== (c === atk ? 'attack' : 'defend'))) continue
+    held[c]++
+    T.vp[c] += o.vp
+  }
+  traceState(G, `round ${T.round}`)
+  const n = held[atk], def = 1 - atk
+  const theirs = G.objectives.some((o) => o.scores !== 'attack') ? ` ${seatName(G, def)} hold ${held[def]}, ${T.vp[def]} VP.` : ''
+  log(G, -1, `End of round ${T.round}: ${seatName(G, atk)} hold ${n} objective${n === 1 ? '' : 's'} beyond the line. Breakthrough ${T.vp[atk]} of ${need}.${theirs}`, 'big')
+  emit(G, 'round.scored', { round: T.round, held: [...held], vp: [...T.vp], owners, need })
 }
 
 // The battle is over: the held-back lines, its state line (traced while the
@@ -211,8 +253,16 @@ export function gameOver(G, conceded = -1) {
   T.stage = 'over'
   G.pending = null
   emit(G, 'stage', { stage: 'over' })
-  const win = conceded >= 0 ? 1 - conceded : T.wiped >= 0 ? 1 - T.wiped : T.vp[0] > T.vp[1] ? 0 : T.vp[1] > T.vp[0] ? 1 : -1
-  const why = conceded >= 0 ? 'concede' : T.wiped >= 0 ? 'wipe' : 'score'
+  let win = conceded >= 0 ? 1 - conceded : T.wiped >= 0 ? 1 - T.wiped : T.vp[0] > T.vp[1] ? 0 : T.vp[1] > T.vp[0] ? 1 : -1
+  let why = conceded >= 0 ? 'concede' : T.wiped >= 0 ? 'wipe' : 'score'
+  // ((Breakthrough) on a role mission the score never draws: the attacker
+  // wins on its target ('breakthrough'), the defender when the rounds run
+  // out under it ('held'))
+  if (why === 'score' && rolesOf(G.setup)) {
+    const atk = attackerOf(G.setup)
+    win = broken(G) ? atk : 1 - atk
+    why = win === atk ? 'breakthrough' : 'held'
+  }
   T.result = { win, why }
   emit(G, 'game.over', { win, why, vp: [...T.vp], rounds })
 }

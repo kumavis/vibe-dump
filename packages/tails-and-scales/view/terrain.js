@@ -868,6 +868,136 @@ const FORT_PIECES = {
     g.add(mesh(boxAt(w, h, d, 0, h / 2, 0), mat(shade(color, 0.8))))
     return { obj: g }
   },
+  // (Breakthrough, S4b) The March Wall's gate: a great timber gate between
+  // its towers, in the rules' box (its own x the 0.6 deep across the
+  // passage, its outer face −x, toward the attacker on every board: the
+  // plan turns it with the rest; its own z the passage's width, h tall).
+  // Two leaves of upright boards, three iron straps across each and the
+  // outer face studded; the drop-bar across the inner face on its
+  // brackets; a lintel beam over it, into the towers. `stage` (gateStage:
+  // 0 whole, 1 and 2 as its hit points fall, 12 to 8 to 4 after each ram)
+  // breaks it: a ragged hole through the middle boards where the ram
+  // struck, the straps across it snapped, splinters at its foot both
+  // sides; at 2 the hole most of the gate's height, the leaves pushed in
+  // on their hinges and the bar cracked. Its jitter is the piece's own
+  // stream (hash), so a snap draws the same gate the hurts drew.
+  gate(c, stage = 0) {
+    const { w, d, h, color } = c.look
+    const g = framed(c)
+    const rnd = hash(c, 11)
+    const n = Math.max(4, Math.round(d / 0.5)), pw = d / n, t = w * 0.62
+    // each board's hole [lo, hi] (null: whole): the middle boards first
+    const hole = (i) => {
+      const k = Math.abs(i + 0.5 - n / 2)
+      const reach = stage === 1 ? 2 : stage === 2 ? 3 : 0
+      if (k >= reach) return null
+      const deep = 1 - k / (reach + 0.5)
+      const mid = h * 0.45, half = h * (stage === 2 ? 0.3 : 0.17) * (0.55 + 0.45 * deep)
+      return [Math.max(0.12, mid - half + (rnd() - 0.5) * 0.3), Math.min(h - 0.25, mid + half + (rnd() - 0.5) * 0.3)]
+    }
+    const leaves = [[], []], dark = [[], []], iron = [[], []], wood = [], ironFixed = []
+    // a board's pieces (around its hole), in leaf l's own frame (its hinge
+    // at the origin, the leaf along −side·z)
+    for (let i = 0; i < n; i++) {
+      const zc = -d / 2 + (i + 0.5) * pw, l = zc < 0 ? 0 : 1, hz = l ? d / 2 : -d / 2
+      const out = i % 2 ? dark[l] : leaves[l], ho = hole(i)
+      const spans = ho ? [[0, ho[0]], [ho[1], h]] : [[0, h]]
+      for (const [y0, y1] of spans) if (y1 - y0 > 0.05) out.push(boxAt(t, y1 - y0, pw - 0.035, 0, (y0 + y1) / 2, zc - hz))
+      // the broken boards' splintered ends
+      if (ho) for (const y of ho) for (let k = 0; k < 2; k++) out.push(new THREE.BoxGeometry(0.05, 0.2, t * 0.7).rotateY(Math.PI / 2).rotateX((rnd() - 0.5) * 0.7).translate((rnd() - 0.5) * 0.1, y + (y === ho[0] ? 0.06 : -0.06), zc - hz + (rnd() - 0.5) * pw * 0.6))
+    }
+    // the straps, each across its leaf, broken where they cross a hole
+    const ys = [0.45, h * 0.48, h - 0.5]
+    for (const l of [0, 1]) {
+      const hz = l ? d / 2 : -d / 2
+      for (const y of ys) {
+        let run = null
+        for (let i = l ? n / 2 : 0; i < (l ? n : n / 2); i++) {
+          const ho = hole(i), cut = ho && y > ho[0] - 0.05 && y < ho[1] + 0.05
+          const z0 = -d / 2 + i * pw, z1 = z0 + pw
+          if (!cut) run = run ? [run[0], z1] : [z0, z1]
+          if ((cut || i === (l ? n : n / 2) - 1) && run) {
+            iron[l].push(boxAt(w + 0.05, 0.13, run[1] - run[0] - 0.06, 0, y, (run[0] + run[1]) / 2 - hz))
+            run = null
+          }
+        }
+      }
+      // the studs on the outer face, between the straps
+      for (let r = 0; r < 2; r++) {
+        const y = (ys[r] + ys[r + 1]) / 2
+        for (let i = l ? n / 2 : 0; i < (l ? n : n / 2); i++) {
+          const ho = hole(i), zc = -d / 2 + (i + 0.5) * pw
+          if (ho && y > ho[0] && y < ho[1]) continue
+          iron[l].push(boxAt(0.06, 0.09, 0.09, -t / 2 - 0.02, y, zc - hz))
+        }
+      }
+      // the hinge plates at the towers
+      for (const y of ys) ironFixed.push(boxAt(w + 0.08, 0.2, 0.32, 0, y, l ? d / 2 - 0.16 : -d / 2 + 0.16))
+    }
+    // the drop-bar on its brackets, across the inner face (cracked at 2)
+    const bx = t / 2 + 0.14, by = h * 0.48 + 0.25
+    if (stage < 2) wood.push(boxAt(0.2, 0.24, d * 0.94, bx, by, 0))
+    else {
+      wood.push(new THREE.BoxGeometry(0.2, 0.24, d * 0.47).rotateX(0.12).translate(bx, by + 0.04, -d * 0.25))
+      wood.push(new THREE.BoxGeometry(0.2, 0.24, d * 0.45).rotateX(-0.2).translate(bx + 0.05, by - 0.1, d * 0.25))
+    }
+    for (const z of [-d * 0.38, d * 0.38]) ironFixed.push(boxAt(0.16, 0.36, 0.14, bx - 0.04, by, z))
+    // the lintel beam over the gate, into the towers
+    wood.push(boxAt(w + 0.4, 0.3, d + 0.7, 0, h + 0.05, 0))
+    // splinters at the foot, both sides, once it is broken
+    if (stage > 0) for (let k = 0; k < 10 * stage; k++) {
+      const side = k % 2 ? 1 : -1, L = 0.25 + rnd() * 0.45
+      wood.push(boxAt(L, 0.05, 0.1, side * (t / 2 + 0.2 + rnd() * 0.9), 0.03, (rnd() - 0.5) * d * 0.5, rnd() * Math.PI))
+    }
+    // (the look's timber, weathered toward an old oak's brown: its own red
+    // read as paint across the table)
+    const oak = `#${new THREE.Color(color).lerp(new THREE.Color('#6a4628'), 0.6).getHexString()}`
+    const timber = shade(oak, 1.05), seam = shade(oak, 0.84), black = '#2b2724'
+    // each leaf on its hinge, pushed in (toward +x) once badly broken
+    for (const l of [0, 1]) {
+      const leaf = new THREE.Group()
+      leaf.position.z = l ? d / 2 : -d / 2
+      if (stage === 2) leaf.rotation.y = l ? -0.07 : 0.07
+      if (leaves[l].length) leaf.add(merged(leaves[l], timber))
+      if (dark[l].length) leaf.add(merged(dark[l], seam))
+      leaf.add(merged(iron[l], black, { metalness: 0.35, roughness: 0.6 }))
+      g.add(leaf)
+    }
+    g.add(merged(wood, shade(oak, 0.72)), merged(ironFixed, black, { metalness: 0.35, roughness: 0.6 }))
+    return { obj: g }
+  },
+  // (Breakthrough, S4b) The March Wall's ditch, w × d on the turf, drawn
+  // dug without leaving its footprint or the mat (FLAT: it hides nothing,
+  // and the ladders' feet stand in it): a lip of thrown-up earth round its
+  // edge, banks sloping in from the lip, a dark wet floor between them.
+  ditch(c) {
+    const { w, d, color } = c.look
+    const g = framed(c)
+    const a = w / 2, b = d / 2, lip = 0.2, top = 0.09, low = 0.016
+    const inA = Math.max(0.3, a - 0.62), inB = Math.max(0.25, b - 0.62)
+    const lips = [boxAt(w, top, lip, 0, top / 2, b - lip / 2), boxAt(w, top, lip, 0, top / 2, -b + lip / 2), boxAt(lip, top, d - 2 * lip, a - lip / 2, top / 2, 0), boxAt(lip, top, d - 2 * lip, -a + lip / 2, top / 2, 0)]
+    // the banks: a quad from the lip's inner edge down to the floor's, its
+    // face up (wound so)
+    const pos = []
+    const quad = (p0, p1, p2, p3) => {
+      const u = new THREE.Vector3(...p1).sub(new THREE.Vector3(...p0)), v = new THREE.Vector3(...p2).sub(new THREE.Vector3(...p0))
+      const up = u.cross(v).y > 0
+      for (const q of up ? [p0, p1, p2, p0, p2, p3] : [p0, p2, p1, p0, p3, p2]) pos.push(...q)
+    }
+    const ea = a - lip, eb = b - lip
+    quad([-ea, top, eb], [ea, top, eb], [inA, low, inB], [-inA, low, inB])
+    quad([-ea, top, -eb], [ea, top, -eb], [inA, low, -inB], [-inA, low, -inB])
+    quad([ea, top, -eb], [ea, top, eb], [inA, low, inB], [inA, low, -inB])
+    quad([-ea, top, -eb], [-ea, top, eb], [-inA, low, inB], [-inA, low, -inB])
+    const banks = new THREE.BufferGeometry()
+    banks.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+    banks.computeVertexNormals()
+    const floor = new THREE.PlaneGeometry(2 * inA, 2 * inB).rotateX(-Math.PI / 2).translate(0, low, 0)
+    g.add(mesh(mergeGeometries(lips), mat(shade(color, 1.45)), { shadow: false }))
+    g.add(mesh(banks, mat(shade(color, 1.05)), { shadow: false }))
+    g.add(mesh(floor, mat(shade(color, 0.55), { roughness: 0.35, flatShading: false }), { shadow: false }))
+    return { obj: g }
+  },
   // (F7b) A parapet: a thin crenellated wall standing on its deck's top
   // (def.base, the deck's y), w long along its own x, d thick, h tall, its
   // outer face its own −z (look.face '-z', on the deck's edge). In the
@@ -895,6 +1025,12 @@ const FORT_PIECES = {
     return { obj: g }
   },
 }
+// (Breakthrough, S4b) How broken a gate is drawn, from its hit points: 0
+// whole (above two thirds of them), 1 (above a third), 2 (the rest). The
+// March Wall's gate (12, and 4 a ram) shows 1 after the first ram and 2
+// after the second; a blast's chip shows once it has crossed a third.
+export const gateStage = (hp, max) => (hp > (max * 2) / 3 ? 0 : hp > max / 3 ? 1 : 2)
+
 // (F7c) A fallen timber platform's planks (core/terrain/terrain.js's planks:
 // a 'rubble' chunk, look.style 'timber', over the deck's footprint, w × d,
 // in its colour), built from its def alone as every piece is, so a snap
@@ -1150,6 +1286,114 @@ function standing(c, m) {
   return { obj: m }
 }
 
+// ── The mat's edge (Breakthrough, S4b) ─────────────────────────────────────
+// The March Wall's curtain walk runs on past the table's edge (its plan's
+// RUN_ON), and so does a parapet on it: the rules' pieces as they are, the
+// view's drawing cut at the mat, so the wall ends cleanly there instead of
+// over the table's frame (and, dressed, the country's own wall runs on from
+// it: view/dressing/place.js marchOf). Each of the chunk's meshes cut by the
+// four planes |x| = W/2, |z| = H/2, triangle by triangle (Sutherland-
+// Hodgman, every attribute carried along each cut edge), and each cut faced
+// over in its own material: the convex hull of the cut's points on that
+// plane, its face outward. Only on a board with a plan (view/index.js's
+// clipTo); every other board draws its pieces as ever.
+function clipMesh(m, W, H) {
+  // (its place on the table through every parent: the piece's frame)
+  m.updateWorldMatrix(true, false)
+  const toWorld = m.matrixWorld.clone(), toLocal = toWorld.clone().invert()
+  let g = (m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone()).applyMatrix4(toWorld)
+  const names = Object.keys(g.attributes)
+  // the triangles as vertex records: { p: [x, y, z], a: { name: [...] } }
+  const pos = g.attributes.position
+  let tris = []
+  for (let i = 0; i < pos.count; i += 3) {
+    const tri = []
+    for (let k = 0; k < 3; k++) tri.push(Object.fromEntries(names.map((n) => { const at = g.attributes[n]; return [n, Array.from({ length: at.itemSize }, (_, c) => at.array[(i + k) * at.itemSize + c])] })))
+    tris.push(tri)
+  }
+  const planes = [[0, 1, W / 2], [0, -1, W / 2], [2, 1, H / 2], [2, -1, H / 2]]
+  const caps = []
+  for (const [ax, sg, lim] of planes) {
+    const side = (v) => lim - sg * v.position[ax]
+    const lerpV = (a, b, t) => Object.fromEntries(names.map((n) => [n, a[n].map((x, c) => x + (b[n][c] - x) * t)]))
+    const next = [], cut = []
+    for (const tri of tris) {
+      const d = tri.map(side)
+      if (d.every((x) => x >= -1e-6)) {
+        next.push(tri)
+        continue
+      }
+      if (d.every((x) => x <= 1e-6)) continue
+      const poly = []
+      for (let i = 0; i < 3; i++) {
+        const a = tri[i], b = tri[(i + 1) % 3], da = d[i], db = d[(i + 1) % 3]
+        if (da >= 0) poly.push(a)
+        if ((da >= 0) !== (db >= 0)) {
+          const v = lerpV(a, b, da / (da - db))
+          v.position[ax] = sg * lim
+          poly.push(v)
+          cut.push(v.position)
+        }
+      }
+      for (let i = 1; i + 1 < poly.length; i++) next.push([poly[0], poly[i], poly[i + 1]])
+    }
+    tris = next
+    if (cut.length >= 3) caps.push({ ax, sg, pts: cut })
+  }
+  // each cut faced: the hull of its points on its plane (u, v the plane's
+  // other two axes), wound to face out (+sg along ax)
+  for (const { ax, sg, pts } of caps) {
+    const [u, v] = ax === 0 ? [2, 1] : [0, 1]
+    const ps = pts.map((p) => [p[u], p[v], p]).sort((a, b) => a[0] - b[0] || a[1] - b[1])
+    const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    const half = (list) => {
+      const h = []
+      for (const p of list) {
+        while (h.length >= 2 && cross(h[h.length - 2], h[h.length - 1], p) <= 1e-9) h.pop()
+        h.push(p)
+      }
+      h.pop()
+      return h
+    }
+    const hull = [...half(ps), ...half([...ps].reverse())]
+    if (hull.length < 3) continue
+    const proto = tris[0]?.[0] ?? null
+    const vert = (p) => {
+      const out = Object.fromEntries(names.map((n) => [n, proto ? [...proto[n]] : [0, 0, 0]]))
+      out.position = [...p[2]]
+      if (out.normal) out.normal = [ax === 0 ? sg : 0, 0, ax === 2 ? sg : 0]
+      return out
+    }
+    for (let i = 1; i + 1 < hull.length; i++) {
+      const tri = [vert(hull[0]), vert(hull[i]), vert(hull[i + 1])]
+      // (its face's normal along +sg on ax, or turned round)
+      const [a, b, c] = tri.map((t) => new THREE.Vector3(...t.position))
+      const n = b.sub(a).cross(c.sub(a))
+      if ((ax === 0 ? n.x : n.z) * sg < 0) tri.reverse()
+      tris.push(tri)
+    }
+  }
+  const out = new THREE.BufferGeometry()
+  for (const n of names) {
+    const size = g.attributes[n].itemSize, arr = new Float32Array(tris.length * 3 * size)
+    let o = 0
+    for (const tri of tris) for (const vtx of tri) for (const x of vtx[n]) arr[o++] = x
+    out.setAttribute(n, new THREE.BufferAttribute(arr, size))
+  }
+  g.dispose()
+  out.applyMatrix4(toLocal)
+  m.geometry = out
+}
+// whether a def's footprint reaches past the mat W × H
+function pastMat(c, W, H) {
+  const s = c.shape, co = Math.cos(s.yaw ?? 0), sn = Math.sin(s.yaw ?? 0)
+  for (const [i, j] of [[-1, -1], [-1, 1], [1, -1], [1, 1]]) {
+    const x = s.x + co * i * s.hx + sn * j * s.hz, z = s.z - sn * i * s.hx + co * j * s.hz
+    if (Math.abs(x) > W / 2 + 1e-6 || Math.abs(z) > H / 2 + 1e-6) return true
+  }
+  return false
+}
+
 export class TerrainView {
   // ((V3d) `scorch`, when given, hears the burned turf the table's chunks
   // leave round them, [{ x, z, r }], as it changes (view/index.js hands it
@@ -1161,6 +1405,10 @@ export class TerrainView {
     this.scene = scene
     this.effects = fx
     this.onScorch = scorch
+    // ((Breakthrough, S4b) told as a gate is struck, ('ram', { hp, of, ram
+    // }), and as it breaks, ('down'): app/flow.js siegeLine's; none on a
+    // table built off the page)
+    this.onSiege = null
     this.fast = fast
     // (V3d) the burned turf, by chunk id: { x, z, r } (scorched), and its
     // signature as last handed on
@@ -1183,6 +1431,34 @@ export class TerrainView {
     this.tileGroup = null
   }
 
+  // (Breakthrough, S4b) The mat the pieces are cut to ({ W, H }), or null:
+  // view/index.js's rebuild, a board with a plan's (the March Wall's), set
+  // before its pieces are built
+  clipTo(mat) {
+    this.mat = mat ? { W: mat.W, H: mat.H } : null
+  }
+  // whether an item reaching past the mat is drawn otherwise than the mat
+  // now says (cut and no mat to cut to, or a mat and not cut)
+  uncut(item) {
+    return !!item.obj && !!item.cut !== (!!this.mat && pastMat(item.c, this.mat.W, this.mat.H))
+  }
+  // an item's meshes cut at the mat's edge, if its footprint reaches past it
+  clipped(item) {
+    if (!this.mat || !item.obj || !pastMat(item.c, this.mat.W, this.mat.H)) return
+    item.cut = true
+    const was = item.obj.parent
+    if (was) was.remove(item.obj)
+    item.obj.traverse((o) => {
+      if (o.isMesh && o.geometry?.attributes.position) {
+        const old = o.geometry
+        clipMesh(o, this.mat.W, this.mat.H)
+        // (the shared unit box and log stay: other chunks draw with them)
+        if (old !== BOX && old !== LOG) old.dispose()
+      }
+    })
+    if (was) was.add(item.obj)
+  }
+
   // the object a chunk is drawn with
   object(id) {
     return this.items.get(id)?.obj
@@ -1193,7 +1469,7 @@ export class TerrainView {
     switch (e.t) {
       case 'terrain.clear': return this.clear()
       case 'terrain.add': return this.add(e.def)
-      case 'terrain.hurt': return this.hurt(this.items.get(e.id).c, e.from, e.at)
+      case 'terrain.hurt': return this.hurt(this.items.get(e.id).c, e.from, e.at, e.hp, e.of, e.ram)
       case 'terrain.destroy': return this.destroy(this.items.get(e.id).c, e.from, e.at)
       // ((F16) but the drops the fog keeps unseen)
       case 'terrain.collapse': return this.collapse(e.unseen ? e.drops.filter((d) => !e.unseen.includes(d.id)) : e.drops, e.by, M)
@@ -1239,6 +1515,7 @@ export class TerrainView {
     }
     if (c.look.piece === 'fallen') return this.fell(c)
     const item = { c, ...PIECES[c.look.piece](c) }
+    this.clipped(item)
     this.items.set(c.id, item)
     this.group.add(item.obj)
     this.tile(item)
@@ -1343,7 +1620,8 @@ export class TerrainView {
     for (const c of chunks) this.burnMark(c)
     for (const [id, item] of [...this.items]) {
       const c = byId.get(id)
-      if (c && sameDef(item.c, c, false) && (c.alive ? this.shows(item) : !this.shows(item)) && !item.drop) continue
+      // ((Breakthrough, S4b) and, past the mat, cut as the mat now says)
+      if (c && sameDef(item.c, c, false) && (c.alive ? this.shows(item) : !this.shows(item)) && !item.drop && !this.uncut(item)) continue
       this.free(item)
       this.items.delete(id)
     }
@@ -1385,6 +1663,7 @@ export class TerrainView {
       }
       const def = defOf(c)
       const item = { c: def, ...PIECES[c.look.piece](def) }
+      this.clipped(item)
       this.items.set(c.id, item)
       this.group.add(item.obj)
       this.tile(item)
@@ -1393,6 +1672,41 @@ export class TerrainView {
       if (c.kind === 'rubble') for (const b of chunks) if (b.kind === 'block' && !b.alive && b.col?.rubble === c) this.rubble(def, null)
     }
     this.flush()
+    // ((Breakthrough) each gate as broken as it stands)
+    this.wear(chunks)
+  }
+
+  // (Breakthrough, S4b) Each gate drawn as broken as `chunks` (the match's,
+  // as the table shows it: a snap's, or the table caught up) say it is:
+  // gateStage of its hit points. A hurt (terrain.hurt) names the chunk but
+  // carries no hit points, so the table shudders the gate as it is struck
+  // and draws its new state here, once it has caught up (app/flow.js idled,
+  // and every sync); the gate's fall is its destroy's burst as ever.
+  wear(chunks) {
+    for (const c of chunks) if (c.kind === 'gate' && c.alive) this.worn(this.items.get(c.id), c.hp, c.maxHp, false)
+    this.flush()
+  }
+  // (?debug) how gate `id` is drawn: { shown, stage }, or null
+  gateDrawn(id) {
+    const it = this.items.get(id)
+    return it ? { shown: this.shows(it), stage: it.stage ?? 0 } : null
+  }
+  // a gate's item drawn at the stage its hit points `hp` of `of` say
+  worn(item, hp, of, flush = true) {
+    if (!item?.obj || item.shared || !(of > 0)) return
+    const stage = gateStage(hp, of)
+    if ((item.stage ?? 0) !== stage) {
+      this.solid(item)
+      this.untile(item)
+      const was = item.obj, at = was.parent
+      if (at) at.remove(was)
+      freeShapes(was)
+      item.obj = FORT_PIECES.gate(item.c, stage).obj
+      item.stage = stage
+      if (at) at.add(item.obj)
+      this.tile(item)
+    }
+    if (flush) this.flush()
   }
 
   // (F16) Chunks the fog kept as last seen, seen again as they now stand:
@@ -1436,6 +1750,7 @@ export class TerrainView {
         continue
       }
       const made = { c: def, ...PIECES[def.look.piece](def) }
+      this.clipped(made)
       this.items.set(def.id, made)
       this.group.add(made.obj)
       this.tile(made)
@@ -1869,7 +2184,14 @@ export class TerrainView {
   // under it, falls on to its rest. It used to hold the block at the height
   // it was hit at, and leave it there when it ended, over a fall that had
   // ended first (a short drop, or ?fast): a block floating a level up.
-  hurt(c, from, at) {
+  // ((Breakthrough, S4b) a gate struck is drawn as broken as the hit points
+  // `hp` it is left with, of its whole `of`, say, at once, then shudders:
+  // app/flow.js wornEntry hands them on; a hurt without them, as before)
+  hurt(c, from, at, hp, of, ram) {
+    if (c.kind === 'gate' && hp !== undefined) {
+      this.worn(this.items.get(c.id), hp, of)
+      this.onSiege?.('ram', { hp, of, ram })
+    }
     const v = this.items.get(c.id), m = v.obj
     v.touched = true
     // ((F7b) solid first: its scuffed colour is its own material's; the
@@ -1946,6 +2268,15 @@ export class TerrainView {
       case 'log':
         this.group.remove(v.obj)
         fx.debris(s.x, s.y, s.z, WOOD, 14, { from, power: 6, size: 0.12 })
+        break
+      // (Breakthrough) the gate bursts in its own timbers (its pile of them
+      // the terrain.add that follows)
+      case 'gate':
+        this.group.remove(v.obj)
+        // ((S4b) the watcher's line, the gate gone: app/flow.js siegeLine)
+        this.onSiege?.('down')
+        fx.debris(s.x, s.y, s.z, [c.look.chip, ...WOOD], 18, { from, power: 6, size: 0.14 })
+        fx.smoke({ x: s.x, y: s.y, z: s.z, size: 0.5, color: '#8a7458', life: 1.4 })
         break
       // ((F9a) a wreck blown apart: charred splinters, a last cloud)
       case 'wreck':
@@ -2275,7 +2606,7 @@ function flipWinding(geo) {
 // once per material and kept (a scuffed chunk's own material's copy is
 // freed with it: free()). One program per kind of material (its cache key
 // names the dither), linked the first time something is seen through.
-const FLAT = new Set(['floor', 'rubble'])
+const FLAT = new Set(['floor', 'rubble', 'ditch'])
 const TALL = 1.0
 const FADE = 0.35
 const fades = new WeakMap()

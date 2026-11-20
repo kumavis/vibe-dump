@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { RACES } from '../data/schema.js'
 import { MISSIONS, CLASSIC } from '../data/mission.js'
-import { EDGES, NAV_CELL, refreshNav } from '../core/match.js'
+import { EDGES, NAV_CELL, refreshNav, setOf } from '../core/match.js'
 import { preview, q, stateHash, army } from '../core/index.js'
 import { gridSize } from '../core/nav.js'
 import { project } from '../present/mirror.js'
@@ -33,7 +33,8 @@ import { TitleScreen } from '../ui/screens/title.js'
 import { ResultScreen } from '../ui/screens/result.js'
 import { wireHelp } from '../ui/screens/help.js'
 import { ReplayBar } from '../ui/replaybar.js'
-import { SetupScreen, sizeName } from '../ui/screens/setup.js'
+import { SetupScreen, sizeName, terrainName } from '../ui/screens/setup.js'
+import { rolesHelp, ROLE_TITLE } from '../present/roles.js'
 import { MusterScreen, PassScreen, presetsFor, presetName, presetCounts } from '../ui/screens/muster.js'
 import { cyrb53 } from '../core/util.js'
 import { Lists } from './lists.js'
@@ -100,8 +101,10 @@ const { W, H } = MISSIONS.classic.board
 const $ = (s) => document.querySelector(s)
 // (F8b) the battle sizes the setup panel and the lobby offer: each mission,
 // its list's size name ((F19a) or its own: the Powder keg's), its board,
-// points and rounds
-export const SIZES = Object.freeze(Object.entries(MISSIONS).map(([mission, m]) => Object.freeze({ mission, name: sizeName(mission, m), W: m.board.W, H: m.board.H, points: m.list?.points ?? 0, rounds: m.rounds })))
+// points and rounds ((Breakthrough) and, for a mission with roles, the
+// attacker's target: the size line's words read it, never a number of
+// their own)
+export const SIZES = Object.freeze(Object.entries(MISSIONS).map(([mission, m]) => Object.freeze({ mission, name: sizeName(mission, m), W: m.board.W, H: m.board.H, points: (m.roles?.attack.list ?? m.list)?.points ?? 0, defend: m.roles ? (m.roles.defend.list ?? m.list)?.points ?? 0 : null, rounds: m.rounds, target: m.roles?.attack.target ?? null })))
 
 // The races at the table: the classic Bushtails-versus-Coil matchup
 // (data/mission.js), or any pair a ?races=<seat 0>,<seat 1> URL names (e.g.
@@ -151,10 +154,23 @@ function armiesPick(params, title, races, mission) {
     return null
   }
   const trial = { mission, seats: races.map((race, s) => ({ race, army: pick[s] })) }
+  // ((Breakthrough, S5a) on a mission with roles a seat's list rules are
+  // its role's, and who attacks is pressed on the panel after the URL is
+  // read: a value one of the roles takes is kept, and the panel's army
+  // line judges it again under the attacker pressed)
+  const attackers = MISSIONS[mission].roles ? [0, 1] : [undefined]
   const armies = pick.map((a, s) => {
     try {
-      army.armyOf(trial, s)
-      return a
+      let why = null
+      for (const attacker of attackers) {
+        try {
+          army.armyOf(attacker === undefined ? trial : { ...trial, attacker }, s)
+          return a
+        } catch (err) {
+          why ??= err
+        }
+      }
+      throw why
     } catch (err) {
       const msg = `?armies= for seat ${s}: ${err.message}`
       console.warn(`${msg}: it plays the ${preset} preset`)
@@ -177,6 +193,21 @@ function terrainPick(params, title, mission) {
   const msg = `?terrain= takes one of ${sets.join(', ')} (the ${mission} mission's terrain), not "${params.get('terrain')}"`
   console.warn(`${msg}: playing on ${sets[0]}`)
   title.note(`${msg}, so a battle here is fought on ${sets[0]}.`)
+  return null
+}
+
+// ((Breakthrough, S5d) The seat that attacks on a mission with roles, as the
+// page opens: ?attacker=0 or 1, else none (the battle-setup panel presses
+// the human's seat against the AI, seat 0 otherwise). It is the door sim/'s
+// runs start a role battle with either seat attacking by, as ?mission= is
+// for the mission: oracle/human-bot.mjs pageStart names it for every setup
+// with an attacker, so a log's battle is the same from the title screen's
+// button in Chromium and from __ts.start in Node. Any other value is none.
+function attackerPick(params) {
+  if (!params.has('attacker')) return null
+  const v = params.get('attacker').trim()
+  if (v === '0' || v === '1') return Number(v)
+  console.warn(`?attacker= takes 0 or 1, not "${params.get('attacker')}": the panel's own`)
   return null
 }
 
@@ -307,6 +338,7 @@ export function boot(location) {
   const mission = missionPick(params, title)
   flow = new Flow({ view, ui, params, seed, races, mission, armies: armiesPick(params, title, races, mission), terrain: terrainPick(params, title, mission) })
   flow.fogPick = fogPick(params)
+  const attackerURL = attackerPick(params)
   // each seat's look on the page, and the zones in its colour (ui/theme.js)
   flow.seatPlayers(seatsOf(races))
   // ((F6) a mirror match's east army on broader rims: ui/theme.js's mirror)
@@ -429,7 +461,7 @@ export function boot(location) {
   })
   ui.minimap = new Minimap({
     units: view.units, terrain: view.terrain, mirror: () => player.mirror, camera: view.camera, colorOf, fast: FAST,
-    board: () => ({ W: view.table.W, H: view.table.H, deploy: view.table.deploy, edges: EDGES, objectives: view.objectives.items.map((o) => ({ x: o.g.position.x, z: o.g.position.z })) }),
+    board: () => ({ W: view.table.W, H: view.table.H, deploy: view.table.deploy, edges: EDGES, zones: view.table.shapes ?? null, objectives: view.objectives.items.map((o) => ({ x: o.g.position.x, z: o.g.position.z })) }),
     selected: () => human.standing?.picked().map((u) => u.id) ?? [],
     lines: () => human.standing?.lines() ?? [],
     fog: () => flow.fogShown,
@@ -477,6 +509,15 @@ export function boot(location) {
   const perf = new PerfOverlay({ stage: view.stage, el: $('#perfOverlay'), style: models.value, quality: qualities, params, fast: FAST })
   ui.hud.wire({ rig: view.rig, player, standing: human.standing, perf })
   wireHelp()
+  // ((Breakthrough) the rules' paragraph on Breakthrough, written from the
+  // mission's own numbers: present/roles.js)
+  {
+    // ((the March Wall) and its battlefield: the set's name, its record
+    // and the race data, handed over as the mission is)
+    const p = $('#helpBreakthrough'), m = MISSIONS.breakthrough
+    if (p && m?.roles) p.innerHTML = rolesHelp(m, { name: terrainName(m.sets[0]), set: setOf(m.sets[0]), races: RACES })
+    else p?.remove()
+  }
   // (N2) online play: app/online.js, the net layer and Automerge loaded the
   // first time they are wanted (Play online, a #m= link), never for a game
   // played here
@@ -546,14 +587,21 @@ export function boot(location) {
   const pass = new PassScreen()
   const NAME = /^[a-z][a-z0-9-]*$/
   const digits = (race, text) => RACES[race].roster.map((k, i) => (i < text.length ? text.charCodeAt(i) - 48 : 0))
-  const countsOf = (race, mission, a) => a.counts ?? presetCounts(race, a.preset ?? MISSIONS[mission].army)
-  const whyOf = (race, mission, a) => (a.preset && !Object.hasOwn(RACES[race].armies, a.preset) ? `the ${RACES[race].name} have no army "${a.preset}"` : army.checkList(RACES[race], MISSIONS[mission].list, countsOf(race, mission, a)))
-  const valueOf = (mission, a) => a.url ?? (a.counts ? army.listText(a.counts) : a.preset && a.preset !== MISSIONS[mission].army ? a.preset : null)
+  // ((Breakthrough) the list rules seat s is held to in a battle of
+  // `mission`: its role's, the attacker the picking's (core/army.js
+  // rulesFor; the mission's own on a mission without roles); (S5a) and the
+  // preset it takes naming none, its role's own where it has one
+  // (presetFor: the defender's garrison)
+  const rulesOf = (mission, s) => army.rulesFor(MISSIONS[mission].roles ? { mission, attacker: picking?.attacker ?? 0 } : { mission }, s)
+  const ownOf = (mission, s) => army.presetFor(MISSIONS[mission].roles ? { mission, attacker: picking?.attacker ?? 0 } : { mission }, s)
+  const countsOf = (race, mission, a, s) => a.counts ?? presetCounts(race, a.preset ?? ownOf(mission, s))
+  const whyOf = (race, mission, a, s) => (a.preset && !Object.hasOwn(RACES[race].armies, a.preset) ? `the ${RACES[race].name} have no army "${a.preset}"` : army.checkList(RACES[race], rulesOf(mission, s), countsOf(race, mission, a, s)))
+  const valueOf = (mission, a, s) => a.url ?? (a.counts ? army.listText(a.counts) : a.preset && a.preset !== ownOf(mission, s) ? a.preset : null)
   const same = (x, y) => x.every((n, i) => n === (y[i] ?? 0))
   // (§4.2.8.6) an AI seat's Random: autoList on cyrb53 of the board, the
   // size and the seat, so the panel's preview holds still while the player
   // builds, and another race or size draws another list
-  const randomOf = (s, race, mission) => army.autoList(RACES[race], MISSIONS[mission].list, cyrb53(`${flow.S.seed}:${mission}:${s}`) % 4294967296)
+  const randomOf = (s, race, mission) => army.autoList(RACES[race], rulesOf(mission, s), cyrb53(`${flow.S.seed}:${mission}:${s}`) % 4294967296)
   // The line a seat starts with: ?armies='s value for it where the flow
   // judged one for this race and size; else, for a seat played here, the
   // last list its race took into this size (ts.lists.last, its lost units
@@ -566,7 +614,7 @@ export function boot(location) {
     const u = flow.armyFor(s, race, mission)
     if (u != null) return NAME.test(u) ? { preset: u, url: u, dflt: true } : { counts: digits(race, u), url: u, dflt: true }
     const last = played(mode, s) && mode !== 'hotseat' ? lists.last(race, mission) : null
-    if (last && !army.checkList(RACES[race], MISSIONS[mission].list, last.counts) && !same(last.counts, presetCounts(race, MISSIONS[mission].army))) return { counts: last.counts, dflt: true }
+    if (last && !army.checkList(RACES[race], rulesOf(mission, s), last.counts) && !same(last.counts, presetCounts(race, ownOf(mission, s)))) return { counts: last.counts, dflt: true }
     return { preset: null, dflt: true }
   }
   // what the panel says whose army it is
@@ -579,19 +627,19 @@ export function boot(location) {
   // screen)
   const unfit = (s, mission) => `doesn't fit a ${sizeName(mission, MISSIONS[mission])} battle: hand the screen to player ${s + 1} to change it`
   const armyLine = (s) => {
-    const { mode, races, mission } = picking, race = races[s], a = picking.armies[s], r = RACES[race], rules = MISSIONS[mission].list
-    const presets = presetsFor(race, mission)
+    const { mode, races, mission } = picking, race = races[s], a = picking.armies[s], r = RACES[race], rules = rulesOf(mission, s)
+    const presets = presetsFor(race, mission, rules, ownOf(mission, s))
     const options = presets.map((p) => ({ value: p, label: presetName(p) }))
     if (a.preset && !presets.includes(a.preset) && !a.counts) options.push({ value: a.preset, label: presetName(a.preset) })
     if (a.counts) options.push({ value: 'list', label: a.random ? 'Random list' : 'List' })
-    const counts = countsOf(race, mission, a), refused = whyOf(race, mission, a)
+    const counts = countsOf(race, mission, a, s), refused = whyOf(race, mission, a, s)
     const cost = army.listCost(r, counts, rules), n = counts.reduce((x, y) => x + y, 0)
     const sealed = mode === 'hotseat' && a.built
     const why = sealed && refused ? `it ${unfit(s, mission)}` : refused
     const total = `${sealed ? 'Ready · ' : ''}${cost.toLocaleString('en')} pts · ${n} unit${n === 1 ? '' : 's'}`
     // (against the AI, its units a tap away: no secrecy against the AI)
     const units = !played(mode, s) && FOG_MODES.includes(mode) ? r.roster.flatMap((k, i) => (counts[i] ? [`${r.units[k].name}${counts[i] > 1 ? ` ×${counts[i]}` : ''}`] : [])).join(', ') : null
-    return { human: played(mode, s), options, value: a.counts ? 'list' : a.preset ?? MISSIONS[mission].army, random: !!a.random, total, why, units, sealed }
+    return { human: played(mode, s), options, value: a.counts ? 'list' : a.preset ?? ownOf(mission, s), random: !!a.random, total, why, units, sealed }
   }
   // ((F7a) and the terrain line: the mission's sets, the table's picked;
   // (F16) the fog line against the AI; (F11b) each seat's army line, and
@@ -602,12 +650,27 @@ export function boot(location) {
     const armies = [0, 1].map(armyLine)
     const bad = armies.findIndex((x) => x.why)
     const board = { seed: flow.S.seed, name: boardNameOf({ board: flow.S.seed, mission, terrain: picking.terrain }) }
-    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color, rules: MISSIONS[mission].list })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog }, armies, startWhy: bad < 0 ? null : armies[bad].sealed ? `${ownerOf(mode, bad)} ${unfit(bad, mission)}` : `${ownerOf(mode, bad)}: ${armies[bad].why}`, board })
+    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color, rules: rulesOf(mission, s) })), mirror: isMirror(seats), sizes: SIZES, size: mission, roles: rolesLine(mode, mission, sides), terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog }, armies, startWhy: bad < 0 ? null : armies[bad].sealed ? `${ownerOf(mode, bad)} ${unfit(bad, mission)}` : `${ownerOf(mode, bad)}: ${armies[bad].why}`, board })
   }
+  // (Breakthrough, DESIGN §4.2.12's "The page") The Who attacks line, for
+  // a mission with roles only (null hides it): a button per seat, against
+  // the AI [You] [The AI], in hotseat [Player 1] [Player 2], watched the
+  // seats' races; the picking's attacker pressed, and who does what.
+  const rolesLine = (mode, mission, sides) => {
+    if (!MISSIONS[mission].roles) return null
+    const h = MODES[mode].indexOf('human'), a = picking.attacker
+    const order = FOG_MODES.includes(mode) ? [h, 1 - h] : [0, 1]
+    const label = (s) => (mode === 'hotseat' ? `Player ${s + 1}` : mode === 'watch' ? sides[s].name : played(mode, s) ? 'You' : 'The AI')
+    return { options: order.map((s) => ({ seat: s, label: label(s) })), pick: a, note: `${sides[a].name} attack and move first; ${sides[1 - a].name} hold the line.` }
+  }
+  // the seat that attacks as a mode's panel opens: against the AI the
+  // player's own (the active role, the readable one for a first game),
+  // else seat 0 (Player 1; the first race watched)
+  const firstAttacker = (mode) => (FOG_MODES.includes(mode) ? MODES[mode].indexOf('human') : 0)
   // (F8b) the panel's battle size defaults to the flow's mission (?mission=,
   // else classic; then the last chosen)
   const openSetup = (mode) => {
-    picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf(), fog: flow.fogPick }
+    picking = { mode, races: [...flow.races], mission: flow.mission, terrain: flow.terrainOf(), fog: flow.fogPick, attacker: attackerURL ?? firstAttacker(mode) }
     picking.armies = [0, 1].map((s) => armyDefault(s, picking.races[s], picking.mission, mode))
     title.away()
     showSetup()
@@ -623,14 +686,17 @@ export function boot(location) {
   const openMuster = (s, handed = false) => {
     const { mode, races, mission } = picking, race = races[s], a = picking.armies[s]
     if (mode === 'hotseat' && a.built && !handed) return pass.show({ to: s + 1, line: `Player ${s + 1}'s army is sealed: hand the screen to player ${s + 1} to change it`, onGo: () => openMuster(s, true), onBack: showSetup })
+    // ((Breakthrough) its seat's role and that role's list rules, on a
+    // mission with roles)
+    const role = MISSIONS[mission].roles ? (s === picking.attacker ? 'attack' : 'defend') : null
     muster.open({
-      race, mission, counts: countsOf(race, mission, a),
+      race, mission, counts: countsOf(race, mission, a, s), rules: rulesOf(mission, s), own: ownOf(mission, s), role: role && ROLE_TITLE[role],
       onReady: (counts) => {
         picking.armies[s] = { counts, built: true }
         lists.keep(race, mission, counts)
         if (mode === 'hotseat' && s === 0 && !picking.armies[1].built) {
           const n = counts.reduce((x, y) => x + y, 0)
-          return pass.show({ to: 2, line: `Player 1: Ready · ${army.listCost(RACES[race], counts, MISSIONS[mission].list).toLocaleString('en')} pts · ${n} unit${n === 1 ? '' : 's'}`, onGo: () => openMuster(1), onBack: showSetup })
+          return pass.show({ to: 2, line: `Player 1: Ready · ${army.listCost(RACES[race], counts, rulesOf(mission, s)).toLocaleString('en')} pts · ${n} unit${n === 1 ? '' : 's'}`, onGo: () => openMuster(1), onBack: showSetup })
         }
         showSetup()
       },
@@ -648,6 +714,12 @@ export function boot(location) {
     },
     terrain: (set) => {
       picking.terrain = set
+      showSetup()
+    },
+    // ((Breakthrough) Who attacks: the seat pressed; each army line judged
+    // again under its seat's role's list rules)
+    attacker: (seat) => {
+      picking.attacker = seat === 1 ? 1 : 0
       showSetup()
     },
     // (F8b) a battle size: its mission; (F7a) the terrain picked stays where
@@ -673,7 +745,7 @@ export function boot(location) {
     // (F11b) the army line's preset (its own: none named), Build… and an
     // AI seat's Random
     army: (s, value) => {
-      if (value !== 'list') picking.armies[s] = { preset: value === MISSIONS[picking.mission].army ? null : value }
+      if (value !== 'list') picking.armies[s] = { preset: value === ownOf(picking.mission, s) ? null : value }
       showSetup()
     },
     build: (s) => openMuster(s),
@@ -685,10 +757,10 @@ export function boot(location) {
     start: () => {
       // (F11b) never with an army the battle would refuse: Start is
       // disabled then, and a stray press changes nothing
-      if (picking.armies.some((a, s) => whyOf(picking.races[s], picking.mission, a))) return
+      if (picking.armies.some((a, s) => whyOf(picking.races[s], picking.mission, a, s))) return
       setup.hide()
       try {
-        flow.start(picking.mode, picking.races, picking.mission, picking.terrain, picking.fog, picking.armies.map((a) => valueOf(picking.mission, a)))
+        flow.start(picking.mode, picking.races, picking.mission, picking.terrain, picking.fog, picking.armies.map((a, s) => valueOf(picking.mission, a, s)), picking.attacker)
       } catch (err) {
         title.show()
         ui.toast.show(err.message, 8000)
@@ -725,6 +797,14 @@ export function boot(location) {
     if (!flow.battle) return
     replay.open(flow.battle)
     replay.fromStart()
+  }, () => {
+    // ((Breakthrough) Swap sides: the battle again, the other seat
+    // attacking)
+    try {
+      flow.swapSides()
+    } catch (err) {
+      ui.toast.show(err.message, 8000)
+    }
   })
 
   // ── Boot ──────────────────────────────────────────────────────────────────
@@ -1219,7 +1299,10 @@ export function boot(location) {
       get roundLimit() {
         return human.mode() === 'roundLimit' ? human.voters() : null
       },
-      start: (mode) => flow.start(mode),
+      // ((S5d) on a mission with roles, the address's ?attacker= seat,
+      // else seat 0: not the panel's own default, the human seat in a fog
+      // mode)
+      start: (mode) => flow.start(mode, undefined, undefined, undefined, undefined, undefined, attackerURL ?? undefined),
       select: (u) => human.select(u),
       // ((F9b) a long hull's to heading f, when given: the pinned ghost's
       // turned heading, sent as the commit sends it)
@@ -1321,6 +1404,14 @@ export function boot(location) {
           return v ? qq.landing(g, u, v) : []
         }),
         mayBoard: (u, v) => asked((g, qq) => qq.mayBoard(g, u, v, g.pending?.k === 'phase')),
+        // ((Breakthrough, S5d) seat `side`'s deployment zone, the rules' own
+        // (core/queries.js zone): its x bounds, its z bounds where its role
+        // names them, and whether it lies behind a wall's face (the plan
+        // itself stays the table's): the human bot's deployment)
+        zone: (side) => asked((g, qq) => {
+          const b = qq.zone(g, side)
+          return { minX: b.minX, maxX: b.maxX, ...(b.minZ !== undefined ? { minZ: b.minZ, maxZ: b.maxZ } : {}), behind: !!b.plan }
+        }),
         rngState: () => (serving ? serving.rng : rngState(atTable().rng)),
       },
       screen(x, y, z) {
@@ -1329,6 +1420,22 @@ export function boot(location) {
       },
       view: {
         snapDiff,
+        // ((Breakthrough, S4b, not promised) the table's Breakthrough
+        // drawing, for sim/hud-check.mjs: each seat's zone as drawn (the
+        // table's polygons, or null for the strips) and the minimap's; the
+        // gate's stage as drawn (its item's, view/terrain.js gateStage) and
+        // whether it stands; the ways' labels (view/ways.js state); the
+        // siege's lines (app/flow.js siegeLine))
+        breakthrough: () => {
+          const plan = atTable().terrain.plan
+          return {
+            zones: view.table.shapes ?? null, minimap: ui.minimap.board()?.zones ?? null,
+            gate: plan ? terrainView.gateDrawn(plan.gate.id) : null,
+            ways: view.ways.state(),
+            // (each siege line said, as it showed, and the gate as drawn then)
+            said: flow.said ?? [],
+          }
+        },
         // ((F9c's review, not promised) every rider figure on a deck, as the
         // view keeps it: its unit, the place its volleys leave from (the
         // figure's x and z, ride()'s), its mesh's place in the world (its

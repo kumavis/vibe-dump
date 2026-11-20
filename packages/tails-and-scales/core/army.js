@@ -4,6 +4,9 @@
 // models, each role's slot, the most of one unit).
 //
 //   setup.seats[i].army   absent (or null): the mission's preset, mission.army
+//                         ((Breakthrough) or, on a mission with roles, its
+//                         role's own preset where the role names one:
+//                         presetFor)
 //                         a preset's name: one of race.armies' keys (defineRace
 //                         derives 'classic' from the race's army, so it is
 //                         always there)
@@ -38,6 +41,14 @@
 //                             names one (`rules.prices`), else the unit's cost
 //   listCost(race, counts, rules)   Σ counts[i] × the roster entry's price
 //                             (rules left out: its cost, the classic battle's)
+//   rulesFor(setup, seat)     (Breakthrough) the list rules seat `seat` of
+//                             `setup` is held to: its role's own `list` on a
+//                             mission with roles where the role has one,
+//                             else the mission's `list`
+//   presetFor(setup, seat)    (Breakthrough, S5a) the preset a seat naming
+//                             no army takes: its role's own `army` on a
+//                             mission with roles where the role names one,
+//                             else the mission's `army`
 //   unitPrice(setup, u)       (F8b) what unit u (a match's: its race and key)
 //                             costs in the battle `setup` is fought (its
 //                             mission's list's prices): the card's, the
@@ -147,7 +158,35 @@ export const listCost = (race, counts, rules) => race.roster.reduce((sum, k, i) 
 // it names none): its mission's price for it (priceOf), the price the
 // view shows on the card, the roster and the group card, so a Field or
 // Grand battle shows its own prices, never the Skirmish's.
-export const unitPrice = (setup, u) => priceOf(RACES[u.race], u.key, MISSIONS[setup?.mission ?? 'classic']?.list)
+// ((Breakthrough) at the prices of its seat's role's list rules, rulesFor)
+export const unitPrice = (setup, u) => priceOf(RACES[u.race], u.key, rulesFor(setup, u.side))
+
+// (Breakthrough, DESIGN §4.2.12) The list rules seat `seat` of `setup` is
+// held to: on a mission with roles (data/mission.js `roles`), its role's
+// `list` where the role has its own (the attacking seat setup.attacker, 0
+// by default; the other defends), else the mission's `list`, as on every
+// mission without roles. (This module imports nothing of the core's, so it
+// reads the roles itself: core/match.js rolesOf's twin, sim/flag-lint.mjs's
+// second reader of a mission's roles.) `missions` exists so sim/data-check.mjs
+// can hand it a role with its own list (none is shipped yet).
+export function rulesFor(setup, seat, missions = MISSIONS) {
+  const mission = byName(missions, setup?.mission ?? 'classic')
+  if (!mission?.roles) return mission?.list
+  const role = seat === (setup.attacker ?? 0) ? 'attack' : 'defend'
+  return mission.roles[role].list ?? mission.list
+}
+
+// (Breakthrough, S5a) The preset seat `seat` of `setup` takes when it names
+// no army: on a mission with roles, its role's own `army` where the role
+// names one (Breakthrough's defender its garrison: fewer points, held to
+// its role's own list), else the mission's `army`, as on every mission
+// without roles. rulesFor's twin, and like it a reader of the roles.
+export function presetFor(setup, seat, missions = MISSIONS) {
+  const mission = byName(missions, setup?.mission ?? 'classic')
+  if (!mission?.roles) return mission?.army
+  const role = seat === (setup.attacker ?? 0) ? 'attack' : 'defend'
+  return mission.roles[role].army ?? mission.army
+}
 
 // A list's one spelling: a digit per count, trailing zeros dropped (so a
 // list of no units is '', which LIST refuses).
@@ -192,7 +231,8 @@ export function armyOf(setup, seat) {
   // (fullSetup has refused a race that is no name)
   const race = byName(RACES, rec?.race)
   if (!race) throw new Error(`seat ${seat}: no race ${shown(rec?.race)}`)
-  const army = rec.army ?? mission.army
+  // ((Breakthrough) its role's preset on a mission with roles: presetFor)
+  const army = rec.army ?? presetFor(setup, seat)
   if (typeof army !== 'string') throw new Error(`seat ${seat}'s army is a preset's name or a list of counts, not ${shown(army)}`)
   let preset = null, text = army
   if (NAME.test(army)) {
@@ -207,7 +247,8 @@ export function armyOf(setup, seat) {
     throw new Error(`seat ${seat}'s list ${shown(army)} counts ${army.length} kinds of unit; the ${race.name} muster ${race.roster.length} (${race.roster.join(' ')})`)
   }
   const counts = countsOf(race, text)
-  const why = checkList(race, mission.list, counts)
+  // ((Breakthrough) its role's list rules on a mission with roles)
+  const why = checkList(race, rulesFor(setup, seat), counts)
   if (why) throw new Error(`seat ${seat}'s army: ${why}`)
   return { preset, counts, keys: keysOf(race, counts) }
 }

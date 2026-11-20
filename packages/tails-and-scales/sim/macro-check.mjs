@@ -73,7 +73,7 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { loadCorpus } from './lib.mjs'
+import { loadCorpus, linkModules } from './lib.mjs'
 import { jobSetup, seatDevices } from './run.mjs'
 
 const PKG = fileURLToPath(new URL('..', import.meta.url))
@@ -1053,6 +1053,8 @@ if (a['self-test']) {
   const copy = (dir) => {
     for (const d of ['core', 'data', 'match', 'present', 'input', 'view']) cpSync(join(PKG, d), join(dir, d), { recursive: true })
     writeFileSync(join(dir, 'package.json'), JSON.stringify({ type: 'module', private: true }))
+    // (view/'s three found from the OS temp dir too: lib.mjs linkModules)
+    linkModules(dir)
   }
   {
     const dir = mkdtempSync(join(tmpdir(), 'macro-unbroken-'))

@@ -56,7 +56,11 @@ export { canShoot, shotInfo, shootTargets, rangeOf, lobbed, weaponOf, allySpell,
 // appraisal, no draw)
 export { bestSpell, spellFor } from './ai/policy.js'
 export { canCharge, chargeTargets, chargePlan, chargeSpots } from './actions/charge.js'
-export { freeSpot, placeOk, placeFacing } from './deploy.js'
+// ((Breakthrough, S5d) and each seat's deployment zone, the rules' own
+// (core/deploy.js zone: its x bounds, its z bounds where its role names
+// them, and the wall's plan where it lies behind the face), which the
+// view's table and minimap draw: view/zones.js, one reader)
+export { freeSpot, placeOk, placeFacing, zone } from './deploy.js'
 export { groundOnly } from './actions/move.js'
 export { hullOf, riders, room, mayBoard, embarkSpot, landing, isTransport } from './actions/transport.js'
 // ((F9c) the firing deck: its slots, those spent this turn, the point its

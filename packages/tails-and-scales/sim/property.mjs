@@ -234,6 +234,18 @@
 //    plan by cell (cellBest), the body disc's reach as its lower bound, its
 //    paths and the rules' stand, sweep and room questions held with it.
 //    `--only lattice` runs it alone.
+// 17. (Breakthrough, DESIGN §4.2.12) P-roles, on code with roles (core/
+//    match.js rolesOf; rolesScenes below says what each scene holds): on
+//    the breakthrough mission with either seat attacking, the zones the
+//    roles' (a place behind the defender's line taken, one between the
+//    zones refused), the attacker's first turn with no die drawn, the
+//    scoring by role and worth, the target's early end, the rounds run out
+//    ('held', even at 0-0), the wipe either way; and 300 AI battles of its
+//    own (random seeds, races and attacking seat, strict), none a draw.
+//    P-mission's role rows (roleRows: the zones, the objectives, their
+//    exact mirror when seat 1 attacks, every default unit in its zone) and
+//    its role refusals; result() a role battle's end by the target; the
+//    list games and P-army's games on the mission, either seat attacking.
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
@@ -751,6 +763,21 @@ function hullState(core, G, where) {
   return n
 }
 
+// ((the March Wall) the signed distance from (x, z) to a plan's outer
+// face, behind it (inside its region, an even-odd test) above 0, measured
+// here from the plan's own points, not by the core's reader)
+function faceGap(plan, x, z) {
+  let d = Infinity, inside = false
+  const f = plan.face, R = plan.region
+  for (let i = 0; i + 1 < f.length; i++) {
+    const a = f[i], b = f[i + 1], dx = b.x - a.x, dz = b.z - a.z, L2 = dx * dx + dz * dz
+    const t = L2 > 0 ? Math.max(0, Math.min(1, ((x - a.x) * dx + (z - a.z) * dz) / L2)) : 0
+    d = Math.min(d, Math.hypot(a.x + dx * t - x, a.z + dz * t - z))
+  }
+  for (let i = 0, j = R.length - 1; i < R.length; j = i++) if (R[i].z > z !== R[j].z > z && x < ((R[j].x - R[i].x) * (z - R[i].z)) / (R[j].z - R[i].z) + R[i].x) inside = !inside
+  return inside ? d : -d
+}
+
 // Why legal() should refuse body `b` (a place, move or chargeEnd naming a
 // heading `f`) for seat `seat`, judged here from the match, or null when
 // DESIGN §4.2.5 allows its heading: `kind` names the refusal ('round',
@@ -770,8 +797,32 @@ function hullWrong(core, G, seat, b) {
   const no = (why) => ({ kind: 'state', why })
   if (b.t === 'place') {
     const edge = G.seats[u.side].edge, { W, deploy } = G.board
-    const lo = Math.min(edge * (W / 2), edge * (W / 2 - deploy)), hi = Math.max(edge * (W / 2), edge * (W / 2 - deploy))
-    if (ds.some((d) => d.x - d.r < lo - 0.01 || d.x + d.r > hi + 0.01)) return no(`puts a disc of ${u.t.short} outside its zone`)
+    let lo = Math.min(edge * (W / 2), edge * (W / 2 - deploy)), hi = Math.max(edge * (W / 2), edge * (W / 2 - deploy)), zlo = -Infinity, zhi = Infinity
+    // ((Breakthrough) on a mission with roles, its role's rectangle, the
+    // point mirror of the mission's when seat 1 attacks)
+    const roles = core.rolesOf?.(G.setup)
+    let wall = null
+    if (roles) {
+      const atk = G.setup.attacker, role = roles[u.side === atk ? 'attack' : 'defend'], z = role.zone
+      if (z.behind) {
+        // ((the March Wall) behind the line: on a board with a plan, the
+        // defender's side's x bounds on the table and every disc wholly
+        // behind the outer face (faceGap, measured here); else x from the
+        // line to the seat's edge; either way within the role's own x
+        // bounds, mirrored with seat 1 attacking)
+        wall = G.terrain.plan
+        const [b0, b1] = atk === 1 ? [-z.x[1], -z.x[0]] : z.x
+        if (wall) {
+          const xs = wall.region.map((p) => p.x)
+          ;[lo, hi] = [Math.max(-W / 2, Math.min(...xs), b0), Math.min(W / 2, Math.max(...xs), b1)]
+        } else [lo, hi] = atk === 1 ? [Math.max(-W / 2, b0), Math.min(0 - role.line, b1)] : [Math.max(role.line, b0), Math.min(W / 2, b1)]
+      } else {
+        const zz = z.z ?? [-Infinity, Infinity]
+        ;[lo, hi, zlo, zhi] = atk === 1 ? [-z.x[1], -z.x[0], -zz[1], -zz[0]] : [z.x[0], z.x[1], zz[0], zz[1]]
+      }
+    }
+    if (ds.some((d) => d.x - d.r < lo - 0.01 || d.x + d.r > hi + 0.01 || d.z - d.r < zlo - 0.01 || d.z + d.r > zhi + 0.01)) return no(`puts a disc of ${u.t.short} outside its zone`)
+    if (wall && ds.some((d) => !(faceGap(wall, d.x, d.z) >= d.r - 0.01))) return no(`puts a disc of ${u.t.short} in front of the wall's face or over it`)
     if (!standsHere(nav, fp, b.c, b.f, 'walk')) return no(`puts ${u.t.short} on cell ${b.c} facing ${b.f}, where a disc doesn't stand`)
     for (const d of ds) for (const o of others) if (edgeTo(o, d.x, d.z, d.r) < 0.4 - 1e-9) return no(`puts a disc of ${u.t.short} within 0.4" of unit ${o.id}`)
     return null
@@ -796,12 +847,17 @@ function hullWrong(core, G, seat, b) {
 
 // The result agrees with how the battle ended (a concession is refused once
 // a side is wiped out, so the two never meet).
-function result(G, where, conceded) {
+// ((Breakthrough) On a mission with roles the score never draws: the
+// attacker at its target wins ('breakthrough'), else the defender ('held').)
+function result(G, where, conceded, core = null) {
   const T = G.turn, r = T.result
   const last = G.journal.trace.at(-1)
   if (!last?.startsWith('over ')) throw new Error(`${where}: the trace doesn't end on its 'over' line`)
+  const roles = core?.rolesOf?.(G.setup) ?? null
+  const atk = G.setup.attacker
   const want = conceded >= 0 ? { win: 1 - conceded, why: 'concede' }
     : T.wiped >= 0 ? { win: 1 - T.wiped, why: 'wipe' }
+    : roles ? (T.vp[atk ?? 0] >= roles.attack.target ? { win: atk, why: 'breakthrough' } : { win: 1 - atk, why: 'held' })
     : { win: T.vp[0] > T.vp[1] ? 0 : T.vp[1] > T.vp[0] ? 1 : -1, why: 'score' }
   if (r?.win !== want.win || r?.why !== want.why) throw new Error(`${where}: the result ${JSON.stringify(r)} should be ${JSON.stringify(want)}`)
   return r.why
@@ -1102,9 +1158,12 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     // every other seed, each Coil list holding two Howdahs where its
     // budget lets it, one at least)
     if (lists.hulls) setup.seats.forEach((x, i) => (x.race = i === 1 || seed % 2 === 0 ? 'serpent' : 'squirrel'))
-    for (const x of setup.seats) {
-      const budget = rules.points - 5 * Math.floor(pickList() * (rules.points / 12.5))
-      const at = { ...rules, points: budget }
+    // ((Breakthrough, S5a) a role mission's seat at its role's list rules,
+    // core/army.js rulesFor: the attacker below is seed % 2, no draw)
+    const seatRules = (i) => (lists.MISSIONS[lists.mission].roles && core.army.rulesFor ? core.army.rulesFor({ mission: lists.mission, attacker: seed % 2 }, i) : rules)
+    for (const [i, x] of setup.seats.entries()) {
+      const own = seatRules(i), budget = own.points - 5 * Math.floor(pickList() * (own.points / 12.5))
+      const at = { ...own, points: budget }
       x.army = (lists.hulls && x.race === 'serpent' && (cartList(core.army, lists.RACES[x.race], at, pickList, 2) || cartList(core.army, lists.RACES[x.race], at, pickList))) ||
         (lists.rides && cartList(core.army, lists.RACES[x.race], at, pickList)) || core.army.listText(core.army.autoList(lists.RACES[x.race], at, Math.floor(pickList() * 2 ** 32)))
     }
@@ -1115,6 +1174,11 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
   // stream above, so the draw here is a plain game's
   const fortified = !!core.q.levelDist && core.missionOf?.(setup).sets.includes('fortified')
   if (fortified && rand() < 0.4) setup.terrain = 'fortified'
+  // ((Breakthrough) a mission that allows no vote plays without it, its
+  // draw above made all the same; and a role mission's attacker is either
+  // seat, by the seed)
+  if (lists && lists.MISSIONS[lists.mission].overtime === false) delete setup.overtime
+  if (lists && lists.MISSIONS[lists.mission].roles) setup.attacker = seed % 2
   const where0 = `game ${seed} (${JSON.stringify(setup)})`
   const counts = { games: 1, probes: 0, commands: {}, ended: null, aggressive }
   // how far from the nearest enemy a body's move ends (Infinity if it isn't one)
@@ -1251,7 +1315,7 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     Object.assign(counts.rides, { bailed: watch.counts.bailed, lost: watch.counts.lost })
   }
   counts.mirrored = tap.counts()
-  counts.ended = result(G, where0, conceded)
+  counts.ended = result(G, where0, conceded, core)
   // (F4) the overtime rounds a vote bought, held to the rounds the setup
   // asked (a battle without the vote never plays one)
   counts.overtime = G.turn.overtime
@@ -1355,8 +1419,8 @@ const BAD_MISSION_SETUPS = {
   'a seat that is no record': [{ seats: [SETUP.seats[0], null] }, /^seat 1 is null, not a record/],
   'a seat that is a list': [{ seats: [['squirrel', 'human'], SETUP.seats[1]] }, /^seat 0 is \["squirrel","human"\], not a record/],
   // ((F8b) the three missions, named in their order)
-  'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there are classic, field, grand, keg, powder\)$/],
-  'a mission named in capitals': [{ mission: 'Grand' }, /^no mission "Grand" \(there are classic, field, grand, keg, powder\)$/],
+  'an unknown mission': [{ mission: 'raid' }, /^no mission "raid" \(there are classic, field, grand, keg, powder, breakthrough\)$/],
+  'a mission named in capitals': [{ mission: 'Grand' }, /^no mission "Grand" \(there are classic, field, grand, keg, powder, breakthrough\)$/],
   'a mission named like an Object.prototype member': [{ mission: 'toString' }, /^no mission "toString"/],
   'a mission that is no name': [{ mission: 5 }, /^no mission 5 /],
   // ((F7a) the classic mission is fought on fortified too, so a set it isn't
@@ -1379,12 +1443,694 @@ const BAD_MISSION_SETUPS = {
   'the powder mission on the open set': [{ mission: 'powder', terrain: 'open' }, /^the powder mission is fought on powder, not "open"$/],
   'the grand mission on the powder set': [{ mission: 'grand', terrain: 'powder' }, /^the grand mission is fought on open or fortified, not "powder"$/],
   'a field no setup takes, before a bad mission': [{ mission: 'raid', zzz: 1 }, /^a setup takes no field "zzz"$/],
+  // ((Breakthrough) the attacking seat: on a mission with roles 0 or 1, on
+  // any other none; and no overtime vote where the mission allows none)
+  'an attacker on the classic mission': [{ attacker: 0 }, /^the classic mission has no attacker$/],
+  'an attacker on the field mission': [{ mission: 'field', attacker: 1 }, /^the field mission has no attacker$/],
+  'an attacker that is seat 2': [{ mission: 'breakthrough', attacker: 2 }, /^the attacker is seat 0 or seat 1, not 2$/],
+  'an attacker below seat 0': [{ mission: 'breakthrough', attacker: -1 }, /^the attacker is seat 0 or seat 1, not -1$/],
+  'an attacker half a seat': [{ mission: 'breakthrough', attacker: 0.5 }, /^the attacker is seat 0 or seat 1, not 0.5$/],
+  'an attacker as text': [{ mission: 'breakthrough', attacker: '1' }, /^the attacker is seat 0 or seat 1, not "1"$/],
+  'the overtime vote on breakthrough': [{ mission: 'breakthrough', overtime: 'vote' }, /^the breakthrough mission ends on its rounds: it takes no overtime vote$/],
+  'breakthrough on the fortified set': [{ mission: 'breakthrough', terrain: 'fortified' }, /^the breakthrough mission is fought on march, not "fortified"$/],
+  // ((the March Wall) breakthrough is fought on its wall alone, and no
+  // mission without roles on it)
+  'breakthrough on the open set': [{ mission: 'breakthrough', terrain: 'open' }, /^the breakthrough mission is fought on march, not "open"$/],
+  'the field mission on the march set': [{ mission: 'field', terrain: 'march' }, /^the field mission is fought on open or fortified, not "march"$/],
   // (F8a's review) a parsed entry's own __proto__ field, refused, not taken
   // for the setup's prototype (its fields would slip past the whitelist)
   'a __proto__ field': [JSON.parse('{"__proto__":{"board":5,"dice":7,"army":"x"}}'), /^a setup takes no field "__proto__"$/],
   "a seat's __proto__ field": [{ seats: [JSON.parse('{"race":"squirrel","ctrl":"human","__proto__":{"army":"x"}}'), SETUP.seats[1]] }, /^seat 0 takes no field "__proto__"$/],
 }
-function missionTask(core, MISSIONS) {
+// (Breakthrough, P-mission's role rows) A mission with roles as shipped,
+// in the attacker-west frame: both zones inside the board, apart by 12
+// tails at least, the attacker's west of the centre; every objective 1 tail
+// inside the board, outside the attacker's zone and beyond the defender's
+// line, scoring for a role or both; a match of it with either seat
+// attacking: the objectives on the table exactly the mission's (seat 0) or
+// their point mirror (seat 1), negated to the bit, each with its scores
+// and worth, and every unit of the default deployment inside its role's
+// zone (the attacker's zone the mission's, the defender's too, or their
+// mirror). ((the March Wall) A defender's zone behind the line: its x
+// bounds inside the board, its near bound 8 tails or more from the
+// attacker zone's front and the line inside them, and every default unit
+// of the defender's standing wholly behind the board's outer face, its
+// signed distance (`face`: core/terrain/breakthrough.js faceDist) its
+// radius or more, every disc of a long hull's, and inside the bounds:
+// every one 8 tails or more from the attacker's zone.)
+function roleRows(core, name, m, face = null) {
+  const { W, H } = m.board
+  const { attack, defend } = m.roles
+  const box = (z) => (z.behind ? null : { x: z.x, z: z.z ?? [-H / 2, H / 2] })
+  const A = box(attack.zone), D = box(defend.zone)
+  for (const [k, b] of [['attack', A], ['defend', D]]) {
+    if (!b) continue
+    if (!(b.x[0] >= -W / 2 && b.x[0] < b.x[1] && b.x[1] <= W / 2 && b.z[0] >= -H / 2 && b.z[0] < b.z[1] && b.z[1] <= H / 2)) throw new Error(`P-mission: ${name}'s ${k} zone ${JSON.stringify(b)} isn't inside its ${W}×${H} board`)
+  }
+  if (!A) throw new Error(`P-mission: ${name}'s attack zone is behind the line`)
+  const gap = (p, q) => Math.max(q[0] - p[1], p[0] - q[1])
+  if (!D) {
+    const bx = defend.zone.x
+    if (!(Array.isArray(bx) && bx[0] >= -W / 2 && bx[0] < bx[1] && bx[1] <= W / 2)) throw new Error(`P-mission: ${name}'s defend zone behind the line has x bounds ${JSON.stringify(bx)}, not inside its ${W}-wide board`)
+    if (!(bx[0] - A.x[1] >= 8)) throw new Error(`P-mission: ${name}'s defend zone behind the line starts under 8 tails from the attack zone's front`)
+    if (!(defend.line >= bx[0] && defend.line <= bx[1])) throw new Error(`P-mission: ${name}'s line at x ${defend.line} is outside its defend zone's bounds ${JSON.stringify(bx)}`)
+  }
+  if (D && !(gap(A.x, D.x) >= 12 || gap(A.z, D.z) >= 12)) throw new Error(`P-mission: ${name}'s zones are under 12 tails apart`)
+  if (!(A.x[1] <= 0)) throw new Error(`P-mission: ${name}'s attack zone reaches past the centre line`)
+  for (const o of m.objectives) {
+    const at = `${name}'s objective at (${o.x}, ${o.z})`
+    if (Math.abs(o.x) > W / 2 - 1 || Math.abs(o.z) > H / 2 - 1) throw new Error(`P-mission: ${at} is under 1 tail inside its ${W}×${H} board`)
+    if (o.x >= A.x[0] && o.x <= A.x[1] && o.z >= A.z[0] && o.z <= A.z[1]) throw new Error(`P-mission: ${at} is in the attacker's zone`)
+    if (defend.line !== undefined && !(o.x > defend.line)) throw new Error(`P-mission: ${at} is in front of the line at x ${defend.line}`)
+    if (o.scores !== undefined && o.scores !== 'attack' && o.scores !== 'defend') throw new Error(`P-mission: ${at} scores for ${JSON.stringify(o.scores)}`)
+  }
+  let n = 0
+  for (const attacker of [0, 1]) {
+    const G = core.createMatch({ ...SETUP, mission: name, attacker })
+    const bad = G.objectives.findIndex((o, i) => {
+      const p = m.objectives[i]
+      return o.i !== i || !Object.is(o.x, attacker ? -p.x : p.x) || !Object.is(o.z, attacker ? -p.z : p.z) || o.scores !== (p.scores ?? null) || o.vp !== (p.vp ?? 1)
+    })
+    if (G.objectives.length !== m.objectives.length || bad >= 0) throw new Error(`P-mission: a match of ${name} with seat ${attacker} attacking puts objective ${bad} at ${JSON.stringify(G.objectives[bad])}, not ${attacker ? 'the point mirror of ' : ''}${JSON.stringify(m.objectives[bad])}`)
+    for (const u of G.units) {
+      const role = u.side === attacker ? A : D
+      if (!role) {
+        // (behind the line: wholly behind the board's face, a long hull's
+        // every disc; a rider is its hull's)
+        if (u.aboard) continue
+        if (!face || !G.terrain.plan) throw new Error(`P-mission: a match of ${name} has a defender behind the line on a board with no plan to judge it by`)
+        const discs = u.t.fp ? u.t.fp.H[u.facing].map((d) => ({ x: u.pos.x + d.ix * u.t.fp.cell, z: u.pos.z + d.iz * u.t.fp.cell, r: d.r })) : [{ x: u.pos.x, z: u.pos.z, r: u.r }]
+        const off = discs.find((d) => !(face(G.terrain.plan, d.x, d.z) >= d.r - 0.01))
+        if (off) throw new Error(`P-mission: a match of ${name} with seat ${attacker} attacking deploys the defender's ${u.t.short} ${u.id} at (${u.pos.x}, ${u.pos.z}), a disc ${face(G.terrain.plan, off.x, off.z).toFixed(3)} from the wall's face (r ${off.r}): not wholly behind it`)
+        const bx = defend.zone.x, b0 = attacker ? -bx[1] : bx[0], b1 = attacker ? -bx[0] : bx[1]
+        const out = discs.find((d) => d.x - d.r < b0 - 0.01 || d.x + d.r > b1 + 0.01)
+        if (out) throw new Error(`P-mission: a match of ${name} with seat ${attacker} attacking deploys the defender's ${u.t.short} ${u.id} at (${u.pos.x}, ${u.pos.z}), a disc outside its zone's x bounds ${b0}..${b1}`)
+        continue
+      }
+      const lo = attacker ? -role.x[1] : role.x[0], hi = attacker ? -role.x[0] : role.x[1]
+      const zlo = attacker ? -role.z[1] : role.z[0], zhi = attacker ? -role.z[0] : role.z[1]
+      if (u.pos.x < lo - 1e-9 || u.pos.x > hi + 1e-9 || u.pos.z < zlo - 1e-9 || u.pos.z > zhi + 1e-9) throw new Error(`P-mission: a match of ${name} with seat ${attacker} attacking deploys seat ${u.side}'s ${u.t.short} ${u.id} at (${u.pos.x}, ${u.pos.z}), outside its ${u.side === attacker ? 'attack' : 'defend'} zone x ${lo}..${hi}`)
+    }
+    n++
+  }
+  return n
+}
+// (Breakthrough, DESIGN §4.2.12) P-roles: a mission with roles plays its
+// own rules, each held by a scene on the breakthrough mission (`mods`: the
+// engine, the deployment, the match), with either seat attacking:
+//   - the zones: zone() the role's rectangle (the mission's, or its point
+//     mirror with seat 1 attacking), or (the March Wall) for a role behind
+//     the line the board's plan, its x bounds the defender's side's on the
+//     table; by the place command's own legality, a defender's unit 3
+//     tails or more behind the wall's outer face taken, one in front of it
+//     (between the zones) refused, and one whose middle is behind the face
+//     but whose base reaches over it refused;
+//   - the first turn: the attacker takes it with no roll-off (no tray, no
+//     die drawn between the deployment and the attacker's first phase),
+//     where a classic battle rolls one;
+//   - the scoring: a defender-held objective scores nothing for it, an
+//     objective worth 2 scores 2, one that scores for both scores for the
+//     defender too, round.scored carrying the target as `need`;
+//   - the end: the target reached at a round's end ends the battle there
+//     ('breakthrough', the attacker winning, rounds the round), the rounds
+//     run out under it ('held', the defender winning, even at 0-0: no
+//     draw), the target reached in the last round a breakthrough, a wipe
+//     either way the wipe's;
+// and `n` AI battles of its own (rolesGames): random boards, dice, races
+// and attacking seat, strict, each ending 'breakthrough', 'held' or 'wipe'
+// and never a draw, its result as result() has it, the attacker's the
+// first phase and no roll-off tray. (The March Wall) And what the rules
+// allow of every end, whoever wins (the balance is the sweep's, S5): the
+// rounds scored one after another from round 1, each round.scored with
+// its need, the score moving only there (the VP only grow, and game.over's
+// are the last round scored's, 0-0 before any) and the defender's staying
+// 0 where no objective scores for it; no round scored once the attacker's
+// tally has reached the target (the early end: 'breakthrough' exactly when
+// the last round scored reached it, in that round; 'held' exactly when the
+// last round was scored under it; a wipe under it, in the round the wipe
+// came); the ends counted by the attacker's race.
+function rolesScenes(core, mods) {
+  const E = mods.engine, D = mods.deploy
+  const counts = { scenes: 0, firsts: 0 }
+  const m = core.missionOf({ mission: 'breakthrough' })
+  const seats = [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }]
+  const make = (attacker, mission = 'breakthrough') => core.createMatch({ board: 4242, dice: 99, mission, ...(mission === 'breakthrough' ? { attacker } : {}), seats }, { out: [] })
+  const deployed = (G) => {
+    for (const s of core.pendingSeats(G)) core.apply(G, s, { t: 'deployed' })
+  }
+  // every unit at its own edge's back, far from every objective
+  const park = (G) => G.units.forEach((u, k) => mods.units.setUnitPos(u, G.seats[u.side].edge * (G.board.W / 2 - 1.5), -G.board.H / 2 + 2 + (k % 12) * 3))
+  const onto = (u, o) => mods.units.setUnitPos(u, o.x, o.z)
+  const lastScored = (G) => G.out.filter((e) => e.t === 'round.scored').at(-1)
+  for (const attacker of [0, 1]) {
+    const def = 1 - attacker, where = `P-roles (seat ${attacker} attacking)`
+    // the zones
+    {
+      const G = make(attacker)
+      const flip = (z) => (attacker ? { minX: -z.x[1], maxX: -z.x[0] } : { minX: z.x[0], maxX: z.x[1] })
+      const W = G.board.W, plan = G.terrain.plan
+      // ((the March Wall) behind the line: the plan, and the defender's side's
+      // x bounds on the table)
+      // (within the role's own x bounds, mirrored with seat 1 attacking)
+      const behind = () => {
+        const xs = plan.region.map((p) => p.x), bx = m.roles.defend.zone.x
+        return attacker ? { minX: Math.max(-W / 2, -bx[1]), maxX: Math.min(W / 2, Math.max(...xs), -bx[0]) } : { minX: Math.max(-W / 2, Math.min(...xs), bx[0]), maxX: Math.min(W / 2, bx[1]) }
+      }
+      for (const [s, role] of [[attacker, 'attack'], [def, 'defend']]) {
+        if (core.roleOf(G, s) !== role) throw new Error(`${where}: seat ${s}'s role is ${core.roleOf(G, s)}, not ${role}`)
+        const z = m.roles[role].zone, got = D.zone(G, s)
+        const want = z.behind ? behind() : flip(z)
+        if (z.behind && (!plan || got.plan !== plan)) throw new Error(`${where}: seat ${s}'s zone behind the line carries ${got.plan ? 'another plan' : 'no plan'}, not the board's`)
+        if (JSON.stringify({ minX: got.minX, maxX: got.maxX, ...(got.minZ !== undefined ? { minZ: got.minZ, maxZ: got.maxZ } : {}) }) !== JSON.stringify(want)) throw new Error(`${where}: seat ${s}'s zone is ${JSON.stringify({ ...got, plan: !!got.plan })}, not the ${role} zone ${JSON.stringify(want)}`)
+      }
+      // a defender's unit put where its base stands 3 tails or more behind
+      // the wall's face, in front of it (between the zones), and with its
+      // middle behind the face but its base over it, by the place command's
+      // own legality
+      const u = G.units.find((x) => x.side === def && !x.t.fp)
+      const others = G.units.filter((x) => x !== u)
+      const az = D.zone(G, attacker), dz = D.zone(G, def)
+      // (each cell inside the defender zone's x bounds, so the face alone
+      // may refuse it)
+      const cellWhere = (ok) => {
+        for (let k = 0; k < G.nav.N; k++) {
+          const i = (Math.floor(G.nav.N / 2) + k * 37) % G.nav.N
+          const x = G.nav.x(i), zz = G.nav.z(i)
+          if (!ok(mods.wall.faceDist(plan, x, zz), x) || x - u.r < dz.minX + 0.05 || x + u.r > dz.maxX - 0.05) continue
+          if (G.nav.standable(i, u.r, 'walk') && (!G.nav.hasHeight || G.nav.floor[i] === 0) && !others.some((o) => Math.hypot(o.pos.x - x, o.pos.z - zz) < o.r + u.r + 0.5)) return i
+        }
+        return -1
+      }
+      const outside = (x) => x - u.r > az.maxX + 1 || x + u.r < az.minX - 1
+      const near = cellWhere((f) => f >= 3 + u.r && f <= 6 + u.r), between = cellWhere((f, x) => f <= -3 && f >= -8 && outside(x)), astride = cellWhere((f) => f >= 0.1 && f <= u.r - 0.1)
+      if (near < 0 || between < 0 || astride < 0) throw new Error(`${where}: no clear cell to test a placement on (${near}, ${between}, ${astride})`)
+      const take = core.legal(G, def, { t: 'place', u: u.id, c: near }), refuse = core.legal(G, def, { t: 'place', u: u.id, c: between }), over = core.legal(G, def, { t: 'place', u: u.id, c: astride })
+      if (take !== null || refuse === null || over === null) throw new Error(`${where}: placing the defender's ${u.t.short} 3 tails behind the wall's face is ${take === null ? 'taken' : `refused (${take})`}, in front of it ${refuse === null ? 'taken' : 'refused'}, and its base over the face ${over === null ? 'taken' : 'refused'}: not taken, refused and refused`)
+      counts.scenes++
+    }
+    // the first turn: no roll-off, the attacker's first phase
+    {
+      const G = make(attacker)
+      const n0 = G.rng.n, out0 = G.out.length
+      deployed(G)
+      const after = G.out.slice(out0)
+      const first = after.find((e) => e.t === 'phase.start')
+      if (G.turn.first !== attacker || first?.side !== attacker || first?.round !== 1 || G.pending?.seats?.join() !== String(attacker)) throw new Error(`${where}: the first turn is seat ${G.turn.first}'s (the first phase ${JSON.stringify(first)}, the match waiting on ${JSON.stringify(G.pending)}), not the attacker's`)
+      if (G.rng.n !== n0 || after.some((e) => e.t === 'tray.open' || e.t === 'dice')) throw new Error(`${where}: ${G.rng.n - n0} dice drawn and ${after.filter((e) => e.t === 'tray.open').length} trays opened before the attacker's first phase, not none`)
+      if (!G.journal.trace.some((l) => l.startsWith(`log ${attacker} `) && /attack, and take the first turn/.test(l))) throw new Error(`${where}: no log line says the attacker takes the first turn`)
+      counts.firsts++
+      // (the control: a classic battle rolls off)
+      const C = make(attacker, 'classic'), c0 = C.rng.n
+      deployed(C)
+      if (!(C.rng.n > c0) || !C.out.some((e) => e.t === 'tray.open')) throw new Error(`${where}: the classic control drew no roll-off`)
+    }
+    // the scoring
+    {
+      const G = make(attacker)
+      park(G)
+      const a = G.units.find((u) => u.side === attacker), d = G.units.find((u) => u.side === def)
+      onto(d, G.objectives[0])
+      onto(a, G.objectives[1])
+      E.scoreRound(G)
+      let e = lastScored(G)
+      if (e?.owners?.join() !== `${def},${attacker},-1` || G.turn.vp[attacker] !== 1 || G.turn.vp[def] !== 0 || e.held.join() !== (attacker ? '0,1' : '1,0') || e.need !== m.roles.attack.target) throw new Error(`${where}: the defender on objective 0 and the attacker on 1 score ${JSON.stringify(G.turn.vp)} (round.scored ${JSON.stringify(e)}), not 1 for the attacker, none for the defender, need ${m.roles.attack.target}`)
+      // an objective worth 2, and one that scores for both
+      G.objectives[1].vp = 2
+      G.objectives[0].scores = null
+      E.scoreRound(G)
+      e = lastScored(G)
+      if (G.turn.vp[attacker] !== 3 || G.turn.vp[def] !== 1) throw new Error(`${where}: with objective 1 worth 2 and objective 0 scoring for both, the round scores ${JSON.stringify(G.turn.vp)}, not 3 for the attacker and 1 for the defender`)
+      counts.scenes++
+    }
+    // the end: the target reached at a round's end, the rounds run out,
+    // the target reached in the last round, a wipe either way
+    for (const [what, round, vp, hold, want] of [
+      ['the target reached in round 2', 2, m.roles.attack.target - 1, true, { win: attacker, why: 'breakthrough' }],
+      ['the rounds run out under the target', m.rounds, m.roles.attack.target - 1, false, { win: def, why: 'held' }],
+      ['the rounds run out at 0-0', m.rounds, 0, false, { win: def, why: 'held' }],
+      ['the target reached in the last round', m.rounds, m.roles.attack.target - 1, true, { win: attacker, why: 'breakthrough' }],
+    ]) {
+      const G = make(attacker)
+      deployed(G)
+      park(G)
+      if (hold) onto(G.units.find((u) => u.side === attacker), G.objectives[2])
+      const T = G.turn
+      T.vp[attacker] = vp
+      T.round = round
+      T.step = 'score'
+      G.pending = null
+      E.advance(G)
+      const over = G.out.filter((e) => e.t === 'game.over')
+      if (T.stage !== 'over' || T.result?.win !== want.win || T.result?.why !== want.why || over.length !== 1 || over[0].why !== want.why || over[0].rounds !== round) throw new Error(`${where}: ${what} ends ${JSON.stringify(T.result)} in stage ${T.stage} (game.over ${JSON.stringify(over)}), not ${JSON.stringify(want)} in round ${round}`)
+      result(G, `${where}: ${what}`, -1, core)
+      counts.scenes++
+    }
+    for (const gone of [attacker, def]) {
+      const G = make(attacker)
+      deployed(G)
+      for (const u of G.units) {
+        if (u.side !== gone) continue
+        u.alive = 0
+        for (const md of u.models) md.alive = false
+      }
+      E.checkWipe(G)
+      E.gameOver(G)
+      if (G.turn.result?.win !== 1 - gone || G.turn.result?.why !== 'wipe') throw new Error(`${where}: seat ${gone} wiped out ends ${JSON.stringify(G.turn.result)}, not seat ${1 - gone} winning by the wipe`)
+      counts.scenes++
+    }
+  }
+  return counts
+}
+function rolesGames(core, RACES, n, seed) {
+  const rand = mulberry32(seed * 3266489917 + 11)
+  const int = (k) => Math.floor(rand() * k)
+  const races = Object.keys(RACES)
+  const ends = { breakthrough: 0, held: 0, wipe: 0 }, byRace = {}
+  for (let k = 0; k < n; k++) {
+    const attacker = int(2)
+    const setup = { board: int(2 ** 32), dice: int(2 ** 32), mission: 'breakthrough', attacker, seats: [0, 1].map(() => ({ race: rand() < 0.7 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)], ctrl: 'ai' })) }
+    const where = `P-roles battle ${seed}.${k} (${JSON.stringify(setup)})`
+    const out = []
+    let G
+    try {
+      G = core.createMatch(setup, { out, strict: true })
+    } catch (e) {
+      throw new Error(`${where}: ${e.stack}`)
+    }
+    if (G.turn.stage !== 'over') throw new Error(`${where}: an AI battle stopped at ${G.turn.stage}`)
+    const why = result(G, where, -1, core)
+    if (G.turn.result.win < 0 || !(why in ends)) throw new Error(`${where}: ended ${JSON.stringify(G.turn.result)}: a role battle ends 'breakthrough', 'held' or 'wipe', never a draw`)
+    const first = out.find((e) => e.t === 'phase.start')
+    if (first?.side !== attacker || out.some((e) => e.t === 'tray.open' && /Roll-off/.test(e.title))) throw new Error(`${where}: the first phase is seat ${first?.side}'s${out.some((e) => e.t === 'tray.open' && /Roll-off/.test(e.title)) ? ', after a roll-off' : ''}, not the attacker's with no roll-off`)
+    const scored = out.filter((e) => e.t === 'round.scored')
+    const R = core.rolesOf(G.setup), need = R.attack.target, def = 1 - attacker
+    if (scored.some((e) => e.need !== need)) throw new Error(`${where}: a round.scored without its need`)
+    // ((the March Wall) the ends the rules allow, whoever wins)
+    const over = out.filter((e) => e.t === 'game.over')
+    if (over.length !== 1) throw new Error(`${where}: ${over.length} game.over events`)
+    const end = over[0], last = scored.at(-1)
+    let prev = [0, 0]
+    scored.forEach((e, i) => {
+      if (e.round !== i + 1) throw new Error(`${where}: round ${e.round} scored ${i + 1}th: the rounds are scored one after another`)
+      if (e.vp[0] < prev[0] || e.vp[1] < prev[1]) throw new Error(`${where}: the score fell from ${prev} to ${e.vp} at the end of round ${e.round}`)
+      if (i < scored.length - 1 && !(e.vp[attacker] < need)) throw new Error(`${where}: round ${e.round + 1} was scored after the attacker's tally reached its target (${e.vp[attacker]} of ${need} at the end of round ${e.round})`)
+      prev = e.vp
+    })
+    if (end.vp.join() !== prev.join()) throw new Error(`${where}: game.over's VP ${end.vp} are not the last round scored's ${prev}: the score moved outside a round's end`)
+    if (G.turn.vp.join() !== prev.join()) throw new Error(`${where}: the turn's VP ${G.turn.vp} are not the last round scored's ${prev}`)
+    if (G.objectives.every((o) => o.scores === 'attack') && prev[def] !== 0) throw new Error(`${where}: the defender scored ${prev[def]} where no objective scores for it`)
+    if (why === 'breakthrough' && !(last && last.vp[attacker] >= need && end.rounds === last.round)) throw new Error(`${where}: a breakthrough in round ${end.rounds} with the last round scored ${JSON.stringify(last)}: not the round the target was reached`)
+    if (why === 'held' && !(last && last.vp[attacker] < need && last.round === G.setup.rounds && end.rounds === G.setup.rounds)) throw new Error(`${where}: held in round ${end.rounds}, its last round scored ${JSON.stringify(last)}: not the last round, under the target`)
+    if (why === 'wipe' && !(prev[attacker] < need && end.rounds >= scored.length && end.rounds <= scored.length + 1)) throw new Error(`${where}: a wipe in round ${end.rounds} after ${scored.length} rounds scored at ${prev}: not under the target, in the round under way`)
+    ends[why]++
+    const ar = setup.seats[attacker].race
+    const by = (byRace[ar] ??= { breakthrough: 0, held: 0, wipe: 0, over: 0 })
+    by[why]++
+    if (prev[attacker] > need) by.over++
+  }
+  return { battles: n, ends, byRace }
+}
+// (Breakthrough, the March Wall) P-roles' deployment behind the wall: on
+// every mission whose defender's zone is behind the line, `n` boards, each
+// with either seat attacking and each race order on the presets, and once
+// with either seat attacking on lists at the caps (two War-Carts for the
+// Bushtails, two Howdahs for the Coil, the rest at random: capCounts):
+//   - every unit standing (a rider is its hull's) on a cell's centre where
+//     the place command takes it (fits: its zone, standable, clear of
+//     every other unit by 0.4; a long hull at its facing), no two round
+//     bases nearer than their radii and 0.4;
+//   - every defender's base wholly behind the wall's outer face (faceDist
+//     of each disc its radius or more: the rule judged again by the
+//     plan's own reader, not by fits), and no big unit, vehicle or long
+//     hull of the defender's on a deck (a floor above STEP);
+//   - (Breakthrough) every defender at least 8 tails from the attacker's
+//     zone: each disc's edge 8 tails or more along x from the attack
+//     zone's front, as the mission writes it (mirrored with seat 1
+//     attacking), whatever the face's shape (the least seen, `apart`);
+//   - the deployment deterministic and drawing nothing: deployArmies run
+//     again over the same match (the riders put down first) puts every unit
+//     where it was, at its facing, aboard what it rode, the dice unmoved;
+//   - and a defender's base astride a face refused by fits, a round
+//     unit's and every long hull's (discs both sides), with the same state
+//     wholly behind a face 4 tails off taken (the control); counted, the
+//     run's long hulls judged above 0.
+function rolesDeployTask(core, mods, RACES, MISSIONS, n, seed) {
+  const A = core.army, rand = mulberry32(seed * 69069 + 5)
+  const STEP_ = mods.move.STEP
+  const face = mods.wall.faceDist
+  const c = { boards: 0, matches: 0, units: 0, decks: 0, defenders: 0, astride: 0, longs: 0, hulls: 0, apart: Infinity }
+  const walls = Object.entries(MISSIONS).filter(([, m]) => m.roles?.defend?.zone?.behind)
+  const discsOf = (u, x = u.pos.x, z = u.pos.z, f = u.facing) => (u.t.fp ? u.t.fp.H[f].map((d) => ({ x: x + d.ix * u.t.fp.cell, z: z + d.iz * u.t.fp.cell, r: d.r })) : [{ x, z, r: u.r }])
+  const judge = (G, where) => {
+    const nav = G.nav, plan = G.terrain.plan, def = 1 - G.setup.attacker
+    if (!plan) throw new Error(`${where}: a board behind a wall with no plan`)
+    const standing = G.units.filter((u) => !u.aboard)
+    for (const u of standing) {
+      const cell = nav.index(u.pos.x, u.pos.z)
+      if (nav.x(cell) !== u.pos.x || nav.z(cell) !== u.pos.z) throw new Error(`${where}: seat ${u.side}'s ${u.t.short} ${u.id} stands at (${u.pos.x}, ${u.pos.z}), no cell's centre`)
+      const why = core.legal(G, u.side, u.t.fp ? { t: 'place', u: u.id, c: cell, f: u.facing } : { t: 'place', u: u.id, c: cell })
+      if (why !== null) throw new Error(`${where}: seat ${u.side}'s ${u.t.short} ${u.id} was deployed at (${u.pos.x}, ${u.pos.z}), where place refuses it: ${why}`)
+      c.units++
+      if (u.side !== def) continue
+      c.defenders++
+      const off = discsOf(u).find((d) => !(face(plan, d.x, d.z) >= d.r - 0.01))
+      if (off) throw new Error(`${where}: the defender's ${u.t.short} ${u.id} at (${u.pos.x}, ${u.pos.z}) has a disc ${face(plan, off.x, off.z).toFixed(3)} from the wall's face (r ${off.r}): in front of it or over it`)
+      // ((Breakthrough) 8 tails or more from the attacker's zone)
+      const front = core.rolesOf(G.setup).attack.zone.x[1], sx = G.setup.attacker ? -1 : 1
+      const ap = Math.min(...discsOf(u).map((d) => sx * d.x - d.r - front))
+      if (!(ap >= 8 - 0.01)) throw new Error(`${where}: the defender's ${u.t.short} ${u.id} at (${u.pos.x}, ${u.pos.z}) stands ${ap.toFixed(3)} tails from the attacker's zone, under 8`)
+      c.apart = Math.min(c.apart, ap)
+      const up = nav.hasHeight && nav.floor[cell] > STEP_
+      if (up && (u.t.big || u.t.vehicle || u.t.fp)) throw new Error(`${where}: the defender's ${u.t.short} ${u.id} (${u.t.big ? 'big' : u.t.vehicle ? 'a vehicle' : 'a long hull'}) stands on a deck (floor ${nav.floor[cell]})`)
+      if (up) c.decks++
+    }
+    for (let i = 0; i < standing.length; i++) for (let j = i + 1; j < standing.length; j++) {
+      const a = standing[i], b = standing[j]
+      if (a.t.fp || b.t.fp) continue
+      if (Math.hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z) < a.r + b.r + 0.4 - 1e-9) throw new Error(`${where}: ${a.t.short} ${a.id} and ${b.t.short} ${b.id} overlap`)
+    }
+    // determinism, no dice: deployArmies again over the same match
+    const was = G.units.map((u) => [u.pos.x, u.pos.z, u.facing, u.aboard].join()), n0 = G.rng.n
+    for (const u of G.units) u.aboard = 0
+    mods.deploy.deployArmies(G)
+    const now = G.units.map((u) => [u.pos.x, u.pos.z, u.facing, u.aboard].join())
+    const k = now.findIndex((x, i) => x !== was[i])
+    if (k >= 0 || G.rng.n !== n0) throw new Error(`${where}: deployArmies again puts ${k >= 0 ? `${G.units[k].t.short} ${G.units[k].id} at ${now[k]}, not ${was[k]}` : 'every unit back'}${G.rng.n !== n0 ? `, drawing ${G.rng.n - n0} dice` : ''}`)
+    // a defender's base astride a face: refused. (A face of the test's own,
+    // straight across the table through a state the zone's bounds and the
+    // ground take, so only the face can refuse it: the wall's own face runs
+    // along decks, the gate and the breach, where a hull never stands. For
+    // each defender's long hull, its first such state in the board's order
+    // with its discs on both sides of the face; for its first round unit,
+    // its own cell with the face through its base.)
+    const W = G.board.W, H = G.board.H, east = !G.setup.attacker
+    const faceAt = (X) => {
+      const far = east ? W / 2 + 2 : -W / 2 - 2
+      return { face: [{ x: X, z: H / 2 + 2 }, { x: X, z: -H / 2 - 2 }], region: [{ x: X, z: H / 2 + 2 }, { x: X, z: -H / 2 - 2 }, { x: far, z: -H / 2 - 2 }, { x: far, z: H / 2 + 2 }] }
+    }
+    const box = mods.deploy.zone(G, def), bare = { minX: box.minX, maxX: box.maxX }
+    const probe = (u, i, h) => {
+      const ds = discsOf(u, nav.x(i), nav.z(i), h)
+      const lo = Math.min(...ds.map((d) => d.x)), hi = Math.max(...ds.map((d) => d.x))
+      return { X: u.t.fp ? (lo + hi) / 2 : nav.x(i) + (east ? -1 : 1) * u.r / 2 }
+    }
+    const round = G.units.find((x) => x.side === def && !x.t.fp && !x.aboard)
+    for (const u of [round, ...G.units.filter((x) => x.side === def && x.t.fp && !x.aboard)].filter(Boolean)) {
+      if (u.t.fp) c.hulls++
+      const others = G.units.filter((o) => o !== u && !o.aboard)
+      let done = false
+      for (let i = 0; i < nav.N && !done; i++) for (const h of u.t.fp ? [0, 1, 2, 3, 4, 5, 6, 7] : [undefined]) {
+        if (done || (!u.t.fp && i !== nav.index(u.pos.x, u.pos.z))) continue
+        if (!mods.deploy.fits(G, u, i, bare, others, h)) continue
+        const { X } = probe(u, i, h)
+        if (mods.deploy.fits(G, u, i, { ...bare, plan: faceAt(X) }, others, h)) throw new Error(`${where}: the defender's ${u.t.short} ${u.id} on cell ${i}${u.t.fp ? ` facing ${h}` : ''}, its base astride a face at x ${X}, fits`)
+        if (!mods.deploy.fits(G, u, i, { ...bare, plan: faceAt(east ? X - 4 : X + 4) }, others, h)) throw new Error(`${where}: the defender's ${u.t.short} ${u.id} on cell ${i}${u.t.fp ? ` facing ${h}` : ''}, wholly behind a face 4 tails off, does not fit (the control)`)
+        c.astride++
+        if (u.t.fp) c.longs++
+        done = true
+      }
+    }
+    c.matches++
+  }
+  for (let k = 0; k < n; k++) {
+    for (const [mission, m] of walls) {
+      const board = Math.floor(rand() * 2 ** 32)
+      for (const attacker of [0, 1]) {
+        for (const races of [['squirrel', 'serpent'], ['serpent', 'squirrel']]) {
+          const setup = { board, dice: 7, mission, attacker, seats: races.map((race) => ({ race, ctrl: 'human' })) }
+          judge(core.createMatch(setup, { out: null }), `P-roles deployment ${seed}.${k} (${JSON.stringify(setup)})`)
+        }
+        // the lists at the caps, made and deployed as newState does
+        const races = ['squirrel', 'serpent']
+        const lists = races.map((race) => capCounts(RACES[race], m.list, mods.schema.ROLES, rand, 2))
+        const setup = { board, dice: 7, mission, attacker, seats: races.map((race) => ({ race, ctrl: 'human' })) }
+        const G = core.createMatch(setup, { out: null })
+        G.units.length = 0
+        G.nextUnitId = 1
+        races.forEach((race, side) => {
+          for (const key of A.keysOf(RACES[race], A.listText(lists[side]))) G.units.push(mods.units.makeUnit(G, key, side))
+        })
+        mods.deploy.deployArmies(G)
+        judge(G, `P-roles deployment ${seed}.${k} at the caps (${JSON.stringify({ ...setup, lists: lists.map((x) => A.listText(x)) })})`)
+      }
+      c.boards++
+    }
+  }
+  return c
+}
+// (Breakthrough, S3: DESIGN §4.2.12's AI) P-wall: the AI plays Breakthrough.
+// WALL_PLAY battles (ARMY.wallPlay, 80) on the March Wall, a quarter in
+// each cell (WALL_CELLS: either seat attacking, each race order on the
+// presets), on the fixed boards WALL_BOARDS + k (dice 7·board + 3), all
+// AI, each watched by sim/wall-probe.mjs, and over them all four of the
+// acceptance rows, each with the measurement that set its threshold (the
+// tree as built: S3's As built in DESIGN) and the self-test mutant that
+// breaks it:
+//   1. it gets through: in 90% or more of battles a walking attacker
+//      stands behind the wall's outer face at a round's end by round 4,
+//      in WALL_SCORED (18) of the 80 or more the attacker has scored by
+//      the end of round 4, and the walking attackers cross the face 5.4
+//      times a battle or more by then (built: 80, 22, 5.71; the route
+//      field taken away, `wall-route-straight`: 80, 13, 5.05);
+//   2. nobody idles at the face: an attacking unit standing still against
+//      the face (wall-probe's `idle`: not engaged, in front of it within
+//      its radius and 2, where it stood the move before, while its route
+//      field reaches an objective) at most 0.3 times a battle (built: 12
+//      in 80; a ladder whose head is held left open to its field,
+//      `wall-ladder-held`: 73);
+//   4. the defender holds the wall: under 2% of its unit-rounds in front of
+//      the face, and at most 0.25% of its units' movement-phase ends in
+//      front of it, not locked in a fight (built: 0.16% and 2 of 4,336;
+//      the ground in front not refused, `wall-front-open`: 2.8% and 108
+//      of 4,237);
+//   6. it denies: where the attacker holds an objective as the defender's
+//      movement phase begins and a defending unit could contest it (OC, not
+//      locked in a fight, within its move and the objective's range), the
+//      defender's OC within the objective's range after its charges is up
+//      0.4 or more a case on average (built: 61 over 102; no deny term,
+//      `wall-deny-off`: 9 over 72).
+const WALL_CELLS = Object.freeze([
+  { attacker: 0, races: ['squirrel', 'serpent'] }, { attacker: 0, races: ['serpent', 'squirrel'] },
+  { attacker: 1, races: ['squirrel', 'serpent'] }, { attacker: 1, races: ['serpent', 'squirrel'] },
+].map((c) => Object.freeze(c)))
+const WALL_BOARDS = 5000, WALL_SCORED = 18
+function wallPlayTask(core, mods, probe, cell, n) {
+  const { attacker, races } = WALL_CELLS[cell]
+  const rs = []
+  for (let k = 0; k < n; k++) {
+    const board = WALL_BOARDS + k, setup = { board, dice: board * 7 + 3, mission: 'breakthrough', attacker, seats: races.map((race) => ({ race, ctrl: 'ai' })) }
+    const p = probe.wallProbe(core, mods, attacker)
+    let G
+    try {
+      G = core.createMatch(setup, { onTrace: p.trace, strict: true })
+    } catch (e) {
+      throw new Error(`P-wall battle ${JSON.stringify(setup)}: ${e.stack}`)
+    }
+    if (G.turn.stage !== 'over') throw new Error(`P-wall battle ${JSON.stringify(setup)}: stopped at ${G.turn.stage}`)
+    rs.push(p.result())
+  }
+  const t = probe.wallTally(rs)
+  const deny = rs.flatMap((r) => r.deny).filter((d) => d.able > 0)
+  return {
+    n: t.n, walk4: t.walk4, scored4: t.scored4, cross4: rs.reduce((a, r) => a + r.crossings.filter((c) => c.round <= 4 && c.route !== 'flight').length, 0),
+    idle: t.idle.length, idleAt: rs.flatMap((r, k) => r.idle.map((i) => ({ board: WALL_BOARDS + k, attacker, ...i }))).slice(0, 3),
+    defRounds: t.defRounds, defRoundsFront: t.defRoundsFront, defMoves: t.defMoves, defFree: t.defFront.filter((d) => !d.engaged).length,
+    defFreeAt: rs.flatMap((r, k) => r.defFront.filter((d) => !d.engaged).map((d) => ({ board: WALL_BOARDS + k, attacker, ...d }))).slice(0, 3),
+    able: deny.length, gained: deny.reduce((a, d) => a + d.after - d.before, 0), routes: t.routes,
+  }
+}
+function wallJudge(ws) {
+  const sum = (k) => ws.reduce((a, c) => a + c[k], 0)
+  const n = sum('n'), routes = {}
+  for (const c of ws) for (const [k, v] of Object.entries(c.routes)) routes[k] = (routes[k] ?? 0) + v
+  const rows = [
+    [sum('walk4') >= 0.9 * n && sum('scored4') >= WALL_SCORED && sum('cross4') >= 5.4 * n, `1 (through): a walker behind the face by round 4 in ${sum('walk4')} of ${n} (90% or more), scored by round 4 in ${sum('scored4')} (${WALL_SCORED} or more), ${(sum('cross4') / n).toFixed(2)} crossings a battle by round 4 (5.4 or more)`],
+    [sum('idle') <= 0.3 * n, `2 (no idling): ${sum('idle')} attackers standing still against the face with a route open (${(0.3 * n).toFixed(0)} at most)${sum('idle') ? `, e.g. ${JSON.stringify(ws.flatMap((c) => c.idleAt)[0])}` : ''}`],
+    [sum('defRoundsFront') < 0.02 * sum('defRounds') && sum('defFree') <= 0.0025 * sum('defMoves'), `4 (the wall held): ${sum('defRoundsFront')} of ${sum('defRounds')} defender unit-rounds in front of the face (under 2%), ${sum('defFree')} of ${sum('defMoves')} movement-phase ends in front, not locked in a fight (0.25% at most)${sum('defFree') ? `, e.g. ${JSON.stringify(ws.flatMap((c) => c.defFreeAt)[0])}` : ''}`],
+    [sum('able') > 0 && sum('gained') >= 0.4 * sum('able'), `6 (denied): the defender's OC up ${sum('gained')} over ${sum('able')} objectives held with a defender able to contest (0.4 a case or more)`],
+  ]
+  const failed = rows.filter(([ok]) => !ok)
+  const said = `${n} AI battles on the March Wall (crossings ${Object.entries(routes).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(', ')}): ${rows.map(([, w]) => w).join('; ')}`
+  return { said, error: failed.length ? `P-wall: ${failed.map(([, w]) => w).join('; ')}` : null }
+}
+
+// (Breakthrough, S5b) P-wall's charge scenes: the gap the attacker's charge
+// term reads to a defender across the wall (core/ai/score.js wallGap, its
+// route fields' lower bound on the walk to base contact), on board 4242
+// with seat 0 the Bushtails attacking, an Oak Guard squad charging, each
+// on a straight walk in the open toward an enemy with the field's
+// objective beyond it, D (5) tails apart middle to middle, the first such
+// place a fixed scan of the yard finds:
+//   A. a Scaleguard squad whose own cell is on the attacker's field, the
+//      walk straight on past it: the gap within half a tail of the
+//      straight one (D less both radii; built: 2.70 of 2.70); S5a's form,
+//      the least field value over the cells in base contact,
+//      `wall-contact-least`, reads it both radii and the pad too long
+//      (5.41);
+//   B. a Hierophant whose own cell is off the field (a wider base has no
+//      clearance there): the charge weighed all the same, by a gap no
+//      longer than the straight one and within half a tail of it (built:
+//      3.00 of 3.37); S3's form, the enemy's own cell alone,
+//      `wall-contact-own`, reads Infinity there.
+function wallScenes(core, mods) {
+  const { U, S, R, BT } = mods
+  const G = core.createMatch({ board: 4242, dice: 99, mission: 'breakthrough', attacker: 0, seats: [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }] }, { out: [] })
+  const plan = G.terrain.plan, nav = G.nav, D = 5
+  const u = G.units.find((x) => x.side === 0 && x.t.short === 'Oak Guard')
+  const f = R.routeFields(G, u, plan)
+  // (the field drops by the walk all along the segment: the way is straight)
+  const straight = (k, x0, z0, x1, z1) => {
+    const L = Math.hypot(x1 - x0, z1 - z0), n = Math.ceil(L / 0.25), a = f[k][nav.index(x0, z0)]
+    for (let s = 0; s <= n; s++) {
+      const t = s / n, i = nav.index(x0 + (x1 - x0) * t, z0 + (z1 - z0) * t)
+      if (i < 0 || !(Math.abs(a - f[k][i] - L * t) <= 0.3)) return false
+    }
+    return true
+  }
+  const out = []
+  for (const [scene, short, own] of [['A', 'Scaleguard', true], ['B', 'Hierophant', false]]) {
+    const e = G.units.find((x) => x.side === 1 && x.t.short === short)
+    let found = null
+    for (let q = 0; q < nav.N && !found; q++) {
+      const j = (Math.floor(nav.N / 2) + q * 37) % nav.N, ex = nav.x(j), ez = nav.z(j)
+      if (BT.faceDist(plan, ex, ez) < 3 || (nav.hasHeight && nav.floor[j] !== 0) || !nav.standable(j, e.r, 'walk')) continue
+      if (own ? !f.every((d) => isFinite(d[j])) : f.some((d) => isFinite(d[j]))) continue
+      for (const [dx, dz] of [[1, 0], [0, 1], [-1, 0], [0, -1]]) {
+        const ux = ex + dx * D, uz = ez + dz * D, i = nav.index(ux, uz)
+        if (i < 0) continue
+        const g = D - u.r - e.r, cx = ex + dx * (u.r + e.r), cz = ez + dz * (u.r + e.r)
+        // (and on past e by its radii and a tail, where scene A's own cell is on
+        // the field: the objective beyond it, not under it)
+        const bx = ex - dx * (u.r + e.r + 1), bz = ez - dz * (u.r + e.r + 1)
+        if (!f.some((d, k) => straight(k, ux, uz, own ? bx : cx, own ? bz : cz) && d[i] - d[nav.index(cx, cz)] > g - 0.3)) continue
+        found = { ex, ez, ux, uz, g }
+        break
+      }
+    }
+    if (!found) throw new Error(`P-wall charge scene ${scene}: no straight walk to a ${short} ${own ? 'on' : 'off'} the field on board 4242`)
+    const { ex, ez, ux, uz, g } = found
+    U.setUnitPos(u, ux, uz)
+    U.setUnitPos(e, ex, ez)
+    const bt = S.wallTerms(G, u, plan, [e], G.objectives.map(() => -1))
+    const got = S.wallGap(G, bt, u, e, ux, uz)
+    const where = `P-wall charge scene ${scene}: the Oak Guard at (${ux}, ${uz}) charging the ${short} at (${ex}, ${ez}) ${own ? 'on' : 'off'} its field`
+    if (!isFinite(got)) throw new Error(`${where}: the charge term reads a gap of ${got}, not weighed (a straight ${g.toFixed(2)})`)
+    if (!(Math.abs(got - g) <= 0.5) || (!own && got > g + 1e-9)) throw new Error(`${where}: the charge term reads a gap of ${got.toFixed(2)}, the straight walk ${g.toFixed(2)} (${own ? 'within half a tail' : 'no longer, and within half a tail'})`)
+    out.push(`${scene} ${got.toFixed(2)} of ${g.toFixed(2)}`)
+  }
+  return { scenes: out }
+}
+
+// (Breakthrough) P-wall's term scenes: three of the wall's terms read
+// directly, each in a scene where it decides, beside the statistical rows
+// above (as the garrison now deploys and holds its posts, those battles
+// put these three terms in play too seldom to catch their mutants). Each
+// is a match of the mission on a fixed board, seat 0 the Bushtails
+// attacking the Coil, every unit the scene doesn't name stood off at its
+// own edge (attackers at x -28, defenders at x 28, a hull's riders with
+// it), the AI's own function read and nothing applied; the only dice drawn
+// are bestSpot's tie-breaks off the scene's own match, none a battle row's.
+// Each placement is the one with the widest margin of those tried:
+//   A. a held ladder is shut (core/ai/route.js heldLadders): on board 5001
+//      an Oak Guard squad 1.5 tails out from ladder 1's foot, where the
+//      ladders are its way; its route distance to the nearest objective
+//      with the heads free, then with a Spitters squad on ladder 1's top,
+//      a tail or more longer held (built 17.07 free, 53.31 held: the
+//      ladders' tops stand 3 tails apart, so one Spitters on either head
+//      shuts both to a base the Oak Guard's size, and the next way is the
+//      breach or the wood). Tried 1.5 and 3 tails out from either ladder on
+//      boards 4242, 5000-5003, 1 and 2: 25.79 to 36.24 longer every time
+//      (an Elder, whose base leaves the other ladder open: 0 to 4.46).
+//      With a held ladder left open, `wall-ladder-held`, the same both
+//      ways.
+//   B. a defender refuses the ground in front of the face (core/ai/score.js
+//      wallScore's FRONT_COST): on board 5000 a Brute a tail behind the
+//      breach's middle, a Trebuchet 10 tails out in front of it, the
+//      charge's odds better from the rubble's far side; the cell its move
+//      picks (bestSpot) behind the face, its middle's faceDist above 0 as
+//      wall-probe counts it (built 0.20). With the ground in front open,
+//      `wall-front-open`, it picks a cell 1.19 tails in front, scoring
+//      3.93 more than the built pick. Tried with the Trebuchet 8, 10 and 12
+//      tails out on boards 4242 and 5000-5004: built behind the face every
+//      time, the mutant 0.05 to 1.19 tails in front every time, 1.52 to
+//      3.93 better.
+//   C. a defender contests what the attacker holds (score.js wallObjective's
+//      DENY): on board 5001 an Oak Guard squad 2.4 tails from the yard's
+//      objective (the one nearest the gate), holding it, and a Spitters
+//      squad 6 tails from it on the far side (at 7 eighths of a turn from
+//      +x), within its move and the objective's range of contesting it;
+//      the cell its move picks within the objective's range and its radius
+//      of it (wallDeny's measure: built 2.15 from it, 1.97 inside). With no
+//      deny term, `wall-deny-off`, it goes off 10.61 from it. Tried 6 tails
+//      out at every bearing of eight with ground to stand on, boards 4242
+//      and 5000-5002 (21 placements): built 1.55 to 1.97 inside every time,
+//      the mutant 4.28 to 6.49 outside in 20 (on board 5000 at 4 eighths
+//      it contests all the same).
+function wallTermScenes(core, mods) {
+  const { U, R, S, BT, rules } = mods
+  const match = (board) => {
+    const G = core.createMatch({ board, dice: 99, mission: 'breakthrough', attacker: 0, seats: [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }] }, { out: [] })
+    G.units.forEach((x, n) => {
+      if (!x.aboard) U.moveUnitTo(G, x, x.side ? 28 : -28, -18 + (n % 14) * 2.6)
+    })
+    return G
+  }
+  const unit = (G, side, short) => G.units.find((x) => x.side === side && x.t.short === short && !x.aboard)
+  const at = (x, z) => `(${x.toFixed(2)}, ${z.toFixed(2)})`
+  const out = []
+  {
+    const G = match(5001), plan = G.terrain.plan, nav = G.nav, k = 1, l = plan.ladders[k]
+    const u = unit(G, 0, 'Oak Guard'), head = unit(G, 1, 'Spitters')
+    const ox = l.foot.x - l.top.x, oz = l.foot.z - l.top.z, L = Math.hypot(ox, oz)
+    const ux = l.foot.x + (ox / L) * 1.5, uz = l.foot.z + (oz / L) * 1.5, i = nav.index(ux, uz)
+    const where = `P-wall term scene A: the Oak Guard at ${at(ux, uz)} below ladder ${k} on board 5001`
+    if (i < 0 || !nav.standable(i, u.r, 'walk')) throw new Error(`${where}: no ground to stand on`)
+    U.setUnitPos(u, ux, uz)
+    const near = () => Math.min(...R.routeFields(G, u, plan).map((f) => f[i]))
+    const free = near()
+    U.setUnitPos(head, l.top.x, l.top.z)
+    const held = near()
+    if (!isFinite(free)) throw new Error(`${where}: no way to any objective with the ladder's head free`)
+    if (!(held >= free + 1)) throw new Error(`${where}: its way to the nearest objective ${free.toFixed(2)} with the head free, ${held.toFixed(2)} with a Spitters on it (a tail or more longer: a held ladder is shut)`)
+    out.push(`A (held ladder) ${free.toFixed(2)} free, ${held.toFixed(2)} held`)
+  }
+  {
+    const G = match(5000), plan = G.terrain.plan, nav = G.nav, br = plan.breach
+    const d = unit(G, 1, 'Brute'), t = unit(G, 0, 'Trebuchet')
+    const mx = (br.a.x + br.b.x) / 2, mz = (br.a.z + br.b.z) / 2, L = Math.hypot(br.b.x - br.a.x, br.b.z - br.a.z)
+    // (the breach's normal, pointing behind the face)
+    let nx = -(br.b.z - br.a.z) / L, nz = (br.b.x - br.a.x) / L
+    if (BT.faceDist(plan, mx + nx * 2, mz + nz * 2) < 0) [nx, nz] = [-nx, -nz]
+    U.setUnitPos(d, mx + nx, mz + nz)
+    U.setUnitPos(t, mx - nx * 10, mz - nz * 10)
+    const where = `P-wall term scene B: the Brute at ${at(d.pos.x, d.pos.z)} behind the breach on board 5000, the Trebuchet at ${at(t.pos.x, t.pos.z)} in front`
+    if (!(BT.faceDist(plan, d.pos.x, d.pos.z) > d.r) || !(BT.faceDist(plan, t.pos.x, t.pos.z) < 0)) throw new Error(`${where}: not either side of the face`)
+    const b = S.bestSpot(G, d, core.q.movePlan(G, d, 0), new Set(), d.t.ai)
+    const bx = b.cell >= 0 ? nav.x(b.cell) : d.pos.x, bz = b.cell >= 0 ? nav.z(b.cell) : d.pos.z, fd = BT.faceDist(plan, bx, bz)
+    if (!(fd > 0)) throw new Error(`${where}: its move picks ${at(bx, bz)}, ${(-fd).toFixed(2)} tails in front of the face (the ground in front refused)`)
+    out.push(`B (front refused) the pick ${fd.toFixed(2)} behind the face`)
+  }
+  {
+    const G = match(5001), plan = G.terrain.plan, nav = G.nav
+    let o = null
+    for (const p of G.objectives) if (!o || Math.hypot(p.x - plan.gate.x, p.z - plan.gate.z) < Math.hypot(o.x - plan.gate.x, o.z - plan.gate.z)) o = p
+    const h = unit(G, 0, 'Oak Guard'), d = unit(G, 1, 'Spitters')
+    const cx = Math.cos((7 * Math.PI) / 4), cz = Math.sin((7 * Math.PI) / 4)
+    U.setUnitPos(h, o.x - cx * 2.4, o.z - cz * 2.4)
+    U.setUnitPos(d, o.x + cx * 6, o.z + cz * 6)
+    const range = rules.OBJECTIVE_RANGE + d.r, from = Math.hypot(d.pos.x - o.x, d.pos.z - o.z)
+    const where = `P-wall term scene C: the Spitters at ${at(d.pos.x, d.pos.z)}, ${from.toFixed(2)} from the objective at ${at(o.x, o.z)} the Oak Guard holds, on board 5001`
+    if (core.q.controlOf(G, o) !== 0) throw new Error(`${where}: the attacker doesn't hold it`)
+    if (!(from > range && from - d.r <= d.t.M + rules.OBJECTIVE_RANGE) || !(BT.faceDist(plan, d.pos.x, d.pos.z) > d.r)) throw new Error(`${where}: not behind the face, out of its range and within its move of contesting it`)
+    const b = S.bestSpot(G, d, core.q.movePlan(G, d, 0), new Set(), d.t.ai)
+    const bx = b.cell >= 0 ? nav.x(b.cell) : d.pos.x, bz = b.cell >= 0 ? nav.z(b.cell) : d.pos.z, to = Math.hypot(bx - o.x, bz - o.z)
+    if (!(to <= range)) throw new Error(`${where}: its move picks ${at(bx, bz)}, ${to.toFixed(2)} from it, not within its range and radius (${range.toFixed(2)}: the objective contested)`)
+    out.push(`C (deny) the pick ${to.toFixed(2)} from the held objective, within ${range.toFixed(2)}`)
+  }
+  return { scenes: out }
+}
+
+function missionTask(core, MISSIONS, face = null) {
   let n = 0
   for (const [name, [change, want]] of Object.entries(BAD_MISSION_SETUPS)) {
     let G = null, why = null
@@ -1405,11 +2151,19 @@ function missionTask(core, MISSIONS) {
     const G = core.createMatch({ ...SETUP, ...change })
     if (G.setup.mission !== 'classic' || G.board.W !== 40 || G.board.H !== 28 || G.board.deploy !== 8) throw new Error(`P-mission: a setup with ${JSON.stringify(change)} plays mission ${G.setup.mission} on ${JSON.stringify(G.board)}`)
   }
+  // ((Breakthrough) a null attacker is one left out: seat 0 attacks)
+  if (MISSIONS.breakthrough) for (const change of [{}, { attacker: null }, { attacker: 0 }]) {
+    const G = core.createMatch({ ...SETUP, mission: 'breakthrough', ...change })
+    if (G.setup.attacker !== 0) throw new Error(`P-mission: a breakthrough setup with ${JSON.stringify(change)} has attacker ${JSON.stringify(G.setup.attacker)}, not seat 0`)
+    n++
+  }
   // every mission as shipped: its objectives point-symmetric, 1" inside its
-  // board and outside both zones; and a match of it on its board
+  // board and outside both zones; and a match of it on its board. ((Breakthrough)
+  // A mission with roles is no mirror: its rows are roleRows', beside these)
   for (const [name, m] of Object.entries(MISSIONS)) {
     const { W, H } = m.board
-    for (const o of m.objectives) {
+    if (m.roles !== undefined) n += roleRows(core, name, m, face)
+    else for (const o of m.objectives) {
       if (!m.objectives.some((p) => p.x === -o.x && p.z === -o.z)) throw new Error(`P-mission: ${name}'s objective at (${o.x}, ${o.z}) has no point mirror`)
       if (Math.abs(o.x) > W / 2 - 1 || Math.abs(o.z) > H / 2 - 1) throw new Error(`P-mission: ${name}'s objective at (${o.x}, ${o.z}) is under 1" inside its ${W}×${H} board`)
       if (!(Math.abs(o.x) < W / 2 - m.deploy)) throw new Error(`P-mission: ${name}'s objective at (${o.x}, ${o.z}) is in a zone ${m.deploy}" deep`)
@@ -1424,11 +2178,14 @@ function missionTask(core, MISSIONS) {
       const keys = (X) => X.units.map((u) => `${u.side}:${u.key}`).join(' ')
       for (const [s, { race }] of SETUP.seats.entries()) {
         const want = G.units.filter((u) => u.side === s).map((u) => u.key).join(' ')
-        if (G.setup.seats[s].army !== m.army) throw new Error(`P-mission: a match of ${name} fills seat ${s}'s army in as ${JSON.stringify(G.setup.seats[s].army)}, not its preset ${m.army}`)
+        // ((Breakthrough, S5a) on a mission with roles, the seat's role's
+        // preset (core/army.js presetFor), and the other seat naming none)
+        const own = core.army.presetFor ? core.army.presetFor(G.setup, s) : m.army
+        if (G.setup.seats[s].army !== own) throw new Error(`P-mission: a match of ${name} fills seat ${s}'s army in as ${JSON.stringify(G.setup.seats[s].army)}, not its preset ${own}`)
         const text = core.army.listText(core.army.armyOf(G.setup, s).counts)
         if (want !== core.army.armyOf(G.setup, s).keys.join(' ')) throw new Error(`P-mission: a match of ${name} fields ${want} for seat ${s}, not its preset's units`)
-        for (const army of [m.army, text]) {
-          const H2 = core.createMatch({ ...SETUP, mission: name, seats: SETUP.seats.map((x) => ({ ...x, army })) })
+        for (const army of [own, text]) {
+          const H2 = core.createMatch({ ...SETUP, mission: name, seats: SETUP.seats.map((x, t) => (m.roles && t !== s ? x : { ...x, army })) })
           if (keys(H2) !== keys(G) || core.stateHash(H2) !== core.stateHash(G)) throw new Error(`P-mission: a match of ${name} with every seat naming ${JSON.stringify(army)} differs from one naming no army (${race}'s preset)`)
         }
         n++
@@ -1456,9 +2213,10 @@ const ARMY_REFUSALS = {
   'true': [true, NO, /^seat 0's army is a preset's name or a list of counts, not true$/],
   // (the plural is the orchestrator's call while each race has one
   // preset: either agreement passes)
-  // ((F8b) every race's three presets, named in their order)
-  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there are classic, field, grand\)$/],
-  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there are classic, field, grand\)$/],
+  // ((F8b) every race's presets, named in their order: (Breakthrough, S5a)
+  // four, the March Wall's garrison the last)
+  'a preset the race lacks': [NO, 'grnad', /^the Coil of Ssithra have no army "grnad" \(there are classic, field, grand, garrison, assault\)$/],
+  "an Object.prototype member's name": [NO, 'constructor', /^the Coil of Ssithra have no army "constructor" \(there are classic, field, grand, garrison, assault\)$/],
   // ('toString' has a capital: no preset's name, so not a list either)
   "toString": ['toString', NO, /^seat 0's army "toString" is neither a preset nor a list of counts$/],
   // ((F8b) a larger battle's preset is a preset like any, held to the
@@ -1680,7 +2438,9 @@ const V1_PINS = {
 // F9c's firing decks, a rider's shot from its hull's deck: no new state
 // (the deck's spent slots read off its riders' `shot` flags), the format
 // unchanged, and no pinned match fields a rider: the pins as under 15)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+// ((Breakthrough) 17: the roles, a branch only a mission with roles reaches;
+// no unit field added, the format unchanged: the pins as under 16)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
 const PINS_UNDER = (v) => (v >= 12
   ? { ...V1_PINS, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
   : v >= 9 ? { ...V1_PINS, '64-89': { end: '1jmxq628imf' } } : V1_PINS)
@@ -1771,9 +2531,15 @@ function fuzzTask(core, RACES, MISSIONS, n, seed) {
   const races = Object.keys(RACES), missions = Object.keys(MISSIONS)
   const int = (k) => Math.floor(rand() * k)
   const counts = { fuzzed: 0, refused: 0, taken: 0, roundTrips: 0, both: 0, made: 0 }
-  // a legal list of `race` at `mission`, as text (from 60% of the limit)
-  const legal = (race, mission) => {
-    const rules = MISSIONS[mission].list
+  // ((Breakthrough, S5a) each seat's list rules and preset its role's on a
+  // mission with roles: core/army.js rulesFor and presetFor, where the
+  // code has them; the seats name no attacker, so seat 0 attacks)
+  const rulesOf = (mission, seat) => (A.rulesFor ? A.rulesFor({ mission }, seat) : MISSIONS[mission].list)
+  const presetOf = (mission, seat) => (A.presetFor ? A.presetFor({ mission }, seat) : MISSIONS[mission].army)
+  // a legal list of `race` at `mission` for `seat`, as text (from 60% of
+  // the limit)
+  const legal = (race, mission, seat) => {
+    const rules = rulesOf(mission, seat)
     return A.listText(A.autoList(RACES[race], { ...rules, points: rules.points - 5 * int(rules.points / 12.5) }, int(2 ** 32)))
   }
   // fullSetup's verdict: the setup, or the error thrown
@@ -1794,7 +2560,7 @@ function fuzzTask(core, RACES, MISSIONS, n, seed) {
   for (let k = 0; k < n; k++) {
     const mission = missions[int(missions.length)]
     const race = [0, 1].map(() => (rand() < 0.6 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)]))
-    const lists = race.map((r) => legal(r, mission))
+    const lists = race.map((r, i) => legal(r, mission, i))
     const seat = int(2), both = rand() < 0.2
     const army = [0, 1].map((i) => (i === seat || both ? fuzzValue(rand, lists[i]) : rand() < 0.5 ? lists[i] : undefined))
     const setupOf = (a) => ({ board: 1 + int(1e6), dice: 1 + int(1e9), mission, seats: [0, 1].map((i) => ({ race: race[i], ctrl: 'human', ...(a[i] === undefined && rand() < 0.5 ? {} : { army: a[i] }) })) })
@@ -1825,7 +2591,7 @@ function fuzzTask(core, RACES, MISSIONS, n, seed) {
     for (const i of [0, 1]) {
       const r = RACES[race[i]], given = army[i], filled = v.s.seats[i].army
       if (given != null && typeof given !== 'string') throw new Error(`${where}: fullSetup takes seat ${i}'s army ${show(given)}, which is no string`)
-      if (filled !== (given ?? MISSIONS[mission].army)) throw new Error(`${where}: seat ${i}'s army filled in as ${show(filled)}`)
+      if (filled !== (given ?? presetOf(mission, i))) throw new Error(`${where}: seat ${i}'s army filled in as ${show(filled)}`)
       const got = A.armyOf(v.s, i)
       const text = A.listText(got.counts)
       const preset = Object.hasOwn(r.armies, filled) ? filled : null
@@ -1833,7 +2599,7 @@ function fuzzTask(core, RACES, MISSIONS, n, seed) {
       const sum = [...text].reduce((s, d) => s + Number(d), 0)
       const order = got.keys.map((key) => r.roster.indexOf(key))
       if (got.keys.length !== sum || order.some((x, j) => x < 0 || (j && x < order[j - 1]))) throw new Error(`${where}: seat ${i}'s '${text}' fields ${got.keys.join(' ')}: not ${sum} units in roster order`)
-      if (A.checkList(r, MISSIONS[mission].list, got.counts) !== null) throw new Error(`${where}: seat ${i}'s '${text}' is taken, but checkList says ${A.checkList(r, MISSIONS[mission].list, got.counts)}`)
+      if (A.checkList(r, rulesOf(mission, i), got.counts) !== null) throw new Error(`${where}: seat ${i}'s '${text}' is taken, but checkList says ${A.checkList(r, rulesOf(mission, i), got.counts)}`)
       counts.roundTrips++
     }
     // the first lists taken, made into matches (human seats: each stops at
@@ -1918,16 +2684,22 @@ function armyGamesTask(core, RACES, MISSIONS, mission, n, seed, mods = null) {
   const A = core.army, rand = mulberry32(seed * 2246822519 + 3)
   const int = (k) => Math.floor(rand() * k)
   const races = Object.keys(RACES), rules = MISSIONS[mission].list
-  const ends = { score: 0, wipe: 0 }, budgets = []
+  // ((Breakthrough) a role mission's ends beside them)
+  const ends = { score: 0, wipe: 0, breakthrough: 0, held: 0 }, budgets = []
   let hulls = 0, bailed = 0
   for (let k = 0; k < n; k++) {
     const race = [0, 1].map(() => (rand() < 0.7 ? ['squirrel', 'serpent'][int(2)] : races[int(races.length)]))
-    const army = race.map((r) => {
-      const budget = rules.points - 5 * int(rules.points / 12.5)
+    // ((Breakthrough, S5a) a role mission's seat at its role's list rules,
+    // core/army.js rulesFor, the attacker k % 2 as below)
+    const own = (i) => (MISSIONS[mission].roles && A.rulesFor ? A.rulesFor({ mission, attacker: k % 2 }, i) : rules)
+    const army = race.map((r, i) => {
+      const at = own(i), budget = at.points - 5 * int(at.points / 12.5)
       budgets.push(budget)
-      return A.listText(A.autoList(RACES[r], { ...rules, points: budget }, int(2 ** 32)))
+      return A.listText(A.autoList(RACES[r], { ...at, points: budget }, int(2 ** 32)))
     })
     const setup = { board: int(2 ** 32), dice: int(2 ** 32), mission, seats: [0, 1].map((i) => ({ race: race[i], ctrl: 'ai', army: army[i] })) }
+    // ((Breakthrough) either seat attacking, by the game)
+    if (MISSIONS[mission].roles) setup.attacker = k % 2
     const where = `P-army game ${seed}.${k} (${JSON.stringify(setup)})`
     let G
     const out = mods ? new Watched() : [], watch = mods ? bailWatch(core, mods) : null
@@ -1954,7 +2726,7 @@ function armyGamesTask(core, RACES, MISSIONS, mission, n, seed, mods = null) {
     }
     unitsAre(core, G, RACES, where)
     invariants(core, G, `${where} at its end`)
-    ends[result(G, where, -1)]++
+    ends[result(G, where, -1, core)]++
     const bad = traceShape(G)
     if (bad) throw new Error(`${where}: ${bad}`)
   }
@@ -3743,7 +4515,10 @@ function kegTask(core, mods) {
     for (const set of m.sets) {
       for (let seed = 1; seed <= KEG_SETS_SEEDS; seed++) {
         const T = new mods.terrain.Terrain(m.board.W, m.board.H)
-        T.generate(seed, m.objectives, m.deploy, set)
+        // ((Breakthrough) a mission with roles builds its board as newState
+        // does, handed its roles' frame: the March Wall needs it)
+        if (m.roles) T.generate(seed, mods.match.roleObjectives(m, false), m.deploy, set, null, mods.match.roleFrame(m.roles, false))
+        else T.generate(seed, m.objectives, m.deploy, set)
         const kegs = T.chunks.filter((c) => c.kind === 'keg')
         if (set === 'powder') {
           if (!kegs.length || kegs.some((k) => k.hp !== K.hp || k.navKind !== 'soft' || k.los || k.cover)) throw new Error(`P-keg: the Powder Field's board ${seed} stands ${kegs.length} kegs, ${kegs.length ? 'not all with the keg\'s hit points, soft, without sight or cover' : 'none'}`)
@@ -3942,6 +4717,100 @@ function kegTask(core, mods) {
   const never = Object.entries(met).filter(([, v]) => !v).map(([k]) => k)
   if (never.length) throw new Error(`P-keg never met: ${never.join(', ')} (on ${KEG_BOARDS} boards)`)
   return counts
+}
+
+// ── P-ram (Breakthrough, the line set's gate) ──────────────────────────────
+// The March Wall's gate (core/terrain/breakthrough.js: the set's hp and ram)
+// rammed by a wrecker, on a scene of its own: a Field match, both seats
+// human, every unit gone but the one under test, the table cleared and a
+// wall built across it at x = 0, two hard pieces from the table's edges to a
+// gap of the gate's width with the gate in it (its def the generator's,
+// copied off a March Wall board). The wrecker (the Brute, the War-Cart, the
+// Howdah) stands 7 west of it facing it and walks (core/actions/move.js
+// doMove, each move a plan from where it stands): up to the gate, back two
+// tails from it, up to it again. Each walk takes exactly one ram's blow off
+// the gate, however many of its samples (and, the Howdah's, its discs) meet
+// it (`rammed`: once a walk): 12 → 8 → 4 → broken, the third walk breaking
+// it, in one terrain.hurt or terrain.destroy of the gate per walk; while
+// the gate stands no walk ends with any of the unit east of the wall. Then
+// the War-Cart and the Howdah each walk on through the broken gate (its
+// timbers difficult ground) to east of the wall (in two walks at most). A chunk without the field
+// (a crate the Brute walks into) still takes the smash's 99.
+function ramTask(core, mods) {
+  const q = core.q, out = { walks: 0, blows: 0, through: 0, crates: 0 }
+  // (a March Wall board as breakthrough builds it, its gate's def copied)
+  const bm = core.missionOf({ mission: 'breakthrough' })
+  const scratch = new mods.terrain.Terrain(bm.board.W, bm.board.H)
+  scratch.generate(1, mods.match.roleObjectives(bm, false), bm.deploy, 'march', null, mods.match.roleFrame(bm.roles, false))
+  const gd = scratch.byId(scratch.plan.gate.id), M = mods.sets.SETS.march.gate
+  if (gd.hp !== M.hp || gd.ram !== M.ram || M.ram * 3 < M.hp || M.ram * 2 >= M.hp) throw new Error(`P-ram: the set's gate (hp ${M.hp}, ram ${M.ram}) is not three blows, or the board's (hp ${gd.hp}, ram ${gd.ram}) not the set's`)
+  const serpentList = core.army.listText(RACES_R.serpent.roster.map((k) => ({ hierophant: 1, brute: 1, scaleguard: 2, howdah: 1 })[k] ?? 0))
+  const scene = (race, key) => {
+    const seats = race === 'squirrel' ? [{ race: 'squirrel', ctrl: 'human', army: SCENE_LIST }, { race: 'serpent', ctrl: 'human', army: serpentList }] : [{ race: 'squirrel', ctrl: 'human' }, { race: 'serpent', ctrl: 'human', army: serpentList }]
+    const G = core.createMatch({ board: 4242, dice: 99, mission: 'field', terrain: 'open', seats }, { out: [] })
+    const u = G.units.find((x) => x.key === key && x.alive > 0 && !x.aboard)
+    if (!u) throw new Error(`P-ram: no ${key} in the ${race} seat's list`)
+    for (const o of G.units) if (o !== u) o.alive = 0
+    u.aboard = null
+    G.terrain.clear()
+    const H = G.nav.H, w = gd.shape.hz
+    for (const k of [1, -1]) G.terrain.add({ kind: 'rock', hp: Infinity, shape: { x: 0, y: 1.5, z: (k * (H / 2 + w)) / 2, hx: 0.6, hy: 1.5, hz: (H / 2 - w) / 2 + 0.5, yaw: 0 }, navKind: 'hard', los: 'block', cover: true, look: { piece: 'boulder', size: 1, color: '#8c8880', scale: [1, 1, 1], rot: [0, 0, 0], y: 1, moss: false } })
+    const gate = G.terrain.add({ kind: gd.kind, hp: gd.hp, ram: gd.ram, shape: { x: 0, y: gd.shape.y, z: 0, hx: gd.shape.hx, hy: gd.shape.hy, hz: gd.shape.hz, yaw: 0 }, navKind: gd.navKind, los: gd.los, cover: gd.cover, look: gd.look })
+    G.terrain.dirty = true
+    mods.units.moveUnitTo(G, u, -7, 0)
+    if (u.t.fp) u.facing = 2
+    G.terrain.dirty = true
+    mods.match.refreshNav(G)
+    return { G, u, gate }
+  }
+  // the furthest east any of u stands (its discs, a long hull's)
+  const east = (u) => (u.t.fp ? Math.max(...q.discsOf(u).map((d) => d.x + d.r)) : u.pos.x + u.r)
+  // a walk to the valid end nearest (x, z)
+  const walk = (G, u, x, z, where) => {
+    const plan = q.movePlan(G, u, 0)
+    let best = -1, bd = Infinity
+    for (let i = 0; i < G.nav.N; i++) {
+      if (!(plan.fp ? plan.cells.dist[i] < Infinity : isFinite(plan.res.dist[i])) || !q.validEnd(G, plan, i)) continue
+      const d = Math.hypot(G.nav.x(i) - x, G.nav.z(i) - z)
+      if (d < bd) [bd, best] = [d, i]
+    }
+    if (best < 0) throw new Error(`${where}: no valid end`)
+    G.out.length = 0
+    mods.move.doMove(G, u, best, plan)
+    out.walks++
+    return G.out
+  }
+  const blowsOn = (ev, id) => ev.filter((e) => e.t === 'unit.move').flatMap((e) => e.smashes.flatMap((sm) => sm.ev)).filter((e) => (e.t === 'terrain.hurt' || e.t === 'terrain.destroy') && e.id === id).length
+  for (const [race, key] of [['serpent', 'brute'], ['squirrel', 'warcart'], ['serpent', 'howdah']]) {
+    const where = `P-ram, the ${key}`
+    const { G, u, gate } = scene(race, key)
+    const legs = [[8, 0], [-2 - u.r - (u.t.fp ? 2.5 : 0), 0], [8, 0]]
+    legs.forEach(([x, z], k) => {
+      const ev = walk(G, u, x, z, `${where}, walk ${k + 1}`)
+      const want = M.hp - M.ram * (k + 1)
+      const n = blowsOn(ev, gate.id)
+      if (n !== 1) throw new Error(`${where}, walk ${k + 1}: the gate hurt ${n} times in one walk, not once`)
+      if (want > 0 ? !(gate.alive && gate.hp === want) : gate.alive) throw new Error(`${where}, walk ${k + 1}: the gate at ${gate.alive ? `${gate.hp} hit points` : 'broken'}, not ${want > 0 ? `${want}` : 'broken'}`)
+      if (east(u) > -gate.shape.hx) throw new Error(`${where}, walk ${k + 1}: the ${key} reaches ${east(u).toFixed(2)}, past the wall's face, while the gate stood`)
+      out.blows++
+    })
+    const pile = G.terrain.chunks.find((c) => c.kind === 'rubble' && c.alive)
+    if (!pile || pile.shape.x !== gate.shape.x || pile.shape.hz !== gate.shape.hz || pile.navKind !== 'diff' || pile.look.style !== 'timber') throw new Error(`${where}: the broken gate left ${pile ? `a ${pile.navKind} pile` : 'no pile'}, not its timbers on its footprint`)
+    if (key !== 'brute') {
+      // (two walks at most: the Howdah's move is short)
+      for (let k = 0; k < 2 && !(u.pos.x > gate.shape.hx + u.r); k++) walk(G, u, 10, 0, `${where}, through`)
+      if (!(u.pos.x > gate.shape.hx + u.r)) throw new Error(`${where}: the ${key} stops at x ${u.pos.x.toFixed(2)}, not through the broken gate`)
+      out.through++
+    } else {
+      // a crate, which has no ram, takes the smash's 99
+      const crate = G.terrain.add({ kind: 'crate', hp: 1, shape: { x: u.pos.x - 2, y: 0.3, z: 0, hx: 0.36, hy: 0.3, hz: 0.36, yaw: 0 }, navKind: 'diff', los: 'obscure', cover: true, look: { piece: 'crate', s: 0.6, color: '#9a7048', stacked: false, yaw: 0, chip: '#9a7048' } })
+      G.terrain.dirty = true
+      walk(G, u, u.pos.x - 4, 0, `${where}, into a crate`)
+      if (crate.alive) throw new Error(`${where}: the crate stands after the Brute walked through it`)
+      out.crates++
+    }
+  }
+  return out
 }
 
 // ── P-spell (V3c, DESIGN §4.1 rule 29) ──────────────────────────────────────
@@ -4291,6 +5160,8 @@ let RACES_F = null
 
 // ((V3c) the races, for P-spell's coverage: the child's)
 let RACES_S = null
+// (Breakthrough) P-ram's race data, set in the child as RACES_S is
+let RACES_R = null
 
 // (the child's match/ modules that fold a log, R8's: refold's)
 // ── (F9a) P-riders (DESIGN §4.2.5's invariants; §4.2.9's P-riders, P-pilot
@@ -4619,12 +5490,15 @@ function bailWatch(core, mods) {
 // The units DESIGN §4.2.8.7's autoload boards, by id → hull id: each hull
 // in G.units order, its seat's Troops in G.units order, on the table, bases
 // within maxBase, neither big nor a wrecker, whole, while they fit (a squad
-// that doesn't is passed over)
+// that doesn't is passed over). ((Breakthrough, S5c) A hull of a seat that
+// deployed behind a wall boards no one: on a board with a plan, the seat
+// that does not attack, the only one whose zone is behind it.)
 function autoloadWant(G) {
   const want = new Map()
+  const walled = (s) => !!G.terrain.plan && G.setup.attacker !== undefined && s !== G.setup.attacker
   for (const v of G.units) {
     const tr = v.t.transport
-    if (!tr || v.alive <= 0) continue
+    if (!tr || v.alive <= 0 || walled(v.side)) continue
     let left = tr.capacity
     for (const u of G.units) {
       if (u.side !== v.side || u.t.role !== 'Troops' || want.has(u.id) || u.alive <= 0) continue
@@ -5830,6 +6704,12 @@ if (a.child) {
       const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
       const [shoot, recipes, terrain, score, matchMod, hazards] = await Promise.all([mod('core', 'actions', 'shoot.js'), mod('core', 'terrain', 'recipes.js'), mod('core', 'terrain', 'terrain.js'), mod('core', 'ai', 'score.js'), mod('core', 'match.js'), mod('data', 'hazards.js')])
       out = { ok: true, counts: kegTask(core, { rng, shoot, recipes, terrain, score, match: matchMod, hazards, MISSIONS: await missionsOf() }) }
+    } else if (task.kind === 'ram') {
+      // (Breakthrough: P-ram's scenes)
+      const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
+      const [move, terrain, sets, matchMod, units] = await Promise.all([mod('core', 'actions', 'move.js'), mod('core', 'terrain', 'terrain.js'), mod('core', 'terrain', 'sets.js'), mod('core', 'match.js'), mod('core', 'units.js')])
+      RACES_R = RACES
+      out = { ok: true, counts: ramTask(core, { move, terrain, sets, match: matchMod, units }) }
     } else if (task.kind === 'lattice') {
       // (F9b: P-lattice, against the reference beside this file)
       const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
@@ -5840,7 +6720,10 @@ if (a.child) {
       // (F8a: P-mission, on code whose setups name their mission; F11a: and
       // its armies, on code with core/army.js)
       const missions = core.SETUP_KEYS ? await import(pathToFileURL(join(dir, 'data', 'mission.js')).href) : null
-      out = { ok: true, counts: { refused: setupTask(core), missions: missions ? missionTask(core, missions.MISSIONS) : 0, armies: core.army ? armyTask(core, missions, RACES) : 0 } }
+      // ((the March Wall) the plan's reader a defender behind the line is
+      // judged by, on code with the line set)
+      const wall = existsSync(join(dir, 'core', 'terrain', 'breakthrough.js')) ? await import(pathToFileURL(join(dir, 'core', 'terrain', 'breakthrough.js')).href) : null
+      out = { ok: true, counts: { refused: setupTask(core), missions: missions ? missionTask(core, missions.MISSIONS, wall?.faceDist ?? null) : 0, armies: core.army ? armyTask(core, missions, RACES) : 0 } }
     } else if (task.kind === 'army') {
       // (F11a) P-army's fuzz, sweep and shadow
       const MISSIONS = await missionsOf()
@@ -5852,6 +6735,34 @@ if (a.child) {
       out = { ok: true, counts: ridesTask(core, await ridesMods(), mirror, RACES, await missionsOf(), task.mission, task.n, task.seed) }
     } else if (task.kind === 'ridesScene') {
       out = { ok: true, counts: ridesScenes(core, await ridesMods(), mirror, RACES, await missionsOf()) }
+    } else if (task.kind === 'roles') {
+      // (Breakthrough) P-roles' scenes
+      const mod = (...p) => import(pathToFileURL(join(dir, 'core', ...p)).href)
+      const [engine, deploy, units, wall] = await Promise.all([mod('engine.js'), mod('deploy.js'), mod('units.js'), mod('terrain', 'breakthrough.js')])
+      out = { ok: true, counts: rolesScenes(core, { engine, deploy, units, wall }) }
+    } else if (task.kind === 'rolesGames') {
+      out = { ok: true, counts: rolesGames(core, RACES, task.n, task.seed) }
+    } else if (task.kind === 'wallPlay') {
+      // ((Breakthrough, S3) P-wall's battles, watched by sim/wall-probe.mjs)
+      const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
+      const [BT, R, probe] = await Promise.all([at('core', 'terrain', 'breakthrough.js'), at('core', 'ai', 'route.js'), import(new URL('./wall-probe.mjs', import.meta.url).href)])
+      out = { ok: true, counts: wallPlayTask(core, { BT, R }, probe, task.cell, task.n) }
+    } else if (task.kind === 'wallScene') {
+      // ((Breakthrough, S5b) P-wall's charge scenes)
+      const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
+      const [U, S, R, BT] = await Promise.all([at('core', 'units.js'), at('core', 'ai', 'score.js'), at('core', 'ai', 'route.js'), at('core', 'terrain', 'breakthrough.js')])
+      out = { ok: true, counts: wallScenes(core, { U, S, R, BT }) }
+    } else if (task.kind === 'wallTerms') {
+      // ((Breakthrough) P-wall's term scenes)
+      const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
+      const [U, S, R, BT, rules] = await Promise.all([at('core', 'units.js'), at('core', 'ai', 'score.js'), at('core', 'ai', 'route.js'), at('core', 'terrain', 'breakthrough.js'), at('core', 'rules.js')])
+      out = { ok: true, counts: wallTermScenes(core, { U, S, R, BT, rules }) }
+    } else if (task.kind === 'rolesDeploy') {
+      // ((the March Wall) P-roles' deployment behind the wall)
+      const mods = await ridesMods()
+      const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
+      const [wall, move] = await Promise.all([at('core', 'terrain', 'breakthrough.js'), at('core', 'nav.js')])
+      out = { ok: true, counts: rolesDeployTask(core, { ...mods, wall, move: { STEP: move.STEP } }, RACES, await missionsOf(), task.n, task.seed) }
     } else if (task.kind === 'hullDeploy') {
       // (F9a) P-army: the deployment at the caps with hulls
       out = { ok: true, counts: hullDeployTask(core, await ridesMods(), RACES, await missionsOf(), task.mission, task.n, task.seed) }
@@ -5900,7 +6811,9 @@ function child(task, pkg) {
 // of 2), random games with War-Carts and a human seat, the scenes, and
 // P-army's deployments at the caps with hulls by mission ((V3d, at the V3
 // merge) the Powder Field among them: it takes War-Carts as Grand does)
-const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2, powder: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20, powder: 20 }, hullHuman: 6 }
+// ((Breakthrough) and P-roles': its scenes and 300 AI battles of its own,
+// in children of 50)
+const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2, powder: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20, powder: 20 }, hullHuman: 6, rolesAI: 300, rolesDeploy: 300, wallPlay: 80 }
 
 // (F9b) P-lattice's run, on code with the lattice (core/nav.js hullReach):
 // [] when it holds (or, unless it was asked for alone, when the code has
@@ -5943,14 +6856,35 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
   // against the AI, the Coil fielding Howdahs, every decision probed)
   const longs = /hullReach\(/.test(readFileSync(join(pkg, 'core', 'nav.js'), 'utf8'))
   if (rides && longs) for (let j = 0; j < (army.hullHuman ?? 0); j++) tasks.push({ kind: 'random', seed: 700000 + seed * 1000 + j, lists: j % 2 ? 'grand' : 'field', rides: true, hulls: true })
+  // (Breakthrough, code with roles: P-roles' scenes and battles)
+  const roles = /export const rolesOf/.test(readFileSync(join(pkg, 'core', 'match.js'), 'utf8'))
+  if (roles) {
+    tasks.unshift({ kind: 'roles' })
+    for (let j = 0; j < (army.rolesAI ?? 0); j += 50) tasks.push({ kind: 'rolesGames', n: Math.min(50, army.rolesAI - j), seed: seed * 1000 + j })
+    // ((the March Wall) the deployment behind the wall, on code with it)
+    if (existsSync(join(pkg, 'core', 'terrain', 'breakthrough.js'))) for (let j = 0; j < (army.rolesDeploy ?? 0); j += 50) tasks.push({ kind: 'rolesDeploy', n: Math.min(50, army.rolesDeploy - j), seed: seed * 1000 + j })
+    // ((Breakthrough, S3) P-wall's battles, on code with the AI's wall terms:
+    // a quarter a cell, on the fixed boards WALL_BOARDS, whatever the seed)
+    if (existsSync(join(pkg, 'core', 'ai', 'route.js')) && army.wallPlay) for (let cell = 0; cell < 4; cell++) tasks.push({ kind: 'wallPlay', cell, n: army.wallPlay / 4 })
+    // ((S5b) P-wall's charge scenes, on code with the charge's wallGap)
+    if (existsSync(join(pkg, 'core', 'ai', 'route.js')) && /^export function wallGap\(/m.test(readFileSync(join(pkg, 'core', 'ai', 'score.js'), 'utf8'))) tasks.push({ kind: 'wallScene' })
+    // ((Breakthrough) P-wall's term scenes, on code with the AI's wall terms)
+    if (existsSync(join(pkg, 'core', 'ai', 'route.js'))) tasks.push({ kind: 'wallTerms' })
+  }
   const t0 = Date.now()
   const res = await pool(tasks, CPUS, async (t) => {
     const r = await child(t, pkg)
     const c = r.counts
-    const label = t.kind === 'corpus' ? t.id : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.hulls ? `hull game ${t.seed}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
+    const label = t.kind === 'corpus' ? t.id : t.kind === 'wallPlay' ? `P-wall cell ${t.cell}` : t.kind === 'wallScene' ? 'P-wall charge scenes' : t.kind === 'wallTerms' ? 'P-wall term scenes' : t.kind === 'roles' ? 'P-roles scenes' : t.kind === 'rolesGames' ? `P-roles #${t.seed}` : t.kind === 'rolesDeploy' ? `P-roles deployment #${t.seed}` : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.hulls ? `hull game ${t.seed}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
     const what = !r.ok ? '' : t.kind === 'corpus' ? `${c.probes} decisions probed`
+      : t.kind === 'wallScene' ? `the charge's gap across the wall, read against a straight walk: ${c.scenes.join(', ')}`
+      : t.kind === 'wallTerms' ? `the wall's terms read where each decides: ${c.scenes.join('; ')}`
+      : t.kind === 'wallPlay' ? `${c.n} AI battles on the March Wall, ${WALL_CELLS[t.cell].races[WALL_CELLS[t.cell].attacker]} attacking from seat ${WALL_CELLS[t.cell].attacker}: behind the face by round 4 ${c.walk4}, scored by round 4 ${c.scored4}`
+      : t.kind === 'roles' ? `${c.scenes} scenes with either seat attacking (the zones, the scoring, the ends), the attacker's first turn with no die drawn ${c.firsts} times`
+      : t.kind === 'rolesGames' ? `${c.battles} breakthrough AI battles, none a draw (breakthrough ${c.ends.breakthrough}, held ${c.ends.held}, wipe ${c.ends.wipe})`
+        : t.kind === 'rolesDeploy' ? `${c.boards} boards behind the wall, ${c.matches} deployments, ${c.units} units where place takes them, ${c.defenders} defenders behind the face (${c.decks} on a deck), ${c.astride} bases astride a face refused (${c.longs} of ${c.hulls} long hulls)`
       : t.kind === 'army' ? `${c.fuzz.fuzzed} armies fuzzed (${c.fuzz.refused} refused, ${c.fuzz.both} with both seats fuzzed; ${c.fuzz.taken} taken, ${c.fuzz.roundTrips} seats round-tripped, ${c.fuzz.made} made into matches), ${c.sweep} autoLists legal, ${c.shadow} classic shadows held`
-        : t.kind === 'armyGames' ? `${c.listGames} AI battles between lists of ${c.budgets[0]}-${c.budgets[1]} points (score ${c.ends.score}, wipe ${c.ends.wipe})${c.hulls ? `, ${c.hulls} hulls fielded, ${c.bailed} bail-outs held to P-riders` : ''}`
+        : t.kind === 'armyGames' ? `${c.listGames} AI battles between lists of ${c.budgets[0]}-${c.budgets[1]} points (score ${c.ends.score}, wipe ${c.ends.wipe}${c.ends.breakthrough || c.ends.held ? `, breakthrough ${c.ends.breakthrough}, held ${c.ends.held}` : ''})${c.hulls ? `, ${c.hulls} hulls fielded, ${c.bailed} bail-outs held to P-riders` : ''}`
           : t.kind === 'rides' ? `${c.battles} AI battles with War-Carts: ${c.lines} trace lines held to P-riders' state (${c.hidden} hidden-rider queries), ${c.autoloaded} riders autoloaded, riders stepping off ${c.steps} times (in ${c.stepped} battles), ${c.hullsDown} hulls destroyed with riders (${c.bailed} bailed out, ${c.lost} lost), ${c.wrecks} wrecks, the mirror held at ${c.acts} acts${c.deckShots !== undefined ? `; (F9c) ${c.deckShots} shots from a deck (${c.deckBlasts} templates) in ${c.decked} battles` : ''}`
             : t.kind === 'ridesScene' ? `${c.scenes} scenes: ${c.autoloaded} riders autoloaded, ${c.hidden} hidden-rider queries, ${c.bailed} bailed out by an enemy's 1", ${c.lost} lost with nowhere to stand, the AI's friendly fire swept at ${c.sweep} places${c.deckShots ? `; (F9c) a volley and ${c.deckBlasts} templates thrown from a War-Cart's deck, its third rider refused, a shot over a wall ${c.deckEye.toFixed(2)}" high from the deck, ${c.longDeck} shots from a Howdah's deck at its 8 headings, ${c.deckSpell} spell cast from a deck${c.deckLob ? `, a lob from a deck at a target ${c.deckLob.toFixed(2)}" up` : ''}` : ''}`
               : t.kind === 'hullDeploy' ? `${c.boards} deployments at the caps (${Object.entries(c.sets).map(([k, n]) => `${k} ${n}`).join(', ')}): ${c.hulls} hulls (${c.longs ?? 0} long hulls on the state place {f} takes), ${c.units} units on the table where place takes them, ${c.riders} riders aboard as the autoload and embark have them`
@@ -6004,6 +6938,12 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     say(`  P-keg: ${r.ok ? `ok   no keg on ${r.counts.clean} boards of classic, open and fortified, one at (0, 0) on ${r.counts.kegBoards} keg boards, ${r.counts.powderKegs ?? 0} kegs every one a keg in its rules on ${r.counts.powderBoards ?? 0} Powder Field boards; ${r.counts.templates} templates setting the keg off once (${r.counts.once} again on the same spot setting nothing off), the setting-off blast's victims and scenery before the keg's line, fuse and blast, ${r.counts.rows} victims' rows held die for die in G.units order, the fallen the setter-off's; ${r.counts.chains} chains of four kegs going off in the line's order, each once; ${r.counts.walks} wreckers' walks setting it off once the walk ended; ${r.counts.values} AI keg values and ${r.counts.fears} cells in the blast feared` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
+  // (Breakthrough) P-ram's scenes, for code with the March Wall
+  if (existsSync(join(pkg, 'core', 'terrain', 'breakthrough.js'))) {
+    const r = await child({ kind: 'ram' }, pkg)
+    say(`  P-ram: ${r.ok ? `ok   ${r.counts.walks} wreckers' walks (the Brute, the War-Cart, the Howdah) at the March Wall's gate, ${r.counts.blows} of them one ram's blow each, never two in a walk, the third breaking it into its timbers, none ending past the wall while it stood; ${r.counts.through} hulls through it once broken; ${r.counts.crates} crate smashed for 99` : `FAIL ${r.error}`}`)
+    if (!r.ok) bad.push(r)
+  }
   // (V3c) P-spell's scenes, for code whose casters have several spells
   if (/export function bestCast/.test(readFileSync(join(pkg, 'core', 'ai', 'policy.js'), 'utf8'))) {
     const r = await child({ kind: 'spell' }, pkg)
@@ -6016,7 +6956,8 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
   const reached = { score: 0, wipe: 0, concede: 0, offTurn: 0, chargeEnd: 0, auto: 0, place: 0, vote: 0, overtime: 0, ...(pilots(pkg) ? { pilot: 0 } : {}) }
   for (const r of res) {
     if (!r.ok || !r.game) continue
-    reached[r.counts.ended]++
+    // ((Breakthrough) and a role mission's ends, counted, none required)
+    reached[r.counts.ended] = (reached[r.counts.ended] ?? 0) + 1
     reached.offTurn += r.counts.offTurn ?? 0
     for (const k of ['chargeEnd', 'auto', 'place', 'vote', ...('pilot' in reached ? ['pilot'] : [])]) reached[k] += r.counts.commands[k] ?? 0
     reached.overtime += r.counts.overtime ?? 0
@@ -6098,7 +7039,36 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     if (!bad.length && (!fz || ai !== want || human !== tasks.filter((t) => t.lists && !t.rides).length)) bad.push({ error: `P-army ran short: ${fz ? 'the fuzz held' : 'no fuzz'}, ${ai} of ${want} AI list battles, ${human} list games with a human seat` })
     if (fz) armySaid = `; (P-army) ${fz.fuzz.fuzzed} fuzzed armies, ${fz.fuzz.refused} refused with a seat's reason and ${fz.fuzz.taken} taken in their one spelling (${fz.fuzz.made} made into matches), ${fz.sweep} autoLists legal, ${fz.shadow} classic shadows unchanged, ${ai + human} random legal lists' battles played to the end (${human} with a human seat)`
   }
-  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}${Object.keys(cast).length ? `; spells cast by a human seat: ${Object.entries(cast).map(([k, n]) => `${k} ${n}`).join(', ')}` : ''}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid}${ridesSaid}${hullSaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
+  // (Breakthrough) P-roles: what it held, over the run
+  let rolesSaid = ''
+  if (roles) {
+    const sc = res.find((r, i) => r.ok && tasks[i].kind === 'roles')?.counts
+    const bs = res.filter((r, i) => r.ok && tasks[i].kind === 'rolesGames').map((r) => r.counts)
+    const n = bs.reduce((k, c) => k + c.battles, 0)
+    if (!bad.length && (!sc || n !== (army.rolesAI ?? 0))) bad.push({ error: `P-roles ran short: ${sc ? 'the scenes held' : 'no scenes'}, ${n} of ${army.rolesAI ?? 0} role battles` })
+    // ((the March Wall) the deployment behind the wall: every seed run, and
+    // a long hull astride the face judged)
+    const ds = res.filter((r, i) => r.ok && tasks[i].kind === 'rolesDeploy').map((r) => r.counts)
+    const dsum = (k) => ds.reduce((x, c) => x + c[k], 0)
+    const wantD = tasks.filter((t) => t.kind === 'rolesDeploy').reduce((x, t) => x + t.n, 0)
+    if (!bad.length && wantD && (dsum('boards') !== wantD || dsum('astride') === 0 || (dsum('hulls') > 0 && dsum('longs') === 0))) bad.push({ error: `P-roles' deployment ran short: ${dsum('boards')} of ${wantD} boards, ${dsum('astride')} bases astride a face judged, ${dsum('longs')} of ${dsum('hulls')} long hulls` })
+    const sum = (k) => bs.reduce((x, c) => x + c.ends[k], 0)
+    // (the ends by the attacker's race, and those whose last round passed
+    // the target)
+    const byRace = {}
+    for (const c of bs) for (const [r, e] of Object.entries(c.byRace ?? {})) for (const [k, v] of Object.entries(e)) (byRace[r] ??= {})[k] = (byRace[r][k] ?? 0) + v
+    const races = Object.entries(byRace).sort(([a], [b]) => (a < b ? -1 : 1)).map(([r, e]) => `${r} attacking: breakthrough ${e.breakthrough ?? 0}, held ${e.held ?? 0}, wipe ${e.wipe ?? 0}, past the target ${e.over ?? 0}`).join('; ')
+    rolesSaid = `; (P-roles) ${sc?.scenes ?? 0} scenes and ${n} breakthrough battles on the March Wall, none drawn, every end one the rules allow (breakthrough ${sum('breakthrough')}, held ${sum('held')}, wipe ${sum('wipe')}; ${races})`
+    // ((S3) P-wall: the AI's rows over its battles, judged here)
+    const ws = res.filter((r, i) => r.ok && tasks[i].kind === 'wallPlay').map((r) => r.counts)
+    if (ws.length) {
+      const w = wallJudge(ws)
+      if (!bad.length && w.error) bad.push({ error: w.error })
+      rolesSaid += `; (P-wall) ${w.said}`
+    }
+    if (ds.length) rolesSaid += `; (P-roles, the March Wall) ${dsum('boards')} boards' deployments, either seat attacking, each race order and at the caps (${dsum('matches')} in all): ${dsum('units')} units where place takes them, none overlapping, ${dsum('defenders')} defenders wholly behind the wall's face and 8 tails or more from the attacker's zone (the least ${Math.min(...ds.map((c) => c.apart)).toFixed(2)}), ${dsum('decks')} of them on a deck, no big unit, vehicle or long hull on one, every deployment the same again and drawing nothing; ${dsum('astride')} bases astride a face refused (${dsum('longs')} of ${dsum('hulls')} long hulls)`
+  }
+  say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}${Object.keys(cast).length ? `; spells cast by a human seat: ${Object.entries(cast).map(([k, n]) => `${k} ${n}`).join(', ')}` : ''}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid}${ridesSaid}${hullSaid}${rolesSaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
   return bad
 }
 
@@ -6172,6 +7142,10 @@ const MUTATIONS = {
   'keg-depth-first': ['core/actions/shoot.js', '    for (const next of landing(G, u, at, w, at)) line.push(next)\n', '    line.splice(i + 1, 0, ...landing(G, u, at, w, at))\n'],
   'keg-walk-dud': ['core/commands.js', '    if (kegs.length) kegsGoOff(G, unit, kegs)\n', ''],
   'keg-on-classic': ['core/terrain/sets.js', "    centre: [['tower', 0.55], ['rockbox', 0.8]],\n    kinds: [\n      ['ruin', 3.2, 4],", "    centre: [['keg', 0.1], ['tower', 0.55], ['rockbox', 0.8]],\n    kinds: [\n      ['ruin', 3.2, 4],"],
+  // (Breakthrough) P-ram: the ram on every sample of a walk (the gate down
+  // in one), and no ram at all (the smash's 99)
+  'ram-every-sample': ['core/actions/move.js', '        if (rammed?.has(c.id)) continue\n        rammed?.add(c.id)\n', ''],
+  'ram-ignored': ['core/actions/move.js', 'G.terrain.hurt(c, c.ram === undefined ? 99 : Math.min(99, c.ram),', 'G.terrain.hurt(c, 99,'],
   'keg-ai-blind': ['core/ai/score.js', '    const more = keg + (pre ? pre.fall : fallGain(G, u, e, w))\n', '    const more = (pre ? pre.fall : fallGain(G, u, e, w))\n'],
   'friend-rows-first': ['core/actions/shoot.js', '  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n', '  if (stray) (strayHits(G, u, fight.onto, stray, w), stray = 0)\n  const wn = woundNeed(w.S, target.t.T, w.poison)\n  const wd = roll(G, h)\n'],
   'stray-tie-last': ['core/queries.js', '    if (f.alive > onto.alive) onto = f\n', '    if (f.alive >= onto.alive) onto = f\n'],
@@ -6239,10 +7213,10 @@ const MUTATIONS = {
   // only the seat the match waits on may concede (§2.2: out of band)
   'concede-in-band': ['core/commands.js', '  return rule.ok(G, seat, body)\n}', '  return P?.seats.includes(seat) ? rule.ok(G, seat, body) : `seat ${seat} has no decision to make now`\n}'],
   // a concession crashes the engine
-  'concede-crash': ['core/engine.js', "const win = conceded >= 0 ? 1 - conceded :", 'const win = conceded >= 0 ? 1 - conceded.seat.x :'],
+  'concede-crash': ['core/engine.js', "let win = conceded >= 0 ? 1 - conceded :", 'let win = conceded >= 0 ? 1 - conceded.seat.x :'],
   // a quiet fold (G.out null) walks a wrecker without smashing anything: the
   // smash is skipped with the events nobody keeps
-  'quiet-smash': ['core/actions/move.js', 'if (smashAround(G, u, p, ev, broke) && ev)', 'if (ev && smashAround(G, u, p, ev, broke))'],
+  'quiet-smash': ['core/actions/move.js', 'if (smashAround(G, u, p, ev, broke, u.r, rammed) && ev)', 'if (ev && smashAround(G, u, p, ev, broke, u.r, rammed))'],
   // (F7c) P-height's collapse scenes: a deck falling at one post fewer than
   // its fallsAt, its ladders standing, no planks where it stood, its floor
   // kept by the nav, the units on it settled in the reverse of G.units
@@ -6447,6 +7421,50 @@ const MUTATIONS = {
   'hull-deploy-unstanding': ['core/deploy.js', "  if (!nav.hullStands(i, f, fp, 'walk')) return false\n", ''],
   'landing-long-centre': ['core/actions/transport.js', '    if (v.t.fp ? clearOf(v, x, z, u.r) > LAND_REACH : hypot(x - v.pos.x, z - v.pos.z) - v.r - u.r > LAND_REACH) continue', '    if (hypot(x - v.pos.x, z - v.pos.z) - v.r - u.r > LAND_REACH) continue'],
   'wreck-unturned': ['core/actions/transport.js', 'yaw: v.t.fp ? (v.facing * Math.PI) / 4 : 0,', 'yaw: 0,'],
+  // (Breakthrough) P-roles and P-mission's role rows: a roll-off on a role
+  // mission, the defender scoring an objective that scores for the
+  // attacker, no early end at the target, a draw on the score, the zones
+  // the old strips, the objectives unmirrored when seat 1 attacks, and an
+  // attacker taken on a mission without roles
+  'roles-roll-off': ['core/engine.js', '        if (rolesOf(G.setup)?.attack.first) attackFirst(G)\n        else rollOff(G)\n', '        rollOff(G)\n'],
+  'roles-defender-scores': ['core/engine.js', "    if (c < 0 || (o.scores !== null && o.scores !== (c === atk ? 'attack' : 'defend'))) continue\n", '    if (c < 0) continue\n'],
+  'roles-no-early-end': ['core/engine.js', '        if (rolesOf(G.setup) && broken(G)) gameOver(G)\n', '        if (false) gameOver(G)\n'],
+  'roles-draw': ['core/engine.js', "  if (why === 'score' && rolesOf(G.setup)) {\n", '  if (false) {\n'],
+  'roles-zone-strips': ['core/deploy.js', '  if (rolesOf(G.setup)) return roleZone(G, side)\n', ''],
+  'roles-unflipped': ['core/match.js', 'x: flip ? -p.x : p.x, z: flip ? -p.z : p.z,', 'x: p.x, z: p.z,'],
+  // ((the March Wall) a base over the wall's face taken, a long hull's
+  // disc over it taken, a big unit put on a deck, a post's cell taken
+  // without fits)
+  'roles-wall-face': ['core/deploy.js', '  if (box.plan && !(faceDist(box.plan, cx, cz) >= u.r - 0.01)) return false\n', ''],
+  'roles-wall-hull-face': ['core/deploy.js', '  if (plan) for (const d of row) if (!(faceDist(plan, cx + d.ix * fp.cell, cz + d.iz * fp.cell) >= d.r - 0.01)) return false\n', ''],
+  'roles-wall-big-on-deck': ['core/deploy.js', '  const decked = (u) => !!u.t.ranged && !u.t.big && !groundOnly(u) && !u.t.fp\n', '  const decked = (u) => !groundOnly(u) && !u.t.fp\n'],
+  // ((Breakthrough) the zone behind the line without its x bounds: the
+  // defender's side alone, so a defender may start in the wood's east
+  // mouth a tail and a quarter from the attacker's zone)
+  'roles-wall-unbounded': ['core/deploy.js', '  return { minX: Math.max(-W / 2, lo, b0), maxX: Math.min(W / 2, hi, b1), plan }\n', '  return { minX: Math.max(-W / 2, lo), maxX: Math.min(W / 2, hi), plan }\n'],
+  'roles-wall-post-unjudged': ['core/deploy.js', '    if (nav.hasHeight && Math.abs(nav.floor[i] - p.y) > STEP) continue\n    if (!fits(G, u, i, box, others)) continue\n', '    if (nav.hasHeight && Math.abs(nav.floor[i] - p.y) > STEP) continue\n'],
+  // ((Breakthrough, S3) P-wall's rows, each its term taken away: the
+  // route field (every route distance the straight line), a ladder whose
+  // head is held left open to its field, the ground in front of the face
+  // not refused, the deny term (its pull and its charge's worth))
+  'wall-route-straight': ['core/ai/route.js', 'export function routeDist(G, f, o, x, z) {\n  if (!f)', 'export function routeDist(G, f, o, x, z) {\n  if (true)'],
+  'wall-ladder-held': ['core/ai/route.js', '  const shut = cl.ladder ? heldLadders(G, u, plan, cl) : 0\n', '  const shut = 0\n'],
+  'wall-front-open': ['core/ai/score.js', '  if (fd < 0) s -= FRONT_COST\n', '  if (fd < 0) s -= 0\n'],
+  'wall-deny-off': [
+    ['core/ai/score.js', 'DENY = 5, THREAT', 'DENY = 1, THREAT'],
+    ['core/ai/score.js', 'DENY_GAIN = 40', 'DENY_GAIN = 0'],
+  ],
+  // ((S5b) P-wall's charge scenes: S5a's bound (the least field value
+  // over the cells in base contact, both radii taken off again) and S3's
+  // (the enemy's own cell alone, Infinity where it is off the field))
+  'wall-contact-least': [
+    ['core/ai/route.js', '  const nav = G.nav, out = f.map(() => -Infinity)\n', '  const nav = G.nav, out = f.map(() => Infinity)\n'],
+    ['core/ai/route.js', 'if (isFinite(f[k][i]) && f[k][i] > out[k]) out[k] = f[k][i]', 'if (f[k][i] < out[k]) out[k] = f[k][i]'],
+    ['core/ai/score.js', '  const own = f.map((d) => (j >= 0 ? d[j] : Infinity))\n', '  const own = f.map(() => Infinity)\n'],
+    ['core/ai/score.js', ': c.far && isFinite(c.far[k]) ? f[k][i] - c.far[k] : NaN', ': c.far && isFinite(c.far[k]) ? f[k][i] - c.far[k] - u.r - e.r : NaN'],
+  ],
+  'wall-contact-own': ['core/ai/score.js', '  return { own, far: own.every(isFinite) ? null : nearField(', '  return { own, far: true ? null : nearField('],
+  'roles-attacker-anywhere': ['core/index.js', "  } else if (s.attacker !== undefined) throw new Error(`the ${s.mission} mission has no attacker`)\n", '  }\n'],
   'lattice-ties-reordered': ['core/nav.js', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] <= key) break\n', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] < key) break\n'],
 }
 
@@ -6455,7 +7473,7 @@ if (a['self-test']) {
   // (F11a: P-army's workload cut down, its fuzz a fifth and a few list
   // battles; F9a: P-riders' too, a battle with War-Carts, a game with a
   // human seat, the scenes and a few deployments at the caps)
-  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false, army: { fuzz: 20000, ai: 3, human: 1, ridesAI: { field: 1 }, ridesHuman: 1, hullDeploy: { field: 4, grand: 2 } } }
+  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false, army: { fuzz: 20000, ai: 3, human: 1, ridesAI: { field: 1 }, ridesHuman: 1, hullDeploy: { field: 4, grand: 2 }, rolesAI: 20, rolesDeploy: 4, wallPlay: 80 } }
   // (--mutations a,b: only those, by name)
   const names = a.mutations ? a.mutations.split(',').map((x) => x.trim()) : Object.keys(MUTATIONS)
   const unknown = names.filter((x) => !Object.hasOwn(MUTATIONS, x))

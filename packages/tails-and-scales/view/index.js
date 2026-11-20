@@ -28,6 +28,8 @@ import { Shots } from './effects/shots.js'
 import { Diorama } from './diorama.js'
 import { Ghosts } from './fog.js'
 import { Dressing } from './dressing/index.js'
+import { zoneShapes } from './zones.js'
+import { Ways } from './ways.js'
 import { wait } from './clock.js'
 
 // (F8a) what of a board the table is made for: its size, its zones' depth
@@ -81,6 +83,9 @@ export class View {
     // board and the ground under its pieces, dressed as each match's table
     // is shown: rebuild)
     this.dressing = dress ? new Dressing({ scene, renderer, stage: this.stage, table: this.table, camera: this.camera, range, lowfi }) : null
+    // ((Breakthrough, S4b) the March Wall's four ways, marked: view/ways.js,
+    // app/flow.js's to show)
+    this.ways = new Ways(this.stage.overlay)
     // (F7b) the chunks seen through now (see()), and what they were worked
     // out for
     this.seen = new Set()
@@ -245,8 +250,14 @@ export class View {
     // another than the one shown (the presenter's: M.board; the zones'
     // depth and the objectives from the match)
     if (!to.units) this.setBoard({ ...g.board, ...M.board }, g.objectives, g.nav)
+    // ((Breakthrough) each seat's zone as its role's, on a mission with
+    // roles: view/zones.js; null, the strips, on every other)
+    if (!to.units) this.table.zoneShapes(zoneShapes(g))
     // (its dressing, once per setup: view/dressing/)
-    if (!to.units) this.dressing?.build(g)
+    if (!to.units) this.dressing?.build(g, zoneShapes(g))
+    // ((Breakthrough, S4b) a board with a plan, the March Wall's, its pieces
+    // cut at the mat's edge: view/terrain.js clipTo)
+    terrain.clipTo(g.terrain.plan ? g.board : null)
     terrain.sync(chunks)
     // ((F7a) each objective's marker on the top it stands on: the keep's
     // centre objective is held from its top)
@@ -314,6 +325,8 @@ export class View {
         // ((F7b) the walls in front of what the player is looking at)
         if (!this.fast) this.see()
         objectives.animate(dt, time, this.owners ?? mirror().owners)
+        // ((Breakthrough) the ways' labels over their ways)
+        if (!this.fast) this.ways.animate(camera)
         // (the battlefield's dressing: its clutter hidden under the bases)
         if (!this.fast) this.dressing?.animate(performance.now())
       },

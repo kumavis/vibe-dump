@@ -19,8 +19,26 @@ export default {
   roster: ['elder', 'oakguard', 'nutkin', 'grenadier', 'glider', 'trebuchet', 'warcart'],
   // (F8b) the presets of the larger battles, as counts in roster order: the
   // classic list twice over for a Field battle, three times for a Grand one
-  // (data/mission.js names them; sim/data-check.mjs holds each legal there)
-  armies: { field: '224222', grand: '336333' },
+  // (data/mission.js names them; sim/data-check.mjs holds each legal there).
+  // ((Breakthrough, S5a) `garrison`, the March Wall's defence, under the
+  // defender's own list: the Elder, an Oak Guard, three Nutkin and three
+  // Grenadier squads for the works and the yard, a Trebuchet, and two
+  // War-Carts, whose hulls hold the gate's road: (S5b) 620 points of 625,
+  // 11 units, 42 models) ((S5c) Made again for the defender's 800 points
+  // and its own War-Cart price, 90 (data/mission.js): the Elder, two Oak
+  // Guard, three Nutkin and three Grenadier squads, a Glider Wing and one
+  // War-Cart, 800 points of 800, 11 units, 49 models, its squads on the
+  // works. `assault`, the attacker's own preset: Field's ×2 list and a
+  // War-Cart, the clan's wrecker, so its default attack can ram the gate:
+  // 995 points of 1,000, 15 units, 57 models.) ((S5d) The garrison made
+  // again for the defender's Nutkin at 55: the Elder, three Oak Guard, a
+  // Nutkin squad, four Grenadier squads, a Trebuchet and a War-Cart, 800
+  // points of 800, 11 units, 44 models. Of the lists tried at 800 against
+  // the Coil's assault (boards 1-100, either seat), '1234101' (the old one
+  // and a Grenadier squad) let it win 85% and 84%, '1234011' 79% and 76%,
+  // '1224111' 74% and 71%, this one 64% and 66%: the strong defenders
+  // (the Oak Guard, the Trebuchet) for the weak one, the Nutkin.)
+  armies: { field: '224222', grand: '336333', garrison: '1314011', assault: '2242221' },
   units: {
     nutkin: {
       name: 'Nutkin Skirmishers', short: 'Nutkin', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 7, cost: 75,

@@ -48,12 +48,19 @@ import { hypot } from '../dmath.js'
 import { emit } from '../journal.js'
 import {
   alive, enemiesOf, gap, isEngaged, engagedWith, movePlan, canShoot, shootTargets, shotInfo, canCharge, chargeTargets, chargePlan,
-  ownersOf, riders, landing, fpGap, clearOf,
+  ownersOf, riders, landing, fpGap, clearOf, controlOf,
 } from '../queries.js'
 import { hold } from '../actions/move.js'
 import { chargeReach } from '../actions/charge.js'
 import { fireSlots, nearestCell } from '../actions/transport.js'
-import { worth, meleeValue, shotValue, riderShot, spellValue, bestSpot, fallbackSpot, bestLanding, budgetOf, nearestOf } from './score.js'
+import { worth, meleeValue, shotValue, riderShot, spellValue, bestSpot, fallbackSpot, bestLanding, budgetOf, nearestOf, wallRush, wallTerms, wallDeny, CHARGE_OUT } from './score.js'
+import { wallOf, sideRole, faceAt } from './route.js'
+
+// (Breakthrough, DESIGN §4.2.12's AI) CHARGE_OUT, how far in front of a
+// wall's outer face a defender still charges an attacker, is core/ai/
+// score.js's (S5c: beside the hold term, which reads it too), named here as
+// ever
+export { CHARGE_OUT }
 
 // Each unit type names its AI role in the race data (`t.ai`); the roles act
 // in this order, brawlers first and the guns last. (F9a) The transports
@@ -129,6 +136,11 @@ function* aiMoveOne(G, u, role, claimed) {
   } else if (role === 'shooter') {
     advance = !pick.canShoot && !pick.onObjective && (u.t.ranged.assault || nearest > u.t.ranged.range + u.t.M + 3)
   }
+  // ((Breakthrough) an attacker on a wall's board by the wall's rule:
+  // core/ai/score.js wallRush; null everywhere else, and the rule above
+  // stands)
+  const rush = wallRush(G, u, role, pick)
+  if (rush !== null) advance = rush
   // ((F9c, rule 10) a hull with a gun aboard never advances: its riders
   // would shoot only their assault weapons, DESIGN §4.2.5's firing deck)
   if (advance && u.t.ai === 'transport' && riders(G, u).some((p) => p.t.ranged)) advance = false
@@ -166,6 +178,23 @@ function* aiMoveOne(G, u, role, claimed) {
 // off where they score best (bestLanding) once an enemy is within their
 // weapon's range + 3. No draws but the hull's own move's.
 function* aiTransport(G, v, mask, claimed) {
+  // ((Breakthrough, S5a) an attacking hull on a wall's board carries no one
+  // across it: before it first moves, every rider steps off where it scores
+  // best (bestLanding) and walks its own route. (S5b) Measured on the final
+  // tree over random legal lists (army-sim's role mode, seed 1111; DESIGN
+  // §4.2.12's As built (S5a, S5b)): with the riders kept aboard the
+  // attacker wins 56.5%, the Bushtails attacking 67.5% and 66.3% (their
+  // War-Carts carry them through the rammed gate), the Coil 46.0% and
+  // 46.3%; stepped off 52.8%: 51.5%, 52.3%, 59.3% and 48.0%)
+  if (!v.flags.moved && wallOf(G) && sideRole(G, v) === 'attack') {
+    for (const p of riders(G, v)) {
+      if (!mask(p) || p.flags.moved) continue
+      const c = bestLanding(G, p, landing(G, p, v), claimed)
+      if (c < 0) continue
+      emit(G, 'focus', { x: v.pos.x, z: v.pos.z })
+      yield { t: 'disembark', u: p.id, c }
+    }
+  }
   if (!v.flags.moved) {
     for (const p of riders(G, v)) {
       if (!mask(p) || p.flags.moved || !p.t.brawler) continue
@@ -334,20 +363,28 @@ export function spellFor(G, u, tg) {
 function* aiCharge(G, side, mask) {
   const mine = G.units.filter((u) => u.side === side && canCharge(G, u) && mask(u))
   mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
+  // ((Breakthrough) a defender behind a wall charges nothing standing more
+  // than CHARGE_OUT in front of its face)
+  const wall = wallOf(G)
   for (const u of mine) {
     if (!canCharge(G, u)) continue
     // (F9a: a hull charges as the role its riders make it)
     const role = roleOf(G, u)
+    const holds = wall && sideRole(G, u) === 'defend'
+    const bt = holds ? wallTerms(G, u, wall, enemiesOf(G, u), G.objectives.map((o) => controlOf(G, o))) : null
     let best = null, bs = 0
     const near = u.t.fp ? chargeReach(G, u) : null
     const tgs = near && budgetOf(G) ? nearestOf(G, u, chargeTargets(G, u).filter((e) => near(e)), 1) : chargeTargets(G, u)
     for (const e of tgs) {
       if (near && !near(e)) continue
+      if (holds && faceAt(G, wall, e.pos.x, e.pos.z) < -CHARGE_OUT) continue
       const plan = chargePlan(G, u, e)
       if (!plan) continue
       // ((V3c, rule 10) a resolute unit rolls a miss again: 2p − p²)
       const p0 = p2D6(plan.need), p = u.resolute ? p0 + p0 * (1 - p0) : p0
-      const gain = meleeValue(u, e) + (e.t.role === 'Artillery' ? 12 : 0) + (e.alive <= 2 ? 6 : 0)
+      let gain = meleeValue(u, e) + (e.t.role === 'Artillery' ? 12 : 0) + (e.alive <= 2 ? 6 : 0)
+      // ((Breakthrough) and, for a defender, the objective it contests)
+      if (bt) gain += wallDeny(G, bt, e)
       const loss = meleeValue(e, u)
       const min = role === 'melee' ? 0.25 : role === 'line' ? 0.33 : role === 'raider' ? 0.4 : role === 'hero' ? 0.5 : 0.6
       if (p < min) continue

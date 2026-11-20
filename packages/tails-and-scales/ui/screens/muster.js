@@ -67,7 +67,15 @@
 //
 //   new MusterScreen({ lists })   `lists`: app/lists.js's Lists
 //   muster.open({ race, mission, counts | preset, notes, onReady(counts),
-//                 onClose() })
+//   ((S5a) own: the seat's own preset, its role's where it has one),
+//                 onClose(), rules, role })
+//
+// (Breakthrough, DESIGN §4.2.12's "The page") On a mission with roles the
+// screen is handed the seat's role ("Attacker", "Defender"), which leads
+// its title ("Attacker · Bushtail Clans · Breakthrough battle"), and that
+// role's list rules (core/army.js rulesFor: its own where the role has
+// any, else the mission's), which the bar, the caps, the presets and
+// Ready read in place of the mission's.
 //   muster.close()
 //   new PassScreen()              the hotseat's "Pass to player 2"
 //   pass.show({ to, line, onGo, onBack })   `line` the army just readied,
@@ -110,8 +118,11 @@ export const presetCounts = (race, p) => {
 }
 // The presets of `race` a battle of `mission` offers: its own first, then
 // every other the race has that its list rules allow, the costliest first.
-export function presetsFor(race, mission) {
-  const r = RACES[race], rules = MISSIONS[mission].list, own = MISSIONS[mission].army
+// ((Breakthrough) under `rules`, a seat's role's list rules where it has
+// its own: core/army.js rulesFor; (S5a) and `own` its role's own preset
+// where it has one, core/army.js presetFor)
+export function presetsFor(race, mission, rules = MISSIONS[mission].list, own = MISSIONS[mission].army) {
+  const r = RACES[race]
   const others = Object.keys(r.armies).filter((p) => p !== own && !checkList(r, rules, presetCounts(race, p)))
   others.sort((a, b) => listCost(r, presetCounts(race, b), rules) - listCost(r, presetCounts(race, a), rules))
   return [own, ...others]
@@ -164,12 +175,14 @@ export class MusterScreen {
   // rules and prices), the list to open with (`counts`, one per roster
   // entry, or `preset`, a preset's name; neither: the mission's own),
   // `notes` (what reading it dropped: a saved list's lost units),
-  // onReady(counts) for Ready, onClose() for ✕.
-  open({ race, mission, counts = null, preset = null, notes = [], onReady, onClose }) {
+  // onReady(counts) for Ready, onClose() for ✕. ((Breakthrough) `rules`
+  // the seat's list rules (left out: the mission's), `role` its role's
+  // title on a mission with roles (null: none))
+  open({ race, mission, counts = null, preset = null, notes = [], onReady, onClose, rules = null, role = null, own = null }) {
     const r = RACES[race], m = MISSIONS[mission]
     this.at = {
-      race, mission, r, rules: m.list, onReady, onClose,
-      counts: r.roster.map((k, i) => (counts ? counts[i] ?? 0 : presetCounts(race, preset ?? m.army)[i])),
+      race, mission, r, rules: rules ?? m.list, role, onReady, onClose, own: own ?? m.army,
+      counts: r.roster.map((k, i) => (counts ? counts[i] ?? 0 : presetCounts(race, preset ?? own ?? m.army)[i])),
       notes: [...notes],
     }
     this.build()
@@ -369,7 +382,7 @@ export class MusterScreen {
     const at = this.at
     if (!at) return
     const { r, rules, counts } = at, s = this.tally()
-    this.titleEl.textContent = `${r.name} · ${sizeName(at.mission, MISSIONS[at.mission])} battle`
+    this.titleEl.textContent = `${at.role ? `${at.role} · ` : ''}${r.name} · ${sizeName(at.mission, MISSIONS[at.mission])} battle`
     // the bar: a segment per role, coloured by role, over the limit or the
     // list's own points if more; red over the limit
     const over = s.points > rules.points, scale = Math.max(rules.points, s.points)
@@ -394,7 +407,7 @@ export class MusterScreen {
     }))
     // the tools: the presets, Random, Clear, Saved
     const same = (a) => a.every((n, i) => n === (counts[i] ?? 0))
-    const tools = presetsFor(at.race, at.mission).map((p) => {
+    const tools = presetsFor(at.race, at.mission, at.rules, at.own).map((p) => {
       const b = el('button', 'mPreset', presetName(p))
       b.dataset.preset = p
       b.setAttribute('aria-pressed', String(same(presetCounts(at.race, p))))

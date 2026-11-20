@@ -31,6 +31,11 @@
 // `keg` is a Skirmish fought round a powder keg: classic's board, zones,
 // rounds, points and list rules, on the `keg` set alone (classic's pieces
 // with the keg at the centre), its four objectives clustered round the keg.
+// (Breakthrough, DESIGN §4.2.12) A mission may give its seats roles
+// (`roles`: an attacker and a defender, each with its own zone and,
+// optionally, its own list rules; the attacker's target and first turn,
+// the defender's line), its objectives whom they score for (`scores`) and
+// their worth (`vp`), and `overtime: false`; `breakthrough` is the first.
 //
 // Every mission is checked as this module loads (checkMission, as the
 // terrain sets are): a slip in a new one fails at once, on every board.
@@ -284,6 +289,118 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       { x: 0, z: 20 },
     ],
   },
+  // (Breakthrough, DESIGN §4.2.12) The first asymmetric mission: a Field
+  // battle (60×40, 6 rounds, Field's list rules and prices) in which one
+  // seat attacks and the other
+  // defends the March Wall (the line set, sets.js `march`: a walled line
+  // across the table, its gate, its breach, its siege ladders and a wood on
+  // its flank). Written in the attacker-west frame (the attacker in seat
+  // 0): when seat 1 attacks (`setup.attacker` 1) the board, the zones and
+  // the objectives are its point mirror. The attacker deploys within 10
+  // tails of its own edge and takes the first turn with no roll-off; the
+  // defender anywhere behind the wall's outer face (`behind`: the wall's
+  // own decks and towers included, never in front of it; core/deploy.js
+  // zone) and inside its x bounds, x −12 to the far edge, the face drawn
+  // within 1.5 tails of `line`, the gate face's nominal x. ((Breakthrough)
+  // The bounds keep the defender 8 tails from the attacker's zone whatever
+  // the seed: the wall's west tip, the crag and the wood's picket, stands
+  // as little as 1.25 tails from it, so behind the face alone a defender
+  // might start in the wood's east mouth or on the walk's far end a tail
+  // and a quarter from the attacker.) Every objective stands behind the
+  // wall (the road in the yard 9.5 tails behind the gate's line, and behind
+  // each arm) and scores for the attacker alone: at each round's end the
+  // attacker scores 1 for each it holds, and 4 wins at once; otherwise the
+  // defender wins when the rounds run out. No draw, no overtime. `deploy`
+  // is the attacker's depth, 10: the view draws both zones by it until the
+  // zones are drawn per seat (no rule reads it under roles: core/deploy.js
+  // zone). ((S5a, S5b, S5c) The armies are unequal: the attacker has the
+  // numbers, Field's 1,000 points and its own preset, the assault (Field's
+  // ×2 list, with a wrecker for each race); the defender the works and
+  // less need to move, its own list of 800 points (14 units, 56 models:
+  // Field's scaled by the points; its slots Field's, its prices Field's but
+  // the hulls', below) and its own preset, the garrison. (S5c) The
+  // defender's squads start on the works, nobody aboard a hull
+  // (core/deploy.js), and hold their posts (core/ai/score.js HOLD_POST).
+  // Balance ((S5d) DESIGN's As built (S5d)): random legal lists under
+  // each role's rules, 1,600 battles, seed 1111, the attacker 50.9% (the
+  // ordered race pairs, attacker > defender, the Bushtails > the Bushtails
+  // 52.5%, > the Coil 50.2%, the Coil > the Bushtails 57.5%, > the Coil
+  // 43.5%; on seed 2222 51.0%: 53.8, 49.0, 59.0, 42.3), ended by
+  // breakthrough 41.8%, held 49.1%, the defender wiped 9.2%; on the
+  // presets (boards 1-100) the attacker scores by round 4 in 69% and wins
+  // 59-66% in every cell. ((S5c) Tried: the defender at 700 points, 65.6%;
+  // at 750, 57.5%; at 775, 57.1%; 800 is the most the ratio allows (1.25).
+  // (S5d) The defending races were 15-20 points apart at one points
+  // figure; the defender's own prices for two units moved them together,
+  // below.) The objectives are ones the generator's checks hold on every board
+  // measured (sim/terrain-check.mjs section 10): (5, 0) for the yard's
+  // (S3's (9, 0); (3, 0) and (1, 0) fail them) and the arms' at (3, ±13),
+  // the only one of those tried there that holds.)
+  breakthrough: {
+    board: { W: 60, H: 40 },
+    deploy: 10,
+    rounds: 6,
+    army: 'field',
+    // (Field's list rules and prices, whole: sim/data-check.mjs holds them
+    // equal)
+    list: {
+      size: 'Field', points: 1000, units: 18, models: 70, perKind: 5,
+      roles: { Hero: [1, 2], Troops: [2, 10], Elite: [0, 3], Fast: [0, 3], Monster: [0, 2], Artillery: [0, 2], Vehicle: [0, 2] },
+      prices: {
+        squirrel: { elder: 75, oakguard: 115, nutkin: 70, grenadier: 45, glider: 60, trebuchet: 55 },
+        serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 45 },
+      },
+    },
+    sets: ['march'],
+    overtime: false,
+    roles: {
+      attack: { zone: { x: [-30, -20] }, army: 'assault', first: true, target: 4 },
+      defend: {
+        zone: { behind: true, x: [-12, 30] }, line: -4.5, army: 'garrison',
+        list: {
+          size: 'Field', points: 800, units: 14, models: 56, perKind: 5,
+          roles: { Hero: [1, 2], Troops: [2, 10], Elite: [0, 3], Fast: [0, 3], Monster: [0, 2], Artillery: [0, 2], Vehicle: [0, 2] },
+          // ((S5c) Field's prices, but the hulls': a defence's own. At
+          // Field's (the War-Cart 15, the Howdah 5) a defence's hulls,
+          // crewless on the works' side, are tough bodies that draw a third
+          // of the attack's blows: over random legal lists (400 battles a
+          // cell, the defender at 625) the attacker won 84.3% / 72.5% /
+          // 64.5% against a Bushtail defence with 0 / 1 / 2 War-Carts, and
+          // 70.3% / 52.5% / 38.5% against a Coil one with 0 / 1 / 2 Howdahs.
+          // Searched: the War-Cart at 45, 90 and 135 swung 19.0, 6.8 and 5.0
+          // points; the Howdah at 45, 90, 105, 120 and 135 swung 29.0,
+          // 13.8, 7.7, 8.5 and 0.5. So the War-Cart 90, the lowest under 10;
+          // the Howdah 135, which at the defender's 800 left the Coil
+          // attacking the Coil at 37.8% where 105 left it at 36.3%)
+          // ((S5d, Breakthrough) and two of Field's own prices moved, one a
+          // race, for what each defends: over random legal lists (400
+          // battles a cell, seed 1111, the tree before) the attacker won
+          // 43.3% / 46.0% / 67.0% against a Bushtail defence with 0 / 1 / 2
+          // or more Nutkin squads (the rest of it 0 to 18 points either
+          // way), and 52.3% / 48.8% / 35.5% against a Coil one with 0 / 1 / 2
+          // or more Venom Engines. So the Nutkin 55 (Field's 70), and the
+          // Engine 60 (Field's 45). Army-sim's pairs (seed 1111; the
+          // Bushtails > the Bushtails, > the Coil, the Coil > the
+          // Bushtails, > the Coil): before 56.8 / 47.3 / 60.0 / 37.8; the
+          // Nutkin 55 alone 52.5 / 47.3 / 57.5 / 37.8 (the last still under
+          // 40); the Engine 60 alone 56.8 / 50.2 / 60.0 / 43.5; both 52.5 /
+          // 50.2 / 57.5 / 43.5, kept; the Nutkin 45 with the Engine 60 46.8 /
+          // 50.2 / 56.8 / 43.5, the Nutkin 55 with the Engine 75 52.5 / 49.5
+          // / 57.5 / 45.5: each passing too, a step further for no pair
+          // that needed it)
+          prices: {
+            squirrel: { elder: 75, oakguard: 115, nutkin: 55, grenadier: 45, glider: 60, trebuchet: 55, warcart: 90 },
+            serpent: { hierophant: 45, brute: 135, scaleguard: 65, spitter: 50, sidewinder: 70, engine: 60, howdah: 135 },
+          },
+        },
+      },
+    },
+    objectives: [
+      { x: 5, z: 0, scores: 'attack' },
+      { x: 3, z: 13, scores: 'attack' },
+      { x: 3, z: -13, scores: 'attack' },
+    ],
+  },
 }))
 
 // A mission the rules can play, or an Error naming what is wrong with it:
@@ -292,7 +409,9 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
 // centre line, every objective 1" inside the board, outside both zones and
 // with its point mirror in the list (both seats rely on that fairness, as
 // on the terrain's mirror), whole rounds, sets that exist, an army's name
-// and (F11a) a sane `list` (checkListRules, below).
+// and (F11a) a sane `list` (checkListRules, below). (Breakthrough) A
+// mission with `roles` is no mirror: its objectives are held to its roles'
+// rules instead (checkRoles, below), and `overtime`, when given, is false.
 export function checkMission(name, m) {
   const bad = (why) => {
     throw new Error(`mission "${name}": ${why}`)
@@ -313,14 +432,109 @@ export function checkMission(name, m) {
     if (!whole(ai.lattice, 1, 8)) bad(`its AI count budget's lattice is ${JSON.stringify(ai.lattice)}, not a whole number of cells from 1 to 8`)
     if (!whole(ai.targets, 1, Infinity)) bad(`its AI count budget's targets is ${JSON.stringify(ai.targets)}, not a whole number above 0`)
   }
+  // ((Breakthrough) `overtime`, when given, is false: the mission's battles
+  // end on their rounds, and a setup asking for the vote is refused)
+  if (m.overtime !== undefined && m.overtime !== false) bad(`its overtime is ${JSON.stringify(m.overtime)}, not false (a mission that allows the vote says nothing)`)
   if (!Array.isArray(m.objectives) || !m.objectives.length) bad('it has no objectives')
+  // ((Breakthrough) a mission with roles is checked by its own rules, below)
+  if (m.roles !== undefined) return checkRoles(m, bad)
   for (const o of m.objectives) {
     const at = `the objective at (${o.x}, ${o.z})`
     if (!Number.isFinite(o.x) || !Number.isFinite(o.z)) bad(`${at} isn't on the board`)
     if (Math.abs(o.x) > W / 2 - 1 || Math.abs(o.z) > H / 2 - 1) bad(`${at} is less than ${tails(1)} inside the board`)
     if (!(Math.abs(o.x) < W / 2 - m.deploy)) bad(`${at} is in a deployment zone`)
     if (!m.objectives.some((p) => p.x === -o.x && p.z === -o.z)) bad(`${at} has no point mirror`)
+    // (an objective scores for both seats alike on a mission without roles)
+    if (o.scores !== undefined || o.vp !== undefined) bad(`${at} names whom it scores for or its worth, but the mission has no roles`)
   }
+}
+
+// (Breakthrough, DESIGN §4.2.12) A mission's roles, or bad(why). Written in
+// the attacker-west frame (core/match.js flips the table when seat 1
+// attacks): `roles` holds `attack` and `defend` and nothing else; each a
+// `zone` { x: [a, b], z?: [c, d] }, a rectangle inside the board (z left
+// out: the board's whole depth), and optionally its own `list` (the list
+// rules its seat's army is held to, checkListRules; absent, the mission's)
+// and ((S5a) its own `army`, the preset's name a seat of that role naming
+// no army takes: core/army.js presetFor; absent, the mission's);
+// the attacker's zone in the west half, the two zones at least 12 tails
+// apart along x or z. ((Breakthrough, the March Wall) Or the defender's
+// zone is `{ behind: true }`: everything behind the wall's outer face
+// (core/deploy.js zone: the board's plan, or, on a board with none, x
+// past the line), so the defender needs a `line`; and `x: [a, b]`, its x
+// bounds: a base behind the face and inside them. The wall stands between
+// the zones, so its near bound is held BEHIND_APART (8) tails or more from
+// the attacker zone's front, not 12, and the line inside the bounds; the
+// arms of a wall sweep forward of the line, and the bounds are what keep a
+// defender off the attacker whatever the face's shape.) The attacker's
+// `target`, a whole number of VP from 1, and `first` (true: it takes the
+// first turn, no roll-off); the defender's
+// `line` (the x of its line's front face) inside the board. `overtime`
+// false (a role battle ends on its rounds or its target, never by a vote).
+// Each objective inside the board by 1 tail, outside the attacker's zone
+// and, with a line, beyond it (x past the line); `scores` 'attack' or
+// 'defend' (absent: both seats score it), `vp` a whole number from 1
+// (absent: 1); and the target within reach: at most the rounds times the
+// VP the attacker's objectives are worth.
+const ROLE_KEYS = Object.freeze({ attack: ['zone', 'list', 'army', 'first', 'target'], defend: ['zone', 'list', 'army', 'line'] })
+const APART = 12
+// ((Breakthrough, the March Wall) a zone behind the line's near bound to the
+// attacker zone's front: 8 tails, the wall between them)
+const BEHIND_APART = 8
+function checkRoles(m, bad) {
+  const { W, H } = m.board
+  const roles = m.roles
+  if (!record(roles) || Object.keys(roles).sort().join() !== 'attack,defend') bad(`its roles are ${JSON.stringify(roles)}, not { attack, defend }`)
+  const span = (v, lo, hi) => Array.isArray(v) && v.length === 2 && v.every(Number.isFinite) && v[0] >= lo && v[0] < v[1] && v[1] <= hi
+  const box = {}
+  for (const k of ['attack', 'defend']) {
+    const r = roles[k]
+    if (!record(r)) bad(`its ${k} role is ${JSON.stringify(r)}, not a record`)
+    for (const f of Object.keys(r)) if (!ROLE_KEYS[k].includes(f)) bad(`its ${k} role takes no field "${f}" (it takes ${ROLE_KEYS[k].join(', ')})`)
+    const z = r.zone
+    // ((the March Wall) the defender's zone behind the line: { behind: true }
+    // and nothing else, held to the line below; its list as any role's)
+    if (k === 'defend' && record(z) && 'behind' in z) {
+      if (Object.keys(z).sort().join() !== 'behind,x' || z.behind !== true) bad(`its defend zone is ${JSON.stringify(z)}, not { behind: true, x: [a, b] } (behind the line inside x bounds, and nothing else)`)
+      if (!span(z.x, -W / 2, W / 2)) bad(`its defend zone's x is ${JSON.stringify(z.x)}, not [a, b] with a < b inside a board ${tails(W)} wide`)
+      box.behind = { x: z.x }
+    } else {
+      if (!record(z) || Object.keys(z).some((f) => f !== 'x' && f !== 'z')) bad(`its ${k} zone is ${JSON.stringify(z)}, not { x: [a, b], z?: [c, d] }${k === 'defend' ? ' or { behind: true }' : ''}`)
+      if (!span(z.x, -W / 2, W / 2)) bad(`its ${k} zone's x is ${JSON.stringify(z.x)}, not [a, b] with a < b inside a board ${tails(W)} wide`)
+      if (z.z !== undefined && !span(z.z, -H / 2, H / 2)) bad(`its ${k} zone's z is ${JSON.stringify(z.z)}, not [c, d] with c < d inside a board ${tails(H)} deep`)
+      box[k] = { x: z.x, z: z.z ?? [-H / 2, H / 2] }
+    }
+    if (r.list !== undefined) checkListRules(r.list, (why) => bad(`its ${k} role's list: ${why.replace(/^its list('s)? ?/, '')}`))
+    if (r.army !== undefined && (typeof r.army !== 'string' || !r.army)) bad(`its ${k} role's army is ${JSON.stringify(r.army)}, not a preset's name`)
+  }
+  const A = box.attack, D = box.defend
+  if (!(A.x[1] <= 0)) bad(`its attack zone reaches x ${A.x[1]}, past the centre line (the roles are written with the attacker in the west)`)
+  const atk = roles.attack, line = roles.defend.line
+  const gap = (p, q) => Math.max(q[0] - p[1], p[0] - q[1])
+  if (!D) {
+    // ((the March Wall) behind the line: its near bound to the attacker
+    // zone's front, and the line inside its bounds)
+    const [b0, b1] = box.behind.x
+    if (!Number.isFinite(line)) bad('its defend zone is behind the line, but the defender has no line')
+    else if (!(b0 - A.x[1] >= BEHIND_APART)) bad(`its defend zone behind the line starts ${b0 - A.x[1]} tails from the attacker's zone front, under ${tails(BEHIND_APART)}`)
+    else if (!(line >= b0 && line <= b1)) bad(`its defender's line at x ${line} is outside its zone's x bounds [${b0}, ${b1}]`)
+  } else if (!(gap(A.x, D.x) >= APART || gap(A.z, D.z) >= APART)) bad(`its zones are ${Math.max(gap(A.x, D.x), gap(A.z, D.z))} tails apart, under ${tails(APART)}`)
+  if (!Number.isInteger(atk.target) || atk.target < 1) bad(`its attacker's target is ${JSON.stringify(atk.target)}, not a whole number of VP from 1`)
+  if (atk.first !== undefined && atk.first !== true) bad(`its attacker's first is ${JSON.stringify(atk.first)}, not true (left out: the roll-off)`)
+  if (line !== undefined && !(Number.isFinite(line) && Math.abs(line) < W / 2)) bad(`its defender's line is at ${JSON.stringify(line)}, not inside a board ${tails(W)} wide`)
+  if (m.overtime !== false) bad('it has roles, so its overtime is false (a role battle ends on its rounds or its target)')
+  let worth = 0
+  for (const o of m.objectives) {
+    const at = `the objective at (${o.x}, ${o.z})`
+    if (!Number.isFinite(o.x) || !Number.isFinite(o.z)) bad(`${at} isn't on the board`)
+    if (Math.abs(o.x) > W / 2 - 1 || Math.abs(o.z) > H / 2 - 1) bad(`${at} is less than ${tails(1)} inside the board`)
+    if (o.x >= A.x[0] && o.x <= A.x[1] && o.z >= A.z[0] && o.z <= A.z[1]) bad(`${at} is in the attacker's zone`)
+    if (line !== undefined && !(o.x > line)) bad(`${at} is in front of the defender's line (x ${line})`)
+    if (o.scores !== undefined && o.scores !== 'attack' && o.scores !== 'defend') bad(`${at} scores for ${JSON.stringify(o.scores)}, not 'attack' or 'defend' (left out: both)`)
+    if (o.vp !== undefined && !(Number.isInteger(o.vp) && o.vp >= 1)) bad(`${at} is worth ${JSON.stringify(o.vp)}, not a whole number of VP from 1`)
+    if (o.scores !== 'defend') worth += o.vp ?? 1
+  }
+  if (atk.target > worth * m.rounds) bad(`its attacker's target of ${atk.target} is out of reach: its objectives are worth ${worth} a round for ${m.rounds} rounds`)
 }
 
 // (F11a, DESIGN §4.2.8.3) A mission's list rules, or bad(why): `size` a

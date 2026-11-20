@@ -56,10 +56,12 @@ export class Dressing {
     stage.onQuality = (name) => this.quality(name)
   }
 
-  // the table match `G` shows, dressed (once per setup)
-  build(G) {
+  // the table match `G` shows, dressed (once per setup); ((Breakthrough,
+  // S4b) `zones`, each seat's zone as the table draws it, view/zones.js:
+  // null on a mission without roles)
+  build(G, zones = null) {
     const { board, mission, terrain } = G.setup
-    const setup = `${board >>> 0}|${mission}|${terrain}`
+    const setup = `${board >>> 0}|${mission}|${terrain}|${G.setup.attacker ?? ''}`
     if (setup === this.dressed) return false
     this.dressed = setup
     const seed = dressSeed(G.setup)
@@ -67,6 +69,8 @@ export class Dressing {
     const p = (this.plan = plan({
       seed, set: terrain, W, H, deploy, edges: G.seats.map((s) => s.edge),
       objectives: G.objectives, range: this.range, chunks: G.terrain.chunks, nav: G.nav,
+      // ((Breakthrough, S4b) the wall's plan, a plain record, and the zones)
+      plan: G.terrain.plan ?? null, zones,
     }))
     // S1: the day, the sky, the world round the board
     const sky = SKIES[p.day]

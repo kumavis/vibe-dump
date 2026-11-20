@@ -184,9 +184,9 @@ const LEN = lengthWords(LENGTH)
 import { IDLE_MS, glArgs, glConfirm } from './chromium.mjs'
 import { fortScene } from './fort-scene.mjs'
 
-const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, only: { type: 'string' }, carts: { type: 'boolean' }, fort: { type: 'boolean' }, hulls: { type: 'boolean' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } })
-if ((a.only !== undefined && (!['aim', 'tips'].includes(a.only) || a.carts)) || (a.fort && (a.only !== undefined || a.carts)) || ((a.hulls || a['self-test']) && (a.only !== undefined || a.carts || a.fort || (a.hulls && a['self-test'])))) {
-  console.error('input-check: --only takes aim or tips, and not with --carts; --fort, --hulls and --self-test each go alone')
+const { values: a } = parseArgs({ options: { dist: { type: 'string' }, shots: { type: 'string' }, only: { type: 'string' }, carts: { type: 'boolean' }, fort: { type: 'boolean' }, hulls: { type: 'boolean' }, breakthrough: { type: 'boolean' }, 'self-test': { type: 'boolean' }, mutations: { type: 'string' } } })
+if ((a.only !== undefined && (!['aim', 'tips'].includes(a.only) || a.carts)) || (a.fort && (a.only !== undefined || a.carts)) || ((a.hulls || a['self-test']) && (a.only !== undefined || a.carts || a.fort || (a.hulls && a['self-test']))) || (a.breakthrough && (a.only !== undefined || a.carts || a.fort || a.hulls || a['self-test']))) {
+  console.error('input-check: --only takes aim or tips, and not with --carts; --fort, --hulls, --breakthrough and --self-test each go alone')
   process.exit(2)
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -3202,7 +3202,99 @@ const DECK_EDITS = {
   'deck-lunge': ['view/effects/shots.js', '    } else if (!src.deck) {\n', '    } else {\n'],
 }
 // every --self-test edit, with the row that must catch it
-const EDITS = { ...Object.fromEntries(Object.entries(HULL_EDITS).map(([k, e]) => [k, [...e, 'hulls']])), ...Object.fromEntries(Object.entries(DECK_EDITS).map(([k, e]) => [k, [...e, 'deck']])) }
+// ((Breakthrough, S4b) the breakthrough page's: a click far in front of
+// the wall placing the defender at the nearest spot behind it, anywhere)
+const BREAKTHROUGH_EDITS = {
+  'far-snap': ['input/tools/deploy.js', 'Math.hypot(p.x - ground.x, p.z - ground.z) < 2.5', 'Math.hypot(p.x - ground.x, p.z - ground.z) < 25'],
+}
+const EDITS = { ...Object.fromEntries(Object.entries(HULL_EDITS).map(([k, e]) => [k, [...e, 'hulls']])), ...Object.fromEntries(Object.entries(DECK_EDITS).map(([k, e]) => [k, [...e, 'deck']])), ...Object.fromEntries(Object.entries(BREAKTHROUGH_EDITS).map(([k, e]) => [k, [...e, 'breakthrough']])) }
+
+// (Breakthrough, S4b, DESIGN §4.2.12) The defender's deployment on the
+// March Wall, by the mouse: a hotseat Breakthrough battle (board 12, seat 0
+// attacking), seat 1's deployment; one of its units on foot picked up, a
+// click on open ground behind the wall (the second line's post, from
+// above) places it there, inside its zone (behind the wall's outer face:
+// the plan's region) and one command sent; a click on open ground 7 tails
+// in front of the gate, where its zone is not, sends nothing and leaves it
+// where it stood. Walking a wrecker into the gate and climbing a ladder
+// are not here: each needs a unit brought from the attacker's zone, 15
+// tails and more from the wall, over rounds of both seats' play.
+async function checkBreakthrough(page, say) {
+  const fail = (m) => {
+    throw new Error(`breakthrough: ${m}`)
+  }
+  const ev = (fn, arg) => page.evaluate(fn, arg)
+  const count = () => ev(() => window.__ts.session.count)
+  const seatNow = () => ev(() => window.__ts.session.decisionFor())
+  await page.waitForFunction(() => window.__ts?.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
+  for (let k = 0; k < 3 && (await seatNow()) !== 1; k++) await ev(() => window.__ts.endPhase())
+  if ((await seatNow()) !== 1) fail('seat 1, the defender, never held the deployment here')
+  const at = await ev(() => {
+    const G = window.__ts.G, P = G.terrain.plan, u = G.units.find((x) => x.side === 1 && !x.t.big && !x.t.fly && !x.t.fp && !x.aboard)
+    const post = P.posts.find((p) => p.on === 'second' && p.y === 0)
+    const sa = P.flip ? 1 : -1, ps = P.gate.passage
+    return { u: u && { id: u.id, x: u.pos.x, z: u.pos.z }, behind: post && { x: post.x, z: post.z }, front: { x: (sa < 0 ? ps.x0 : ps.x1) + sa * 7, z: P.gate.z }, attacker: G.setup.attacker }
+  })
+  if (at.attacker !== 0) fail(`the battle's attacker is seat ${at.attacker}, not 0`)
+  if (!at.u || !at.behind) fail(`no unit on foot of seat 1 (${JSON.stringify(at.u)}) or no second-line post (${JSON.stringify(at.behind)})`)
+  const behindLine = (x, z) => ev(([x, z]) => {
+    const pts = window.__ts.G.terrain.plan.region
+    let c = false
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      const a = pts[i], b = pts[j]
+      if (a.z > z !== b.z > z && x < ((b.x - a.x) * (z - a.z)) / (b.z - a.z) + a.x) c = !c
+    }
+    return c
+  }, [x, z])
+  const clickAt = async (p) => {
+    await ev((p) => window.__ts.view.look({ pos: [p.x, 26, p.z + 0.5], target: [p.x, 0, p.z] }), p)
+    await sleep(400)
+    const [sx, sy] = await ev((p) => window.__ts.screen(p.x, 0, p.z), p)
+    await page.mouse.click(sx, sy)
+    await sleep(500)
+  }
+  const pos = () => ev((id) => {
+    const u = window.__ts.G.units.find((x) => x.id === id)
+    return { x: u.pos.x, z: u.pos.z }
+  }, at.u.id)
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), at.u.id)
+  await sleep(300)
+  // in front of the gate: nothing sent, the unit where it stood
+  let n0 = await count()
+  await clickAt(at.front)
+  const p0 = await pos()
+  if ((await count()) !== n0) fail(`a click 7 tails in front of the gate (${at.front.x.toFixed(1)}, ${at.front.z.toFixed(1)}) sent a command: unit ${at.u.id} now at ${p0.x.toFixed(2)}, ${p0.z.toFixed(2)}`)
+  if (Math.hypot(p0.x - at.u.x, p0.z - at.u.z) > 1e-6) fail(`a click in front of the gate moved unit ${at.u.id}`)
+  say(`breakthrough: in seat 1's deployment a click 7 tails in front of the gate sent nothing and left unit ${at.u.id} where it stood`)
+  // behind the wall: placed there, inside its zone
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), at.u.id)
+  await sleep(300)
+  n0 = await count()
+  await clickAt(at.behind)
+  await page.waitForFunction((n) => window.__ts.session.count > n && window.__ts.player.idle, n0, { timeout: IDLE_MS }).catch(() => fail(`a click behind the wall at the second line's post (${at.behind.x.toFixed(1)}, ${at.behind.z.toFixed(1)}) sent nothing`))
+  const p1 = await pos()
+  if (Math.hypot(p1.x - at.behind.x, p1.z - at.behind.z) > 2.5) fail(`placed behind the wall, unit ${at.u.id} stands at ${p1.x.toFixed(2)}, ${p1.z.toFixed(2)}, ${Math.hypot(p1.x - at.behind.x, p1.z - at.behind.z).toFixed(2)} tails from the click`)
+  if (!(await behindLine(p1.x, p1.z))) fail(`placed at ${p1.x.toFixed(2)}, ${p1.z.toFixed(2)}, in front of the wall's face`)
+  say(`breakthrough: a click behind the wall at the second line placed unit ${at.u.id} at ${p1.x.toFixed(2)}, ${p1.z.toFixed(2)}, inside its zone (one command)`)
+}
+async function breakthroughPage(browser, url, say) {
+  const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
+  page.setDefaultTimeout(IDLE_MS)
+  const errors = []
+  page.on('pageerror', (e) => errors.push(e.message))
+  page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
+  try {
+    await page.goto(`${url}/?debug&lowfi&seed=12&dice=1&mission=breakthrough`)
+    await page.waitForSelector('#title:not(.hidden)')
+    await page.click('[data-mode="hotseat"]')
+    await page.waitForSelector('#setup:not(.hidden) #setupStart')
+    await page.click('#setupStart')
+    await checkBreakthrough(page, say)
+    if (errors.length) throw new Error(`breakthrough: page errors: ${errors.slice(0, 3).join('; ')}`)
+  } finally {
+    await page.context().close()
+  }
+}
 async function hullPage(browser, url, say) {
   const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
   page.setDefaultTimeout(IDLE_MS)
@@ -3248,6 +3340,7 @@ if (a['self-test']) {
       try {
         for (const row of name === 'unedited' ? rows : [EDITS[name][3]]) {
           if (row === 'hulls') await hullPage(browser, served.url, () => {})
+          else if (row === 'breakthrough') await breakthroughPage(browser, served.url, () => {})
           else await deckPage(browser, served.url, () => {})
         }
       } catch (e) {
@@ -3287,7 +3380,7 @@ try {
   await glConfirm(browser, 'input-check')
   try {
     let lanes = true, deckNext = false
-    if (a.only !== 'tips' && !a.fort && !a.hulls) {
+    if (a.only !== 'tips' && !a.fort && !a.hulls && !a.breakthrough) {
       const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 }, hasTouch: true })).newPage()
       page.setDefaultTimeout(IDLE_MS)
       const errors = []
@@ -3336,7 +3429,7 @@ try {
     }
     // (V3a) the conditions' tips, by the mouse at 1280×800 and by real
     // touches on a 390×844 phone
-    if (a.only !== 'aim' && !a.fort && !a.hulls) {
+    if (a.only !== 'aim' && !a.fort && !a.hulls && !a.breakthrough) {
       console.log('\ninput-check (V3a): the conditions\' tips in Chromium, by the mouse and by touch\n')
       for (const vp of [{ width: 1280, height: 800 }, { width: 390, height: 844, touch: true }]) {
         try {
@@ -3349,7 +3442,7 @@ try {
     }
     // ((F7b) the see-through walls and the LOS ray, on a fortified board:
     // a page of its own; with --fort alone)
-    if (a.fort || (a.only === undefined && !a.carts && !a.hulls)) {
+    if (a.fort || (a.only === undefined && !a.carts && !a.hulls && !a.breakthrough)) {
       console.log('\ninput-check (F7b): the see-through walls and the LOS ray on a fortified board\n')
       try {
         await fortified(browser, url, (l) => console.log(`  ok   ${l}`))
@@ -3360,7 +3453,7 @@ try {
     }
     // ((F9b) the long hulls' input, on a page of its own: with --hulls
     // alone, or every lane)
-    if (a.hulls || (a.only === undefined && !a.carts && !a.fort)) {
+    if (a.hulls || (a.only === undefined && !a.carts && !a.fort && !a.breakthrough)) {
       console.log('\ninput-check (F9b): a lone long hull pinned, turned and sent, by the mouse and the keys\n')
       try {
         await hullPage(browser, url, (l) => console.log(`  ok   ${l}`))
@@ -3368,6 +3461,17 @@ try {
         // heading, on a page of their own)
         console.log('\ninput-check (F9c): a Howdah\'s riders firing from its deck on a diagonal heading\n')
         await deckPage(browser, url, (l) => console.log(`  ok   ${l}`), ['howdah'])
+      } catch (e) {
+        console.log(`  FAIL ${e.message}`)
+        lanes = false
+      }
+    }
+    // ((Breakthrough, S4b) the defender's deployment on the March Wall, a
+    // page of its own: with --breakthrough alone, or every lane)
+    if (a.breakthrough || (a.only === undefined && !a.carts && !a.fort && !a.hulls)) {
+      console.log('\ninput-check (Breakthrough): the defender placed behind the March Wall by a click, and refused in front of it\n')
+      try {
+        await breakthroughPage(browser, url, (l) => console.log(`  ok   ${l}`))
       } catch (e) {
         console.log(`  FAIL ${e.message}`)
         lanes = false
@@ -3381,6 +3485,6 @@ try {
 } finally {
   rmSync(work, { recursive: true, force: true })
 }
-const what = a.fort ? '(F7b) Alt and a picked-up unit seeing through the walls, its ring drawn through, the LOS ray on hover leaking nothing' : a.only === 'aim' ? '(F13) the touch aim' : a.hulls ? "(F9b) a lone long hull pinned and sending nothing, turned through only the headings the match takes by ] [ and its rotate handle, sent by Enter, its flag or a double click, left drag still orbiting; (F9c) a Howdah's rider firing from its deck on a diagonal heading" : [!a.carts && a.only !== 'tips' && 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers', a.only !== 'tips' && "(F9a) the War-Carts' tools: R, chips and Tab to pick riders, placing, boarding and stepping off by click, the box and R with a group; (F9c) their decks' glow and lit chips, a rider's chip, ring, tooltip and rays from the deck, R firing a deck by one click, the spent slot refused", !a.carts && '(V3a) every condition an icon and a tip, shown on a hover and a tap, inside the screen', !a.carts && a.only === undefined && '(F7b) the see-through walls, the rings through them and the LOS ray', !a.carts && a.only === undefined && "(F9b) a lone long hull pinned, turned through its valid headings and sent; (F9c) a Howdah's rider firing from its deck on a diagonal heading"].filter(Boolean).join('; ')
+const what = a.breakthrough ? '(Breakthrough) the defender placed behind the March Wall by a click, refused in front of it' : a.fort ? '(F7b) Alt and a picked-up unit seeing through the walls, its ring drawn through, the LOS ray on hover leaking nothing' : a.only === 'aim' ? '(F13) the touch aim' : a.hulls ? "(F9b) a lone long hull pinned and sending nothing, turned through only the headings the match takes by ] [ and its rotate handle, sent by Enter, its flag or a double click, left drag still orbiting; (F9c) a Howdah's rider firing from its deck on a diagonal heading" : [!a.carts && a.only !== 'tips' && 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers', a.only !== 'tips' && "(F9a) the War-Carts' tools: R, chips and Tab to pick riders, placing, boarding and stepping off by click, the box and R with a group; (F9c) their decks' glow and lit chips, a rider's chip, ring, tooltip and rays from the deck, R firing a deck by one click, the spent slot refused", !a.carts && '(V3a) every condition an icon and a tip, shown on a hover and a tap, inside the screen', !a.carts && a.only === undefined && '(F7b) the see-through walls, the rings through them and the LOS ray', !a.carts && a.only === undefined && "(F9b) a lone long hull pinned, turned through its valid headings and sent; (F9c) a Howdah's rider firing from its deck on a diagonal heading", !a.carts && a.only === undefined && '(Breakthrough) the defender placed behind the March Wall by a click, refused in front of it'].filter(Boolean).join('; ')
 console.log(ok ? `\ninput-check passed: ${what}` : '\ninput-check FAILED')
 process.exit(ok ? 0 : 1)

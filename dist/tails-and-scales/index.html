@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tails &amp; Scales</title>
     <link rel="icon" href="data:," />
-    <script type="module" crossorigin src="./assets/index-DpiyFVrT.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-guAk71zd.css">
+    <script type="module" crossorigin src="./assets/index-BYfxrj-J.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-AkSOtqiM.css">
   </head>
   <body>
     <div id="labels"></div>
@@ -15,6 +15,7 @@
       <div class="side s0" id="sideA"><span class="ic">🐿️</span><span class="nm">Bushtail Clans</span><span class="vp" id="vp0">0</span></div>
       <div class="mid">
         <div id="round">Round 1 / 5</div>
+        <div id="tally" class="hidden"></div>
         <div id="phases">
           <span class="ph" data-k="move">Move</span><span class="ph" data-k="shoot">Shoot</span><span class="ph" data-k="charge">Charge</span><span class="ph" data-k="fight">Fight</span><span class="ph" data-k="morale">Morale</span>
         </div>
@@ -136,6 +137,8 @@
         <p>Line of sight is real: walls block it, one tree or hedge in the way gives cover, two block it. <b>Indirect</b> weapons can fire without sight at −1 to hit. <b>Heavy</b> weapons are −1 to hit after moving. The <b>Constrictor Brute</b> simply walks through walls.</p>
         <p><b>The powder keg</b> (the <b>Powder keg</b> battle size: a Skirmish fought round one). A barrel of black powder at the centre of the table, its four objectives clustered round it. It goes off when it breaks: a template or acid landing near it (the acorns only crack it; a second one does it), or the Brute walking through it. Its blast is a 3-tail template of its own, S5 AP1 D2, that hits everyone under it, friend and foe, and wrecks the scenery round it; a keg under its blast goes off in turn. Whoever set it off is the one the fallen are counted to, and their own catch it like anyone else. Hold the objectives from their far side if you can.</p>
         <p><b>The Powder Field</b> (a Grand battle of its own). The field the morning's armies left: a farmstead and barns burned out, a great trebuchet, war-wagons and a venom engine wrecked, shell holes, burned trees, sandbags, and powder kegs and caches of bombs lying everywhere. The objectives stand where the fighting was: on the farmstead's floor, on the wrecks (climb their stairs and ladders, as a fortification's) and among a magazine's kegs. A shell hole is difficult ground and cover. Every keg and cache is a powder keg: a blast that sets one off sets off every other within its 3-tail blast, so a whole heap (or a supply train's kegs along a road) can go up at once. War-Carts take the field here as in any Grand battle (up to two a side).</p>
+        <!-- Breakthrough: the page writes it from the mission's own numbers (app/boot.js, present/roles.js rolesHelp) -->
+        <p id="helpBreakthrough"></p>
         <h2>Spells</h2>
         <p>Each army's wizard knows three spells and casts one in each of its shooting phases (a spell is its shot). Pick the wizard up and choose the spell on the spell bar above the buttons, or press <b>1</b>, <b>2</b> or <b>3</b>; the bar starts on the one the AI would cast. Every spell is cast on 2D6: roll its number or more, or it fizzles. A spell at an enemy needs range and sight, as a shot does; one on a friend needs only its range, and the wizard may cast it on itself. A mark lasts as its spell says; the unit's label shows it (hover for what it does).</p>
         <ul class="spells">
@@ -186,6 +189,8 @@
           <button id="endBattle">End the battle</button>
         </div>
         <button id="rematch" class="hidden">Rematch</button>
+        <button id="swapSides" class="hidden" title="The same battlefield and races, the other side attacking">⇄ Swap sides</button>
+        <p id="swapNote" class="small hidden"></p>
         <button id="watchReplay">📼 Watch the replay</button>
         <button id="again" class="primary">Back to the war room</button>
       </div>

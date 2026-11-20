@@ -117,6 +117,19 @@
 // --self-test runs them on TIP_MUTATIONS' edits too (the climb's cost
 // never added; the ray always drawn green), each of which must fail them.
 //
+// (Breakthrough, DESIGN §4.2.12's "The page") And role battles, which no
+// corpus log holds yet: two watched Breakthrough battles made from their
+// setups (ROLE_ITEMS: one that breaks through, one held), snapped past
+// their end as any watched battle, the end screen worded as their
+// game.over (the new ends' title and line, the target the mission's); and
+// the role lane (rolesLane): those battles watched whole, unsnapped, and a
+// battle against the AI at its deployment each way round, and a Skirmish,
+// every banner and the HUD's tally read as they play (the opening
+// banners, the tally on each round's banner and the HUD against each
+// round.scored, the end screen folded from game.over; none of it on a
+// Skirmish). --only roles runs those alone; --self-test runs
+// ROLE_MUTATIONS' edits on them, each of which must fail them.
+//
 // By default five battles: a watched one and four human logs (one per
 // vs-AI seat, one hotseat, and (F4) a hotseat log that votes at the round
 // limit and plays two overtime rounds), then the tooltips. Exit 0 when every snap shows what it must and
@@ -146,6 +159,12 @@ import { fortScene } from './fort-scene.mjs'
 const { createMatch, fullSetup } = await import(pathToFileURL(`${PKG}/core/index.js`).href)
 const { OBJECTIVE_RANGE } = await import(pathToFileURL(`${PKG}/core/rules.js`).href)
 const P = await import(pathToFileURL(`${PKG}/view/dressing/place.js`).href)
+// ((Breakthrough, S4b) the rules' zones and the wall's readers, which the
+// drawn zones are held to; the gate's stages as the view numbers them; the
+// help's own rule of who climbs)
+const { zone: zoneUT } = await import(pathToFileURL(`${PKG}/core/deploy.js`).href)
+const { behindLine } = await import(pathToFileURL(`${PKG}/core/terrain/breakthrough.js`).href)
+const { climbs: climbsUT } = await import(pathToFileURL(`${PKG}/core/queries.js`).href)
 const boardOf = (setup) => {
   const s = fullSetup(setup)
   const G = createMatch({ ...s, seats: s.seats.map((x) => ({ ...x, ctrl: 'human' })) }, { out: null })
@@ -171,7 +190,10 @@ const DECK_LOG = 'hotseat-ride-embark-1'
 const DEFAULT = `64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,hotseat-late-vote-1,${DECK_LOG}`
 let items
 try {
-  items = select(loadCorpus().items, a.only ?? DEFAULT)
+  // ((Breakthrough) `roles` in --only: the role battles and the role
+  // lane, which are no corpus logs)
+  const named = a.only?.split(',').filter((x) => x !== 'roles').join(',')
+  items = a.only && !named ? [] : select(loadCorpus().items, named || DEFAULT)
 } catch (e) {
   console.error(`hud-check: ${e.message}`)
   process.exit(2)
@@ -347,6 +369,363 @@ async function tips(browser, url) {
   return { rows, why: whys.join('; ') }
 }
 
+// ── (Breakthrough, DESIGN §4.2.12's "The page") Role battles ────────────────
+// No log of a role battle is in the corpus yet (the balance slice records
+// breach/), so the role battles are made here: watched battles the AI
+// plays alone, each from its board, dice, races and lists (the page's own
+// door: ?seed, ?dice, ?races, ?armies, ?mission) and its attacker pressed
+// on the panel's Who attacks. Picked so each of a role battle's own ends
+// comes, on the March Wall: board 205 (the Bushtails attacking on their
+// preset, seat 0, against a Coil defence of seven units, half the
+// preset's: a Hierophant, three Scaleguard and three Spitters) breaks
+// through (S2b: in round 4 at 6 of 5; (S3) the AI that plays the wall:
+// in round 5 at 6 of 5); board 1 (the presets, seat 1 attacking) is held
+// (S2b at 0, S3 at 1). Neither is lopsided by construction alone. (S3)
+// The AI that plays the wall still wipes a tiny defence, or a tiny
+// attack, before the target is reached (three-unit lists, boards 1-30:
+// a tiny Coil defence wiped 30 of 30, a tiny Bushtail one 30 of 30, a
+// tiny Bushtail attack 30 of 30, a tiny Coil attack 27, breaking through
+// in 3), so a wipe, not a breakthrough or a held line, is what a list
+// lopsided by construction shows; both are kept as searched, re-measured
+// on S3's AI: against the seven-unit defence the Bushtails break through
+// on 3 of boards 1-60 (51 wiped, 6 held), and on 205; the presets with
+// seat 1 attacking are held on 17 of boards 1-20. ((Breakthrough, S5b)
+// The defender musters its own, smaller list now (625 points), so the
+// seven-unit Coil list and a Field preset defending are no longer what a
+// defender may field: both battles are the roles' presets, each named (the
+// attacker 'field', the defender 'garrison', what a seat naming none
+// takes), found by playing boards 1-40 each way round on the tree and
+// keeping the old boards, which still end each way: board 205, seat 0
+// attacking, breaks through, 4 of 4 in round 5; board 1, seat 1
+// attacking, is held at 3. Boards 1, 2, 3 and 5 with seat 0 attacking
+// also break through, boards 1, 4, 5 and 6 with seat 1 attacking are
+// held.) ((S5c) The roles' presets are the attacker's assault and the
+// defender's garrison, the defender at 800 points, its squads on the works:
+// both old boards ended the other way (205 held at 3, 1 broken through in
+// round 5), so the pair was found again on boards 1-40 each way round:
+// board 7, seat 0 attacking, breaks through, 4 of 4 in round 5 (boards 3, 6
+// and 8 too, each in round 6); board 6, seat 1 attacking, is held at 1
+// (11, 19 and 24 too, at 3, 3 and 2).) Their numbers (the target, the rounds) and the races' names are
+// the code under test's own (data/mission.js, data/schema.js).
+const { MISSIONS: MISSIONS_UT } = await import(pathToFileURL(join(PKG, 'data', 'mission.js')).href)
+const { RACES: RACES_UT } = await import(pathToFileURL(join(PKG, 'data', 'schema.js')).href)
+const BT = MISSIONS_UT.breakthrough
+const roleBattle = (id, board, attacker, armies) => ({
+  id, kind: 'roles',
+  job: {
+    setup: { board, dice: board, mission: 'breakthrough', terrain: BT.sets[0], rounds: BT.rounds, overtime: 'never', diceMode: 'shared', attacker, seats: ['squirrel', 'serpent'].map((race, i) => ({ race, ctrl: 'ai', army: armies[i] })) },
+    entries: [],
+    // (what the end screen's oracle reads: the target, the seats' names)
+    need: BT.roles.attack.target, names: ['squirrel', 'serpent'].map((r) => RACES_UT[r].name),
+  },
+  click: `#setupRoles button[data-attacker="${attacker}"]`,
+})
+const ROLE_ITEMS = BT ? [roleBattle('breakthrough-7', 7, 0, ['assault', 'garrison']), roleBattle('held-6', 6, 1, ['garrison', 'assault'])] : []
+
+// The role lane: each role battle watched whole on a page of its own,
+// nothing snapped, and a battle against the AI at its deployment, each
+// way round, and a Skirmish watched to its first round: every banner the
+// table plays (its two lines, and the HUD's tally as it shows), the
+// events it plays (round.scored, game.over), and the end screen. It must
+// show: on a role battle, the opening banners as the battle's first stage
+// begins, for each seat played here (watched: both, the attacker's first)
+// its role and its line ("Break through the line: hold the objectives
+// beyond it. 5 to win." / "Hold the line: keep them under 5 by the end of
+// round 6.", the mission's numbers); at each round.scored the round's
+// banner saying the tally ("Breakthrough v of t": the attacker's VP in
+// the event, its target the event's `need`, itself the mission's) and the
+// HUD's tally the same; the end screen worded from the game.over event
+// (the new ends' words, below); against the AI one banner, the player's
+// role, and the tally at 0 in the deployment; and on a Skirmish no role
+// banner, no tally and the round's banner its score. Returns { rows, why }.
+async function rolesLane(browser, url) {
+  const rows = [], whys = []
+  const need = BT.roles.attack.target, icon = (race) => RACES_UT[race].icon, name = (race) => RACES_UT[race].name
+  const races = ['squirrel', 'serpent']
+  const lines = { attack: `Break through the line: hold the objectives beyond it. ${need} to win.`, defend: `Hold the line: keep them under ${need} by the end of round ${BT.rounds}.` }
+  const opening = (s, atk) => [`${icon(races[s])} ${name(races[s])}`, s === atk ? 'Attack' : 'Defend', lines[s === atk ? 'attack' : 'defend']]
+  // a page on `mode`'s panel, `q` the URL's more, `click` pressed before
+  // Start; the recorder in the page
+  const scene = async (mode, q, click, until, probe = null) => {
+    const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
+    page.setDefaultTimeout(IDLE_MS)
+    const errors = []
+    page.on('pageerror', (e) => errors.push(e.message))
+    await page.addInitScript(() => {
+      // ((Breakthrough, S4b) and the gate: each hurt to it the table plays
+      // (a blast's, or a ram in a walk's smashes) and its break, as folded;
+      // the siege's lines, with the gate as drawn as each showed, are the
+      // page's own record: its view.breakthrough().said)
+      const rec = (window.__roles = { banners: [], events: [], gate: [] })
+      Object.defineProperty(window, '__ts', {
+        configurable: true,
+        get: () => rec.ts,
+        set: (ts) => {
+          rec.ts = ts
+          ts.present.listen({
+            reset: () => {},
+            event: (e) => {
+              if (e.t === 'round.scored' || e.t === 'game.over' || e.t === 'stage') rec.events.push(JSON.parse(JSON.stringify(e)))
+              const gid = ts.G?.terrain?.plan?.gate.id
+              if (gid === undefined) return
+              for (const x of [e, ...(e.t === 'unit.move' ? (e.smashes ?? []).flatMap((sm) => sm.ev) : [])]) if (x.id === gid && (x.t === 'terrain.hurt' || x.t === 'terrain.destroy')) rec.gate.push(x.t === 'terrain.destroy' ? { down: true } : { hp: x.hp, of: x.of, ram: !!x.ram })
+            },
+          })
+        },
+      })
+      addEventListener('DOMContentLoaded', () => {
+        const b = document.querySelector('#banner')
+        new MutationObserver(() => {
+          const t = document.querySelector('#tally')
+          rec.banners.push({ b1: b.querySelector('.b1')?.textContent ?? '', b2: b.querySelector('.b2')?.textContent ?? '', b3: b.querySelector('.b3')?.textContent ?? '', tally: t && !t.classList.contains('hidden') ? t.textContent : null })
+        }).observe(b, { childList: true })
+      })
+    })
+    await page.goto(`${url}/?debug&fast&lowfi&${q}`, { timeout: IDLE_MS })
+    await page.waitForSelector('#title:not(.hidden)', { timeout: IDLE_MS })
+    await page.click(`[data-mode="${mode}"]`)
+    await page.waitForSelector('#setup:not(.hidden) #setupStart')
+    if (click) await page.click(click)
+    await page.click('#setupStart')
+    // (a page that never gets there is a row that fails, not a crash)
+    const reached = await page.waitForFunction(until, null, { timeout: IDLE_MS, polling: 100 }).then(() => true, (e) => (whys.push(`${mode} ${q}: what the scene waits on never came (${e.message.split('\n')[0]})`), false))
+    // ((Breakthrough, S4b) what the scene asks of the page once there)
+    const probed = reached && probe ? await probe(page) : null
+    const got = await page.evaluate(() => ({
+      banners: window.__roles.banners, events: window.__roles.events, setup: window.__ts.G.setup, gate: window.__roles.gate, lines: window.__ts.view.breakthrough?.().said ?? [],
+      bannerUp: document.querySelector('#banner').classList.contains('show'), lineUp: !!document.querySelector('#armyBanner')?.classList.contains('show'),
+      tally: document.querySelector('#tally')?.classList.contains('hidden') ? null : document.querySelector('#tally')?.textContent ?? null,
+      over: document.querySelector('#over').classList.contains('hidden') ? null : { title: document.querySelector('#overTitle').textContent, why: document.querySelector('#overWhy').textContent },
+    }))
+    await page.context().close()
+    if (errors.length) whys.push(`page errors: ${errors.slice(0, 3).join('; ')}`)
+    return { ...got, reached, probed }
+  }
+  const no = (m) => whys.push(m)
+  let gateHurts = 0
+  // the role battles, watched whole
+  for (const it of ROLE_ITEMS) {
+    const s = it.job.setup, atk = s.attacker
+    const got = await scene('watch', `seed=${s.board}&dice=${s.dice}&races=${races.join(',')}&mission=breakthrough&armies=${s.seats.map((x) => x.army).join(',')}`, it.click, () => !document.querySelector('#over').classList.contains('hidden'))
+    const at = it.id
+    if (!got.reached) continue
+    if (got.setup.attacker !== atk) no(`${at}: the battle's attacker ${got.setup.attacker}, not ${atk}`)
+    const open = got.banners.slice(0, 2).map((b) => [b.b1, b.b2, b.b3]), wantOpen = [atk, 1 - atk].map((x) => opening(x, atk))
+    if (JSON.stringify(open) !== JSON.stringify(wantOpen)) no(`${at}: the opening banners ${JSON.stringify(open)}, not ${JSON.stringify(wantOpen)}`)
+    const scored = got.events.filter((e) => e.t === 'round.scored')
+    if (!scored.length) no(`${at}: no round.scored played`)
+    for (const e of scored) {
+      const want = `Breakthrough ${e.vp[atk]} of ${need}`
+      const b = got.banners.find((x) => x.b1 === `End of round ${e.round}`)
+      if (e.need !== need) no(`${at}: round ${e.round}'s round.scored names a target of ${e.need}, not the mission's ${need}`)
+      if (!b) no(`${at}: no banner for round ${e.round}`)
+      else if (b.b2 !== want || b.tally !== want) no(`${at}: round ${e.round}'s banner says "${b.b2}" and the HUD's tally "${b.tally}", not "${want}"`)
+    }
+    const over = got.events.find((e) => e.t === 'game.over')
+    const w = over && endWords(over, { attacker: atk, need, names: it.job.names })
+    if (!over) no(`${at}: no game.over played`)
+    else if (!got.over || got.over.title !== `${icon(races[over.win])} ${w.title}` || got.over.why !== w.line) no(`${at}: the end screen ${JSON.stringify(got.over)}, not "${icon(races[over.win])} ${w.title}" / "${w.line}" (game.over ${over.why})`)
+    else rows.push(`${at}: the opening banners (${races[atk]} attack, then ${races[1 - atk]} defend), the tally at ${scored.length} round ends ("${got.banners.find((x) => x.b1 === `End of round ${scored.at(-1).round}`)?.b2}"), "${got.over.title}" / "${got.over.why}"`)
+    // ((Breakthrough, S4b) the gate as drawn after each hurt and its break,
+    // the siege's lines, and the end screen with no banner behind it)
+    const g = gateRows(at, got)
+    gateHurts += g.hurts
+    if (g.why) no(g.why)
+    else rows.push(g.row)
+  }
+  // ((Breakthrough, S4b) the role battles strike the gate: else the rows
+  // above prove nothing of its stages)
+  if (ROLE_ITEMS.length && !gateHurts) no('no role battle struck the gate: its stages went unseen')
+  // against the AI, at its deployment: the player's role alone, the tally
+  // at 0
+  for (const [click, atk] of [[null, 0], ['#setupRoles button[data-attacker="1"]', 1]]) {
+    const got = await scene('bushtail', 'seed=4242&mission=breakthrough', click, () => window.__ts?.G?.pending?.k === 'deploy' && window.__roles.events.some((e) => e.t === 'stage') && window.__ts.player.idle, drawnProbe)
+    const at = `bushtail, seat ${atk} attacking`
+    if (!got.reached) continue
+    // ((Breakthrough, S4b) each seat's zone as drawn on the table and the
+    // minimap, and the ways' labels, held to the rules)
+    const d = drawnRows(at, got)
+    if (d.why) no(d.why)
+    else rows.push(d.row)
+    const want = [opening(0, atk)], open = got.banners.filter((b) => !/^End of round/.test(b.b1)).map((b) => [b.b1, b.b2, b.b3])
+    if (JSON.stringify(open) !== JSON.stringify(want)) no(`${at}: the banners ${JSON.stringify(open)}, not ${JSON.stringify(want)}`)
+    else if (got.tally !== `Breakthrough 0 of ${need}`) no(`${at}: the HUD's tally "${got.tally}" in the deployment`)
+    else rows.push(`${at}: "${open[0].join('" / "')}", the tally "${got.tally}"`)
+  }
+  // ((Breakthrough, S4b) a Skirmish against the AI at its deployment: the
+  // strips, as ever, and no ways marked)
+  {
+    const got = await scene('bushtail', 'seed=4242', null, () => window.__ts?.G?.pending?.k === 'deploy' && window.__ts.player.idle, (page) => page.evaluate(() => window.__ts.view.breakthrough()))
+    if (got.reached) {
+      const d = got.probed
+      if (d.zones !== null || d.minimap !== null) no(`a Skirmish's deployment draws zones other than the strips: ${JSON.stringify(d.zones)?.slice(0, 80)}`)
+      else if (d.ways.some((w) => w.shown)) no(`a Skirmish's deployment marks the March Wall's ways`)
+      else rows.push('a Skirmish: the strips, no ways marked')
+    }
+  }
+  // a Skirmish: none of it
+  {
+    const got = await scene('watch', 'seed=4242', null, () => window.__roles.banners.some((b) => /^End of round/.test(b.b1)))
+    if (!got.reached) return { rows, why: whys.join('; ') }
+    const first = got.banners[0], round = got.banners.find((b) => /^End of round/.test(b.b1)), e = got.events.find((x) => x.t === 'round.scored')
+    if (/^(Attack|Defend)$/.test(first?.b2 ?? '') || first?.b3) no(`a Skirmish opens on a role banner: ${JSON.stringify(first)}`)
+    else if (round.tally !== null || round.b2 !== `VP ${e.vp[0]} – ${e.vp[1]}`) no(`a Skirmish's round banner "${round.b2}" with the tally ${JSON.stringify(round.tally)}`)
+    else rows.push(`a Skirmish: no role banner, no tally, "${round.b2}"`)
+  }
+  return { rows, why: whys.join('; ') }
+}
+
+// The end screen's title and line for a role battle's own end, from its
+// game.over event (`ev`: win, why, vp, rounds) and the battle's attacker,
+// target and seats' names (the title's icon left out); null for any other
+// end.
+function endWords(ev, { attacker, need, names }) {
+  if (ev.why === 'breakthrough') return { title: `${names[ev.win]} break through!`, line: `Breakthrough ${ev.vp[attacker]} of ${need} in round ${ev.rounds}.` }
+  if (ev.why === 'held') return { title: `The line holds: ${names[ev.win]} win!`, line: `The attackers scored ${ev.vp[attacker]} of the ${need} they needed in ${ev.rounds} round${ev.rounds === 1 ? '' : 's'}.` }
+  return null
+}
+
+// (Breakthrough, S4b) The deployment's probe: the drawing as it stands
+// (view: zones, minimap, ways), then with a wrecker, a climber and a flier
+// of the player's seat picked up in turn, the ways' labels each time.
+async function drawnProbe(page) {
+  return page.evaluate(() => {
+    const ts = window.__ts, out = { first: ts.view.breakthrough(), picks: [] }
+    for (const flag of ['wrecker', 'climb', 'fly']) {
+      const u = ts.units.find((x) => x.side === 0 && x.alive && !!x.t[flag])
+      if (!u) continue
+      ts.select(u)
+      out.picks.push({ id: u.id, flag, ways: ts.view.breakthrough().ways })
+    }
+    ts.select(null)
+    return out
+  })
+}
+// whether (x, z) is inside polygon `pts` (an even-odd ray cast), and how far
+// it is from the polygon's edges
+function inPoly(pts, x, z) {
+  let c = false
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const a = pts[i], b = pts[j]
+    if (a.z > z !== b.z > z && x < ((b.x - a.x) * (z - a.z)) / (b.z - a.z) + a.x) c = !c
+  }
+  return c
+}
+function edgeDist(pts, x, z) {
+  let best = Infinity
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i], b = pts[(i + 1) % pts.length], dx = b.x - a.x, dz = b.z - a.z, L2 = dx * dx + dz * dz
+    const t = L2 ? Math.max(0, Math.min(1, ((x - a.x) * dx + (z - a.z) * dz) / L2)) : 0
+    best = Math.min(best, Math.hypot(a.x + dx * t - x, a.z + dz * t - z))
+  }
+  return best
+}
+// The zones and the ways at a role battle's deployment against the AI:
+// each seat's polygon on the table the minimap's too, and over a half-tail
+// grid of the board inside it exactly where the rules' zone (core/deploy.js
+// zone: its x and z bounds, and behind the wall's face where it carries
+// the plan) holds the point, points within a twentieth of a tail of its
+// edges aside; the ways' four labels up by name; with a wrecker picked up
+// the gate "rams it" and the breach "ploughs it", with a climber the
+// ladders "climbs", with a flier every way "flies over" (the help's words,
+// present/roles.js), and the ladders lit exactly for a unit that climbs
+// (core/queries.js climbs).
+function drawnRows(at, got) {
+  const d = got.probed?.first
+  if (!d) return { why: `${at}: the drawing was never read` }
+  if (!d.zones) return { why: `${at}: the table draws the strips, not each seat's zone` }
+  if (JSON.stringify(d.minimap) !== JSON.stringify(d.zones)) return { why: `${at}: the minimap's zones are not the table's` }
+  const s0 = fullSetup(got.setup), G = createMatch({ ...s0, seats: s0.seats.map((x) => ({ ...x, ctrl: 'human' })) }, { out: null })
+  const { W, H } = G.board
+  let n = 0
+  for (const s of [0, 1]) {
+    const Z = zoneUT(G, s), poly = d.zones[s]
+    let bad = 0, first = null
+    for (let x = -W / 2 + 0.25; x < W / 2; x += 0.5) for (let z = -H / 2 + 0.25; z < H / 2; z += 0.5) {
+      const core = x >= Z.minX && x <= Z.maxX && (Z.minZ === undefined || (z >= Z.minZ && z <= Z.maxZ)) && (!Z.plan || behindLine(Z.plan, x, z))
+      if (core === inPoly(poly, x, z) || edgeDist(poly, x, z) < 0.05) continue
+      bad++
+      first ??= `${x},${z} (${core ? 'in' : 'out of'} the rules' zone)`
+    }
+    if (bad) return { why: `${at}: seat ${s}'s zone as drawn differs from the rules' at ${bad} points of the grid, first ${first}` }
+    n += poly.length
+  }
+  if (d.ways.length !== 4 || !d.ways.every((w) => w.shown && !w.say)) return { why: `${at}: the ways' labels in the deployment ${JSON.stringify(d.ways)}` }
+  const say = (pick, k) => pick.ways.find((w) => w.k === k)?.say
+  for (const p of got.probed.picks) {
+    const u = G.units.find((x) => x.id === p.id)
+    if (p.flag === 'fly' && !p.ways.every((w) => w.say === 'flies over')) return { why: `${at}: a flier's ways ${JSON.stringify(p.ways)}` }
+    if (p.flag === 'wrecker' && (say(p, 'gate') !== 'rams it' || say(p, 'breach') !== 'ploughs it')) return { why: `${at}: a wrecker's ways ${JSON.stringify(p.ways)}` }
+    if (p.flag !== 'fly' && (say(p, 'ladders') === 'climbs') !== climbsUT(u)) return { why: `${at}: ${u.t.name}'s ladders say "${say(p, 'ladders')}", but it ${climbsUT(u) ? 'climbs' : 'does not climb'}` }
+  }
+  if (!got.probed.picks.some((p) => p.flag === 'climb') || got.probed.picks.length < 2) return { why: `${at}: no climber and a wrecker or flier of the player's seat found to pick up (${got.probed.picks.map((p) => p.flag).join(', ')})` }
+  return { row: `${at}: each seat's zone drawn as the rules' (table and minimap, ${n} corners), the four ways named, and what they are to ${got.probed.picks.map((p) => ({ wrecker: 'a wrecker', climb: 'a climber', fly: 'a flier' })[p.flag]).join(', ')}` }
+}
+// The gate through a watched role battle: each hurt the table plays (as
+// folded: its hit points and whole, handed on by app/flow.js) said by a line
+// ("<attacker> ram the gate: h of w left" for a wrecker's, "The gate is
+// struck: h of w left" for a blast's) and, as that line shows, the gate
+// drawn standing at the stage its hit points say (12 whole, 8 the first
+// hole, 4 the second: two thirds and a third of its whole, the view's
+// gateStage); its break said ("The gate is down!") with the gate no longer
+// drawn; at the end, no round banner and no line showing behind the end
+// screen. Returns { row, why, hurts }.
+function gateRows(at, got) {
+  const stageOf = (hp, of) => (hp > (of * 2) / 3 ? 0 : hp > of / 3 ? 1 : 2)
+  const hurts = got.gate.filter((r) => !r.down), downs = got.gate.filter((r) => r.down)
+  for (const r of hurts) {
+    if (!(r.hp > 0 && r.of > 0)) return { why: `${at}: a hurt to the gate played with no hit points (${JSON.stringify(r)})`, hurts: hurts.length }
+    const want = r.ram ? `ram the gate: ${r.hp} of ${r.of} left` : `The gate is struck: ${r.hp} of ${r.of} left`
+    const l = got.lines.find((x) => x.text.includes(want))
+    if (!l) return { why: `${at}: no line "${want}" (lines: ${JSON.stringify(got.lines.map((x) => x.text)).slice(0, 160)})`, hurts: hurts.length }
+    if (!l.drawn?.shown || l.drawn.stage !== stageOf(r.hp, r.of)) return { why: `${at}: the gate struck to ${r.hp} of ${r.of} is drawn ${JSON.stringify(l.drawn)}, not standing at stage ${stageOf(r.hp, r.of)}`, hurts: hurts.length }
+  }
+  if (downs.length) {
+    const l = got.lines.find((x) => x.text === 'The gate is down!')
+    if (!l) return { why: `${at}: the gate broke and no line said so`, hurts: hurts.length }
+    if (l.drawn?.shown) return { why: `${at}: the gate still drawn as its break is said`, hurts: hurts.length }
+  }
+  if (got.over && (got.bannerUp || got.lineUp)) return { why: `${at}: ${got.bannerUp ? 'the round banner' : 'the siege line'} still up behind the end screen`, hurts: hurts.length }
+  return { row: `${at}: the gate drawn at its stage as each of ${hurts.length} hurts is said (stages ${[...new Set(hurts.map((r) => stageOf(r.hp, r.of)))].join(', ') || 'none'})${downs.length ? ', gone as its break is said' : ''}, nothing behind the end`, hurts: hurts.length }
+}
+
+// (Breakthrough) the role lane's edits, each of which rolesLane must catch
+const ROLE_MUTATIONS = {
+  // the HUD shows no tally
+  'tally-none': ['present/hud-model.js', '    tally: tallyOf(G.setup, M.vp),', '    tally: null,'],
+  // the tally reads the defender's VP
+  'tally-defender': ['present/roles.js', '  return R ? `Breakthrough ${vp[attackerSeat(setup)]} of', '  return R ? `Breakthrough ${vp[1 - attackerSeat(setup)]} of'],
+  // the round's banner the plain score
+  'round-plain': ['app/flow.js', '(setup && tallyOf(setup, e.vp)) ?? `VP', 'null ?? `VP'],
+  // no opening banners
+  'opening-unsaid': ['app/flow.js', "    if (!this.rolesSaid && (e.stage === 'deploy' || e.stage === 'battle') && this.session?.G && rolesOf(this.session.G.setup)) return this.sayRoles(this.session)\n", ''],
+  // both roles' banners to a player against the AI
+  'opening-both': ['app/flow.js', '    const seats = (session.localSeats.length ? [...session.localSeats] : [0, 1])', '    const seats = [0, 1]'],
+  // a role battle's own end worded as a plain score
+  'result-plain': ['ui/screens/result.js', '    const line = roles ? roles.line', '    const line = false ? roles.line'],
+  // ((Breakthrough, S4b) the table's Breakthrough drawing) the zones drawn
+  // as the strips on a role battle
+  'zones-strips': ['view/index.js', '    if (!to.units) this.table.zoneShapes(zoneShapes(g))', '    if (!to.units) this.table.zoneShapes(null)'],
+  // the zones not mirrored when seat 1 attacks ((S5d) the view reads the
+  // rules' zone, core/queries.js zone, so the edit reads it as if seat 0
+  // attacked: the attacker-west frame's bounds, unmirrored)
+  'zones-unmirrored': ['view/zones.js', '    const b = zone(G, s)', '    const b = zone({ ...G, setup: { ...G.setup, attacker: 0 } }, s)'],
+  // ((S5d) the plan's whole region drawn, not cut to the role's bounds)
+  'zones-uncut': ['view/zones.js', '    return b.plan ? clipBox(b.plan.region, x0, x1, z0, z1)', '    return b.plan ? b.plan.region'],
+  // the minimap's zones the strips
+  'minimap-strips': ['app/boot.js', 'edges: EDGES, zones: view.table.shapes ?? null,', 'edges: EDGES, zones: null,'],
+  // the hurts handed no hit points: the gate never drawn broken
+  'gate-unworn': ['app/flow.js', '        events = this.wornEntry(events, ses.G)\n', ''],
+  // the gate drawn a ram late
+  'gate-late': ['view/terrain.js', '    const stage = gateStage(hp, of)', '    const stage = gateStage(hp + 4, of)'],
+  // the round banner left fading behind the end screen
+  'banner-behind': ['app/flow.js', '    this.ui.banner.hide()\n    this.ui.armyBanner?.hide()\n    this.human.select(null)', '    this.human.select(null)'],
+  // the siege said nothing
+  'siege-silent': ['app/flow.js', '    if (text) this.ui.armyBanner?.show(text)', '    if (false) this.ui.armyBanner?.show(text)'],
+  // the ways never marked
+  'ways-unmarked': ['app/flow.js', '    view.ways.show(this.waysShown())', '    view.ways.show(null)'],
+}
+
 // In the page, before the app: catch window.__ts, drive a human log's seats
 // (the corpus driver), and snap at each point due, reading the page once
 // the table has settled.
@@ -472,9 +851,14 @@ function pageHarness(job, mode, settle, names) {
     if (what === ROUND_LIMIT) return { round: g.turn.round }
     if (what !== 'past the end') return { phase: names[P.phase], ready: done(g) }
     const { win, why, vp, rounds } = queuedOver(), when = rounds ? `in round ${rounds}` : 'in the deployment'
+    // ((Breakthrough) a role battle's own ends: the attacker's target
+    // reached, or the line held; the target the job's, the mission's)
+    const atk = g.setup.attacker ?? 0, s = rounds === 1 ? '' : 's'
+    if (why === 'breakthrough') return { win, why, title: `${job.names[win]} break through!`, line: `Breakthrough ${vp[atk]} of ${job.need} in round ${rounds}.` }
+    if (why === 'held') return { win, why, title: `The line holds: ${job.names[win]} win!`, line: `The attackers scored ${vp[atk]} of the ${job.need} they needed in ${rounds} round${s}.` }
     return {
       win, why,
-      line: why === 'score' ? `Final score ${vp[0]} – ${vp[1]} after ${rounds} round${rounds === 1 ? '' : 's'}.` : why === 'wipe' ? `have been wiped from the table ${when}.` : `conceded ${when}.`,
+      line: why === 'score' ? `Final score ${vp[0]} – ${vp[1]} after ${rounds} round${s}.` : why === 'wipe' ? `have been wiped from the table ${when}.` : `conceded ${when}.`,
     }
   }
   // whether a point is due now: the table behind the match (but for the
@@ -570,6 +954,8 @@ async function run(browser, url, item) {
     const boot = await ask(page, () => window.__sim?.error ?? (window.__ts ? null : 'no window.__ts'))
     if (boot) throw new Error(boot)
     await page.click(`[data-mode="${mode}"]`, { timeout: 30000 })
+    // ((Breakthrough) a role battle's attacker, pressed on the panel)
+    if (item.click) await page.click(item.click, { timeout: 30000 })
     // (F6) the battle-setup panel's Start, its races the URL's
     await page.click('#setupStart', { timeout: 30000 })
     let mark = '', since = Date.now()
@@ -600,7 +986,7 @@ function wrong({ what, want, got }) {
     if (!got.over) bad.push('no end screen')
     else if (got.vote) bad.push('the vote panel up, not the end screen')
     else {
-      if (want.win < 0 ? got.over.title !== 'A bloody draw' : !got.over.title.endsWith(' win!')) bad.push(`the end screen's title "${got.over.title}"`)
+      if (want.title ? !got.over.title.endsWith(want.title) : want.win < 0 ? got.over.title !== 'A bloody draw' : !got.over.title.endsWith(' win!')) bad.push(`the end screen's title "${got.over.title}"${want.title ? `, not "… ${want.title}"` : ''}`)
       if (!got.over.why.endsWith(want.line)) bad.push(`the end screen says "${got.over.why}", not "… ${want.line}"`)
     }
     down('end', 'End')
@@ -671,7 +1057,7 @@ try {
     const onOf = (name) => (name === 'unedited' ? select(loadCorpus().items, [SELF_TEST_ON, ...new Set(Object.values(MUTATIONS).map((m) => m[3]).filter(Boolean))].join(',')) : MUTATIONS[name][3] ? select(loadCorpus().items, MUTATIONS[name][3]) : on)
     console.log(a.tips ? `hud-check self-test: (F7b) the tooltips' ${Object.keys(TIP_MUTATIONS).length} edits, after the unedited code passes them` : `hud-check self-test: ${Object.keys(MUTATIONS).length} edits, each on ${on.map((x) => x.id).join(' and ')} ((F9c) or the battles it names: ${DECK_LOG}), after the unedited code passes there; then the tooltips' ${Object.keys(TIP_MUTATIONS).length}`)
     // ((F7b) with --tips, the tooltips' edits alone)
-    for (const [k, name] of (a.tips ? [] : ['unedited', ...Object.keys(MUTATIONS)]).entries()) {
+    for (const [k, name] of (a.tips || a.only === 'roles' ? [] : ['unedited', ...Object.keys(MUTATIONS)]).entries()) {
       const dir = copyCode(PKG, join(work, `${k}`))
       if (name !== 'unedited') {
         const [f, from, to] = MUTATIONS[name]
@@ -705,7 +1091,7 @@ try {
     }
     // ((F7b) the tooltips: the unedited code passes them, and each of
     // TIP_MUTATIONS' edits fails them)
-    if (!failed) {
+    if (!failed && a.only !== 'roles') {
       for (const [k, name] of ['unedited', ...Object.keys(TIP_MUTATIONS)].entries()) {
         const dir = copyCode(PKG, join(work, `tip${k}`))
         if (name !== 'unedited') {
@@ -727,6 +1113,43 @@ try {
         if (name === 'unedited' && !ok) break
       }
     }
+    // ((Breakthrough) the role lane and the role battles: the unedited
+    // code passes them, and each of ROLE_MUTATIONS' edits fails one; with
+    // --only roles, these alone)
+    const rolesToo = !a.tips && (!a.only || a.only.split(',').includes('roles'))
+    if (!failed && rolesToo) {
+      for (const [k, name] of ['unedited', ...Object.keys(ROLE_MUTATIONS)].entries()) {
+        const dir = copyCode(PKG, join(work, `role${k}`))
+        if (name !== 'unedited') {
+          const [f, from, to] = ROLE_MUTATIONS[name]
+          const src = readFileSync(join(dir, f), 'utf8')
+          if (src.split(from).length !== 2) throw new Error(`hud-check self-test: ${name} finds no single "${from.trim().slice(0, 60)}" in ${f}`)
+          writeFileSync(join(dir, f), src.replace(from, to))
+        }
+        const served = await startStaticServer(await buildApp(dir, join(work, `role${k}-dist`)))
+        const whys = []
+        try {
+          const r = await rolesLane(browser, served.url)
+          if (r.why) whys.push(['roles lane', r.why])
+          for (const it of ROLE_ITEMS) {
+            let x
+            try {
+              x = await run(browser, served.url, it)
+            } catch (e) {
+              x = { error: e.message, snaps: [] }
+            }
+            const w = judge(it, x)
+            if (w) whys.push([it.id, w])
+          }
+        } finally {
+          served.close()
+        }
+        const ok = name === 'unedited' ? !whys.length : whys.length > 0
+        if (!ok) failed++
+        console.log(`  ${ok ? (name === 'unedited' ? 'passes' : 'caught') : 'WRONG '} ${name.padEnd(14)} the role lane and battles: ${(whys.map(([id, w]) => `${id}: ${w}`).join(' | ') || 'right').slice(0, 300)}`)
+        if (name === 'unedited' && !ok) break
+      }
+    }
     console.log(failed ? `\nhud-check self-test FAILED: ${failed} wrong verdict(s)` : '\nhud-check self-test passed: the unedited code passes, and every edit is caught')
   } else {
     const dist = a.dist ?? (await buildApp(PKG, join(work, 'dist')))
@@ -736,7 +1159,9 @@ try {
     // many true
     const ready = { checked: 0, ready: 0, deck: { able: 0, only: 0, hints: 0 } }
     try {
-      for (const it of a.tips ? [] : items) {
+      // ((Breakthrough) and the role battles, snapped past their end too)
+      const roled = !a.tips && (!a.only || a.only.split(',').includes('roles'))
+      for (const it of a.tips ? [] : [...items, ...(roled ? ROLE_ITEMS : [])]) {
         let r
         try {
           r = await run(browser, url, it)
@@ -751,9 +1176,17 @@ try {
         console.log(`  ${it.kind.padEnd(5)} ${it.id.padEnd(24)} ${say(it, r, why)}`)
       }
       // ((F7b) the tooltips that read heights, on a fortified board)
-      const t = await tips(browser, url)
-      if (t.why) failed++
-      console.log(`  F7b   tooltips                 ${t.why ? `FAIL: ${t.why.slice(0, 600)}` : t.rows.join('; ')}`)
+      if (!a.only || items.length) {
+        const t = await tips(browser, url)
+        if (t.why) failed++
+        console.log(`  F7b   tooltips                 ${t.why ? `FAIL: ${t.why.slice(0, 600)}` : t.rows.join('; ')}`)
+      }
+      // ((Breakthrough) the role lane: the banners, the tally and the end)
+      if (roled) {
+        const t = await rolesLane(browser, url)
+        if (t.why) failed++
+        console.log(`  roles lane                     ${t.why ? `FAIL: ${t.why.slice(0, 900)}` : t.rows.join('; ')}`)
+      }
     } finally {
       close()
     }

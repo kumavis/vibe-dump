@@ -317,7 +317,10 @@ export class Minimap {
   // ── Drawing ───────────────────────────────────────────────────────────────
   draw(M, b) {
     const g = this.canvas.getContext('2d'), k = this.k
-    const tkey = `${this.terrainKey(M)}|${this.canvas.width}x${this.canvas.height}|${b.W}x${b.H}`
+    // ((Breakthrough) and the role zones: a battle with sides swapped has
+    // the same chunks' heights, mirrored, and other zones)
+    const zkey = b.zones ? b.zones.map((z) => `${z.length}:${z[0].x.toFixed(2)},${z[0].z.toFixed(2)}`).join(';') : ''
+    const tkey = `${this.terrainKey(M)}|${this.canvas.width}x${this.canvas.height}|${b.W}x${b.H}|${zkey}`
     let painted = false
     if (!this.bg || this.terrainSig !== tkey) {
       this.terrainSig = tkey
@@ -420,10 +423,19 @@ export class Minimap {
     g.fillStyle = '#4d6a2e'
     g.fillRect(x0, y0, b.W * k, b.H * k)
     for (const s of [0, 1]) {
-      const edge = b.edges?.[s] ?? (s ? 1 : -1)
-      const [zx] = this.toPx(edge < 0 ? -b.W / 2 : b.W / 2 - b.deploy, 0)
       g.fillStyle = this.colorOf(s)
       g.globalAlpha = 0.16
+      // ((Breakthrough) a seat's zone as its role's, where the table has
+      // them: view/zones.js, the board's `zones`)
+      if (b.zones) {
+        g.beginPath()
+        b.zones[s].forEach((p, i) => g[i ? 'lineTo' : 'moveTo'](...this.toPx(p.x, p.z)))
+        g.closePath()
+        g.fill()
+        continue
+      }
+      const edge = b.edges?.[s] ?? (s ? 1 : -1)
+      const [zx] = this.toPx(edge < 0 ? -b.W / 2 : b.W / 2 - b.deploy, 0)
       g.fillRect(zx, y0, b.deploy * k, b.H * k)
     }
     g.globalAlpha = 1
@@ -531,8 +543,9 @@ export class Minimap {
 // how each kind of chunk shows from above ((F19a) a powder keg a red dot,
 // the colour of its danger band)
 // ((V3d) the Powder Field's: craters the burned turf's brown, the wrecks'
-// decks and hulks charred, a fire's orange)
-const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a', keg: '#e0402e', crater: '#4e3d2a', stump: '#3a2e26', cart: '#5a3f2a', sandbag: '#a8946a', pyre: '#ff7a1a', hulk: '#3d3a37' }
+// decks and hulks charred, a fire's orange; (Breakthrough) the March
+// Wall's gate its timber's red, its ditch a dark trodden brown)
+const FILL = { block: '#a59d8c', cap: '#a59d8c', tree: '#2f5a24', hedge: '#3d6e2a', boulder: '#8b8b86', crate: '#9a7048', barrel: '#7a5232', sack: '#c2a77a', mushroom: '#c4553e', floor: '#3a5422', log: '#6b4a2e', rubble: '#77706a', keg: '#e0402e', crater: '#4e3d2a', stump: '#3a2e26', cart: '#5a3f2a', sandbag: '#a8946a', pyre: '#ff7a1a', hulk: '#3d3a37', gate: '#8a2e22', ditch: '#3f3326' }
 // the kinds drawn as discs whatever their extent
 const ROUND = { tree: true, boulder: true, mushroom: true, barrel: true, sack: true, rubble: true, keg: true, crater: true, stump: true, pyre: true }
 
