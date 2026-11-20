@@ -6,8 +6,9 @@
 // can't be matched pixel for pixel by any run (the mat is painted from
 // Math.random and the frame lands where the wall clock puts it), so this
 // shoots the title the way the thumbnail script does from two builds, the
-// code under test and a reference (HEAD by default), with every source of
-// difference pinned on both: Math.random seeded alike before the page loads
+// code under test and a reference (HEAD by default; --dressed: DRESSED,
+// below), with every source of difference pinned on both: Math.random
+// seeded alike before the page loads
 // (the same board, mat, wood, tufts), the page's frames run by hand at 60 a
 // second of a clock of its own for 1200 ms (requestAnimationFrame and
 // performance.now replaced before the page loads: the same frames, the same
@@ -37,13 +38,18 @@
 // test's frames, encoded as the thumbnail is, are kept beside the PNGs for a
 // look against the committed thumbnail.jpg.
 //
-//   node sim/title-shot.mjs [--ref <git ref>] [--seeds 1,2,3] [--out <dir>] [--control] [--timeout <s>]
+//   node sim/title-shot.mjs [--ref <git ref>] [--seeds 1,2,3] [--out <dir>] [--control] [--timeout <s>] [--dressed]
 //
 // (S1) Both sides are shot with ?dress=0 (DESIGN §4.3): the table as it was
 // before the battlefield's dressing, so a reference from before it still
 // holds the rest of the title to its pixels. --dressed shoots the title as
 // the page shows it, the dressing in it: against a reference that has the
-// dressing too (the commit the dressed title was last accepted at).
+// dressing too, the commit the dressed title was last accepted at, which is
+// pinned below (DRESSED) and is --dressed's reference unless --ref names
+// another. A change that moves the dressed title on purpose re-pins it: the
+// frames looked at (the JPEGs, beside the committed thumbnail.jpg), the
+// gallery's thumbnail shot again, and DRESSED moved to the commit that
+// carries the change.
 // --control shoots the reference on both sides (two loads of one build):
 // the harness's own determinism, which must hold for a difference to mean
 // anything.
@@ -81,7 +87,11 @@ try {
 } catch (e) {
   usage(e.message)
 }
-const ref = a.ref ?? 'HEAD'
+// (S4) The dressed title's reference: the commit the dressed title was last
+// accepted at (the battlefield dressing's tip as its first frames were
+// looked at and fixed, S1-S4)
+const DRESSED = 'c3d6f7a62710c200202d17608f77f2ee3df875aa'
+const ref = a.ref ?? (a.dressed ? DRESSED : 'HEAD')
 const seedList = (a.seeds ?? '1,2,3').split(',')
 if (!seedList.every((v) => /^\d+$/.test(v))) usage(`--seeds ${a.seeds}: give whole numbers, comma-separated`)
 const seeds = seedList.map(Number)

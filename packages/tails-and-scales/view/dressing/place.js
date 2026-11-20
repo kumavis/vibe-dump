@@ -118,7 +118,7 @@ export function boxHolds(b, x, z, r) {
   const [lx, lz] = local(b, x, z)
   return Math.abs(lx) <= b.hx - r && Math.abs(lz) <= b.hz - r
 }
-// the boxes, bucketed by 4" cells, for the near ones
+// the boxes, bucketed by 4-tail cells, for the near ones
 function buckets(boxes) {
   const B = 4, map = new Map()
   for (const b of boxes) {
@@ -387,7 +387,7 @@ function lanesOf(ctx, R, seed, trackSide) {
 // and stone outweigh the green, a farmstead where they don't. The theme sets
 // the palette (the mat's wash, its lanes, the meadow round it), the works
 // of the people who live there (off the mat, worksOf), and the board's name
-// (nameOf: kept with the theme, not yet shown).
+// (nameOf; on screen through app/board-name.js).
 export const THEMES = Object.freeze(['farm', 'quarry', 'keep', 'burned'])
 export function themeOf(ctx) {
   if (ctx.set === 'powder') return 'burned'

@@ -40,6 +40,7 @@ import { Session } from '../match/session.js'
 import { LocalStore } from '../match/store.js'
 import { CORE_VERSION, RULES_ID } from '../core/index.js'
 import { clock } from '../view/clock.js'
+import { boardNameOf } from './board-name.js'
 
 // how long the table rests between two moves, in wall ms at speed 1
 const BETWEEN = 400
@@ -235,7 +236,9 @@ export class Replay {
     if (!this.battle) return this.bar.hide()
     const moves = this.moves(), first = this.first(moves)
     if (!this.shown) this.k = moves.length - 1
-    this.bar.render({ min: first - 1, max: moves.length - 1, at: this.k, first, playing: this.playing, live: this.isLive, atLive: !this.shown, closable: !this.isLive || this.peek })
+    // ((S4) named by its board: its start's setup's, whatever table the
+    // page drew before it)
+    this.bar.render({ min: first - 1, max: moves.length - 1, at: this.k, first, playing: this.playing, live: this.isLive, atLive: !this.shown, closable: !this.isLive || this.peek, board: boardNameOf(moves[first]?.setup) })
   }
 
   // ── Replay files ───────────────────────────────────────────────────────

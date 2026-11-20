@@ -547,6 +547,23 @@ ul.abil .cond {
   justify-content: space-between;
   user-select: none;
 }
+/* (S4) the board's name after "Battle log", quieter than it; on a narrow
+   log it wraps under it */
+#log h3 .logHead {
+  font-weight: inherit;
+  min-width: 0;
+}
+#logBoard {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--dim);
+}
+#logBoard::before {
+  content: "· ";
+}
+#logBoard.hidden {
+  display: none;
+}
 #log.collapsed #logList {
   display: none;
 }
@@ -1207,6 +1224,20 @@ table.wt th {
   min-width: 60px;
   accent-color: var(--gold);
 }
+/* (S4) the battle's board named over where the slider stands */
+#replay .rpWhere {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+#rpBoard {
+  font-size: 11px;
+  font-weight: normal;
+  font-style: italic;
+  color: var(--gold);
+}
 #rpLabel {
   flex: none;
   min-width: 108px;
@@ -1745,6 +1776,10 @@ body.mirror .ulabel.s1.sel .ct {
 }
 #setup .terrainLine .what {
   color: var(--dim);
+}
+/* (S4) the battlefield's line: the board's name and its seed */
+#setup #setupBoard .name {
+  color: var(--ink);
 }
 /* the lobby's terrain choice, the host's to change */
 .seedrow select {

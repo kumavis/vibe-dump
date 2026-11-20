@@ -31,6 +31,10 @@
 //             k - 1, the log made again after a snap (relog) stamps every
 //             line alike, and a peek over a battle going on comes back to
 //             it at Live and at ✕
+//   name      (S4) the bar names the battle's board as the dressing does
+//             (view/dressing/place.js plan(…).name, the plan of its table
+//             as made, worked out here from the battle's own setup, its
+//             races and armies at the table), on every battle
 //   undo      (F12) a human battle played alone: after every entry,
 //             undoable() is exactly the rule (the last accepted a
 //             placement, move or charge's end of the seat now deciding, no
@@ -58,8 +62,8 @@ const { values: a } = parseArgs({ options: { only: { type: 'string' }, 'self-tes
 
 async function modules(dir) {
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
-  const [core, E, F, { LocalStore }, { Session }, R, { clock }, flow, undo, hud] = await Promise.all(['core/index.js', 'match/envelope.js', 'match/fold.js', 'match/store.js', 'match/session.js', 'app/replay.js', 'view/clock.js', 'app/flow.js', 'app/undo.js', 'present/hud-model.js'].map(at))
-  return { core, E, F, LocalStore, Session, R, clock, flow, undo, hud }
+  const [core, E, F, { LocalStore }, { Session }, R, { clock }, flow, undo, hud, place, rules] = await Promise.all(['core/index.js', 'match/envelope.js', 'match/fold.js', 'match/store.js', 'match/session.js', 'app/replay.js', 'view/clock.js', 'app/flow.js', 'app/undo.js', 'present/hud-model.js', 'view/dressing/place.js', 'core/rules.js'].map(at))
+  return { core, E, F, LocalStore, Session, R, clock, flow, undo, hud, place, rules }
 }
 
 // (F15) the page's flow, with nothing drawn: its sink (app/flow.js) hands
@@ -294,6 +298,13 @@ async function checks(dir, only) {
     const replay = new M.R.Replay({ flow, bar })
     replay.open(battle)
     const moves = replay.moves(), first = replay.first(moves)
+    // (S4) name: the bar names the battle's board, the name the dressing's
+    // plan gives it (its table made afresh, every seat played here so it
+    // waits at its deployment)
+    const full = M.core.fullSetup(setup)
+    const made = M.core.createMatch({ ...full, seats: full.seats.map((x) => ({ ...x, ctrl: 'human' })) }, { out: null })
+    const named = M.place.plan({ seed: M.place.dressSeed(made.setup), set: made.setup.terrain, W: made.board.W, H: made.board.H, deploy: made.board.deploy, edges: made.seats.map((x) => x.edge), objectives: made.objectives, range: M.rules.OBJECTIVE_RANGE, chunks: made.terrain.chunks, nav: made.nav }).name
+    if (bar.m?.board !== named) fail(it, `the replay bar names the board ${JSON.stringify(bar.m?.board)}, not ${named} (board ${full.board}, ${full.mission} on ${full.terrain})`)
     // (F15) logs: every line names the move that logged it; relog stamps
     // the same; a click on a line shows the match before its move
     const lw = linesWrong(M, page, battle, lens, first)
@@ -459,6 +470,11 @@ const MUTANTS = {
   'click-after': ['app/replay.js', '    this.scrub(k - 1)\n', '    this.scrub(k)\n'],
   // (F15) a peek put away at Live stays on the bar
   'peek-stays': ['app/replay.js', '    if (this.peek) return this.close({ back: true })\n', ''],
+  // (S4) the replay bar names no board
+  'bar-unnamed': ['app/replay.js', ', board: boardNameOf(moves[first]?.setup) })', ' })'],
+  // (S4) the name made without the table: the theme read off no terrain
+  // (every classic board a farmstead, its name a farm's)
+  'name-tableless': ['app/board-name.js', 'themeOf({ set: s.terrain, chunks: G.terrain.chunks })', 'themeOf({ set: s.terrain, chunks: [] })'],
   // (F12) undo takes back past a die rolled
   'undo-past-dice': ['present/hud-model.js', '&& f.dice[k] === f.dice[k - 1] ? k : -1', '? k : -1'],
   // (F12) in hotseat a seat takes back the other's entry
@@ -495,6 +511,6 @@ if (a['self-test']) {
 } else {
   const t0 = performance.now()
   const { failed, n, undone } = await checks(a.dir ?? PKG, only)
-  console.log(failed ? `\nreplay-check: ${failed} check(s) failed` : `\nreplay-check passed: ${n} battles scrubbed move by move, replayed from the start event for event, saved and opened again, held to what a page kept; a replay of a battle going on catches up with it; (F15) every battle-log line names the move that logged it, and a click on one shows the battle before it; (F12) undo's rule held after every entry of the human battles (${undone.entries} entries it would take back), ${undone.taken} taken back and made again to the same trace (${((performance.now() - t0) / 1000).toFixed(0)} s)`)
+  console.log(failed ? `\nreplay-check: ${failed} check(s) failed` : `\nreplay-check passed: ${n} battles scrubbed move by move, replayed from the start event for event, saved and opened again, held to what a page kept; a replay of a battle going on catches up with it; (F15) every battle-log line names the move that logged it, and a click on one shows the battle before it; (S4) the bar names the battle's board; (F12) undo's rule held after every entry of the human battles (${undone.entries} entries it would take back), ${undone.taken} taken back and made again to the same trace (${((performance.now() - t0) / 1000).toFixed(0)} s)`)
   process.exit(failed ? 1 : 0)
 }

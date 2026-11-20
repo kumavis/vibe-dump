@@ -11,8 +11,8 @@
 //     apart, and the two plans must be the same, value for value;
 //   - placed: every item the plan stands on the ground (place.js standing)
 //     is off the mat, or inside a rules piece's footprint (its shape's box),
-//     or low clutter (at most 0.3" tall) on the mat with all of: outside
-//     both deployment zones, outside every objective's range, 1" or more
+//     or low clutter (at most 0.3 tails tall) on the mat with all of: outside
+//     both deployment zones, outside every objective's range, 1 tail or more
 //     from every rules piece's footprint, and its centre and the four
 //     points at its radius on walkable nav cells (not hard, not soft, on
 //     the ground). The rules are worked out here afresh (Math's own trig,
@@ -309,9 +309,9 @@ async function selfTest() {
   verdict("low clutter in an objective's range", plant({ x: o.x + OBJECTIVE_RANGE - 0.5, z: o.z }))
   const c = G.terrain.chunks.find((c) => c.kind === 'crate' || c.kind === 'rock')
   {
-    // half an inch off its box's +x face, in the box's own frame
+    // half a tail off its box's +x face, in the box's own frame
     const l = c.shape.hx + 0.5, y = c.shape.yaw ?? 0
-    verdict(`low clutter half an inch from a ${c.kind}`, plant({ x: c.shape.x + l * Math.cos(y), z: c.shape.z - l * Math.sin(y), r: 0.02 }))
+    verdict(`low clutter half a tail from a ${c.kind}`, plant({ x: c.shape.x + l * Math.cos(y), z: c.shape.z - l * Math.sin(y), r: 0.02 }))
   }
   {
     const i = G.nav.index(t.x, t.z), was = G.nav.hard[i]

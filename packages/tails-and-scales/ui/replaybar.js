@@ -4,7 +4,8 @@
 // (shown as it is let go of, and a moment after the last nudge), Live is
 // the battle as it stands (a battle still going on), 💾 saves its log as a
 // replay file, and ✕ (a battle that is over, or a file's) puts the bar
-// away. The speed is the page's own (⏩).
+// away. The speed is the page's own (⏩). (S4) The battle's board is named
+// over where the slider stands (app/board-name.js).
 const $ = (s) => document.querySelector(s)
 
 export class ReplayBar {
@@ -41,9 +42,13 @@ export class ReplayBar {
     this.slider.onchange = go
   }
 
-  // { min, max, at, first, playing, live, atLive, closable }
+  // { min, max, at, first, playing, live, atLive, closable, (S4) board:
+  // the battle's board's name, or null }
   render(m) {
     this.m = m
+    const board = $('#rpBoard')
+    board.textContent = m.board ?? ''
+    board.classList.toggle('hidden', !m.board)
     this.slider.min = m.min
     this.slider.max = m.max
     if (!this.held && !this.wait) {

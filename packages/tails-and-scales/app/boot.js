@@ -43,6 +43,7 @@ import { Roster } from '../ui/roster.js'
 import { Minimap } from '../view/minimap.js'
 import { Flow, MODES, FOG_MODES } from './flow.js'
 import { Replay, openReplay } from './replay.js'
+import { boardNameOf } from './board-name.js'
 import { Session } from '../match/session.js'
 // (V2) the figure style, and the perf overlay
 import { STYLES, setFigureStyle } from '../view/models/cache.js'
@@ -594,12 +595,14 @@ export function boot(location) {
   }
   // ((F7a) and the terrain line: the mission's sets, the table's picked;
   // (F16) the fog line against the AI; (F11b) each seat's army line, and
-  // Start while every army is legal)
+  // Start while every army is legal; (S4) the battlefield's line, the
+  // board the battle would be fought on named)
   const showSetup = () => {
     const { mode, races, mission } = picking, seats = seatsOf(races), sides = sidesFor(seats)
     const armies = [0, 1].map(armyLine)
     const bad = armies.findIndex((x) => x.why)
-    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color, rules: MISSIONS[mission].list })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog }, armies, startWhy: bad < 0 ? null : armies[bad].sealed ? `${ownerOf(mode, bad)} ${unfit(bad, mission)}` : `${ownerOf(mode, bad)}: ${armies[bad].why}` })
+    const board = { seed: flow.S.seed, name: boardNameOf({ board: flow.S.seed, mission, terrain: picking.terrain }) }
+    setup.show({ title: SETUP[mode], seats: races.map((race, s) => ({ who: whoOf(mode, s), race, color: sides[s].color, rules: MISSIONS[mission].list })), mirror: isMirror(seats), sizes: SIZES, size: mission, terrain: { sets: MISSIONS[mission].sets, pick: picking.terrain }, fog: { offered: FOG_MODES.includes(mode), on: picking.fog }, armies, startWhy: bad < 0 ? null : armies[bad].sealed ? `${ownerOf(mode, bad)} ${unfit(bad, mission)}` : `${ownerOf(mode, bad)}: ${armies[bad].why}`, board })
   }
   // (F8b) the panel's battle size defaults to the flow's mission (?mission=,
   // else classic; then the last chosen)

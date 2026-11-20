@@ -51,7 +51,7 @@ const FIELDS = {
   singed: ['#6e6448', '#5e5640'],
 }
 
-// the fields' paint: `T` inches either side of the board's centre on a
+// the fields' paint: `T` tails either side of the board's centre on a
 // 1024 px canvas, the ring beyond it the edge's colour
 function paintFields(p, T, seed) {
   const c = document.createElement('canvas')
