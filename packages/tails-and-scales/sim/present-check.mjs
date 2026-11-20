@@ -315,8 +315,11 @@ async function factsFold(dir, job, setup) {
     shot: !!u.flags.shot, charged: !!u.flags.charged, cover: core.q.inCover(G, u), chargeTried: !!u.flags.chargeTried, lost: u.lost, rode: !!u.flags.rode,
   }]))
   // ((F8b) on the battle's own mission, each seat its own army: a Field or
-  // Grand table is its own, as app/flow.js's showTable makes it)
-  const table = core.createMatch({ board: setup.board, dice: 0, ...(setup.mission ? { mission: setup.mission } : {}), terrain: setup.terrain, seats: setup.seats.map((x) => ({ race: x.race, ctrl: 'human', ...(x.army != null ? { army: x.army } : {}) })) }, { out: null })
+  // Grand table is its own, as app/flow.js's showTable makes it;
+  // (Breakthrough) and, on a mission with roles, with the battle's own
+  // attacker, as tableOf carries it: left out, seat 0 attacks, and a battle
+  // seat 1 attacks has its armies judged under the wrong roles' lists)
+  const table = core.createMatch({ board: setup.board, dice: 0, ...(setup.mission ? { mission: setup.mission } : {}), ...(setup.attacker !== undefined ? { attacker: setup.attacker } : {}), terrain: setup.terrain, seats: setup.seats.map((x) => ({ race: x.race, ctrl: 'human', ...(x.army != null ? { army: x.army } : {}) })) }, { out: null })
   const acts = [], stops = []
   const G = core.createMatch(setup, { out: null, onTrace: (line, g) => line.startsWith('act ') && acts.push(factsOf(g)) })
   const stop = () => G.pending && stops.push({ k: G.pending.k, facts: factsOf(G) })
