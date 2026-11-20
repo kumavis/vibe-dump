@@ -9,7 +9,7 @@
 // every peer, and bestSpot's tie-breaks draw from the match's own dice, one
 // draw per lattice cell that passes `isFinite(res.dist[i]) && validEnd`, in
 // the lattice's order (rule 6). Everything else here only reads the match.
-import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount, saveNeed } from '../rules.js'
+import { CHARGE_RANGE, OBJECTIVE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount, saveNeed } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot, hypot3 } from '../dmath.js'
 import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf, gap, isEngaged, canCharge, hullOf, deckPoint, deckEye } from '../queries.js'
@@ -19,6 +19,9 @@ import { friendsUnder } from '../actions/shoot.js'
 import { inFootprint } from '../actions/settle.js'
 import { HAZARDS } from '../../data/hazards.js'
 import { MISSIONS } from '../../data/mission.js'
+import { wallOf, sideRole, routeFields, routeDist, faceGrid, gateOf, ramsAt } from './route.js'
+import { postsOf } from '../terrain/breakthrough.js'
+import { STEP } from '../nav.js'
 
 // a unit's points still standing
 export const worth = (u) => (u.t.pts * u.alive) / u.t.models
@@ -470,7 +473,45 @@ export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
       if (sc > best.score) best = { cell: i, score: sc, dist: hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
     }
   }
+  // ((Breakthrough) an attacker on a wall's board also weighs its route's
+  // waypoints, after the lattice and drawing nothing: wallWaypoints)
+  if (ctx.bt?.atk && ctx.bt.f && !fp) {
+    for (const i of wallWaypoints(G, plan, ctx.bt.f, box)) {
+      const x = nav.x(i), z = nav.z(i)
+      const sc = score(G, u, x, z, ctx, true)
+      if (sc > best.score) best = { cell: i, score: sc, dist: hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
+    }
+  }
   return best
+}
+
+// (Breakthrough) The cells of `plan` (a round unit's move plan) an
+// attacker's lattice may miss on its way: for each objective, the valid end
+// its route field puts nearest it (the first in the board's order of
+// equals), so a climber can step onto a ladder's foot (a single cell, and
+// the ladder costs 4 tails of a 5-tail move from it) or its top, and a
+// wrecker up to the gate, though no lattice point falls there. In
+// objective order, each once.
+function wallWaypoints(G, plan, f, box) {
+  const nav = G.nav, res = plan.res, out = []
+  for (const d of f) {
+    let best = -1, bd = Infinity
+    const order = []
+    for (let iz = box.z0; iz <= box.z1; iz++) for (let i = iz * nav.nx + box.x0; i <= iz * nav.nx + box.x1; i++) {
+      if (!isFinite(res.dist[i]) || !(d[i] < Infinity)) continue
+      order.push(i)
+    }
+    order.sort((a, b) => d[a] - d[b] || a - b)
+    for (const i of order) {
+      if (!(d[i] < bd)) break
+      if (!validEnd(G, plan, i)) continue
+      best = i
+      bd = d[i]
+      break
+    }
+    if (best >= 0 && !out.includes(best)) out.push(best)
+  }
+  return out
 }
 
 // What score asks of the match for `u`, worked out once for a whole scan:
@@ -503,7 +544,10 @@ function scoring(G, u, claimed, role) {
     keg: shoots && w.blast ? kegGain(G, u, e, kegs) : 0,
     fall: plats.length ? fallGain(G, u, e, w, plats) : 0,
   }]))
-  return { enemies, friends, owners, claimed, role, pre, kegs, kegDanger: kegs.length > 0 && kegDanger(G, u.side) }
+  // ((Breakthrough) the wall's terms: null on every board without one)
+  const wall = wallOf(G)
+  const bt = wall ? wallTerms(G, u, wall, enemies, owners) : null
+  return { enemies, friends, owners, claimed, role, pre, kegs, kegDanger: kegs.length > 0 && kegDanger(G, u.side), bt }
 }
 
 // (F9b) A mission's AI count budget (DESIGN §4.2.2: `ai`, { lattice,
@@ -545,13 +589,18 @@ export function bestLanding(G, u, cells, claimed) {
 // base, over every other cell of the board (the even indices), the first
 // found of the farthest; -1 for none. (S0) Only the cells inside the plan's
 // box are visited (scanBox), in the board's order: none outside is a valid
-// end.
+// end. ((Breakthrough) On a wall's board a defender's cells in front of the
+// wall's face are passed over: it falls back behind the line or not at all.)
 export function fallbackSpot(G, u, plan) {
   let best = -1, bs = -Infinity
   const nav = G.nav, box = scanBox(nav, plan.res.sx, plan.res.sz, plan.max)
+  // ((Breakthrough) a defender behind a wall never falls back in front of
+  // its face)
+  const wall = wallOf(G), face = wall && sideRole(G, u) === 'defend' ? faceGrid(G, wall) : null
   for (let iz = box.z0; iz <= box.z1; iz++) {
     const row = iz * nav.nx
     for (let i = row + box.x0 + ((row + box.x0) % 2); i <= row + box.x1; i += 2) {
+      if (face && face[i] < 0) continue
       if (!validEnd(G, plan, i)) continue
       const x = nav.x(i), z = nav.z(i)
       const s = Math.min(...enemiesOf(G, u).map((e) => hypot(e.pos.x - x, e.pos.z - z) - e.r))
@@ -614,7 +663,9 @@ export function score(G, u, x, z, ctx, moving) {
   if (t.OC > 0) {
     const pull = role === 'line' || role === 'shooter' ? 5 : role === 'melee' ? 2 : 2.5
     let bestObj = 0
-    for (const o of G.objectives) {
+    // ((Breakthrough) on a wall's board, the wall's own objective term)
+    if (ctx.bt) [bestObj, onObjective, obj] = wallObjective(G, u, x, z, ctx, pull, walks, climb)
+    else for (const o of G.objectives) {
       // (with height: an objective the straight line, less any shortcut,
       // puts 18.6" off or more is worth nothing by the way too: v is 0)
       if (walks && hypot(o.x - x, o.z - z) - levelSlack(G, climb) >= 18.6) continue
@@ -656,18 +707,25 @@ export function score(G, u, x, z, ctx, moving) {
       // (an enemy the straight line puts out of reach by more than any
       // shortcut, levelSlack, is out of it by the way too: not measured)
       if (walks && hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r - levelSlack(G, climb) > CHARGE_RANGE) continue
-      const g = (walks ? levelDist(G, from, e.pos, climb) : hypot(e.pos.x - x, e.pos.z - z)) - u.r - e.r
+      let g = (walks ? levelDist(G, from, e.pos, climb) : hypot(e.pos.x - x, e.pos.z - z)) - u.r - e.r
+      // ((Breakthrough) an attacker's way to a defender across the wall is
+      // no shorter than its route fields say: wallApart)
+      if (ctx.bt?.atk) g = Math.max(g, wallApart(G, ctx.bt, e, x, z) - u.r - e.r)
       if (g > CHARGE_RANGE) continue
       const p = g <= 1 ? 1 : p2D6(Math.ceil(g))
       const back = pre.get(e).back * 0.4
-      const v = p * (pre.get(e).hit - back + (e.t.role === 'Artillery' ? 10 : 0))
+      let v = p * (pre.get(e).hit - back + (e.t.role === 'Artillery' ? 10 : 0))
+      // ((Breakthrough) a defender's charge at an attacker holding an
+      // objective contests it: wallDeny)
+      if (ctx.bt && !ctx.bt.atk) v += p * wallDeny(G, ctx.bt, e)
       if (v > best) best = v
     }
     const w = role === 'melee' ? 0.3 : role === 'raider' ? 0.18 : role === 'hero' ? 0.06 : 0.15
     s += best * w
     // far from everything: just close the distance
+    // ((Breakthrough) on a wall's board, by the wall's way: wallNear)
     if (best === 0 && role !== 'hero') {
-      const near = walks ? nearestBy(G, from, enemies, climb) : Math.min(...enemies.map((e) => hypot(e.pos.x - x, e.pos.z - z)))
+      const near = ctx.bt ? wallNear(G, u, x, z, ctx, walks, climb) : walks ? nearestBy(G, from, enemies, climb) : Math.min(...enemies.map((e) => hypot(e.pos.x - x, e.pos.z - z)))
       s -= near * (role === 'melee' ? 0.12 : 0.05)
     }
   }
@@ -715,6 +773,220 @@ export function score(G, u, x, z, ctx, moving) {
     if (ctx.kegDanger) for (const k of kegs) s -= kegFear(u, k, from, G) * KEG_FEAR
     if (moved) s += kegWalk(G, u, from, kegs) * KEG_SMASH
   }
+  // ((Breakthrough) the wall: the ram, and the line held)
+  if (ctx.bt) s += wallScore(G, u, x, z, ctx, moved, canShoot, ci)
   ctx.last = { onObjective, obj, canShoot }
   return s
+}
+
+// ── (Breakthrough) The wall ─────────────────────────────────────────────────
+// What the AI makes of a walled line (DESIGN §4.2.12's AI), on a mission with
+// roles whose board has a plan (core/ai/route.js wallOf: the March Wall's),
+// in terms each skipped on every other board (scoring's `bt` is null there,
+// and score, bestSpot's draws and every other term are as they were, to the
+// bit). Keyed on the mission's roles and the board's plan, never on a
+// mission's, set's, race's or unit's name.
+//   - The attacker: its objective term (wallObjective) and its "close the
+//     distance" (wallNear) measure the walking way to each objective by its
+//     route field (route.js), never the straight line, and pull from across
+//     the table (ROUTE_REACH), so a unit walks to the ladders, the gate,
+//     the breach or the wood its class may take, whichever is shortest for
+//     it; and a wrecker's walk that ends ramming the gate is worth RAM_BLOW
+//     (wallScore), so it rams on move after move until the gate falls.
+//   - The defender: ground in front of the wall's outer face costs
+//     FRONT_COST (wallScore: a unit never ends a move out there by choice);
+//     an objective the attacker holds pulls DENY times (wallObjective) and
+//     one an attacker stands within THREAT of as if unheld, so the line
+//     contests what is taken; a shooter on the works with a target is worth
+//     WALL_HOLD more there; and its "close the distance" (wallNear) goes to
+//     the attackers across the face when any stand there (the reserves'
+//     countercharge), else to its post in the yard, or the second line's
+//     once the attacker holds the yard's objective.
+// None draws, and nothing is built but the route fields' cache (derived).
+// The weights, each measured over 80 AI battles (boards 1-20, every cell)
+// against the attacker scoring by round 4, unless it says otherwise:
+// PROGRESS 0.25 scored 16%, 0.4 38%; with THIN, 0.4 / 0.6 / 1 scored 38% /
+// 36% / 44%, 1 doubling the attackers standing still at the face, so 0.4;
+// THIN (the thinner held objective pulls more) at PROGRESS 0.25 31%
+// against 16% without; DENY and
+// DENY_GAIN over 60 battles (boards 1-15): the defender's OC up where it
+// could contest in 4 of 39 cases with neither, 8 of 42 at 1.6 and 15, 12
+// of 53 at 3, 19 of 64 at 5 and 40, so those; ROUTE_REACH, RAM_BLOW (8
+// raised the gate's fall from 20% to 52% of battles and scored no more),
+// FRONT_COST, THREAT and WALL_HOLD chosen, not tuned.
+export const ROUTE_REACH = 40, RAM_BLOW = 3, FRONT_COST = 30, DENY = 5, THREAT = 12, WALL_HOLD = 1, PROGRESS = 0.4, THIN = 6, DENY_GAIN = 40
+
+// What the wall's terms read of the match for `u`'s scan, once: for the
+// attacker its route fields and, for a wrecker, the gate standing; for the
+// defender the face's grid, the attackers across it, how each objective is
+// threatened (2 the attacker holds it, 1 an attacker within THREAT of it, 0
+// neither) and its post (the nearest of the yard's, or the second line's
+// once the yard is lost: the attacker holding the objective nearest the
+// gate)
+export function wallTerms(G, u, wall, enemies, owners) {
+  if (sideRole(G, u) === 'attack') {
+    const f = routeFields(G, u, wall), nav = G.nav
+    // (each enemy's cell's route distances, for wallApart)
+    const at = f ? new Map(enemies.map((e) => [e, f.map((d) => d[nav.index(e.pos.x, e.pos.z)] ?? Infinity)])) : null
+    // (the defenders' OC standing on each objective, a squad's by its
+    // models left: the thinner held, the more it pulls)
+    const held = G.objectives.map((o) => {
+      let c = 0
+      for (const e of enemies) if (hypot(e.pos.x - o.x, e.pos.z - o.z) <= OBJECTIVE_RANGE + e.r) c += (e.t.OC * e.alive) / e.t.models
+      return c
+    })
+    return { atk: true, f, at, held, gate: u.t.wrecker ? gateOf(G, wall) : null }
+  }
+  const face = faceGrid(G, wall), nav = G.nav
+  const across = enemies.filter((e) => {
+    const i = nav.index(e.pos.x, e.pos.z)
+    return i >= 0 && face[i] > 0
+  })
+  const foe = 1 - u.side
+  const threat = G.objectives.map((o) => (owners[o.i] === foe ? 2 : enemies.some((e) => hypot(e.pos.x - o.x, e.pos.z - o.z) <= THREAT) ? 1 : 0))
+  let yard = null
+  for (const o of G.objectives) if (!yard || hypot(o.x - wall.gate.x, o.z - wall.gate.z) < hypot(yard.x - wall.gate.x, yard.z - wall.gate.z)) yard = o
+  const lost = owners[yard.i] === foe
+  let post = null
+  for (const p of postsOf(wall, lost ? 'second' : 'yard')) if (!post || hypot(p.x - u.pos.x, p.z - u.pos.z) < hypot(post.x - u.pos.x, post.z - u.pos.z)) post = p
+  return { atk: false, face, across, threat, post }
+}
+
+// The objective term on a wall's board: [its best value, whether (x, z) is
+// on an objective, which]: for the attacker by the route (0 on the hold
+// area), from across the table; for the defender by the way up as ever
+// (levelDist), each objective's want by its threat
+function wallObjective(G, u, x, z, ctx, pull, walks, climb) {
+  const { owners, claimed, bt } = ctx
+  let best = 0, on = false, obj = -1
+  for (const o of G.objectives) {
+    let d, v
+    // (the attacker never discounts an objective a friend is already
+    // going for: the line is broken by weight, not spread across it)
+    // (nor the defender one the attacker holds: every unit that can
+    // contests it)
+    const taken = bt.atk || bt.threat[o.i] === 2 || !claimed.has(o.i) ? 1 : 0.25
+    if (bt.atk) {
+      d = routeDist(G, bt.f, o, x, z)
+      if (!isFinite(d)) continue
+      const want = (owners[o.i] === u.side ? 0.45 : 1) * THIN / (THIN + bt.held[o.i])
+      v = d <= 0 ? pull * want * taken * 1.4 : pull * want * taken * Math.max(0, 1 - d / ROUTE_REACH) * 0.7
+      d = d <= 0 ? 0 : d + 2.6
+    } else {
+      if (walks && hypot(o.x - x, o.z - z) - levelSlack(G, climb) >= 18.6) continue
+      d = walks ? levelDist(G, { x, z }, o, climb) : hypot(o.x - x, o.z - z)
+      const th = bt.threat[o.i]
+      const want = th === 2 ? DENY : th === 1 ? 1 : owners[o.i] === u.side ? 0.45 : 1
+      v = d <= 2.6 ? pull * want * taken * 1.4 : pull * want * taken * Math.max(0, 1 - (d - 2.6) / 16) * 0.7
+    }
+    if (v > best) {
+      best = v
+      if (d <= 2.6) {
+        on = true
+        obj = o.i
+      } else if (!on) obj = -1
+    }
+  }
+  return [best, on, obj]
+}
+
+// (Breakthrough) What a defender's charge at attacker `e` is worth beyond
+// its fight: DENY_GAIN when e stands within an objective's range (its
+// middle within OBJECTIVE_RANGE and its radius) of one the attacker holds,
+// so the line charges what sits on its objectives rather than shooting it
+// from afar while the tally climbs; 0 otherwise. The charge term and the
+// policy's charges (core/ai/policy.js aiCharge) read it.
+export function wallDeny(G, bt, e) {
+  for (const o of G.objectives) if (bt.threat[o.i] === 2 && hypot(e.pos.x - o.x, e.pos.z - o.z) <= OBJECTIVE_RANGE + e.r) return DENY_GAIN
+  return 0
+}
+
+// "Close the distance" on a wall's board: the attacker's route to its
+// nearest objective; the defender's way to the nearest attacker across the
+// face, or with none there to its post
+function wallNear(G, u, x, z, ctx, walks, climb) {
+  const bt = ctx.bt
+  if (bt.atk) {
+    let near = Infinity
+    for (const o of G.objectives) near = Math.min(near, routeDist(G, bt.f, o, x, z))
+    return isFinite(near) ? near : Math.min(...G.objectives.map((o) => hypot(o.x - x, o.z - z)))
+  }
+  const from = { x, z }
+  if (bt.across.length) return walks ? nearestBy(G, from, bt.across, climb) : Math.min(...bt.across.map((e) => hypot(e.pos.x - x, e.pos.z - z)))
+  if (!bt.post) return 0
+  return walks ? levelDist(G, from, bt.post, climb) : hypot(bt.post.x - x, bt.post.z - z)
+}
+
+// A lower bound on the attacker's walk from (x, z) to enemy `e`: a walk
+// changes no route distance by more than its length, so it is at least the
+// most any objective's field drops from here to e's cell (Infinity where
+// e stands on ground the attacker's class never does, a tower's top for a
+// unit that climbs no ladder; -Infinity for a flier, whose way is the
+// straight line). The charge term reads it, so an attacker at the wall's
+// foot no longer weighs a charge at defenders behind the wall that the
+// straight line (or levelDist's way up, which knows the ladders but not
+// the wall) puts within reach.
+function wallApart(G, bt, e, x, z) {
+  if (!bt.f) return -Infinity
+  const ei = bt.at.get(e), i = G.nav.index(x, z)
+  if (!ei || i < 0) return -Infinity
+  let lb = -Infinity
+  for (let k = 0; k < ei.length; k++) {
+    if (!isFinite(ei[k])) return Infinity
+    const d = bt.f[k][i] - ei[k]
+    if (d > lb) lb = d
+  }
+  return lb
+}
+
+// The rest of the wall's terms at (x, z): the attacker's ram (a wrecker's
+// walk ending where it rams the standing gate); the defender's line (the
+// ground in front of the face refused, a shooter with a target on the works
+// held there)
+function wallScore(G, u, x, z, ctx, moved, canShoot, ci) {
+  const bt = ctx.bt
+  let s = 0
+  if (bt.atk) {
+    if (bt.gate && moved && ramsAt(u, bt.gate, x, z)) s += RAM_BLOW
+    // (the way on: every attacker but the guns, a hero at half weight)
+    if (ctx.role !== 'artillery' && bt.f !== undefined) s -= wallNear(G, u, x, z, ctx, false, false) * (ctx.role === 'hero' ? PROGRESS / 2 : PROGRESS)
+    return s
+  }
+  const fd = ci >= 0 ? bt.face[ci] : -1
+  if (fd < 0) s -= FRONT_COST
+  else if (canShoot && G.nav.hasHeight && floorAt(G, x, z) > STEP) s += WALL_HOLD
+  return s
+}
+
+// (Breakthrough) Whether an attacker on a wall's board advances (the
+// policy's Advance, core/ai/policy.js aiMoveOne), or null off a wall's
+// board and for a defender (the policy's own rule then, as ever): the
+// guns and the heroes never; a unit within its move and 2 of its nearest
+// objective by its route never (it arrives walking); a line unit on an
+// objective, and a raider or a shooter with a shot from its pick, never
+// (an Advance forfeits the shot); a brawler (melee, line or raider) with an
+// enemy within its move and 8 of it by the wall's way (wallApart's bound
+// beside the gap) never (it may charge); every other attacker does: the
+// route is long and the wall's fire is on it while it walks. No draw.
+export function wallRush(G, u, role, pick) {
+  const wall = wallOf(G)
+  if (!wall || sideRole(G, u) !== 'attack') return null
+  if (role === 'artillery' || role === 'hero') return false
+  const f = routeFields(G, u, wall), nav = G.nav, i = nav.index(u.pos.x, u.pos.z)
+  let left = Infinity
+  for (const o of G.objectives) left = Math.min(left, routeDist(G, f, o, u.pos.x, u.pos.z))
+  if (!(left > u.t.M + 2)) return false
+  if (role === 'line' && pick.onObjective) return false
+  if ((role === 'raider' || role === 'shooter') && pick.canShoot) return false
+  if (role === 'melee' || role === 'line' || role === 'raider') {
+    for (const e of enemiesOf(G, u)) {
+      let g = gap(u, e)
+      if (f && i >= 0) {
+        const j = nav.index(e.pos.x, e.pos.z)
+        for (let k = 0; k < f.length && j >= 0; k++) g = Math.max(g, isFinite(f[k][j]) ? f[k][i] - f[k][j] - u.r - e.r : Infinity)
+      }
+      if (g < u.t.M + 8) return false
+    }
+  }
+  return true
 }

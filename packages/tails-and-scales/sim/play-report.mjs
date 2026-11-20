@@ -163,8 +163,30 @@
 // the corpus (before F19a's corpus commit) it sweeps 12 keg battles, seeded
 // as corpus-add's candidates are, the races swapping seats.
 //
+// (Breakthrough, S3) The Breakthrough row (`bt`), over a sweep of AI
+// battles on the March Wall (400 by default, --sweep N for N: a quarter in
+// each cell, either seat attacking and each race order on the presets,
+// board k from --seed's 1 and dice 7·k + 3), each watched by
+// sim/wall-probe.mjs (DESIGN §4.2.12's AI, its acceptance rows):
+//   - judged: an attacking unit behind the wall's outer face at a round's
+//     end by round 4 in ≥ 90% of battles; the attacker scoring by the end
+//     of round 4 in ≥ 60%; under 2% of the defender's unit-rounds in front
+//     of the face;
+//   - reported: the same with walkers alone; the crossings by route and
+//     the round; the gate's fall (share of battles, median round) and the
+//     ramming (movement phases with a blow, the longest run back to back);
+//     the attackers standing still against the face with a route open,
+//     and the hulls among them at the wood; the attacker's charges; the
+//     defender's movement-phase ends in front of the face (free or locked
+//     in a fight), its charges ending in front and how far; its shooters'
+//     unit-rounds on the works; the objectives threatened and manned; its
+//     countercharges; its units at the second line once the yard is lost;
+//     the deny (the defender's OC gained over the objectives held where it
+//     could contest); the attacker's win share per cell (not judged: the
+//     balance sweep's, S5); and the time a battle takes.
+//
 //   node sim/play-report.mjs                    every row, on the working tree's core
-//   node sim/play-report.mjs --row f10b         one row (f7a, f7b, f7c, f9a, f9b, f9c, f10b, f19a; comma-separated for more)
+//   node sim/play-report.mjs --row f10b         one row (f7a, f7b, f7c, f9a, f9b, f9c, f10b, f19a, bt; comma-separated for more)
 //   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's, F7b's, (F7c) F7c's post row, F9a's, (F9b) F9b's and (F9c) F9c's rows: a seeded sweep of AI battles instead
 //   --pin | --ref <ref> | --dir <packageDir>    another copy of the code
 //
@@ -184,7 +206,7 @@ import { foldJob, loadMatch } from './run.mjs'
 import { codeDir, readPin } from './oracle/pin.mjs'
 import { setupFor, mulberry32 } from './oracle/human-bot.mjs'
 
-const ROWS = ['f7a', 'f7b', 'f7c', 'f9a', 'f9b', 'f9c', 'f10b', 'f19a']
+const ROWS = ['f7a', 'f7b', 'f7c', 'f9a', 'f9b', 'f9c', 'f10b', 'f19a', 'bt']
 const { values: a } = parseArgs({ options: { row: { type: 'string' }, sweep: { type: 'string' }, seed: { type: 'string' }, pin: { type: 'boolean' }, ref: { type: 'string' }, dir: { type: 'string' } } })
 const SWEEP = a.sweep === undefined ? null : Number(a.sweep)
 if (SWEEP !== null && !(Number.isInteger(SWEEP) && SWEEP > 0)) {
@@ -713,12 +735,75 @@ async function f19a() {
   return { checks, failed }
 }
 
+// ── (Breakthrough, S3) the AI plays Breakthrough ────────────────────────────
+// { checks, failed }, or null when the code has no wall terms (no
+// core/ai/route.js) or no mission behind a wall
+async function bt() {
+  if (!existsSync(join(dir, 'core', 'ai', 'route.js')) || !Object.values(MISSIONS).some((m) => m.roles?.defend?.zone?.behind)) return null
+  const BT = await import(at('core/terrain/breakthrough.js')), R = await import(at('core/ai/route.js'))
+  const { wallProbe, wallTally } = await import(pathToFileURL(fileURLToPath(new URL('./wall-probe.mjs', import.meta.url))).href)
+  const mission = Object.keys(MISSIONS).find((k) => MISSIONS[k].roles?.defend?.zone?.behind)
+  const total = SWEEP ?? 400, per = Math.ceil(total / 4), s0 = Number(a.seed ?? 1)
+  const cells = [[0, ['squirrel', 'serpent']], [0, ['serpent', 'squirrel']], [1, ['squirrel', 'serpent']], [1, ['serpent', 'squirrel']]]
+  const rs = [], failed = [], ms = [], byCell = []
+  for (const [attacker, races] of cells) {
+    const cell = { name: `${races[attacker]} attacking from seat ${attacker}`, n: 0, wins: 0, why: {} }
+    for (let k = 0; k < per; k++) {
+      const board = s0 + k, setup = { board, dice: board * 7 + 3, mission, attacker, seats: races.map((race) => ({ race, ctrl: 'ai' })) }
+      const p = wallProbe(core, { BT, R }, attacker)
+      const t0 = performance.now()
+      let G
+      try {
+        G = core.createMatch(setup, { onTrace: p.trace, strict: true })
+      } catch (e) {
+        failed.push(`${JSON.stringify(setup)}: ${String(e.message).split('\n')[0]}`)
+        continue
+      }
+      ms.push(performance.now() - t0)
+      if (G.turn.stage !== 'over') {
+        failed.push(`${JSON.stringify(setup)}: stopped at ${G.turn.stage}`)
+        continue
+      }
+      rs.push(p.result())
+      cell.n++
+      if (G.turn.result.win === attacker) cell.wins++
+      cell.why[G.turn.result.why] = (cell.why[G.turn.result.why] ?? 0) + 1
+    }
+    byCell.push(cell)
+  }
+  const t = wallTally(rs), n = t.n
+  console.log(`\nBreakthrough's row: a sweep of ${n} AI battles on the March Wall (${mission}), boards ${s0}-${s0 + per - 1} in each of 4 cells (either seat attacking, each race order, the presets)`)
+  const routes = Object.entries(t.routes).sort((x, y) => y[1] - x[1])
+  const byRound = {}
+  for (const r of rs) for (const c of r.crossings) byRound[c.round] = (byRound[c.round] ?? 0) + 1
+  const med = (xs) => (xs.length ? xs[xs.length >> 1] : '-')
+  const freeFront = t.defFront.filter((d) => !d.engaged)
+  const deny = rs.flatMap((r) => r.deny).filter((d) => d.able > 0)
+  ms.sort((x, y) => x - y)
+  console.log(`  1. behind the face by round 4: any unit ${t.behind4} of ${n} (${pct(t.behind4, n)}), a walker ${t.walk4} (${pct(t.walk4, n)}); scored by round 4 ${t.scored4} (${pct(t.scored4, n)})`)
+  console.log(`  2. crossings ${t.crossings}: ${routes.map(([k, v]) => `${k} ${v} (${pct(v, t.crossings)})`).join(', ')}; by round ${Object.entries(byRound).map(([k, v]) => `${k}: ${v}`).join(', ')}`)
+  console.log(`     the gate fell in ${t.gateFell.length} of ${n} (${pct(t.gateFell.length, n)}), median round ${med(t.gateFell)}; rammed in ${t.rams} movement phases, the longest run ${t.ramRun} back to back`)
+  console.log(`     attackers standing still against the face with a route open: ${t.idle.length} (${(t.idle.length / Math.max(1, n)).toFixed(2)} a battle), hulls among them at the wood ${t.hullWood}`)
+  console.log(`  3. the attacker's charges ${t.charges} (${(t.charges / Math.max(1, n)).toFixed(1)} a battle)`)
+  console.log(`  4. the defender's unit-rounds in front of the face ${t.defRoundsFront} of ${t.defRounds} (${(100 * t.defRoundsFront / Math.max(1, t.defRounds)).toFixed(2)}%); its movement-phase ends in front ${t.defFront.length} of ${t.defMoves} (${freeFront.length} not locked in a fight${freeFront.length ? `, e.g. ${JSON.stringify(freeFront[0])}` : ''}); charges ending in front ${t.defCharge.length}${t.defCharge.length ? ` (the farthest ${Math.min(...t.defCharge.map((d) => d.face)).toFixed(2)} tails out)` : ''}`)
+  console.log(`  5. its shooters on the works ${t.shooters.deck} of ${t.shooters.all} unit-rounds (${pct(t.shooters.deck, t.shooters.all)}); objectives threatened (an attacker within 12) and manned (a defender with OC within 6) ${t.manned.manned} of ${t.manned.threatened} (${pct(t.manned.manned, t.manned.threatened)}); countercharges at attackers behind the face ${t.counter}; at the second line once the yard is lost ${t.second.there} of ${t.second.lost} unit-rounds (${pct(t.second.there, t.second.lost)})`)
+  console.log(`  6. objectives held by the attacker as the defender's turn began, with a defender able to contest: ${deny.length}; its OC there up ${deny.reduce((x, d) => x + d.after - d.before, 0)} in all, contested (more OC) in ${deny.filter((d) => d.after > d.before).length} (${pct(deny.filter((d) => d.after > d.before).length, deny.length)})`)
+  console.log(`  the attacker's wins (reported, not judged): ${byCell.map((c) => `${c.name} ${c.wins} of ${c.n} (${pct(c.wins, c.n)}; ${Object.entries(c.why).map(([k, v]) => `${k} ${v}`).join(', ')})`).join('; ')}`)
+  console.log(`  a battle takes ${med(ms.map((x) => +x.toFixed(0)))} ms (median), ${ms.length ? ms[Math.floor(ms.length * 0.9)].toFixed(0) : '-'} ms (p90)`)
+  const checks = [
+    { name: 'an attacking unit behind the face by round 4', ok: n > 0 && t.behind4 >= 0.9 * n, got: `${t.behind4} of ${n} battles (${pct(t.behind4, n)})`, want: '≥ 90%' },
+    { name: 'the attacker scores by the end of round 4', ok: n > 0 && t.scored4 >= 0.6 * n, got: `${t.scored4} of ${n} battles (${pct(t.scored4, n)})`, want: '≥ 60%' },
+    { name: "the defender's unit-rounds in front of the face", ok: t.defRounds > 0 && t.defRoundsFront < 0.02 * t.defRounds, got: `${t.defRoundsFront} of ${t.defRounds} (${(100 * t.defRoundsFront / Math.max(1, t.defRounds)).toFixed(2)}%)`, want: 'under 2%' },
+  ]
+  return { checks, failed }
+}
+
 console.log(`play-report: ${rows.join(', ')}, on the core of ${codeName}`)
 let missed = 0, broke = 0, judged = 0
 for (const row of rows) {
-  const r = row === 'f7a' ? await f7a() : row === 'f7b' ? await f7b() : row === 'f7c' ? await f7c() : row === 'f9a' ? await f9a() : row === 'f9b' ? await f9b() : row === 'f9c' ? await f9c() : row === 'f19a' ? await f19a() : await f10b()
+  const r = row === 'bt' ? await bt() : row === 'f7a' ? await f7a() : row === 'f7b' ? await f7b() : row === 'f7c' ? await f7c() : row === 'f9a' ? await f9a() : row === 'f9b' ? await f9b() : row === 'f9c' ? await f9c() : row === 'f19a' ? await f19a() : await f10b()
   if (!r) {
-    console.log(`\n${row === 'f7c' ? "F7c's row: not judged: this code's platforms never fall (no core/actions/settle.js)" : row === 'f7a' || row === 'f7b' ? `${row === 'f7a' ? 'F7a' : 'F7b'}'s row: not judged: this code has no fortified set` : row === 'f9a' ? "F9a's row: not judged: this code has no transport (core/actions/transport.js)" : row === 'f9b' ? "F9b's row: not judged: this code has no long hull (core/footprint.js)" : row === 'f9c' ? "F9c's row: not judged: this code's riders never shoot from a deck (no ridersShot: code older than F9c)" : row === 'f19a' ? "F19a's row: not judged: this code has no keg mission" : "F10b's row: not judged: this code has no grand mission"}`)
+    console.log(`\n${row === 'bt' ? "Breakthrough's row: not judged: this code has no AI wall terms (core/ai/route.js) or no mission behind a wall" : row === 'f7c' ? "F7c's row: not judged: this code's platforms never fall (no core/actions/settle.js)" : row === 'f7a' || row === 'f7b' ? `${row === 'f7a' ? 'F7a' : 'F7b'}'s row: not judged: this code has no fortified set` : row === 'f9a' ? "F9a's row: not judged: this code has no transport (core/actions/transport.js)" : row === 'f9b' ? "F9b's row: not judged: this code has no long hull (core/footprint.js)" : row === 'f9c' ? "F9c's row: not judged: this code's riders never shoot from a deck (no ridersShot: code older than F9c)" : row === 'f19a' ? "F19a's row: not judged: this code has no keg mission" : "F10b's row: not judged: this code has no grand mission"}`)
     continue
   }
   judged++

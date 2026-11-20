@@ -1875,6 +1875,82 @@ function rolesDeployTask(core, mods, RACES, MISSIONS, n, seed) {
   }
   return c
 }
+// (Breakthrough, S3: DESIGN §4.2.12's AI) P-wall: the AI plays Breakthrough.
+// WALL_PLAY battles (ARMY.wallPlay, 80) on the March Wall, a quarter in
+// each cell (WALL_CELLS: either seat attacking, each race order on the
+// presets), on the fixed boards WALL_BOARDS + k (dice 7·board + 3), all
+// AI, each watched by sim/wall-probe.mjs, and over them all four of the
+// acceptance rows, each with the measurement that set its threshold (the
+// tree as built: S3's As built in DESIGN) and the self-test mutant that
+// breaks it:
+//   1. it gets through: in 90% or more of battles a walking attacker
+//      stands behind the wall's outer face at a round's end by round 4,
+//      in WALL_SCORED (18) of the 80 or more the attacker has scored by
+//      the end of round 4, and the walking attackers cross the face 5.4
+//      times a battle or more by then (built: 80, 22, 5.71; the route
+//      field taken away, `wall-route-straight`: 80, 13, 5.05);
+//   2. nobody idles at the face: an attacking unit standing still against
+//      the face (wall-probe's `idle`: not engaged, in front of it within
+//      its radius and 2, where it stood the move before, while its route
+//      field reaches an objective) at most 0.3 times a battle (built: 12
+//      in 80; a ladder whose head is held left open to its field,
+//      `wall-ladder-held`: 73);
+//   4. the defender holds the wall: under 2% of its unit-rounds in front of
+//      the face, and at most 0.25% of its units' movement-phase ends in
+//      front of it, not locked in a fight (built: 0.16% and 2 of 4,336;
+//      the ground in front not refused, `wall-front-open`: 2.8% and 108
+//      of 4,237);
+//   6. it denies: where the attacker holds an objective as the defender's
+//      movement phase begins and a defending unit could contest it (OC, not
+//      locked in a fight, within its move and the objective's range), the
+//      defender's OC within the objective's range after its charges is up
+//      0.4 or more a case on average (built: 61 over 102; no deny term,
+//      `wall-deny-off`: 9 over 72).
+const WALL_CELLS = Object.freeze([
+  { attacker: 0, races: ['squirrel', 'serpent'] }, { attacker: 0, races: ['serpent', 'squirrel'] },
+  { attacker: 1, races: ['squirrel', 'serpent'] }, { attacker: 1, races: ['serpent', 'squirrel'] },
+].map((c) => Object.freeze(c)))
+const WALL_BOARDS = 5000, WALL_SCORED = 18
+function wallPlayTask(core, mods, probe, cell, n) {
+  const { attacker, races } = WALL_CELLS[cell]
+  const rs = []
+  for (let k = 0; k < n; k++) {
+    const board = WALL_BOARDS + k, setup = { board, dice: board * 7 + 3, mission: 'breakthrough', attacker, seats: races.map((race) => ({ race, ctrl: 'ai' })) }
+    const p = probe.wallProbe(core, mods, attacker)
+    let G
+    try {
+      G = core.createMatch(setup, { onTrace: p.trace, strict: true })
+    } catch (e) {
+      throw new Error(`P-wall battle ${JSON.stringify(setup)}: ${e.stack}`)
+    }
+    if (G.turn.stage !== 'over') throw new Error(`P-wall battle ${JSON.stringify(setup)}: stopped at ${G.turn.stage}`)
+    rs.push(p.result())
+  }
+  const t = probe.wallTally(rs)
+  const deny = rs.flatMap((r) => r.deny).filter((d) => d.able > 0)
+  return {
+    n: t.n, walk4: t.walk4, scored4: t.scored4, cross4: rs.reduce((a, r) => a + r.crossings.filter((c) => c.round <= 4 && c.route !== 'flight').length, 0),
+    idle: t.idle.length, idleAt: rs.flatMap((r, k) => r.idle.map((i) => ({ board: WALL_BOARDS + k, attacker, ...i }))).slice(0, 3),
+    defRounds: t.defRounds, defRoundsFront: t.defRoundsFront, defMoves: t.defMoves, defFree: t.defFront.filter((d) => !d.engaged).length,
+    defFreeAt: rs.flatMap((r, k) => r.defFront.filter((d) => !d.engaged).map((d) => ({ board: WALL_BOARDS + k, attacker, ...d }))).slice(0, 3),
+    able: deny.length, gained: deny.reduce((a, d) => a + d.after - d.before, 0), routes: t.routes,
+  }
+}
+function wallJudge(ws) {
+  const sum = (k) => ws.reduce((a, c) => a + c[k], 0)
+  const n = sum('n'), routes = {}
+  for (const c of ws) for (const [k, v] of Object.entries(c.routes)) routes[k] = (routes[k] ?? 0) + v
+  const rows = [
+    [sum('walk4') >= 0.9 * n && sum('scored4') >= WALL_SCORED && sum('cross4') >= 5.4 * n, `1 (through): a walker behind the face by round 4 in ${sum('walk4')} of ${n} (90% or more), scored by round 4 in ${sum('scored4')} (${WALL_SCORED} or more), ${(sum('cross4') / n).toFixed(2)} crossings a battle by round 4 (5.4 or more)`],
+    [sum('idle') <= 0.3 * n, `2 (no idling): ${sum('idle')} attackers standing still against the face with a route open (${(0.3 * n).toFixed(0)} at most)${sum('idle') ? `, e.g. ${JSON.stringify(ws.flatMap((c) => c.idleAt)[0])}` : ''}`],
+    [sum('defRoundsFront') < 0.02 * sum('defRounds') && sum('defFree') <= 0.0025 * sum('defMoves'), `4 (the wall held): ${sum('defRoundsFront')} of ${sum('defRounds')} defender unit-rounds in front of the face (under 2%), ${sum('defFree')} of ${sum('defMoves')} movement-phase ends in front, not locked in a fight (0.25% at most)${sum('defFree') ? `, e.g. ${JSON.stringify(ws.flatMap((c) => c.defFreeAt)[0])}` : ''}`],
+    [sum('able') > 0 && sum('gained') >= 0.4 * sum('able'), `6 (denied): the defender's OC up ${sum('gained')} over ${sum('able')} objectives held with a defender able to contest (0.4 a case or more)`],
+  ]
+  const failed = rows.filter(([ok]) => !ok)
+  const said = `${n} AI battles on the March Wall (crossings ${Object.entries(routes).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(', ')}): ${rows.map(([, w]) => w).join('; ')}`
+  return { said, error: failed.length ? `P-wall: ${failed.map(([, w]) => w).join('; ')}` : null }
+}
+
 function missionTask(core, MISSIONS, face = null) {
   let n = 0
   for (const [name, [change, want]] of Object.entries(BAD_MISSION_SETUPS)) {
@@ -6471,6 +6547,11 @@ if (a.child) {
       out = { ok: true, counts: rolesScenes(core, { engine, deploy, units, wall }) }
     } else if (task.kind === 'rolesGames') {
       out = { ok: true, counts: rolesGames(core, RACES, task.n, task.seed) }
+    } else if (task.kind === 'wallPlay') {
+      // ((Breakthrough, S3) P-wall's battles, watched by sim/wall-probe.mjs)
+      const at = (...f) => import(pathToFileURL(join(dir, ...f)).href)
+      const [BT, R, probe] = await Promise.all([at('core', 'terrain', 'breakthrough.js'), at('core', 'ai', 'route.js'), import(new URL('./wall-probe.mjs', import.meta.url).href)])
+      out = { ok: true, counts: wallPlayTask(core, { BT, R }, probe, task.cell, task.n) }
     } else if (task.kind === 'rolesDeploy') {
       // ((the March Wall) P-roles' deployment behind the wall)
       const mods = await ridesMods()
@@ -6527,7 +6608,7 @@ function child(task, pkg) {
 // merge) the Powder Field among them: it takes War-Carts as Grand does)
 // ((Breakthrough) and P-roles': its scenes and 300 AI battles of its own,
 // in children of 50)
-const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2, powder: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20, powder: 20 }, hullHuman: 6, rolesAI: 300, rolesDeploy: 300 }
+const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2, powder: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20, powder: 20 }, hullHuman: 6, rolesAI: 300, rolesDeploy: 300, wallPlay: 80 }
 
 // (F9b) P-lattice's run, on code with the lattice (core/nav.js hullReach):
 // [] when it holds (or, unless it was asked for alone, when the code has
@@ -6577,13 +6658,17 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     for (let j = 0; j < (army.rolesAI ?? 0); j += 50) tasks.push({ kind: 'rolesGames', n: Math.min(50, army.rolesAI - j), seed: seed * 1000 + j })
     // ((the March Wall) the deployment behind the wall, on code with it)
     if (existsSync(join(pkg, 'core', 'terrain', 'breakthrough.js'))) for (let j = 0; j < (army.rolesDeploy ?? 0); j += 50) tasks.push({ kind: 'rolesDeploy', n: Math.min(50, army.rolesDeploy - j), seed: seed * 1000 + j })
+    // ((Breakthrough, S3) P-wall's battles, on code with the AI's wall terms:
+    // a quarter a cell, on the fixed boards WALL_BOARDS, whatever the seed)
+    if (existsSync(join(pkg, 'core', 'ai', 'route.js')) && army.wallPlay) for (let cell = 0; cell < 4; cell++) tasks.push({ kind: 'wallPlay', cell, n: army.wallPlay / 4 })
   }
   const t0 = Date.now()
   const res = await pool(tasks, CPUS, async (t) => {
     const r = await child(t, pkg)
     const c = r.counts
-    const label = t.kind === 'corpus' ? t.id : t.kind === 'roles' ? 'P-roles scenes' : t.kind === 'rolesGames' ? `P-roles #${t.seed}` : t.kind === 'rolesDeploy' ? `P-roles deployment #${t.seed}` : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.hulls ? `hull game ${t.seed}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
+    const label = t.kind === 'corpus' ? t.id : t.kind === 'wallPlay' ? `P-wall cell ${t.cell}` : t.kind === 'roles' ? 'P-roles scenes' : t.kind === 'rolesGames' ? `P-roles #${t.seed}` : t.kind === 'rolesDeploy' ? `P-roles deployment #${t.seed}` : t.kind === 'army' ? 'P-army fuzz, sweep' : t.kind === 'armyGames' ? `P-army ${t.mission} #${t.seed}` : t.kind === 'rides' ? `P-riders ${t.mission} #${t.seed}` : t.kind === 'ridesScene' ? 'P-riders scenes' : t.kind === 'hullDeploy' ? `hull deploy ${t.mission}` : t.hulls ? `hull game ${t.seed}` : t.rides ? `rides game ${t.seed}` : t.lists ? `list game ${t.seed}` : `game ${t.seed}`
     const what = !r.ok ? '' : t.kind === 'corpus' ? `${c.probes} decisions probed`
+      : t.kind === 'wallPlay' ? `${c.n} AI battles on the March Wall, ${WALL_CELLS[t.cell].races[WALL_CELLS[t.cell].attacker]} attacking from seat ${WALL_CELLS[t.cell].attacker}: behind the face by round 4 ${c.walk4}, scored by round 4 ${c.scored4}`
       : t.kind === 'roles' ? `${c.scenes} scenes with either seat attacking (the zones, the scoring, the ends), the attacker's first turn with no die drawn ${c.firsts} times`
       : t.kind === 'rolesGames' ? `${c.battles} breakthrough AI battles, none a draw (breakthrough ${c.ends.breakthrough}, held ${c.ends.held}, wipe ${c.ends.wipe})`
         : t.kind === 'rolesDeploy' ? `${c.boards} boards behind the wall, ${c.matches} deployments, ${c.units} units where place takes them, ${c.defenders} defenders behind the face (${c.decks} on a deck), ${c.astride} bases astride a face refused (${c.longs} of ${c.hulls} long hulls)`
@@ -6763,6 +6848,13 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     for (const c of bs) for (const [r, e] of Object.entries(c.byRace ?? {})) for (const [k, v] of Object.entries(e)) (byRace[r] ??= {})[k] = (byRace[r][k] ?? 0) + v
     const races = Object.entries(byRace).sort(([a], [b]) => (a < b ? -1 : 1)).map(([r, e]) => `${r} attacking: breakthrough ${e.breakthrough ?? 0}, held ${e.held ?? 0}, wipe ${e.wipe ?? 0}, past the target ${e.over ?? 0}`).join('; ')
     rolesSaid = `; (P-roles) ${sc?.scenes ?? 0} scenes and ${n} breakthrough battles on the March Wall, none drawn, every end one the rules allow (breakthrough ${sum('breakthrough')}, held ${sum('held')}, wipe ${sum('wipe')}; ${races})`
+    // ((S3) P-wall: the AI's rows over its battles, judged here)
+    const ws = res.filter((r, i) => r.ok && tasks[i].kind === 'wallPlay').map((r) => r.counts)
+    if (ws.length) {
+      const w = wallJudge(ws)
+      if (!bad.length && w.error) bad.push({ error: w.error })
+      rolesSaid += `; (P-wall) ${w.said}`
+    }
     if (ds.length) rolesSaid += `; (P-roles, the March Wall) ${dsum('boards')} boards' deployments, either seat attacking, each race order and at the caps (${dsum('matches')} in all): ${dsum('units')} units where place takes them, none overlapping, ${dsum('defenders')} defenders wholly behind the wall's face and 8 tails or more from the attacker's zone (the least ${Math.min(...ds.map((c) => c.apart)).toFixed(2)}), ${dsum('decks')} of them on a deck, no big unit, vehicle or long hull on one, every deployment the same again and drawing nothing; ${dsum('astride')} bases astride a face refused (${dsum('longs')} of ${dsum('hulls')} long hulls)`
   }
   say(`\n${items.length} corpus battles and ${games} random games (${Object.entries(reached).map(([k, n]) => `${k} ${n}`).join(', ')}${Object.keys(cast).length ? `; spells cast by a human seat: ${Object.entries(cast).map(([k, n]) => `${k} ${n}`).join(', ')}` : ''}), ${probes} decisions probed (${heights} of them on fortified boards, held to P-height), every AI command held to legal(), ${refolded} random games' logs folded by foldJob the same, ${quietly} corpus battles folded quietly as well (${res.reduce((n, r) => n + (r.counts?.hashed ?? 0), 0)} stateHashes before entries the same), the match's events held to the mirror at ${mirrored[0]} acts and ${mirrored[1]} stops, ${sessions[0]} corpus battles played through the Session the same (the sink handed all ${sessions[2]} events the core left, in order; ${sessions[1]} junk entries refused on replay; ${sessions[3]} of the Folder's rules held on replays), resultOf(G) the match's game.over at ${results} ends${armySaid}${ridesSaid}${hullSaid}${rolesSaid} (${Math.round((Date.now() - t0) / 1000)} s)`)
@@ -7140,6 +7232,17 @@ const MUTATIONS = {
   // mouth a tail and a quarter from the attacker's zone)
   'roles-wall-unbounded': ['core/deploy.js', '  return { minX: Math.max(-W / 2, lo, b0), maxX: Math.min(W / 2, hi, b1), plan }\n', '  return { minX: Math.max(-W / 2, lo), maxX: Math.min(W / 2, hi), plan }\n'],
   'roles-wall-post-unjudged': ['core/deploy.js', '    if (nav.hasHeight && Math.abs(nav.floor[i] - p.y) > STEP) continue\n    if (!fits(G, u, i, box, others)) continue\n', '    if (nav.hasHeight && Math.abs(nav.floor[i] - p.y) > STEP) continue\n'],
+  // ((Breakthrough, S3) P-wall's rows, each its term taken away: the
+  // route field (every route distance the straight line), a ladder whose
+  // head is held left open to its field, the ground in front of the face
+  // not refused, the deny term (its pull and its charge's worth))
+  'wall-route-straight': ['core/ai/route.js', 'export function routeDist(G, f, o, x, z) {\n  if (!f)', 'export function routeDist(G, f, o, x, z) {\n  if (true)'],
+  'wall-ladder-held': ['core/ai/route.js', '  const shut = cl.ladder ? heldLadders(G, u, plan, cl) : 0\n', '  const shut = 0\n'],
+  'wall-front-open': ['core/ai/score.js', '  if (fd < 0) s -= FRONT_COST\n', '  if (fd < 0) s -= 0\n'],
+  'wall-deny-off': [
+    ['core/ai/score.js', 'DENY = 5, THREAT', 'DENY = 1, THREAT'],
+    ['core/ai/score.js', 'DENY_GAIN = 40', 'DENY_GAIN = 0'],
+  ],
   'roles-attacker-anywhere': ['core/index.js', "  } else if (s.attacker !== undefined) throw new Error(`the ${s.mission} mission has no attacker`)\n", '  }\n'],
   'lattice-ties-reordered': ['core/nav.js', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] <= key) break\n', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] < key) break\n'],
 }
@@ -7149,7 +7252,7 @@ if (a['self-test']) {
   // (F11a: P-army's workload cut down, its fuzz a fifth and a few list
   // battles; F9a: P-riders' too, a battle with War-Carts, a game with a
   // human seat, the scenes and a few deployments at the caps)
-  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false, army: { fuzz: 20000, ai: 3, human: 1, ridesAI: { field: 1 }, ridesHuman: 1, hullDeploy: { field: 4, grand: 2 }, rolesAI: 20, rolesDeploy: 4 } }
+  const load = { games: 10, seed: 1, only: 'hotseat-late-8,bushtail-random-6,64-89', quiet: true, coverage: false, army: { fuzz: 20000, ai: 3, human: 1, ridesAI: { field: 1 }, ridesHuman: 1, hullDeploy: { field: 4, grand: 2 }, rolesAI: 20, rolesDeploy: 4, wallPlay: 80 } }
   // (--mutations a,b: only those, by name)
   const names = a.mutations ? a.mutations.split(',').map((x) => x.trim()) : Object.keys(MUTATIONS)
   const unknown = names.filter((x) => !Object.hasOwn(MUTATIONS, x))

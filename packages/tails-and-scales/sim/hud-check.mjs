@@ -350,16 +350,21 @@ async function tips(browser, url) {
 // plays alone, each from its board, dice, races and lists (the page's own
 // door: ?seed, ?dice, ?races, ?armies, ?mission) and its attacker pressed
 // on the panel's Who attacks. Picked so each of a role battle's own ends
-// comes, on the March Wall (S2b): board 205 (the Bushtails attacking on
-// their preset, seat 0, against a Coil defence of seven units, half the
+// comes, on the March Wall: board 205 (the Bushtails attacking on their
+// preset, seat 0, against a Coil defence of seven units, half the
 // preset's: a Hierophant, three Scaleguard and three Spitters) breaks
-// through in round 4 at 6 of 5; board 1 (the presets, seat 1 attacking)
-// is held at 0. Neither is lopsided by construction alone: on the wall
-// today's AI wipes a tiny defence (or a tiny attack) before it scores
-// (29-30 battles of 30 for a three-unit list), so the breakthrough is the
-// widest one a search found (seven units, boards 1-300: the only round-4
-// end at 6) and the held line the presets', held on 20 boards of 20 at 2 VP
-// at most; the AI lane (S3) re-picks both if its play moves them. Their
+// through (S2b: in round 4 at 6 of 5; (S3) the AI that plays the wall:
+// in round 5 at 6 of 5); board 1 (the presets, seat 1 attacking) is held
+// (S2b at 0, S3 at 1). Neither is lopsided by construction alone. (S3)
+// The AI that plays the wall still wipes a tiny defence, or a tiny
+// attack, before the target is reached (three-unit lists, boards 1-30:
+// a tiny Coil defence wiped 30 of 30, a tiny Bushtail one 30 of 30, a
+// tiny Bushtail attack 30 of 30, a tiny Coil attack 27, breaking through
+// in 3), so a wipe, not a breakthrough or a held line, is what a list
+// lopsided by construction shows; both are kept as searched, re-measured
+// on S3's AI: against the seven-unit defence the Bushtails break through
+// on 3 of boards 1-60 (51 wiped, 6 held), and on 205; the presets with
+// seat 1 attacking are held on 17 of boards 1-20. Their
 // numbers (the target, the rounds) and the races' names are the code under
 // test's own (data/mission.js, data/schema.js).
 const { MISSIONS: MISSIONS_UT } = await import(pathToFileURL(join(PKG, 'data', 'mission.js')).href)

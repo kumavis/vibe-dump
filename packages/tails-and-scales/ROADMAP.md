@@ -1958,14 +1958,21 @@ follows N3.
     order and at the caps), four `roles-wall-*` mutants, hud-check's two
     role battles re-picked on the wall. Parity 97 of 97, nothing
     re-recorded; `CORE_VERSION` 17 as S1's.
-  - [ ] **S3** The AI: a flow field to the scoring objectives (per
-    movement kind, memoised by the nav's epoch), the role wants, the
-    defender's hold points and its walk term, the guns' gate gain, all
-    under `rolesOf`. Proved by play-report's four rows (an attacker beyond
-    the line by round 4 in 90% of battles, the gate broken in 60% where a
-    wrecker is fielded, defender melee behind the line, both ends in 25%
-    each) and P-prop strict. Until it lands every breakthrough battle ends
-    'held'.
+  - [x] **S3** The AI plays the wall (DESIGN §4.2.12, As built (S3)).
+    Step 0: the defender's zone behind the line carries x bounds
+    (`{ behind: true, x: [-12, 30] }`: 8 tails from the attacker's zone
+    whatever the seed; `checkRoles`, `behindZone`, the checks, the help).
+    Then the route field (`core/ai/route.js`: walking distance to each
+    objective per movement class, the gate a wrecker's at a price per blow,
+    a held ladder shut, cached per nav epoch), the attacker's route-led
+    objective pull, walk-on, advance, waypoints and ram, the defender's
+    refused front, deny and posts, and route-aware attacker rows, all under
+    `wallOf` (`rolesOf` and the plan). P-wall's four rows and mutants,
+    play-report's Breakthrough row. Over 400 AI battles: an attacker
+    behind the face by round 4 in 100%, scoring by round 4 in 24% (the
+    row's 60% missed: the Coil 42-46%, the Bushtails 3-5%), the defender
+    in front of the face 0.13% of its unit-rounds, the attacker winning 8%.
+    Parity 97 of 97, nothing re-recorded; `CORE_VERSION` 17.
   - [x] **S4a** The page: the setup panel's "Who attacks" line (and
     `attacker` in the setup it builds), the Muster screen's role and its
     `rulesFor` points (with the panel's and the lobby's judges), the HUD's
