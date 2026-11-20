@@ -159,6 +159,12 @@ import { fortScene } from './fort-scene.mjs'
 const { createMatch, fullSetup } = await import(pathToFileURL(`${PKG}/core/index.js`).href)
 const { OBJECTIVE_RANGE } = await import(pathToFileURL(`${PKG}/core/rules.js`).href)
 const P = await import(pathToFileURL(`${PKG}/view/dressing/place.js`).href)
+// ((Breakthrough, S4b) the rules' zones and the wall's readers, which the
+// drawn zones are held to; the gate's stages as the view numbers them; the
+// help's own rule of who climbs)
+const { zone: zoneUT } = await import(pathToFileURL(`${PKG}/core/deploy.js`).href)
+const { behindLine } = await import(pathToFileURL(`${PKG}/core/terrain/breakthrough.js`).href)
+const { climbs: climbsUT } = await import(pathToFileURL(`${PKG}/core/queries.js`).href)
 const boardOf = (setup) => {
   const s = fullSetup(setup)
   const G = createMatch({ ...s, seats: s.seats.map((x) => ({ ...x, ctrl: 'human' })) }, { out: null })
@@ -440,19 +446,31 @@ async function rolesLane(browser, url) {
   const opening = (s, atk) => [`${icon(races[s])} ${name(races[s])}`, s === atk ? 'Attack' : 'Defend', lines[s === atk ? 'attack' : 'defend']]
   // a page on `mode`'s panel, `q` the URL's more, `click` pressed before
   // Start; the recorder in the page
-  const scene = async (mode, q, click, until) => {
+  const scene = async (mode, q, click, until, probe = null) => {
     const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
     page.setDefaultTimeout(IDLE_MS)
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
     await page.addInitScript(() => {
-      const rec = (window.__roles = { banners: [], events: [] })
+      // ((Breakthrough, S4b) and the gate: each hurt to it the table plays
+      // (a blast's, or a ram in a walk's smashes) and its break, as folded;
+      // the siege's lines, with the gate as drawn as each showed, are the
+      // page's own record: its view.breakthrough().said)
+      const rec = (window.__roles = { banners: [], events: [], gate: [] })
       Object.defineProperty(window, '__ts', {
         configurable: true,
         get: () => rec.ts,
         set: (ts) => {
           rec.ts = ts
-          ts.present.listen({ reset: () => {}, event: (e) => (e.t === 'round.scored' || e.t === 'game.over' || e.t === 'stage') && rec.events.push(JSON.parse(JSON.stringify(e))) })
+          ts.present.listen({
+            reset: () => {},
+            event: (e) => {
+              if (e.t === 'round.scored' || e.t === 'game.over' || e.t === 'stage') rec.events.push(JSON.parse(JSON.stringify(e)))
+              const gid = ts.G?.terrain?.plan?.gate.id
+              if (gid === undefined) return
+              for (const x of [e, ...(e.t === 'unit.move' ? (e.smashes ?? []).flatMap((sm) => sm.ev) : [])]) if (x.id === gid && (x.t === 'terrain.hurt' || x.t === 'terrain.destroy')) rec.gate.push(x.t === 'terrain.destroy' ? { down: true } : { hp: x.hp, of: x.of, ram: !!x.ram })
+            },
+          })
         },
       })
       addEventListener('DOMContentLoaded', () => {
@@ -471,16 +489,20 @@ async function rolesLane(browser, url) {
     await page.click('#setupStart')
     // (a page that never gets there is a row that fails, not a crash)
     const reached = await page.waitForFunction(until, null, { timeout: IDLE_MS, polling: 100 }).then(() => true, (e) => (whys.push(`${mode} ${q}: what the scene waits on never came (${e.message.split('\n')[0]})`), false))
+    // ((Breakthrough, S4b) what the scene asks of the page once there)
+    const probed = reached && probe ? await probe(page) : null
     const got = await page.evaluate(() => ({
-      banners: window.__roles.banners, events: window.__roles.events, setup: window.__ts.G.setup,
+      banners: window.__roles.banners, events: window.__roles.events, setup: window.__ts.G.setup, gate: window.__roles.gate, lines: window.__ts.view.breakthrough?.().said ?? [],
+      bannerUp: document.querySelector('#banner').classList.contains('show'), lineUp: !!document.querySelector('#armyBanner')?.classList.contains('show'),
       tally: document.querySelector('#tally')?.classList.contains('hidden') ? null : document.querySelector('#tally')?.textContent ?? null,
       over: document.querySelector('#over').classList.contains('hidden') ? null : { title: document.querySelector('#overTitle').textContent, why: document.querySelector('#overWhy').textContent },
     }))
     await page.context().close()
     if (errors.length) whys.push(`page errors: ${errors.slice(0, 3).join('; ')}`)
-    return { ...got, reached }
+    return { ...got, reached, probed }
   }
   const no = (m) => whys.push(m)
+  let gateHurts = 0
   // the role battles, watched whole
   for (const it of ROLE_ITEMS) {
     const s = it.job.setup, atk = s.attacker
@@ -504,17 +526,42 @@ async function rolesLane(browser, url) {
     if (!over) no(`${at}: no game.over played`)
     else if (!got.over || got.over.title !== `${icon(races[over.win])} ${w.title}` || got.over.why !== w.line) no(`${at}: the end screen ${JSON.stringify(got.over)}, not "${icon(races[over.win])} ${w.title}" / "${w.line}" (game.over ${over.why})`)
     else rows.push(`${at}: the opening banners (${races[atk]} attack, then ${races[1 - atk]} defend), the tally at ${scored.length} round ends ("${got.banners.find((x) => x.b1 === `End of round ${scored.at(-1).round}`)?.b2}"), "${got.over.title}" / "${got.over.why}"`)
+    // ((Breakthrough, S4b) the gate as drawn after each hurt and its break,
+    // the siege's lines, and the end screen with no banner behind it)
+    const g = gateRows(at, got)
+    gateHurts += g.hurts
+    if (g.why) no(g.why)
+    else rows.push(g.row)
   }
+  // ((Breakthrough, S4b) the role battles strike the gate: else the rows
+  // above prove nothing of its stages)
+  if (ROLE_ITEMS.length && !gateHurts) no('no role battle struck the gate: its stages went unseen')
   // against the AI, at its deployment: the player's role alone, the tally
   // at 0
   for (const [click, atk] of [[null, 0], ['#setupRoles button[data-attacker="1"]', 1]]) {
-    const got = await scene('bushtail', 'seed=4242&mission=breakthrough', click, () => window.__ts?.G?.pending?.k === 'deploy' && window.__roles.events.some((e) => e.t === 'stage') && window.__ts.player.idle)
+    const got = await scene('bushtail', 'seed=4242&mission=breakthrough', click, () => window.__ts?.G?.pending?.k === 'deploy' && window.__roles.events.some((e) => e.t === 'stage') && window.__ts.player.idle, drawnProbe)
     const at = `bushtail, seat ${atk} attacking`
     if (!got.reached) continue
+    // ((Breakthrough, S4b) each seat's zone as drawn on the table and the
+    // minimap, and the ways' labels, held to the rules)
+    const d = drawnRows(at, got)
+    if (d.why) no(d.why)
+    else rows.push(d.row)
     const want = [opening(0, atk)], open = got.banners.filter((b) => !/^End of round/.test(b.b1)).map((b) => [b.b1, b.b2, b.b3])
     if (JSON.stringify(open) !== JSON.stringify(want)) no(`${at}: the banners ${JSON.stringify(open)}, not ${JSON.stringify(want)}`)
     else if (got.tally !== `Breakthrough 0 of ${need}`) no(`${at}: the HUD's tally "${got.tally}" in the deployment`)
     else rows.push(`${at}: "${open[0].join('" / "')}", the tally "${got.tally}"`)
+  }
+  // ((Breakthrough, S4b) a Skirmish against the AI at its deployment: the
+  // strips, as ever, and no ways marked)
+  {
+    const got = await scene('bushtail', 'seed=4242', null, () => window.__ts?.G?.pending?.k === 'deploy' && window.__ts.player.idle, (page) => page.evaluate(() => window.__ts.view.breakthrough()))
+    if (got.reached) {
+      const d = got.probed
+      if (d.zones !== null || d.minimap !== null) no(`a Skirmish's deployment draws zones other than the strips: ${JSON.stringify(d.zones)?.slice(0, 80)}`)
+      else if (d.ways.some((w) => w.shown)) no(`a Skirmish's deployment marks the March Wall's ways`)
+      else rows.push('a Skirmish: the strips, no ways marked')
+    }
   }
   // a Skirmish: none of it
   {
@@ -538,6 +585,110 @@ function endWords(ev, { attacker, need, names }) {
   return null
 }
 
+// (Breakthrough, S4b) The deployment's probe: the drawing as it stands
+// (view: zones, minimap, ways), then with a wrecker, a climber and a flier
+// of the player's seat picked up in turn, the ways' labels each time.
+async function drawnProbe(page) {
+  return page.evaluate(() => {
+    const ts = window.__ts, out = { first: ts.view.breakthrough(), picks: [] }
+    for (const flag of ['wrecker', 'climb', 'fly']) {
+      const u = ts.units.find((x) => x.side === 0 && x.alive && !!x.t[flag])
+      if (!u) continue
+      ts.select(u)
+      out.picks.push({ id: u.id, flag, ways: ts.view.breakthrough().ways })
+    }
+    ts.select(null)
+    return out
+  })
+}
+// whether (x, z) is inside polygon `pts` (an even-odd ray cast), and how far
+// it is from the polygon's edges
+function inPoly(pts, x, z) {
+  let c = false
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const a = pts[i], b = pts[j]
+    if (a.z > z !== b.z > z && x < ((b.x - a.x) * (z - a.z)) / (b.z - a.z) + a.x) c = !c
+  }
+  return c
+}
+function edgeDist(pts, x, z) {
+  let best = Infinity
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i], b = pts[(i + 1) % pts.length], dx = b.x - a.x, dz = b.z - a.z, L2 = dx * dx + dz * dz
+    const t = L2 ? Math.max(0, Math.min(1, ((x - a.x) * dx + (z - a.z) * dz) / L2)) : 0
+    best = Math.min(best, Math.hypot(a.x + dx * t - x, a.z + dz * t - z))
+  }
+  return best
+}
+// The zones and the ways at a role battle's deployment against the AI:
+// each seat's polygon on the table the minimap's too, and over a half-tail
+// grid of the board inside it exactly where the rules' zone (core/deploy.js
+// zone: its x and z bounds, and behind the wall's face where it carries
+// the plan) holds the point, points within a twentieth of a tail of its
+// edges aside; the ways' four labels up by name; with a wrecker picked up
+// the gate "rams it" and the breach "ploughs it", with a climber the
+// ladders "climbs", with a flier every way "flies over" (the help's words,
+// present/roles.js), and the ladders lit exactly for a unit that climbs
+// (core/queries.js climbs).
+function drawnRows(at, got) {
+  const d = got.probed?.first
+  if (!d) return { why: `${at}: the drawing was never read` }
+  if (!d.zones) return { why: `${at}: the table draws the strips, not each seat's zone` }
+  if (JSON.stringify(d.minimap) !== JSON.stringify(d.zones)) return { why: `${at}: the minimap's zones are not the table's` }
+  const s0 = fullSetup(got.setup), G = createMatch({ ...s0, seats: s0.seats.map((x) => ({ ...x, ctrl: 'human' })) }, { out: null })
+  const { W, H } = G.board
+  let n = 0
+  for (const s of [0, 1]) {
+    const Z = zoneUT(G, s), poly = d.zones[s]
+    let bad = 0, first = null
+    for (let x = -W / 2 + 0.25; x < W / 2; x += 0.5) for (let z = -H / 2 + 0.25; z < H / 2; z += 0.5) {
+      const core = x >= Z.minX && x <= Z.maxX && (Z.minZ === undefined || (z >= Z.minZ && z <= Z.maxZ)) && (!Z.plan || behindLine(Z.plan, x, z))
+      if (core === inPoly(poly, x, z) || edgeDist(poly, x, z) < 0.05) continue
+      bad++
+      first ??= `${x},${z} (${core ? 'in' : 'out of'} the rules' zone)`
+    }
+    if (bad) return { why: `${at}: seat ${s}'s zone as drawn differs from the rules' at ${bad} points of the grid, first ${first}` }
+    n += poly.length
+  }
+  if (d.ways.length !== 4 || !d.ways.every((w) => w.shown && !w.say)) return { why: `${at}: the ways' labels in the deployment ${JSON.stringify(d.ways)}` }
+  const say = (pick, k) => pick.ways.find((w) => w.k === k)?.say
+  for (const p of got.probed.picks) {
+    const u = G.units.find((x) => x.id === p.id)
+    if (p.flag === 'fly' && !p.ways.every((w) => w.say === 'flies over')) return { why: `${at}: a flier's ways ${JSON.stringify(p.ways)}` }
+    if (p.flag === 'wrecker' && (say(p, 'gate') !== 'rams it' || say(p, 'breach') !== 'ploughs it')) return { why: `${at}: a wrecker's ways ${JSON.stringify(p.ways)}` }
+    if (p.flag !== 'fly' && (say(p, 'ladders') === 'climbs') !== climbsUT(u)) return { why: `${at}: ${u.t.name}'s ladders say "${say(p, 'ladders')}", but it ${climbsUT(u) ? 'climbs' : 'does not climb'}` }
+  }
+  if (!got.probed.picks.some((p) => p.flag === 'climb') || got.probed.picks.length < 2) return { why: `${at}: no climber and a wrecker or flier of the player's seat found to pick up (${got.probed.picks.map((p) => p.flag).join(', ')})` }
+  return { row: `${at}: each seat's zone drawn as the rules' (table and minimap, ${n} corners), the four ways named, and what they are to ${got.probed.picks.map((p) => ({ wrecker: 'a wrecker', climb: 'a climber', fly: 'a flier' })[p.flag]).join(', ')}` }
+}
+// The gate through a watched role battle: each hurt the table plays (as
+// folded: its hit points and whole, handed on by app/flow.js) said by a line
+// ("<attacker> ram the gate: h of w left" for a wrecker's, "The gate is
+// struck: h of w left" for a blast's) and, as that line shows, the gate
+// drawn standing at the stage its hit points say (12 whole, 8 the first
+// hole, 4 the second: two thirds and a third of its whole, the view's
+// gateStage); its break said ("The gate is down!") with the gate no longer
+// drawn; at the end, no round banner and no line showing behind the end
+// screen. Returns { row, why, hurts }.
+function gateRows(at, got) {
+  const stageOf = (hp, of) => (hp > (of * 2) / 3 ? 0 : hp > of / 3 ? 1 : 2)
+  const hurts = got.gate.filter((r) => !r.down), downs = got.gate.filter((r) => r.down)
+  for (const r of hurts) {
+    if (!(r.hp > 0 && r.of > 0)) return { why: `${at}: a hurt to the gate played with no hit points (${JSON.stringify(r)})`, hurts: hurts.length }
+    const want = r.ram ? `ram the gate: ${r.hp} of ${r.of} left` : `The gate is struck: ${r.hp} of ${r.of} left`
+    const l = got.lines.find((x) => x.text.includes(want))
+    if (!l) return { why: `${at}: no line "${want}" (lines: ${JSON.stringify(got.lines.map((x) => x.text)).slice(0, 160)})`, hurts: hurts.length }
+    if (!l.drawn?.shown || l.drawn.stage !== stageOf(r.hp, r.of)) return { why: `${at}: the gate struck to ${r.hp} of ${r.of} is drawn ${JSON.stringify(l.drawn)}, not standing at stage ${stageOf(r.hp, r.of)}`, hurts: hurts.length }
+  }
+  if (downs.length) {
+    const l = got.lines.find((x) => x.text === 'The gate is down!')
+    if (!l) return { why: `${at}: the gate broke and no line said so`, hurts: hurts.length }
+    if (l.drawn?.shown) return { why: `${at}: the gate still drawn as its break is said`, hurts: hurts.length }
+  }
+  if (got.over && (got.bannerUp || got.lineUp)) return { why: `${at}: ${got.bannerUp ? 'the round banner' : 'the siege line'} still up behind the end screen`, hurts: hurts.length }
+  return { row: `${at}: the gate drawn at its stage as each of ${hurts.length} hurts is said (stages ${[...new Set(hurts.map((r) => stageOf(r.hp, r.of)))].join(', ') || 'none'})${downs.length ? ', gone as its break is said' : ''}, nothing behind the end`, hurts: hurts.length }
+}
+
 // (Breakthrough) the role lane's edits, each of which rolesLane must catch
 const ROLE_MUTATIONS = {
   // the HUD shows no tally
@@ -552,6 +703,23 @@ const ROLE_MUTATIONS = {
   'opening-both': ['app/flow.js', '    const seats = (session.localSeats.length ? [...session.localSeats] : [0, 1])', '    const seats = [0, 1]'],
   // a role battle's own end worded as a plain score
   'result-plain': ['ui/screens/result.js', '    const line = roles ? roles.line', '    const line = false ? roles.line'],
+  // ((Breakthrough, S4b) the table's Breakthrough drawing) the zones drawn
+  // as the strips on a role battle
+  'zones-strips': ['view/index.js', '    if (!to.units) this.table.zoneShapes(zoneShapes(g))', '    if (!to.units) this.table.zoneShapes(null)'],
+  // the zones not mirrored when seat 1 attacks
+  'zones-unmirrored': ['view/zones.js', '    const [x0, x1] = flip ? [0 - z.x[1], 0 - z.x[0]] : z.x', '    const [x0, x1] = z.x'],
+  // the minimap's zones the strips
+  'minimap-strips': ['app/boot.js', 'edges: EDGES, zones: view.table.shapes ?? null,', 'edges: EDGES, zones: null,'],
+  // the hurts handed no hit points: the gate never drawn broken
+  'gate-unworn': ['app/flow.js', '        events = this.wornEntry(events, ses.G)\n', ''],
+  // the gate drawn a ram late
+  'gate-late': ['view/terrain.js', '    const stage = gateStage(hp, of)', '    const stage = gateStage(hp + 4, of)'],
+  // the round banner left fading behind the end screen
+  'banner-behind': ['app/flow.js', '    this.ui.banner.hide()\n    this.ui.armyBanner?.hide()\n    this.human.select(null)', '    this.human.select(null)'],
+  // the siege said nothing
+  'siege-silent': ['app/flow.js', '    if (text) this.ui.armyBanner?.show(text)', '    if (false) this.ui.armyBanner?.show(text)'],
+  // the ways never marked
+  'ways-unmarked': ['app/flow.js', '    view.ways.show(this.waysShown())', '    view.ways.show(null)'],
 }
 
 // In the page, before the app: catch window.__ts, drive a human log's seats

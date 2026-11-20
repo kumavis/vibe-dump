@@ -332,8 +332,11 @@ function lanesOf(ctx, R, seed, trackSide) {
     }
   }
   const nearestObj = (x, z) => objectives.reduce((m, o, k) => (hypot(o.x - x, o.z - z) < hypot(objectives[m].x - x, objectives[m].z - z) ? k : m), 0)
+  // ((Breakthrough, S4b) on the March Wall the road runs through the gate:
+  // marchLanes, in place of the armies' roads)
+  if (ctx.plan) marchLanes(ctx, out, { find, open, lane, cx, cz })
   // each army's road in from its own edge
-  for (const s of [0, 1]) {
+  else for (const s of [0, 1]) {
     const sx = edges[s], z = (r() - 0.5) * H * 0.5, x = sx * (W / 2 - 0.3)
     const cells = find(open(x, z), objs[nearestObj(x, z)])
     if (!cells) continue
@@ -381,6 +384,31 @@ function lanesOf(ctx, R, seed, trackSide) {
   return out
 }
 
+// (Breakthrough, S4b) The March Wall's lanes (lanesOf's helpers): the road
+// in from the attacker's edge to the gate's causeway and on from inside
+// the gatehouse to the defender's edge, each carried off the mat (roads);
+// and the attacker's approaches, worn from its zone's front toward each
+// way in: each siege ladder's foot, the breach's outer face and the Hollow
+// Wood's track, thinning as they near it.
+function marchLanes(ctx, out, { find, open, lane, cx, cz }) {
+  const { W, deploy } = ctx, P = ctx.plan, sa = P.flip ? 1 : -1, ps = P.gate.passage, gz = P.gate.z
+  const before = sa < 0 ? ps.x0 - 1.6 : ps.x1 + 1.6, after = sa < 0 ? ps.x1 + 1.6 : ps.x0 - 1.6
+  for (const [x0, x1, sx] of [[sa * (W / 2 - 0.3), before, sa], [-sa * (W / 2 - 0.3), after, -sa]]) {
+    const cells = find(open(x0, gz), open(x1, gz))
+    if (!cells) continue
+    out.paths.push(lane(cells, 1.1, true, true))
+    out.roads.push({ x: sx * W / 2, z: cz(cells[0]), sx, from: [cx(cells[0]), cz(cells[0])] })
+  }
+  const fx = sa * (W / 2 - deploy - 0.5)
+  const ways = [...P.ladders.map((l) => l.foot), ...(P.breach ? [{ x: (P.breach.a.x + P.breach.b.x) / 2 + sa * 2.5, z: (P.breach.a.z + P.breach.b.z) / 2 }] : []), P.wood.mouths[0]]
+  for (const t of ways) {
+    const cells = find(open(fx, t.z), open(t.x, t.z))
+    if (!cells) continue
+    const ap = lane(cells, 0.75, false, true)
+    out.paths.push(ap)
+  }
+}
+
 // ---- S4: themes ---------------------------------------------------------
 // One identity per board, from the rules terrain on it: the Powder Field's
 // burned hamlet; a fortified board's border keep; else a quarry where rock
@@ -388,9 +416,11 @@ function lanesOf(ctx, R, seed, trackSide) {
 // the palette (the mat's wash, its lanes, the meadow round it), the works
 // of the people who live there (off the mat, worksOf), and the board's name
 // (nameOf; on screen through app/board-name.js).
-export const THEMES = Object.freeze(['farm', 'quarry', 'keep', 'burned'])
+export const THEMES = Object.freeze(['farm', 'quarry', 'keep', 'burned', 'march'])
 export function themeOf(ctx) {
   if (ctx.set === 'powder') return 'burned'
+  // ((Breakthrough, S4b) the March Wall's border country: marchWorks)
+  if (ctx.set === 'march') return 'march'
   if (ctx.set === 'fortified') return 'keep'
   let stone = 0, green = 0
   for (const c of ctx.chunks) {
@@ -408,6 +438,9 @@ export const PALETTES = Object.freeze({
   quarry: Object.freeze({ wash: '#a39b84', washA: 0.06, chalk: '#c2bcaa', lane: '#827c66', verge: '#7f8758', meadow: '#737a4c' }),
   keep: Object.freeze({ wash: '#7f7a5c', washA: 0.035, lane: '#6f6a46', verge: '#76844a', meadow: '#6c7744' }),
   burned: Object.freeze({ wash: null, lane: '#4c463a', verge: '#5a5638', meadow: '#4e4a3c', scorch: '#2e2820', ash: '#5e5a50' }),
+  // ((Breakthrough, S4b) open march country: a dry straw wash, the lanes a
+  // trodden road's earth)
+  march: Object.freeze({ wash: '#a29a6c', washA: 0.04, lane: '#7a6a44', verge: '#808a4e', meadow: '#7a8048' }),
 })
 // the board's name, from its theme's syllables
 const NAMES = {
@@ -415,6 +448,7 @@ const NAMES = {
   quarry: [['Grey', 'Flint', 'Chalk', 'Slate', 'Rook', 'Cold', 'Scree', 'Crag'], ['cut', 'scar', 'pits', 'edge', 'delve', 'stone', 'rise', 'fall']],
   keep: [['Thorn', 'Watch', 'Iron', 'Ash', 'Briar', 'High', 'Wyrm', 'Dun'], ['hold', 'gate', 'keep', 'ward', 'mark', 'wall', 'tower', 'burgh']],
   burned: [['Cinder', 'Ember', 'Smoke', 'Black', 'Char', 'Soot', 'Brand', 'Ash'], ['field', 'stead', 'end', 'ford', 'marsh', 'lea', 'thorpe', 'wick']],
+  march: [['March', 'Border', 'Wether', 'Cairn', 'Heath', 'Stane', 'Hart', 'Fell'], ['gate', 'wall', 'dyke', 'ward', 'cross', 'mark', 'reach', 'moor']],
 }
 export function nameOf(seed, theme) {
   const r = stream(seed, 'name'), [a, b] = NAMES[theme]
@@ -437,8 +471,9 @@ export function nameOf(seed, theme) {
 // --browser holds a landmark of each theme inside the opening views.
 const FAR = (H) => 5 + 0.1 * H
 // the works each theme counts as its landmark (the check's)
-export const LANDMARKS = Object.freeze({ farm: ['house', 'barn'], quarry: ['cut', 'crane', 'spoil'], keep: ['gatehouse', 'tower', 'wall'], burned: ['shell', 'chimney'] })
-function worksOf(out, seed, theme) {
+export const LANDMARKS = Object.freeze({ farm: ['house', 'barn'], quarry: ['cut', 'crane', 'spoil'], keep: ['gatehouse', 'tower', 'wall'], burned: ['shell', 'chimney'], march: ['runwall', 'watchtower'] })
+function worksOf(out, seed, theme, ctx = {}) {
+  if (theme === 'march') return marchWorks(out, seed, ctx)
   const { W, H, k } = out
   const r = stream(seed, 'works')
   const b = FAR(H), a = 2 + 0.04 * W
@@ -532,12 +567,103 @@ function worksOf(out, seed, theme) {
     }
   }
 }
+// (Breakthrough, S4b) The March Wall's country (DESIGN §4.2.12's "The
+// line set": a border wall where the road crosses into the March). The
+// wall runs on off the table from where the curtain walk leaves it, out
+// across the country (`runwall` stretches along the walk's line, each its
+// own one try at a place wholly off the mat: the first a little out, so it
+// never reads as the walk's playable top): first a ruined stretch, its top
+// broken in steps, then whole and crenellated, a gap where it has fallen,
+// a watchtower on it, ruined again toward the haze. At the far long side a
+// watchtower always stands (the opening views look at it): on the run-on
+// when the walk leaves by that side, else beyond the Hollow Wood on the
+// face's line, where the wall was never finished. Behind the defender's
+// edge, by the road out of the gate, the garrison's huts and tents.
+function marchWorks(out, seed, ctx) {
+  const { W, H, k } = out, P = ctx.plan
+  if (!P) return
+  const r = stream(seed, 'works')
+  const onMat = (x, z) => Math.abs(x) <= W / 2 && Math.abs(z) <= H / 2
+  const clear = (x, z, rad) => Math.abs(x) >= W / 2 + rad + 0.05 || Math.abs(z) >= H / 2 + rad + 0.05
+  const put = (kind, x, z, yaw, extra = {}) => {
+    const w = { kind, x, z, y: lift(seed, W, H, x, z) - 0.25, yaw, ...SIZE[kind], ...extra }
+    out.works.push(w)
+    return w
+  }
+  // a line out from (x0, z0) along (ux, uz), the wall's stretches on it
+  // from `from` tails to `to`; a watchtower `tower` tails out (or none)
+  const runOn = (x0, z0, ux, uz, from, to, tower) => {
+    const yaw = atan2(0 - uz, ux)
+    let d = from, towered = false
+    while (d < to) {
+      const len = 4 + r() * 2, mid = d + len / 2, cx = x0 + ux * mid, cz = z0 + uz * mid
+      const ruin = d < 10 + r() * 4 || d > 46 * k
+      const h = ruin ? 1.1 + r() * 0.5 : 2.3, rad = hypot(len / 2, 1.1) + 0.2
+      if (!towered && tower !== null && mid >= tower) {
+        towered = true
+        const tx = x0 + ux * (d + 1.8), tz = z0 + uz * (d + 1.8)
+        if (clear(tx, tz, SIZE.watchtower.r)) put('watchtower', tx, tz, yaw)
+        d += 3.6
+        continue
+      }
+      // (a stretch fallen: a gap, now and then, past the first)
+      if (d > 14 && r() < 0.14) {
+        d += len
+        continue
+      }
+      if (clear(cx, cz, rad)) {
+        const steps = []
+        for (let i = 0; i < Math.ceil(len / 1.2); i++) steps.push(ruin ? 0.35 + r() * 0.65 : 1)
+        put('runwall', cx, cz, yaw, { len, h, ruin, steps, r: rad })
+      } else r()
+      d += len
+    }
+  }
+  // the walk's far end, past the table's edge: the wall runs on from it
+  let farTower = false
+  for (const wk of P.walks) {
+    const ina = onMat(wk.a.x, wk.a.z), inb = onMat(wk.b.x, wk.b.z)
+    if (ina === inb) continue
+    const [a, b] = ina ? [wk.a, wk.b] : [wk.b, wk.a]
+    const L = hypot(b.x - a.x, b.z - a.z), ux = (b.x - a.x) / L, uz = (b.z - a.z) / L
+    let t = 0
+    while (onMat(a.x + ux * t, a.z + uz * t) && t < 200) t += 0.05
+    const far = uz < 0
+    farTower ||= far
+    runOn(a.x + ux * t, a.z + uz * t, ux, uz, 0.6, 70 * k, far ? 20 + r() * 8 : 26 + r() * 10)
+  }
+  // the far side's watchtower, beyond the wood on the face's line, if the
+  // wall did not run on that way
+  if (!farTower) {
+    const f = P.face
+    // (the face's end beyond the far edge, and the way it points)
+    const [p0, p1] = f[0].z < f[f.length - 1].z ? [f[0], f[1]] : [f[f.length - 1], f[f.length - 2]]
+    const L = hypot(p0.x - p1.x, p0.z - p1.z) || 1, ux = (p0.x - p1.x) / L, uz = (p0.z - p1.z) / L
+    const back = FAR(H) + 4 + r() * 3, tx = p0.x + ux * back, tz = Math.min(p0.z + uz * back, -(H / 2 + back))
+    put('watchtower', tx, tz, atan2(0 - uz, ux), { ruin: true })
+    // (a few courses of the unfinished wall either side of it)
+    for (let i = 0; i < 3; i++) {
+      const ox = tx + (i % 2 ? 1 : -1) * (3.8 + i * 2.2 + r()), rad = hypot(1.6, 1.1) + 0.2
+      if (clear(ox, tz, rad)) put('runwall', ox, tz, 0, { len: 3.2, h: 0.9 + r() * 0.5, ruin: true, steps: [0.5 + r() * 0.5, 0.4 + r() * 0.6, 0.3 + r() * 0.7], r: rad })
+      else r()
+    }
+  }
+  // the garrison's huts and tents behind the defender's edge, by the road
+  const sd = P.flip ? -1 : 1, gz = P.gate.z
+  const cx = sd * (W / 2 + 7 + r() * 2), cz = gz + (gz > 0 ? -1 : 1) * (7 + r() * 3)
+  for (let i = 0; i < 2; i++) put('hut', cx + sd * i * 4.4, cz + (r() - 0.5) * 1.5, (r() - 0.5) * 0.3 + Math.PI / 2, { s: 0.8 })
+  for (let i = 0; i < 3; i++) put('tent', cx + sd * (1 + i * 2.8), cz + (gz > 0 ? -1 : 1) * (4 + r()), r() * 3)
+  out.yards.push({ x: cx + sd * 2, z: cz + (gz > 0 ? -1 : 1) * 1.5, r: 6 })
+}
+
 // each work's bounding radius and height (works.js draws them to these)
 const SIZE = {
   house: { r: 3.2, h: 4.2 }, barn: { r: 4.4, h: 5.2 }, well: { r: 0.8, h: 1.6 }, cart: { r: 1.6, h: 1.2 }, stook: { r: 0.6, h: 1.1 },
   fence: { r: 6, h: 0.9 }, cut: { r: 7.5, h: 4 }, crane: { r: 4.5, h: 7 }, hut: { r: 2.4, h: 2.8 }, spoil: { r: 2.4, h: 2.2 }, block: { r: 0.7, h: 0.8 },
   gatehouse: { r: 4, h: 6 }, wall: { r: 3.6, h: 3 }, tower: { r: 2, h: 6.5 }, tent: { r: 1.3, h: 1.6 }, beacon: { r: 1.2, h: 6 },
   shell: { r: 3, h: 2.6 }, chimney: { r: 0.7, h: 5 },
+  // ((Breakthrough, S4b) the March Wall's: a stretch's r is its own)
+  runwall: { r: 3.2, h: 2.8 }, watchtower: { r: 2.4, h: 6.5 },
 }
 
 // ---- the plan ----------------------------------------------------------
@@ -553,11 +679,20 @@ export function plan(ctx) {
 
   // the boundary stakes: each mat corner and where each zone meets the long
   // edges, off the mat, in the seat's colour
+  // ((Breakthrough, S4b) on a mission with roles, where each seat's own
+  // zone, `zones` (view/zones.js, the table's), meets the long edges: its
+  // point there farthest from its edge)
+  const front = (s, sz) => {
+    const sx = edges[s]
+    if (!ctx.zones) return sx * (W / 2 - deploy)
+    const on = ctx.zones[s].filter((p) => Math.abs(p.z - sz * H / 2) < 1e-6)
+    return on.length ? on.reduce((m, p) => (sx * p.x < sx * m ? p.x : m), on[0].x) : sx * (W / 2 - deploy)
+  }
   for (const s of [0, 1]) {
     const sx = edges[s]
     for (const sz of [-1, 1]) {
       out.stakes.push({ x: sx * (W / 2 + 0.55), z: sz * (H / 2 + 0.55), seat: s, r: 0.1, h: 1.4 })
-      out.stakes.push({ x: sx * (W / 2 - deploy), z: sz * (H / 2 + 0.55), seat: s, r: 0.1, h: 1.4 })
+      out.stakes.push({ x: front(s, sz), z: sz * (H / 2 + 0.55), seat: s, r: 0.1, h: 1.4 })
     }
   }
 
@@ -610,7 +745,7 @@ export function plan(ctx) {
     const th = (out.theme = themeOf(ctx))
     out.palette = PALETTES[th]
     out.name = nameOf(seed, th)
-    worksOf(out, seed, th)
+    worksOf(out, seed, th, ctx)
   }
 
   // the trees: copses and a wood's edge, from 12 tails out (nothing tall near
@@ -679,6 +814,10 @@ export function plan(ctx) {
   }
   // and the objectives' trodden ground (the marker's base stands on it)
   for (const o of objectives) out.decals.push({ kind: 'trodden', x: o.x, z: o.z, hx: 0.95, hz: 0.95, yaw: 0, salt: mix(seed, hashStr(`o${o.x},${o.z}`)), r: 0 })
+  // ((Breakthrough, S4b) the garrison's ground behind the wall, trodden
+  // where it stands to: the yard's posts behind the gate and at the towers'
+  // and stairs' feet, plan.posts)
+  for (const q of ctx.plan?.posts ?? []) if (q.on === 'yard') out.decals.push({ kind: 'trodden', x: q.x, z: q.z, hx: q.r * 0.7, hz: q.r * 0.7, yaw: 0, salt: mix(seed, hashStr(`y${q.x},${q.z}`)), r: 0, heavy: true })
 
   // the debris: round each piece, from CLEAR out, thinner the farther (low
   // clutter); inside a forest's footprint, its leaf litter, twigs and ferns
@@ -714,7 +853,7 @@ export function plan(ctx) {
     }
     // (S4) the theme's own strewing over open ground: a quarry's stone
     // chips, a keep's, a burned field's charred sticks (none on a farm)
-    const strew = { quarry: 160, keep: 70, burned: 110 }[out.theme] ?? 0
+    const strew = { quarry: 160, keep: 70, burned: 110, march: 60 }[out.theme] ?? 0
     for (let i = 0; i < strew * Math.min(2, area); i++) {
       const x = (r() - 0.5) * W, z = (r() - 0.5) * H
       const kind = out.theme === 'burned' ? 'stick' : 'pebble', s2 = 0.5 + r() * 0.7

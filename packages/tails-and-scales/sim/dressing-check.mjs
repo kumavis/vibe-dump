@@ -52,6 +52,7 @@ import { createMatch } from '../core/index.js'
 import { OBJECTIVE_RANGE } from '../core/rules.js'
 import { MISSIONS } from '../data/mission.js'
 import { PKG } from './oracle/pin.mjs'
+import { zoneShapes } from '../view/zones.js'
 
 let a
 try {
@@ -74,10 +75,14 @@ const LOW = 0.3, CLEAR = 1, EPS = 1e-6
 const place = (dir = PKG) => import(pathToFileURL(join(dir, 'view/dressing/place.js')).href)
 const bases = (dir = PKG) => import(pathToFileURL(join(dir, 'view/dressing/bases.js')).href)
 const ground = (dir = PKG) => import(pathToFileURL(join(dir, 'view/dressing/ground.js')).href)
-const matchOf = (board, mission, terrain) => createMatch({ board, dice: 0, mission, terrain, seats: SEATS }, { out: null })
+// ((Breakthrough, S4b) a role mission's either way round: `attacker`)
+const matchOf = (board, mission, terrain, attacker) => createMatch({ board, dice: 0, mission, terrain, seats: SEATS, ...(attacker === undefined ? {} : { attacker }) }, { out: null })
+// ((Breakthrough, S4b) and, as view/dressing/index.js hands them, the
+// wall's plan and each seat's zone as the table draws it, view/zones.js)
 const ctxOf = (P, G) => ({
   seed: P.dressSeed(G.setup), set: G.setup.terrain, W: G.board.W, H: G.board.H, deploy: G.board.deploy,
   edges: G.seats.map((s) => s.edge), objectives: G.objectives, range: OBJECTIVE_RANGE, chunks: G.terrain.chunks, nav: G.nav,
+  plan: G.terrain.plan ?? null, zones: zoneShapes(G),
 })
 const digest = (p) => createHash('sha256').update(JSON.stringify(p)).digest('hex')
 
@@ -243,26 +248,69 @@ function figureBasesProblems(G, B, F, p, discsOf) {
   return out.slice(0, 3)
 }
 
-function board(P, set, seed, B = null, F = null) {
+function board(P, set, seed, B = null, F = null, attacker = undefined) {
   const missions = SETS.get(set), mission = missions[seed % missions.length]
-  const G = matchOf(seed, mission, set)
+  const G = matchOf(seed, mission, set, attacker)
   let p1, p2
   try {
     p1 = seeded(P, ctxOf(P, G))
-    p2 = seeded(P, ctxOf(P, matchOf(seed, mission, set)))
+    p2 = seeded(P, ctxOf(P, matchOf(seed, mission, set, attacker)))
   } catch (e) {
     return { G, problems: [`${set} board ${seed} (${mission}): ${e.message}`] }
   }
   const problems = []
   if (digest(p1) !== digest(p2)) problems.push(`${set} board ${seed} (${mission}): two runs placed it differently`)
+  // ((Breakthrough, S4b) the March Wall's own country: marchProblems)
+  if (G.terrain.plan) for (const t of marchProblems(G, p1)) problems.push(`${set} board ${seed} (${mission}, seat ${G.setup.attacker} attacking): ${t}`)
   for (const t of placementProblems(G, P.standing(p1))) problems.push(`${set} board ${seed} (${mission}): ${t}`)
   if (B) for (const t of basesProblems(B, G, p1)) problems.push(`${set} board ${seed} (${mission}): ${t}`)
   if (B && F) for (const t of figureBasesProblems(G, B, F.figs, p1, F.discsOf)) problems.push(`${set} board ${seed} (${mission}): ${t}`)
   return { G, p: p1, problems }
 }
 
+// (Breakthrough, S4b) The March Wall's dressing (view/dressing/place.js
+// marchWorks and marchLanes), on a board with the wall's plan: its theme
+// 'march'; the wall run on into the country (a `runwall` stretch at least)
+// and a watchtower past the far long side (the broadside's view, which the
+// browser half holds a landmark in); every work of it wholly off the mat
+// (by its radius: nothing of it on the mat, over the walk's top or any
+// rules piece); each seat's boundary stakes at its own zone's front where
+// it meets each long edge (the zone as the table draws it, view/zones.js);
+// the road through the gate (a lane within 2.5 tails of the gate's outer
+// causeway, and two roads off the mat, at opposite edges); and the works'
+// triangles (works.js, merged: one draw call) within WORKS_TRIS, their
+// share of the dressing's 40,000 (the browser half measures the whole).
+const WORKS_TRIS = 2500
+let worksTris = null, worksMax = 0
+function marchProblems(G, p) {
+  const out = [], { W, H } = G.board, plan = G.terrain.plan
+  if (p.theme !== 'march') out.push(`its theme is ${p.theme}, not march`)
+  const mw = p.works.filter((w) => w.kind === 'runwall' || w.kind === 'watchtower')
+  if (!mw.some((w) => w.kind === 'runwall')) out.push('no stretch of the wall runs on into the country')
+  if (!mw.some((w) => w.kind === 'watchtower' && w.z < -H / 2)) out.push('no watchtower past the far long side')
+  for (const w of p.works) if (!(Math.abs(w.x) >= W / 2 + w.r - EPS || Math.abs(w.z) >= H / 2 + w.r - EPS)) out.push(`its ${w.kind} at ${w.x.toFixed(2)},${w.z.toFixed(2)} (r ${w.r.toFixed(2)}) reaches onto the mat`)
+  const Z = zoneShapes(G)
+  for (const s of [0, 1]) for (const sz of [-1, 1]) {
+    const on = Z[s].filter((q) => Math.abs(q.z - sz * H / 2) < 1e-6), sx = G.seats[s].edge
+    const front = on.reduce((m, q) => (sx * q.x < sx * m ? q.x : m), on[0]?.x ?? NaN)
+    if (!p.stakes.some((k) => k.seat === s && Math.abs(k.x - front) < 1e-6 && Math.sign(k.z) === sz)) out.push(`seat ${s}'s stake at its zone's front on the ${sz < 0 ? 'far' : 'near'} edge (x ${front.toFixed(2)}) is not there`)
+  }
+  const ps = plan.gate.passage, sa = plan.flip ? 1 : -1, cx = sa < 0 ? ps.x0 - 1.6 : ps.x1 + 1.6
+  if (!p.lanes.some((l) => l.pts.some(([x, z]) => Math.hypot(x - cx, z - plan.gate.z) < 2.5))) out.push('no lane runs to the gate')
+  if (p.roads.length !== 2 || p.roads[0].sx === p.roads[1].sx) out.push(`the road through the gate leaves the mat by ${p.roads.map((r) => r.sx).join(', ') || 'no edge'}`)
+  if (worksTris) {
+    const n = worksTris(p.works)
+    worksMax = Math.max(worksMax, n)
+    if (n > WORKS_TRIS) out.push(`its works draw ${n} triangles (cap ${WORKS_TRIS})`)
+  }
+  return out
+}
+
 async function nodeHalf() {
   const P = await place(), B = await bases(), F = { figs: await figures(), discsOf: (await ground()).baseDiscs }
+  // ((Breakthrough, S4b) the works' triangles, as works.js merges them)
+  const WK = await import(pathToFileURL(join(PKG, 'view/dressing/works.js')).href)
+  worksTris = (works) => (WK.worksGeometry(works)?.attributes.position.count ?? 0) / 3
   const sets = a.sets ? a.sets.split(',') : [...SETS.keys()]
   for (const s of sets) if (!SETS.has(s)) {
     console.error(`dressing-check: no set "${s}" (there are ${[...SETS.keys()].join(', ')})`)
@@ -277,9 +325,16 @@ async function nodeHalf() {
       const r = board(P, set, seed, B, F)
       if (r.p) items += P.standing(r.p).length
       bad.push(...r.problems)
+      // ((Breakthrough, S4b) a role board the other way round too: seat 1
+      // attacking, the table and its dressing mirrored)
+      if (r.G.terrain.plan) {
+        const r1 = board(P, set, seed, B, F, 1)
+        if (r1.p) items += P.standing(r1.p).length
+        bad.push(...r1.problems)
+      }
     }
     failed += bad.length
-    console.log(`  ${set.padEnd(10)} ${bad.length ? `FAILED: ${bad.length} problems` : 'ok'}: ${SEEDS} boards, ${items} items stood, each placement seeded and the same twice, the clutter hidden under every base (drawn and read from real figures) (${((performance.now() - t0) / 1000).toFixed(1)} s)`)
+    console.log(`  ${set.padEnd(10)} ${bad.length ? `FAILED: ${bad.length} problems` : 'ok'}: ${SEEDS} boards${worksMax && set === 'march' ? ' each way round' : ''}, ${items} items stood, each placement seeded and the same twice, the clutter hidden under every base (drawn and read from real figures)${set === 'march' ? `; (S4b) the march theme, the wall run on, a watchtower past the far side, its works off the mat, the stakes at each zone's front, the road through the gate, the works at most ${worksMax} triangles (cap ${WORKS_TRIS})` : ''} (${((performance.now() - t0) / 1000).toFixed(1)} s)`)
     for (const t of bad.slice(0, 12)) console.log(`    ${t}`)
   }
   console.log(failed ? `\ndressing-check FAILED` : `\ndressing-check passed`)
@@ -361,6 +416,18 @@ async function selfTest() {
     verdict("every base read as a Nutkin's", [411, 7, 30].some((n) => board(P, 'classic', n, B0, { figs: F0, discsOf: small.baseDiscs }).problems.length > 0))
     const real = await ground()
     verdict('the bases read from real figures as ground.js reads them', board(P, 'classic', 411, B0, { figs: F0, discsOf: real.baseDiscs }).problems.length > 0, false)
+    // ((Breakthrough, S4b) the March Wall's country: board 12 passes either
+    // way round; a march board themed as a farm, the run-on begun on the
+    // mat (over the walk's top), the far watchtower left out (board 12's
+    // walk leaves by the near side), the stakes at the strips' fronts, and
+    // the road kept out of the gate, each caught)
+    verdict('march board 12 as placed, either way round', board(P, 'march', 12).problems.length + board(P, 'march', 12, null, null, 1).problems.length > 0, false)
+    const marchEdit = async (name, edit) => board(await place(copy(name, edit)), 'march', 12).problems.length > 0
+    verdict('a march board themed as a farm', await marchEdit('march-farm', (s) => s.replace("  if (ctx.set === 'march') return 'march'\n", '')))
+    verdict('the wall run on from the mat, over the walk', await marchEdit('march-onmat', (s) => s.replace('runOn(a.x + ux * t, a.z + uz * t, ux, uz, 0.6,', 'runOn(a.x + ux * t, a.z + uz * t, ux, uz, -6,').replace('      if (clear(cx, cz, rad)) {\n        const steps = []', '      if (true) {\n        const steps = []')))
+    verdict('no watchtower past the far side', await marchEdit('march-notower', (s) => s.replace('  if (!farTower) {', '  if (false) {')))
+    verdict("the stakes at the strips' fronts", await marchEdit('march-strips', (s) => s.replace('    if (!ctx.zones) return sx * (W / 2 - deploy)', '    if (true) return sx * (W / 2 - deploy)')))
+    verdict('the road kept out of the gate', await marchEdit('march-noroad', (s) => s.replace('  if (ctx.plan) marchLanes(ctx, out, { find, open, lane, cx, cz })\n  // each army', '  if (false) marchLanes(ctx, out, { find, open, lane, cx, cz })\n  // each army')))
   } finally {
     rmSync(work, { recursive: true, force: true })
   }

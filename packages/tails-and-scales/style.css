@@ -2744,6 +2744,52 @@ body:has(#lobby:not(.hidden)) #muster {
   margin: 8px 0;
 }
 
+/* (Breakthrough, S4b) the March Wall's four ways, marked on the table
+   (view/ways.js): each way's name, and with a unit picked up what that way
+   is to it, lit (it may), amber (once the way is broken) or dimmed */
+.wayl {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(30, 24, 16, 0.78);
+  border: 1px dashed rgba(240, 220, 170, 0.55);
+  color: var(--ink);
+  white-space: nowrap;
+  will-change: transform;
+  letter-spacing: 0.02em;
+}
+.wayl b {
+  font-family: Georgia, serif;
+  font-weight: normal;
+  color: #f0dca8;
+}
+.wayl.ok {
+  border: 1px solid #8fd06a;
+}
+.wayl.ok span {
+  color: #b8f08e;
+}
+.wayl.later {
+  border: 1px solid #d8a84a;
+}
+.wayl.later span {
+  color: #f0c36a;
+}
+.wayl.no {
+  opacity: 0.6;
+  border-style: dotted;
+}
+.wayl.no span {
+  color: #c9a8a0;
+  text-decoration: line-through;
+}
+
 /* the deployment's points banner: under the HUD, fading after a while,
    taking no pointer */
 #armyBanner {

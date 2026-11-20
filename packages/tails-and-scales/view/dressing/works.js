@@ -30,6 +30,7 @@ function crenels(len, h, d, colour, step = 1.1) {
   return out
 }
 
+const OLD = '#868674', OLD_DARK = '#5f6150'
 const STONE = '#8a857a', DARK = '#5e5a52', WOOD = '#6e5034', THATCH = '#b8a05a', ROOF = '#7a4a34', CHAR = '#24201c', HAY = '#c8b060'
 const BUILD = {
   house: () => [box(5, 2.6, 3.4, 0, 0, 0, '#d8ccb0'), roof(5.4, 3.8, 1.6, 0, 2.6, 0, THATCH), box(0.5, 1.6, 0.5, 1.6, 2.6, 0.6, STONE), box(0.9, 1.5, 0.08, -0.6, 0, 1.72, WOOD)],
@@ -55,6 +56,23 @@ const BUILD = {
   beacon: () => [box(0.35, 5, 0.35, 0, 0, 0, WOOD), box(1, 0.6, 1, 0, 5, 0, '#3a3028'), box(0.7, 0.4, 0.7, 0, 5.4, 0, '#d0802a'), box(1.4, 0.15, 0.15, 0, 4.2, 0, WOOD)],
   shell: () => [box(4.6, 2.2, 0.35, 0, 0, -1.5, '#6a645c'), box(4.6, 1.4, 0.35, 0, 0, 1.5, '#6a645c'), box(0.35, 2.0, 3.3, -2.15, 0, 0, '#6a645c'), box(0.35, 1.1, 3.3, 2.15, 0, 0, '#6a645c'), box(4.4, 0.25, 0.4, 0, 2.2, -1.5, CHAR), box(1.2, 0.3, 1, 0.6, 0, 0.2, CHAR), box(0.2, 0.2, 2.6, -0.8, 0.3, 0, CHAR, 0.6)],
   chimney: () => [box(0.7, 4.6, 0.7, 0, 0, 0, '#6e6860'), box(0.8, 0.3, 0.8, 0, 4.6, 0, CHAR)],
+  // ((Breakthrough, S4b) the March Wall run on into the country: a stretch
+  // `len` long along its own x, 2 deep, `h` tall, crenellated where whole;
+  // ruined, its top broken in steps (`steps`, each a share of h, place.js's
+  // seeded draws) and a few fallen blocks at its foot; weathered greyer
+  // and greener than the table's own stone. And a square watchtower with a
+  // pyramid roof (a ruined one roofless, broken off a course down).
+  runwall: (w) => {
+    const out = [], n = w.steps.length, seg = w.len / n
+    if (!w.ruin) out.push(box(w.len, w.h, 2, 0, 0, 0, OLD), ...crenels(w.len, w.h, 2, OLD_DARK))
+    else
+      w.steps.forEach((k, i) => {
+        out.push(box(seg + 0.02, w.h * k, 2, -w.len / 2 + (i + 0.5) * seg, 0, 0, OLD))
+        if (k < 0.6) out.push(box(0.6, 0.45, 0.6, -w.len / 2 + (i + 0.5) * seg, 0, 1.5 - (i % 2) * 3, OLD_DARK, i))
+      })
+    return out
+  },
+  watchtower: (w) => (w.ruin ? [box(3.4, 4.2, 3.4, 0, 0, 0, OLD), box(1.4, 1.1, 3.4, -1, 4.2, 0, OLD), box(0.9, 1.6, 0.12, 0, 0.3, 1.72, '#3a2a1e')] : [box(3.4, 5, 3.4, 0, 0, 0, OLD), ...crenels(3.4, 5, 3.4, OLD_DARK, 1), box(0.9, 1.6, 0.12, 0, 0, 1.72, '#3a2a1e'), roof(3.2, 3.2, 1.6, 0, 5.5, 0, ROOF)]),
 }
 
 // the works, merged: one geometry in vertex colours (null if none)

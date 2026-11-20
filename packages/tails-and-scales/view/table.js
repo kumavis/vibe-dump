@@ -238,6 +238,24 @@ function zoneLine(sx, W, H, deploy) {
   return pts
 }
 
+// (Breakthrough) a zone's edge round polygon `pts` ([{ x, z }]), dashed as
+// the strips' are, a half tail on and off along each side
+function polyLine(pts) {
+  const out = []
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i], b = pts[(i + 1) % pts.length], L = Math.hypot(b.x - a.x, b.z - a.z)
+    for (let t = 0; t < L; t += 1) {
+      const t1 = Math.min(L, t + 0.5)
+      out.push(new THREE.Vector3(a.x + ((b.x - a.x) * t) / L, 0.02, a.z + ((b.z - a.z) * t) / L), new THREE.Vector3(a.x + ((b.x - a.x) * t1) / L, 0.02, a.z + ((b.z - a.z) * t1) / L))
+    }
+  }
+  return out
+}
+// (Breakthrough) a zone's floor over polygon `pts`, flat on the mat
+function polyFloor(pts) {
+  return new THREE.ShapeGeometry(new THREE.Shape(pts.map((p) => new THREE.Vector2(p.x, 0 - p.z)))).rotateX(-Math.PI / 2)
+}
+
 // a mesh's geometry swapped for another, the old one freed
 function regeom(mesh, geometry) {
   mesh.geometry.dispose()
@@ -362,6 +380,9 @@ export class Table {
       this.zoneMeshes[s].position.set(sx * (W / 2 - deploy / 2), 0.008, 0)
       regeom(this.zoneLines[s], new THREE.BufferGeometry().setFromPoints(zoneLine(sx, W, H, deploy)))
     }
+    // ((Breakthrough) the role zones' polygons let go: the next rebuild
+    // draws the new match's, view/index.js)
+    this.shapes = null
     // the tufts and flowers, as many as the board takes (their geometry and
     // material kept)
     const regrow = (old, n) => {
@@ -404,6 +425,29 @@ export class Table {
     this.dresser?.(g, c, this.W, this.H)
     if (marks.length) paintScorch(g, c, this.W, this.H, marks)
     map.needsUpdate = true
+  }
+
+  // (Breakthrough, DESIGN §4.2.12) Each seat's zone as its role's, a
+  // polygon per seat (view/zones.js zoneShapes: the attacker's strip, the
+  // defender's everything behind the wall), drawn in place of the strips;
+  // null puts the strips back (a mission without roles, which never calls
+  // this until a role battle has drawn its polygons: its table is made as
+  // it always was). Read by the minimap too (shapes).
+  zoneShapes(polys) {
+    if (!polys && !this.shapes) return
+    this.shapes = polys
+    for (const s of [0, 1]) {
+      const sx = this.edges[s], m = this.zoneMeshes[s]
+      if (polys) {
+        regeom(m, polyFloor(polys[s]))
+        m.position.set(0, 0.008, 0)
+        regeom(this.zoneLines[s], new THREE.BufferGeometry().setFromPoints(polyLine(polys[s])))
+      } else {
+        regeom(m, new THREE.PlaneGeometry(this.deploy, this.H).rotateX(-Math.PI / 2))
+        m.position.set(sx * (this.W / 2 - this.deploy / 2), 0.008, 0)
+        regeom(this.zoneLines[s], new THREE.BufferGeometry().setFromPoints(zoneLine(sx, this.W, this.H, this.deploy)))
+      }
+    }
   }
 
   // each seat's zone in its colour (colors[seat])

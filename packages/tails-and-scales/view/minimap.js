@@ -317,7 +317,10 @@ export class Minimap {
   // ── Drawing ───────────────────────────────────────────────────────────────
   draw(M, b) {
     const g = this.canvas.getContext('2d'), k = this.k
-    const tkey = `${this.terrainKey(M)}|${this.canvas.width}x${this.canvas.height}|${b.W}x${b.H}`
+    // ((Breakthrough) and the role zones: a battle with sides swapped has
+    // the same chunks' heights, mirrored, and other zones)
+    const zkey = b.zones ? b.zones.map((z) => `${z.length}:${z[0].x.toFixed(2)},${z[0].z.toFixed(2)}`).join(';') : ''
+    const tkey = `${this.terrainKey(M)}|${this.canvas.width}x${this.canvas.height}|${b.W}x${b.H}|${zkey}`
     let painted = false
     if (!this.bg || this.terrainSig !== tkey) {
       this.terrainSig = tkey
@@ -420,10 +423,19 @@ export class Minimap {
     g.fillStyle = '#4d6a2e'
     g.fillRect(x0, y0, b.W * k, b.H * k)
     for (const s of [0, 1]) {
-      const edge = b.edges?.[s] ?? (s ? 1 : -1)
-      const [zx] = this.toPx(edge < 0 ? -b.W / 2 : b.W / 2 - b.deploy, 0)
       g.fillStyle = this.colorOf(s)
       g.globalAlpha = 0.16
+      // ((Breakthrough) a seat's zone as its role's, where the table has
+      // them: view/zones.js, the board's `zones`)
+      if (b.zones) {
+        g.beginPath()
+        b.zones[s].forEach((p, i) => g[i ? 'lineTo' : 'moveTo'](...this.toPx(p.x, p.z)))
+        g.closePath()
+        g.fill()
+        continue
+      }
+      const edge = b.edges?.[s] ?? (s ? 1 : -1)
+      const [zx] = this.toPx(edge < 0 ? -b.W / 2 : b.W / 2 - b.deploy, 0)
       g.fillRect(zx, y0, b.deploy * k, b.H * k)
     }
     g.globalAlpha = 1

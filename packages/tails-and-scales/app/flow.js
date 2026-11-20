@@ -79,6 +79,7 @@ import { viewsFor } from '../present/camera-presets.js'
 import { hudModel, ringLooks, afterSnap, factsOf, turnBegun, resultOf, undoable, PHASE_NAME } from '../present/hud-model.js'
 import { tallyOf, openingOf, roleResult, attackerSeat } from '../present/roles.js'
 import { EventPlayer } from '../view/player.js'
+import { inZone } from '../view/zones.js'
 import { defOf } from '../view/terrain.js'
 import { clock } from '../view/clock.js'
 import { sidesFor, seatsOf, paintSeats, seatInk } from '../ui/theme.js'
@@ -133,6 +134,15 @@ const sameTable = (a, b) => JSON.stringify(tableOf(a)) === JSON.stringify(tableO
 // A backdrop as the title shows it: the match as it stands, at the stage
 // 'title' (its own, a deployment no one plays, is never shown).
 export const onTitle = (g) => ({ ...project(g), stage: 'title' })
+
+// (Breakthrough, S4b) the hit points of every chunk with a ram (the March
+// Wall's gate), by id, as match `g` stands (a broken one's 0): app/flow.js
+// wornEntry's
+const rammed = (g) => {
+  const out = {}
+  for (const c of g.terrain.chunks) if (c.ram !== undefined) out[c.id] = c.alive ? c.hp : 0
+  return out
+}
 
 export class Flow {
   // `view` (view/index.js), `ui` (ui/: { tray, log, card, banner, tooltip,
@@ -245,8 +255,15 @@ export class Flow {
     // Every battle's trace lines, as the match writes them (createMatch's
     // onTrace, which the Session passes): an action's facts for the card,
     // and under ?debug the trace listener's.
+    // ((Breakthrough, S4b) and, keyed by those facts, the hit points of
+    // every chunk with a ram as the action ended: wornEntry)
+    this.wornAt = new WeakMap()
     this.onTrace = (line, g) => {
-      if (/^act /.test(line)) this.acted.push(preview(g, factsOf))
+      if (/^act /.test(line)) {
+        const f = preview(g, factsOf)
+        this.acted.push(f)
+        if (g.terrain?.plan) this.wornAt.set(f, rammed(g))
+      }
       this.traceListener?.line(line, g)
     }
     // What the Session hands over after each entry it accepts: the events
@@ -274,6 +291,9 @@ export class Flow {
         // which a click on the line scrubs to the eve of
         const facts = this.acted.splice(0), k = ses.accepted.length - 1
         events = events.map((e) => (e.t === 'act' ? { ...e, facts: facts.shift() } : e.t === 'pending' ? { ...e, facts: ses.preview(factsOf) } : e.t === 'log' ? { ...e, k } : e))
+        // ((Breakthrough, S4b) and each hurt to a chunk with a ram, the
+        // March Wall's gate, the hit points it is left with: wornEntry)
+        events = this.wornEntry(events, ses.G)
         if (this.traceListener) events = this.traceListener.present(events, this.G)
         // ((F16) under the courtesy fog: marked, and its two fog events round it)
         if (this.fog) events = this.fogEntry(events, ses)
@@ -364,6 +384,18 @@ export class Flow {
       // (F16) the courtesy fog, as an entry opens and closes
       fog: (e) => this.fogPlayed(e),
     }
+    // ((Breakthrough, S4b) a walk's end behind the wall: the first of the
+    // attacker's says so, siegeLine)
+    {
+      const walk = handlers['unit.move']
+      handlers['unit.move'] = (e, M, how) => {
+        const r = walk(e, M, how)
+        const G = this.session?.G, plan = G?.terrain?.plan
+        if (plan && this.acrossOf !== G && e.to && rolesOf(G.setup) && this.unitById(e.u)?.side === attackerSeat(G.setup) && inZone(plan.region, e.to.x, e.to.z)) this.siegeLine('across')
+        return r
+      }
+    }
+    view.terrain.onSiege = (k, x) => this.siegeLine(k, x)
     // ((F16) what the fog marked hidden never reaches its handler)
     for (const k of VEILED) {
       const h = handlers[k]
@@ -466,6 +498,82 @@ export class Flow {
     this.fogLast = null
     this.fogCache.clear()
     if (this.player) this.showFog(null)
+  }
+
+  // (Breakthrough, S4b) A hurt (terrain.hurt) names its chunk and carries
+  // no hit points; the gate is drawn as broken as its hit points say
+  // (view/terrain.js gateStage). Each hurt in an entry's events to a chunk
+  // with a ram (the March Wall's gate), top-level (a blast's) or in a
+  // walk's smashes (a wrecker's ram: `ram` marks it), is handed the hit
+  // points it leaves and its whole (`hp`, `of`), as the act's facts and a
+  // log line's place are. Every action ends in an `act` event, and the
+  // match's hit points as it ended were kept with its facts (onTrace,
+  // `wornAt`), so each hurt is handed those of the action it is part of:
+  // the last of an action's hurts to a chunk (or its break) exactly, any
+  // before it (several blasts in one volley) their share of the fall since
+  // the hit points last handed on (`hpSeen`, made again for each match);
+  // hurts after an entry's last act, the match's as the sink takes it (it
+  // stands after the entry). A watched battle is one entry, the whole
+  // battle: its acts keep each step exact.
+  wornEntry(events, G) {
+    const hurtsIn = (e) => [e, ...(e.t === 'unit.move' ? (e.smashes ?? []).flatMap((sm) => sm.ev) : [])].filter((x) => (x.t === 'terrain.hurt' || x.t === 'terrain.destroy') && G.terrain.byId(x.id)?.ram !== undefined)
+    if (!events.some((e) => hurtsIn(e).length)) return events
+    if (this.hpSeenOf !== G) {
+      this.hpSeenOf = G
+      this.hpSeen = new Map()
+    }
+    const worn = new Map()
+    let pending = []
+    const hand = (hp) => {
+      const byId = new Map()
+      for (const x of pending) byId.set(x.id, [...(byId.get(x.id) ?? []), x])
+      for (const [id, xs] of byId) {
+        const c = G.terrain.byId(id), now = hp[id] ?? (c.alive ? c.hp : 0), was = this.hpSeen.get(id) ?? c.maxHp, m = xs.length
+        xs.forEach((x, k) => x.t === 'terrain.hurt' && worn.set(x, { hp: k + 1 === m ? now : Math.max(1, Math.round(was - ((was - now) * (k + 1)) / m)), of: c.maxHp }))
+        this.hpSeen.set(id, now)
+      }
+      pending = []
+    }
+    for (const e of events) {
+      pending.push(...hurtsIn(e))
+      if (e.t === 'act' && e.facts && this.wornAt.has(e.facts)) hand(this.wornAt.get(e.facts))
+    }
+    if (pending.length) hand({})
+    const dress = (x, ram) => (worn.has(x) ? { ...x, ...worn.get(x), ram } : x)
+    return events.map((e) => {
+      if (e.t === 'unit.move' && e.smashes?.some((sm) => sm.ev.some((x) => worn.has(x)))) return { ...e, smashes: e.smashes.map((sm) => ({ ...sm, ev: sm.ev.map((x) => dress(x, true)) })) }
+      return dress(e, false)
+    })
+  }
+
+  // (Breakthrough, S4b) The siege's moments, a line under the HUD a watcher
+  // sees (the deployment's points banner's, ui/banner.js ArmyBanner, never
+  // waited on): a ram on the gate and what it leaves, the gate's fall, and
+  // the first of the attacker's units across the wall's outer face (its
+  // walk's end behind the line: view/zones.js inZone over the plan's
+  // region). Each as the table plays it, from view/terrain.js's onSiege (a
+  // gate struck or broken) and the walks' handler; a snap says none. On a
+  // board without a plan nothing calls it.
+  siegeLine(k, x = {}) {
+    const G = this.session?.G
+    if (!G?.terrain?.plan || !rolesOf(G.setup)) return
+    const atk = attackerSeat(G.setup), name = `${this.sides[atk].icon} ${this.sides[atk].name}`
+    let text = null
+    if (k === 'ram') text = x.ram ? `${name} ram the gate: ${x.hp} of ${x.of} left` : `The gate is struck: ${x.hp} of ${x.of} left`
+    else if (k === 'down') text = 'The gate is down!'
+    else if (k === 'across' && this.acrossOf !== G) {
+      // (once a match)
+      this.acrossOf = G
+      text = `${name} are over the wall!`
+    }
+    if (text) this.ui.armyBanner?.show(text)
+    // (what the line shows now, and the gate as drawn as it was said: the
+    // ?debug block's, sim/hud-check.mjs; once a match)
+    if (this.saidOf !== G) {
+      this.saidOf = G
+      this.said = []
+    }
+    if (text) this.said.push({ text: this.ui.armyBanner?.el?.textContent ?? null, drawn: this.view.terrain.gateDrawn(G.terrain.plan.gate.id) })
   }
 
   // the match the table shows: the battle's, or on the title the backdrop
@@ -584,6 +692,11 @@ export class Flow {
   // role battle's own end worded by present/roles.js from its setup, and
   // Swap sides offered for one played on this device: swapSides.)
   over(r) {
+    // ((Breakthrough, S4b) the round's banner, which the end follows at
+    // once, gone rather than fading behind the end screen's panel; and the
+    // siege's line with it)
+    this.ui.banner.hide()
+    this.ui.armyBanner?.hide()
     this.human.select(null)
     this.refreshUI()
     const setup = this.session?.G?.setup
@@ -706,12 +819,27 @@ export class Flow {
       ui.result.showVote({ round: G.turn.round, vp: G.turn.vp, votes: P.votes, voters, canMore: this.session.count < OFFER_CAP }, this.sides)
     } else if (ui.result.voting) ui.result.hide()
     view.table.zones(m.zones)
+    view.ways.show(this.waysShown())
     view.units.paintRings(m.rings)
     // (F10c) the standing orders on the labels: every seat played here; and
     // the lines of those picked up (O: all of them)
     view.units.badges(new Map([...(this.peerBadges ?? []), ...(this.human.standing?.glyphs() ?? [])]))
     view.overlay.orderLines(this.human.standing?.lines() ?? [])
   }
+  // (Breakthrough, S4b) The March Wall's four ways marked on the table
+  // (view/ways.js): through a deployment a seat played here makes, by name;
+  // with the player's own unit picked up, there or in the battle, what each
+  // way is to it. Never on the title, the end, a watched battle's play or a
+  // board without a plan.
+  waysShown() {
+    const G = this.atTable(), M = this.player.mirror, plan = G?.terrain?.plan
+    if (!plan || !this.session || !rolesOf(G.setup) || !M || M.stage === 'title' || M.stage === 'over') return null
+    const sel = this.human.sel, mine = sel && this.session.localSeats.includes(sel.side) ? sel : null
+    if (M.stage !== 'deploy' && !mine) return null
+    if (M.stage === 'deploy' && !mine && this.human.deploySeat() < 0) return null
+    return { plan, unit: mine, open: M.chunks[plan.gate.id]?.alive === false }
+  }
+
   // the rings alone (the pointer leaves the table; a unit picked up to
   // deploy)
   refreshRings() {
@@ -812,6 +940,9 @@ export class Flow {
     // the order the table has always been drawn in, so the cosmetic
     // Math.random draws fall as they did (three.js draws some for every
     // object it makes)
+    // ((Breakthrough, S4b) a board with a plan's pieces cut at the mat's
+    // edge, view/terrain.js clipTo, before they are built)
+    view.terrain.clipTo(next.terrain.plan ? next.board : null)
     view.terrain.sync(next.terrain.chunks)
     view.table.scatterTufts()
     // the table as shown: the match as it stands (its board, its units where

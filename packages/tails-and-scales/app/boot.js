@@ -445,7 +445,7 @@ export function boot(location) {
   })
   ui.minimap = new Minimap({
     units: view.units, terrain: view.terrain, mirror: () => player.mirror, camera: view.camera, colorOf, fast: FAST,
-    board: () => ({ W: view.table.W, H: view.table.H, deploy: view.table.deploy, edges: EDGES, objectives: view.objectives.items.map((o) => ({ x: o.g.position.x, z: o.g.position.z })) }),
+    board: () => ({ W: view.table.W, H: view.table.H, deploy: view.table.deploy, edges: EDGES, zones: view.table.shapes ?? null, objectives: view.objectives.items.map((o) => ({ x: o.g.position.x, z: o.g.position.z })) }),
     selected: () => human.standing?.picked().map((u) => u.id) ?? [],
     lines: () => human.standing?.lines() ?? [],
     fog: () => flow.fogShown,
@@ -1393,6 +1393,22 @@ export function boot(location) {
       },
       view: {
         snapDiff,
+        // ((Breakthrough, S4b, not promised) the table's Breakthrough
+        // drawing, for sim/hud-check.mjs: each seat's zone as drawn (the
+        // table's polygons, or null for the strips) and the minimap's; the
+        // gate's stage as drawn (its item's, view/terrain.js gateStage) and
+        // whether it stands; the ways' labels (view/ways.js state); the
+        // siege's lines (app/flow.js siegeLine))
+        breakthrough: () => {
+          const plan = atTable().terrain.plan
+          return {
+            zones: view.table.shapes ?? null, minimap: ui.minimap.board()?.zones ?? null,
+            gate: plan ? terrainView.gateDrawn(plan.gate.id) : null,
+            ways: view.ways.state(),
+            // (each siege line said, as it showed, and the gate as drawn then)
+            said: flow.said ?? [],
+          }
+        },
         // ((F9c's review, not promised) every rider figure on a deck, as the
         // view keeps it: its unit, the place its volleys leave from (the
         // figure's x and z, ride()'s), its mesh's place in the world (its

@@ -1990,10 +1990,12 @@ follows N3.
     tally ("Breakthrough 3 of 5"), the opening banners, the end screen's
     wording and Swap sides, the help's paragraph, the lobby's `attacker`
     field. ui-check, hud-check, lobby-rig.
-  - [ ] **S4b** The view: the per-seat zones on the table and the minimap
+  - [x] **S4b** The view: the per-seat zones on the table and the minimap
     (drawn from `zone`, the defender's behind the wall's face, not
-    `G.board.deploy`), the gate's, breach's and ditch's look;
-    input-check's breakthrough page.
+    `G.board.deploy`), the gate's and ditch's look, the wall cut at the
+    mat, the siege's lines, the ways marked, the dressing's march theme;
+    input-check's breakthrough page (placement; the ram and the climb not
+    yet). DESIGN §4.2.12, As built (S4b).
   - [ ] **S5** Balance and the corpus (DESIGN §4.2.12, As built (S5a,
     S5b)).
     - [x] **S5a, S5b** Pace and balance: army-sim's role mode (the
