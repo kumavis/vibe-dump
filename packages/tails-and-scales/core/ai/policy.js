@@ -180,6 +180,23 @@ function* aiMoveOne(G, u, role, claimed) {
 // off where they score best (bestLanding) once an enemy is within their
 // weapon's range + 3. No draws but the hull's own move's.
 function* aiTransport(G, v, mask, claimed) {
+  // ((Breakthrough, S5a) an attacking hull on a wall's board carries no one
+  // across it: before it first moves, every rider steps off where it scores
+  // best (bestLanding) and walks its own route. (S5b) Measured on the final
+  // tree over random legal lists (army-sim's role mode, seed 1111; DESIGN
+  // §4.2.12's As built (S5a, S5b)): with the riders kept aboard the
+  // attacker wins 56.5%, the Bushtails attacking 67.5% and 66.3% (their
+  // War-Carts carry them through the rammed gate), the Coil 46.0% and
+  // 46.3%; stepped off 52.8%: 51.5%, 52.3%, 59.3% and 48.0%)
+  if (!v.flags.moved && wallOf(G) && sideRole(G, v) === 'attack') {
+    for (const p of riders(G, v)) {
+      if (!mask(p) || p.flags.moved) continue
+      const c = bestLanding(G, p, landing(G, p, v), claimed)
+      if (c < 0) continue
+      emit(G, 'focus', { x: v.pos.x, z: v.pos.z })
+      yield { t: 'disembark', u: p.id, c }
+    }
+  }
   if (!v.flags.moved) {
     for (const p of riders(G, v)) {
       if (!mask(p) || p.flags.moved || !p.t.brawler) continue

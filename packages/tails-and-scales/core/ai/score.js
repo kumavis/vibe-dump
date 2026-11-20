@@ -19,7 +19,7 @@ import { friendsUnder } from '../actions/shoot.js'
 import { inFootprint } from '../actions/settle.js'
 import { HAZARDS } from '../../data/hazards.js'
 import { MISSIONS } from '../../data/mission.js'
-import { wallOf, sideRole, routeFields, routeDist, faceGrid, gateOf, ramsAt } from './route.js'
+import { wallOf, sideRole, routeFields, routeDist, faceGrid, gateOf, ramsAt, nearField } from './route.js'
 import { postsOf } from '../terrain/breakthrough.js'
 import { STEP } from '../nav.js'
 
@@ -709,8 +709,8 @@ export function score(G, u, x, z, ctx, moving) {
       if (walks && hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r - levelSlack(G, climb) > CHARGE_RANGE) continue
       let g = (walks ? levelDist(G, from, e.pos, climb) : hypot(e.pos.x - x, e.pos.z - z)) - u.r - e.r
       // ((Breakthrough) an attacker's way to a defender across the wall is
-      // no shorter than its route fields say: wallApart)
-      if (ctx.bt?.atk) g = Math.max(g, wallApart(G, ctx.bt, e, x, z) - u.r - e.r)
+      // no shorter than its route fields say: wallGap)
+      if (ctx.bt?.atk) g = Math.max(g, wallGap(G, ctx.bt, u, e, x, z))
       if (g > CHARGE_RANGE) continue
       const p = g <= 1 ? 1 : p2D6(Math.ceil(g))
       const back = pre.get(e).back * 0.4
@@ -813,7 +813,9 @@ export function score(G, u, x, z, ctx, moving) {
 // could contest in 4 of 39 cases with neither, 8 of 42 at 1.6 and 15, 12
 // of 53 at 3, 19 of 64 at 5 and 40, so those; ROUTE_REACH, RAM_BLOW (8
 // raised the gate's fall from 20% to 52% of battles and scored no more),
-// FRONT_COST, THREAT and WALL_HOLD chosen, not tuned.
+// FRONT_COST, THREAT and WALL_HOLD chosen, not tuned. (S5b: those are
+// S3's measurements on S3's record; the gate's fall and the ram's way on
+// the final one are route.js RAM_STEP's.)
 export const ROUTE_REACH = 40, RAM_BLOW = 3, FRONT_COST = 30, DENY = 5, THREAT = 12, WALL_HOLD = 1, PROGRESS = 0.4, THIN = 6, DENY_GAIN = 40
 
 // What the wall's terms read of the match for `u`'s scan, once: for the
@@ -826,8 +828,8 @@ export const ROUTE_REACH = 40, RAM_BLOW = 3, FRONT_COST = 30, DENY = 5, THREAT =
 export function wallTerms(G, u, wall, enemies, owners) {
   if (sideRole(G, u) === 'attack') {
     const f = routeFields(G, u, wall), nav = G.nav
-    // (each enemy's cell's route distances, for wallApart)
-    const at = f ? new Map(enemies.map((e) => [e, f.map((d) => d[nav.index(e.pos.x, e.pos.z)] ?? Infinity)])) : null
+    // (each enemy's route distances, for wallGap: contactOf)
+    const at = f ? new Map(enemies.map((e) => [e, contactOf(G, f, u, e)])) : null
     // (the defenders' OC standing on each objective, a squad's by its
     // models left: the thinner held, the more it pulls)
     const held = G.objectives.map((o) => {
@@ -917,26 +919,58 @@ function wallNear(G, u, x, z, ctx, walks, climb) {
   return walks ? levelDist(G, from, bt.post, climb) : hypot(bt.post.x - x, bt.post.z - z)
 }
 
-// A lower bound on the attacker's walk from (x, z) to enemy `e`: a walk
-// changes no route distance by more than its length, so it is at least the
-// most any objective's field drops from here to e's cell (Infinity where
-// e stands on ground the attacker's class never does, a tower's top for a
-// unit that climbs no ladder; -Infinity for a flier, whose way is the
-// straight line). The charge term reads it, so an attacker at the wall's
-// foot no longer weighs a charge at defenders behind the wall that the
-// straight line (or levelDist's way up, which knows the ladders but not
-// the wall) puts within reach.
-function wallApart(G, bt, e, x, z) {
-  if (!bt.f) return -Infinity
-  const ei = bt.at.get(e), i = G.nav.index(x, z)
-  if (!ei || i < 0) return -Infinity
-  let lb = -Infinity
-  for (let k = 0; k < ei.length; k++) {
-    if (!isFinite(ei[k])) return Infinity
-    const d = bt.f[k][i] - ei[k]
+// (Breakthrough, S5b) What attacker `u`'s route fields `f` know of enemy
+// `e`, for wallGap: each objective's route distance at e's own cell, and
+// for each field e's cell is off, the greatest at the cells where u's
+// middle stands in base contact with e (within their radii and CONTACT_PAD
+// of e's middle: route.js nearField). e's cell is off u's field wherever e
+// stands hard against a wall a wider base has no clearance by, or on a
+// tower's top a walker never stands on; the cells it is charged from are
+// on it all the same. { own, far }: far null where own is on every field.
+export const CONTACT_PAD = 0.375
+function contactOf(G, f, u, e) {
+  const j = G.nav.index(e.pos.x, e.pos.z)
+  const own = f.map((d) => (j >= 0 ? d[j] : Infinity))
+  return { own, far: own.every(isFinite) ? null : nearField(G, f, e.pos.x, e.pos.z, e.r + (u.t.fp ? u.t.base : u.r) + CONTACT_PAD) }
+}
+
+// A lower bound on the gap attacker `u` must walk from nav cell `i` to
+// base contact with enemy `e` (`c` its contactOf), by the wall's way: a
+// walk changes no route distance by more than its length, so for each
+// objective's field it is at least the field's drop from here to e's own
+// cell, less both radii (exact on a straight walk in the open), or where
+// e's cell is off that field, its drop to the contact cell where the field
+// is greatest (the walk ends in base contact there: no radii to take off).
+// The most of them; Infinity where neither is on any field (a tower's top
+// for a unit that climbs no ladder). (S5a took the least field value over
+// the contact cells, which on a straight walk with the objective beyond e
+// is e's far side: the gap both radii and the pad too long, a charge that
+// is on out of reach; S3 e's own cell alone, Infinity wherever it is off
+// the field.) wallGap and wallRush both read it. Measured on the final
+// tree (army-sim's role mode, seed 1111): with S3's form the attacker wins
+// 54.0%, the Coil attacking the Bushtails 61.0%; with this one 52.8% and
+// 59.3%. P-wall's charge scenes hold it (sim/property.mjs wallScenes).
+function contactGap(f, c, i, u, e) {
+  let lb = -Infinity, any = false
+  for (let k = 0; k < f.length; k++) {
+    const d = isFinite(c.own[k]) ? f[k][i] - c.own[k] - u.r - e.r : c.far && isFinite(c.far[k]) ? f[k][i] - c.far[k] : NaN
+    if (d !== d) continue
+    any = true
     if (d > lb) lb = d
   }
-  return lb
+  return any ? lb : Infinity
+}
+
+// The gap the charge term reads from (x, z) to enemy `e` on a wall's board
+// (contactGap; -Infinity, no bound, for a flier, whose way is the straight
+// line). So an attacker at the wall's foot no longer weighs a charge at
+// defenders behind the wall that the straight line (or levelDist's way up,
+// which knows the ladders but not the wall) puts within reach.
+export function wallGap(G, bt, u, e, x, z) {
+  if (!bt.f) return -Infinity
+  const c = bt.at.get(e), i = G.nav.index(x, z)
+  if (!c || i < 0) return -Infinity
+  return contactGap(bt.f, c, i, u, e)
 }
 
 // The rest of the wall's terms at (x, z): the attacker's ram (a wrecker's
@@ -965,7 +999,7 @@ function wallScore(G, u, x, z, ctx, moved, canShoot, ci) {
 // objective by its route never (it arrives walking); a line unit on an
 // objective, and a raider or a shooter with a shot from its pick, never
 // (an Advance forfeits the shot); a brawler (melee, line or raider) with an
-// enemy within its move and 8 of it by the wall's way (wallApart's bound
+// enemy within its move and 8 of it by the wall's way (contactGap's bound
 // beside the gap) never (it may charge); every other attacker does: the
 // route is long and the wall's fire is on it while it walks. No draw.
 export function wallRush(G, u, role, pick) {
@@ -981,10 +1015,7 @@ export function wallRush(G, u, role, pick) {
   if (role === 'melee' || role === 'line' || role === 'raider') {
     for (const e of enemiesOf(G, u)) {
       let g = gap(u, e)
-      if (f && i >= 0) {
-        const j = nav.index(e.pos.x, e.pos.z)
-        for (let k = 0; k < f.length && j >= 0; k++) g = Math.max(g, isFinite(f[k][j]) ? f[k][i] - f[k][j] - u.r - e.r : Infinity)
-      }
+      if (f && i >= 0) g = Math.max(g, contactGap(f, contactOf(G, f, u, e), i, u, e))
       if (g < u.t.M + 8) return false
     }
   }

@@ -52,11 +52,15 @@ import { moveMode, climbs, groundOnly } from '../actions/move.js'
 // objective's holds it at its level (core/queries.js controlHigh's HIGH).
 export const HOLD = 2.6, HOLD_Y = 1.2
 // The tails a blow still to strike adds to a wrecker's way
-// through a standing gate: about one move of the War-Cart, the Brute or the
-// Howdah (8, 6 and 6 tails) less the walk the ram's move still makes.
-// Chosen so, not tuned: with it the wreckers take the breach far more often
-// than the gate (S3's As built, DESIGN §4.2.12)
-export const RAM_STEP = 4
+// through a standing gate. (S3) 4, about one move of the War-Cart, the
+// Brute or the Howdah (8, 6 and 6 tails) less the walk the ram's move
+// still makes, left the wreckers taking the breach far more often than the
+// gate. ((Breakthrough, S5b) 1: the gate is a way in. Measured on the final
+// record (DESIGN §4.2.12's As built (S5a, S5b)): where the attacker fields
+// a wrecker, on the presets over boards 1-100, the gate falls in 95.5% of
+// battles and is 26.2% of their crossings (at 4: 12.0% and 1.0%); over
+// random legal lists, seed 1111, the attacker wins 52.8% (at 4: 46.6%).)
+export const RAM_STEP = 1
 // a field's radius is rounded up to a multiple of this (a squad's disc
 // shrinks as it loses models; each size would be a field of its own)
 const R_STEP = 0.05
@@ -161,6 +165,24 @@ export function routeDist(G, f, o, x, z) {
   if (!f) return Math.max(0, hypot(o.x - x, o.z - z) - HOLD)
   const i = G.nav.index(x, z)
   return i < 0 ? Infinity : f[o.i][i]
+}
+
+// (Breakthrough) The greatest finite value of each field `f` (an
+// objective's, in G.objectives order) over the cells whose middle stands
+// within `rr` of (x, z): where a unit whose middle comes so near an enemy
+// standing at (x, z) may stand, for a charge's base contact (its radius
+// and the enemy's), the farthest of them from the objective. -Infinity for
+// a field none of them is on. No draw.
+export function nearField(G, f, x, z, rr) {
+  const nav = G.nav, out = f.map(() => -Infinity)
+  const ix0 = Math.max(0, Math.floor((x - rr + nav.W / 2) / nav.cell)), ix1 = Math.min(nav.nx - 1, Math.floor((x + rr + nav.W / 2) / nav.cell))
+  const iz0 = Math.max(0, Math.floor((z - rr + nav.H / 2) / nav.cell)), iz1 = Math.min(nav.nz - 1, Math.floor((z + rr + nav.H / 2) / nav.cell))
+  for (let iz = iz0; iz <= iz1; iz++) for (let ix = ix0; ix <= ix1; ix++) {
+    const i = iz * nav.nx + ix
+    if (hypot(nav.x(i) - x, nav.z(i) - z) > rr) continue
+    for (let k = 0; k < f.length; k++) if (isFinite(f[k][i]) && f[k][i] > out[k]) out[k] = f[k][i]
+  }
+  return out
 }
 
 // The face's grid: every cell's faceDist (behind the face above 0), worked
