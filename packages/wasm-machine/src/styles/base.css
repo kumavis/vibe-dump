@@ -181,7 +181,7 @@ code {
 .mbeat { display: none; }
 
 /* panes */
-.pane { background: var(--pane); display: flex; flex-direction: column; min-width: 0; min-height: 0; position: relative; }
+.pane { background: var(--pane); display: flex; flex-direction: column; min-width: 0; min-height: 0; position: relative; overflow: hidden; }
 .pane-head { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px 0 12px; flex: 0 0 auto; border-bottom: 1px solid var(--line); min-width: 0; }
 .pane-head.sub { border-top: 1px solid var(--line); }
 .pane-label { font-size: 10.5px; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; color: var(--fg3); white-space: nowrap; }
@@ -250,3 +250,6 @@ input[type='text'], input[type='search'], select {
 }
 input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
 input.bad { border-color: var(--trap); background: var(--trap-bg); }
+.fx-leave { z-index: 50; box-shadow: var(--shadow); overflow: hidden; pointer-events: none; }
+/* ?present: capture mode for recordings */
+:root[data-present] .toast, :root[data-present] .prog-name, :root[data-present] .drop-hint { display: none !important; }

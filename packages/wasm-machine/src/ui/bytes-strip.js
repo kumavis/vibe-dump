@@ -25,12 +25,12 @@ export class BytesStrip {
       h('div', { class: 'pane-head' }, h('span', { class: 'pane-label' }, 'Bytes'), this.title, h('span', { class: 'grow' }), this.legend),
       this.scroll, this.tip)
     this.scroll.addEventListener('scroll', rafThrottle(() => this.renderRows()))
-    this.rows.addEventListener('mousemove', (e) => {
+    this.rows.addEventListener('mouseover', (e) => {
       const b = e.target.closest('[data-o]')
       this.hoverAt(b ? +b.dataset.o : null)
     })
     this.rows.addEventListener('mouseleave', () => this.hoverAt(null))
-    this.groups.addEventListener('mousemove', (e) => {
+    this.groups.addEventListener('mouseover', (e) => {
       const b = e.target.closest('[data-o]')
       this.hoverAt(b ? +b.dataset.o : null)
     })

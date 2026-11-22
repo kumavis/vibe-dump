@@ -26,7 +26,7 @@ export const LESSONS = [
       { at: 1, op: 'i32.const', spot: 'bytes', text: '`i32.const 2` pops nothing and pushes the i32 value 2. The 2 is an **immediate**: it is part of the instruction\'s encoding (`41 02` in the Bytes strip), not taken from the stack.' },
       { at: 2, op: 'i32.const', spot: 'stack', text: 'Another constant. Two i32 values are on the stack, 3 on top. The next instruction, `i32.add`, has the type `[i32 i32] → [i32]`.' },
       { at: 3, op: 'i32.add', spot: 'stack', text: '`i32.add` popped both operands and pushed their sum, 5. Its operands are not named anywhere in the code: they are simply the top two values of the stack.' },
-      { at: 4, op: 'i32.const', text: 'Push 7. The stack is now [5 7].' },
+      { at: 4, op: 'i32.const', spot: 'stack', text: '`i32.const 7` pushed 7 on top of the 5 that `i32.add` left behind. The stack is now [5 7]: exactly the operands the next instruction, `i32.mul`, will pop. Step (→) to multiply, or back (←) to rewind.' },
       { at: 5, op: 'i32.mul', spot: 'stack', text: '`i32.mul` pops 5 and 7 and pushes 35. Each instruction\'s type fixes how many values it pops and pushes, so the stack height at every point in the code is known before the code runs.' },
       { at: 6, op: 'end', spot: 'code', text: '`end` closes the function body. The result type is `[i32]`, so exactly one i32 must remain on the stack: 35 is returned. Step back (←) to rewind, or go on to lesson 2.' },
     ],

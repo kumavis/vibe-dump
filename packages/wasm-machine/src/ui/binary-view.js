@@ -36,7 +36,7 @@ export class BinaryView {
       h('div', { class: 'bin-body' }, h('div', { class: 'bin-col' }, this.hex, this.detail), h('div', { class: 'bin-col tree-col' }, this.treeEl)))
     this.hex.addEventListener('scroll', rafThrottle(() => this.renderHex()))
     this.treeEl.addEventListener('scroll', rafThrottle(() => this.renderTree()))
-    this.hexRows.addEventListener('mousemove', (e) => {
+    this.hexRows.addEventListener('mouseover', (e) => {
       const c = e.target.closest('[data-o]')
       this.setHover(c ? this.leafAt(+c.dataset.o) : null, 'hex')
     })
@@ -45,7 +45,7 @@ export class BinaryView {
       const c = e.target.closest('[data-o]')
       if (c) this.select(this.leafAt(+c.dataset.o), { scrollHex: false })
     })
-    this.treeRows.addEventListener('mousemove', (e) => {
+    this.treeRows.addEventListener('mouseover', (e) => {
       const r = e.target.closest('[data-k]')
       this.setHover(r ? this.flat[+r.dataset.k].node : null, 'tree')
     })

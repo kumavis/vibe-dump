@@ -7,7 +7,7 @@ import './styles/side.css'
 import helloUrl from '../test/fixtures/hello.wasm?url'
 
 import { h, icon, s } from './ui/dom.js'
-import { prefs, setPref, SPEEDS } from './ui/prefs.js'
+import { prefs, setPref, setTransient } from './ui/prefs.js'
 import { Session } from './ui/session.js'
 import { CodePane } from './ui/code-pane.js'
 import { StackPane } from './ui/stack-pane.js'
@@ -25,6 +25,7 @@ import { EXAMPLES } from './ui/examples.js'
 import { LESSONS } from './ui/lessons.js'
 import { typeClass } from './ui/format.js'
 import { STAGE_TITLE } from './ui/explain.js'
+import { automation } from './ui/automation.js'
 
 const NEW_WAT = `(module
   (func $add (export "add")
@@ -217,10 +218,6 @@ class App {
     if (this.view === 'binary') this.binary.ensure()
     const p = this.session.prog
     this.progName.textContent = p ? p.name : ''
-    const mod = this.session.module
-    const hasStore = !!mod && !!this.session.machine && (mod.memories.length || mod.tables.length || mod.globals.length || mod.imports.length)
-    this.machineEl.classList.toggle('no-store', !hasStore)
-    this.mtabs.querySelector('[data-t="store"]').hidden = !hasStore
   }
 
   async loadExample(id) {
@@ -403,7 +400,13 @@ class App {
     const n0 = this.stack.n
     const cells = []
     for (let i = n0 - ev.popped.length; i < n0; i++) cells.push(this.stack.cellRect(i))
-    return { cells, n0 }
+    // a return pops the callee's frame card: keep a copy of it to animate away
+    let card = null
+    if (ev.control && ev.control.kind === 'return') {
+      const el = this.frames.frames.querySelector('.frame.top')
+      if (el) card = { el: el.cloneNode(true), rect: el.getBoundingClientRect(), head: el.querySelector('.frame-h').getBoundingClientRect() }
+    }
+    return { cells, n0, card }
   }
 
   choreograph(ev, pre, dur) {
@@ -433,6 +436,15 @@ class App {
     if (ev.control && ev.control.kind === 'call' && !ev.control.crossInstance) {
       const nArgs = ev.control.args ? ev.control.args.length : ev.popped.length - (ev.control.indirect ? 1 : 0)
       for (let k = 0; k < nArgs; k++) ov.fly(pre.cells[k], rect(this.frames.localEl(topF, k)), { ...ghost(ev.popped[k]), dur: dur * 1.2, delay: k * 40 })
+    }
+    if (pre.card) {
+      // the callee's frame leaves; its results come out of it onto the caller's stack
+      ov.leave(pre.card.el, pre.card.rect, { dur: dur * 1.1 })
+      const res = ev.pushed
+      res.forEach((v, k) => {
+        const to = this.stack.cellEl(top - (res.length - 1 - k))
+        ov.fly(pre.card.head, rect(to), { ...ghost(v), dur: dur * 1.25, delay: dur * 0.15 + k * 40, hide: to })
+      })
     }
     const acc = ev.memWrite || ev.memRead
     if (acc && pre.cells[0] && this.store.tab === 'memory') {
@@ -527,14 +539,44 @@ class App {
     })
   }
 
-  // ---- first paint: a short intro on lesson 1 ----
+  // ---- first paint: lesson 1 a few steps in ----
+  // Three steps land at once (no motion), then i32.const 7 executes with full
+  // motion, so ~1 s after load the stack holds [5 7] and i32.mul is next.
   intro() {
     const s = this.session
-    const steps = [380, 760]
-    this.introT = steps.map((t) => setTimeout(() => {
-      if (s.machine && s.machine.status === 'ready' && this.mode === 'tutorial' && this.tutorial.lesson.id === 1) s.step()
-    }, t))
+    const ok = () => s.machine && s.machine.status === 'ready' && this.mode === 'tutorial' && this.tutorial.lesson.id === 1
+    this.introT = [
+      setTimeout(() => {
+        if (!ok()) return
+        let ev = null
+        for (let i = 0; i < 3; i++) ev = s._step()
+        s.emit('update', { ev, anim: 0 })
+      }, 120),
+      setTimeout(() => ok() && s.machine.steps === 3 && s.step(), 520),
+    ]
   }
+  /**
+   * ?present: a clean capture mode for recording scripts. Preferences come
+   * from the query and are not saved; toasts and nonessential chrome hide;
+   * there is no intro. ?present&lesson=4&theme=light&motion=on&view=binary
+   */
+  present(q) {
+    setTransient()
+    document.documentElement.dataset.present = ''
+    if (q.has('theme')) setPref('theme', q.get('theme') === 'light' ? 'light' : 'dark')
+    if (q.has('motion')) setPref('anim', !/^(off|0|false|no)$/.test(q.get('motion')))
+    this.applyTheme()
+    this.applyAnim()
+    if (q.has('example')) {
+      this.setMode('debugger', { load: false })
+      this.loadExample(q.get('example'))
+    } else if (q.has('lesson')) {
+      this.setMode('tutorial', { load: false })
+      this.tutorial.load(Math.max(1, Math.min(LESSONS.length, +q.get('lesson') || 1)))
+    } else this.route()
+    if (q.has('view')) this.setView(q.get('view') === 'binary' ? 'binary' : 'machine')
+  }
+
   cancelIntro() {
     if (this.introT) this.introT.forEach(clearTimeout)
     this.introT = null
@@ -550,4 +592,7 @@ function logo() {
 
 const app = new App(document.getElementById('root'))
 window.__wasmMachine = app // for the smoke test and the curious
-if (app.route() === 'intro') app.intro()
+app.api = automation(app)
+const q = new URLSearchParams(location.search)
+if (q.has('present')) app.present(q)
+else if (app.route() === 'intro') app.intro()

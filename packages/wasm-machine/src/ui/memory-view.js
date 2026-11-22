@@ -37,7 +37,7 @@ export class MemoryView {
     this.el = h('div', { class: 'mem' }, this.toolbar, h('div', { class: 'mem-body' }, this.grid, this.insp), this.empty)
     this.scroller.addEventListener('scroll', rafThrottle(() => this.onScroll()))
     this.grid.addEventListener('wheel', (e) => this.onWheel(e), { passive: false })
-    this.rows.addEventListener('mousemove', (e) => {
+    this.rows.addEventListener('mouseover', (e) => {
       const c = e.target.closest('[data-a]')
       const a = c ? +c.dataset.a : null
       if (a !== this.hover) {
@@ -156,7 +156,17 @@ export class MemoryView {
     const p = this.session.prog
     if (!mem) {
       this.empty.hidden = false
-      this.empty.textContent = p && p.module ? 'This module declares no linear memory. Lesson 8 adds one.' : 'No module loaded.'
+      const mod = p && p.module
+      if (!mod || !this.session.machine) {
+        this.empty.textContent = p && p.error ? 'No instance: the module did not load.' : 'No module loaded.'
+      } else {
+        // a quiet summary of the whole store, so the pane reads as part of the machine
+        const n = (k) => mod.imports.filter((i) => i.kind === k).length
+        const row = (name, count, note) => `<div class="st-r${count ? '' : ' none'}"><span class="st-k">${name}</span><span class="st-v mono">${count}</span><span class="st-n">${note}</span></div>`
+        this.empty.innerHTML = `<div class="st-h">This module declares no linear memory.</div>
+          <div class="st">${row('memories', mod.memories.length, 'byte arrays for load / store')}${row('tables', mod.tables.length, 'references for call_indirect')}${row('globals', mod.globals.length, 'module-wide typed values')}${row('host imports', n('func'), 'functions the host provides')}</div>
+          <div class="st-f">The store is everything an instance owns besides its stack and frames. Code that touches none of it computes with the operand stack and locals only.</div>`
+      }
       this.toolbar.hidden = true
       this.el.querySelector('.mem-body').hidden = true
       return

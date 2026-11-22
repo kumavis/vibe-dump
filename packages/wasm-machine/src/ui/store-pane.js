@@ -58,7 +58,7 @@ export class StorePane {
     const m = this.session.machine
     const mod = this.session.module
     let tab = 'memory'
-    if (m && !m.memory) tab = mod && mod.globals.length ? 'globals' : mod && mod.tables.length ? 'tables' : mod && mod.imports.some((i) => i.kind === 'func') ? 'output' : 'memory'
+    if (m && !m.memory) tab = mod && mod.tables.length ? 'tables' : mod && mod.globals.length ? 'globals' : mod && mod.imports.some((i) => i.kind === 'func') ? 'output' : 'memory'
     this.select(tab)
   }
 
@@ -170,7 +170,7 @@ export class StorePane {
       const e = list[i]
       const k = e.kind
       const prefix = k === 'host' ? '→ host ' : k === 'unresolved' ? 'unresolved import called: ' : k === 'unresolved-import' ? 'unresolved import, stubbed: ' : k === 'invoke' ? '▸ invoke ' : ''
-      html += `<div class="con-line ${k}">${prefix ? `<span class="con-p">${prefix}</span>` : ''}${esc(e.text.replace(/\n$/, ''))}</div>`
+      html += `<div class="con-line ${k}">${prefix ? `<span class="con-p">${prefix}</span>` : ''}${esc(e.text.replace(/\n$/, ''))}${e.count > 1 ? `<span class="con-n"> ×${e.count.toLocaleString()} calls</span>` : ''}</div>`
     }
     this.out.innerHTML = html
     this.out.scrollTop = this.out.scrollHeight

@@ -69,22 +69,23 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const chromiumPath = arg('--chromium') || process.env.CHROMIUM_PATH
 const browser = await chromium.launch(chromiumPath ? { executablePath: chromiumPath } : {})
 
-async function open(hash = '', { width = 1280, height = 800, theme = 'dark', reducedMotion = 'no-preference' } = {}) {
-  const ctx = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1, colorScheme: theme, reducedMotion })
+async function open(hash = '', { width = 1280, height = 800, theme = 'dark', reducedMotion = 'no-preference', dpr = 1, query = '' } = {}) {
+  const ctx = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: dpr, colorScheme: theme, reducedMotion })
   const page = await ctx.newPage()
   page.setDefaultTimeout(8000)
   page.on('console', (m) => {
-    if (m.type() === 'error') errors.push(`[console] ${m.text()}`)
+    if (m.type() === 'error') errors.push(`[console] ${m.text()} ${m.location().url || ''}`)
   })
   page.on('pageerror', (e) => errors.push(`[pageerror] ${e.message}`))
   page.on('response', (r) => {
     if (r.status() >= 400) errors.push(`[http ${r.status()}] ${r.url()}`)
   })
-  await page.goto(base + (hash ? '#' + hash : ''))
+  await page.goto(base + query + (hash ? '#' + hash : ''))
   await page.waitForFunction(() => window.__wasmMachine && window.__wasmMachine.session.prog)
   return page
 }
 async function section(name, fn) {
+  if (process.env.SMOKE_ONLY && !name.includes(process.env.SMOKE_ONLY)) return
   console.log(name)
   try {
     await fn()
@@ -123,7 +124,8 @@ await section('first paint', async () => {
   await sleep(1200)
   await shot(page, '01-first-paint-1280')
   const s = await st(page)
-  check(s.steps === 2, `intro auto-played two steps (steps=${s.steps})`)
+  check(s.steps === 4, `intro sits four steps in (steps=${s.steps})`)
+  check(await page.locator('.store-pane').isVisible(), 'store pane visible even without a memory')
   check(await page.locator('.stack-pane .cell').count() === 2, 'two values on the stack at first paint')
   check(await page.locator('.cl.next').count() === 1, 'next instruction marked')
   check((await page.locator('.instr-bar').innerText()).includes('[i32 i32]'), 'instruction bar shows the i32.add signature')
@@ -313,7 +315,8 @@ await section('binary view', async () => {
   check((await page.locator('.tn.hov').innerText()).includes('literal 2'), 'hovering hex byte 0x23 highlights its tree node')
   await page.locator('.tn', { hasText: 'i32.const 7' }).first().hover()
   await sleep(100)
-  check(await page.locator('.hb span.hov').count() === 2, 'hovering a tree node (i32.const 7) highlights its 2 bytes')
+  const hovN = await page.locator('.hb span.hov').count()
+  check(hovN === 2, `hovering a tree node (i32.const 7) highlights its 2 bytes (${hovN}: ${await page.evaluate(() => document.querySelector('.tn.hov') && document.querySelector('.tn.hov').innerText.replace(/\s+/g, ' '))})`)
   await page.locator('.tn', { hasText: 'body size' }).first().click()
   await page.mouse.move(5, 5)
   await sleep(100)
@@ -365,6 +368,64 @@ await section('390 px phone', async () => {
   await shot(page, 'phone-code')
   await page.context().close()
 })
+
+// ---------------------------------------------------------------- returns, host calls, present mode, portrait
+await section('return animation', async () => {
+  const page = await open('lesson-7')
+  for (let i = 0; i < 34; i++) await page.keyboard.press('ArrowRight')
+  await sleep(500)
+  await page.keyboard.press('ArrowRight') // step 35: the innermost fact returns
+  await sleep(90)
+  check(await page.locator('.fx-layer .fx-leave').count() === 1, 'returning frame card animates away')
+  check(await page.locator('.fx-layer .fx-ghost').count() >= 1, 'the result flies onto the caller\'s stack')
+  await shot(page, 'return-mid-flight')
+  await sleep(600)
+  check(await page.locator('.fx-layer > *:not(svg)').count() === 0, 'return animation cleans up')
+  await page.context().close()
+})
+
+await section('host calls at max speed', async () => {
+  const page = await open('lesson-9')
+  await page.evaluate(() => window.__wasmMachine.transport.setSpeedIndex(10))
+  await page.keyboard.press(' ')
+  await page.waitForFunction(() => window.__wasmMachine.session.machine.status === 'done')
+  await sleep(100)
+  const con = await page.locator('.console').innerText()
+  check(/env\.log\(42\)/.test(con), 'host call env.log(42) logged when running at max speed')
+  await page.context().close()
+})
+
+await section('present mode + automation api', async () => {
+  const page = await open('', { query: '?present&lesson=4&theme=light&motion=on' })
+  const st0 = await page.evaluate(() => window.__wasmMachine.api.state())
+  check(st0.lesson === 4 && st0.steps === 0, `?present&lesson=4 opens lesson 4 without an intro (${st0.lesson}, ${st0.steps})`)
+  check(await page.evaluate(() => document.documentElement.dataset.theme) === 'light', '?present&theme=light applies')
+  const st1 = await page.evaluate(() => window.__wasmMachine.api.step(7))
+  check(st1.steps === 7 && st1.stack.length === 1 && st1.stack[0].value === '-1', 'api.step(7) resolves after the branch with [-1]')
+  const st2 = await page.evaluate(() => window.__wasmMachine.api.lesson(3))
+  check(st2.lesson === 3 && st2.phase === 'walk', 'api.lesson(3) jumps to the validation walk')
+  const st3 = await page.evaluate(() => window.__wasmMachine.api.play({ gap: 0 }))
+  check(st3.status === 'done' && st3.results[0] === '3.5', 'api.play walks validation then runs to the result')
+  await page.context().close()
+})
+
+for (const [w, hgt, dpr] of [[540, 960, 2], [1080, 1920, 1]]) {
+  await section(`portrait ${w}x${hgt}`, async () => {
+    const page = await open('lesson-7', { width: w, height: hgt, dpr })
+    for (let i = 0; i < 27; i++) await page.keyboard.press('ArrowRight')
+    await sleep(500)
+    const vis = async (sel) => {
+      const b = await page.locator(sel).boundingBox()
+      return !!b && b.width > 100 && b.height > 80 && b.y + b.height <= hgt + 1
+    }
+    check(await vis('.code-pane') && await vis('.stack-pane') && await vis('.frames-pane'), `portrait ${w}x${hgt}: code, stack and frames all on screen`)
+    check(await vis('.tutorial') && await vis('.transport'), `portrait ${w}x${hgt}: narration and transport on screen`)
+    const sw = await page.evaluate(() => document.documentElement.scrollWidth)
+    check(sw <= w, `portrait ${w}x${hgt}: no horizontal scroll (${sw})`)
+    await shot(page, `portrait-${w}x${hgt}`)
+    await page.context().close()
+  })
+}
 
 await browser.close()
 server.close()

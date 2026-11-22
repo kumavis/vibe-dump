@@ -29,9 +29,15 @@ export const prefs = {
 export const SPEEDS = [1, 2, 4, 8, 15, 30, 60, 250, 1000, 10000, Infinity]
 export const speedLabel = (v) => (v === Infinity ? 'max' : v >= 1000 ? v / 1000 + 'k/s' : v + '/s')
 
+let transient = false
+/** Stop persisting preferences (presentation / capture mode). */
+export function setTransient() {
+  transient = true
+}
+
 export function setPref(k, v) {
   prefs[k] = v
-  try {
+  if (!transient) try {
     localStorage.setItem(KEY, JSON.stringify(prefs))
   } catch {
     /* storage unavailable: keep in memory */

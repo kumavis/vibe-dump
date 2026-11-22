@@ -50,6 +50,19 @@ export class Overlay {
     })
   }
 
+  /** A copy of an element (a frame card) sliding out and fading where it stood. */
+  leave(el, rect, { dur = 280 } = {}) {
+    if (!rect || !rect.width || !dur) return
+    el.classList.add('fx-leave')
+    Object.assign(el.style, { position: 'fixed', left: rect.left + 'px', top: rect.top + 'px', width: rect.width + 'px', height: rect.height + 'px', margin: 0 })
+    this.el.appendChild(el)
+    const a = el.animate([
+      { transform: 'none', opacity: 1 },
+      { transform: 'translateX(24px) scale(.97)', opacity: 0 },
+    ], { duration: dur, easing: EASE, fill: 'both' })
+    this._track(a, () => el.remove())
+  }
+
   /** A curved link from one rect to another that draws in and fades. */
   ribbon(from, to, { dur = 420, cls = '' } = {}) {
     if (!from || !to || !dur) return

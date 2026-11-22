@@ -52,7 +52,7 @@ export class CodePane {
       if (e.target.closest('.ln')) this.toggleBpAtLine(line)
     })
     this.bar = h('div', { class: 'instr-bar', 'aria-live': 'polite' })
-    this.measure = h('span', { class: 'code-measure', 'aria-hidden': 'true' }, 'MMMMMMMMMM')
+    this.measure = h('span', { class: 'code-measure', 'aria-hidden': 'true' }, 'M'.repeat(100))
     this.el = h('section', { class: 'pane code-pane', 'data-pane': 'code', 'aria-label': 'Code' }, header, this.banner, this.scroll, this.bar, this.measure)
     new ResizeObserver(() => this.renderWindow()).observe(this.scroll)
   }
@@ -254,8 +254,9 @@ export class CodePane {
   }
 
   measureChar() {
-    const w = this.measure.getBoundingClientRect().width
-    if (w > 0) this.chW = w / 10
+    // layout px (offsetWidth), not screen px: stays right under CSS zoom
+    const w = this.measure.offsetWidth
+    if (w > 0) this.chW = w / 100
   }
 
   renderWindow() {

@@ -117,6 +117,7 @@ export class Session {
         args: opts.args || [prog.name.replace(/\.wasm$/, '')],
         onUnresolved: (c) => this._out('unresolved', `${c.module}.${c.name}(${c.args.map(String).join(', ')})`),
       })
+      this._wrapHostCalls(module, prog.host)
       prog.machine = instantiate(module, prog.host.imports, { start: 'pending', history: HISTORY })
     } catch (e) {
       return this._failLoad({ stage: 'instantiate', error: e, wat: opts.wat, sourceMap: opts.sourceMap, bytes, module, opts })
@@ -151,6 +152,57 @@ export class Session {
     return m.exports.filter((e) => e.kind === 'func').map((e) => ({ name: e.name, index: e.index, type: m.funcs[e.index].type }))
   }
 
+  /**
+   * Log every call into a (resolved) host import, whatever the run speed:
+   * events only exist when stepping, so the imports themselves are wrapped.
+   * Stubs for unresolved imports are logged by onUnresolved instead.
+   */
+  _wrapHostCalls(module, host) {
+    const stub = new Set(host.unresolved.map((u) => u.module + '\0' + u.name))
+    for (const imp of module.imports) {
+      if (imp.kind !== 'func' || stub.has(imp.module + '\0' + imp.name)) continue
+      const ns = host.imports[imp.module]
+      const fn = ns && ns[imp.name]
+      if (typeof fn !== 'function' || fn.__logged) continue
+      const label = `${imp.module}.${imp.name}`
+      const caller = fn.withCaller === true
+      const session = this
+      const w = function (...a) {
+        session._hostCall(label, caller ? a.slice(1) : a)
+        return fn.apply(this, a)
+      }
+      Object.assign(w, fn)
+      w.__logged = true
+      ns[imp.name] = w
+    }
+  }
+
+  _hostCall(label, args) {
+    const p = this.prog
+    const text = `${label}(${args.map((x) => String(x)).join(', ')})`
+    const last = p.output[p.output.length - 1]
+    // at run speeds, coalesce back-to-back calls of the same import into one line
+    if (this.running && last && last.kind === 'host' && last.run === p.runId && last.label === label) {
+      last.count = (last.count || 1) + 1
+      last.text = text
+      last.step = p.machine ? p.machine.steps + 1 : 0
+      this._outDirty()
+      return
+    }
+    this._out('host', text)
+    p.output[p.output.length - 1].label = label
+  }
+
+  _outDirty() {
+    // repaint the console at most once per frame while running
+    if (this._outQueued) return
+    this._outQueued = true
+    requestAnimationFrame(() => {
+      this._outQueued = false
+      this.emit('output', {})
+    })
+  }
+
   // ---- output console ----
   _out(kind, text) {
     const p = this.prog
@@ -160,7 +212,8 @@ export class Session {
     if ((kind === 'stdout' || kind === 'stderr') && last && last.kind === kind && last.run === p.runId && last.step === step && !last.text.endsWith('\n')) last.text += text
     else p.output.push({ kind, text, step, run: p.runId })
     if (p.output.length > 5000) p.output.splice(0, p.output.length - 5000)
-    this.emit('output', {})
+    if (this.running) this._outDirty()
+    else this.emit('output', {})
   }
   _trimOutput() {
     const p = this.prog
@@ -234,9 +287,6 @@ export class Session {
       p.events.set(ev.step, ev)
       if (p.events.size > EVENT_KEEP) p.events.delete(p.events.keys().next().value)
       if (ev.step > p.maxStep) p.maxStep = ev.step
-      if (ev.control && ev.control.kind === 'host-call' && !ev.control.unresolved) {
-        this._out('host', `${ev.control.module}.${ev.control.field}(${ev.control.args.map((a) => String(a.value ?? a)).join(', ')})`)
-      }
     }
     return ev
   }

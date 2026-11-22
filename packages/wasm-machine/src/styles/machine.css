@@ -213,7 +213,8 @@
 
 /* ---------- store ---------- */
 .store-pane .pane-head { gap: 12px; }
-.tabs { display: flex; gap: 2px; height: 100%; }
+.tabs { display: flex; gap: 2px; height: 100%; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
 .tab { border: 0; background: none; color: var(--fg3); padding: 0 8px; font-size: 12.5px; cursor: pointer; border-bottom: 2px solid transparent; display: inline-flex; align-items: center; gap: 5px; }
 .tab:hover { color: var(--fg); }
 .tab[aria-selected='true'] { color: var(--fg); border-bottom-color: var(--accent); }
@@ -364,9 +365,13 @@
 .bgp.trap .bgl { color: var(--trap); }
 .bgp.hov { background: var(--raise2); }
 
-/* modules with no store: give the stack and frames the full height */
-.machine.no-store { grid-template-areas: 'code stack frames' 'bytes stack frames'; }
-.machine.no-store .store-pane { display: none; }
-@media (max-width: 980px) {
-  .machine.no-store { grid-template-rows: minmax(0, 1fr) 210px; grid-template-areas: 'code stack' 'bytes frames'; }
-}
+.con-n { color: var(--fg3); }
+.mem-empty { padding: 14px 16px; display: grid; gap: 10px; align-content: start; overflow-y: auto; }
+.st-h { color: var(--fg2); font-size: 13px; }
+.st { display: grid; gap: 2px; border: 1px solid var(--line); border-radius: 7px; padding: 6px 10px; background: var(--pane); }
+.st-r { display: grid; grid-template-columns: 96px 2ch 1fr; gap: 10px; align-items: baseline; font-size: 12.5px; padding: 2px 0; }
+.st-k { color: var(--fg2); }
+.st-v { color: var(--fg); text-align: right; }
+.st-n { color: var(--fg3); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.st-r.none .st-v { color: var(--fg3); }
+.st-f { color: var(--fg3); font-size: 12px; line-height: 1.5; max-width: 60ch; }
