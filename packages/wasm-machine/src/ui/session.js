@@ -29,8 +29,21 @@ export class Session {
     return () => this.subs.get(type).delete(fn)
   }
   emit(type, detail = {}) {
+    if (type === 'update') this._ver = (this._ver || 0) + 1
     const set = this.subs.get(type)
     if (set) for (const fn of set) fn(detail)
+  }
+
+  /** machine.callStack, computed once per update. */
+  frames() {
+    const m = this.machine
+    if (!m) return []
+    if (this._fver !== this._ver || this._fm !== m) {
+      this._fver = this._ver
+      this._fm = m
+      this._fcache = m.callStack
+    }
+    return this._fcache
   }
 
   get machine() {

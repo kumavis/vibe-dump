@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0f1115" />
+    <meta name="description" content="Wasm Machine: an interactive WebAssembly runtime that shows the operand stack, labels, frames, memory and bytes as each instruction executes. A guided tutorial and a debugger for any .wasm or WAT." />
+    <title>Wasm Machine</title>
+    <script>
+      // apply the saved theme before first paint (no flash)
+      try {
+        var p = JSON.parse(localStorage.getItem('wasm-machine:prefs') || '{}')
+        var t = p.theme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+        document.documentElement.dataset.theme = t
+        var a = p.anim != null ? p.anim : !matchMedia('(prefers-reduced-motion: reduce)').matches
+        document.documentElement.dataset.anim = a ? 'on' : 'off'
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Wasm Machine needs JavaScript: it is a WebAssembly interpreter written in JavaScript.</noscript>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

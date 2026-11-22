@@ -85,7 +85,9 @@ export function watModel(prog) {
 
 export function disasmModel(module, f) {
   const raw = disassembleFunction(module, f)
-  const lines = raw.map((l) => ({ text: '  '.repeat(l.depth) + l.text, depth: l.depth, pc: l.pc, kind: l.kind, offset: l.offset }))
+  // deep nesting (compiled code) would push the text off screen: indent 2 per level up to 6, then 1
+  const ind = (d) => (d <= 6 ? 2 * d : 12 + (d - 6))
+  const lines = raw.map((l) => ({ text: ' '.repeat(ind(l.depth)) + l.text, depth: l.depth, pc: l.pc, kind: l.kind, offset: l.offset }))
   const pcLine = new Map()
   raw.forEach((l, i) => {
     if (l.pc != null && !pcLine.has(l.pc)) pcLine.set(l.pc, i)
@@ -95,11 +97,11 @@ export function disasmModel(module, f) {
     if (fi !== f) return null
     const i = pcLine.get(pc)
     if (i == null) return null
-    const ind = 2 * raw[i].depth
+    const col0 = ind(raw[i].depth)
     const t = raw[i].text
     const sp = t.indexOf(' ')
-    const end = ind + (sp < 0 ? t.length : sp)
-    return { line: i, col0: ind, col1: end, rangeLine0: i, rangeLine1: i }
+    const end = col0 + (sp < 0 ? t.length : sp)
+    return { line: i, col0, col1: end, rangeLine0: i, rangeLine1: i }
   }
   const brackets = module.funcs[f].body ? bracketsFor(module, f, (pc) => pcLine.get(pc) ?? 0) : []
   const lanes = brackets.reduce((m, b) => Math.max(m, b.lane + 1), 0)

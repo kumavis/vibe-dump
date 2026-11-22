@@ -7,5 +7,19 @@
     "dev": "vite",
     "build": "vite build",
     "test": "node --test test/*.test.mjs"
+  },
+  "gallery": {
+    "title": "Wasm Machine",
+    "description": "A WebAssembly interpreter you can watch. Ten lessons step a hand-written VM through real wasm — operand stack, labels, frames, memory, the bytes themselves — then a debugger does the same for any .wasm you drop on it.",
+    "tags": [
+      "tutorial",
+      "tool"
+    ],
+    "status": "done",
+    "models": [
+      "Opus 5.5",
+      "Fable 5.2"
+    ],
+    "thinking": "unknown"
   }
 }
